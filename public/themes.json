@@ -1,0 +1,356 @@
+{
+  "ok": true,
+  "updatedAt": "2026-02-13",
+  "themes": [
+    {
+      "id": "classic",
+      "name": "Classic Glass",
+      "note": "Default neon glass",
+      "a": "rgba(124,92,255,1)",
+      "b": "rgba(0,229,255,1)"
+    },
+    {
+      "id": "midnight",
+      "name": "Midnight",
+      "note": "Cool blue glow",
+      "a": "rgba(98,114,255,1)",
+      "b": "rgba(0,200,255,1)"
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "note": "Warm gradient",
+      "a": "rgba(255,122,0,1)",
+      "b": "rgba(255,75,145,1)"
+    },
+    {
+      "id": "emerald",
+      "name": "Emerald",
+      "note": "Fresh green",
+      "a": "rgba(0,229,125,1)",
+      "b": "rgba(0,200,255,1)"
+    },
+    {
+      "id": "gold",
+      "name": "Gold Rush",
+      "note": "Premium gold",
+      "a": "rgba(255,210,77,1)",
+      "b": "rgba(255,122,0,1)"
+    },
+    {
+      "id": "berry",
+      "name": "Berry",
+      "note": "Vibrant magenta",
+      "a": "rgba(255,75,145,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "ice",
+      "name": "Ice",
+      "note": "Bright icy",
+      "a": "rgba(0,229,255,1)",
+      "b": "rgba(200,245,255,1)"
+    },
+    {
+      "id": "lava",
+      "name": "Lava",
+      "note": "Hot orange",
+      "a": "rgba(255,60,0,1)",
+      "b": "rgba(255,210,77,1)"
+    },
+    {
+      "id": "matrix",
+      "name": "Matrix",
+      "note": "Green terminal",
+      "a": "rgba(0,255,160,1)",
+      "b": "rgba(0,200,80,1)"
+    },
+    {
+      "id": "violet",
+      "name": "Violet",
+      "note": "Purple glow",
+      "a": "rgba(180,110,255,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "ocean",
+      "name": "Ocean",
+      "note": "Sea blue",
+      "a": "rgba(0,160,255,1)",
+      "b": "rgba(0,229,255,1)"
+    },
+    {
+      "id": "sand",
+      "name": "Sand",
+      "note": "Soft warm",
+      "a": "rgba(255,210,150,1)",
+      "b": "rgba(255,122,0,1)"
+    },
+    {
+      "id": "carbon",
+      "name": "Carbon",
+      "note": "Muted pro",
+      "a": "rgba(180,180,190,1)",
+      "b": "rgba(90,95,110,1)"
+    },
+    {
+      "id": "plasma",
+      "name": "Plasma",
+      "note": "Pink x cyan",
+      "a": "rgba(255,75,145,1)",
+      "b": "rgba(0,229,255,1)"
+    },
+    {
+      "id": "mint",
+      "name": "Mint",
+      "note": "Clean mint",
+      "a": "rgba(120,255,210,1)",
+      "b": "rgba(0,200,255,1)"
+    },
+    {
+      "id": "royal",
+      "name": "Royal",
+      "note": "Purple x gold",
+      "a": "rgba(124,92,255,1)",
+      "b": "rgba(255,210,77,1)"
+    },
+    {
+      "id": "peach",
+      "name": "Peach",
+      "note": "Soft peach",
+      "a": "rgba(255,160,120,1)",
+      "b": "rgba(255,75,145,1)"
+    },
+    {
+      "id": "storm",
+      "name": "Storm",
+      "note": "Dark blue",
+      "a": "rgba(90,120,200,1)",
+      "b": "rgba(80,90,140,1)"
+    },
+    {
+      "id": "neon",
+      "name": "Neon",
+      "note": "Cyber neon",
+      "a": "rgba(0,229,255,1)",
+      "b": "rgba(0,229,125,1)"
+    },
+    {
+      "id": "mono",
+      "name": "Mono",
+      "note": "Minimal gray",
+      "a": "rgba(220,220,225,1)",
+      "b": "rgba(160,160,170,1)"
+    },
+    {
+      "id": "p01",
+      "name": "Solana Aurora",
+      "note": "Solana neon aurora",
+      "a": "rgba(0,229,255,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p02",
+      "name": "Degen Neon",
+      "note": "Loud degen glow",
+      "a": "rgba(255,75,145,1)",
+      "b": "rgba(0,229,255,1)"
+    },
+    {
+      "id": "p03",
+      "name": "Validator Night",
+      "note": "Deep infra vibes",
+      "a": "rgba(24,33,68,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p04",
+      "name": "Meme Mint",
+      "note": "Playful mint pop",
+      "a": "rgba(0,229,125,1)",
+      "b": "rgba(255,75,145,1)"
+    },
+    {
+      "id": "p05",
+      "name": "Liquidity Pool",
+      "note": "Blue-green flow",
+      "a": "rgba(0,200,255,1)",
+      "b": "rgba(0,229,125,1)"
+    },
+    {
+      "id": "p06",
+      "name": "Airdrop Pink",
+      "note": "Candy airdrop",
+      "a": "rgba(255,75,145,1)",
+      "b": "rgba(255,210,77,1)"
+    },
+    {
+      "id": "p07",
+      "name": "MEV Shadow",
+      "note": "Dark purple edge",
+      "a": "rgba(70,29,132,1)",
+      "b": "rgba(0,200,255,1)"
+    },
+    {
+      "id": "p08",
+      "name": "Onchain Gold",
+      "note": "Premium chain shine",
+      "a": "rgba(255,210,77,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p09",
+      "name": "Laser Grid",
+      "note": "Sharp grid glow",
+      "a": "rgba(0,229,255,1)",
+      "b": "rgba(255,122,0,1)"
+    },
+    {
+      "id": "p10",
+      "name": "Hodl Forest",
+      "note": "Calm green depth",
+      "a": "rgba(0,229,125,1)",
+      "b": "rgba(26,132,86,1)"
+    },
+    {
+      "id": "p11",
+      "name": "Alpha Crimson",
+      "note": "Aggressive red alpha",
+      "a": "rgba(220,38,38,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p12",
+      "name": "Frogwave",
+      "note": "Meme wave",
+      "a": "rgba(34,197,94,1)",
+      "b": "rgba(0,229,255,1)"
+    },
+    {
+      "id": "p13",
+      "name": "NFT Chrome",
+      "note": "Chrome highlights",
+      "a": "rgba(229,231,235,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p14",
+      "name": "ZK Mist",
+      "note": "Soft zk haze",
+      "a": "rgba(167,139,250,1)",
+      "b": "rgba(0,229,255,1)"
+    },
+    {
+      "id": "p15",
+      "name": "Gas Plasma",
+      "note": "Hot plasma",
+      "a": "rgba(255,122,0,1)",
+      "b": "rgba(255,75,145,1)"
+    },
+    {
+      "id": "p16",
+      "name": "Builder Steel",
+      "note": "Clean steel",
+      "a": "rgba(148,163,184,1)",
+      "b": "rgba(59,130,246,1)"
+    },
+    {
+      "id": "p17",
+      "name": "Iceberg",
+      "note": "Cold minimal",
+      "a": "rgba(186,230,253,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p18",
+      "name": "Sunset DEX",
+      "note": "Warm dex sunset",
+      "a": "rgba(255,122,0,1)",
+      "b": "rgba(0,200,255,1)"
+    },
+    {
+      "id": "p19",
+      "name": "Orbit",
+      "note": "Cosmic orbit",
+      "a": "rgba(17,24,39,1)",
+      "b": "rgba(0,200,255,1)"
+    },
+    {
+      "id": "p20",
+      "name": "Photon",
+      "note": "Bright photon",
+      "a": "rgba(250,250,250,1)",
+      "b": "rgba(0,229,255,1)"
+    },
+    {
+      "id": "p21",
+      "name": "Cyber Lime",
+      "note": "Cyber lime",
+      "a": "rgba(163,230,53,1)",
+      "b": "rgba(0,200,255,1)"
+    },
+    {
+      "id": "p22",
+      "name": "Royal Violet",
+      "note": "Royal violet",
+      "a": "rgba(124,92,255,1)",
+      "b": "rgba(255,75,145,1)"
+    },
+    {
+      "id": "p23",
+      "name": "Ocean Matrix",
+      "note": "Ocean matrix",
+      "a": "rgba(0,200,255,1)",
+      "b": "rgba(2,132,199,1)"
+    },
+    {
+      "id": "p24",
+      "name": "Circuit Mint",
+      "note": "Circuit mint",
+      "a": "rgba(0,229,125,1)",
+      "b": "rgba(0,200,255,1)"
+    },
+    {
+      "id": "p25",
+      "name": "Pink Noise",
+      "note": "Pink noise",
+      "a": "rgba(255,75,145,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p26",
+      "name": "Night Market",
+      "note": "Night market",
+      "a": "rgba(15,23,42,1)",
+      "b": "rgba(255,210,77,1)"
+    },
+    {
+      "id": "p27",
+      "name": "Starship",
+      "note": "Starship",
+      "a": "rgba(0,229,255,1)",
+      "b": "rgba(255,210,77,1)"
+    },
+    {
+      "id": "p28",
+      "name": "Turbo Teal",
+      "note": "Turbo teal",
+      "a": "rgba(20,184,166,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p29",
+      "name": "Sapphire",
+      "note": "Sapphire",
+      "a": "rgba(59,130,246,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p30",
+      "name": "Blackout Pro",
+      "note": "Near-black pro",
+      "a": "rgba(5,7,14,1)",
+      "b": "rgba(124,92,255,1)"
+    }
+  ]
+}

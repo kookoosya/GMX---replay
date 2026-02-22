@@ -1,0 +1,152 @@
+GMXReply — CHAT + CHANGELOG ARCHIVE
+Generated: 2026-02-17 12:00 UTC+01:00
+
+Goal (user):
+- Make the SITE + EXTENSION look premium ("дорого") and be stable across devices (phone/tablet/TV).
+- Primary focus: SITE. Extension must be stable, simple, and insert buttons inline near X reply box.
+- Wallet support: ALL wallets (Wallet Standard), with Solflare prioritized.
+- Trust: anti-scam UI (no seed phrase, on-chain verify, domain check, social proof).
+- Auto-recovery: if X changes DOM / inject breaks / crashes — extension should self-heal; site should avoid brittle failures.
+
+Key decisions / constraints:
+- Keep GM + GN (GN must exist).
+- Remove "ugly" extra tabs (Studio/Packs/Bulk/History/Favorites) as separate navigation sections.
+- Freemium logic MUST NOT be time-limited (no 1/3/7 day trials).
+  Free should be permanently usable for everyone, so people can understand why to pay.
+
+Recommended freemium model (per latest agreement):
+FREE (permanent):
+- Core GM + GN generation: unlimited.
+- Best: unlimited but "basic" (e.g., generates 3 candidates + simple ranking).
+- Context: available, but "light" (e.g., only current message / limited depth), unlimited.
+- Packs: limited set (e.g., 5 packs) but usable, unlimited.
+- Styles: 1 default style + basic theme support.
+
+PRO (one plan only):
+- Best++: 7 candidates + smarter ranking + anti-repeat/anti-cringe filters.
+- Context Pro: thread/last N messages + better contextualization.
+- Style profiles (save multiple): e.g., up to 10.
+- All packs unlocked + save custom pack/profile.
+- Cloud sync/backup (multi-device).
+- Live fixes for X DOM changes (remote selectors.json + fallback strategies).
+- Priority stability features (more robust heuristics, faster recovery) — optional but marketable.
+
+Artifacts produced in this workspace (filenames; keep as references):
+- GMXReply_v31_7_SITE_protabs_wallets_ready.zip
+- GMXReply_v31_10_SITE_ext_hotkeys_best_pending.zip
+- GMXReply_v31_11_GM_only_clean.zip
+- GMXReply_v31_12_premium_order_gm_gn.zip
+- GMXReply_v31_13_stable_site_ext_xbuttons.zip
+- GMXReply_v31_9_SITE_themes_alltabs_premium.zip
+
+Current baseline to continue from (latest):
+- GMXReply_v31_13_stable_site_ext_xbuttons.zip (site responsive + extension inline X buttons + self-heal scaffolding)
+
+Implementation notes (to apply next patch):
+1) Remove time-based gating from tools:
+   - Replace "X/day" quotas with capability-based limits (depth/candidates/features), not temporal limits.
+   - If any daily counters exist: keep only for abuse protection (server rate-limit), not presented as "trial".
+
+2) UX (premium + simple):
+   - Inline toolbar: GM, GN, Best, (Context as Pro chip) + a small ⋯ for advanced.
+   - Avoid separate windows; no complex tabs.
+   - Right-side panel on SITE: "What you get" + Trust + Tips + Pro unlock, consistent across GM/GN.
+
+3) Stability:
+   - Extension: MutationObserver + periodic rescan + fallback insertion methods.
+   - Remote selectors.json for quick hotfixes without extension store release.
+   - Site: error boundary + safe reload with backoff; non-blocking resource loading.
+
+How to maintain this log:
+- Append new changes below with date/time + short bullet list.
+- Keep this TXT inside a ZIP for every release.
+
+--- APPEND LOG BELOW ---
+
+[2026-02-17] Update: clarify Free vs Pro + easier payments
+- Keep GM + GN free cap: 70 lines per day each (server-enforced); Pro removes cap.
+- Themes/Writing styles: free preview = 5 themes + 5 styles; rest locked (unlock via referrals or Pro).
+- Wallet: add "Pay via QR (Solana Pay)" block (works on mobile wallets even when no browser wallet installed).
+- Dynamic copy: home guide + themes rules are rendered from constants so text always matches logic.
+
+Files changed:
+- Backend/public/app.html (limits constants, dynamic copy, Solana Pay QR UI + logic)
+- Backend/public/app.css (QR block styling)
+
+
+
+========================
+2026-02-17 — v31_18_admin_selectors_selfheal
+Changes:
+- Site (Admin): added “X selectors hotfix” card to load/save/reset selector JSON used by the extension.
+- Backend: selectors override is now stored in SQLite (table ext_selectors).
+  - /api/ext/selectors returns override if present (otherwise defaults), with overrideUpdatedAt for debugging.
+  - Added admin endpoints:
+    - GET /api/admin/ext/selectors
+    - POST /api/admin/ext/selectors (action: save/reset)
+- Extension: stronger self-heal:
+  - loadRemoteSelectors(apiBase, force) supports force refresh (cache-bust) and is used automatically on “reply_box_not_found”.
+  - Inline toolbar periodically forces compatibility refresh if no composer detected for a while (toast: “Updating compatibility…”).
+  - Added hideLauncher() to avoid errors on SPA route changes.
+Files touched:
+- Backend/index.js
+- Backend/public/app.html
+- Backend/extension/content.js
+- Backend/extension/manifest.json
+========================
+
+
+========================
+2026-02-17 — v31_19_admin_hotfix_propagation
+Changes:
+- Site (Admin): actually added the “Admin: X selectors hotfix” card into the Admin tab UI (Load/Save/Reset + Force refresh clients).
+  - “Force refresh clients” bumps selector version + updated_at without changing arrays, so you can trigger a rollout even if you paste the same JSON.
+- Backend: /api/ext/selectors now supports ?meta=1 to return a tiny payload (build, overrideUpdatedAt, version) for cheap polling.
+- Extension: selector updates propagate faster (no waiting 6h):
+  - Keeps 6h cache TTL for full payload, but performs a lightweight meta poll every ~30 minutes.
+  - If build/version/overrideUpdatedAt changed, it auto-fetches the full selectors.
+Files touched:
+- Backend/public/app.html
+- Backend/index.js
+- Backend/extension/content.js
+========================
+
+
+
+========================
+2026-02-17 — v31_21_canary_rollout_health_templates
+Changes:
+- Backend: extension selectors hotfix upgraded with canary rollout + rollback:
+  - Added ext_selectors_meta (rollout_percent + rollout_salt) and ext_selectors_history (audit trail).
+  - /api/ext/selectors now supports per-client canary via client_id (stable bucketing) and returns rolloutUpdatedAt/inRollout/rolloutPercent.
+  - Admin endpoints extended:
+    - POST /api/admin/ext/selectors supports actions: save/reset/touch/rollout/rotate_salt/rollback.
+- Site (Admin): selectors card now includes rollout controls + history list with one-click rollback.
+- Extension: reliability + UX:
+  - Persistent client_id (stored locally) used for canary selection and diagnostics.
+  - Insert operations are queued to prevent overlapping writes to the composer.
+  - Optional reply templates with {reply} and {author}.
+  - Optional safety check (warns on suspicious text) + diagnostics toggle (anonymous events, no tweet text/replies).
+  - Sends lightweight selfcheck + insert success/fail events to backend (when diagnostics enabled).
+- Backend: health + FAQ:
+  - POST /api/ext/event stores anonymous extension events (opt-in via diagnostics toggle).
+  - GET /api/admin/ext/health shows aggregated counts + top errors + versions + latest events.
+  - FAQ base bucket (GET /api/ext/faq, admin GET/POST /api/admin/faq).
+Files touched:
+- Backend/index.js
+- Backend/public/app.html
+- Backend/extension/{content.js,popup.html,popup.js,background.js,manifest.json}
+- GMXReply_CHAT_AND_CHANGELOG_ARCHIVE.txt
+========================
+
+
+========================
+2026-02-22 — FIX15_important_fixes
+Changes:
+- Site: eliminated noisy 401/unhandled rejections by awaiting refreshUsage() everywhere it is invoked.
+- Site: Referrals rules text corrected in EN (Eligible = max(active, legacy); legacy only used if larger) and clarified in RU.
+- Site: postEvent() now skips /api/event calls when no token is present (avoids unnecessary 401 traffic).
+Files touched:
+- Backend/public/app.js
+- Backend/GMXReply_CHAT_AND_CHANGELOG_ARCHIVE.txt
+========================

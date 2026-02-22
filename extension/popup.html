@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GMXReply</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <img src="icons/icon48.png" class="logo" alt="GMXReply" />
+        <div>
+          <div class="title">GMXReply</div>
+          <div class="subtitle" id="ext_subtitle">Bridge to X</div>
+        </div>
+      </div>
+      <div class="topRight">
+        <div class="langMini" role="group" aria-label="Language">
+          <button id="langEn" class="langBtn" type="button">EN</button>
+          <button id="langRu" class="langBtn" type="button">RU</button>
+        </div>
+        <button id="openSite" class="linkbtn" type="button">Open site</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center;gap:10px">
+        <div style="min-width:0">
+          <div class="label" id="bestToggleLabel">Best mode</div>
+          <div class="hint" id="bestToggleHint">When enabled, GM/GN on X auto-picks and uses Best logic</div>
+        </div>
+        <button id="bestToggle" class="toggle" type="button" aria-pressed="false">Off</button>
+      </div>
+
+      <div class="row" style="justify-content:space-between;align-items:center;margin-top:10px;gap:10px">
+        <div class="label" id="typingLabel">Typing speed</div>
+        <select id="typingProfile" class="select">
+          <option value="safe">Safe</option>
+          <option value="balanced">Balanced</option>
+          <option value="fast">Fast</option>
+        </select>
+      </div>
+      <div class="hint" id="typingHint" style="margin-top:6px">Safe looks the most human</div>
+
+      <div class="small" id="actionStatus"></div>
+      <div class="actions" style="margin-top:8px;display:none" id="openXWrap">
+        <button id="openXBtn" class="secondary" type="button">Open x.com</button>
+      </div>
+    </div>
+
+    <div class="card" id="connCard">
+      <div class="row">
+        <div class="label" id="ext_session_label">Session</div>
+        <div class="value" id="sessionValue">—</div>
+      </div>
+      <div class="hint" id="sessionHint"></div>
+
+      <div style="margin-top:10px">
+        <div class="label" style="margin-bottom:6px" id="ext_connect_label">Connect @handle</div>
+        <div class="row" style="gap:8px">
+          <input id="handleInput" placeholder="@yourhandle" />
+          <button class="secondary" id="connectBtn" type="button" style="flex:0 0 auto">Connect</button>
+        </div>
+        <div class="hint" id="connectStatus" style="margin-top:6px"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sectionTitle" id="ext_stats_title">Stats</div>
+      <div class="grid">
+        <div class="kv"><div class="k" id="ext_k_eligible">Eligible</div><div class="v" id="refEligible">—</div></div>
+        <div class="kv"><div class="k" id="ext_k_active">Active</div><div class="v" id="refActive">—</div></div>
+        <div class="kv"><div class="k" id="ext_k_confirmed">Confirmed</div><div class="v" id="refConfirmed">—</div></div>
+        <div class="kv"><div class="k" id="ext_k_daily_bonus">Daily bonus</div><div class="v" id="dailyBonus">—</div></div>
+        <div class="kv"><div class="k" id="ext_k_gm_used">GM used</div><div class="v" id="gmUsed">—</div></div>
+        <div class="kv"><div class="k" id="ext_k_gn_used">GN used</div><div class="v" id="gnUsed">—</div></div>
+      </div>
+      <div class="small" id="statsHint"></div>
+    </div>
+
+    <div class="foot" id="ext_foot">Lists and session sync automatically from the site</div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
