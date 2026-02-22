@@ -16,7 +16,7 @@ app.disable("x-powered-by");
 app.disable("etag");
 
 const PORT = Number(process.env.PORT) || 10000;
-const TRUST_PROXY = String(process.env.TRUST_PROXY || "").trim() === "1";
+const TRUST_PROXY = String(process.env.TRUST_PROXY || "").trim() === "1"; if (TRUST_PROXY) app.set("trust proxy", 1);
 const STARTED_AT = new Date().toISOString();
 const BUILD_ID =
   process.env.BUILD_ID ||
@@ -4412,7 +4412,7 @@ function noStore(res) {
 // ---- React frontend (production static + SPA fallback) ----
 // In production on Render, we serve the built React app from frontend/dist.
 // In local dev, Vite serves the frontend on :5173 and proxies /api -> backend:10000.
-const IS_PROD = String(process.env.NODE_ENV || "").trim() === "production";
+const IS_PROD = String(process.env.NODE_ENV || "").trim() === "production" || IS_RENDER;
 const FRONTEND_DIST = path.join(__dirname, "frontend", "dist");
 const FRONTEND_INDEX = path.join(FRONTEND_DIST, "index.html");
 const HAS_REACT_BUILD = IS_PROD && fs.existsSync(FRONTEND_INDEX);
