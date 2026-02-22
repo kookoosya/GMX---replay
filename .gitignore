@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+.DS_Store
+
+.env
+.env.*
+*.sqlite
+*.db
+*.log
+
+# chrome extension builds (если у тебя есть)
+*.crx
+*.pem
