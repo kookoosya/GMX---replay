@@ -4409,6 +4409,28 @@ function noStore(res) {
   res.setHeader("Expires", "0");
 }
 
+// ---- React frontend (production static + SPA fallback) ----
+// In production on Render, we serve the built React app from frontend/dist.
+// In local dev, Vite serves the frontend on :5173 and proxies /api -> backend:10000.
+const IS_PROD = String(process.env.NODE_ENV || "").trim() === "production";
+const FRONTEND_DIST = path.join(__dirname, "frontend", "dist");
+const FRONTEND_INDEX = path.join(FRONTEND_DIST, "index.html");
+const HAS_REACT_BUILD = IS_PROD && fs.existsSync(FRONTEND_INDEX);
+
+// Serve React build assets first (so /assets from Vite build wins over legacy /public assets).
+if (HAS_REACT_BUILD) {
+  app.use(
+    express.static(FRONTEND_DIST, {
+      maxAge: "1h",
+      setHeaders: (res, filePath) => {
+        // Never cache HTML so deployments update immediately.
+        if (filePath.endsWith(".html")) noStore(res);
+      },
+    })
+  );
+}
+
+// ---- Legacy static (kept during migration) ----
 app.use(
   express.static(PUBLIC_DIR, {
     maxAge: "1h",
@@ -4425,8 +4447,12 @@ app.use(
   })
 );
 
+// Root:
+// - prod + built React -> React SPA
+// - otherwise -> legacy /app
 app.get("/", (req, res) => {
   noStore(res);
+  if (HAS_REACT_BUILD) return res.sendFile(FRONTEND_INDEX);
   res.redirect("/app");
 });
 
@@ -4459,10 +4485,25 @@ app.get("/get-extension", (req, res) => {
   <p>The extension is included in the repo under <b>/extension</b>.</p>
   <p><b>Local install:</b> open <b>chrome://extensions</b> → enable Developer mode → <b>Load unpacked</b> → select the <b>extension</b> folder.</p>
   <p>Once published, this page will redirect to the Chrome Web Store automatically.</p>
-  <p>Go back to <a href="/app">/app</a>.</p>
+  <p>Go back to <a href="/">/</a> (React) or <a href="/app">/app</a> (legacy).</p>
 </body></html>`);
 });
 
+// SPA fallback for React routes (keep /api and /app behaving normally).
+if (HAS_REACT_BUILD) {
+  app.get("*", (req, res, next) => {
+    const p = String(req.path || "");
+    if (p.startsWith("/api")) return next();
+    if (p.startsWith("/app")) return next();
+    if (p === "/get-extension") return next();
+
+    const accept = String(req.headers.accept || "");
+    if (!accept.includes("text/html")) return next();
+
+    noStore(res);
+    return res.sendFile(FRONTEND_INDEX);
+  });
+}
 
 // ---------- ERROR HANDLER ----------
 app.use((err, req, res, next) => {

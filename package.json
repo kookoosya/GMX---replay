@@ -10,7 +10,9 @@
     "dev": "concurrently -k --kill-others-on-fail -n backend,frontend -c blue,green \"npm:dev:backend\" \"npm:dev:frontend\"",
     "dev:backend": "npm start",
     "dev:frontend": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend install && npm --prefix frontend run build",
     "start": "node index.js",
+    "smoke": "node smoke.js",
     "test": "node smoke.js"
   },
   "dependencies": {
