@@ -35,7 +35,8 @@ const ADMIN_SECRET = process.env.ADMIN_SECRET || "CHANGE_ME_ADMIN_SECRET";
 const IS_RENDER = Boolean(process.env.RENDER || process.env.RENDER_GIT_COMMIT || process.env.RENDER_SERVICE_ID);
 const RAW_ADMIN_PASSWORD = String(process.env.ADMIN_PASSWORD || "").trim();
 const RAW_ADMIN_SECRET = String(process.env.ADMIN_SECRET || "").trim();
-const ADMIN_PASSWORD = RAW_ADMIN_PASSWORD || (!IS_RENDER
+// In production (NODE_ENV=production) we REQUIRE explicit ADMIN_PASSWORD.
+const ADMIN_PASSWORD = RAW_ADMIN_PASSWORD || (DEV_MODE
   ? ((RAW_ADMIN_SECRET && RAW_ADMIN_SECRET !== "CHANGE_ME_ADMIN_SECRET") ? RAW_ADMIN_SECRET : "admin")
   : ""
 );
@@ -3562,7 +3563,10 @@ app.post("/api/admin/login", adminLoginLimiter, requireAuth, (req, res) => {
       return res.status(500).json({ ok:false, error:"server_error", hint:"admin_password_not_configured" });
     }
     const handle = req.user?.handle || null;
-    
+    if (!handle || !isAdminHandle(handle)) {
+      return res.status(403).json({ ok:false, error:"forbidden" });
+    }
+
     const pw = String(req.body?.password || "").trim();
     if (!pw) return res.status(400).json({ ok:false, error:"invalid_request", hint:"missing_password" });
 
@@ -3641,9 +3645,9 @@ function adminSessionDelete(token){
 // ---------- ADMIN ----------
 function requireAdmin(req, res, next) {
   try {
-    // First: allow admin session token without user auth (useful for local/dev admin panel).
+    // First: allow admin session token without user auth (useful for local/dev admin panel)  DEV ONLY.
     const at0 = getAdminToken(req);
-    if (at0){
+    if (DEV_MODE && at0){
       const s0 = adminSessionGet(at0);
       if (!s0) return res.status(401).json({ ok:false, error:"unauthorized", hint:"invalid_admin_session" });
       req.admin = { by: "admin_session", handle: String(s0.handle || "@admin") };
