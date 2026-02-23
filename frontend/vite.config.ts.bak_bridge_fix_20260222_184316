@@ -1,0 +1,25 @@
+﻿import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    host: true,
+    port: 5173,
+    strictPort: true,
+
+    // ВАЖНО:
+    // 1) НЕТ proxy для "/" => vite.svg и HMR не ломаются
+    // 2) target = 127.0.0.1 => избегаем IPv6 ::1 и AggregateError ECONNREFUSED
+    proxy: {
+      "/api":   { target: "http://127.0.0.1:10000", changeOrigin: true, secure: false, ws: true },
+      "/app":   { target: "http://127.0.0.1:10000", changeOrigin: true, secure: false },
+
+      // страховка под абсолютные ассеты legacy:
+      "/assets":   { target: "http://127.0.0.1:10000", changeOrigin: true, secure: false },
+      "/contents": { target: "http://127.0.0.1:10000", changeOrigin: true, secure: false },
+      "/static":   { target: "http://127.0.0.1:10000", changeOrigin: true, secure: false },
+      "/fonts":    { target: "http://127.0.0.1:10000", changeOrigin: true, secure: false },
+    },
+  },
+})

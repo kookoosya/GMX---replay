@@ -1,0 +1,145 @@
+﻿import { useCallback, useEffect, useState } from "react";
+
+type AnyObj = any;
+
+async function fetchAny(url: string): Promise<AnyObj> {
+  const r = await fetch(url, { credentials: "include", cache: "no-store" });
+  const text = await r.text();
+
+  if (!r.ok) {
+    const msg = String(r.status) + " " + String(r.statusText) + " :: " + text.slice(0, 400);
+    throw new Error(msg);
+  }
+
+  const t = text.trim();
+  if ((t.startsWith("{") && t.endsWith("}")) || (t.startsWith("[") && t.endsWith("]"))) {
+    try {
+      return JSON.parse(t);
+    } catch {
+      return text;
+    }
+  }
+  return text;
+}
+
+export default function App() {
+  const [health, setHealth] = useState<AnyObj>(null);
+  const [version, setVersion] = useState<AnyObj>(null);
+  const [usage, setUsage] = useState<AnyObj>(null);
+  const [refs, setRefs] = useState<AnyObj>(null);
+
+  const [healthErr, setHealthErr] = useState("");
+  const [versionErr, setVersionErr] = useState("");
+  const [usageErr, setUsageErr] = useState("");
+  const [refsErr, setRefsErr] = useState("");
+
+  const load = useCallback(async () => {
+    setHealthErr(""); setVersionErr(""); setUsageErr(""); setRefsErr("");
+
+    try { setHealth(await fetchAny("/api/health")); } catch (e: any) { setHealthErr(String(e?.message ?? e)); }
+    try { setVersion(await fetchAny("/api/version")); } catch (e: any) { setVersionErr(String(e?.message ?? e)); }
+    try { setUsage(await fetchAny("/api/usage")); } catch (e: any) { setUsageErr(String(e?.message ?? e)); }
+
+    // referrals: показываем ошибку, не прячем её
+    try { setRefs(await fetchAny("/api/referral/stats")); } catch (e: any) { setRefsErr(String(e?.message ?? e)); }
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  return (
+    <div style={{ minHeight: "100vh", padding: 20, fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Arial" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
+        <h1 style={{ margin: 0 }}>GMXReply</h1>
+
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <button
+            onClick={load}
+            style={{
+              padding: "8px 12px",
+              borderRadius: 10,
+              border: "1px solid rgba(0,0,0,0.18)",
+              background: "white",
+              cursor: "pointer",
+            }}
+          >
+            Refresh
+          </button>
+
+          <a
+            href="/app"
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              padding: "8px 12px",
+              borderRadius: 10,
+              border: "1px solid rgba(0,0,0,0.15)",
+              textDecoration: "none",
+              color: "#111",
+              background: "rgba(0,0,0,0.04)",
+            }}
+          >
+            Open legacy (/app)
+          </a>
+        </div>
+      </div>
+
+      <Card title="Backend: /api/health">
+        <Err text={healthErr} />
+        <Pre obj={health} />
+      </Card>
+
+      <Card title="Backend: /api/version">
+        <Err text={versionErr} />
+        <Pre obj={version} />
+      </Card>
+
+      <Card title="Usage: /api/usage">
+        <Err text={usageErr} />
+        <Pre obj={usage} />
+      </Card>
+
+      <Card title="Referrals: /api/referral/stats">
+        <Err text={refsErr} />
+        <Pre obj={refs} />
+        {refsErr.includes("401") && (
+          <div style={{ marginTop: 10, opacity: 0.85 }}>
+            Видишь 401  открой legacy, подключи @handle, потом нажми Refresh
+          </div>
+        )}
+        {refsErr.includes("404") && (
+          <div style={{ marginTop: 10, opacity: 0.85 }}>
+            Видишь 404  значит эндпоинт другой, сейчас найдем точный роут в index.js
+          </div>
+        )}
+      </Card>
+    </div>
+  );
+}
+
+function Card({ title, children }: { title: string; children: any }) {
+  return (
+    <div style={{ marginTop: 16, padding: 14, borderRadius: 12, border: "1px solid rgba(0,0,0,0.12)" }}>
+      <div style={{ opacity: 0.8, marginBottom: 10 }}>{title}</div>
+      {children}
+    </div>
+  );
+}
+
+function Err({ text }: { text: string }) {
+  if (!text) return null;
+  return (
+    <div style={{ color: "#b00020", marginBottom: 10 }}>
+      <b>Error:</b> {text}
+    </div>
+  );
+}
+
+function Pre({ obj }: { obj: any }) {
+  if (obj === null || obj === undefined) return <div style={{ opacity: 0.75 }}></div>;
+  const s = typeof obj === "string" ? obj : JSON.stringify(obj, null, 2);
+  return (
+    <pre style={{ margin: 0, padding: 12, background: "rgba(0,0,0,0.04)", borderRadius: 10, overflow: "auto" }}>
+      {s}
+    </pre>
+  );
+}

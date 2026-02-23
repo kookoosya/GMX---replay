@@ -1,0 +1,580 @@
+{
+  "version": 1,
+  "generatedAt": "2026-02-14T09:19:14Z",
+  "languages": {
+    "site": [
+      [
+        "en",
+        "English"
+      ],
+      [
+        "es",
+        "Español"
+      ],
+      [
+        "pt",
+        "Português"
+      ],
+      [
+        "fr",
+        "Français"
+      ],
+      [
+        "de",
+        "Deutsch"
+      ],
+      [
+        "it",
+        "Italiano"
+      ],
+      [
+        "nl",
+        "Nederlands"
+      ],
+      [
+        "tr",
+        "Türkçe"
+      ],
+      [
+        "pl",
+        "Polski"
+      ],
+      [
+        "id",
+        "Indonesia"
+      ],
+      [
+        "ru",
+        "Русский"
+      ],
+      [
+        "uk",
+        "Українська"
+      ],
+      [
+        "hi",
+        "हिन्दी"
+      ],
+      [
+        "ja",
+        "日本語"
+      ],
+      [
+        "zh",
+        "中文"
+      ]
+    ],
+    "reply": [
+      [
+        "en",
+        "English"
+      ],
+      [
+        "es",
+        "Español"
+      ],
+      [
+        "pt",
+        "Português"
+      ],
+      [
+        "fr",
+        "Français"
+      ],
+      [
+        "de",
+        "Deutsch"
+      ],
+      [
+        "it",
+        "Italiano"
+      ],
+      [
+        "nl",
+        "Nederlands"
+      ],
+      [
+        "tr",
+        "Türkçe"
+      ],
+      [
+        "pl",
+        "Polski"
+      ],
+      [
+        "id",
+        "Indonesia"
+      ],
+      [
+        "ru",
+        "Русский"
+      ],
+      [
+        "uk",
+        "Українська"
+      ],
+      [
+        "hi",
+        "हिन्दी"
+      ],
+      [
+        "ja",
+        "日本語"
+      ],
+      [
+        "zh",
+        "中文"
+      ]
+    ]
+  },
+  "themes": [
+    {
+      "id": "classic",
+      "name": "Classic Glass",
+      "a": "rgba(124,92,255,1)",
+      "b": "rgba(0,229,255,1)",
+      "note": "Default neon glass",
+      "bgType": "glass"
+    },
+    {
+      "id": "midnight",
+      "name": "Midnight",
+      "a": "rgba(98,114,255,1)",
+      "b": "rgba(0,200,255,1)",
+      "note": "Cool blue glow",
+      "bgType": "glass"
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "a": "rgba(255,122,0,1)",
+      "b": "rgba(255,75,145,1)",
+      "note": "Warm gradient",
+      "bgType": "nft"
+    },
+    {
+      "id": "emerald",
+      "name": "Emerald",
+      "a": "rgba(0,229,125,1)",
+      "b": "rgba(0,200,255,1)",
+      "note": "Fresh green",
+      "bgType": "glass"
+    },
+    {
+      "id": "gold",
+      "name": "Gold Rush",
+      "a": "rgba(255,210,77,1)",
+      "b": "rgba(255,122,0,1)",
+      "note": "Premium gold",
+      "bgType": "nft"
+    },
+    {
+      "id": "berry",
+      "name": "Berry",
+      "a": "rgba(255,75,145,1)",
+      "b": "rgba(124,92,255,1)",
+      "note": "Vibrant magenta",
+      "bgType": "nft"
+    },
+    {
+      "id": "ice",
+      "name": "Ice",
+      "a": "rgba(0,229,255,1)",
+      "b": "rgba(200,245,255,1)",
+      "note": "Bright icy",
+      "bgType": "minimal"
+    },
+    {
+      "id": "lava",
+      "name": "Lava",
+      "a": "rgba(255,60,0,1)",
+      "b": "rgba(255,210,77,1)",
+      "note": "Hot orange",
+      "bgType": "degen"
+    },
+    {
+      "id": "matrix",
+      "name": "Matrix",
+      "a": "rgba(0,255,160,1)",
+      "b": "rgba(0,200,80,1)",
+      "note": "Green terminal",
+      "bgType": "matrix"
+    },
+    {
+      "id": "violet",
+      "name": "Violet",
+      "a": "rgba(180,110,255,1)",
+      "b": "rgba(124,92,255,1)",
+      "note": "Purple glow",
+      "bgType": "glass"
+    },
+    {
+      "id": "ocean",
+      "name": "Ocean",
+      "a": "rgba(0,160,255,1)",
+      "b": "rgba(0,229,255,1)",
+      "note": "Sea blue",
+      "bgType": "space"
+    },
+    {
+      "id": "sand",
+      "name": "Sand",
+      "a": "rgba(255,210,150,1)",
+      "b": "rgba(255,122,0,1)",
+      "note": "Soft warm",
+      "bgType": "minimal"
+    },
+    {
+      "id": "carbon",
+      "name": "Carbon",
+      "a": "rgba(180,180,190,1)",
+      "b": "rgba(90,95,110,1)",
+      "note": "Muted pro",
+      "bgType": "minimal"
+    },
+    {
+      "id": "plasma",
+      "name": "Plasma",
+      "a": "rgba(255,75,145,1)",
+      "b": "rgba(0,229,255,1)",
+      "note": "Pink x cyan",
+      "bgType": "nft"
+    },
+    {
+      "id": "mint",
+      "name": "Mint",
+      "a": "rgba(120,255,210,1)",
+      "b": "rgba(0,200,255,1)",
+      "note": "Clean mint",
+      "bgType": "glass"
+    },
+    {
+      "id": "royal",
+      "name": "Royal",
+      "a": "rgba(124,92,255,1)",
+      "b": "rgba(255,210,77,1)",
+      "note": "Purple x gold",
+      "bgType": "nft"
+    },
+    {
+      "id": "peach",
+      "name": "Peach",
+      "a": "rgba(255,160,120,1)",
+      "b": "rgba(255,75,145,1)",
+      "note": "Soft peach",
+      "bgType": "nft"
+    },
+    {
+      "id": "storm",
+      "name": "Storm",
+      "a": "rgba(90,120,200,1)",
+      "b": "rgba(80,90,140,1)",
+      "note": "Dark blue",
+      "bgType": "glass"
+    },
+    {
+      "id": "neon",
+      "name": "Neon",
+      "a": "rgba(0,229,255,1)",
+      "b": "rgba(0,229,125,1)",
+      "note": "Cyber neon",
+      "bgType": "degen"
+    },
+    {
+      "id": "mono",
+      "name": "Mono",
+      "a": "rgba(220,220,225,1)",
+      "b": "rgba(160,160,170,1)",
+      "note": "Minimal gray",
+      "bgType": "minimal"
+    },
+    {
+      "id": "p01",
+      "name": "Solana Aurora",
+      "a": "rgba(0,229,255,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p02",
+      "name": "Degen Neon",
+      "a": "rgba(255,75,145,1)",
+      "b": "rgba(0,229,255,1)"
+    },
+    {
+      "id": "p03",
+      "name": "Validator Night",
+      "a": "rgba(24,33,68,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p04",
+      "name": "Meme Mint",
+      "a": "rgba(0,229,125,1)",
+      "b": "rgba(255,75,145,1)"
+    },
+    {
+      "id": "p05",
+      "name": "Liquidity Pool",
+      "a": "rgba(0,200,255,1)",
+      "b": "rgba(0,229,125,1)"
+    },
+    {
+      "id": "p06",
+      "name": "Airdrop Pink",
+      "a": "rgba(255,75,145,1)",
+      "b": "rgba(255,210,77,1)"
+    },
+    {
+      "id": "p07",
+      "name": "MEV Shadow",
+      "a": "rgba(70,29,132,1)",
+      "b": "rgba(0,200,255,1)"
+    },
+    {
+      "id": "p08",
+      "name": "Onchain Gold",
+      "a": "rgba(255,210,77,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p09",
+      "name": "Laser Grid",
+      "a": "rgba(0,229,255,1)",
+      "b": "rgba(255,122,0,1)"
+    },
+    {
+      "id": "p10",
+      "name": "Hodl Forest",
+      "a": "rgba(0,229,125,1)",
+      "b": "rgba(26,132,86,1)"
+    },
+    {
+      "id": "p11",
+      "name": "Alpha Crimson",
+      "a": "rgba(220,38,38,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p12",
+      "name": "Frogwave",
+      "a": "rgba(34,197,94,1)",
+      "b": "rgba(0,229,255,1)"
+    },
+    {
+      "id": "p13",
+      "name": "NFT Chrome",
+      "a": "rgba(229,231,235,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p14",
+      "name": "ZK Mist",
+      "a": "rgba(167,139,250,1)",
+      "b": "rgba(0,229,255,1)"
+    },
+    {
+      "id": "p15",
+      "name": "Gas Plasma",
+      "a": "rgba(255,122,0,1)",
+      "b": "rgba(255,75,145,1)"
+    },
+    {
+      "id": "p16",
+      "name": "Builder Steel",
+      "a": "rgba(148,163,184,1)",
+      "b": "rgba(59,130,246,1)"
+    },
+    {
+      "id": "p17",
+      "name": "Iceberg",
+      "a": "rgba(186,230,253,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p18",
+      "name": "Sunset DEX",
+      "a": "rgba(255,122,0,1)",
+      "b": "rgba(0,200,255,1)"
+    },
+    {
+      "id": "p19",
+      "name": "Orbit",
+      "a": "rgba(17,24,39,1)",
+      "b": "rgba(0,200,255,1)"
+    },
+    {
+      "id": "p20",
+      "name": "Photon",
+      "a": "rgba(250,250,250,1)",
+      "b": "rgba(0,229,255,1)"
+    },
+    {
+      "id": "p21",
+      "name": "Cyber Lime",
+      "a": "rgba(163,230,53,1)",
+      "b": "rgba(0,200,255,1)"
+    },
+    {
+      "id": "p22",
+      "name": "Royal Violet",
+      "a": "rgba(124,92,255,1)",
+      "b": "rgba(255,75,145,1)"
+    },
+    {
+      "id": "p23",
+      "name": "Ocean Matrix",
+      "a": "rgba(0,200,255,1)",
+      "b": "rgba(2,132,199,1)"
+    },
+    {
+      "id": "p24",
+      "name": "Circuit Mint",
+      "a": "rgba(0,229,125,1)",
+      "b": "rgba(0,200,255,1)"
+    },
+    {
+      "id": "p25",
+      "name": "Pink Noise",
+      "a": "rgba(255,75,145,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p26",
+      "name": "Night Market",
+      "a": "rgba(15,23,42,1)",
+      "b": "rgba(255,210,77,1)"
+    },
+    {
+      "id": "p27",
+      "name": "Starship",
+      "a": "rgba(0,229,255,1)",
+      "b": "rgba(255,210,77,1)"
+    },
+    {
+      "id": "p28",
+      "name": "Turbo Teal",
+      "a": "rgba(20,184,166,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p29",
+      "name": "Sapphire",
+      "a": "rgba(59,130,246,1)",
+      "b": "rgba(124,92,255,1)"
+    },
+    {
+      "id": "p30",
+      "name": "Blackout Pro",
+      "a": "rgba(5,7,14,1)",
+      "b": "rgba(124,92,255,1)"
+    }
+  ],
+  "styles": [
+    [
+      "classic",
+      "CT clean (default)"
+    ],
+    [
+      "degen",
+      "CT degen (singular)"
+    ],
+    [
+      "alpha",
+      "Alpha / Hype"
+    ],
+    [
+      "calm",
+      "Calm / Clean"
+    ],
+    [
+      "meme",
+      "Meme / Fun"
+    ],
+    [
+      "classy",
+      "Classy"
+    ],
+    [
+      "minimal",
+      "Minimal"
+    ],
+    [
+      "noemoji",
+      "No emoji"
+    ],
+    [
+      "emoji",
+      "Emoji heavy"
+    ],
+    [
+      "focus",
+      "Focused"
+    ],
+    [
+      "cheer",
+      "Cheerful"
+    ],
+    [
+      "builder",
+      "Builder"
+    ]
+  ],
+  "presetPacks": [
+    {
+      "id": "classic",
+      "name": "Classic (default)",
+      "pro": false,
+      "style": "classic",
+      "mode": "min",
+      "anti": 35
+    },
+    {
+      "id": "king",
+      "name": "King",
+      "pro": false,
+      "style": "alpha",
+      "mode": "max",
+      "anti": 55
+    },
+    {
+      "id": "degen",
+      "name": "Degen",
+      "pro": true,
+      "style": "degen",
+      "mode": "mid",
+      "anti": 70
+    },
+    {
+      "id": "minimal",
+      "name": "Minimal",
+      "pro": true,
+      "style": "minimal",
+      "mode": "min",
+      "anti": 55
+    },
+    {
+      "id": "builder",
+      "name": "Builder",
+      "pro": true,
+      "style": "builder",
+      "mode": "mid",
+      "anti": 60
+    },
+    {
+      "id": "focus",
+      "name": "Focused",
+      "pro": false,
+      "style": "focus",
+      "mode": "mid",
+      "anti": 55
+    },
+    {
+      "id": "cheer",
+      "name": "Cheerful",
+      "pro": false,
+      "style": "cheer",
+      "mode": "mid",
+      "anti": 50
+    }
+  ]
+}

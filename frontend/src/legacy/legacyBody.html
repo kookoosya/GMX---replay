@@ -1,0 +1,1259 @@
+<div aria-hidden="true" class="bg"></div>
+<div class="wrap">
+<header>
+<div class="brand">
+<div class="logo">GM</div>
+<div>
+<h1>GMXReply</h1>
+<div class="sub" id="ui_sub"></div>
+<div class="muted" id="ui_build" style="margin-top:6px"></div>
+</div>
+</div>
+<div class="row headerRow">
+<div class="pillGroup left">
+<div class="pill" id="apiPill"><span class="dot" id="apiDot"></span><strong>API</strong><span class="muted" id="apiText">checking...</span></div>
+<div class="pill"><strong id="ui_handle">Handle</strong><span class="muted" id="handlePill">not set</span></div>
+<div class="pill"><strong id="ui_used">Used</strong><span class="muted" id="usedPill">GM 0/70 • GN 0/70</span></div>
+<div class="pill"><strong id="ui_plan">Plan</strong><span class="muted" id="planPill">Free</span></div>
+<div class="pill"><strong id="ui_sync">Sync</strong><span class="muted" id="syncPill">-</span></div>
+</div>
+<div class="pillGroup right">
+<div class="pill">
+<strong id="ui_site_lang">Language</strong>
+<!-- Custom language dropdown (flags + list) -->
+<div class="langPick" id="siteLangPick">
+  <button class="langBtn" id="siteLangBtn" type="button" aria-haspopup="listbox" aria-expanded="false">
+    <img class="flagImg" id="siteLangFlag" alt="" src="/assets/flags/en.svg">
+    <span class="langLabel" id="siteLangLabel">English</span>
+    <span class="caret">▾</span>
+  </button>
+  <div class="langMenu hidden" id="siteLangMenu" role="listbox" aria-label="Language"></div>
+  <select aria-label="siteLang" id="siteLang" name="siteLang" class="hidden"></select>
+</div>
+</div>
+<div class="pill"><button class="btn ghost mini" id="btnMode" type="button" title="Toggle light/dark">Light</button></div>
+<div class="pill"><button class="btn ghost mini" id="btnHelp" type="button" title="How Free &amp; Pro work">Free / Pro</button></div>
+</div>
+</div>
+</header>
+<div aria-live="polite" class="toast hidden" id="toast" role="status"></div>
+
+<!-- Degraded / offline bar: keeps the UI usable even if API is down -->
+<div class="degraded hidden" id="degradedBar" role="status" aria-live="polite">
+  <div class="degradedInner">
+    <div class="degradedLeft">
+      <b id="degradedTitle">Offline mode</b>
+      <span class="muted" id="degradedMsg">API is unreachable. You can still edit lists locally; sync/verify will retry when back online.</span>
+    </div>
+    <div class="degradedRight">
+      <button class="btn ghost mini" id="degradedRetry" type="button">Retry</button>
+      <button class="btn ghost mini" id="degradedHide" type="button">Hide</button>
+    </div>
+  </div>
+</div>
+
+<div class="fatal hidden" id="fatalOverlay" role="alert" aria-live="assertive">
+  <div class="fatalCard">
+    <div class="fatalTitle">Something went wrong</div>
+    <div class="fatalMsg" id="fatalMsg">A script error prevented the app from working.</div>
+    <div class="split" style="margin-top:14px;flex-wrap:wrap">
+      <button class="btn" id="fatalReload" type="button">Reload</button>
+      <button class="btn secondary" id="fatalGoHome" type="button">Go Home</button>
+    </div>
+    <div class="muted small" style="margin-top:10px">Tip: if you use many Chrome extensions (wallets, security tools), try Incognito with extensions off to confirm it’s not an injected script.</div>
+  </div>
+</div>
+<div class="tabs">
+<button class="tab active" data-tab="home" id="t_home">Home</button>
+<button class="tab" data-tab="gm" id="t_gm">GM</button>
+<button class="tab" data-tab="gn" id="t_gn">GN</button>
+<button class="tab" data-tab="referrals" id="t_ref">Referrals</button>
+<button class="tab" data-tab="leaderboard" id="t_lb">Leaderboard</button>
+<button class="tab" data-tab="themes" id="t_themes">Themes</button>
+<button class="tab" data-tab="extthemes" id="t_extthemes">Extension Themes</button>
+<button class="tab" data-tab="wallet" id="t_wallet">Upgrade Pro</button>
+<button class="tab hidden" data-tab="admin" id="t_admin">Admin</button>
+</div>
+<!-- HOME -->
+<div id="tab-home">
+<div class="grid">
+<div class="card">
+<div class="title" id="h_title">Connect</div>
+<div class="note" id="home_desc">Home: connect your X handle, activate a Pro code, and check your daily usage.</div>
+<div class="note" id="h_note">
+            Enter your X handle and connect once. The app will not work without a valid @handle.
+          </div>
+<label id="h_label_handle" for="xHandle">X handle</label>
+<input aria-label="xHandle" id="xHandle" name="xHandle" placeholder="@your_handle"/>
+<div class="split" style="margin-top:12px">
+<button class="btn" id="btnConnect">Connect</button>
+<button class="btn ghost" id="btnReset">Reset local</button>
+<a class="btn secondary link" href="/get-extension" id="btnExt">Download Chrome Extension</a>
+</div>
+<div class="hr"></div>
+<div class="title" id="h_code_title">Activate code</div>
+<div class="note" id="h_code_note">
+            If you received a tester/subscription code, paste it here and activate.
+          </div>
+<div class="split" style="margin-top:10px">
+<input aria-label="redeemCode" id="redeemCode" name="redeemCode" placeholder="Activation code"/>
+<button class="btn secondary" id="btnRedeem">Activate</button>
+</div>
+<div class="muted" id="connectMsg" style="margin-top:10px"></div>
+</div>
+<div class="card sideCard">
+<div class="title" id="h_status">Quick guide</div>
+<div class="desc" id="h_desc">
+            GMXReply is built for fast, human-style GM replies without looking botted.
+          </div>
+<div class="sideMeta" style="margin-top:10px">
+  <span class="sideBadge" id="h_badge_fast">⚡ Fast</span>
+  <span class="sideBadge" id="h_badge_safe">🛡️ No seed phrase</span>
+  <span class="sideBadge" id="h_badge_onchain">✅ On-chain verify</span>
+</div>
+<div class="sideSection">
+  <div class="sideTitle" id="h_what_title">What you get</div>
+  <ul class="clean small">
+    <li id="h_what_1">Human-sounding <b>GM</b> and <b>GN</b> replies with natural diversity.</li>
+    <li id="h_what_2">One-click + hotkeys in the extension for instant insertion on X.</li>
+    <li>Premium themes & wallpapers that apply across the whole product.</li>
+  </ul>
+</div>
+<div class="sideSection">
+  <div class="sideTitle" id="h_freepro_title">Free vs Pro</div>
+  <ul class="clean small">
+    <li><b>Free:</b> build & edit lists, limited daily inserts and saves.</li>
+    <li><b>Pro:</b> removes limits, unlocks premium controls, and best-insert hotkeys.</li>
+  </ul>
+</div>
+
+<div class="hr"></div>
+<div class="title">Try instantly (free)</div>
+<div class="note">No wallet needed. Get a quick taste, then connect your @handle to save and unlock Pro tools.</div>
+<div class="toolbar" style="margin-top:10px">
+  <div class="toolgroup">
+    <button class="btn" id="homeTryGm" type="button">Try GM</button>
+<button class="btn secondary" id="homeTryGn" type="button">Try GN</button>
+</div>
+  <div class="toolgroup">
+</div>
+</div>
+<div class="proList" id="homeTryBox" style="margin-top:10px"></div>
+<div class="muted small" id="homeTryMsg" style="margin-top:8px"></div>
+
+<ul class="clean" id="h_guide">
+<li><b>Step 1:</b> Connect your X handle (one-time).</li>
+<li><b>Step 2:</b> Build lists in <span class="kbd">GM</span> / <span class="kbd">GN</span> tabs (Global + per-language).</li>
+<li><b>Step 3:</b> Use the Chrome extension on X to insert a reply with one click.</li>
+<li><b>Limits:</b> Free = up to <b>70 saved lines</b> for GM + <b>70</b> for GN (Global + all languages). Editing is unlimited. Pro removes limits.</li>
+</ul>
+<div class="hr"></div>
+<div class="split" style="gap:12px;flex-wrap:wrap">
+<div class="pill"><strong id="h_gm_used">GM used</strong><span class="muted" id="kGmUsed">0</span></div>
+<div class="pill"><strong id="h_gn_used">GN used</strong><span class="muted" id="kGnUsed">0</span></div>
+<div class="pill"><strong id="h_reset">Reset</strong><span class="muted" id="kResetAt">-</span></div>
+</div>
+<div class="hr"></div>
+<div class="note" id="h_safe">
+            Safety: replying too fast on X can trigger rate limits. Use responsibly.
+          </div>
+</div>
+</div>
+</div>
+
+<!-- LEADERBOARD -->
+<div class="hidden" id="tab-leaderboard">
+  <div class="grid">
+    <div class="card">
+      <div class="title" id="lb_title">Leaderboard</div>
+      <div class="note" id="lb_note">Ranks by eligible referrals with real product usage.</div>
+      <div class="hr"></div>
+      <div class="split" style="gap:10px;flex-wrap:wrap;align-items:center">
+        <div class="tabsHead" style="margin:0">
+          <button class="tabBtn active" id="lb_7d" type="button">7d</button>
+          <button class="tabBtn" id="lb_30d" type="button">30d</button>
+        </div>
+        <div class="muted" id="lb_status"></div>
+      </div>
+      <div class="hr"></div>
+      <div class="tableWrap">
+        <table class="tbl" id="lb_tbl">
+          <thead>
+            <tr>
+              <th style="width:56px">#</th>
+              <th id="lb_col_handle">Handle</th>
+              <th style="width:120px" id="lb_col_eligible">Eligible</th>
+              <th style="width:120px" id="lb_col_active">Active</th>
+            </tr>
+          </thead>
+          <tbody id="lb_body"></tbody>
+        </table>
+      </div>
+      <div class="muted" id="lb_you" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <div class="title" id="lb_rules_title">Rules</div>
+      <ul class="clean" id="lb_rules_list">
+        <li id="lb_r1">Only referrals with real product usage count.</li>
+        <li id="lb_r2">Fraud-flagged invites are excluded.</li>
+        <li id="lb_r3">Leaderboard is informational and does not guarantee rewards.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- GM -->
+<div class="hidden" id="tab-gm">
+<div class="grid">
+<div class="card">
+<div class="title" id="gm_title" style="display:none"></div>
+<div class="note" id="gm_desc" style="display:none"></div>
+<div class="note" id="gm_note" style="display:none"></div>
+<div class="split" style="margin-top:12px">
+<div style="min-width:160px;flex:1">
+<label id="gm_size" for="gmMode">Size</label>
+<select aria-label="gmMode" id="gmMode" name="gmMode">
+<option value="min">min</option>
+<option value="mid">mid</option>
+<option value="max">max</option>
+</select>
+</div>
+<div style="min-width:220px;flex:1">
+<label id="gm_style_label" for="gmStyle">Writing style</label>
+<select aria-label="gmStyle" id="gmStyle" name="gmStyle"></select>
+</div>
+<div style="min-width:220px;flex:1;display:none">
+<label id="gm_lang" for="gmLang">Reply language</label>
+<div class="selectWithFlag"><span class="flag" id="gmLangFlag">️</span><select aria-label="gmLang" id="gmLang" name="gmLang"></select></div>
+</div>
+<div style="min-width:220px;flex:1;display:none">
+<label id="gm_view" for="gmViewGlobal">List</label>
+<div class="seg">
+<button id="gmViewGlobal" type="button" style="display:none">Global list</button>
+<button class="active" id="gmViewLang" type="button">Language list</button>
+</div>
+</div>
+</div>
+<div class="note muted" id="gmProMovedNote" style="margin-top:10px;display:none"></div>
+<div class="split proRow" id="gmProRow" style="margin-top:12px;flex-wrap:wrap">
+<div style="min-width:240px;flex:1">
+<label id="gm_pack_label" for="gmPack">Preset pack</label>
+<div class="split" style="gap:8px">
+<select aria-label="gmPack" id="gmPack" name="gmPack" style="flex:1"></select>
+<button class="btn ghost" id="gmPackApply" type="button">Apply</button>
+</div>
+</div>
+<div style="min-width:220px;flex:1">
+<label id="gm_anti_label" for="gmAnti">Anti-repeat</label>
+<div class="rangeRow">
+<input aria-label="gmAnti" id="gmAnti" name="gmAnti" max="5" min="0" step="1" type="range"/>
+<span class="badge"><b id="gmAntiVal">0</b></span>
+</div>
+<div class="muted small">Blocks repeats from your saved lines. Higher = stricter.</div>
+</div>
+</div>
+<div class="toolbar" style="margin-top:12px">
+  <div class="toolgroup">
+    <button class="btn" id="gmRand1">Random 1</button>
+    <button class="btn secondary" id="gmRand10">Random 10</button>
+    <button class="btn secondary" id="gmRand70">Random 70</button>
+    <button class="btn ghost" id="gmBestBtn">Best</button>
+  </div>
+  <div class="toolgroup">
+    <button class="btn ghost" id="gmCleanup" style="display:none">Cleanup list</button>
+    <button class="btn ghost" id="gmClear">Clear view</button>
+    <button class="btn ghost danger" id="gmClearAll" title="Clears Global + all language lists">Clear ALL</button>
+  </div>
+  <div class="toolgroup">
+    <button class="btn ghost" id="gmCopyAll" type="button">Copy all</button>
+    <button class="btn ghost" id="gmExport" type="button">Export .txt</button>
+  </div>
+</div>
+<div class="quickAddRow">
+<input aria-label="gmNewLine" class="quickAddInput" id="gmNewLine" name="gmNewLine" placeholder="Type your own line…"/>
+<button class="btn ghost" id="gmNewAdd" type="button">Add</button>
+</div>
+<div class="langChipsWrap hidden" id="gmLangChipsWrap">
+<div class="muted small" id="gm_lang_tabs_note"></div>
+<div class="langChips" id="gmLangChips"></div>
+</div>
+<div class="listWrap">
+<div class="listTop">
+<div class="split">
+<span class="badge"><span id="gm_badge_this">This list</span>: <b id="gmCount">0</b></span>
+<span class="badge"><span id="gm_badge_total">Saved</span>: <b id="gmTotal">0</b> / <b id="gmCap">70</b></span>
+</div>
+<div class="split" style="margin-top:10px;flex-wrap:wrap">
+  <input aria-label="gmFilter" id="gmFilter" name="gmFilter" placeholder="Filter saved lines…" style="flex:1;min-width:220px"/>
+  <button class="btn ghost" id="gmFilterClear" type="button">Clear</button>
+</div>
+<div class="muted small" id="gmSavedBreakdown"></div>
+<div class="muted" id="gmMsg"></div>
+</div>
+<div class="listBody" id="gmList"></div>
+<div class="helperRow">
+<div style="flex:1">
+<div class="muted" id="gm_paste_label">Paste multiple lines (one per line)</div>
+<textarea aria-label="gmPaste" class="pasteBox" id="gmPaste" name="gmPaste" placeholder="Paste lines..."></textarea>
+</div>
+<div class="split">
+<button class="btn secondary" id="gmPasteAdd">Add pasted</button>
+</div>
+</div>
+</div>
+</div>
+<div class="card sideCard">
+<div class="title" id="gm_right">How to use GM</div>
+<div class="desc" id="gm_right_desc">Build a clean GM list so the extension can insert human-style replies with a natural typing delay.</div>
+<div class="sideMeta" style="margin-top:10px">
+  <span class="sideBadge" id="gm_badge_1">⚡ One-click insert</span>
+  <span class="sideBadge" id="gm_badge_2">🎛️ Style control</span>
+  <span class="sideBadge" id="gm_badge_3">🧠 Anti-repeat</span>
+</div>
+<div class="sideSection">
+  <div class="sideTitle">Free limits (forever)</div>
+  <div class="meterBlock">
+    <div class="meterRow"><div class="meterLabel">Daily inserts (extension)</div><div class="meterVal" id="gmDailyVal">0/70</div></div>
+    <div class="meter"><span id="gmDailyFill"></span></div>
+
+    <div class="meterRow" style="margin-top:6px"><div class="meterLabel">Saved lines (site)</div><div class="meterVal" id="gmSavedVal">0/70</div></div>
+    <div class="meter"><span id="gmSavedFill"></span></div>
+  </div>
+  <div class="muted small" style="margin-top:8px">Free is enough to try everything. Pro removes caps + unlocks all themes/styles.</div>
+</div>
+<div class="sideSection">
+  <div class="sideTitle" id="gm_pro_title">What Pro unlocks</div>
+  <ul class="clean small">
+    <li id="gm_pro_1"><b>Unlimited</b> saved lines and inserts.</li>
+    <li id="gm_pro_2">“Insert best” hotkey (generate a few, insert the best).</li>
+    <li id="gm_pro_3">Stronger anti-repeat, cleaner output, faster flow.</li>
+  </ul>
+</div>
+<div class="sideSection">
+  <div class="sideTitle" id="gm_safe_title">Trust & safety</div>
+  <ul class="clean small">
+    <li id="gm_safe_1">We never ask for seed phrase or private keys.</li>
+    <li id="gm_safe_2">You always confirm recipient + amount inside your wallet.</li>
+  </ul>
+</div>
+
+<ul class="clean" id="gm_right_list">
+<li><b>Pick a style</b> and <b>Preset pack</b> (optional).</li>
+<li><b>Random 1 / 10 / 70</b> adds new unique lines (status shows <b>Added X/Y</b>).</li>
+<li><b>Anti-repeat</b> blocks duplicates from your saved lines.</li>
+<li><b>Edit any line</b> by clicking it and typing your own text.</li>
+<li><b>Free cap:</b> up to <b>70</b> saved GM lines total (adding stops when full, editing always works).</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- GN -->
+<div class="hidden" id="tab-gn">
+<div class="grid">
+<div class="card">
+<div class="title" id="gn_title" style="display:none"></div>
+<div class="note" id="gn_desc" style="display:none"></div>
+<div class="note" id="gn_note" style="display:none"></div>
+<div class="split" style="margin-top:12px">
+<div style="min-width:160px;flex:1">
+<label id="gn_size" for="gnMode">Size</label>
+<select aria-label="gnMode" id="gnMode" name="gnMode">
+<option value="min">min</option>
+<option value="mid">mid</option>
+<option value="max">max</option>
+</select>
+</div>
+<div style="min-width:220px;flex:1">
+<label id="gn_style_label" for="gnStyle">Writing style</label>
+<select aria-label="gnStyle" id="gnStyle" name="gnStyle"></select>
+</div>
+<div style="min-width:220px;flex:1;display:none">
+<label id="gn_lang" for="gnLang">Reply language</label>
+<div class="selectWithFlag"><span class="flag" id="gnLangFlag">️</span><select aria-label="gnLang" id="gnLang" name="gnLang"></select></div>
+</div>
+<div style="min-width:220px;flex:1;display:none">
+<label id="gn_view" for="gnViewGlobal">List</label>
+<div class="seg">
+<button id="gnViewGlobal" type="button">Global list</button>
+<button class="active" id="gnViewLang" type="button">Language list</button>
+</div>
+</div>
+</div>
+<div class="note muted" id="gnProMovedNote" style="margin-top:10px;display:none"></div>
+<div class="split proRow" id="gnProRow" style="margin-top:12px;flex-wrap:wrap">
+<div style="min-width:240px;flex:1">
+<label id="gn_pack_label" for="gnPack">Preset pack</label>
+<div class="split" style="gap:8px">
+<select aria-label="gnPack" id="gnPack" name="gnPack" style="flex:1"></select>
+<button class="btn ghost" id="gnPackApply" type="button">Apply</button>
+</div>
+</div>
+<div style="min-width:220px;flex:1">
+<label id="gn_anti_label" for="gnAnti">Anti-repeat</label>
+<div class="rangeRow">
+<input aria-label="gnAnti" id="gnAnti" name="gnAnti" max="5" min="0" step="1" type="range"/>
+<span class="badge"><b id="gnAntiVal">0</b></span>
+</div>
+<div class="muted small">Blocks repeats from your saved lines. Higher = stricter.</div>
+</div>
+</div>
+<div class="toolbar" style="margin-top:12px">
+  <div class="toolgroup">
+    <button class="btn" id="gnRand1">Random 1</button>
+    <button class="btn secondary" id="gnRand10">Random 10</button>
+    <button class="btn secondary" id="gnRand70">Random 70</button>
+    <button class="btn ghost" id="gnBestBtn">Best</button>
+  </div>
+  <div class="toolgroup">
+    <button class="btn ghost" id="gnCleanup" style="display:none">Cleanup list</button>
+    <button class="btn ghost" id="gnClear">Clear view</button>
+    <button class="btn ghost danger" id="gnClearAll" title="Clears Global + all language lists">Clear ALL</button>
+  </div>
+  <div class="toolgroup">
+    <button class="btn ghost" id="gnCopyAll" type="button">Copy all</button>
+    <button class="btn ghost" id="gnExport" type="button">Export .txt</button>
+  </div>
+</div>
+<div class="quickAddRow">
+<input aria-label="gnNewLine" class="quickAddInput" id="gnNewLine" name="gnNewLine" placeholder="Type your own line…"/>
+<button class="btn ghost" id="gnNewAdd" type="button">Add</button>
+</div>
+<div class="langChipsWrap hidden" id="gnLangChipsWrap">
+<div class="muted small" id="gn_lang_tabs_note"></div>
+<div class="langChips" id="gnLangChips"></div>
+</div>
+<div class="listWrap">
+<div class="listTop">
+<div class="split">
+<span class="badge"><span id="gn_badge_this">This list</span>: <b id="gnCount">0</b></span>
+<span class="badge"><span id="gn_badge_total">Saved</span>: <b id="gnTotal">0</b> / <b id="gnCap">70</b></span>
+</div>
+<div class="split" style="margin-top:10px;flex-wrap:wrap">
+  <input aria-label="gnFilter" id="gnFilter" name="gnFilter" placeholder="Filter saved lines…" style="flex:1;min-width:220px"/>
+  <button class="btn ghost" id="gnFilterClear" type="button">Clear</button>
+</div>
+<div class="muted small" id="gnSavedBreakdown"></div>
+<div class="muted" id="gnMsg"></div>
+</div>
+<div class="listBody" id="gnList"></div>
+<div class="helperRow">
+<div style="flex:1">
+<div class="muted" id="gn_paste_label">Paste multiple lines (one per line)</div>
+<textarea aria-label="gnPaste" class="pasteBox" id="gnPaste" name="gnPaste" placeholder="Paste lines..."></textarea>
+</div>
+<div class="split">
+<button class="btn secondary" id="gnPasteAdd">Add pasted</button>
+</div>
+</div>
+</div>
+</div>
+<div class="card sideCard">
+<div class="title" id="gn_right">How to use GN</div>
+<div class="desc" id="gn_right_desc">Build a clean GN list so the extension can insert human-style good night replies with a natural typing delay.</div>
+<div class="sideMeta" style="margin-top:10px">
+  <span class="sideBadge" id="gn_badge_1">🌙 Night-friendly</span>
+  <span class="sideBadge" id="gn_badge_2">🎛️ Style control</span>
+  <span class="sideBadge" id="gn_badge_3">🧠 Anti-repeat</span>
+</div>
+<div class="sideSection">
+  <div class="sideTitle">Free limits (forever)</div>
+  <div class="meterBlock">
+    <div class="meterRow"><div class="meterLabel">Daily inserts (extension)</div><div class="meterVal" id="gnDailyVal">0/70</div></div>
+    <div class="meter"><span id="gnDailyFill"></span></div>
+
+    <div class="meterRow" style="margin-top:6px"><div class="meterLabel">Saved lines (site)</div><div class="meterVal" id="gnSavedVal">0/70</div></div>
+    <div class="meter"><span id="gnSavedFill"></span></div>
+  </div>
+  <div class="muted small" style="margin-top:8px">Same rules as GM. Pro unlocks unlimited lines + all themes/styles.</div>
+</div>
+<div class="sideSection">
+  <div class="sideTitle" id="gn_pro_title">What Pro unlocks</div>
+  <ul class="clean small">
+    <li id="gn_pro_1"><b>Unlimited</b> saved lines and inserts.</li>
+    <li id="gn_pro_2">“Insert best” hotkey for GN too.</li>
+    <li id="gn_pro_3">Premium packs and stronger anti-repeat.</li>
+  </ul>
+</div>
+<div class="sideSection">
+  <div class="sideTitle" id="gn_safe_title">Trust & safety</div>
+  <ul class="clean small">
+    <li id="gn_safe_1">We never ask for seed phrase or private keys.</li>
+    <li id="gn_safe_2">You always confirm recipient + amount inside your wallet.</li>
+  </ul>
+</div>
+
+<ul class="clean" id="gn_right_list">
+<li><b>Pick a style</b> and <b>Preset pack</b> (optional).</li>
+<li><b>Random 1 / 10 / 70</b> adds new unique lines (status shows <b>Added X/Y</b>).</li>
+<li><b>Anti-repeat</b> blocks duplicates from your saved lines.</li>
+<li><b>Edit any line</b> by clicking it and typing your own text.</li>
+<li><b>Free cap:</b> up to <b>70</b> saved GN lines total (adding stops when full, editing always works).</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- REFERRALS -->
+<div class="hidden" id="tab-referrals">
+<div class="grid">
+<div class="card">
+<div class="title" id="r_title">Referrals</div>
+<div class="note" id="r_note">Referrals count only when they lead to real product usage (not just signups).</div>
+
+
+<div class="split refTopRow" style="flex-wrap:wrap;gap:12px;margin-top:12px">
+  <div style="min-width:320px;flex:1">
+    <label id="refLinkLabel" for="refLink">Referral link</label>
+    <input aria-label="refLink" id="refLink" name="refLink" placeholder="" readonly=""/>
+  </div>
+  <div style="min-width:240px;flex:0 1 auto">
+    <div class="labelSpacer" aria-hidden="true"></div>
+    <div class="refActions">
+      <button class="btn ghost" id="refCopy" type="button">Copy link</button>
+      <button class="btn" id="refLoad" type="button">Load stats</button>
+      <div class="refCounts" style="display:flex;gap:8px;flex-wrap:wrap">
+        <span class="pill refPill"><strong id="refConfirmedLabel">Confirmed</strong><span class="muted"><b id="refConfirmedInline">0</b></span></span>
+        <span class="pill refPill"><strong id="refActiveLabel">Active</strong><span class="muted"><b id="refActiveInline">0</b></span></span>
+        <span class="pill refPill"><strong id="refEligibleLabel">Eligible</strong><span class="muted"><b id="refEligibleInline">0</b><span class="srOnly" id="refCountInline">0</span><span class="srOnly" id="refCountRight">0</span></span></span>
+      </div>
+    </div>
+    <div class="muted" id="refMsg" style="margin-top:10px"></div>
+  <details class="foldSmall" id="promoDetails" style="margin-top:12px" open>
+  <summary><b>Promoter details</b></summary>
+  <div class="kpiRow" id="promoKpiRow">
+    <div class="kpi"><div class="k" id="promo_k_confirmed">Confirmed</div><div class="v" id="promoConfirmed">0</div></div>
+    <div class="kpi"><div class="k" id="promo_k_active">Active</div><div class="v" id="promoActive">0</div></div>
+    <div class="kpi"><div class="k" id="promo_k_eligible">Eligible</div><div class="v" id="promoEligible">0</div></div>
+    <div class="kpi"><div class="k" id="promo_k_legacy">Legacy</div><div class="v" id="promoLegacy">0</div></div>
+    <div class="kpi"><div class="k" id="promo_k_clicks">Clicks</div><div class="v" id="promoClicks">0</div></div>
+    <div class="kpi"><div class="k" id="promo_k_daily">Daily inserts</div><div class="v" id="promoDailyLimit">0</div></div>
+    <!-- Removed: Bonus/20 and Next bonus at (confusing; per docs we show only actual daily bonus + caps) -->
+  </div>
+  <div class="note" id="refPromoNote" style="margin-top:10px"></div>
+</details>
+
+<div class="hr"></div>
+
+<div class="title" id="r_invited_title">Invited users</div>
+<div class="note" id="r_invited_note">Active means the invited user used the product at least once. Fraud-flagged invites don’t count.</div>
+<div class="tableWrap">
+  <table class="table" id="refInvitedTable">
+    <thead>
+      <tr>
+        <th id="r_col_handle">Handle</th>
+        <th id="r_col_inserts">Inserts</th>
+        <th id="r_col_active">Active days</th>
+        <th id="r_col_status">Status</th>
+      </tr>
+    </thead>
+    <tbody id="refInvitedBody">
+      <tr><td colspan="4" class="muted" id="r_invited_placeholder">Press “Load stats” to fetch</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="card">
+<div class="title" id="r_how">How it works</div>
+<div class="desc" id="r_desc">Short version:</div>
+<div class="hr"></div>
+<ul class="clean" id="r_list">
+  <li id="r_li1">Share your referral link.</li>
+  <li id="r_li2">Confirmed = signup via your link.</li>
+  <li id="r_li3">Active = confirmed referral who used the product at least once.</li>
+  <li id="r_li4">Eligible = active referrals + any legacy (grandfathered).</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- THEMES -->
+<div class="hidden" id="tab-themes">
+  <div class="grid">
+    <div class="colStack">
+      <div class="card">
+        <div class="title" id="themes_title">Themes</div>
+        <div class="note" id="themes_desc">
+          Themes change the look of the app. Wallpapers and backgrounds change the vibe. Some items are locked in Free.
+        </div>
+        <div class="hr"></div>
+        <div class="kpiRow">
+          <div class="kpi"><div class="k" id="themes_k_themes">Unlocked themes</div><div class="v" id="themesUnlocked">0/100</div></div>
+          <div class="kpi"><div class="k" id="themes_k_walls">Unlocked wallpapers</div><div class="v" id="wpUnlocked">0/100</div></div>
+          <div class="kpi"><div class="k" id="themes_k_ref">Referrals</div><div class="v" id="refCountPill">0</div></div>
+        </div>
+      </div>
+
+      <div class="card" id="themeWallCard">
+        <div class="tabsHead" role="tablist" aria-label="themes-wallpapers">
+          <button class="tabBtn active" id="tabTheme" role="tab" aria-selected="true" aria-controls="themePane" type="button">
+            <span id="themes_pick_title">Pick a theme</span>
+          </button>
+          <button class="tabBtn" id="tabWall" role="tab" aria-selected="false" aria-controls="wallPane" type="button">
+            <span id="wp_title">Wallpapers</span>
+          </button>
+          <button class="tabBtn" id="tabCustom" role="tab" aria-selected="false" aria-controls="customPane" type="button">
+            <span id="customBg_title">Custom background</span>
+          </button>
+        </div>
+
+        <div class="tabPane" id="themePane" role="tabpanel" aria-labelledby="tabTheme">
+          <div class="note" id="themes_pick_note">Click any unlocked theme to apply it instantly.</div>
+          <div class="hr"></div>
+          <div class="themeGrid" id="themeGrid"></div>
+        </div>
+
+        <div class="tabPane hidden" id="wallPane" role="tabpanel" aria-labelledby="tabWall">
+          <div class="split" style="flex-wrap:wrap;gap:12px">
+            <div style="min-width:240px;flex:1">
+              <label id="wpTab_label" for="wpTab">Apply to</label>
+              <select id="wpTab" aria-label="wpTab"></select>
+            </div>
+            <div style="min-width:180px">
+              <div class="labelSpacer" aria-hidden="true"></div>
+              <button class="btn secondary" id="wpClear" type="button">Clear</button>
+            </div>
+          </div>
+          <div class="hr"></div>
+          <div class="wpGrid" id="wpGrid"></div>
+          <div class="note" id="wpStatus" style="margin-top:10px"></div>
+        </div>
+
+        <div class="tabPane hidden" id="customPane" role="tabpanel" aria-labelledby="tabCustom">
+          <div class="split" style="flex-wrap:wrap;gap:12px">
+            <div style="min-width:240px;flex:1">
+              <label for="customBgTab">Apply to</label>
+              <select id="customBgTab" aria-label="customBgTab"></select>
+            </div>
+            <div style="min-width:180px">
+              <div class="labelSpacer" aria-hidden="true"></div>
+              <button class="btn secondary" id="customBgClear" type="button">Clear</button>
+            </div>
+          </div>
+          <div class="hr"></div>
+          <div class="split" style="flex-wrap:wrap">
+            <div style="min-width:260px;flex:1">
+              <label id="customBg_label" for="customBgPick">Upload image</label>
+              <button class="btn ghost" id="customBgPick" type="button">Choose image</button>
+              <span class="muted" id="customBgName" style="margin-left:10px;display:inline-block;max-width:240px;
+overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
+              <input accept="image/*" aria-label="customBgFile" id="customBgFile" name="customBgFile" type="file" class="hidden"/>
+            </div>
+            <div style="min-width:220px">
+              <div class="labelSpacer" aria-hidden="true"></div>
+              <button class="btn secondary" id="customBgRemove" type="button">Remove</button>
+            </div>
+          </div>
+          <div class="note" id="customBg_status" style="margin-top:10px"></div>
+</div>
+      </div>
+    </div>
+
+    <div class="card" id="themesRightCard">
+      <div class="title" id="themes_right_title">Quick guide</div>
+      <div class="desc" id="themes_right_desc">
+        Customize the site UI, backgrounds, and unlock previews with referrals (Pro unlocks everything).
+      </div>
+      <div class="hr"></div>
+      <div class="desc" id="themes_rules">
+        Free preview: first 10 themes + first 10 wallpapers. Unlock more via referrals. Pro unlocks everything and removes the 70-line cap.</div>
+      <div class="hr"></div>
+      <div class="pill" style="width:fit-content"><strong id="themes_free_title">Free limits (forever)</strong><span class="muted" id="themes_free_note">clear &amp; predictable</span></div>
+      <div class="meterBlock" style="margin-top:10px">
+        <div class="meterRow"><div class="muted">Themes unlocked</div><div class="spacer"></div><div class="pill" id="themesUnlockedVal">0/10</div></div>
+        <div class="meter"><span id="themesUnlockedFill"></span></div>
+        <div class="meterRow"><div class="muted">Wallpapers unlocked</div><div class="spacer"></div><div class="pill" id="wpUnlockedVal">0/10</div></div>
+        <div class="meter"><span id="wpUnlockedFill"></span></div>
+        <div class="muted" style="margin-top:6px" id="themes_free_tip">Referrals unlock more for Free. Pro unlocks all instantly.</div>
+      </div>
+      <div class="hr"></div>
+      <div class="desc hidden" id="wp_note">
+        Set a wallpaper per tab (Home / GM / Referrals / Themes / Extension themes / Wallet). First 10 wallpapers are free; more unlock at 10 referrals (then +1 every 5) or Pro.
+      </div>
+      <div class="desc hidden" id="customBg_note">
+        Pro only. Upload an image and we auto-fit it to any screen (desktop/mobile). This will later sync to the extension.
+      </div>
+      <ul class="clean" id="themes_right_list"></ul>
+    </div>
+  </div>
+</div>
+<!-- EXTENSION THEMES -->
+<div class="hidden" id="tab-extthemes">
+<div class="grid">
+<div class="card">
+<div class="title" id="extthemes_title">Extension themes</div>
+<div class="note" id="extthemes_note">Pick a skin for the extension UI. This is selected on the site and synced to the extension.</div>
+<div class="hr"></div>
+<div class="kpiRow">
+  <div class="kpi"><div class="k" id="ext_k_themes">Unlocked themes</div><div class="v" id="extThemesUnlocked">0/100</div></div>
+  <div class="kpi"><div class="k" id="ext_k_walls">Unlocked wallpapers</div><div class="v" id="extWpUnlocked">0/100</div></div>
+  <div class="kpi"><div class="k" id="ext_k_ref">Referrals</div><div class="v" id="extRefCountPill">0</div></div>
+</div>
+<div class="hr"></div>
+<div class="tabsHead" role="tablist" aria-label="extthemes-tabs">
+  <button class="tabBtn active" id="extTabTheme" role="tab" aria-selected="true" aria-controls="extThemePane" type="button">
+    <span id="ext_pick_title">Pick a theme</span>
+  </button>
+  <button class="tabBtn" id="extTabWall" role="tab" aria-selected="false" aria-controls="extWallPane" type="button">
+    <span id="ext_wp_title">Wallpapers</span>
+  </button>
+  <button class="tabBtn" id="extTabCustom" role="tab" aria-selected="false" aria-controls="extCustomPane" type="button">
+    <span id="ext_custom_title">Custom background</span>
+  </button>
+</div>
+
+<div id="extThemePane">
+  <div class="themeGrid" id="extThemeGrid"></div>
+  <div class="muted" id="extThemeStatus" style="margin-top:10px"></div>
+</div>
+
+<div class="hidden" id="extWallPane">
+  <div class="wpGrid" id="extWpGrid"></div>
+  <div class="muted" id="extWpStatus" style="margin-top:10px"></div>
+</div>
+
+<div class="hidden" id="extCustomPane">
+  <div class="split" style="gap:12px;flex-wrap:wrap;align-items:flex-end">
+    <div style="min-width:240px;flex:1">
+      <label for="extCustomBgTab" id="extCustomBgTab_label">Apply to</label>
+      <select id="extCustomBgTab"></select>
+    </div>
+    <div style="min-width:180px">
+      <div class="labelSpacer"></div>
+      <button class="btn secondary" type="button" id="extCustomBgClear">Clear</button>
+    </div>
+  </div>
+  <div class="hr"></div>
+  <div class="split" style="gap:12px;flex-wrap:wrap;align-items:center">
+    <div style="min-width:260px;flex:1">
+      <label id="extCustomBg_label" for="extCustomBgPick">Upload image</label>
+      <button class="btn ghost" id="extCustomBgPick" type="button">Choose image</button>
+      <span class="muted" id="extCustomBgName" style="margin-left:10px"></span>
+      <input accept="image/*" id="extCustomBgFile" type="file" class="hidden"/>
+      <div class="muted" id="extCustomBgHint" style="margin-top:6px">We auto-fit your image to the extension popup.</div>
+    </div>
+    <div style="min-width:180px">
+      <button class="btn" type="button" id="extCustomBgRemove">Remove</button>
+    </div>
+  </div>
+  <div class="muted" id="extCustomBgStatus" style="margin-top:10px"></div>
+</div>
+</div>
+<div class="card">
+<div class="title" id="extthemes_right_title">How unlocks work</div>
+<div class="desc" id="extthemes_right_desc">
+            Free preview: first 10 extension skins. Unlock +1 at 10 referrals, then +1 every 5. Pro unlocks everything.
+          </div>
+<div class="hr"></div>
+<ul class="clean" id="extthemes_right_list">
+<li>Skins are applied from the site and synced to the extension.</li>
+<li>Only 1 skin is active at a time.</li>
+<li>Pro also removes the 70-line cap and unlocks all writing styles/preset packs.</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- WALLET / BILLING -->
+<div class="hidden" id="tab-wallet">
+<div class="grid">
+<div class="card">
+<div class="title" id="w_title">Upgrade Pro</div>
+<div class="note" id="wallet_desc">Upgrade Pro: remove daily limits, unlock all themes/skins, and get advanced controls.</div>
+<div class="note" id="w_status_desc"></div>
+<div class="note" id="w_note">Pick a plan → choose SOL / USDC / USDT → connect your wallet → approve the transfer. We verify on-chain automatically.</div>
+
+<div class="hr"></div>
+<div class="split" style="align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+  <div class="title" id="w_plan_title">Choose plan</div>
+  <button class="btn secondary" id="plan_compare_btn" type="button" style="padding:10px 12px">Compare</button>
+</div>
+<div class="planGrid" id="planGrid"></div>
+
+<div class="hr"></div>
+<div class="title" id="w_paywith_title">Pay with</div>
+<div class="payTokenRow" id="payTokenRow">
+  <button class="tokenBtn active" type="button" data-cur="SOL" id="token_SOL">
+    <img class="tokenIcon" src="/assets/tokens/sol.svg" alt="SOL"/>
+    <span>SOL</span>
+  </button>
+  <button class="tokenBtn" type="button" data-cur="USDC" id="token_USDC">
+    <img class="tokenIcon" src="/assets/tokens/usdc.svg" alt="USDC"/>
+    <span>USDC</span>
+  </button>
+  <button class="tokenBtn" type="button" data-cur="USDT" id="token_USDT">
+    <img class="tokenIcon" src="/assets/tokens/usdt.svg" alt="USDT"/>
+    <span>USDT</span>
+  </button>
+</div>
+<div class="muted small" id="w_quote_hint" style="margin-top:8px">Stablecoins pay exact USD. SOL amount is quoted live at checkout.</div>
+
+<div class="hr"></div>
+<div id="walletActions" class="hidden">
+  <div class="title" id="sf_title">Wallet</div>
+  <div class="desc" id="sf_desc" style="margin-bottom:10px">Connect any Solana wallet via Wallet Standard.</div>
+  <div class="split" style="margin-top:10px;gap:12px;flex-wrap:wrap;align-items:center">
+    <button class="btn" id="sf_connect" type="button">Connect wallet</button>
+    <button class="btn secondary hidden" id="sf_disconnect" type="button">Disconnect</button>
+    <div class="pill"><strong id="sf_label">Wallet</strong><span class="muted" id="sf_addr">not connected</span></div>
+  </div>
+  <div class="split" style="margin-top:12px;gap:12px;flex-wrap:wrap;align-items:center">
+    <button class="btn" id="sf_pay" type="button" disabled>Pay now</button>
+    <div class="muted small" id="sf_hint">Select a plan to enable.</div>
+  </div>
+  <div class="muted" id="w_msg" style="margin-top:10px"></div>
+  <div id="pay_state_box" class="hidden" style="margin-top:10px;border:1px solid var(--border);border-radius:14px;padding:10px;background:rgba(0,0,0,0.02)">
+    <div class="muted small" id="pay_state_title" style="margin-bottom:8px">Payment status</div>
+    <div class="split" style="gap:8px;flex-wrap:wrap">
+      <div class="pill" id="pay_step_processing"><strong>1</strong><span class="muted">Processing</span></div>
+      <div class="pill" id="pay_step_confirming"><strong>2</strong><span class="muted">Confirming</span></div>
+      <div class="pill" id="pay_step_verified"><strong>3</strong><span class="muted">Verified</span></div>
+    </div>
+    <div class="muted small" id="pay_state_hint" style="margin-top:8px"></div>
+  </div>
+
+</div>
+
+</div>
+<div class="card sideCard">
+<div class="title" id="w_right">How Pro &amp; referrals work</div>
+<div class="desc" id="w_right_desc">
+    Free lets you build and edit your GM list. Pro unlocks everything and removes limits.
+  </div>
+<ul class="clean" id="w_right_list">
+<li><b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines. Daily inserts: <b>70</b> each.</li>
+<li><b>Free cosmetics:</b> <b>10</b> themes + <b>10</b> wallpapers. More via referrals or Pro.</li>
+<li><b>Referrals:</b> unlock more themes/skins/packs gradually. Full details in <b>Referrals</b> tab.</li>
+<li><b>Pro:</b> unlimited daily inserts, unlock everything, advanced controls.</li>
+<li><b>Pay:</b> select a plan → choose SOL/USDC/USDT → connect wallet → approve transfer.</li>
+</ul>
+<div class="hr"></div>
+<div class="title" id="w_pay_help_title">Payment steps</div>
+<ul class="clean" id="w_pay_help_list">
+<li>Select a plan and choose a payment token (SOL / USDC / USDT).</li>
+<li>Connect a wallet and approve the transfer inside your wallet.</li>
+<li>We verify the transaction on-chain and activate Pro for your handle.</li>
+</ul>
+<div class="hr"></div>
+<div class="title" id="w_trust_title">Trust &amp; safety</div>
+<ul class="clean" id="w_trust_list">
+  <li><b>No seed phrase:</b> we never ask for your secret words or private keys.</li>
+  <li><b>Standard transfer:</b> you will always see the receiver address and amount inside your wallet before approving.</li>
+  <li><b>On-chain verification:</b> Pro activates only after we verify your transaction on Solana.</li>
+</ul>
+<div class="hr"></div>
+<details class="fold" id="walletExtras"><summary><b>Account &amp; support</b><span class="muted small" style="margin-left:8px">Activity, sync, diagnostics, FAQ</span></summary>
+
+<div class="split" style="align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+  <div class="title" id="w_activity_title">Your activity</div>
+  <button class="btn secondary" id="w_activity_refresh" type="button" style="padding:10px 12px">Refresh</button>
+</div>
+<div class="muted small" id="w_activity_hint" style="margin-top:6px">Shows recent events for your handle (payments, referrals, upgrades)</div>
+<div class="proofList" id="w_activity_list" style="margin-top:10px"></div>
+<div class="muted" id="w_activity_msg" style="margin-top:8px"></div>
+<div class="hr"></div>
+<div class="title" id="w_proof_title">Recent verified upgrades</div>
+<div class="muted" id="w_proof_stats">Loading…</div>
+<div class="proofList" id="w_proof_list" style="margin-top:10px"></div>
+<div class="hr"></div>
+<div class="title" id="w_cloud_title">Cloud sync</div>
+<div class="desc" id="w_cloud_desc">Backup your GM/GN lists to the cloud and restore on any device (Pro-only).</div>
+<div class="split" style="margin-top:10px;flex-wrap:wrap;gap:10px">
+  <button class="btn secondary" id="w_cloud_backup" type="button">Backup now</button>
+  <button class="btn secondary" id="w_cloud_restore" type="button">Restore</button>
+</div>
+<div class="muted small" id="w_cloud_msg" style="margin-top:8px"></div>
+
+<div class="hr"></div>
+<div class="title" id="w_support_title">Support</div>
+<div class="desc" id="w_support_desc">Copy a safe diagnostics bundle (no private keys) to help us debug issues fast</div>
+<div class="split" style="margin-top:10px;flex-wrap:wrap;gap:10px">
+  <button class="btn secondary" id="toolSupport" type="button">Copy support bundle</button>
+</div>
+<details class="fold foldSmall" id="supportAdvanced" style="margin-top:10px">
+  <summary>Advanced diagnostics</summary>
+  <div class="split" style="margin-top:10px;flex-wrap:wrap;gap:10px">
+    <button class="btn secondary" id="toolDiag" type="button">Copy diagnostics</button>
+    <button class="btn secondary" id="toolLogs" type="button">Copy local logs</button>
+  </div>
+</details>
+<div class="muted small" id="toolNote" style="margin-top:8px"></div>
+<textarea id="supportOut" placeholder="" style="margin-top:10px;min-height:80px" aria-label="supportOut"></textarea>
+
+<div class="hr"></div>
+<div class="title" id="w_faq_title">FAQ</div>
+<ul class="clean" id="w_faq_list">
+  <li><b>Is Pro tied to my wallet?</b> No — Pro is tied to your X handle. You can pay from any wallet.</li>
+  <li><b>What if I paid but Pro isn't active?</b> Use the Support buttons above and send us the bundle.</li>
+  <li><b>Do you store my replies?</b> Lists are stored locally in your browser. Cloud sync is Pro-only.</li>
+</ul>
+
+</details>
+
+</div>
+</div>
+</div>
+<!-- ADMIN -->
+<div class="hidden" id="tab-admin">
+<div class="grid">
+<div class="card">
+<div class="title">Admin stats</div>
+<div class="note">Visible only for the admin handle. Sign in with password to unlock admin tools.</div>
+
+<div class="split" style="gap:12px;flex-wrap:wrap;align-items:flex-end">
+  <div style="flex:1;min-width:220px">
+    <label for="adminHandle">Admin handle</label>
+    <input aria-label="adminHandle" id="adminHandle" name="adminHandle" placeholder="@Kristofer_Sol_"/>
+  </div>
+  <div style="flex:1;min-width:220px">
+    <label for="adminPassword">Password</label>
+    <input aria-label="adminPassword" id="adminPassword" name="adminPassword" type="password" placeholder="Enter admin password"/>
+  </div>
+</div>
+
+<div class="split" style="margin-top:12px;flex-wrap:wrap;gap:12px;align-items:center">
+  <button class="btn" id="adminLogin" type="button">Sign in</button>
+  <button class="btn secondary" id="adminLogout" type="button">Sign out</button>
+  <span class="pill"><strong>Status</strong><span class="muted" id="adminAuthState">signed out</span></span>
+</div>
+
+<div class="split" style="margin-top:12px;flex-wrap:wrap">
+<button class="btn" id="adminStats" type="button">Load stats</button>
+</div>
+<div class="split" style="margin-top:12px;gap:12px;flex-wrap:wrap">
+<div class="pill"><strong>Online (10m)</strong><span class="muted" id="aOnline">-</span></div>
+<div class="pill"><strong>Total users</strong><span class="muted" id="aTotal">-</span></div>
+<div class="pill"><strong>Extension users</strong><span class="muted" id="aExt">-</span></div>
+<div class="pill"><strong>Inserts today</strong><span class="muted" id="aIns">-</span></div>
+</div>
+<div class="muted" id="adminMsg" style="margin-top:10px"></div>
+</div>
+
+<div class="card">
+  <div class="title">Admin: conversion metrics</div>
+  <div class="note">Funnel + rates based on anonymous event counters (no reply text).</div>
+
+  <div class="split" style="margin-top:12px;flex-wrap:wrap;gap:12px;align-items:flex-end">
+    <div style="min-width:200px">
+      <label for="adminMetricsHours">Window (hours)</label>
+      <input aria-label="adminMetricsHours" id="adminMetricsHours" name="adminMetricsHours" type="number" min="1" max="720" value="24" />
+    </div>
+    <button class="btn secondary" id="adminMetricsLoad" type="button">Load</button>
+  </div>
+
+  <div class="split" style="margin-top:12px;gap:12px;flex-wrap:wrap">
+    <div class="pill"><strong>DAU</strong><span class="muted" id="aDau">-</span></div>
+    <div class="pill"><strong>MAU</strong><span class="muted" id="aMau">-</span></div>
+    <div class="pill"><strong>Pro active</strong><span class="muted" id="aPro">-</span></div>
+  </div>
+
+  <div class="hr"></div>
+
+  <div class="split" style="gap:12px;flex-wrap:wrap">
+    <div class="pill"><strong>Limit hits</strong><span class="muted" id="aLimitHit">-</span></div>
+    <div class="pill"><strong>Paywall opens</strong><span class="muted" id="aPaywallOpen">-</span></div>
+    <div class="pill"><strong>Pay clicks</strong><span class="muted" id="aPayClick">-</span></div>
+    <div class="pill"><strong>Pay success</strong><span class="muted" id="aPaySuccess">-</span></div>
+    <div class="pill"><strong>Busy</strong><span class="muted" id="aBusy">-</span></div>
+  </div>
+
+  <div class="hr"></div>
+
+  <div class="split" style="gap:12px;flex-wrap:wrap">
+    <div class="pill"><strong>Open → Click</strong><span class="muted" id="aRateOC">-</span></div>
+    <div class="pill"><strong>Click → Success</strong><span class="muted" id="aRateCS">-</span></div>
+    <div class="pill"><strong>Open → Success</strong><span class="muted" id="aRateOS">-</span></div>
+  </div>
+
+  <div class="muted" id="adminMetricsMsg" style="margin-top:10px"></div>
+</div>
+
+<div class="card">
+<div class="title">Admin: promo codes</div>
+<div class="note">Generate codes with duration so you can gift 1-month / 3-month promos.</div>
+<div class="split" style="flex-wrap:wrap">
+<div style="min-width:140px;flex:1">
+<label for="adminN">How many</label>
+<input aria-label="adminN" id="adminN" name="adminN" value="5"/>
+</div>
+<div style="min-width:220px;flex:2">
+<label for="adminNote">Note</label>
+<input aria-label="adminNote" id="adminNote" name="adminNote" value="promo"/>
+</div>
+</div>
+<div class="split" style="margin-top:10px;flex-wrap:wrap">
+<div style="min-width:220px;flex:1">
+<label for="adminDuration">Duration</label>
+<select aria-label="adminDuration" id="adminDuration" name="adminDuration">
+<option value="0">Unlimited</option>
+<option value="30">30 days (1 month)</option>
+<option value="90">90 days (3 months)</option>
+<option value="180">180 days (6 months)</option>
+<option value="365">365 days (1 year)</option>
+</select>
+</div>
+</div>
+<div class="split" style="margin-top:12px;flex-wrap:wrap">
+<button class="btn" id="adminGen">Generate</button>
+<button class="btn secondary" id="adminList">List recent</button>
+</div>
+<label for="adminOut">Output</label>
+<textarea aria-label="adminOut" class="pasteBox" id="adminOut" name="adminOut" placeholder="Codes appear here..."></textarea>
+<div class="muted" style="margin-top:8px">Tip: share the code only (or <span class="kbd">/app?code=CODE</span>)</div>
+</div>
+
+<div class="card">
+  <div class="title">Admin: leaderboard rewards</div>
+  <div class="note">Award Pro to the top 3 accounts on the referrals leaderboard. Separate rewards for 7 days and 30 days.</div>
+
+  <div class="split" style="margin-top:12px;flex-wrap:wrap">
+    <button class="btn secondary" id="adminLbLoad7" type="button">Load 7d</button>
+    <button class="btn secondary" id="adminLbLoad30" type="button">Load 30d</button>
+  </div>
+
+  <div class="split" style="margin-top:12px;gap:14px;flex-wrap:wrap">
+    <div style="min-width:260px;flex:1">
+      <div class="small muted">7 days — Top 3</div>
+      <div class="tableWrap">
+        <table class="table" id="adminLbTable7">
+          <thead><tr><th>#</th><th>Handle</th><th>Eligible</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="min-width:260px;flex:1">
+      <div class="small muted">30 days — Top 3</div>
+      <div class="tableWrap">
+        <table class="table" id="adminLbTable30">
+          <thead><tr><th>#</th><th>Handle</th><th>Eligible</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="muted" id="adminLbMsg" style="margin-top:10px"></div>
+</div>
+
+<div class="card">
+<div class="title">Admin: X selectors hotfix</div>
+<div class="note">If X changes the reply-box DOM, paste new selectors here. Extensions will pick up updates within ~30 minutes, and immediately after a failure.</div>
+
+<div class="split" style="margin-top:12px;flex-wrap:wrap">
+  <button class="btn secondary" id="adminSelLoad" type="button">Load current</button>
+  <button class="btn" id="adminSelSave" type="button">Save</button>
+  <button class="btn secondary" id="adminSelReset" type="button">Reset to default</button>
+  <button class="btn secondary" id="adminSelTouch" type="button" title="Bump version + updated_at (no selector changes)">Force refresh clients</button>
+</div>
+
+<div style="margin-top:10px" class="split">
+  <div style="min-width:220px;flex:1">
+    <label for="adminSelRollout">Rollout percent (0–100)</label>
+    <input aria-label="adminSelRollout" id="adminSelRollout" name="adminSelRollout" type="number" min="0" max="100" value="100" />
+  </div>
+  <div style="min-width:220px;flex:1">
+    <label for="adminSelNote">Note (optional)</label>
+    <input aria-label="adminSelNote" id="adminSelNote" name="adminSelNote" placeholder="e.g., X composer changed Feb 17" />
+  </div>
+</div>
+
+<div class="split" style="margin-top:10px;flex-wrap:wrap">
+  <button class="btn secondary" id="adminSelApplyRollout" type="button">Apply rollout</button>
+  <button class="btn secondary" id="adminSelRotateSalt" type="button" title="Re-bucket clients for canary">Rotate salt</button>
+</div>
+
+<div class="muted small" id="adminSelRolloutInfo" style="margin-top:8px"></div>
+
+<div class="hr"></div>
+<div class="title" style="font-size:14px;margin-top:0">Selectors history</div>
+<div class="muted small" style="margin-top:6px">Rollback any saved/touched version. (Latest first)</div>
+<div id="adminSelHistory" class="mono" style="margin-top:10px;max-height:220px;overflow:auto;border:1px solid var(--border);border-radius:12px;padding:10px;background:rgba(0,0,0,0.03)"></div>
+
+
+<label for="adminSelBox" style="margin-top:10px">Selectors JSON</label>
+<textarea aria-label="adminSelBox" class="pasteBox" id="adminSelBox" name="adminSelBox" placeholder='{"version": 1, "composer": ["..."], "tweetText": ["..."], "anchors": ["..."]}'></textarea>
+
+<div class="muted" id="adminSelMsg" style="margin-top:8px"></div>
+</div>
+
+
+<div class="card">
+<div class="title">Admin: extension health</div>
+<div class="note">Anonymous event counters (no tweet text / no reply content). Useful to see if selector hotfixes helped.</div>
+<div class="split" style="margin-top:12px;flex-wrap:wrap;align-items:flex-end">
+  <div style="min-width:200px">
+    <label for="adminHealthHours">Window (hours)</label>
+    <input aria-label="adminHealthHours" id="adminHealthHours" name="adminHealthHours" type="number" min="1" max="168" value="24" />
+  </div>
+  <button class="btn secondary" id="adminHealthLoad" type="button">Load</button>
+</div>
+<pre id="adminHealthOut" class="mono" style="margin-top:12px;white-space:pre-wrap"></pre>
+</div>
+
+<div class="card">
+<div class="title">Admin: FAQ base</div>
+<div class="note">Store small shared facts/snippets for future use. This does not affect generation yet — it’s a managed knowledge bucket.</div>
+<label for="adminFaqBox" style="margin-top:10px">FAQ items (JSON)</label>
+<textarea aria-label="adminFaqBox" class="pasteBox" id="adminFaqBox" name="adminFaqBox" placeholder='{"items":["Fact 1","Fact 2"]}'></textarea>
+<div class="split" style="margin-top:12px;flex-wrap:wrap">
+  <button class="btn secondary" id="adminFaqLoad" type="button">Load</button>
+  <button class="btn" id="adminFaqSave" type="button">Save</button>
+</div>
+<div class="muted" id="adminFaqMsg" style="margin-top:8px"></div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Soft paywall modal -->
+<div class="modalBack hidden" id="limit_modal" role="dialog" aria-modal="true" aria-labelledby="limit_modal_title">
+  <div class="modalCard">
+    <div class="title" id="limit_modal_title">Daily limit reached</div>
+    <div class="desc" id="limit_modal_desc" style="margin-top:6px">You hit the free limit. Upgrade to Pro for unlimited inserts + all cosmetics.</div>
+
+    <div class="hr"></div>
+
+    <div class="split" style="gap:12px;flex-wrap:wrap">
+      <div style="min-width:220px;flex:1;border:1px solid var(--border);border-radius:14px;padding:10px">
+        <div class="muted small" style="margin-bottom:6px">Free</div>
+        <ul class="clean small" style="margin:0">
+          <li>70/day</li>
+          <li>Editable lines</li>
+          <li>Limited cosmetics</li>
+        </ul>
+      </div>
+      <div style="min-width:220px;flex:1;border:1px solid var(--border);border-radius:14px;padding:10px;background:rgba(0,0,0,0.02)">
+        <div class="muted small" style="margin-bottom:6px">Pro</div>
+        <ul class="clean small" style="margin:0">
+          <li><b>Unlimited</b> daily inserts</li>
+          <li><b>Unlimited</b> saved lines</li>
+          <li>All themes / styles / extension skins</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="split" style="gap:10px;flex-wrap:wrap;justify-content:flex-end">
+      <button class="btn secondary" id="limit_modal_close" type="button">Not now</button>
+      <button class="btn" id="limit_modal_upgrade" type="button">Upgrade Pro</button>
+    </div>
+    <div class="muted small" id="limit_modal_hint" style="margin-top:10px"></div>
+  </div>
+</div>
+
+<!-- Payment success modal -->
+<div class="modalBack hidden" id="pay_success_modal" role="dialog" aria-modal="true" aria-labelledby="pay_success_title">
+  <div class="modalCard">
+    <div class="title" id="pay_success_title">PRO Activated</div>
+    <div class="desc" id="pay_success_desc" style="margin-top:6px">Unlimited unlocked for your handle</div>
+    <div class="hr"></div>
+    <div class="split" style="gap:10px;flex-wrap:wrap;justify-content:flex-end">
+      <button class="btn" id="pay_success_ok" type="button">Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- Wallet connect modal -->
+<div class="modalBack hidden" id="sf_modal" role="dialog" aria-modal="true" aria-labelledby="sf_modal_title">
+  <div class="modalCard">
+    <div class="title" id="sf_modal_title">Connect wallet</div>
+    <div class="desc" id="sf_modal_desc">Choose a wallet to upgrade. We never ask for seed phrases or private keys.</div>
+
+    <div class="hr"></div>
+
+    <div class="walletPick" id="walletPick"></div>
+    <div class="muted small" id="walletPickHint" style="margin-top:8px"></div>
+
+    <div class="hr"></div>
+
+    <ul class="clean" id="sf_modal_list">
+      <li>Receiver wallet: <span class="kbd" id="sf_modal_receiver">-</span></li>
+      <li>You'll approve a standard SOL transfer inside your wallet.</li>
+      <li>After payment, we verify it on-chain and activate Pro for your @handle.</li>
+    </ul>
+    <div class="split" style="margin-top:12px;gap:12px;flex-wrap:wrap">
+      <button class="btn" id="sf_modal_connect" type="button">Connect</button>
+      <button class="btn secondary" id="sf_modal_close" type="button">Not now</button>
+    </div>
+    <div class="muted" id="sf_modal_msg" style="margin-top:10px"></div>
+  
+<!-- Plan comparison modal -->
+<div class="modalBack hidden" id="plan_modal" role="dialog" aria-modal="true" aria-labelledby="plan_modal_title">
+  <div class="modalCard" style="max-width:860px">
+    <div class="split" style="align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <div class="title" id="plan_modal_title">Plan comparison</div>
+      <button class="btn secondary" id="plan_modal_close" type="button">Close</button>
+    </div>
+    <div class="desc" id="plan_modal_desc" style="margin-top:6px">Pick what you need — you can extend anytime. Pro unlocks everything instantly.</div>
+    <div class="hr"></div>
+    <div style="overflow:auto">
+      <table class="table" id="plan_modal_table" style="min-width:720px">
+        <thead>
+          <tr>
+            <th style="text-align:left">Feature</th>
+            <th style="text-align:left">Free</th>
+            <th style="text-align:left">Pro</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Daily GM/GN inserts</td><td>Limited</td><td>Unlimited</td></tr>
+          <tr><td>GM/GN list size</td><td>Up to 70 lines each</td><td>Unlimited</td></tr>
+          <tr><td>Themes & wallpapers</td><td>Limited + referral unlocks</td><td>All unlocked</td></tr>
+          <tr><td>Writing styles & preset packs</td><td>Limited + referral unlocks</td><td>All unlocked</td></tr>
+          <tr><td>Extension skins & wallpapers</td><td>Limited + referral unlocks</td><td>All unlocked</td></tr>
+          <tr><td>Cloud sync</td><td>—</td><td>Included</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="muted" style="margin-top:10px">Payments support SOL / USDC / USDT on Solana. We verify on-chain automatically.</div>
+  </div>
+</div>
+
+<!-- Free / Pro help modal -->
+<div class="modalBack hidden" id="help_modal" role="dialog" aria-modal="true" aria-labelledby="help_title">
+  <div class="modalCard">
+    <div class="title" id="help_title">How Free &amp; Pro work</div>
+    <div class="desc" id="help_desc">Free is always available. Pro removes caps and unlocks everything — verified on-chain.</div>
+    <div class="hr"></div>
+    <div class="split" style="gap:12px;flex-wrap:wrap;align-items:stretch">
+      <div class="card" style="flex:1;min-width:280px">
+        <div class="title" style="font-size:16px">Free (forever)</div>
+        <div class="meterBlock" style="margin-top:10px">
+          <div class="meterRow"><div class="muted">Saved lines</div><div class="spacer"></div><div class="pill" id="help_saved">GM 0/70 • GN 0/70</div></div>
+          <div class="meter"><span id="helpSavedFill"></span></div>
+          <div class="meterRow" style="margin-top:10px"><div class="muted">Daily inserts (extension)</div><div class="spacer"></div><div class="pill" id="help_daily">GM 0/70 • GN 0/70</div></div>
+          <div class="meter"><span id="helpDailyFill"></span></div>
+        </div>
+        <div class="hr"></div>
+        <ul class="clean">
+          <li><span class="kbd">10</span> themes + <span class="kbd">5</span> writing styles (unlock more via referrals).</li>
+          <li>Generation is free — you can build your GM/GN lists without paying.</li>
+          <li>No wallet required to use Free.</li>
+        </ul>
+        <div class="muted" style="margin-top:8px">Tip: Free is enough for many people — Pro is for power users who want no limits.</div>
+      </div>
+      <div class="card" style="flex:1;min-width:280px">
+        <div class="title" style="font-size:16px">Pro unlocks</div>
+        <ul class="clean" style="margin-top:10px">
+          <li>Unlimited saved lines (GM &amp; GN).</li>
+          <li>Unlimited daily inserts + best-of picks in extension.</li>
+          <li>All themes, writing styles, packs, wallpapers, and custom backgrounds.</li>
+          <li>On-chain verified activation (we never ask seed phrases).</li>
+        </ul>
+        <div class="hr"></div>
+        <div class="pill" style="width:fit-content"><strong>Safety</strong><span class="muted">no seed phrases</span></div>
+        <div class="muted" style="margin-top:8px">Always verify the receiver address inside your wallet and confirm the domain in the browser bar.</div>
+      </div>
+    </div>
+    <div class="split" style="margin-top:12px;gap:12px;flex-wrap:wrap">
+      <button class="btn" id="help_go_wallet" type="button">Upgrade Pro</button>
+      <button class="btn secondary" id="help_close" type="button">Close</button>
+    </div>
+  </div>
+</div>
+

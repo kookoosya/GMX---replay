@@ -16,7 +16,8 @@ app.disable("x-powered-by");
 app.disable("etag");
 
 const PORT = Number(process.env.PORT) || 10000;
-const TRUST_PROXY = String(process.env.TRUST_PROXY || "").trim() === "1"; if (TRUST_PROXY) app.set("trust proxy", 1);
+const TRUST_PROXY = String(process.env.TRUST_PROXY || "").trim() === "1";
+const DEV_MODE = String(process.env.NODE_ENV || "").toLowerCase() !== "production";
 const STARTED_AT = new Date().toISOString();
 const BUILD_ID =
   process.env.BUILD_ID ||
@@ -215,7 +216,11 @@ app.use(
         defaultSrc: ["'self'"],
         baseUri: ["'self'"],
         objectSrc: ["'none'"],
-        frameAncestors: ["'none'"],
+        // Allow local React bridge (Vite) to embed /app during development.
+        // Production stays locked.
+        frameAncestors: DEV_MODE
+          ? ["'self'", "http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000"]
+          : ["'none'"],
         scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         imgSrc: ["'self'", "data:", "https:"],
@@ -4409,28 +4414,6 @@ function noStore(res) {
   res.setHeader("Expires", "0");
 }
 
-// ---- React frontend (production static + SPA fallback) ----
-// In production on Render, we serve the built React app from frontend/dist.
-// In local dev, Vite serves the frontend on :5173 and proxies /api -> backend:10000.
-const IS_PROD = String(process.env.NODE_ENV || "").trim() === "production" || IS_RENDER;
-const FRONTEND_DIST = path.join(__dirname, "frontend", "dist");
-const FRONTEND_INDEX = path.join(FRONTEND_DIST, "index.html");
-const HAS_REACT_BUILD = IS_PROD && fs.existsSync(FRONTEND_INDEX);
-
-// Serve React build assets first (so /assets from Vite build wins over legacy /public assets).
-if (HAS_REACT_BUILD) {
-  app.use(
-    express.static(FRONTEND_DIST, {
-      maxAge: "1h",
-      setHeaders: (res, filePath) => {
-        // Never cache HTML so deployments update immediately.
-        if (filePath.endsWith(".html")) noStore(res);
-      },
-    })
-  );
-}
-
-// ---- Legacy static (kept during migration) ----
 app.use(
   express.static(PUBLIC_DIR, {
     maxAge: "1h",
@@ -4447,13 +4430,24 @@ app.use(
   })
 );
 
-// Root:
-// - prod + built React -> React SPA
-// - otherwise -> legacy /app
 app.get("/", (req, res) => {
   noStore(res);
-  if (HAS_REACT_BUILD) return res.sendFile(FRONTEND_INDEX);
   res.redirect("/app");
+});
+
+// Common local dev footgun:
+// users sometimes paste URLs like "http://localhost:5173/app…" (unicode ellipsis/quotes)
+// which becomes a path like "/app%E2%80%A6". That does not match "/app" or "/app/*".
+// If the request starts with "/app" but is NOT "/app" and NOT "/app/…",
+// redirect to the canonical legacy entry.
+app.use((req, res, next) => {
+  try {
+    const p = String(req.path || "");
+    if (p.startsWith("/app") && p !== "/app" && !p.startsWith("/app/")) {
+      return res.redirect(302, "/app");
+    }
+  } catch {}
+  return next();
 });
 
 app.get("/app", (req, res) => {
@@ -4485,25 +4479,10 @@ app.get("/get-extension", (req, res) => {
   <p>The extension is included in the repo under <b>/extension</b>.</p>
   <p><b>Local install:</b> open <b>chrome://extensions</b> → enable Developer mode → <b>Load unpacked</b> → select the <b>extension</b> folder.</p>
   <p>Once published, this page will redirect to the Chrome Web Store automatically.</p>
-  <p>Go back to <a href="/">/</a> (React) or <a href="/app">/app</a> (legacy).</p>
+  <p>Go back to <a href="/app">/app</a>.</p>
 </body></html>`);
 });
 
-// SPA fallback for React routes (keep /api and /app behaving normally).
-if (HAS_REACT_BUILD) {
-  app.get("*", (req, res, next) => {
-    const p = String(req.path || "");
-    if (p.startsWith("/api")) return next();
-    if (p.startsWith("/app")) return next();
-    if (p === "/get-extension") return next();
-
-    const accept = String(req.headers.accept || "");
-    if (!accept.includes("text/html")) return next();
-
-    noStore(res);
-    return res.sendFile(FRONTEND_INDEX);
-  });
-}
 
 // ---------- ERROR HANDLER ----------
 app.use((err, req, res, next) => {

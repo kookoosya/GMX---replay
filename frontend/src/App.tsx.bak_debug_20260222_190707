@@ -1,0 +1,186 @@
+﻿import { useEffect, useState } from "react";
+
+type Usage = {
+  dailyLimit?: number;
+  usedToday?: number;
+  freeDaily?: number;
+  dailyBonus?: number;
+  bonusPer20?: number;
+  nextBonusAt?: number;
+};
+
+type RefStats = {
+  confirmedRefs?: number;
+  activeRefs?: number;
+  eligibleRefs?: number;
+  legacyReferrals?: number;
+  clicks?: number;
+  dailyLimit?: number;
+  freeDaily?: number;
+  dailyBonus?: number;
+  bonusPer20?: number;
+  bonusChunks?: number;
+  nextBonusAt?: number;
+  promoter?: boolean;
+};
+
+export default function App() {
+  const [health, setHealth] = useState("loading");
+  const [version, setVersion] = useState("");
+  const [usage, setUsage] = useState<Usage | null>(null);
+  const [refs, setRefs] = useState<RefStats | null>(null);
+  const [err, setErr] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const getText = async (url: string) => {
+      const r = await fetch(url, { credentials: "include", cache: "no-store" });
+      if (!r.ok) throw new Error(String(r.status) + " " + String(r.statusText));
+      return r.text();
+    };
+
+    const getJson = async (url: string) => {
+      const r = await fetch(url, { credentials: "include", cache: "no-store" });
+      if (!r.ok) throw new Error(String(r.status) + " " + String(r.statusText));
+      return r.json();
+    };
+
+    (async () => {
+      try {
+        const h = await getText("/api/health");
+        const v = await getText("/api/version");
+        const u = await getJson("/api/usage");
+        let rstats: any = null;
+        try {
+          rstats = await getJson("/api/referral/stats");
+        } catch {
+          rstats = null;
+        }
+
+        if (!cancelled) {
+          setHealth(h);
+          setVersion(v);
+          setUsage(u || {});
+          setRefs(rstats);
+        }
+      } catch (e: any) {
+        if (!cancelled) {
+          setErr(String(e && e.message ? e.message : e));
+          setHealth("error");
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <div style={{ minHeight: "100vh", padding: 20, fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Arial" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
+        <h1 style={{ margin: 0 }}>GMXReply</h1>
+
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <a
+            href="/app"
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              padding: "8px 12px",
+              borderRadius: 10,
+              border: "1px solid rgba(0,0,0,0.15)",
+              textDecoration: "none",
+              color: "#111",
+              background: "rgba(0,0,0,0.04)",
+            }}
+          >
+            Open legacy (/app)
+          </a>
+        </div>
+      </div>
+
+      <Card title="Backend">
+        <Row k="Health" v={health} />
+        <Row k="Version" v={version || ""} />
+        {health === "error" && (
+          <div style={{ marginTop: 10, color: "#b00020" }}>
+            <b>Error:</b> {err}
+            <div style={{ marginTop: 8, opacity: 0.85 }}>
+              Если видишь 401  открой legacy, подключи @handle, потом обнови эту страницу
+            </div>
+          </div>
+        )}
+      </Card>
+
+      <Card title="Usage / Limits">
+        {!usage ? (
+          <div style={{ opacity: 0.8 }}>Loading</div>
+        ) : (
+          <Grid>
+            <KV k="Daily limit" v={usage.dailyLimit ?? ""} />
+            <KV k="Used today" v={usage.usedToday ?? ""} />
+            <KV k="Free daily" v={usage.freeDaily ?? ""} />
+            <KV k="Daily bonus" v={usage.dailyBonus ?? ""} />
+            <KV k="Bonus per 20" v={usage.bonusPer20 ?? ""} />
+            <KV k="Next bonus at" v={usage.nextBonusAt ?? ""} />
+          </Grid>
+        )}
+      </Card>
+
+      <Card title="Referrals">
+        {!refs ? (
+          <div style={{ opacity: 0.8 }}>
+            Loading (если тут пусто  значит эндпоинт отличается, я подстрою)
+          </div>
+        ) : (
+          <Grid>
+            <KV k="Confirmed" v={refs.confirmedRefs ?? ""} />
+            <KV k="Active" v={refs.activeRefs ?? ""} />
+            <KV k="Eligible" v={refs.eligibleRefs ?? ""} />
+            <KV k="Legacy" v={refs.legacyReferrals ?? ""} />
+            <KV k="Clicks" v={refs.clicks ?? ""} />
+            <KV k="Daily bonus" v={refs.dailyBonus ?? ""} />
+            <KV k="Bonus per 20" v={refs.bonusPer20 ?? ""} />
+            <KV k="Next bonus at" v={refs.nextBonusAt ?? ""} />
+          </Grid>
+        )}
+      </Card>
+    </div>
+  );
+}
+
+function Card({ title, children }: { title: string; children: any }) {
+  return (
+    <div style={{ marginTop: 16, padding: 14, borderRadius: 12, border: "1px solid rgba(0,0,0,0.12)" }}>
+      <div style={{ opacity: 0.8, marginBottom: 10 }}>{title}</div>
+      {children}
+    </div>
+  );
+}
+
+function Grid({ children }: { children: any }) {
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 10 }}>
+      {children}
+    </div>
+  );
+}
+
+function Row({ k, v }: { k: string; v: any }) {
+  return (
+    <div style={{ marginTop: 6 }}>
+      <b>{k}:</b> {String(v)}
+    </div>
+  );
+}
+
+function KV({ k, v }: { k: string; v: any }) {
+  return (
+    <div style={{ padding: 10, borderRadius: 10, background: "rgba(0,0,0,0.03)" }}>
+      <div style={{ fontSize: 12, opacity: 0.75 }}>{k}</div>
+      <div style={{ marginTop: 4, fontSize: 16, fontWeight: 600 }}>{String(v)}</div>
+    </div>
+  );
+}

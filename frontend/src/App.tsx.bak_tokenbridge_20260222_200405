@@ -1,0 +1,232 @@
+﻿import { useCallback, useEffect, useMemo, useState } from "react";
+
+type Usage = {
+  ok?: boolean;
+  authenticated?: boolean;
+  gm?: { used: number; limit: number };
+  gn?: { used: number; limit: number };
+  resetAt?: string;
+  sub?: { active: boolean; until: string | null };
+  limits?: { freeDaily: number; dailyBonus: number; saveCapFree: number };
+};
+
+type Cand = { key: string; token: string; note: string };
+
+function looksLikeToken(v: string) {
+  const s = v.trim();
+  if (s.length < 20 || s.length > 512) return false;
+  if (/\s/.test(s)) return false;
+  // allow: jwt-ish (dots), base64-ish, hex-ish, random strings
+  return /^[A-Za-z0-9._\-+/=]+$/.test(s);
+}
+
+function extractTokenFromJsonMaybe(obj: any): string | null {
+  if (!obj || typeof obj !== "object") return null;
+  const keys = ["token", "authToken", "accessToken", "bearer", "gmxToken", "sessionToken"];
+  for (const k of keys) {
+    const v = obj[k];
+    if (typeof v === "string" && looksLikeToken(v)) return v;
+  }
+  return null;
+}
+
+function detectCandidates(): Cand[] {
+  const out: Cand[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (!key) continue;
+    const raw = localStorage.getItem(key);
+    if (!raw) continue;
+
+    const lowKey = key.toLowerCase();
+
+    // direct token value
+    if (looksLikeToken(raw) && (lowKey.includes("token") || lowKey.includes("auth") || lowKey.includes("gmx"))) {
+      out.push({ key, token: raw.trim(), note: "direct" });
+      continue;
+    }
+
+    // json blob that contains token field
+    const t = raw.trim();
+    if (t.startsWith("{") && t.endsWith("}")) {
+      try {
+        const obj = JSON.parse(t);
+        const tok = extractTokenFromJsonMaybe(obj);
+        if (tok) out.push({ key, token: tok, note: "json" });
+      } catch {}
+    }
+  }
+
+  // de-dup by token
+  const seen = new Set<string>();
+  return out.filter(c => (seen.has(c.token) ? false : (seen.add(c.token), true)));
+}
+
+async function fetchAny(url: string, token: string | null): Promise<any> {
+  const headers: Record<string, string> = {};
+  if (token) headers["Authorization"] = "Bearer " + token;
+
+  const r = await fetch(url, { credentials: "include", cache: "no-store", headers });
+  const text = await r.text();
+  if (!r.ok) throw new Error(String(r.status) + " " + String(r.statusText) + " :: " + text.slice(0, 300));
+
+  const t = text.trim();
+  if ((t.startsWith("{") && t.endsWith("}")) || (t.startsWith("[") && t.endsWith("]"))) {
+    try { return JSON.parse(t); } catch { return text; }
+  }
+  return text;
+}
+
+export default function App() {
+  const [token, setToken] = useState<string | null>(null);
+  const [cands, setCands] = useState<Cand[]>([]);
+  const [showApp, setShowApp] = useState(false);
+
+  const [usage, setUsage] = useState<Usage | null>(null);
+  const [refs, setRefs] = useState<any>(null);
+
+  const [usageErr, setUsageErr] = useState("");
+  const [refsErr, setRefsErr] = useState("");
+
+  const authed = !!usage?.authenticated;
+
+  const load = useCallback(async () => {
+    setUsageErr(""); setRefsErr("");
+    try { setUsage(await fetchAny("/api/usage", token)); } catch (e: any) { setUsageErr(String(e?.message ?? e)); }
+    try { setRefs(await fetchAny("/api/referral/stats", token)); } catch (e: any) { setRefsErr(String(e?.message ?? e)); }
+  }, [token]);
+
+  // auto-detect token periodically (works after you connect inside /app on SAME origin 5173)
+  useEffect(() => {
+    const id = setInterval(() => {
+      const found = detectCandidates();
+      setCands(found);
+      if (!token && found.length === 1) setToken(found[0].token);
+    }, 800);
+    return () => clearInterval(id);
+  }, [token]);
+
+  // reload whenever token changes
+  useEffect(() => { load(); }, [load]);
+
+  const tokenShort = useMemo(() => {
+    if (!token) return "";
+    const s = token;
+    return s.length <= 18 ? s : (s.slice(0, 10) + "" + s.slice(-6));
+  }, [token]);
+
+  return (
+    <div style={{ minHeight: "100vh", padding: 20, fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Arial" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+        <h1 style={{ margin: 0 }}>GMXReply</h1>
+
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <button onClick={load} style={btn}>Refresh</button>
+          <button onClick={() => setShowApp(v => !v)} style={btn}>
+            {showApp ? "Hide /app" : "Toggle /app (embedded)"}
+          </button>
+          <a href="/app" target="_blank" rel="noreferrer"
+             style={{ ...btn, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
+            Open /app (new tab)
+          </a>
+        </div>
+      </div>
+
+      <Card title="Auth / Token">
+        <div><b>authenticated:</b> {String(authed)}</div>
+        <div style={{ marginTop: 8 }}>
+          <b>token:</b> {token ? <code>{tokenShort}</code> : <span style={{ opacity: 0.8 }}>not detected</span>}
+          {token && <button onClick={() => setToken(null)} style={{ ...btnSm, marginLeft: 10 }}>Clear</button>}
+        </div>
+
+        {!authed && (
+          <div style={{ marginTop: 10, opacity: 0.85 }}>
+            Самый простой путь: открой встроенный <code>/app</code> ниже, подключи @handle, потом вернись сюда  токен подхватится сам
+          </div>
+        )}
+
+        {cands.length > 1 && !token && (
+          <div style={{ marginTop: 10 }}>
+            <div style={{ opacity: 0.85, marginBottom: 8 }}>
+              Нашёл несколько кандидатов токена в localStorage  выбери правильный:
+            </div>
+            <div style={{ display: "grid", gap: 8 }}>
+              {cands.map((c) => (
+                <button key={c.key} onClick={() => setToken(c.token)} style={{ ...btn, justifyContent: "flex-start" }}>
+                  Use {c.key} <span style={{ opacity: 0.7, marginLeft: 8 }}>({c.note})</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {cands.length === 0 && !token && (
+          <div style={{ marginTop: 10, opacity: 0.85 }}>
+            Пока токенов в localStorage на <code>http://localhost:5173</code> нет.
+            Важно: подключаться надо через <code>5173/app</code> (через этот UI), а не через <code>10000/app</code>.
+          </div>
+        )}
+      </Card>
+
+      {showApp && (
+        <Card title="Legacy /app (embedded)">
+          <iframe
+            src="/app"
+            style={{ width: "100%", height: 640, border: "1px solid rgba(0,0,0,0.12)", borderRadius: 12 }}
+          />
+        </Card>
+      )}
+
+      <Card title="Usage: /api/usage">
+        <Err text={usageErr} />
+        <Pre obj={usage} />
+      </Card>
+
+      <Card title="Referrals: /api/referral/stats">
+        <Err text={refsErr} />
+        <Pre obj={refs} />
+        <div style={{ marginTop: 10, opacity: 0.75 }}>
+          Если ты откроешь этот URL в адресной строке, он почти всегда будет 401  потому что там нет Bearer заголовка
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+const btn: React.CSSProperties = {
+  padding: "8px 12px",
+  borderRadius: 10,
+  border: "1px solid rgba(0,0,0,0.18)",
+  background: "white",
+  color: "#111",
+  cursor: "pointer",
+};
+
+const btnSm: React.CSSProperties = {
+  padding: "4px 8px",
+  borderRadius: 10,
+  border: "1px solid rgba(0,0,0,0.18)",
+  background: "white",
+  color: "#111",
+  cursor: "pointer",
+};
+
+function Card({ title, children }: { title: string; children: any }) {
+  return (
+    <div style={{ marginTop: 16, padding: 14, borderRadius: 12, border: "1px solid rgba(0,0,0,0.12)" }}>
+      <div style={{ opacity: 0.8, marginBottom: 10 }}>{title}</div>
+      {children}
+    </div>
+  );
+}
+
+function Err({ text }: { text: string }) {
+  if (!text) return null;
+  return <div style={{ color: "#b00020", marginBottom: 10 }}><b>Error:</b> {text}</div>;
+}
+
+function Pre({ obj }: { obj: any }) {
+  if (obj === null || obj === undefined) return <div style={{ opacity: 0.75 }}></div>;
+  const s = typeof obj === "string" ? obj : JSON.stringify(obj, null, 2);
+  return <pre style={{ margin: 0, padding: 12, background: "rgba(0,0,0,0.04)", borderRadius: 10, overflow: "auto" }}>{s}</pre>;
+}

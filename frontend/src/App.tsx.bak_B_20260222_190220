@@ -1,0 +1,41 @@
+﻿import { useEffect, useState } from "react";
+
+export default function App() {
+  const [loaded, setLoaded] = useState(false);
+
+  // фейлсейф  оверлей сам исчезнет, даже если onLoad не сработал
+  useEffect(() => {
+    const t = window.setTimeout(() => setLoaded(true), 8000);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  return (
+    <div style={{ height: "100vh", width: "100vw" }}>
+      {!loaded && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "#111",
+            color: "#bbb",
+            zIndex: 9999,
+            pointerEvents: "none",
+            fontFamily: "ui-sans-serif, system-ui",
+          }}
+        >
+          Bridge UI loaded
+        </div>
+      )}
+
+      <iframe
+        src="/app"
+        title="GMXReply Legacy"
+        style={{ border: 0, width: "100%", height: "100%" }}
+        onLoad={() => setLoaded(true)}
+      />
+    </div>
+  );
+}
