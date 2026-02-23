@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import crypto from "node:crypto";
 import fs from "node:fs";
 import Database from "better-sqlite3";
+import { createClient } from "@supabase/supabase-js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -286,6 +287,25 @@ const consumeLimiter = rateLimit({
 
 
 // ---------- DB ----------
+const DB_MODE = (String(process.env.DB_MODE || "sqlite").trim().toLowerCase() === "supabase") ? "supabase" : "sqlite";
+const SUPABASE_URL = String(process.env.SUPABASE_URL || "").trim();
+const SUPABASE_SERVICE_ROLE_KEY = String(process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim();
+const SUPABASE_CONFIGURED = Boolean(SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY);
+
+let SUPABASE_ADMIN = null;
+function getSupabaseAdmin() {
+  if (DB_MODE !== "supabase") return null;
+  if (SUPABASE_ADMIN) return SUPABASE_ADMIN;
+  if (!SUPABASE_CONFIGURED) {
+    console.warn("[supabase] DB_MODE=supabase but env missing; supabase disabled (sqlite fallback stays on)");
+    return null;
+  }
+  SUPABASE_ADMIN = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+  });
+  return SUPABASE_ADMIN;
+}
+
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, "data.sqlite");
 const db = new Database(DB_PATH);
 db.pragma("journal_mode = WAL");
@@ -1661,7 +1681,11 @@ function generateUnique(handle, kind, mode, lang, style, antiLastN = 20) {
 
 // ---------- API ----------
 app.get("/api/health", (req, res) => {
-  res.json({ ok: true, status: "backend alive", time: nowIso() });
+  res.json({
+ok: true, status: "backend alive", time: nowIso(),
+  dbMode: DB_MODE,
+  supabaseConfigured: SUPABASE_CONFIGURED
+});
 });
 
 app.get("/api/version", (req, res) => {
@@ -4505,7 +4529,9 @@ app.use("/api", (req, res) => {
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log("Server listening on", PORT);
-  console.log("DB:", DB_PATH);
+  console.log("DB_MODE:", DB_MODE);
+console.log("DB:", DB_PATH);
+console.log("Supabase configured:", SUPABASE_CONFIGURED);
   console.log("Public dir:", PUBLIC_DIR);
   console.log("Site: /app");
   console.log("Health: /api/health");
