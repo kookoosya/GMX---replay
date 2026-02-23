@@ -1,0 +1,24 @@
+# Normalize all text to LF in repo
+* text=auto eol=lf
+
+# Keep Windows scripts as CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Do not touch binaries
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.zip binary
+*.sqlite binary
+
+# SVG are text, keep LF
+*.svg text eol=lf
