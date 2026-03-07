@@ -15,6 +15,7 @@
     "install:all": "npm install && npm --prefix frontend install"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.98.0",
     "better-sqlite3": "^11.6.0",
     "cors": "^2.8.5",
     "express": "^4.19.2",
