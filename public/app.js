@@ -970,7 +970,7 @@ function scheduleCosmeticRefresh(reason){
     if (typeof value === "string"){
       const txt = value.trim();
       if (!txt) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
-      if (!allowCyr && /[Р Р‚-РЈС—]/.test(value)) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
+      if (!allowCyr && /[\u0400-\u04FF]/u.test(value)) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
       return value;
     }
     if (value === undefined || value === null) return fallback;
