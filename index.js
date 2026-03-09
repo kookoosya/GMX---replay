@@ -1529,6 +1529,29 @@ function safeDb(fn) {
   return fn();
 }
 
+function isOptionalHistoryDbError(error) {
+  const msg = String(error?.message || error || "");
+  return /SQLITE_CORRUPT|database disk image is malformed|malformed/i.test(msg);
+}
+
+function safeOptionalHistoryDb(fn, fallback, tag = "history") {
+  try {
+    const value = safeDb(fn);
+    return value == null ? fallback : value;
+  } catch (error) {
+    if (isOptionalHistoryDbError(error)) {
+      try {
+        console.warn("OPTIONAL_HISTORY_DB_DEGRADED", {
+          tag,
+          error: String(error?.message || error || "db_error"),
+        });
+      } catch {}
+      return fallback;
+    }
+    throw error;
+  }
+}
+
 
 // ---------- ACTIVITY / FEATURES ----------
 function logActivity(handle, eventType, meta) {
@@ -2864,13 +2887,15 @@ const GLOBAL_RECENT = {
 };
 
 function getRecentRows(handle, kind, limit = 20) {
-  return safeDb(() =>
-    db
+  return safeOptionalHistoryDb(
+    () => db
       .prepare(
         "SELECT reply FROM recent_replies WHERE handle=? AND kind=? ORDER BY created_at DESC LIMIT ?"
       )
-      .all(handle, kind, limit)
-  ) || [];
+      .all(handle, kind, limit),
+    [],
+    "recent_rows"
+  );
 }
 
 function getRecentSet(handle, kind, limit = 20) {
@@ -2888,13 +2913,15 @@ function rememberGlobal(kind, reply) {
 }
 
 function getGlobalShapeRows(kind, mode, family, limit = 1200) {
-  return safeDb(() =>
-    db
+  return safeOptionalHistoryDb(
+    () => db
       .prepare(
         "SELECT reply_hash, shape FROM recent_reply_shapes WHERE kind=? AND mode=? AND family=? ORDER BY created_at DESC LIMIT ?"
       )
-      .all(kind, mode, family, limit)
-  ) || [];
+      .all(kind, mode, family, limit),
+    [],
+    "global_shape_rows"
+  );
 }
 
 function rememberGlobalShape(kind, mode, style, reply) {
@@ -2906,39 +2933,45 @@ function rememberGlobalShape(kind, mode, style, reply) {
   const shape = shapeFingerprint(txt, safeKind);
   if (!shape) return;
   const replyHash = sha256(`${safeKind}|${safeMode}|${family}|${txt}`).slice(0, 32);
-  safeDb(() => {
-    db.prepare(
-      "INSERT INTO recent_reply_shapes(kind, mode, family, reply_hash, shape, created_at) VALUES(?,?,?,?,?,?)"
-    ).run(safeKind, safeMode, family, replyHash, shape, nowIso());
+  safeOptionalHistoryDb(() => {
+    safeDb(() => {
+      db.prepare(
+        "INSERT INTO recent_reply_shapes(kind, mode, family, reply_hash, shape, created_at) VALUES(?,?,?,?,?,?)"
+      ).run(safeKind, safeMode, family, replyHash, shape, nowIso());
 
-    db.prepare(`
-      DELETE FROM recent_reply_shapes
-      WHERE rowid NOT IN (
-        SELECT rowid FROM recent_reply_shapes
-        WHERE kind=? AND mode=? AND family=?
-        ORDER BY created_at DESC
-        LIMIT 8000
-      ) AND kind=? AND mode=? AND family=?
-    `).run(safeKind, safeMode, family, safeKind, safeMode, family);
-  });
+      db.prepare(`
+        DELETE FROM recent_reply_shapes
+        WHERE rowid NOT IN (
+          SELECT rowid FROM recent_reply_shapes
+          WHERE kind=? AND mode=? AND family=?
+          ORDER BY created_at DESC
+          LIMIT 8000
+        ) AND kind=? AND mode=? AND family=?
+      `).run(safeKind, safeMode, family, safeKind, safeMode, family);
+    });
+    return true;
+  }, false, "remember_global_shape");
 }
 
 function saveRecent(handle, kind, reply, mode = "mid", style = "classic") {
-  safeDb(() => {
-    db.prepare(
-      "INSERT INTO recent_replies(handle, kind, reply, created_at) VALUES(?,?,?,?)"
-    ).run(handle, kind, reply, nowIso());
+  safeOptionalHistoryDb(() => {
+    safeDb(() => {
+      db.prepare(
+        "INSERT INTO recent_replies(handle, kind, reply, created_at) VALUES(?,?,?,?)"
+      ).run(handle, kind, reply, nowIso());
 
-    db.prepare(`
-      DELETE FROM recent_replies
-      WHERE rowid NOT IN (
-        SELECT rowid FROM recent_replies
-        WHERE handle=? AND kind=?
-        ORDER BY created_at DESC
-        LIMIT 120
-      ) AND handle=? AND kind=?
-    `).run(handle, kind, handle, kind);
-  });
+      db.prepare(`
+        DELETE FROM recent_replies
+        WHERE rowid NOT IN (
+          SELECT rowid FROM recent_replies
+          WHERE handle=? AND kind=?
+          ORDER BY created_at DESC
+          LIMIT 120
+        ) AND handle=? AND kind=?
+      `).run(handle, kind, handle, kind);
+    });
+    return true;
+  }, false, "save_recent");
   rememberGlobal(kind, reply);
   rememberGlobalShape(kind, mode, style, reply);
 }
@@ -2989,7 +3022,12 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
   if (pool.length < Math.max(6, Math.min(count, Math.ceil(count * 0.65)))) {
     collect({ allowHistory: Boolean(allowRecent), relaxGlobalShape: true });
   }
-  if (!pool.length && !allowRecent) collect({ allowHistory: true, relaxGlobalShape: true });
+  if (!allowRecent && pool.length < count) {
+    collect({ allowHistory: true, relaxGlobalShape: false });
+  }
+  if (pool.length < count) {
+    collect({ allowHistory: true, relaxGlobalShape: true });
+  }
 
   pool.sort((a, b) => b.score - a.score);
   if (!pool.length) return [];
@@ -2997,13 +3035,26 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
 
   const out = [];
   const usedShape = new Set();
+  const usedText = new Set();
   for (const item of pool) {
     if (!item || !item.text || !item.fp) continue;
-    if (usedShape.has(item.fp)) continue;
+    if (usedShape.has(item.fp) || usedText.has(item.text)) continue;
     usedShape.add(item.fp);
+    usedText.add(item.text);
     out.push(item.text);
     if (out.length >= count) break;
   }
+
+  if (out.length < count) {
+    for (const item of pool) {
+      if (!item || !item.text) continue;
+      if (usedText.has(item.text)) continue;
+      usedText.add(item.text);
+      out.push(item.text);
+      if (out.length >= count) break;
+    }
+  }
+
   return out.slice(0, count);
 }
 
@@ -3982,8 +4033,7 @@ app.get("/api/tools/history", requireAuth, (req, res) => {
 
     if (q && !sub.active) return toolError(res, "history_search", 0, 0, 1);
 
-    let rows = [];
-    safeDb(() => {
+    const rows = safeOptionalHistoryDb(() => {
       const params = [handle];
       let where = "handle=?";
       if (kind === "gm" || kind === "gn"){
@@ -4000,10 +4050,10 @@ app.get("/api/tools/history", requireAuth, (req, res) => {
       }
       params.push(limit);
 
-      rows = db.prepare(
+      return safeDb(() => db.prepare(
         `SELECT kind, reply, created_at FROM recent_replies WHERE ${where} ORDER BY created_at DESC LIMIT ?`
-      ).all(...params);
-    });
+      ).all(...params));
+    }, [], "tools_history_read");
 
     const nextBefore = rows.length ? rows[rows.length-1].created_at : "";
     res.json({ ok:true, handle, kind, q: q || "", limit, count: rows.length, nextBefore, rows });
