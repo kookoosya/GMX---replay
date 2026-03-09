@@ -55,20 +55,20 @@ const DEFAULT_THEME = {
 
 const FALLBACK_LINES = {
   gm: [
-    "gm, hope your day starts easy ☀️",
-    "good morning, nice read here ☕",
-    "gm, strong post and a clean start ✨",
-    "gm, hope the morning treats you well ☀️",
-    "good morning, this was a solid read ☀️",
-    "gm, wishing you a smooth day ahead ☕",
+    "gm, hope your day starts easy вЂпёЏ",
+    "good morning, nice read here в•",
+    "gm, strong post and a clean start вњЁ",
+    "gm, hope the morning treats you well вЂпёЏ",
+    "good morning, this was a solid read вЂпёЏ",
+    "gm, wishing you a smooth day ahead в•",
   ],
   gn: [
-    "gn, hope you get a calm reset tonight 🌙",
-    "good night, soft close here ✨",
-    "gn, rest well after this one 🌙",
-    "good night, hope you get an easy reset 😴",
-    "gn, calm post to end the day on 🌙",
-    "good night, sleep well tonight ✨",
+    "gn, hope you get a calm reset tonight рџЊ™",
+    "good night, soft close here вњЁ",
+    "gn, rest well after this one рџЊ™",
+    "good night, hope you get an easy reset рџґ",
+    "gn, calm post to end the day on рџЊ™",
+    "good night, sleep well tonight вњЁ",
   ],
 };
 
@@ -357,6 +357,7 @@ function normalizeExtWallpaperId(raw) {
 async function resolveWallpaperSource(base, wallpaperId) {
   const id = normalizeExtWallpaperId(wallpaperId);
   if (!id) return "";
+
   const cacheKey = `${normalizeBase(base)}::${id}`;
   if (WALL_CACHE.has(cacheKey)) return WALL_CACHE.get(cacheKey) || "";
 
@@ -367,8 +368,18 @@ async function resolveWallpaperSource(base, wallpaperId) {
     return localUrl;
   }
 
-  // Photo packs still resolve from the site assets bundle.
-  const finalUrl = `${normalizeBase(base)}/assets/extbg/${encodeURIComponent(id)}.webp`;
+  const fullUrl = `${normalizeBase(base)}/assets/extbg/${encodeURIComponent(id)}.webp`;
+  const thumbUrl = `${normalizeBase(base)}/assets/extbg/thumbs/${encodeURIComponent(id)}.webp`;
+
+  let finalUrl = fullUrl;
+  let ok = false;
+
+  try{
+    ok = Boolean(await Promise.resolve(prefetchWallpaper(fullUrl)));
+  }catch{}
+
+  if (!ok) finalUrl = thumbUrl;
+
   WALL_CACHE.set(cacheKey, finalUrl);
   try{ prefetchWallpaper(finalUrl); }catch{}
   return finalUrl;
@@ -420,7 +431,7 @@ function scoreTemplate(text) {
     else if (emojiHits > 2) score -= (emojiHits - 2) * 3;
   } catch {}
   if (/!/.test(value)) score -= 4;
-  if (/[—–-]/.test(value)) score -= 4;
+  if (/[вЂ”вЂ“-]/.test(value)) score -= 4;
 
   if (/(coffee|brain|screen|pace|hour|desk|today|tonight|tomorrow|morning|night|rest|slow|sleep|reset|sunrise)/i.test(value)) score += 5;
   if (/(good morning|good night|hope|wishing|sleep easy|quiet reset|soft landing)/i.test(value)) score += 5;
@@ -587,10 +598,10 @@ function renderStats(usage, refStats) {
         : "Guest";
 
   if (el.planValue) el.planValue.textContent = plan;
-  if (el.gmUsed) el.gmUsed.textContent = usage && usage.gm ? `${usage.gm.used}/${usage.gm.limit}` : "—";
-  if (el.gnUsed) el.gnUsed.textContent = usage && usage.gn ? `${usage.gn.used}/${usage.gn.limit}` : "—";
-  if (el.refEligible) el.refEligible.textContent = refStats && Number.isFinite(Number(refStats.eligibleRefs)) ? String(refStats.eligibleRefs) : "—";
-  if (el.refConfirmed) el.refConfirmed.textContent = refStats && Number.isFinite(Number(refStats.confirmedRefs)) ? String(refStats.confirmedRefs) : "—";
+  if (el.gmUsed) el.gmUsed.textContent = usage && usage.gm ? `${usage.gm.used}/${usage.gm.limit}` : "вЂ”";
+  if (el.gnUsed) el.gnUsed.textContent = usage && usage.gn ? `${usage.gn.used}/${usage.gn.limit}` : "вЂ”";
+  if (el.refEligible) el.refEligible.textContent = refStats && Number.isFinite(Number(refStats.eligibleRefs)) ? String(refStats.eligibleRefs) : "вЂ”";
+  if (el.refConfirmed) el.refConfirmed.textContent = refStats && Number.isFinite(Number(refStats.confirmedRefs)) ? String(refStats.confirmedRefs) : "вЂ”";
   if (el.statsHint) {
     el.statsHint.textContent = state.token
       ? "Connected snapshot from your backend. Buttons still only copy text."
@@ -697,7 +708,7 @@ async function persistLastText(text) {
 
 async function copyKind(kind, preferBest = false) {
   const safeKind = kind === "gn" ? "gn" : "gm";
-  setCopyStatus(`Loading ${preferBest ? "best " : ""}${safeKind.toUpperCase()}…`);
+  setCopyStatus(`Loading ${preferBest ? "best " : ""}${safeKind.toUpperCase()}вЂ¦`);
   await ensureCache(safeKind, preferBest ? 5 : 1);
   let picked = consumeFromCache(safeKind, preferBest);
   if (!picked) {
@@ -765,7 +776,7 @@ async function queryAllTabs() {
 async function syncFromSite(options = {}) {
   const openIfMissing = options.openIfMissing !== false;
   const silent = options.silent === true;
-  if (!silent) setConnectStatus("Looking for an open site tab…");
+  if (!silent) setConnectStatus("Looking for an open site tabвЂ¦");
   const tabs = await queryAllTabs();
   const siteTabs = (tabs || []).filter((tab) => isSiteUrl(tab.url));
 
@@ -833,7 +844,7 @@ async function connectHandle() {
     setConnectStatus("Enter a valid @handle", "bad");
     return;
   }
-  setConnectStatus("Connecting…");
+  setConnectStatus("ConnectingвЂ¦");
   const result = await apiRequest("/api/user/init", {
     method: "POST",
     body: { handle },
@@ -841,7 +852,7 @@ async function connectHandle() {
   if (!result.ok || !result.data || !result.data.token) {
     const msg = friendlyError(result);
     if (/Use site session instead/i.test(msg)) {
-      setConnectStatus("This handle already exists. Trying site sync…");
+      setConnectStatus("This handle already exists. Trying site syncвЂ¦");
       const synced = await syncFromSite({ openIfMissing: true, silent: true });
       if (synced) {
         setConnectStatus(`Using site session @${state.handle}`, "good");
@@ -959,7 +970,7 @@ function bindEvents() {
   await applyThemeUi();
   applySessionUi();
   if (el.shortcutHint) {
-    el.shortcutHint.textContent = "Optional shortcut: assign one yourself in chrome://extensions/shortcuts for “Open GMXReply quick panel”";
+    el.shortcutHint.textContent = "Optional shortcut: assign one yourself in chrome://extensions/shortcuts for вЂњOpen GMXReply quick panelвЂќ";
   }
   await syncFromSite({ openIfMissing: false, silent: true });
   await refreshSnapshot();
