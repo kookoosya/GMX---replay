@@ -268,16 +268,16 @@ function cleanFillCopy(kind){
     const ru = siteLang() === "ru";
     const on = getCleanFillEnabled(kind);
     return {
-      label: ru ? "Best saved" : "Best saved",
-      button: on ? (ru ? "Best saved: on" : "Best saved: on") : (ru ? "Best saved: off" : "Best saved: off"),
+      label: ru ? "Best pass" : "Best pass",
+      button: on ? (ru ? "Best pass: on" : "Best pass: on") : (ru ? "Best pass: off" : "Best pass: off"),
       hint: on
         ? (ru
-            ? "Р В РІР‚в„ўР В РЎвЂќР В Р’В»Р РЋР вЂ№Р РЋРІР‚РЋР В Р’ВµР В Р вЂ¦Р В РЎвЂў: Best pass Р В РЎвЂ”Р В РЎвЂўР РЋР С“Р В Р’В»Р В Р’Вµ Р В Р’В·Р В Р’В°Р В РЎвЂ”Р РЋРЎвЂњР РЋР С“Р В РЎвЂќР В Р’В° Р РЋР вЂљР В Р’ВµР В Р’В¶Р В Р’ВµР РЋРІР‚С™ shape-Р В РўвЂР РЋРЎвЂњР В Р’В±Р В Р’В»Р В РЎвЂ Р В Р вЂ  Р РЋР С“Р В РЎвЂўР РЋРІР‚В¦Р РЋР вЂљР В Р’В°Р В Р вЂ¦Р РЋРІР‚ВР В Р вЂ¦Р В Р вЂ¦Р В РЎвЂўР В РЎВ Р РЋР С“Р В РЎвЂ”Р В РЎвЂР РЋР С“Р В РЎвЂќР В Р’Вµ Р В РЎвЂ Р В РўвЂР В РЎвЂўР В Р’В±Р В РЎвЂР В Р вЂ Р В Р’В°Р В Р’ВµР РЋРІР‚С™ Р В Р вЂ¦Р В Р’ВµР В РўвЂР В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В Р’В°Р РЋР вЂ№Р РЋРІР‚В°Р В Р’ВµР В Р’Вµ Р В РЎвЂўР В Р’В±Р РЋР вЂљР В Р’В°Р РЋРІР‚С™Р В Р вЂ¦Р В РЎвЂў Р В РўвЂР В РЎвЂў Р РЋРІР‚С™Р В Р’ВµР В РЎвЂќР РЋРЎвЂњР РЋРІР‚В°Р В Р’ВµР В РІвЂћвЂ“ Р РЋРІР‚В Р В Р’ВµР В Р’В»Р В РЎвЂ."
-            : "On: after fill, Saved list gets one cleanup pass for shape-level near-duplicates, then tries to top up the missing slots back to target.")
+            ? "Р вЂ™Р С”Р В»РЎР‹РЎвЂЎР ВµР Р…Р С•: Best pass Р С—Р С•РЎРѓР В»Р Вµ Р В·Р В°Р С—РЎС“РЎРѓР С”Р В° РЎР‚Р ВµР В¶Р ВµРЎвЂљ shape-Р Т‘РЎС“Р В±Р В»Р С‘ Р Р† РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎвЂР Р…Р Р…Р С•Р С РЎРѓР С—Р С‘РЎРѓР С”Р Вµ Р С‘ Р Т‘Р С•Р В±Р С‘Р Р†Р В°Р ВµРЎвЂљ Р Р…Р ВµР Т‘Р С•РЎРѓРЎвЂљР В°РЎР‹РЎвЂ°Р ВµР Вµ Р С•Р В±РЎР‚Р В°РЎвЂљР Р…Р С• Р Т‘Р С• РЎвЂљР ВµР С”РЎС“РЎвЂ°Р ВµР в„– РЎвЂ Р ВµР В»Р С‘."
+            : "On: Best pass prunes shape-level near-duplicates from the saved list, then refills the missing slots back to your current target.")
         : (ru
-            ? "Р В РІР‚в„ўР РЋРІР‚в„–Р В РЎвЂќР В Р’В»Р РЋР вЂ№Р РЋРІР‚РЋР В Р’ВµР В Р вЂ¦Р В РЎвЂў: Р В РЎвЂ“Р В Р’ВµР В Р вЂ¦Р В Р’ВµР РЋР вЂљР В Р’В°Р РЋРІР‚В Р В РЎвЂР РЋР РЏ Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В Р’В°Р РЋРІР‚ВР РЋРІР‚С™Р РЋР С“Р РЋР РЏ Р В РЎвЂ”Р РЋР вЂљР В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В РЎвЂў random fill. Р В РІР‚в„ўР В РЎвЂќР В Р’В»Р РЋР вЂ№Р РЋРІР‚РЋР В Р’В°Р В РІвЂћвЂ“ Р РЋРІР‚С™Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В РЎвЂќР В РЎвЂў Р В РЎвЂќР В РЎвЂўР В РЎвЂ“Р В РўвЂР В Р’В° Р РЋРІР‚В¦Р В РЎвЂўР РЋРІР‚РЋР В Р’ВµР РЋРІвЂљВ¬Р РЋР Р‰ Р В РЎвЂ”Р РЋР вЂљР В РЎвЂўР В РЎвЂ“Р В Р вЂ¦Р В Р’В°Р РЋРІР‚С™Р РЋР Р‰ Best pass Р В РЎвЂ”Р В РЎвЂў Р В Р’В±Р В Р’В°Р В Р вЂ¦Р В РЎвЂќР РЋРЎвЂњ Р В РЎвЂ Р В РўвЂР В РЎвЂўР В Р’В±Р В РЎвЂР РЋРІР‚С™Р РЋР Р‰ Р В РЎвЂ”Р РЋР вЂљР В РЎвЂўР В Р’В±Р В Р’ВµР В Р’В»Р РЋРІР‚в„– Р В РЎвЂўР В Р’В±Р РЋР вЂљР В Р’В°Р РЋРІР‚С™Р В Р вЂ¦Р В РЎвЂў."
-            : "Off: fill runs without the cleanup pass. Turn it on only when you want to clean Saved list and try topping missing slots back up to target."),
-      action: ru ? "Clean saved bank" : "Clean saved bank"
+            ? "Р вЂ™РЎвЂ№Р С”Р В»РЎР‹РЎвЂЎР ВµР Р…Р С•: Р С–Р ВµР Р…Р ВµРЎР‚Р В°РЎвЂ Р С‘РЎРЏ Р С•РЎРѓРЎвЂљР В°РЎвЂРЎвЂљРЎРѓРЎРЏ Р С—РЎР‚Р С•РЎРѓРЎвЂљР С• random fill. Р вЂ™Р С”Р В»РЎР‹РЎвЂЎР В°Р в„– РЎвЂљР С•Р В»РЎРЉР С”Р С• Р С”Р С•Р С–Р Т‘Р В° РЎвЂ¦Р С•РЎвЂЎР ВµРЎв‚¬РЎРЉ Р С—РЎР‚Р С•Р С–Р Р…Р В°РЎвЂљРЎРЉ Best pass Р С—Р С• Р В±Р В°Р Р…Р С”РЎС“ Р С‘ Р Т‘Р С•Р В±Р С‘РЎвЂљРЎРЉ Р С—РЎР‚Р С•Р В±Р ВµР В»РЎвЂ№ Р С•Р В±РЎР‚Р В°РЎвЂљР Р…Р С•."
+            : "Off: generation stays pure random fill. Turn it on only when you want one cleanup pass on the saved bank and a refill back to target."),
+      action: ru ? "Run best pass" : "Run best pass"
     };
   }
   function syncCleanFillUi(kind){
@@ -716,12 +716,12 @@ function readFileAsDataURL(file){
   })();
 
 
-  // Wallpapers Р Р†Р вЂљРІР‚Сњ per-tab. Honest catalog: 2 free SVG + 58 photo packs + 8 premium lux wallpapers.
+  // Wallpapers РІР‚вЂќ per-tab. Honest catalog: 2 free SVG + 58 photo packs + 8 premium lux wallpapers.
   const LS_WP_GLOBAL = "gmx_wp_all";
   const LS_WP_TAB_PREFIX = "gmx_wp_tab_"; // + tab name
   const SITE_WALLPAPER_FREE = [
-    ["free01", "Free Р Р†Р вЂљРІР‚Сњ Solana Waves"],
-    ["free02", "Free Р Р†Р вЂљРІР‚Сњ Solflare Glow"],
+    ["free01", "Free РІР‚вЂќ Solana Waves"],
+    ["free02", "Free РІР‚вЂќ Solflare Glow"],
   ];
   const SITE_WALLPAPER_PACK_COUNT = 58;
   const SITE_WALLPAPER_FREE_PACK_COUNT = 6;
@@ -970,7 +970,7 @@ function scheduleCosmeticRefresh(reason){
     if (typeof value === "string"){
       const txt = value.trim();
       if (!txt) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
-      if (!allowCyr && /[Р В Р вЂљ-Р Р€РЎвЂ”]/.test(value)) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
+      if (!allowCyr && /[Р Р‚-РЈС—]/.test(value)) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
       return value;
     }
     if (value === undefined || value === null) return fallback;
@@ -1214,17 +1214,17 @@ function renderWallpaperUI(){
 // --- Flags + language chips (By language) ---
     function flagEmoji(code){
     const m = {
-      en:"РЎР‚РЎСџРІР‚РЋРЎвЂќРЎР‚РЎСџРІР‚РЋРЎвЂ", es:"РЎР‚РЎСџРІР‚РЋР вЂћРЎР‚РЎСџРІР‚РЋРЎвЂ", pt:"РЎР‚РЎСџРІР‚РЋР’ВµРЎР‚РЎСџРІР‚РЋРІвЂћвЂ“", fr:"РЎР‚РЎСџРІР‚РЋР’В«РЎР‚РЎСџРІР‚РЋР’В·", de:"РЎР‚РЎСџРІР‚РЋР’В©РЎР‚РЎСџРІР‚РЋР вЂћ", it:"РЎР‚РЎСџРІР‚РЋР’В®РЎР‚РЎСџРІР‚РЋРІвЂћвЂ“", nl:"РЎР‚РЎСџРІР‚РЋРЎвЂ“РЎР‚РЎСџРІР‚РЋР’В±",
-      tr:"РЎР‚РЎСџРІР‚РЋРІвЂћвЂ“РЎР‚РЎСџРІР‚РЋР’В·", pl:"РЎР‚РЎСџРІР‚РЋР’ВµРЎР‚РЎСџРІР‚РЋР’В±", id:"РЎР‚РЎСџРІР‚РЋР’В®РЎР‚РЎСџРІР‚РЋР’В©", ru:"РЎР‚РЎСџРІР‚РЋР’В·РЎР‚РЎСџРІР‚РЋРЎвЂќ", uk:"РЎР‚РЎСџРІР‚РЋРЎвЂќРЎР‚РЎСџРІР‚РЋР’В¦", hi:"РЎР‚РЎСџРІР‚РЋР’В®РЎР‚РЎСџРІР‚РЋРЎвЂ“", ja:"РЎР‚РЎСџРІР‚РЋР вЂЎРЎР‚РЎСџРІР‚РЋР’Вµ", zh:"РЎР‚РЎСџРІР‚РЋР РѓРЎР‚РЎСџРІР‚РЋРЎвЂ“"
+      en:"СЂСџвЂЎС”СЂСџвЂЎС‘", es:"СЂСџвЂЎР„СЂСџвЂЎС‘", pt:"СЂСџвЂЎВµСЂСџвЂЎв„–", fr:"СЂСџвЂЎВ«СЂСџвЂЎВ·", de:"СЂСџвЂЎВ©СЂСџвЂЎР„", it:"СЂСџвЂЎВ®СЂСџвЂЎв„–", nl:"СЂСџвЂЎС–СЂСџвЂЎВ±",
+      tr:"СЂСџвЂЎв„–СЂСџвЂЎВ·", pl:"СЂСџвЂЎВµСЂСџвЂЎВ±", id:"СЂСџвЂЎВ®СЂСџвЂЎВ©", ru:"СЂСџвЂЎВ·СЂСџвЂЎС”", uk:"СЂСџвЂЎС”СЂСџвЂЎВ¦", hi:"СЂСџвЂЎВ®СЂСџвЂЎС–", ja:"СЂСџвЂЎР‡СЂСџвЂЎВµ", zh:"СЂСџвЂЎРЃСЂСџвЂЎС–"
     };
-    return m[code] || "РЎР‚РЎСџР Р‰РЎвЂ™";
+    return m[code] || "СЂСџРЉС’";
   }
 
   function updateLangFlags(){
     const site = $("siteLang")?.value || "en";
     const gm = $("gmLang")?.value || "en";
     const gn = $("gnLang")?.value || "en";
-    if ($("siteLangFlag")) $("siteLangFlag").textContent = (site === "en") ? "РЎР‚РЎСџР Р‰РЎвЂ™" : flagEmoji(site);
+    if ($("siteLangFlag")) $("siteLangFlag").textContent = (site === "en") ? "СЂСџРЉС’" : flagEmoji(site);
     if ($("gmLangFlag")) $("gmLangFlag").textContent = flagEmoji(gm);
     if ($("gnLangFlag")) $("gnLangFlag").textContent = flagEmoji(gn);
   }
@@ -2247,7 +2247,7 @@ const $ = (id) => document.getElementById(id);
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
     if (msgEl){
       if (on){
-        msgEl.innerHTML = `<span class="spinner"></span> <span class="muted">${escapeHtml(label||"WorkingР Р†Р вЂљР’В¦")}</span>`;
+        msgEl.innerHTML = `<span class="spinner"></span> <span class="muted">${escapeHtml(label||"WorkingРІР‚В¦")}</span>`;
       } else {
         // keep whatever message was set by the action; do not overwrite
       }
@@ -2379,13 +2379,13 @@ const $ = (id) => document.getElementById(id);
       ? {
           btn: (siteLang() === "ru") ? "Best: live" : "Best: live",
           hint: (siteLang() === "ru")
-            ? "Best live Р РЋРІР‚С™Р РЋР РЏР В Р вЂ¦Р В Р’ВµР РЋРІР‚С™ Р РЋР С“Р В Р вЂ Р В Р’ВµР В Р’В¶Р В РЎвЂР В Р’Вµ Р В Р вЂ Р В Р’В°Р РЋР вЂљР В РЎвЂР В Р’В°Р В Р вЂ¦Р РЋРІР‚С™Р РЋРІР‚в„–, Р В Р вЂ Р РЋРІР‚в„–Р В Р’В±Р В РЎвЂР РЋР вЂљР В Р’В°Р В Р’ВµР РЋРІР‚С™ Р РЋР С“Р В Р’В°Р В РЎВР РЋРІР‚в„–Р В РІвЂћвЂ“ Р РЋР С“Р В РЎвЂР В Р’В»Р РЋР Р‰Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р В РЎвЂ Р РЋР С“Р РЋР вЂљР В Р’В°Р В Р’В·Р РЋРЎвЂњ Р РЋР С“Р В РЎвЂўР РЋРІР‚В¦Р РЋР вЂљР В Р’В°Р В Р вЂ¦Р РЋР РЏР В Р’ВµР РЋРІР‚С™ Р В Р’ВµР В РЎвЂ“Р В РЎвЂў."
+            ? "Best live РЎвЂљРЎРЏР Р…Р ВµРЎвЂљ РЎРѓР Р†Р ВµР В¶Р С‘Р Вµ Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљРЎвЂ№, Р Р†РЎвЂ№Р В±Р С‘РЎР‚Р В°Р ВµРЎвЂљ РЎРѓР В°Р СРЎвЂ№Р в„– РЎРѓР С‘Р В»РЎРЉР Р…РЎвЂ№Р в„– Р С‘ РЎРѓРЎР‚Р В°Р В·РЎС“ РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎРЏР ВµРЎвЂљ Р ВµР С–Р С•."
             : "Best live pulls fresh options, keeps the strongest one, and saves it."
         }
       : {
           btn: (siteLang() === "ru") ? "Best: saved" : "Best: saved",
           hint: (siteLang() === "ru")
-            ? "Best Р В Р’В±Р В Р’ВµР РЋР вЂљР РЋРІР‚ВР РЋРІР‚С™ Р РЋР С“Р В Р’В°Р В РЎВР РЋРІР‚в„–Р В РІвЂћвЂ“ Р РЋР С“Р В РЎвЂР В Р’В»Р РЋР Р‰Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р В Р вЂ Р В Р’В°Р РЋР вЂљР В РЎвЂР В Р’В°Р В Р вЂ¦Р РЋРІР‚С™ Р В РЎвЂР В Р’В· Р РЋРІР‚С™Р В Р вЂ Р В РЎвЂўР В Р’ВµР В РЎвЂ“Р В РЎвЂў Р РЋР С“Р В РЎвЂўР РЋРІР‚В¦Р РЋР вЂљР В Р’В°Р В Р вЂ¦Р РЋРІР‚ВР В Р вЂ¦Р В Р вЂ¦Р В РЎвЂўР В РЎвЂ“Р В РЎвЂў Р РЋР С“Р В РЎвЂ”Р В РЎвЂР РЋР С“Р В РЎвЂќР В Р’В°."
+            ? "Best Р В±Р ВµРЎР‚РЎвЂРЎвЂљ РЎРѓР В°Р СРЎвЂ№Р в„– РЎРѓР С‘Р В»РЎРЉР Р…РЎвЂ№Р в„– Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљ Р С‘Р В· РЎвЂљР Р†Р С•Р ВµР С–Р С• РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎвЂР Р…Р Р…Р С•Р С–Р С• РЎРѓР С—Р С‘РЎРѓР С”Р В°."
             : "Best uses the strongest line from your saved list."
         };
   }
@@ -2753,7 +2753,7 @@ const $ = (id) => document.getElementById(id);
         const j = await api("/api/version?x=1");
         const now = String(j.build || "");
         if (last && now && now !== last){
-          toast("ok", "Update installed. ReloadingР Р†Р вЂљР’В¦");
+          toast("ok", "Update installed. ReloadingРІР‚В¦");
           setTimeout(()=>{ try{ location.reload(); }catch{} }, 700);
         }
         if (now) last = now;
@@ -2775,7 +2775,7 @@ const $ = (id) => document.getElementById(id);
     const v = $(valId);
     const f = $(fillId);
     const cap = normLimitForUI(limit);
-    if (v) v.textContent = (cap === Infinity) ? `${used}/Р Р†РІвЂљВ¬РЎвЂє` : `${used}/${cap}`;
+    if (v) v.textContent = (cap === Infinity) ? `${used}/РІв‚¬С›` : `${used}/${cap}`;
     if (f){
       const pct = (cap === Infinity) ? 100 : (cap ? Math.min(100, Math.round((used/cap)*100)) : 0);
       f.style.width = pct + "%";
@@ -2791,12 +2791,12 @@ function renderHelpModal(){
   const gnLimit = normLimitForUI(LAST_USAGE?.gn?.limit ?? 70);
 
   const savedEl = $("help_saved");
-  if (savedEl) savedEl.textContent = isPro() ? `GM ${gmSaved}/Р Р†РІвЂљВ¬РЎвЂє Р Р†Р вЂљРЎС› GN ${gnSaved}/Р Р†РІвЂљВ¬РЎвЂє` : `GM ${gmSaved}/${SAVE_CAP_FREE} Р Р†Р вЂљРЎС› GN ${gnSaved}/${SAVE_CAP_FREE}`;
+  if (savedEl) savedEl.textContent = isPro() ? `GM ${gmSaved}/РІв‚¬С› РІР‚Сћ GN ${gnSaved}/РІв‚¬С›` : `GM ${gmSaved}/${SAVE_CAP_FREE} РІР‚Сћ GN ${gnSaved}/${SAVE_CAP_FREE}`;
 
   const dailyEl = $("help_daily");
   if (dailyEl) dailyEl.textContent = (isPro() || gmLimit===Infinity || gnLimit===Infinity)
-    ? `GM ${gmUsed}/Р Р†РІвЂљВ¬РЎвЂє Р Р†Р вЂљРЎС› GN ${gnUsed}/Р Р†РІвЂљВ¬РЎвЂє`
-    : `GM ${gmUsed}/${gmLimit} Р Р†Р вЂљРЎС› GN ${gnUsed}/${gnLimit}`;
+    ? `GM ${gmUsed}/РІв‚¬С› РІР‚Сћ GN ${gnUsed}/РІв‚¬С›`
+    : `GM ${gmUsed}/${gmLimit} РІР‚Сћ GN ${gnUsed}/${gnLimit}`;
 
   // aggregate bars
   const savedFill = $("helpSavedFill");
@@ -2876,8 +2876,8 @@ async function refreshUsage(){
       const gnCapUI = normLimitForUI(gn.limit);
       const up = $("usedPill");
       if (up) up.textContent = (isPro() || gmCapUI===Infinity || gnCapUI===Infinity)
-        ? `GM ${gm.used}/Р Р†РІвЂљВ¬РЎвЂє Р Р†Р вЂљРЎС› GN ${gn.used}/Р Р†РІвЂљВ¬РЎвЂє`
-        : `GM ${gm.used}/${gmCapUI} Р Р†Р вЂљРЎС› GN ${gn.used}/${gnCapUI}`;
+        ? `GM ${gm.used}/РІв‚¬С› РІР‚Сћ GN ${gn.used}/РІв‚¬С›`
+        : `GM ${gm.used}/${gmCapUI} РІР‚Сћ GN ${gn.used}/${gnCapUI}`;
 
       // Header status pills
       try{
@@ -3055,7 +3055,7 @@ function scoreLineForBest(kind, s){
   else score -= (clauses.length - 3) * 4;
 
   if (/[\.\!\?]$/.test(t)) score -= 2;
-  if (/[Р Р†Р вЂљРІР‚СњР Р†Р вЂљРІР‚Сљ-]/.test(t)) score -= 5;
+  if (/[РІР‚вЂќРІР‚вЂњ-]/.test(t)) score -= 5;
   try {
     const emojiHits = (t.match(/[\u{1F300}-\u{1FAFF}]/gu) || []).length;
     if (emojiHits === 1) score += 5;
@@ -3198,18 +3198,18 @@ async function doBestServer(kind){
   const antiN = antiWindow(strength);
   const keyActive = activeKey(kind);
 
-  setBusy(kind, true, (siteLang() === "ru") ? "Р В РІР‚в„ўР РЋРІР‚в„–Р В Р’В±Р В РЎвЂР РЋР вЂљР В Р’В°Р РЋР вЂ№ Р В Р’В»Р РЋРЎвЂњР РЋРІР‚РЋР РЋРІвЂљВ¬Р В РЎвЂР В РІвЂћвЂ“ Р В Р вЂ Р В Р’В°Р РЋР вЂљР В РЎвЂР В Р’В°Р В Р вЂ¦Р РЋРІР‚С™Р Р†Р вЂљР’В¦" : "Picking the best replyР Р†Р вЂљР’В¦");
+  setBusy(kind, true, (siteLang() === "ru") ? "Р вЂ™РЎвЂ№Р В±Р С‘РЎР‚Р В°РЎР‹ Р В»РЎС“РЎвЂЎРЎв‚¬Р С‘Р в„– Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљРІР‚В¦" : "Picking the best replyРІР‚В¦");
   try{
     const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}&count=5`, "GET", null, { timeoutMs: 30000 });
     const candidates = dedupeLines((bulk && bulk.list) ? bulk.list : []).map(x=>String(x||"").trim()).filter(Boolean);
     if (!candidates.length){
-      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((siteLang() === "ru") ? "Р В Р Р‹Р В Р’ВµР РЋР вЂљР В Р вЂ Р В Р’ВµР РЋР вЂљ Р В Р вЂ¦Р В Р’Вµ Р В Р вЂ Р В Р’ВµР РЋР вЂљР В Р вЂ¦Р РЋРЎвЂњР В Р’В» Р В Р вЂ Р В Р’В°Р РЋР вЂљР В РЎвЂР В Р’В°Р В Р вЂ¦Р РЋРІР‚С™Р РЋРІР‚в„–" : "No fresh candidates returned")}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((siteLang() === "ru") ? "Р РЋР ВµРЎР‚Р Р†Р ВµРЎР‚ Р Р…Р Вµ Р Р†Р ВµРЎР‚Р Р…РЎС“Р В» Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљРЎвЂ№" : "No fresh candidates returned")}</span>`;
       return;
     }
 
     const best = String(pickBestLine(kind, candidates) || "").trim();
     if (!best){
-      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((siteLang() === "ru") ? "Р В РЎСљР В Р’Вµ Р РЋРЎвЂњР В РўвЂР В Р’В°Р В Р’В»Р В РЎвЂўР РЋР С“Р РЋР Р‰ Р В Р вЂ Р РЋРІР‚в„–Р В Р’В±Р РЋР вЂљР В Р’В°Р РЋРІР‚С™Р РЋР Р‰ Р В Р’В»Р РЋРЎвЂњР РЋРІР‚РЋР РЋРІвЂљВ¬Р В РЎвЂР В РІвЂћвЂ“ Р В Р вЂ Р В Р’В°Р РЋР вЂљР В РЎвЂР В Р’В°Р В Р вЂ¦Р РЋРІР‚С™" : "Could not choose the best reply")}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((siteLang() === "ru") ? "Р СњР Вµ РЎС“Р Т‘Р В°Р В»Р С•РЎРѓРЎРЉ Р Р†РЎвЂ№Р В±РЎР‚Р В°РЎвЂљРЎРЉ Р В»РЎС“РЎвЂЎРЎв‚¬Р С‘Р в„– Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљ" : "Could not choose the best reply")}</span>`;
       return;
     }
 
@@ -3239,8 +3239,8 @@ async function doBestServer(kind){
     renderList(kind);
     if (msgEl){
       const head = already
-        ? ((siteLang() === "ru") ? "Best Р РЋРЎвЂњР В Р’В¶Р В Р’Вµ Р В Р’В±Р РЋРІР‚в„–Р В Р’В» Р В Р вЂ  Р РЋР С“Р В РЎвЂ”Р В РЎвЂР РЋР С“Р В РЎвЂќР В Р’Вµ" : "Best already saved")
-        : (saved ? ((siteLang() === "ru") ? "Best Р В РўвЂР В РЎвЂўР В Р’В±Р В Р’В°Р В Р вЂ Р В Р’В»Р В Р’ВµР В Р вЂ¦" : "Best saved") : ((siteLang() === "ru") ? "Best Р РЋР С“Р В РЎвЂќР В РЎвЂўР В РЎвЂ”Р В РЎвЂР РЋР вЂљР В РЎвЂўР В Р вЂ Р В Р’В°Р В Р вЂ¦" : "Best copied"));
+        ? ((siteLang() === "ru") ? "Best РЎС“Р В¶Р Вµ Р В±РЎвЂ№Р В» Р Р† РЎРѓР С—Р С‘РЎРѓР С”Р Вµ" : "Best already saved")
+        : (saved ? ((siteLang() === "ru") ? "Best Р Т‘Р С•Р В±Р В°Р Р†Р В»Р ВµР Р…" : "Best saved") : ((siteLang() === "ru") ? "Best РЎРѓР С”Р С•Р С—Р С‘РЎР‚Р С•Р Р†Р В°Р Р…" : "Best copied"));
       msgEl.innerHTML = `<span class="ok">${escapeHtml(head)}</span> <span class="muted small">${escapeHtml(best)}</span>`;
     }
     try{ await refreshUsage(); }catch(_e){}
@@ -3300,7 +3300,7 @@ function replaceRandomSavedLine(kind, newLine){
     const totalEl = kind==='gm' ? $('gmTotal') : $('gnTotal');
     const capEl = kind==='gm' ? $('gmCap') : $('gnCap');
     if (totalEl) totalEl.textContent = totalSaved(kind);
-    if (capEl) capEl.textContent = isPro() ? 'Р Р†РІвЂљВ¬РЎвЂє' : String(SAVE_CAP_FREE);
+    if (capEl) capEl.textContent = isPro() ? 'РІв‚¬С›' : String(SAVE_CAP_FREE);
     const brEl = kind==='gm' ? $('gmSavedBreakdown') : $('gnSavedBreakdown');
     if (brEl){
       brEl.textContent = 'Saved bank: ' + totalSaved(kind);
@@ -3314,7 +3314,7 @@ function replaceRandomSavedLine(kind, newLine){
       const fillId = (kind==="gm") ? "gmSavedFill" : "gnSavedFill";
       const v = $(valId);
       const f = $(fillId);
-      if (v) v.textContent = isPro() ? `${used}/Р Р†РІвЂљВ¬РЎвЂє` : `${used}/${cap}`;
+      if (v) v.textContent = isPro() ? `${used}/РІв‚¬С›` : `${used}/${cap}`;
       if (f) f.style.width = isPro() ? "100%" : (Math.min(100, Math.round((used/cap)*100)) + "%");
 
       if (!$("help_modal")?.classList.contains("hidden")) renderHelpModal();
@@ -3447,7 +3447,7 @@ function replaceRandomSavedLine(kind, newLine){
       row.innerHTML = `
         <div class="idx">${pos+1}</div>
         <input class="lineInput" name="line" aria-label="Saved reply ${pos+1}" value="${escapeHtml(val)}" />
-        <button class="delBtn" title="Remove" type="button">Р вЂњРІР‚вЂќ</button>
+        <button class="delBtn" title="Remove" type="button">Р“вЂ”</button>
       `;
       const input = row.querySelector("input");
       const del = row.querySelector("button");
@@ -3780,7 +3780,7 @@ if (effCount <= 0){
   return;
 }
       if (INFLIGHT[kind]){
-      if (msgEl) msgEl.innerHTML = '<span class="muted">WorkingР Р†Р вЂљР’В¦</span>';
+      if (msgEl) msgEl.innerHTML = '<span class="muted">WorkingРІР‚В¦</span>';
       return;
     }
     INFLIGHT[kind] = true;
@@ -4070,7 +4070,7 @@ async function loadLeaderboard(days){
         // rank in top list, else show ">50"
         const idx = top.findIndex(r=>String(r.handle||"")===String(me.handle||""));
         const rank = idx >= 0 ? String(idx+1) : ">50";
-        you.innerHTML = `${escapeHtml(t('lb_you')||'You')}: <b>#${rank}</b> @${h} Р вЂ™Р’В· ${escapeHtml(t('lb_eligible')||'Eligible')}: <b>${eligible}</b>`;
+        you.innerHTML = `${escapeHtml(t('lb_you')||'You')}: <b>#${rank}</b> @${h} Р’В· ${escapeHtml(t('lb_eligible')||'Eligible')}: <b>${eligible}</b>`;
       } else {
         you.textContent = getHandle() ? "" : (t('connectFirst') || "Connect first.");
       }
@@ -4119,7 +4119,7 @@ function bindLeaderboardUI(){
   async function loadRefInvited(days=30){
     const body = $("refInvitedBody");
     if (!body) return;
-    body.innerHTML = `<tr><td colspan="4" class="muted">${t("r_loading") || "LoadingР Р†Р вЂљР’В¦"}<\/td><\/tr>`;
+    body.innerHTML = `<tr><td colspan="4" class="muted">${t("r_loading") || "LoadingРІР‚В¦"}<\/td><\/tr>`;
     const j = await api("/api/referral/list?days=" + encodeURIComponent(String(days)));
     if (!j || !j.ok) throw new Error("ref_list_failed");
     const list = Array.isArray(j.list) ? j.list : [];
@@ -4143,7 +4143,7 @@ async function loadRefLeaderboard(days=90){
   const meEl = $("refLeaderMe");
   const lang = localStorage.getItem(LS_SITE_LANG) || "en";
   const ui = getReferralUiCopy(lang);
-  if (body) body.innerHTML = `<tr><td colspan="3" class="muted">${escapeHtml(ui.leaderboardLoading || "LoadingР Р†Р вЂљР’В¦")}</td></tr>`;
+  if (body) body.innerHTML = `<tr><td colspan="3" class="muted">${escapeHtml(ui.leaderboardLoading || "LoadingРІР‚В¦")}</td></tr>`;
   const j = await api("/api/leaderboard/referrals?days=" + encodeURIComponent(String(days)));
   if (!j || !j.ok) throw new Error("leaderboard_failed");
   const top = Array.isArray(j.top) ? j.top : [];
@@ -4154,7 +4154,7 @@ async function loadRefLeaderboard(days=90){
   }
   if (meEl){
     if (j.me && j.me.handle){
-      meEl.textContent = `${ui.youLabel || "You"}: ${j.me.handle} Р Р†Р вЂљРІР‚Сњ ${ui.eligible}: ${Number(j.me.eligible||0)} (${ui.rulesLabel || "rules"}: Р Р†РІР‚В°РўС’${j.rules?.minInserts||5} inserts + Р Р†РІР‚В°РўС’${j.rules?.minActiveDays||3} active days in ${days}d)`;
+      meEl.textContent = `${ui.youLabel || "You"}: ${j.me.handle} РІР‚вЂќ ${ui.eligible}: ${Number(j.me.eligible||0)} (${ui.rulesLabel || "rules"}: РІвЂ°Тђ${j.rules?.minInserts||5} inserts + РІвЂ°Тђ${j.rules?.minActiveDays||3} active days in ${days}d)`;
     } else {
       meEl.textContent = "";
     }
@@ -4321,7 +4321,7 @@ const msg = $("refMsg");
     try{
       const s = String(pk?.toString?.() || pk || "");
       if (!s) return "";
-      return s.slice(0,4) + "Р Р†Р вЂљР’В¦" + s.slice(-4);
+      return s.slice(0,4) + "РІР‚В¦" + s.slice(-4);
     }catch{ return ""; }
   }
 
@@ -4476,7 +4476,7 @@ function openWalletModal(){
     renderWalletList();
     // receiver hint
     const r = $("sf_modal_receiver");
-    if (r) r.textContent = BILLING?.receiver ? shortPk(BILLING.receiver) : "Р Р†Р вЂљРІР‚Сњ";
+    if (r) r.textContent = BILLING?.receiver ? shortPk(BILLING.receiver) : "РІР‚вЂќ";
     const hm = $("sf_modal_msg");
     if (hm) hm.textContent = "";
   }
@@ -4557,7 +4557,7 @@ if (src){
         const msg = $("sf_modal_msg");
         try{
           connectBtn.disabled = true;
-          if (msg) msg.textContent = "Opening walletР Р†Р вЂљР’В¦";
+          if (msg) msg.textContent = "Opening walletРІР‚В¦";
           await connectWalletByChoice(picked);
           closeWalletModal();
           const out = $("w_msg");
@@ -4744,7 +4744,7 @@ if (src){
       return `$${plan.usd}`;
     }
     const sol = fmtSol(plan.solApprox || 0);
-    return sol ? `Р Р†РІР‚В°РІвЂљВ¬ ${sol} SOL` : "";
+    return sol ? `РІвЂ°в‚¬ ${sol} SOL` : "";
   }
 
   function renderPlanGrid(){
@@ -4831,7 +4831,7 @@ if (src){
       list.innerHTML = "";
       if (!items.length){
         list.innerHTML = `<div class="muted">No receipts yet.</div>`;
-        stats.textContent = "Р Р†Р вЂљРІР‚Сњ";
+        stats.textContent = "РІР‚вЂќ";
         return;
       }
       stats.textContent = `${items.length} receipt${items.length===1?"":"s"}`;
@@ -4853,7 +4853,7 @@ if (src){
       }
     }catch(e){
       list.innerHTML = `<div class="muted">Receipts unavailable.</div>`;
-      stats.textContent = "Р Р†Р вЂљРІР‚Сњ";
+      stats.textContent = "РІР‚вЂќ";
     }
   }
 
@@ -5116,7 +5116,7 @@ if (src){
     const list = $("w_activity_list");
     const msg = $("w_activity_msg");
     if (msg) msg.textContent = "";
-    if (list) list.innerHTML = '<div class="muted">LoadingР Р†Р вЂљР’В¦</div>';
+    if (list) list.innerHTML = '<div class="muted">LoadingРІР‚В¦</div>';
     try{
       if (!getHandle()){
         if (list) list.innerHTML = '<div class="muted">Sign in to see activity.</div>';
@@ -5198,27 +5198,27 @@ async function payNow(){
       PAY_INFLIGHT = true;
       if (payBtn) payBtn.disabled = true;
 
-      setPayState("processing", "Creating checkoutР Р†Р вЂљР’В¦");
-      if (msg) msg.textContent = "Creating paymentР Р†Р вЂљР’В¦";
+      setPayState("processing", "Creating checkoutРІР‚В¦");
+      if (msg) msg.textContent = "Creating paymentРІР‚В¦";
       trackEvent("pay_click", { v, plan: selectedPlan.key, cur, source:"wallet_tab" });
 
       const intent = await api("/api/billing/intent", "POST", { planKey: selectedPlan.key, currency: cur });
 
-      setPayState("processing", "Binding walletР Р†Р вЂљР’В¦");
-      if (msg) msg.textContent = "Sign the wallet message to bind this checkoutР Р†Р вЂљР’В¦";
+      setPayState("processing", "Binding walletРІР‚В¦");
+      if (msg) msg.textContent = "Sign the wallet message to bind this checkoutРІР‚В¦";
       await bindWalletToIntent(intent);
 
-      setPayState("processing", "Building transactionР Р†Р вЂљР’В¦");
-      if (msg) msg.textContent = "Building transactionР Р†Р вЂљР’В¦";
+      setPayState("processing", "Building transactionРІР‚В¦");
+      if (msg) msg.textContent = "Building transactionРІР‚В¦";
       const built = await buildPaymentTx(intent);
 
-      setPayState("processing", "Approve in walletР Р†Р вЂљР’В¦");
-      if (msg) msg.textContent = "Approve the transaction in your walletР Р†Р вЂљР’В¦";
+      setPayState("processing", "Approve in walletРІР‚В¦");
+      if (msg) msg.textContent = "Approve the transaction in your walletРІР‚В¦";
       const payer = String(WALLET.publicKey?.toString?.() || "");
       const sig = await walletSendTransaction(built.tx, built.connection);
 
-      setPayState("confirming", "Confirming on-chainР Р†Р вЂљР’В¦");
-      if (msg) msg.textContent = "Confirming & verifying on-chainР Р†Р вЂљР’В¦";
+      setPayState("confirming", "Confirming on-chainРІР‚В¦");
+      if (msg) msg.textContent = "Confirming & verifying on-chainРІР‚В¦";
       const j = await verifyIntentWithRetry(intent.id, sig, payer);
 
       setPayState("verified", "Verified. Pro activated.");
@@ -5747,98 +5747,98 @@ function getReferralUiCopy(lang){
       discount: "50% off 1 month",
       toolkit: "Referral Toolkit",
       copied: "Copied.",
-      leaderboardLoading: "LoadingР Р†Р вЂљР’В¦",
+      leaderboardLoading: "LoadingРІР‚В¦",
       leaderboardEmpty: "No data yet",
       youLabel: "You",
       rulesLabel: "rules"
     },
     es: {
-      title: "CР вЂњРЎвЂ“mo funciona",
-      note: "Los referidos desbloquean ventajas solo despuР вЂњР’В©s de uso real del producto (no solo registros).",
+      title: "CР“С–mo funciona",
+      note: "Los referidos desbloquean ventajas solo despuР“В©s de uso real del producto (no solo registros).",
       desc: "Ruta de desbloqueo:",
       items: [
         "Confirmed cuenta cuando alguien conecta un handle con tu enlace.",
         "Active cuenta usuarios confirmados con uso registrado.",
-        "Eligible cuenta solo despuР вЂњР’В©s de uso real, controles antifraude y el umbral mР вЂњР’В­nimo de actividad.",
-        "Los referidos desbloquean ventajas. Free mantiene el lР вЂњР’В­mite de lР вЂњР’В­neas guardadas. Pro elimina lР вЂњР’В­mites y desbloquea todo."
+        "Eligible cuenta solo despuР“В©s de uso real, controles antifraude y el umbral mР“В­nimo de actividad.",
+        "Los referidos desbloquean ventajas. Free mantiene el lР“В­mite de lР“В­neas guardadas. Pro elimina lР“В­mites y desbloquea todo."
       ],
       promoterTitle: "Detalles del promotor",
       baseDaily: "Base diaria",
       unlocksNow: "Desbloqueos actuales",
       nextUnlock: "Siguiente desbloqueo",
-      allUnlocked: "Todos los desbloqueos listados ya estР вЂњР Р‹n activos",
-      antiAbuse: "Solo cuentan los referidos eligible. El registro por sР вЂњР’В­ solo no desbloquea ventajas.",
+      allUnlocked: "Todos los desbloqueos listados ya estР“РЋn activos",
+      antiAbuse: "Solo cuentan los referidos eligible. El registro por sР“В­ solo no desbloquea ventajas.",
       confirmed: "Confirmados",
       active: "Activos",
-      eligible: "VР вЂњР Р‹lidos",
+      eligible: "VР“РЋlidos",
       legacy: "Older refs",
       clicks: "Clics",
       bgSlots: "Fondos",
-      saveCap: "LР вЂњР’В­mite guardado",
+      saveCap: "LР“В­mite guardado",
       unlimited: "Ilimitado",
-      onePack: "1 pack cosmР вЂњР’В©tico",
-      allPacks: "Todos los packs cosmР вЂњР’В©ticos",
+      onePack: "1 pack cosmР“В©tico",
+      allPacks: "Todos los packs cosmР“В©ticos",
       proTrial: "Prueba Pro 7d",
       discount: "50% por 1 mes",
       toolkit: "Referral Toolkit",
       copied: "Copiado.",
-      leaderboardLoading: "CargandoР Р†Р вЂљР’В¦",
-      leaderboardEmpty: "AР вЂњРЎвЂќn no hay datos",
-      youLabel: "TР вЂњРЎвЂќ",
+      leaderboardLoading: "CargandoРІР‚В¦",
+      leaderboardEmpty: "AР“С”n no hay datos",
+      youLabel: "TР“С”",
       rulesLabel: "reglas"
     },
     ru: {
-      title: "Р В РЎв„ўР В Р’В°Р В РЎвЂќ Р РЋР РЉР РЋРІР‚С™Р В РЎвЂў Р РЋР вЂљР В Р’В°Р В Р’В±Р В РЎвЂўР РЋРІР‚С™Р В Р’В°Р В Р’ВµР РЋРІР‚С™",
-      note: "Р В Р’В Р В Р’ВµР РЋРІР‚С›Р В Р’ВµР РЋР вЂљР В Р’В°Р В Р’В»Р РЋРІР‚в„– Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р В Р вЂ Р В Р’В°Р РЋР вЂ№Р РЋРІР‚С™ Р В Р’В±Р В РЎвЂўР В Р вЂ¦Р РЋРЎвЂњР РЋР С“Р РЋРІР‚в„– Р РЋРІР‚С™Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В РЎвЂќР В РЎвЂў Р В РЎвЂ”Р В РЎвЂўР РЋР С“Р В Р’В»Р В Р’Вµ Р РЋР вЂљР В Р’ВµР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В РЎвЂўР В РЎвЂ“Р В РЎвЂў Р В РЎвЂР РЋР С“Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В Р’В·Р В РЎвЂўР В Р вЂ Р В Р’В°Р В Р вЂ¦Р В РЎвЂР РЋР РЏ Р В РЎвЂ”Р РЋР вЂљР В РЎвЂўР В РўвЂР РЋРЎвЂњР В РЎвЂќР РЋРІР‚С™Р В Р’В°, Р В Р’В° Р В Р вЂ¦Р В Р’Вµ Р В РЎвЂ”Р РЋР вЂљР В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В РЎвЂў Р РЋР вЂљР В Р’ВµР В РЎвЂ“Р В РЎвЂР РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В Р’В°Р РЋРІР‚В Р В РЎвЂР В РЎвЂ.",
-      desc: "Р В РЎСџР РЋРЎвЂњР РЋРІР‚С™Р РЋР Р‰ Р РЋР вЂљР В Р’В°Р В Р’В·Р В Р’В±Р В Р’В»Р В РЎвЂўР В РЎвЂќР В РЎвЂР РЋР вЂљР В РЎвЂўР В Р вЂ Р В РЎвЂўР В РЎвЂќ:",
+      title: "Р С™Р В°Р С” РЎРЊРЎвЂљР С• РЎР‚Р В°Р В±Р С•РЎвЂљР В°Р ВµРЎвЂљ",
+      note: "Р В Р ВµРЎвЂћР ВµРЎР‚Р В°Р В»РЎвЂ№ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°РЎР‹РЎвЂљ Р В±Р С•Р Р…РЎС“РЎРѓРЎвЂ№ РЎвЂљР С•Р В»РЎРЉР С”Р С• Р С—Р С•РЎРѓР В»Р Вµ РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С•Р С–Р С• Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ Р С—РЎР‚Р С•Р Т‘РЎС“Р С”РЎвЂљР В°, Р В° Р Р…Р Вµ Р С—РЎР‚Р С•РЎРѓРЎвЂљР С• РЎР‚Р ВµР С–Р С‘РЎРѓРЎвЂљРЎР‚Р В°РЎвЂ Р С‘Р С‘.",
+      desc: "Р СџРЎС“РЎвЂљРЎРЉ РЎР‚Р В°Р В·Р В±Р В»Р С•Р С”Р С‘РЎР‚Р С•Р Р†Р С•Р С”:",
       items: [
-        "Р В РЎСџР В РЎвЂўР В РўвЂР РЋРІР‚С™Р В Р вЂ Р В Р’ВµР РЋР вЂљР В Р’В¶Р В РўвЂР РЋРІР‚ВР В Р вЂ¦Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ Р РЋР С“Р РЋРІР‚РЋР В РЎвЂР РЋРІР‚С™Р В Р’В°Р РЋР вЂ№Р РЋРІР‚С™Р РЋР С“Р РЋР РЏ, Р В РЎвЂќР В РЎвЂўР В РЎвЂ“Р В РўвЂР В Р’В° Р РЋРІР‚РЋР В Р’ВµР В Р’В»Р В РЎвЂўР В Р вЂ Р В Р’ВµР В РЎвЂќ Р В РЎвЂ”Р В РЎвЂўР В РўвЂР В РЎвЂќР В Р’В»Р РЋР вЂ№Р РЋРІР‚РЋР В РЎвЂР В Р’В» Р РЋРІР‚В¦Р В Р’ВµР В Р вЂ¦Р В РўвЂР В Р’В» Р В РЎвЂ”Р В РЎвЂў Р РЋРІР‚С™Р В Р вЂ Р В РЎвЂўР В Р’ВµР В РІвЂћвЂ“ Р РЋР С“Р РЋР С“Р РЋРІР‚в„–Р В Р’В»Р В РЎвЂќР В Р’Вµ.",
-        "Р В РЎвЂ™Р В РЎвЂќР РЋРІР‚С™Р В РЎвЂР В Р вЂ Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ Р РЋР С“Р РЋРІР‚РЋР В РЎвЂР РЋРІР‚С™Р В Р’В°Р РЋР вЂ№Р РЋРІР‚С™Р РЋР С“Р РЋР РЏ Р В РўвЂР В Р’В»Р РЋР РЏ Р В РЎвЂ”Р В РЎвЂўР В РўвЂР РЋРІР‚С™Р В Р вЂ Р В Р’ВµР РЋР вЂљР В Р’В¶Р В РўвЂР РЋРІР‚ВР В Р вЂ¦Р В Р вЂ¦Р РЋРІР‚в„–Р РЋРІР‚В¦ Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В Р’В·Р В РЎвЂўР В Р вЂ Р В Р’В°Р РЋРІР‚С™Р В Р’ВµР В Р’В»Р В Р’ВµР В РІвЂћвЂ“ Р РЋР С“ Р В Р’В·Р В Р’В°Р РЋРІР‚С›Р В РЎвЂР В РЎвЂќР РЋР С“Р В РЎвЂР РЋР вЂљР В РЎвЂўР В Р вЂ Р В Р’В°Р В Р вЂ¦Р В Р вЂ¦Р РЋРІР‚в„–Р В РЎВ Р В РЎвЂР РЋР С“Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В Р’В·Р В РЎвЂўР В Р вЂ Р В Р’В°Р В Р вЂ¦Р В РЎвЂР В Р’ВµР В РЎВ.",
-        "Р В РІР‚вЂќР В Р’В°Р РЋРІР‚РЋР РЋРІР‚С™Р РЋРІР‚ВР В Р вЂ¦Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ Р РЋР С“Р РЋРІР‚РЋР В РЎвЂР РЋРІР‚С™Р В Р’В°Р РЋР вЂ№Р РЋРІР‚С™Р РЋР С“Р РЋР РЏ Р РЋРІР‚С™Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В РЎвЂќР В РЎвЂў Р В РЎвЂ”Р В РЎвЂўР РЋР С“Р В Р’В»Р В Р’Вµ Р РЋР вЂљР В Р’ВµР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В РЎвЂўР В РЎвЂ“Р В РЎвЂў Р В РЎвЂР РЋР С“Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В Р’В·Р В РЎвЂўР В Р вЂ Р В Р’В°Р В Р вЂ¦Р В РЎвЂР РЋР РЏ, Р В Р’В°Р В Р вЂ¦Р РЋРІР‚С™Р В РЎвЂР РЋРІР‚С›Р РЋР вЂљР В РЎвЂўР В РўвЂ-Р В РЎвЂ”Р РЋР вЂљР В РЎвЂўР В Р вЂ Р В Р’ВµР РЋР вЂљР В РЎвЂўР В РЎвЂќ Р В РЎвЂ Р В РЎВР В РЎвЂР В Р вЂ¦Р В РЎвЂР В РЎВР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В РЎвЂўР В РЎвЂ“Р В РЎвЂў Р В РЎвЂ”Р В РЎвЂўР РЋР вЂљР В РЎвЂўР В РЎвЂ“Р В Р’В° Р В Р’В°Р В РЎвЂќР РЋРІР‚С™Р В РЎвЂР В Р вЂ Р В Р вЂ¦Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В РЎвЂ.",
-        "Р В Р’В Р В Р’ВµР РЋРІР‚С›Р В Р’ВµР РЋР вЂљР В Р’В°Р В Р’В»Р РЋРІР‚в„– Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р В Р вЂ Р В Р’В°Р РЋР вЂ№Р РЋРІР‚С™ Р В Р’В±Р В РЎвЂўР В Р вЂ¦Р РЋРЎвЂњР РЋР С“Р РЋРІР‚в„–. Р В РЎСџР РЋР вЂљР В РЎвЂўР В РЎВР В РЎвЂўР РЋРЎвЂњР РЋРІР‚С™Р В Р’ВµР РЋР вЂљР РЋР С“Р В РЎвЂќР В РЎвЂР В Р’Вµ Р РЋРІР‚РЋР В Р’В°Р В Р вЂ¦Р В РЎвЂќР В РЎвЂ Р В РЎВР В РЎвЂўР В РЎвЂ“Р РЋРЎвЂњР РЋРІР‚С™ Р В РўвЂР В РЎвЂўР В Р’В±Р В Р’В°Р В Р вЂ Р В РЎвЂР РЋРІР‚С™Р РЋР Р‰ Р В РўвЂР В Р вЂ¦Р В Р’ВµР В Р вЂ Р В Р вЂ¦Р В РЎвЂўР В РІвЂћвЂ“ Р В Р’В±Р В РЎвЂўР В Р вЂ¦Р РЋРЎвЂњР РЋР С“ Р В РЎвЂ”Р В РЎвЂўР В Р вЂ Р В Р’ВµР РЋР вЂљР РЋРІР‚В¦ Free. Р В РІР‚в„ўР В РЎвЂў Free Р РЋР С“Р В РЎвЂўР РЋРІР‚В¦Р РЋР вЂљР В Р’В°Р В Р вЂ¦Р РЋР РЏР В Р’ВµР РЋРІР‚С™Р РЋР С“Р РЋР РЏ Р В Р’В»Р В РЎвЂР В РЎВР В РЎвЂР РЋРІР‚С™ Р РЋР С“Р В РЎвЂўР РЋРІР‚В¦Р РЋР вЂљР В Р’В°Р В Р вЂ¦Р РЋРІР‚ВР В Р вЂ¦Р В Р вЂ¦Р РЋРІР‚в„–Р РЋРІР‚В¦ Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќ. Pro Р РЋР С“Р В Р вЂ¦Р В РЎвЂР В РЎВР В Р’В°Р В Р’ВµР РЋРІР‚С™ Р В Р’В»Р В РЎвЂР В РЎВР В РЎвЂР РЋРІР‚С™Р РЋРІР‚в„– Р В РЎвЂ Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р В Р вЂ Р В Р’В°Р В Р’ВµР РЋРІР‚С™ Р В Р вЂ Р РЋР С“Р РЋРІР‚В."
+        "Р СџР С•Р Т‘РЎвЂљР Р†Р ВµРЎР‚Р В¶Р Т‘РЎвЂР Р…Р Р…РЎвЂ№Р Вµ РЎРѓРЎвЂЎР С‘РЎвЂљР В°РЎР‹РЎвЂљРЎРѓРЎРЏ, Р С”Р С•Р С–Р Т‘Р В° РЎвЂЎР ВµР В»Р С•Р Р†Р ВµР С” Р С—Р С•Р Т‘Р С”Р В»РЎР‹РЎвЂЎР С‘Р В» РЎвЂ¦Р ВµР Р…Р Т‘Р В» Р С—Р С• РЎвЂљР Р†Р С•Р ВµР в„– РЎРѓРЎРѓРЎвЂ№Р В»Р С”Р Вµ.",
+        "Р С’Р С”РЎвЂљР С‘Р Р†Р Р…РЎвЂ№Р Вµ РЎРѓРЎвЂЎР С‘РЎвЂљР В°РЎР‹РЎвЂљРЎРѓРЎРЏ Р Т‘Р В»РЎРЏ Р С—Р С•Р Т‘РЎвЂљР Р†Р ВµРЎР‚Р В¶Р Т‘РЎвЂР Р…Р Р…РЎвЂ№РЎвЂ¦ Р С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°РЎвЂљР ВµР В»Р ВµР в„– РЎРѓ Р В·Р В°РЎвЂћР С‘Р С”РЎРѓР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р Р…РЎвЂ№Р С Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘Р ВµР С.",
+        "Р вЂ”Р В°РЎвЂЎРЎвЂљРЎвЂР Р…Р Р…РЎвЂ№Р Вµ РЎРѓРЎвЂЎР С‘РЎвЂљР В°РЎР‹РЎвЂљРЎРѓРЎРЏ РЎвЂљР С•Р В»РЎРЉР С”Р С• Р С—Р С•РЎРѓР В»Р Вµ РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С•Р С–Р С• Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ, Р В°Р Р…РЎвЂљР С‘РЎвЂћРЎР‚Р С•Р Т‘-Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С•Р С” Р С‘ Р СР С‘Р Р…Р С‘Р СР В°Р В»РЎРЉР Р…Р С•Р С–Р С• Р С—Р С•РЎР‚Р С•Р С–Р В° Р В°Р С”РЎвЂљР С‘Р Р†Р Р…Р С•РЎРѓРЎвЂљР С‘.",
+        "Р В Р ВµРЎвЂћР ВµРЎР‚Р В°Р В»РЎвЂ№ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°РЎР‹РЎвЂљ Р В±Р С•Р Р…РЎС“РЎРѓРЎвЂ№. Р СџРЎР‚Р С•Р СР С•РЎС“РЎвЂљР ВµРЎР‚РЎРѓР С”Р С‘Р Вµ РЎвЂЎР В°Р Р…Р С”Р С‘ Р СР С•Р С–РЎС“РЎвЂљ Р Т‘Р С•Р В±Р В°Р Р†Р С‘РЎвЂљРЎРЉ Р Т‘Р Р…Р ВµР Р†Р Р…Р С•Р в„– Р В±Р С•Р Р…РЎС“РЎРѓ Р С—Р С•Р Р†Р ВµРЎР‚РЎвЂ¦ Free. Р вЂ™Р С• Free РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎРЏР ВµРЎвЂљРЎРѓРЎРЏ Р В»Р С‘Р СР С‘РЎвЂљ РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎвЂР Р…Р Р…РЎвЂ№РЎвЂ¦ РЎРѓРЎвЂљРЎР‚Р С•Р С”. Pro РЎРѓР Р…Р С‘Р СР В°Р ВµРЎвЂљ Р В»Р С‘Р СР С‘РЎвЂљРЎвЂ№ Р С‘ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°Р ВµРЎвЂљ Р Р†РЎРѓРЎвЂ."
       ],
-      promoterTitle: "Р В РІР‚СњР В Р’ВµР РЋРІР‚С™Р В Р’В°Р В Р’В»Р В РЎвЂ Р В РЎвЂ”Р РЋР вЂљР В РЎвЂўР В РЎВР В РЎвЂўР РЋРЎвЂњР РЋРІР‚С™Р В Р’ВµР РЋР вЂљР В Р’В°",
-      baseDaily: "Р В РІР‚ВР В Р’В°Р В Р’В·Р В Р’В° Р В Р вЂ  Р В РўвЂР В Р’ВµР В Р вЂ¦Р РЋР Р‰",
-      unlocksNow: "Р В Р’В§Р РЋРІР‚С™Р В РЎвЂў Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р РЋРІР‚С™Р В РЎвЂў Р РЋР С“Р В Р’ВµР В РІвЂћвЂ“Р РЋРІР‚РЋР В Р’В°Р РЋР С“",
-      nextUnlock: "Р В Р Р‹Р В Р’В»Р В Р’ВµР В РўвЂР РЋРЎвЂњР РЋР вЂ№Р РЋРІР‚В°Р В Р’В°Р РЋР РЏ Р РЋР вЂљР В Р’В°Р В Р’В·Р В Р’В±Р В Р’В»Р В РЎвЂўР В РЎвЂќР В РЎвЂР РЋР вЂљР В РЎвЂўР В Р вЂ Р В РЎвЂќР В Р’В°",
-      allUnlocked: "Р В РІР‚в„ўР РЋР С“Р В Р’Вµ Р В Р’В·Р В Р’В°Р РЋР РЏР В Р вЂ Р В Р’В»Р В Р’ВµР В Р вЂ¦Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ Р РЋР вЂљР В Р’В°Р В Р’В·Р В Р’В±Р В Р’В»Р В РЎвЂўР В РЎвЂќР В РЎвЂР РЋР вЂљР В РЎвЂўР В Р вЂ Р В РЎвЂќР В РЎвЂ Р РЋРЎвЂњР В Р’В¶Р В Р’Вµ Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р РЋРЎвЂњР РЋРІР‚РЋР В Р’ВµР В Р вЂ¦Р РЋРІР‚в„–",
-      antiAbuse: "Р В Р Р‹Р РЋРІР‚РЋР В РЎвЂР РЋРІР‚С™Р В Р’В°Р РЋР вЂ№Р РЋРІР‚С™Р РЋР С“Р РЋР РЏ Р РЋРІР‚С™Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В РЎвЂќР В РЎвЂў Р В Р’В·Р В Р’В°Р РЋРІР‚РЋР РЋРІР‚С™Р РЋРІР‚ВР В Р вЂ¦Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ Р РЋР вЂљР В Р’ВµР РЋРІР‚С›Р В Р’ВµР РЋР вЂљР В Р’В°Р В Р’В»Р РЋРІР‚в„–. Р В РЎвЂєР В РўвЂР В Р вЂ¦Р В Р’В° Р РЋР вЂљР В Р’ВµР В РЎвЂ“Р В РЎвЂР РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В Р’В°Р РЋРІР‚В Р В РЎвЂР РЋР РЏ Р В Р’В±Р В Р’ВµР В Р’В· Р В РЎвЂР РЋР С“Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В Р’В·Р В РЎвЂўР В Р вЂ Р В Р’В°Р В Р вЂ¦Р В РЎвЂР РЋР РЏ Р В Р вЂ¦Р В РЎвЂР РЋРІР‚РЋР В Р’ВµР В РЎвЂ“Р В РЎвЂў Р В Р вЂ¦Р В Р’Вµ Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р В Р вЂ Р В Р’В°Р В Р’ВµР РЋРІР‚С™.",
-      confirmed: "Р В РЎСџР В РЎвЂўР В РўвЂР РЋРІР‚С™Р В Р вЂ Р В Р’ВµР РЋР вЂљР В Р’В¶Р В РўвЂР РЋРІР‚ВР В Р вЂ¦Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ",
-      active: "Р В РЎвЂ™Р В РЎвЂќР РЋРІР‚С™Р В РЎвЂР В Р вЂ Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ",
-      eligible: "Р В РІР‚вЂќР В Р’В°Р РЋРІР‚РЋР РЋРІР‚С™Р РЋРІР‚ВР В Р вЂ¦Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ",
+      promoterTitle: "Р вЂќР ВµРЎвЂљР В°Р В»Р С‘ Р С—РЎР‚Р С•Р СР С•РЎС“РЎвЂљР ВµРЎР‚Р В°",
+      baseDaily: "Р вЂР В°Р В·Р В° Р Р† Р Т‘Р ВµР Р…РЎРЉ",
+      unlocksNow: "Р В§РЎвЂљР С• Р С•РЎвЂљР С”РЎР‚РЎвЂ№РЎвЂљР С• РЎРѓР ВµР в„–РЎвЂЎР В°РЎРѓ",
+      nextUnlock: "Р РЋР В»Р ВµР Т‘РЎС“РЎР‹РЎвЂ°Р В°РЎРЏ РЎР‚Р В°Р В·Р В±Р В»Р С•Р С”Р С‘РЎР‚Р С•Р Р†Р С”Р В°",
+      allUnlocked: "Р вЂ™РЎРѓР Вµ Р В·Р В°РЎРЏР Р†Р В»Р ВµР Р…Р Р…РЎвЂ№Р Вµ РЎР‚Р В°Р В·Р В±Р В»Р С•Р С”Р С‘РЎР‚Р С•Р Р†Р С”Р С‘ РЎС“Р В¶Р Вµ Р С—Р С•Р В»РЎС“РЎвЂЎР ВµР Р…РЎвЂ№",
+      antiAbuse: "Р РЋРЎвЂЎР С‘РЎвЂљР В°РЎР‹РЎвЂљРЎРѓРЎРЏ РЎвЂљР С•Р В»РЎРЉР С”Р С• Р В·Р В°РЎвЂЎРЎвЂљРЎвЂР Р…Р Р…РЎвЂ№Р Вµ РЎР‚Р ВµРЎвЂћР ВµРЎР‚Р В°Р В»РЎвЂ№. Р С›Р Т‘Р Р…Р В° РЎР‚Р ВµР С–Р С‘РЎРѓРЎвЂљРЎР‚Р В°РЎвЂ Р С‘РЎРЏ Р В±Р ВµР В· Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ Р Р…Р С‘РЎвЂЎР ВµР С–Р С• Р Р…Р Вµ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°Р ВµРЎвЂљ.",
+      confirmed: "Р СџР С•Р Т‘РЎвЂљР Р†Р ВµРЎР‚Р В¶Р Т‘РЎвЂР Р…Р Р…РЎвЂ№Р Вµ",
+      active: "Р С’Р С”РЎвЂљР С‘Р Р†Р Р…РЎвЂ№Р Вµ",
+      eligible: "Р вЂ”Р В°РЎвЂЎРЎвЂљРЎвЂР Р…Р Р…РЎвЂ№Р Вµ",
       legacy: "Older refs",
-      clicks: "Р В РЎв„ўР В Р’В»Р В РЎвЂР В РЎвЂќР В РЎвЂ",
-      bgSlots: "Р В Р Р‹Р В Р’В»Р В РЎвЂўР РЋРІР‚С™Р РЋРІР‚в„– Р РЋРІР‚С›Р В РЎвЂўР В Р вЂ¦Р В Р’В°",
-      saveCap: "Р В РІР‚С”Р В РЎвЂР В РЎВР В РЎвЂР РЋРІР‚С™ Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќ",
-      unlimited: "Р В РІР‚ВР В Р’ВµР В Р’В· Р В Р’В»Р В РЎвЂР В РЎВР В РЎвЂР РЋРІР‚С™Р В Р’В°",
-      onePack: "1 Р В РЎвЂќР В РЎвЂўР РЋР С“Р В РЎВР В Р’ВµР РЋРІР‚С™Р В РЎвЂР РЋРІР‚РЋР В Р’ВµР РЋР С“Р В РЎвЂќР В РЎвЂР В РІвЂћвЂ“ Р В РЎвЂ”Р В Р’В°Р В РЎвЂќ",
-      allPacks: "Р В РІР‚в„ўР РЋР С“Р В Р’Вµ Р В РЎвЂќР В РЎвЂўР РЋР С“Р В РЎВР В Р’ВµР РЋРІР‚С™Р В РЎвЂР РЋРІР‚РЋР В Р’ВµР РЋР С“Р В РЎвЂќР В РЎвЂР В Р’Вµ Р В РЎвЂ”Р В Р’В°Р В РЎвЂќР В РЎвЂ",
+      clicks: "Р С™Р В»Р С‘Р С”Р С‘",
+      bgSlots: "Р РЋР В»Р С•РЎвЂљРЎвЂ№ РЎвЂћР С•Р Р…Р В°",
+      saveCap: "Р вЂєР С‘Р СР С‘РЎвЂљ РЎРѓРЎвЂљРЎР‚Р С•Р С”",
+      unlimited: "Р вЂР ВµР В· Р В»Р С‘Р СР С‘РЎвЂљР В°",
+      onePack: "1 Р С”Р С•РЎРѓР СР ВµРЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘Р в„– Р С—Р В°Р С”",
+      allPacks: "Р вЂ™РЎРѓР Вµ Р С”Р С•РЎРѓР СР ВµРЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘Р Вµ Р С—Р В°Р С”Р С‘",
       proTrial: "Pro Trial 7d",
-      discount: "50% Р В Р вЂ¦Р В Р’В° 1 Р В РЎВР В Р’ВµР РЋР С“Р РЋР РЏР РЋРІР‚В ",
+      discount: "50% Р Р…Р В° 1 Р СР ВµРЎРѓРЎРЏРЎвЂ ",
       toolkit: "Referral Toolkit",
-      copied: "Р В Р Р‹Р В РЎвЂќР В РЎвЂўР В РЎвЂ”Р В РЎвЂР РЋР вЂљР В РЎвЂўР В Р вЂ Р В Р’В°Р В Р вЂ¦Р В РЎвЂў.",
-      leaderboardLoading: "Р В РІР‚вЂќР В Р’В°Р В РЎвЂ“Р РЋР вЂљР РЋРЎвЂњР В Р’В·Р В РЎвЂќР В Р’В°Р Р†Р вЂљР’В¦",
-      leaderboardEmpty: "Р В РІР‚СњР В Р’В°Р В Р вЂ¦Р В Р вЂ¦Р РЋРІР‚в„–Р РЋРІР‚В¦ Р В РЎвЂ”Р В РЎвЂўР В РЎвЂќР В Р’В° Р В Р вЂ¦Р В Р’ВµР РЋРІР‚С™",
-      youLabel: "Р В РЎС›Р РЋРІР‚в„–",
-      rulesLabel: "Р В РЎвЂ”Р РЋР вЂљР В Р’В°Р В Р вЂ Р В РЎвЂР В Р’В»Р В Р’В°"
+      copied: "Р РЋР С”Р С•Р С—Р С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С•.",
+      leaderboardLoading: "Р вЂ”Р В°Р С–РЎР‚РЎС“Р В·Р С”Р В°РІР‚В¦",
+      leaderboardEmpty: "Р вЂќР В°Р Р…Р Р…РЎвЂ№РЎвЂ¦ Р С—Р С•Р С”Р В° Р Р…Р ВµРЎвЂљ",
+      youLabel: "Р СћРЎвЂ№",
+      rulesLabel: "Р С—РЎР‚Р В°Р Р†Р С‘Р В»Р В°"
     },
     de: {
       title: "So funktioniert's",
       note: "Referrals schalten Vorteile erst nach echter Produktnutzung frei, nicht nur nach Signups.",
       desc: "Unlock-Pfad:",
       items: [
-        "Confirmed zР вЂњР’В¤hlt, wenn jemand mit deinem Link einen Handle verbindet.",
-        "Active zР вЂњР’В¤hlt bestР вЂњР’В¤tigte Nutzer mit erfasster Nutzung.",
-        "Eligible zР вЂњР’В¤hlt erst nach echter Nutzung, Anti-Fraud-PrР вЂњРЎВfungen und dem Mindest-AktivitР вЂњР’В¤tsschwellenwert.",
-        "Referrals schalten Vorteile frei. Free behР вЂњР’В¤lt das Limit fР вЂњРЎВr gespeicherte Zeilen. Pro entfernt Limits und schaltet alles frei."
+        "Confirmed zР“В¤hlt, wenn jemand mit deinem Link einen Handle verbindet.",
+        "Active zР“В¤hlt bestР“В¤tigte Nutzer mit erfasster Nutzung.",
+        "Eligible zР“В¤hlt erst nach echter Nutzung, Anti-Fraud-PrР“Сfungen und dem Mindest-AktivitР“В¤tsschwellenwert.",
+        "Referrals schalten Vorteile frei. Free behР“В¤lt das Limit fР“Сr gespeicherte Zeilen. Pro entfernt Limits und schaltet alles frei."
       ],
       promoterTitle: "Promoter-Details",
       baseDaily: "Tagesbasis",
       unlocksNow: "Aktuelle Unlocks",
-      nextUnlock: "NР вЂњР’В¤chster Unlock",
-      allUnlocked: "Alle aufgefР вЂњРЎВhrten Unlocks erreicht",
-      antiAbuse: "Nur eligible Referrals zР вЂњР’В¤hlen. Ein Signup allein schaltet nichts frei.",
-      confirmed: "BestР вЂњР’В¤tigt",
+      nextUnlock: "NР“В¤chster Unlock",
+      allUnlocked: "Alle aufgefР“Сhrten Unlocks erreicht",
+      antiAbuse: "Nur eligible Referrals zР“В¤hlen. Ein Signup allein schaltet nichts frei.",
+      confirmed: "BestР“В¤tigt",
       active: "Aktiv",
       eligible: "Eligible",
       legacy: "Older refs",
@@ -5849,65 +5849,65 @@ function getReferralUiCopy(lang){
       onePack: "1 Kosmetik-Pack",
       allPacks: "Alle Kosmetik-Packs",
       proTrial: "Pro-Test 7d",
-      discount: "50% fР вЂњРЎВr 1 Monat",
+      discount: "50% fР“Сr 1 Monat",
       toolkit: "Referral Toolkit",
       copied: "Kopiert.",
-      leaderboardLoading: "LР вЂњР’В¤dtР Р†Р вЂљР’В¦",
+      leaderboardLoading: "LР“В¤dtРІР‚В¦",
       leaderboardEmpty: "Noch keine Daten",
       youLabel: "Du",
       rulesLabel: "Regeln"
     },
     fr: {
-      title: "Comment Р вЂњР’В§a marche",
-      note: "Les referrals dР вЂњР’В©bloquent des avantages seulement aprР вЂњР Рѓs une vraie utilisation du produit, pas juste une inscription.",
-      desc: "Parcours de dР вЂњР’В©blocage :",
+      title: "Comment Р“В§a marche",
+      note: "Les referrals dР“В©bloquent des avantages seulement aprР“РЃs une vraie utilisation du produit, pas juste une inscription.",
+      desc: "Parcours de dР“В©blocage :",
       items: [
         "Confirmed compte quand quelqu'un connecte un handle avec ton lien.",
-        "Active compte les utilisateurs confirmР вЂњР’В©s avec une utilisation enregistrР вЂњР’В©e.",
-        "Eligible compte seulement aprР вЂњР Рѓs une vraie utilisation, les contrР вЂњРўвЂles anti-fraude et le seuil minimum d'activitР вЂњР’В©.",
-        "Les referrals dР вЂњР’В©bloquent des avantages. Free garde la limite de lignes sauvegardР вЂњР’В©es. Pro retire les limites et dР вЂњР’В©bloque tout."
+        "Active compte les utilisateurs confirmР“В©s avec une utilisation enregistrР“В©e.",
+        "Eligible compte seulement aprР“РЃs une vraie utilisation, les contrР“Т‘les anti-fraude et le seuil minimum d'activitР“В©.",
+        "Les referrals dР“В©bloquent des avantages. Free garde la limite de lignes sauvegardР“В©es. Pro retire les limites et dР“В©bloque tout."
       ],
-      promoterTitle: "DР вЂњР’В©tails du promoteur",
+      promoterTitle: "DР“В©tails du promoteur",
       baseDaily: "Base quotidienne",
-      unlocksNow: "DР вЂњР’В©blocages actuels",
-      nextUnlock: "Prochain dР вЂњР’В©blocage",
-      allUnlocked: "Tous les dР вЂњР’В©blocages listР вЂњР’В©s sont atteints",
-      antiAbuse: "Seuls les referrals eligible comptent. Une simple inscription ne dР вЂњР’В©bloque rien.",
-      confirmed: "ConfirmР вЂњР’В©s",
+      unlocksNow: "DР“В©blocages actuels",
+      nextUnlock: "Prochain dР“В©blocage",
+      allUnlocked: "Tous les dР“В©blocages listР“В©s sont atteints",
+      antiAbuse: "Seuls les referrals eligible comptent. Une simple inscription ne dР“В©bloque rien.",
+      confirmed: "ConfirmР“В©s",
       active: "Actifs",
       eligible: "Valides",
       legacy: "Older refs",
       clicks: "Clics",
       bgSlots: "Slots fond",
       saveCap: "Limite sauvegarde",
-      unlimited: "IllimitР вЂњР’В©",
-      onePack: "1 pack cosmР вЂњР’В©tique",
-      allPacks: "Tous les packs cosmР вЂњР’В©tiques",
+      unlimited: "IllimitР“В©",
+      onePack: "1 pack cosmР“В©tique",
+      allPacks: "Tous les packs cosmР“В©tiques",
       proTrial: "Essai Pro 7j",
       discount: "50% pour 1 mois",
       toolkit: "Referral Toolkit",
-      copied: "CopiР вЂњР’В©.",
-      leaderboardLoading: "ChargementР Р†Р вЂљР’В¦",
-      leaderboardEmpty: "Pas encore de donnР вЂњР’В©es",
+      copied: "CopiР“В©.",
+      leaderboardLoading: "ChargementРІР‚В¦",
+      leaderboardEmpty: "Pas encore de donnР“В©es",
       youLabel: "Toi",
-      rulesLabel: "rР вЂњР Рѓgles"
+      rulesLabel: "rР“РЃgles"
     },
     hi: {
-      title: "Р В°Р’В¤Р вЂЎР В°Р’В¤РІвЂћвЂ“ Р В°Р’В¤РІР‚СћР В°РўС’РІвЂљВ¬Р В°Р’В¤РЎвЂР В°РўС’РІР‚РЋ Р В°Р’В¤РІР‚СћР В°Р’В¤РЎвЂўР В°Р’В¤Р’В® Р В°Р’В¤РІР‚СћР В°Р’В¤Р’В°Р В°Р’В¤Р’В¤Р В°Р’В¤РЎвЂў Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІвЂљВ¬",
-      note: "Р В°Р’В¤Р’В°Р В°РўС’РІР‚РЋР В°Р’В¤Р’В«Р В°Р’В¤Р’В°Р В°Р’В¤Р вЂ  perks Р В°Р’В¤Р’В¤Р В°Р’В¤Р’В­Р В°РўС’Р вЂљ unlock Р В°Р’В¤РІР‚СћР В°Р’В¤Р’В°Р В°Р’В¤Р’В¤Р В°РўС’РІР‚РЋ Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІвЂљВ¬Р В°Р’В¤РІР‚С™ Р В°Р’В¤РЎС™Р В°Р’В¤Р’В¬ Р В°Р’В¤Р вЂћР В°РўС’Р РЉР В°Р’В¤Р’В°Р В°РўС’РІР‚в„–Р В°Р’В¤Р Р‹Р В°Р’В¤РІР‚СћР В°РўС’Р РЉР В°Р’В¤РЎСџ Р В°Р’В¤РІР‚СћР В°Р’В¤РЎвЂў Р В°Р’В¤РІР‚В¦Р В°Р’В¤РЎвЂР В°Р’В¤Р вЂ Р В°РўС’Р вЂљ Р В°Р’В¤РІР‚В°Р В°Р’В¤Р вЂћР В°Р’В¤Р вЂЎР В°РўС’РІР‚в„–Р В°Р’В¤РІР‚вЂќ Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІР‚в„–, Р В°Р’В¤РЎвЂР В°Р’В¤РЎвЂ”Р В°Р’В¤Р’В°Р В°РўС’Р РЉР В°Р’В¤Р’В« signup Р В°Р’В¤Р вЂћР В°Р’В¤Р’В° Р В°Р’В¤Р РѓР В°Р’В¤РІвЂћвЂ“Р В°РўС’Р вЂљР В°Р’В¤РІР‚С™Р В°РўС’Р’В¤",
+      title: "Р°В¤Р‡Р°В¤в„– Р°В¤вЂўР°Тђв‚¬Р°В¤С‘Р°ТђвЂЎ Р°В¤вЂўР°В¤С•Р°В¤В® Р°В¤вЂўР°В¤В°Р°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬",
+      note: "Р°В¤В°Р°ТђвЂЎР°В¤В«Р°В¤В°Р°В¤Р† perks Р°В¤В¤Р°В¤В­Р°ТђР‚ unlock Р°В¤вЂўР°В¤В°Р°В¤В¤Р°ТђвЂЎ Р°В¤в„–Р°Тђв‚¬Р°В¤вЂљ Р°В¤СљР°В¤В¬ Р°В¤Р„Р°ТђРЊР°В¤В°Р°ТђвЂ№Р°В¤РЋР°В¤вЂўР°ТђРЊР°В¤Сџ Р°В¤вЂўР°В¤С• Р°В¤вЂ¦Р°В¤С‘Р°В¤Р†Р°ТђР‚ Р°В¤вЂ°Р°В¤Р„Р°В¤Р‡Р°ТђвЂ№Р°В¤вЂ” Р°В¤в„–Р°ТђвЂ№, Р°В¤С‘Р°В¤С—Р°В¤В°Р°ТђРЊР°В¤В« signup Р°В¤Р„Р°В¤В° Р°В¤РЃР°В¤в„–Р°ТђР‚Р°В¤вЂљР°ТђВ¤",
       desc: "Unlock path:",
       items: [
-        "Confirmed Р В°Р’В¤Р’В¤Р В°Р’В¤Р’В¬ Р В°Р’В¤РІР‚вЂќР В°Р’В¤РЎвЂ”Р В°Р’В¤Р РѓР В°Р’В¤РЎвЂў Р В°Р’В¤РЎС™Р В°Р’В¤РЎвЂўР В°Р’В¤Р’В¤Р В°Р’В¤РЎвЂў Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІвЂљВ¬ Р В°Р’В¤РЎС™Р В°Р’В¤Р’В¬ Р В°Р’В¤РІР‚СћР В°РўС’РІР‚в„–Р В°Р’В¤РІвЂљВ¬ Р В°Р’В¤РІР‚В Р В°Р’В¤Р вЂћР В°Р’В¤РІР‚СћР В°РўС’РІР‚РЋ Р В°Р’В¤Р вЂ Р В°Р’В¤РЎвЂ”Р В°Р’В¤РІР‚С™Р В°Р’В¤РІР‚Сћ Р В°Р’В¤РЎвЂР В°РўС’РІР‚РЋ handle connect Р В°Р’В¤РІР‚СћР В°Р’В¤Р’В°Р В°Р’В¤Р’В¤Р В°Р’В¤РЎвЂў Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІвЂљВ¬Р В°РўС’Р’В¤",
-        "Active Р В°Р’В¤РІР‚В°Р В°Р’В¤Р Рѓ confirmed users Р В°Р’В¤РІР‚СћР В°РўС’РІР‚в„– Р В°Р’В¤РІР‚вЂќР В°Р’В¤РЎвЂ”Р В°Р’В¤Р РѓР В°Р’В¤Р’В¤Р В°Р’В¤РЎвЂў Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІвЂљВ¬ Р В°Р’В¤РЎС™Р В°Р’В¤РЎвЂ”Р В°Р’В¤Р РѓР В°Р’В¤РІР‚СћР В°Р’В¤РЎвЂў usage Р В°Р’В¤Р’В°Р В°Р’В¤РЎвЂ”Р В°Р’В¤РІР‚СћР В°РўС’РІР‚В°Р В°Р’В¤Р’В°Р В°РўС’Р РЉР В°Р’В¤Р Р‹ Р В°Р’В¤РІвЂћвЂ“Р В°РўС’Р С“Р В°Р’В¤РІР‚В  Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІвЂљВ¬Р В°РўС’Р’В¤",
-        "Eligible Р В°Р’В¤Р’В¤Р В°Р’В¤Р’В­Р В°РўС’Р вЂљ Р В°Р’В¤РІР‚вЂќР В°Р’В¤РЎвЂ”Р В°Р’В¤Р РѓР В°Р’В¤РЎвЂў Р В°Р’В¤РЎС™Р В°Р’В¤РЎвЂўР В°Р’В¤Р’В¤Р В°Р’В¤РЎвЂў Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІвЂљВ¬ Р В°Р’В¤РЎС™Р В°Р’В¤Р’В¬ real usage, anti-fraud checks Р В°Р’В¤РІР‚СњР В°Р’В¤Р’В° minimum activity threshold Р В°Р’В¤Р вЂћР В°РўС’РІР‚С™Р В°Р’В¤Р’В°Р В°Р’В¤РЎвЂў Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІР‚в„–Р В°РўС’Р’В¤",
-        "Р В°Р’В¤Р’В°Р В°РўС’РІР‚РЋР В°Р’В¤Р’В«Р В°Р’В¤Р’В°Р В°Р’В¤Р вЂ  perks unlock Р В°Р’В¤РІР‚СћР В°Р’В¤Р’В°Р В°Р’В¤Р’В¤Р В°РўС’РІР‚РЋ Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІвЂљВ¬Р В°Р’В¤РІР‚С™Р В°РўС’Р’В¤ Free Р В°Р’В¤Р’В®Р В°РўС’РІР‚РЋР В°Р’В¤РІР‚С™ saved lines Р В°Р’В¤РІР‚СћР В°Р’В¤РЎвЂў cap Р В°Р’В¤Р’В°Р В°Р’В¤РІвЂћвЂ“Р В°Р’В¤Р’В¤Р В°Р’В¤РЎвЂў Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІвЂљВ¬Р В°РўС’Р’В¤ Pro limits Р В°Р’В¤РІвЂћвЂ“Р В°Р’В¤РЎСџР В°Р’В¤РЎвЂўР В°Р’В¤Р’В¤Р В°Р’В¤РЎвЂў Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІвЂљВ¬ Р В°Р’В¤РІР‚СњР В°Р’В¤Р’В° Р В°Р’В¤РЎвЂР В°Р’В¤Р’В¬ unlock Р В°Р’В¤РІР‚СћР В°Р’В¤Р’В°Р В°Р’В¤Р’В¤Р В°Р’В¤РЎвЂў Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІвЂљВ¬Р В°РўС’Р’В¤"
+        "Confirmed Р°В¤В¤Р°В¤В¬ Р°В¤вЂ”Р°В¤С—Р°В¤РЃР°В¤С• Р°В¤СљР°В¤С•Р°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬ Р°В¤СљР°В¤В¬ Р°В¤вЂўР°ТђвЂ№Р°В¤в‚¬ Р°В¤вЂ Р°В¤Р„Р°В¤вЂўР°ТђвЂЎ Р°В¤Р†Р°В¤С—Р°В¤вЂљР°В¤вЂў Р°В¤С‘Р°ТђвЂЎ handle connect Р°В¤вЂўР°В¤В°Р°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬Р°ТђВ¤",
+        "Active Р°В¤вЂ°Р°В¤РЃ confirmed users Р°В¤вЂўР°ТђвЂ№ Р°В¤вЂ”Р°В¤С—Р°В¤РЃР°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬ Р°В¤СљР°В¤С—Р°В¤РЃР°В¤вЂўР°В¤С• usage Р°В¤В°Р°В¤С—Р°В¤вЂўР°ТђвЂ°Р°В¤В°Р°ТђРЊР°В¤РЋ Р°В¤в„–Р°ТђРѓР°В¤вЂ  Р°В¤в„–Р°Тђв‚¬Р°ТђВ¤",
+        "Eligible Р°В¤В¤Р°В¤В­Р°ТђР‚ Р°В¤вЂ”Р°В¤С—Р°В¤РЃР°В¤С• Р°В¤СљР°В¤С•Р°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬ Р°В¤СљР°В¤В¬ real usage, anti-fraud checks Р°В¤вЂќР°В¤В° minimum activity threshold Р°В¤Р„Р°ТђвЂљР°В¤В°Р°В¤С• Р°В¤в„–Р°ТђвЂ№Р°ТђВ¤",
+        "Р°В¤В°Р°ТђвЂЎР°В¤В«Р°В¤В°Р°В¤Р† perks unlock Р°В¤вЂўР°В¤В°Р°В¤В¤Р°ТђвЂЎ Р°В¤в„–Р°Тђв‚¬Р°В¤вЂљР°ТђВ¤ Free Р°В¤В®Р°ТђвЂЎР°В¤вЂљ saved lines Р°В¤вЂўР°В¤С• cap Р°В¤В°Р°В¤в„–Р°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬Р°ТђВ¤ Pro limits Р°В¤в„–Р°В¤СџР°В¤С•Р°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬ Р°В¤вЂќР°В¤В° Р°В¤С‘Р°В¤В¬ unlock Р°В¤вЂўР°В¤В°Р°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬Р°ТђВ¤"
       ],
       promoterTitle: "Promoter details",
       baseDaily: "Base daily",
-      unlocksNow: "Р В°Р’В¤РІР‚В¦Р В°Р’В¤Р’В¬ Р В°Р’В¤РІР‚СћР В°РўС’Р РЉР В°Р’В¤Р вЂЎР В°Р’В¤РЎвЂў unlock Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІвЂљВ¬",
-      nextUnlock: "Р В°Р’В¤РІР‚В¦Р В°Р’В¤РІР‚вЂќР В°Р’В¤Р вЂ Р В°Р’В¤РЎвЂў unlock",
-      allUnlocked: "Р В°Р’В¤РЎвЂР В°Р’В¤Р’В­Р В°РўС’Р вЂљ listed unlocks Р В°Р’В¤Р’В®Р В°Р’В¤РЎвЂ”Р В°Р’В¤Р вЂ  Р В°Р’В¤РЎв„ўР В°РўС’Р С“Р В°Р’В¤РІР‚СћР В°РўС’РІР‚РЋ Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІвЂљВ¬Р В°Р’В¤РІР‚С™",
-      antiAbuse: "Р В°Р’В¤РЎвЂР В°Р’В¤РЎвЂ”Р В°Р’В¤Р’В°Р В°РўС’Р РЉР В°Р’В¤Р’В« eligible referrals Р В°Р’В¤РІР‚вЂќР В°Р’В¤РЎвЂ”Р В°Р’В¤Р РѓР В°РўС’РІР‚РЋ Р В°Р’В¤РЎС™Р В°Р’В¤РЎвЂўР В°Р’В¤Р’В¤Р В°РўС’РІР‚РЋ Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІвЂљВ¬Р В°Р’В¤РІР‚С™Р В°РўС’Р’В¤ Р В°Р’В¤РЎвЂР В°Р’В¤РЎвЂ”Р В°Р’В¤Р’В°Р В°РўС’Р РЉР В°Р’В¤Р’В« signup Р В°Р’В¤РЎвЂР В°РўС’РІР‚РЋ Р В°Р’В¤РІР‚СћР В°РўС’Р С“Р В°Р’В¤РІР‚С” unlock Р В°Р’В¤Р РѓР В°Р’В¤РІвЂћвЂ“Р В°РўС’Р вЂљР В°Р’В¤РІР‚С™ Р В°Р’В¤РІвЂћвЂ“Р В°РўС’РІР‚в„–Р В°Р’В¤Р’В¤Р В°Р’В¤РЎвЂўР В°РўС’Р’В¤",
+      unlocksNow: "Р°В¤вЂ¦Р°В¤В¬ Р°В¤вЂўР°ТђРЊР°В¤Р‡Р°В¤С• unlock Р°В¤в„–Р°Тђв‚¬",
+      nextUnlock: "Р°В¤вЂ¦Р°В¤вЂ”Р°В¤Р†Р°В¤С• unlock",
+      allUnlocked: "Р°В¤С‘Р°В¤В­Р°ТђР‚ listed unlocks Р°В¤В®Р°В¤С—Р°В¤Р† Р°В¤С™Р°ТђРѓР°В¤вЂўР°ТђвЂЎ Р°В¤в„–Р°Тђв‚¬Р°В¤вЂљ",
+      antiAbuse: "Р°В¤С‘Р°В¤С—Р°В¤В°Р°ТђРЊР°В¤В« eligible referrals Р°В¤вЂ”Р°В¤С—Р°В¤РЃР°ТђвЂЎ Р°В¤СљР°В¤С•Р°В¤В¤Р°ТђвЂЎ Р°В¤в„–Р°Тђв‚¬Р°В¤вЂљР°ТђВ¤ Р°В¤С‘Р°В¤С—Р°В¤В°Р°ТђРЊР°В¤В« signup Р°В¤С‘Р°ТђвЂЎ Р°В¤вЂўР°ТђРѓР°В¤вЂє unlock Р°В¤РЃР°В¤в„–Р°ТђР‚Р°В¤вЂљ Р°В¤в„–Р°ТђвЂ№Р°В¤В¤Р°В¤С•Р°ТђВ¤",
       confirmed: "Confirmed",
       active: "Active",
       eligible: "Eligible",
@@ -5922,7 +5922,7 @@ function getReferralUiCopy(lang){
       discount: "50% off 1 month",
       toolkit: "Referral Toolkit",
       copied: "Copied.",
-      leaderboardLoading: "LoadingР Р†Р вЂљР’В¦",
+      leaderboardLoading: "LoadingРІР‚В¦",
       leaderboardEmpty: "No data yet",
       youLabel: "You",
       rulesLabel: "rules"
@@ -5957,43 +5957,43 @@ function getReferralUiCopy(lang){
       discount: "50% korting 1 maand",
       toolkit: "Referral Toolkit",
       copied: "Gekopieerd.",
-      leaderboardLoading: "LadenР Р†Р вЂљР’В¦",
+      leaderboardLoading: "LadenРІР‚В¦",
       leaderboardEmpty: "Nog geen data",
       youLabel: "Jij",
       rulesLabel: "regels"
     },
     tr: {
-      title: "NasР вЂќР’В±l Р вЂњР’В§alР вЂќР’В±Р вЂўРЎСџР вЂќР’В±r",
-      note: "Referrals, sadece kayР вЂќР’В±tla deР вЂќРЎСџil, gerР вЂњР’В§ek Р вЂњРЎВrР вЂњРЎВn kullanР вЂќР’В±mР вЂќР’В± sonrasР вЂќР’В± avantaj aР вЂњР’В§ar.",
-      desc: "AР вЂњР’В§Р вЂќР’В±lma yolu:",
+      title: "NasР”В±l Р“В§alР”В±Р•СџР”В±r",
+      note: "Referrals, sadece kayР”В±tla deР”Сџil, gerР“В§ek Р“СrР“Сn kullanР”В±mР”В± sonrasР”В± avantaj aР“В§ar.",
+      desc: "AР“В§Р”В±lma yolu:",
       items: [
-        "Confirmed, biri senin linkinle handle baР вЂќРЎСџladР вЂќР’В±Р вЂќРЎСџР вЂќР’В±nda sayР вЂќР’В±lР вЂќР’В±r.",
-        "Active, kullanР вЂќР’В±mР вЂќР’В± kayda geР вЂњР’В§en confirmed kullanР вЂќР’В±cР вЂќР’В±larР вЂќР’В± sayar.",
-        "Eligible, ancak gerР вЂњР’В§ek kullanР вЂќР’В±m, anti-fraud kontrolleri ve minimum aktivite eР вЂўРЎСџiР вЂќРЎСџi sonrasР вЂќР’В± sayР вЂќР’В±lР вЂќР’В±r.",
+        "Confirmed, biri senin linkinle handle baР”СџladР”В±Р”СџР”В±nda sayР”В±lР”В±r.",
+        "Active, kullanР”В±mР”В± kayda geР“В§en confirmed kullanР”В±cР”В±larР”В± sayar.",
+        "Eligible, ancak gerР“В§ek kullanР”В±m, anti-fraud kontrolleri ve minimum aktivite eР•СџiР”Сџi sonrasР”В± sayР”В±lР”В±r.",
         "Referrals unlock perks. Free keeps the saved-line cap. Pro removes caps and unlocks everything."
       ],
-      promoterTitle: "Promoter detaylarР вЂќР’В±",
-      baseDaily: "GР вЂњРЎВnlР вЂњРЎВk taban",
-      unlocksNow: "Р вЂўРЎвЂєu an aР вЂњР’В§Р вЂќР’В±k",
+      promoterTitle: "Promoter detaylarР”В±",
+      baseDaily: "GР“СnlР“Сk taban",
+      unlocksNow: "Р•С›u an aР“В§Р”В±k",
       nextUnlock: "Sonraki unlock",
-      allUnlocked: "Listelenen tР вЂњРЎВm unlock'lar aР вЂњР’В§Р вЂќР’В±ldР вЂќР’В±",
-      antiAbuse: "Sadece eligible referrals sayР вЂќР’В±lР вЂќР’В±r. Tek baР вЂўРЎСџР вЂќР’В±na kayР вЂќР’В±t avantaj aР вЂњР’В§maz.",
-      confirmed: "OnaylР вЂќР’В±",
+      allUnlocked: "Listelenen tР“Сm unlock'lar aР“В§Р”В±ldР”В±",
+      antiAbuse: "Sadece eligible referrals sayР”В±lР”В±r. Tek baР•СџР”В±na kayР”В±t avantaj aР“В§maz.",
+      confirmed: "OnaylР”В±",
       active: "Aktif",
       eligible: "Eligible",
       legacy: "Older refs",
-      clicks: "TР вЂќР’В±klama",
+      clicks: "TР”В±klama",
       bgSlots: "BG slot",
-      saveCap: "KayР вЂќР’В±t limiti",
-      unlimited: "SР вЂќР’В±nР вЂќР’В±rsР вЂќР’В±z",
+      saveCap: "KayР”В±t limiti",
+      unlimited: "SР”В±nР”В±rsР”В±z",
       onePack: "1 cosmetics pack",
-      allPacks: "TР вЂњРЎВm cosmetics pack'ler",
+      allPacks: "TР“Сm cosmetics pack'ler",
       proTrial: "Pro Trial 7d",
       discount: "1 ay %50 indirim",
       toolkit: "Referral Toolkit",
-      copied: "KopyalandР вЂќР’В±.",
-      leaderboardLoading: "YР вЂњРЎВkleniyorР Р†Р вЂљР’В¦",
-      leaderboardEmpty: "HenР вЂњРЎВz veri yok",
+      copied: "KopyalandР”В±.",
+      leaderboardLoading: "YР“СkleniyorРІР‚В¦",
+      leaderboardEmpty: "HenР“Сz veri yok",
       youLabel: "Sen",
       rulesLabel: "kurallar"
     },
@@ -6027,80 +6027,80 @@ function getReferralUiCopy(lang){
       discount: "Diskon 50% 1 bulan",
       toolkit: "Referral Toolkit",
       copied: "Disalin.",
-      leaderboardLoading: "MemuatР Р†Р вЂљР’В¦",
+      leaderboardLoading: "MemuatРІР‚В¦",
       leaderboardEmpty: "Belum ada data",
       youLabel: "Kamu",
       rulesLabel: "aturan"
     },
     ja: {
-      title: "Р Т‘Р’В»РІР‚СћР В·Р’ВµРІР‚С›Р С–Р С“РЎвЂ”",
-      note: "Р В·РўвЂРІвЂћвЂ“Р Т‘Р’В»РІР‚в„–Р В·РІР‚В°РІвЂћвЂ“Р ВµРІР‚В¦РЎвЂР С–Р С“Р вЂЎР С–Р вЂљР С“Р В·РІвЂћСћР’В»Р в„–Р Р‰Р вЂ Р С–Р С“Р’В Р С–Р С“РІР‚ВР С–Р С“Р’В§Р С–Р С“Р вЂЎР С–Р С“Р вЂћР С–Р С“Р РЏР ВµР’В®РЎСџР в„–РЎв„ўРІР‚С”Р С–Р С“Р’В®Р ВµРІвЂљВ¬Р’В©Р В·РІР‚СњР РѓР С–Р С“Р Р‰Р В·РЎС›РЎвЂќР С‘Р вЂћР РЉР С–Р С“РІР‚СћР С–РІР‚С™Р Р‰Р С–Р С“РЎСџР ВµРЎвЂўР Р‰Р С–Р С“Р’В«Р С–Р С“Р’В Р С–Р С“РІР‚ВР С‘Р’В§Р в‚¬Р В¶РІР‚СњРЎвЂўР С–Р С“РІР‚СћР С–РІР‚С™Р Р‰Р С–Р С“РЎвЂўР С–Р С“РІвЂћСћР С–Р вЂљРІР‚С™",
-      desc: "Р С‘Р’В§Р в‚¬Р В¶РІР‚СњРЎвЂўР С–РІР‚С™РІвЂћвЂ“Р С–РЎвЂњРІР‚В Р С–РЎвЂњРЎвЂњР С–РЎвЂњРІР‚вЂќ:",
+      title: "РґВ»вЂўР·ВµвЂћРіРѓС—",
+      note: "Р·Т‘в„–РґВ»вЂ№Р·вЂ°в„–РµвЂ¦С‘РіРѓР‡РіР‚РѓР·в„ўВ»Р№РЉР†РіРѓВ РіРѓвЂРіРѓВ§РіРѓР‡РіРѓР„РіРѓРЏРµВ®СџР№С™вЂєРіРѓВ®Рµв‚¬В©Р·вЂќРЃРіРѓРЉР·СћС”РёР„РЊРіРѓвЂўРівЂљРЉРіРѓСџРµС•РЉРіРѓВ«РіРѓВ РіРѓвЂРёВ§Р€Р¶вЂќС•РіРѓвЂўРівЂљРЉРіРѓС•РіРѓв„ўРіР‚вЂљ",
+      desc: "РёВ§Р€Р¶вЂќС•РівЂљв„–РіС“вЂ РіС“С“РіС“вЂ”:",
       items: [
-        "Confirmed Р С–Р С“Р вЂЎР С–Р вЂљР С“Р С–Р С“РІР‚С™Р С–Р С“Р вЂћР С–Р С“РЎСџР С–Р С“Р’В®Р С–РЎвЂњР вЂћР С–РЎвЂњРЎвЂ“Р С–РІР‚С™Р вЂЎР С–Р С“РІР‚в„–Р С–РІР‚С™РІР‚В°Р С‘Р вЂћР’В°Р С–Р С“РІР‚в„–Р С–Р С“Р Р‰Р С–РЎвЂњР РЏР С–РЎвЂњРЎвЂ“Р С–РЎвЂњРІР‚В°Р С–РЎвЂњР’В«Р С–РІР‚С™РІР‚в„ўР В¶Р вЂ№РўС’Р В·Р’В¶РЎв„ўР С–Р С“РІвЂћСћР С–РІР‚С™РІР‚в„–Р С–Р С“Р РѓР ВµР вЂ°Р’В Р В·Р’В®РІР‚вЂќР С–Р С“РІР‚СћР С–РІР‚С™Р Р‰Р С–Р С“РЎвЂўР С–Р С“РІвЂћСћР С–Р вЂљРІР‚С™",
-        "Active Р С–Р С“Р вЂЎР С–Р вЂљР С“Р ВµРІвЂљВ¬Р’В©Р В·РІР‚СњР РѓР ВµР’В®РЎСџР В·РЎвЂРЎвЂўР С–Р С“Р Р‰Р С‘Р РѓР’ВР в„–Р Р‰Р вЂ Р С–Р С“РІР‚СћР С–РІР‚С™Р Р‰Р С–Р С“РЎСџ confirmed Р С–РЎвЂњР’В¦Р С–РЎвЂњРЎВР С–РІР‚С™Р’В¶Р С–РЎвЂњРЎВР С–РІР‚С™РІР‚в„ўР В¶РІР‚СћР’В°Р С–Р С“РІвЂљВ¬Р С–Р С“РЎвЂўР С–Р С“РІвЂћСћР С–Р вЂљРІР‚С™",
-        "Eligible Р С–Р С“Р вЂЎР С–Р вЂљР С“Р ВµР’В®РЎСџР ВµРІвЂљВ¬Р’В©Р В·РІР‚СњР РѓР С–РЎвЂњР’В»Р Т‘РЎвЂР РЉР В¶Р’В­Р в‚¬Р С–РЎвЂњР С“Р С–РІР‚С™Р’В§Р С–РЎвЂњРЎвЂњР С–РІР‚С™Р вЂЎР С–РЎвЂњР’В»Р В¶РЎС™Р вЂљР Т‘Р вЂ¦Р вЂ№Р В¶РўвЂР’В»Р ВµРІР‚в„–РІР‚СћР В¶РЎСљР Р‹Р Т‘Р’В»Р’В¶Р С–РІР‚С™РІР‚в„ўР В¶РЎвЂќР вЂљР С–Р С“РЎСџР С–Р С“РІР‚вЂќР С–Р С“РЎСџР ВµРЎвЂўР Р‰Р С–Р С“Р’В«Р С–Р С“Р’В Р С–Р С“РІР‚ВР ВµР вЂ°Р’В Р В·Р’В®РІР‚вЂќР С–Р С“РІР‚СћР С–РІР‚С™Р Р‰Р С–Р С“РЎвЂўР С–Р С“РІвЂћСћР С–Р вЂљРІР‚С™",
+        "Confirmed РіРѓР‡РіР‚РѓРіРѓвЂљРіРѓР„РіРѓСџРіРѓВ®РіС“Р„РіС“С–РівЂљР‡РіРѓвЂ№РівЂљвЂ°РёР„В°РіРѓвЂ№РіРѓРЉРіС“РЏРіС“С–РіС“вЂ°РіС“В«РівЂљвЂ™Р¶Р‹ТђР·В¶С™РіРѓв„ўРівЂљвЂ№РіРѓРЃРµР‰В Р·В®вЂ”РіРѓвЂўРівЂљРЉРіРѓС•РіРѓв„ўРіР‚вЂљ",
+        "Active РіРѓР‡РіР‚РѓРµв‚¬В©Р·вЂќРЃРµВ®СџР·С‘С•РіРѓРЉРёРЃВР№РЉР†РіРѓвЂўРівЂљРЉРіРѓСџ confirmed РіС“В¦РіС“СРівЂљВ¶РіС“СРівЂљвЂ™Р¶вЂўВ°РіРѓв‚¬РіРѓС•РіРѓв„ўРіР‚вЂљ",
+        "Eligible РіРѓР‡РіР‚РѓРµВ®СџРµв‚¬В©Р·вЂќРЃРіС“В»РґС‘РЊР¶В­Р€РіС“РѓРівЂљВ§РіС“С“РівЂљР‡РіС“В»Р¶СљР‚РґР…Р‹Р¶Т‘В»РµвЂ№вЂўР¶СњРЋРґВ»В¶РівЂљвЂ™Р¶С”Р‚РіРѓСџРіРѓвЂ”РіРѓСџРµС•РЉРіРѓВ«РіРѓВ РіРѓвЂРµР‰В Р·В®вЂ”РіРѓвЂўРівЂљРЉРіРѓС•РіРѓв„ўРіР‚вЂљ",
         "Referrals unlock perks. Free keeps the saved-line cap. Pro removes caps and unlocks everything."
       ],
-      promoterTitle: "Р С–РЎвЂњРІР‚вЂќР С–РЎвЂњР’В­Р С–РЎвЂњРЎС›Р С–РЎвЂњРЎВР С–РІР‚С™РЎвЂ”Р С–РЎвЂњРЎВР С‘Р’В©РЎвЂ“Р В·РўвЂР’В°",
-      baseDaily: "Р ВµРЎСџРЎвЂќР В¶РЎС™Р’В¬Р С–РЎвЂњРІР‚РЋР С–РІР‚С™Р’В¤Р С–РЎвЂњР вЂћР С–РЎвЂњРЎВ",
-      unlocksNow: "Р В·Р РЏРЎвЂўР ВµРЎС™Р РѓР С–Р С“Р’В®Р С‘Р’В§Р в‚¬Р В¶РІР‚СњРЎвЂў",
-      nextUnlock: "Р В¶Р’В¬Р Р‹Р С–Р С“Р’В®Р С‘Р’В§Р в‚¬Р В¶РІР‚СњРЎвЂў",
-      allUnlocked: "Р С‘Р Р‹Р РѓР В·Р’В¤РЎвЂќР Т‘РЎвЂР’В­Р С–Р С“Р’В®Р С‘Р’В§Р в‚¬Р В¶РІР‚СњРЎвЂўР С–Р С“Р вЂЎР С–Р С“РІвЂћСћР С–Р С“РІвЂћвЂ“Р С–Р С“Р’В¦Р в„–Р С“РІР‚СњР В¶РІвЂљВ¬РЎвЂ™Р В¶РЎвЂРІвЂљВ¬Р С–Р С“РЎвЂ”Р С–Р С“Р’В§Р С–Р С“РІвЂћСћ",
-      antiAbuse: "Р С–РІР‚С™Р’В«Р С–РІР‚С™Р’В¦Р С–РЎвЂњРЎвЂ“Р С–РЎвЂњРІвЂљВ¬Р С–Р С“РІР‚СћР С–РІР‚С™Р Р‰Р С–РІР‚С™РІР‚в„–Р С–Р С“Р’В®Р С–Р С“Р вЂЎ eligible Р В·РўвЂРІвЂћвЂ“Р Т‘Р’В»РІР‚в„–Р С–Р С“Р’В®Р С–Р С“РЎвЂ”Р С–Р С“Р’В§Р С–Р С“РІвЂћСћР С–Р вЂљРІР‚С™Р В·РІвЂћСћР’В»Р в„–Р Р‰Р вЂ Р С–Р С“Р’В Р С–Р С“РІР‚ВР С–Р С“Р’В§Р С–Р С“Р вЂЎР В·РІР‚В°РІвЂћвЂ“Р ВµРІР‚В¦РЎвЂР С–Р С“Р вЂЎР С‘Р’В§Р в‚¬Р В¶РІР‚СњРЎвЂўР С–Р С“РІР‚СћР С–РІР‚С™Р Р‰Р С–Р С“РЎвЂўР С–Р С“РІР‚С”Р С–РІР‚С™РІР‚СљР С–Р вЂљРІР‚С™",
-      confirmed: "Р В·РЎС›РЎвЂќР С‘Р вЂћР РЉР В¶РЎвЂРІвЂљВ¬Р С–Р С“РЎвЂ”",
-      active: "Р С–РІР‚С™РЎС›Р С–РІР‚С™Р вЂЎР С–РЎвЂњРІР‚В Р С–РІР‚С™Р в‚¬Р С–РЎвЂњРІР‚вЂњ",
-      eligible: "Р ВµР вЂЎРЎвЂўР С‘Р’В±Р Р‹",
+      promoterTitle: "РіС“вЂ”РіС“В­РіС“СћРіС“СРівЂљС—РіС“СРёВ©С–Р·Т‘В°",
+      baseDaily: "РµСџС”Р¶СљВ¬РіС“вЂЎРівЂљВ¤РіС“Р„РіС“С",
+      unlocksNow: "Р·РЏС•РµСљРЃРіРѓВ®РёВ§Р€Р¶вЂќС•",
+      nextUnlock: "Р¶В¬РЋРіРѓВ®РёВ§Р€Р¶вЂќС•",
+      allUnlocked: "РёРЋРЃР·В¤С”РґС‘В­РіРѓВ®РёВ§Р€Р¶вЂќС•РіРѓР‡РіРѓв„ўРіРѓв„–РіРѓВ¦Р№РѓвЂќР¶в‚¬С’Р¶С‘в‚¬РіРѓС—РіРѓВ§РіРѓв„ў",
+      antiAbuse: "РівЂљВ«РівЂљВ¦РіС“С–РіС“в‚¬РіРѓвЂўРівЂљРЉРівЂљвЂ№РіРѓВ®РіРѓР‡ eligible Р·Т‘в„–РґВ»вЂ№РіРѓВ®РіРѓС—РіРѓВ§РіРѓв„ўРіР‚вЂљР·в„ўВ»Р№РЉР†РіРѓВ РіРѓвЂРіРѓВ§РіРѓР‡Р·вЂ°в„–РµвЂ¦С‘РіРѓР‡РёВ§Р€Р¶вЂќС•РіРѓвЂўРівЂљРЉРіРѓС•РіРѓвЂєРівЂљвЂњРіР‚вЂљ",
+      confirmed: "Р·СћС”РёР„РЊР¶С‘в‚¬РіРѓС—",
+      active: "РівЂљСћРівЂљР‡РіС“вЂ РівЂљР€РіС“вЂ“",
+      eligible: "РµР‡С•РёВ±РЋ",
       legacy: "Older refs",
-      clicks: "Р С–РІР‚С™Р вЂЎР С–РЎвЂњР вЂћР С–РЎвЂњРЎвЂњР С–РІР‚С™Р вЂЎ",
-      bgSlots: "BGР С–РІР‚С™РІвЂћвЂ“Р С–РЎвЂњР’В­Р С–РЎвЂњРЎвЂњР С–РЎвЂњРІвЂљВ¬",
-      saveCap: "Р Т‘РЎвЂ”РЎСљР ВµР’В­Р’ВР Т‘РЎвЂР вЂ°Р в„–РІвЂћСћРЎвЂ™",
-      unlimited: "Р В·РІР‚С›Р Р‹Р ВµРІвЂљВ¬Р’В¶Р в„–РІвЂћСћРЎвЂ™",
-      onePack: "Р С–РІР‚С™РЎвЂ“Р С–РІР‚С™РІвЂћвЂ“Р С–РЎвЂњР Р‹ 1 Р С–РЎвЂњРІР‚ВР С–РЎвЂњРЎвЂњР С–РІР‚С™Р вЂЎ",
-      allPacks: "Р С–Р С“РІвЂћСћР С–Р С“РІвЂћвЂ“Р С–Р С“Р’В¦Р С–Р С“Р’В®Р С–РІР‚С™РЎвЂ“Р С–РІР‚С™РІвЂћвЂ“Р С–РЎвЂњР Р‹Р С–РЎвЂњРІР‚ВР С–РЎвЂњРЎвЂњР С–РІР‚С™Р вЂЎ",
+      clicks: "РівЂљР‡РіС“Р„РіС“С“РівЂљР‡",
+      bgSlots: "BGРівЂљв„–РіС“В­РіС“С“РіС“в‚¬",
+      saveCap: "РґС—СњРµВ­ВРґС‘Р‰Р№в„ўС’",
+      unlimited: "Р·вЂћРЋРµв‚¬В¶Р№в„ўС’",
+      onePack: "РівЂљС–РівЂљв„–РіС“РЋ 1 РіС“вЂРіС“С“РівЂљР‡",
+      allPacks: "РіРѓв„ўРіРѓв„–РіРѓВ¦РіРѓВ®РівЂљС–РівЂљв„–РіС“РЋРіС“вЂРіС“С“РівЂљР‡",
       proTrial: "Pro Trial 7d",
-      discount: "1Р С–Р С“РІР‚в„–Р В¶РЎС™РІвЂљВ¬ 50% Р С–РІР‚С™Р вЂћР С–РЎвЂњРІР‚Сћ",
+      discount: "1РіРѓвЂ№Р¶Сљв‚¬ 50% РівЂљР„РіС“вЂў",
       toolkit: "Referral Toolkit",
-      copied: "Р С–РІР‚С™РЎвЂ“Р С–РЎвЂњРІР‚СњР С–РЎвЂњРЎВР С–Р С“РІР‚вЂќР С–Р С“РЎвЂўР С–Р С“РІР‚вЂќР С–Р С“РЎСџР С–Р вЂљРІР‚С™",
-      leaderboardLoading: "Р С‘Р вЂћР’В­Р С–Р С“РЎвЂ”Р С‘РЎвЂўРЎВР С–Р С“РЎвЂ”Р Т‘РЎвЂР’В­Р Р†Р вЂљР’В¦",
-      leaderboardEmpty: "Р С–Р С“РЎвЂўР С–Р С“Р’В Р С–РЎвЂњРІР‚РЋР С–РЎвЂњРЎВР С–РІР‚С™РЎвЂ”Р С–Р С“Р вЂЎР С–Р С“РІР‚С™Р С–РІР‚С™Р вЂ°Р С–Р С“РЎвЂўР С–Р С“РІР‚С”Р С–РІР‚С™РІР‚Сљ",
-      youLabel: "Р С–Р С“РІР‚С™Р С–Р С“Р вЂћР С–Р С“РЎСџ",
-      rulesLabel: "Р С–РЎвЂњР’В«Р С–РЎвЂњРЎВР С–РЎвЂњР’В«"
+      copied: "РівЂљС–РіС“вЂќРіС“СРіРѓвЂ”РіРѓС•РіРѓвЂ”РіРѓСџРіР‚вЂљ",
+      leaderboardLoading: "РёР„В­РіРѓС—РёС•СРіРѓС—РґС‘В­РІР‚В¦",
+      leaderboardEmpty: "РіРѓС•РіРѓВ РіС“вЂЎРіС“СРівЂљС—РіРѓР‡РіРѓвЂљРівЂљР‰РіРѓС•РіРѓвЂєРівЂљвЂњ",
+      youLabel: "РіРѓвЂљРіРѓР„РіРѓСџ",
+      rulesLabel: "РіС“В«РіС“СРіС“В«"
     },
     zh: {
-      title: "Р С‘РЎвЂ”РЎвЂ™Р Т‘Р вЂ¦РЎС™Р В¶РІР‚вЂњРІвЂћвЂ“Р ВµРЎВР РЏ",
-      note: "Р в„–РІР‚С™Р вЂљР С‘Р вЂЎР’В·Р ВµРўС’РІР‚вЂњР ВµР вЂ°Р’В±Р ВµР РЏР вЂћР В¶РЎС™РІР‚В°Р ВµРЎС™Р РѓР В·РЎС™РЎСџР ВµР’В®РЎвЂєР Т‘Р вЂ¦РЎвЂ”Р В·РІР‚СњР РѓР Т‘РЎвЂќР’В§Р ВµРІР‚СљР С“Р ВµРЎвЂ™Р вЂ№Р В¶РІР‚В°Р РЉР Т‘РЎВРЎв„ўР С‘Р’В§Р в‚¬Р в„–РІР‚СњР С“Р С—РЎВР Р‰Р Т‘РЎвЂР РЉР В¶Р’ВР вЂЎР ВµР РЏР вЂћР в„–РЎСљР’В Р В¶РЎвЂ“Р РѓР ВµРІР‚В Р Р‰Р С–Р вЂљРІР‚С™",
-      desc: "Р С‘Р’В§Р в‚¬Р в„–РІР‚СњР С“Р С‘Р’В·Р вЂЎР ВµРЎвЂўРІР‚С›:",
+      title: "РёС—С’РґР…СљР¶вЂ“в„–РµСРЏ",
+      note: "Р№вЂљР‚РёР‡В·РµТђвЂ“РµР‰В±РµРЏР„Р¶СљвЂ°РµСљРЃР·СљСџРµВ®С›РґР…С—Р·вЂќРЃРґС”В§РµвЂњРѓРµС’Р‹Р¶вЂ°РЊРґСС™РёВ§Р€Р№вЂќРѓРїСРЉРґС‘РЊР¶ВР‡РµРЏР„Р№СњВ Р¶С–РЃРµвЂ РЉРіР‚вЂљ",
+      desc: "РёВ§Р€Р№вЂќРѓРёВ·Р‡РµС•вЂћ:",
       items: [
-        "ConfirmedР С—РЎВРЎв„ўР В¶РЎС™РІР‚В°Р Т‘РЎвЂќРЎвЂќР в„–Р вЂљРЎв„ўР С‘РЎвЂ”РІР‚РЋР Т‘Р вЂ¦Р’В Р В·РЎв„ўРІР‚С›Р в„–РІР‚СљРЎвЂўР В¶Р вЂ№РўС’Р С‘РЎвЂ”РЎвЂєР В¶Р вЂ№РўС’ handle Р ВµРЎвЂ™Р вЂ№Р С‘Р’В®Р Р‹Р ВµРІР‚В¦РўС’Р С–Р вЂљРІР‚С™",
-        "ActiveР С—РЎВРЎв„ўР ВµР’В·Р вЂ Р В·Р Р‹Р’В®Р С‘Р’В®Р’В¤Р Т‘РЎвЂРІР‚СњР В¶РЎС™РІР‚В°Р В·РЎС™РЎСџР ВµР’В®РЎвЂєР Т‘Р вЂ¦РЎвЂ”Р В·РІР‚СњР РѓР С‘Р’В®Р’В°Р ВµР вЂ¦РІР‚СћР В·РЎв„ўРІР‚С›Р В·РІР‚СњР РѓР В¶РІвЂљВ¬Р’В·Р С‘Р’В®Р Р‹Р ВµРІР‚В¦РўС’Р С–Р вЂљРІР‚С™",
-        "EligibleР С—РЎВРЎв„ўР ВµР РЏР вЂћР В¶РЎС™РІР‚В°Р в„–Р вЂљРЎв„ўР С‘РЎвЂ”РІР‚РЋР В·РЎС™РЎСџР ВµР’В®РЎвЂєР Т‘Р вЂ¦РЎвЂ”Р В·РІР‚СњР РѓР С–Р вЂљР С“Р ВµР РЏР РЉР Т‘Р вЂ¦РЎС™Р ВµРЎВР вЂ°Р В¶Р в‚¬Р вЂљР В¶РЎСџРўС’Р ВµРІР‚в„ўР Р‰Р В¶РЎС™Р вЂљР Т‘Р вЂ¦Р вЂ№Р В¶РўвЂР’В»Р С‘Р’В·РЎвЂњР в„–РІР‚вЂќР РѓР В¶Р’В§РІР‚С”Р ВµРЎвЂ™Р вЂ№Р В¶РІР‚В°Р РЉР С‘Р’В®Р Р‹Р ВµРІР‚В¦РўС’Р С–Р вЂљРІР‚С™",
-        "Р в„–РІР‚С™Р вЂљР С‘Р вЂЎР’В·Р Т‘РЎВРЎв„ўР С‘Р’В§Р в‚¬Р в„–РІР‚СњР С“Р В¶РІР‚С”РўвЂР ВµР’В¤РЎв„ўР В¶РЎСљРЎвЂњР В·РІР‚С”Р вЂ°Р С–Р вЂљРІР‚С™Free Р Т‘РЎвЂ”РЎСљР В·РІР‚СћРІвЂћСћР ВµР’В·Р вЂ Р Т‘РЎвЂ”РЎСљР ВµР’В­Р’ВР С‘Р Р‹Р Р‰Р В¶РІР‚СћР’В°Р Т‘РЎвЂР вЂ°Р в„–РІвЂћСћРЎвЂ™Р С–Р вЂљРІР‚С™Pro Р Т‘РЎВРЎв„ўР В·Р’В§Р’В»Р в„–РІвЂћСћР’В¤Р в„–РІвЂћСћРЎвЂ™Р ВµРІвЂљВ¬Р’В¶Р ВµРІвЂћвЂ“Р’В¶Р С‘Р’В§Р в‚¬Р в„–РІР‚СњР С“Р ВµРІР‚В¦Р РѓР в„–РЎвЂњР РѓР ВµРІР‚В РІР‚В¦Р ВµР’В®РІвЂћвЂ“Р С–Р вЂљРІР‚С™"
+        "ConfirmedРїСС™Р¶СљвЂ°РґС”С”Р№Р‚С™РёС—вЂЎРґР…В Р·С™вЂћР№вЂњС•Р¶Р‹ТђРёС—С›Р¶Р‹Тђ handle РµС’Р‹РёВ®РЋРµвЂ¦ТђРіР‚вЂљ",
+        "ActiveРїСС™РµВ·Р†Р·РЋВ®РёВ®В¤РґС‘вЂќР¶СљвЂ°Р·СљСџРµВ®С›РґР…С—Р·вЂќРЃРёВ®В°РµР…вЂўР·С™вЂћР·вЂќРЃР¶в‚¬В·РёВ®РЋРµвЂ¦ТђРіР‚вЂљ",
+        "EligibleРїСС™РµРЏР„Р¶СљвЂ°Р№Р‚С™РёС—вЂЎР·СљСџРµВ®С›РґР…С—Р·вЂќРЃРіР‚РѓРµРЏРЊРґР…СљРµСР‰Р¶Р€Р‚Р¶СџТђРµвЂ™РЉР¶СљР‚РґР…Р‹Р¶Т‘В»РёВ·С“Р№вЂ”РЃР¶В§вЂєРµС’Р‹Р¶вЂ°РЊРёВ®РЋРµвЂ¦ТђРіР‚вЂљ",
+        "Р№вЂљР‚РёР‡В·РґСС™РёВ§Р€Р№вЂќРѓР¶вЂєТ‘РµВ¤С™Р¶СњС“Р·вЂєР‰РіР‚вЂљFree РґС—СњР·вЂўв„ўРµВ·Р†РґС—СњРµВ­ВРёРЋРЉР¶вЂўВ°РґС‘Р‰Р№в„ўС’РіР‚вЂљPro РґСС™Р·В§В»Р№в„ўВ¤Р№в„ўС’Рµв‚¬В¶Рµв„–В¶РёВ§Р€Р№вЂќРѓРµвЂ¦РЃР№С“РЃРµвЂ вЂ¦РµВ®в„–РіР‚вЂљ"
       ],
-      promoterTitle: "Р В¶Р вЂ№Р РѓР ВµРІвЂћвЂ“РЎвЂ”Р С‘Р вЂЎР’В¦Р В¶РЎвЂњРІР‚В¦",
-      baseDaily: "Р ВµРЎСџРЎвЂќР В·Р Р‹Р вЂљР В¶РІР‚вЂќРўС’Р в„–РЎС›РЎСљР ВµРЎвЂќР’В¦",
-      unlocksNow: "Р ВµР вЂ¦РІР‚СљР ВµРІР‚В°Р РЉР ВµР’В·Р вЂ Р С‘Р’В§Р в‚¬Р в„–РІР‚СњР С“",
-      nextUnlock: "Р Т‘РЎвЂРІР‚в„–Р Т‘РЎвЂР вЂљР В¶Р Р‹Р в‚¬Р С‘Р’В§Р в‚¬Р в„–РІР‚СњР С“",
-      allUnlocked: "Р ВµР’В·Р вЂ Р С‘РЎвЂўРЎвЂўР ВµРІвЂљВ¬Р’В°Р В¶РІР‚В°Р вЂљР В¶РЎС™РІР‚В°Р ВµРІвЂљВ¬РІР‚вЂќР ВµРІР‚РЋРЎвЂќР В·РЎв„ўРІР‚С›Р С‘Р’В§Р в‚¬Р в„–РІР‚СњР С“Р В¶Р Р‹Р в‚¬Р Т‘Р вЂ¦Р РЉ",
-      antiAbuse: "Р ВµР РЏР вЂћР В¶РЎС™РІР‚В° eligible Р в„–РІР‚С™Р вЂљР С‘Р вЂЎР’В·Р В¶РІР‚В°Р РЉР С‘Р’В®Р Р‹Р В¶РІР‚СћР’В°Р С–Р вЂљРІР‚С™Р Т‘Р’В»РІР‚В¦Р В¶РЎвЂ“Р РѓР ВµРІР‚В Р Р‰Р Т‘РЎвЂР РЉР Т‘РЎВРЎв„ўР С‘Р’В§Р в‚¬Р в„–РІР‚СњР С“Р Т‘Р’В»Р’В»Р Т‘Р вЂ¦РІР‚СћР В¶РЎСљРЎвЂњР В·РІР‚С”Р вЂ°Р С–Р вЂљРІР‚С™",
-      confirmed: "Р ВµР’В·Р вЂ Р В·Р Р‹Р’В®Р С‘Р’В®Р’В¤",
-      active: "Р В¶РўвЂР’В»Р С‘Р’В·РЎвЂњ",
-      eligible: "Р В¶РЎС™РІР‚В°Р В¶РІР‚СћРІвЂљВ¬",
+      promoterTitle: "Р¶Р‹РЃРµв„–С—РёР‡В¦Р¶С“вЂ¦",
+      baseDaily: "РµСџС”Р·РЋР‚Р¶вЂ”ТђР№СћСњРµС”В¦",
+      unlocksNow: "РµР…вЂњРµвЂ°РЊРµВ·Р†РёВ§Р€Р№вЂќРѓ",
+      nextUnlock: "РґС‘вЂ№РґС‘Р‚Р¶РЋР€РёВ§Р€Р№вЂќРѓ",
+      allUnlocked: "РµВ·Р†РёС•С•Рµв‚¬В°Р¶вЂ°Р‚Р¶СљвЂ°Рµв‚¬вЂ”РµвЂЎС”Р·С™вЂћРёВ§Р€Р№вЂќРѓР¶РЋР€РґР…РЊ",
+      antiAbuse: "РµРЏР„Р¶СљвЂ° eligible Р№вЂљР‚РёР‡В·Р¶вЂ°РЊРёВ®РЋР¶вЂўВ°РіР‚вЂљРґВ»вЂ¦Р¶С–РЃРµвЂ РЉРґС‘РЊРґСС™РёВ§Р€Р№вЂќРѓРґВ»В»РґР…вЂўР¶СњС“Р·вЂєР‰РіР‚вЂљ",
+      confirmed: "РµВ·Р†Р·РЋВ®РёВ®В¤",
+      active: "Р¶Т‘В»РёВ·С“",
+      eligible: "Р¶СљвЂ°Р¶вЂўв‚¬",
       legacy: "Older refs",
-      clicks: "Р В·РІР‚С™РІвЂћвЂ“Р ВµРІР‚РЋР’В»",
-      bgSlots: "Р С‘РЎвЂњР Р‰Р В¶РІвЂћСћР вЂЎР Т‘Р вЂ¦Р РЉ",
-      saveCap: "Р Т‘РЎвЂ”РЎСљР ВµР’В­Р’ВР Т‘РЎвЂР вЂ°Р в„–РІвЂћСћРЎвЂ™",
-      unlimited: "Р В¶РІР‚вЂќР’В Р в„–РІвЂћСћРЎвЂ™",
-      onePack: "1 Р Т‘РЎвЂР вЂћР ВµР’В¤РІР‚вЂњР С‘Р’В§РІР‚С™Р ВµР Р‰РІР‚В¦",
-      allPacks: "Р ВµРІР‚В¦Р РѓР в„–РЎвЂњР РѓР ВµР’В¤РІР‚вЂњР С‘Р’В§РІР‚С™Р ВµР Р‰РІР‚В¦",
+      clicks: "Р·вЂљв„–РµвЂЎВ»",
+      bgSlots: "РёС“РЉР¶в„ўР‡РґР…РЊ",
+      saveCap: "РґС—СњРµВ­ВРґС‘Р‰Р№в„ўС’",
+      unlimited: "Р¶вЂ”В Р№в„ўС’",
+      onePack: "1 РґС‘Р„РµВ¤вЂ“РёВ§вЂљРµРЉвЂ¦",
+      allPacks: "РµвЂ¦РЃР№С“РЃРµВ¤вЂ“РёВ§вЂљРµРЉвЂ¦",
       proTrial: "Pro Trial 7d",
-      discount: "Р в„–Р’В¦РІР‚вЂњР В¶РЎС™РІвЂљВ¬ 5 Р В¶Р вЂ°Р’В",
+      discount: "Р№В¦вЂ“Р¶Сљв‚¬ 5 Р¶Р‰В",
       toolkit: "Referral Toolkit",
-      copied: "Р ВµР’В·Р вЂ Р ВµР’В¤Р РЉР ВµРІвЂљВ¬Р’В¶Р С–Р вЂљРІР‚С™",
-      leaderboardLoading: "Р ВµР вЂ°Р’В Р С‘Р вЂ¦Р вЂ¦Р Т‘РЎвЂР’В­Р Р†Р вЂљР’В¦",
-      leaderboardEmpty: "Р В¶РЎв„ўРІР‚С™Р В¶РІР‚вЂќР’В Р В¶РІР‚СћР’В°Р В¶Р РЉР’В®",
-      youLabel: "Р Т‘Р вЂ¦Р’В ",
-      rulesLabel: "Р С‘Р’В§РІР‚С›Р ВµРІвЂљВ¬РІвЂћСћ"
+      copied: "РµВ·Р†РµВ¤РЊРµв‚¬В¶РіР‚вЂљ",
+      leaderboardLoading: "РµР‰В РёР…Р…РґС‘В­РІР‚В¦",
+      leaderboardEmpty: "Р¶С™вЂљР¶вЂ”В Р¶вЂўВ°Р¶РЊВ®",
+      youLabel: "РґР…В ",
+      rulesLabel: "РёВ§вЂћРµв‚¬в„ў"
     }
   };
   return table[String(lang || "en").toLowerCase()] || table.en;
@@ -6114,7 +6114,7 @@ function getGuideUiCopy(lang){
         desc: "Build short X-style morning replies that feel easy to post right away. Good GM should sound awake, social, and human instead of stiff filler.",
         items: [
           "Fast = one short X-ready line. Think closer to 'gm, coffee carrying' than a full paragraph.",
-          "Balanced = 1Р Р†Р вЂљРІР‚Сљ2 natural clauses with a real morning turn.",
+          "Balanced = 1РІР‚вЂњ2 natural clauses with a real morning turn.",
           "Full = richer, but still compact. No essay mode.",
           "Tone should shift vibe, not manufacture fake variation.",
           "Best gets stronger when you keep only lines you would actually paste on X."
@@ -6125,7 +6125,7 @@ function getGuideUiCopy(lang){
         desc: "Keep GN softer, calmer, and more sign-off friendly. The best GN lines feel like a real wind-down post, not a dressed-up slogan.",
         items: [
           "Fast = one short X-ready close for quick night use.",
-          "Balanced = a gentle 1Р Р†Р вЂљРІР‚Сљ2 clause good-night line.",
+          "Balanced = a gentle 1РІР‚вЂњ2 clause good-night line.",
           "Full = fuller mood, still compact and postable.",
           "A little emoji is fine. Too much sparkle kills the line.",
           "Best improves after you delete robotic, flat, or over-hyped lines."
@@ -6145,36 +6145,36 @@ function getGuideUiCopy(lang){
     },
     ru: {
       gm: {
-        title: "Р В РЎв„ўР В Р’В°Р В РЎвЂќ Р В РЎвЂР РЋР С“Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В Р’В·Р В РЎвЂўР В Р вЂ Р В Р’В°Р РЋРІР‚С™Р РЋР Р‰ GM",
-        desc: "Р В Р Р‹Р В РЎвЂўР В Р’В±Р В РЎвЂР РЋР вЂљР В Р’В°Р В РІвЂћвЂ“ Р В РЎвЂќР В РЎвЂўР РЋР вЂљР В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР В РЎвЂР В Р’Вµ X-style Р РЋРЎвЂњР РЋРІР‚С™Р РЋР вЂљР В Р’ВµР В Р вЂ¦Р В Р вЂ¦Р В РЎвЂР В Р’Вµ Р В РЎвЂўР РЋРІР‚С™Р В Р вЂ Р В Р’ВµР РЋРІР‚С™Р РЋРІР‚в„–, Р В РЎвЂќР В РЎвЂўР РЋРІР‚С™Р В РЎвЂўР РЋР вЂљР РЋРІР‚в„–Р В Р’Вµ Р РЋР вЂљР В Р’ВµР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В РЎвЂў Р РЋРІР‚В¦Р В РЎвЂўР РЋРІР‚РЋР В Р’ВµР РЋРІР‚С™Р РЋР С“Р РЋР РЏ Р РЋР С“Р РЋР вЂљР В Р’В°Р В Р’В·Р РЋРЎвЂњ Р В Р вЂ Р РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р вЂ Р В РЎвЂР РЋРІР‚С™Р РЋР Р‰. Р В РўС’Р В РЎвЂўР РЋР вЂљР В РЎвЂўР РЋРІвЂљВ¬Р В РЎвЂР В РІвЂћвЂ“ GM Р В Р’В·Р В Р вЂ Р РЋРЎвЂњР РЋРІР‚РЋР В РЎвЂР РЋРІР‚С™ Р В Р’В¶Р В РЎвЂР В Р вЂ Р В РЎвЂў, Р В РЎвЂ”Р В РЎвЂў-Р РЋРЎвЂњР РЋРІР‚С™Р РЋР вЂљР В Р’ВµР В Р вЂ¦Р В Р вЂ¦Р В Р’ВµР В РЎВР РЋРЎвЂњ Р В РЎвЂ Р В РЎвЂ”Р В РЎвЂў-Р РЋРІР‚РЋР В Р’ВµР В Р’В»Р В РЎвЂўР В Р вЂ Р В Р’ВµР РЋРІР‚РЋР В Р’ВµР РЋР С“Р В РЎвЂќР В РЎвЂ, Р В Р’В° Р В Р вЂ¦Р В Р’Вµ Р В РЎвЂќР В Р’В°Р В РЎвЂќ Р РЋР С“Р РЋРЎвЂњР РЋРІР‚В¦Р В Р’В°Р РЋР РЏ Р В Р’В·Р В Р’В°Р В РЎвЂ“Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂўР В Р вЂ Р В РЎвЂќР В Р’В°.",
+        title: "Р С™Р В°Р С” Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°РЎвЂљРЎРЉ GM",
+        desc: "Р РЋР С•Р В±Р С‘РЎР‚Р В°Р в„– Р С”Р С•РЎР‚Р С•РЎвЂљР С”Р С‘Р Вµ X-style РЎС“РЎвЂљРЎР‚Р ВµР Р…Р Р…Р С‘Р Вµ Р С•РЎвЂљР Р†Р ВµРЎвЂљРЎвЂ№, Р С”Р С•РЎвЂљР С•РЎР‚РЎвЂ№Р Вµ РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С• РЎвЂ¦Р С•РЎвЂЎР ВµРЎвЂљРЎРѓРЎРЏ РЎРѓРЎР‚Р В°Р В·РЎС“ Р Р†РЎРѓРЎвЂљР В°Р Р†Р С‘РЎвЂљРЎРЉ. Р ТђР С•РЎР‚Р С•РЎв‚¬Р С‘Р в„– GM Р В·Р Р†РЎС“РЎвЂЎР С‘РЎвЂљ Р В¶Р С‘Р Р†Р С•, Р С—Р С•-РЎС“РЎвЂљРЎР‚Р ВµР Р…Р Р…Р ВµР СРЎС“ Р С‘ Р С—Р С•-РЎвЂЎР ВµР В»Р С•Р Р†Р ВµРЎвЂЎР ВµРЎРѓР С”Р С‘, Р В° Р Р…Р Вµ Р С”Р В°Р С” РЎРѓРЎС“РЎвЂ¦Р В°РЎРЏ Р В·Р В°Р С–Р С•РЎвЂљР С•Р Р†Р С”Р В°.",
         items: [
-          "Fast = Р В РЎвЂўР В РўвЂР В Р вЂ¦Р В Р’В° Р В РЎвЂќР В РЎвЂўР РЋР вЂљР В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР В Р’В°Р РЋР РЏ X-ready Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќР В Р’В°. Р В РІР‚ВР В Р’В»Р В РЎвЂР В Р’В¶Р В Р’Вµ Р В РЎвЂќ 'gm, coffee carrying', Р В Р’В° Р В Р вЂ¦Р В Р’Вµ Р В РЎвЂќ Р В Р’В°Р В Р’В±Р В Р’В·Р В Р’В°Р РЋРІР‚В Р РЋРЎвЂњ Р РЋРІР‚С™Р В Р’ВµР В РЎвЂќР РЋР С“Р РЋРІР‚С™Р В Р’В°.",
-          "Balanced = Р В Р’ВµР РЋР С“Р РЋРІР‚С™Р В Р’ВµР РЋР С“Р РЋРІР‚С™Р В Р вЂ Р В Р’ВµР В Р вЂ¦Р В Р вЂ¦Р В Р’В°Р РЋР РЏ Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќР В Р’В° Р В Р вЂ¦Р В Р’В° 1Р Р†Р вЂљРІР‚Сљ2 Р РЋРІР‚РЋР В Р’В°Р РЋР С“Р РЋРІР‚С™Р В РЎвЂ Р РЋР С“ Р В Р вЂ¦Р В РЎвЂўР РЋР вЂљР В РЎВР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р РЋРІР‚в„–Р В РЎВ Р РЋРЎвЂњР РЋРІР‚С™Р РЋР вЂљР В Р’ВµР В Р вЂ¦Р В Р вЂ¦Р В РЎвЂР В РЎВ Р В РЎвЂ”Р В РЎвЂўР В Р вЂ Р В РЎвЂўР РЋР вЂљР В РЎвЂўР РЋРІР‚С™Р В РЎвЂўР В РЎВ.",
-          "Full = Р РЋРІР‚РЋР РЋРЎвЂњР РЋРІР‚С™Р РЋР Р‰ Р В Р вЂ¦Р В Р’В°Р РЋР С“Р РЋРІР‚в„–Р РЋРІР‚В°Р В Р’ВµР В Р вЂ¦Р В Р вЂ¦Р В Р’ВµР В Р’Вµ, Р В Р вЂ¦Р В РЎвЂў Р В Р вЂ Р РЋР С“Р РЋРІР‚В Р В Р’ВµР РЋРІР‚В°Р РЋРІР‚В Р В РЎвЂќР В РЎвЂўР В РЎВР В РЎвЂ”Р В Р’В°Р В РЎвЂќР РЋРІР‚С™Р В Р вЂ¦Р В РЎвЂў. Р В РІР‚ВР В Р’ВµР В Р’В· Р РЋР вЂљР В Р’ВµР В Р’В¶Р В РЎвЂР В РЎВР В Р’В° Р РЋР РЉР РЋР С“Р РЋР С“Р В Р’Вµ.",
-          "Tone Р В РўвЂР В РЎвЂўР В Р’В»Р В Р’В¶Р В Р’ВµР В Р вЂ¦ Р В РЎВР В Р’ВµР В Р вЂ¦Р РЋР РЏР РЋРІР‚С™Р РЋР Р‰ Р В Р вЂ Р В Р’В°Р В РІвЂћвЂ“Р В Р’В±, Р В Р’В° Р В Р вЂ¦Р В Р’Вµ Р РЋРІвЂљВ¬Р РЋРІР‚С™Р В Р’В°Р В РЎВР В РЎвЂ”Р В РЎвЂўР В Р вЂ Р В Р’В°Р РЋРІР‚С™Р РЋР Р‰ Р В РЎвЂР РЋР С“Р В РЎвЂќР РЋРЎвЂњР РЋР С“Р РЋР С“Р РЋРІР‚С™Р В Р вЂ Р В Р’ВµР В Р вЂ¦Р В Р вЂ¦Р В РЎвЂўР В Р’Вµ Р РЋР вЂљР В Р’В°Р В Р’В·Р В Р вЂ¦Р В РЎвЂўР В РЎвЂўР В Р’В±Р РЋР вЂљР В Р’В°Р В Р’В·Р В РЎвЂР В Р’Вµ.",
-          "Best Р РЋР вЂљР В Р’В°Р В Р’В±Р В РЎвЂўР РЋРІР‚С™Р В Р’В°Р В Р’ВµР РЋРІР‚С™ Р РЋР С“Р В РЎвЂР В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В Р’ВµР В Р’Вµ, Р В РЎвЂќР В РЎвЂўР В РЎвЂ“Р В РўвЂР В Р’В° Р РЋРІР‚С™Р РЋРІР‚в„– Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р вЂ Р В Р’В»Р РЋР РЏР В Р’ВµР РЋРІвЂљВ¬Р РЋР Р‰ Р РЋРІР‚С™Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В РЎвЂќР В РЎвЂў Р РЋРІР‚С™Р В Р’Вµ Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќР В РЎвЂ, Р В РЎвЂќР В РЎвЂўР РЋРІР‚С™Р В РЎвЂўР РЋР вЂљР РЋРІР‚в„–Р В Р’Вµ Р РЋР вЂљР В Р’ВµР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В РЎвЂў Р В Р вЂ Р РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р вЂ Р В РЎвЂР В Р’В» Р В Р’В±Р РЋРІР‚в„– Р В Р вЂ  X."
+          "Fast = Р С•Р Т‘Р Р…Р В° Р С”Р С•РЎР‚Р С•РЎвЂљР С”Р В°РЎРЏ X-ready РЎРѓРЎвЂљРЎР‚Р С•Р С”Р В°. Р вЂР В»Р С‘Р В¶Р Вµ Р С” 'gm, coffee carrying', Р В° Р Р…Р Вµ Р С” Р В°Р В±Р В·Р В°РЎвЂ РЎС“ РЎвЂљР ВµР С”РЎРѓРЎвЂљР В°.",
+          "Balanced = Р ВµРЎРѓРЎвЂљР ВµРЎРѓРЎвЂљР Р†Р ВµР Р…Р Р…Р В°РЎРЏ РЎРѓРЎвЂљРЎР‚Р С•Р С”Р В° Р Р…Р В° 1РІР‚вЂњ2 РЎвЂЎР В°РЎРѓРЎвЂљР С‘ РЎРѓ Р Р…Р С•РЎР‚Р СР В°Р В»РЎРЉР Р…РЎвЂ№Р С РЎС“РЎвЂљРЎР‚Р ВµР Р…Р Р…Р С‘Р С Р С—Р С•Р Р†Р С•РЎР‚Р С•РЎвЂљР С•Р С.",
+          "Full = РЎвЂЎРЎС“РЎвЂљРЎРЉ Р Р…Р В°РЎРѓРЎвЂ№РЎвЂ°Р ВµР Р…Р Р…Р ВµР Вµ, Р Р…Р С• Р Р†РЎРѓРЎвЂ Р ВµРЎвЂ°РЎвЂ Р С”Р С•Р СР С—Р В°Р С”РЎвЂљР Р…Р С•. Р вЂР ВµР В· РЎР‚Р ВµР В¶Р С‘Р СР В° РЎРЊРЎРѓРЎРѓР Вµ.",
+          "Tone Р Т‘Р С•Р В»Р В¶Р ВµР Р… Р СР ВµР Р…РЎРЏРЎвЂљРЎРЉ Р Р†Р В°Р в„–Р В±, Р В° Р Р…Р Вµ РЎв‚¬РЎвЂљР В°Р СР С—Р С•Р Р†Р В°РЎвЂљРЎРЉ Р С‘РЎРѓР С”РЎС“РЎРѓРЎРѓРЎвЂљР Р†Р ВµР Р…Р Р…Р С•Р Вµ РЎР‚Р В°Р В·Р Р…Р С•Р С•Р В±РЎР‚Р В°Р В·Р С‘Р Вµ.",
+          "Best РЎР‚Р В°Р В±Р С•РЎвЂљР В°Р ВµРЎвЂљ РЎРѓР С‘Р В»РЎРЉР Р…Р ВµР Вµ, Р С”Р С•Р С–Р Т‘Р В° РЎвЂљРЎвЂ№ Р С•РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎв‚¬РЎРЉ РЎвЂљР С•Р В»РЎРЉР С”Р С• РЎвЂљР Вµ РЎРѓРЎвЂљРЎР‚Р С•Р С”Р С‘, Р С”Р С•РЎвЂљР С•РЎР‚РЎвЂ№Р Вµ РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С• Р Р†РЎРѓРЎвЂљР В°Р Р†Р С‘Р В» Р В±РЎвЂ№ Р Р† X."
         ]
       },
       gn: {
-        title: "Р В РЎв„ўР В Р’В°Р В РЎвЂќ Р В РЎвЂР РЋР С“Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В Р’В·Р В РЎвЂўР В Р вЂ Р В Р’В°Р РЋРІР‚С™Р РЋР Р‰ GN",
-        desc: "Р В РІР‚СњР В Р’ВµР В Р’В»Р В Р’В°Р В РІвЂћвЂ“ GN Р В РЎВР РЋР РЏР В РЎвЂ“Р РЋРІР‚РЋР В Р’Вµ, Р РЋР С“Р В РЎвЂ”Р В РЎвЂўР В РЎвЂќР В РЎвЂўР В РІвЂћвЂ“Р В Р вЂ¦Р В Р’ВµР В Р’Вµ Р В РЎвЂ Р В Р’В±Р В Р’В»Р В РЎвЂР В Р’В¶Р В Р’Вµ Р В РЎвЂќ Р В Р вЂ¦Р В РЎвЂўР РЋР вЂљР В РЎВР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В РЎвЂўР В РЎВР РЋРЎвЂњ sign-off. Р В РІР‚С”Р РЋРЎвЂњР РЋРІР‚РЋР РЋРІвЂљВ¬Р В РЎвЂР В Р’Вµ GN Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќР В РЎвЂ Р В РЎвЂўР РЋРІР‚В°Р РЋРЎвЂњР РЋРІР‚В°Р В Р’В°Р РЋР вЂ№Р РЋРІР‚С™Р РЋР С“Р РЋР РЏ Р В РЎвЂќР В Р’В°Р В РЎвЂќ Р РЋР вЂљР В Р’ВµР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В РЎвЂўР В Р’Вµ Р В Р’В·Р В Р’В°Р В Р вЂ Р В Р’ВµР РЋР вЂљР РЋРІвЂљВ¬Р В Р’ВµР В Р вЂ¦Р В РЎвЂР В Р’Вµ Р В РўвЂР В Р вЂ¦Р РЋР РЏ, Р В Р’В° Р В Р вЂ¦Р В Р’Вµ Р В РЎвЂќР В Р’В°Р В РЎвЂќ Р В Р вЂ¦Р В Р’В°Р РЋРІР‚С™Р РЋР РЏР В Р вЂ¦Р РЋРЎвЂњР РЋРІР‚С™Р В Р’В°Р РЋР РЏ Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р РЋРІР‚С™Р В РЎвЂќР В Р’В°.",
+        title: "Р С™Р В°Р С” Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°РЎвЂљРЎРЉ GN",
+        desc: "Р вЂќР ВµР В»Р В°Р в„– GN Р СРЎРЏР С–РЎвЂЎР Вµ, РЎРѓР С—Р С•Р С”Р С•Р в„–Р Р…Р ВµР Вµ Р С‘ Р В±Р В»Р С‘Р В¶Р Вµ Р С” Р Р…Р С•РЎР‚Р СР В°Р В»РЎРЉР Р…Р С•Р СРЎС“ sign-off. Р вЂєРЎС“РЎвЂЎРЎв‚¬Р С‘Р Вµ GN РЎРѓРЎвЂљРЎР‚Р С•Р С”Р С‘ Р С•РЎвЂ°РЎС“РЎвЂ°Р В°РЎР‹РЎвЂљРЎРѓРЎРЏ Р С”Р В°Р С” РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С•Р Вµ Р В·Р В°Р Р†Р ВµРЎР‚РЎв‚¬Р ВµР Р…Р С‘Р Вµ Р Т‘Р Р…РЎРЏ, Р В° Р Р…Р Вµ Р С”Р В°Р С” Р Р…Р В°РЎвЂљРЎРЏР Р…РЎС“РЎвЂљР В°РЎРЏ Р С•РЎвЂљР С”РЎР‚РЎвЂ№РЎвЂљР С”Р В°.",
         items: [
-          "Fast = Р В РЎвЂўР В РўвЂР В Р вЂ¦Р В Р’В° Р В РЎвЂќР В РЎвЂўР РЋР вЂљР В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР В Р’В°Р РЋР РЏ X-ready Р В Р вЂ¦Р В РЎвЂўР РЋРІР‚РЋР В Р вЂ¦Р В Р’В°Р РЋР РЏ Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќР В Р’В°.",
-          "Balanced = Р В РЎВР РЋР РЏР В РЎвЂ“Р В РЎвЂќР В Р’В°Р РЋР РЏ good-night Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќР В Р’В° Р В Р вЂ¦Р В Р’В° 1Р Р†Р вЂљРІР‚Сљ2 Р РЋРІР‚РЋР В Р’В°Р РЋР С“Р РЋРІР‚С™Р В РЎвЂ.",
-          "Full = Р В Р’В±Р В РЎвЂўР В Р’В»Р РЋР Р‰Р РЋРІвЂљВ¬Р В Р’Вµ Р В Р вЂ¦Р В Р’В°Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В Р’ВµР В Р вЂ¦Р В РЎвЂР РЋР РЏ, Р В Р вЂ¦Р В РЎвЂў Р В Р вЂ Р РЋР С“Р РЋРІР‚В Р В Р’ВµР РЋРІР‚В°Р РЋРІР‚В Р В РЎвЂќР В РЎвЂўР В РЎВР В РЎвЂ”Р В Р’В°Р В РЎвЂќР РЋРІР‚С™Р В Р вЂ¦Р В РЎвЂў Р В РЎвЂ Р В РЎвЂ”Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р’В±Р В Р’ВµР В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В РЎвЂў.",
-          "Р В РЎСљР В Р’ВµР В Р’В±Р В РЎвЂўР В Р’В»Р РЋР Р‰Р РЋРІвЂљВ¬Р В РЎвЂўР В РІвЂћвЂ“ emoji Р Р†Р вЂљРІР‚Сњ Р В Р вЂ¦Р В РЎвЂўР РЋР вЂљР В РЎВР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В РЎвЂў. Р В РЎв„ўР В РЎвЂўР В РЎвЂ“Р В РўвЂР В Р’В° Р В РЎвЂР РЋРІР‚В¦ Р РЋР С“Р В Р’В»Р В РЎвЂР РЋРІвЂљВ¬Р В РЎвЂќР В РЎвЂўР В РЎВ Р В РЎВР В Р вЂ¦Р В РЎвЂўР В РЎвЂ“Р В РЎвЂў, Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќР В Р’В° Р РЋРЎвЂњР В РЎВР В РЎвЂР РЋР вЂљР В Р’В°Р В Р’ВµР РЋРІР‚С™.",
-          "Best Р РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р вЂ¦Р В РЎвЂўР В Р вЂ Р В РЎвЂР РЋРІР‚С™Р РЋР С“Р РЋР РЏ Р РЋР С“Р В РЎвЂР В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В Р’ВµР В Р’Вµ, Р В РЎвЂќР В РЎвЂўР В РЎвЂ“Р В РўвЂР В Р’В° Р РЋРІР‚С™Р РЋРІР‚в„– Р РЋРЎвЂњР В РўвЂР В Р’В°Р В Р’В»Р РЋР РЏР В Р’ВµР РЋРІвЂљВ¬Р РЋР Р‰ Р РЋР вЂљР В РЎвЂўР В Р’В±Р В РЎвЂўР РЋРІР‚С™Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ, Р В РЎвЂ”Р В Р’В»Р В РЎвЂўР РЋР С“Р В РЎвЂќР В РЎвЂР В Р’Вµ Р В РЎвЂ Р РЋР С“Р В Р’В»Р В РЎвЂР РЋРІвЂљВ¬Р В РЎвЂќР В РЎвЂўР В РЎВ Р РЋРІР‚В¦Р В Р’В°Р В РІвЂћвЂ“Р В РЎвЂ”Р В РЎвЂўР В Р вЂ Р РЋРІР‚в„–Р В Р’Вµ Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќР В РЎвЂ."
+          "Fast = Р С•Р Т‘Р Р…Р В° Р С”Р С•РЎР‚Р С•РЎвЂљР С”Р В°РЎРЏ X-ready Р Р…Р С•РЎвЂЎР Р…Р В°РЎРЏ РЎРѓРЎвЂљРЎР‚Р С•Р С”Р В°.",
+          "Balanced = Р СРЎРЏР С–Р С”Р В°РЎРЏ good-night РЎРѓРЎвЂљРЎР‚Р С•Р С”Р В° Р Р…Р В° 1РІР‚вЂњ2 РЎвЂЎР В°РЎРѓРЎвЂљР С‘.",
+          "Full = Р В±Р С•Р В»РЎРЉРЎв‚¬Р Вµ Р Р…Р В°РЎРѓРЎвЂљРЎР‚Р С•Р ВµР Р…Р С‘РЎРЏ, Р Р…Р С• Р Р†РЎРѓРЎвЂ Р ВµРЎвЂ°РЎвЂ Р С”Р С•Р СР С—Р В°Р С”РЎвЂљР Р…Р С• Р С‘ Р С—Р С•РЎРѓРЎвЂљР В°Р В±Р ВµР В»РЎРЉР Р…Р С•.",
+          "Р СњР ВµР В±Р С•Р В»РЎРЉРЎв‚¬Р С•Р в„– emoji РІР‚вЂќ Р Р…Р С•РЎР‚Р СР В°Р В»РЎРЉР Р…Р С•. Р С™Р С•Р С–Р Т‘Р В° Р С‘РЎвЂ¦ РЎРѓР В»Р С‘РЎв‚¬Р С”Р С•Р С Р СР Р…Р С•Р С–Р С•, РЎРѓРЎвЂљРЎР‚Р С•Р С”Р В° РЎС“Р СР С‘РЎР‚Р В°Р ВµРЎвЂљ.",
+          "Best РЎРѓРЎвЂљР В°Р Р…Р С•Р Р†Р С‘РЎвЂљРЎРѓРЎРЏ РЎРѓР С‘Р В»РЎРЉР Р…Р ВµР Вµ, Р С”Р С•Р С–Р Т‘Р В° РЎвЂљРЎвЂ№ РЎС“Р Т‘Р В°Р В»РЎРЏР ВµРЎв‚¬РЎРЉ РЎР‚Р С•Р В±Р С•РЎвЂљР Р…РЎвЂ№Р Вµ, Р С—Р В»Р С•РЎРѓР С”Р С‘Р Вµ Р С‘ РЎРѓР В»Р С‘РЎв‚¬Р С”Р С•Р С РЎвЂ¦Р В°Р в„–Р С—Р С•Р Р†РЎвЂ№Р Вµ РЎРѓРЎвЂљРЎР‚Р С•Р С”Р С‘."
         ]
       },
       ext: {
-        title: "Р В РЎв„ўР В Р’В°Р В РЎвЂќ Р РЋР вЂљР В Р’В°Р В Р’В±Р В РЎвЂўР РЋРІР‚С™Р В Р’В°Р РЋР вЂ№Р РЋРІР‚С™ Р РЋР вЂљР В Р’В°Р В Р’В·Р В Р’В±Р В Р’В»Р В РЎвЂўР В РЎвЂќР В РЎвЂР РЋР вЂљР В РЎвЂўР В Р вЂ Р В РЎвЂќР В РЎвЂ",
-        desc: "Р В Р’В Р В Р’ВµР РЋРІР‚С›Р В Р’ВµР РЋР вЂљР В Р’В°Р В Р’В»Р РЋРІР‚в„– Р РЋР С“Р В Р вЂ¦Р В Р’В°Р РЋРІР‚РЋР В Р’В°Р В Р’В»Р В Р’В° Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р В Р вЂ Р В Р’В°Р РЋР вЂ№Р РЋРІР‚С™ Р В РЎвЂќР В РЎвЂўР РЋР С“Р В РЎВР В Р’ВµР РЋРІР‚С™Р В РЎвЂР В РЎвЂќР РЋРЎвЂњ. Р В Р Р‹Р РЋРІР‚С™Р В РЎвЂР В Р’В»Р В РЎвЂ Р В РЎвЂ”Р В РЎвЂР РЋР С“Р РЋР Р‰Р В РЎВР В Р’В° Р В РЎвЂ Р В РЎвЂ“Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂўР В Р вЂ Р РЋРІР‚в„–Р В Р’Вµ Р В РЎвЂ”Р В Р’В°Р В РЎвЂќР В РЎвЂ Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р В Р вЂ¦Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р РЋР Р‰Р РЋР вЂ№ Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р В Р вЂ Р В Р’В°Р РЋР вЂ№Р РЋРІР‚С™Р РЋР С“Р РЋР РЏ Р РЋРІР‚РЋР В Р’ВµР РЋР вЂљР В Р’ВµР В Р’В· Pro, Р В Р’В° Р РЋР С“Р В Р’В°Р В РЎВР В РЎвЂў Р РЋР вЂљР В Р’В°Р РЋР С“Р РЋРІвЂљВ¬Р В РЎвЂР РЋР вЂљР В Р’ВµР В Р вЂ¦Р В РЎвЂР В Р’Вµ Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В Р’В°Р РЋРІР‚ВР РЋРІР‚С™Р РЋР С“Р РЋР РЏ Р В Р’В±Р В Р’ВµР В Р’В·Р В РЎвЂўР В РЎвЂ”Р В Р’В°Р РЋР С“Р В Р вЂ¦Р РЋРІР‚в„–Р В РЎВ copy-only.",
+        title: "Р С™Р В°Р С” РЎР‚Р В°Р В±Р С•РЎвЂљР В°РЎР‹РЎвЂљ РЎР‚Р В°Р В·Р В±Р В»Р С•Р С”Р С‘РЎР‚Р С•Р Р†Р С”Р С‘",
+        desc: "Р В Р ВµРЎвЂћР ВµРЎР‚Р В°Р В»РЎвЂ№ РЎРѓР Р…Р В°РЎвЂЎР В°Р В»Р В° Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°РЎР‹РЎвЂљ Р С”Р С•РЎРѓР СР ВµРЎвЂљР С‘Р С”РЎС“. Р РЋРЎвЂљР С‘Р В»Р С‘ Р С—Р С‘РЎРѓРЎРЉР СР В° Р С‘ Р С–Р С•РЎвЂљР С•Р Р†РЎвЂ№Р Вµ Р С—Р В°Р С”Р С‘ Р С—Р С•Р В»Р Р…Р С•РЎРѓРЎвЂљРЎРЉРЎР‹ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°РЎР‹РЎвЂљРЎРѓРЎРЏ РЎвЂЎР ВµРЎР‚Р ВµР В· Pro, Р В° РЎРѓР В°Р СР С• РЎР‚Р В°РЎРѓРЎв‚¬Р С‘РЎР‚Р ВµР Р…Р С‘Р Вµ Р С•РЎРѓРЎвЂљР В°РЎвЂРЎвЂљРЎРѓРЎРЏ Р В±Р ВµР В·Р С•Р С—Р В°РЎРѓР Р…РЎвЂ№Р С copy-only.",
         items: [
-          "Р В РІР‚в„ўР В РЎвЂў Free Р В Р вЂ Р В РЎвЂР В РўвЂР В Р вЂ¦Р РЋРІР‚в„– Р В РЎвЂ”Р В Р’ВµР РЋР вЂљР В Р вЂ Р РЋРІР‚в„–Р В Р’Вµ 10 Р РЋРІР‚С™Р В Р’ВµР В РЎВ Р РЋР вЂљР В Р’В°Р РЋР С“Р РЋРІвЂљВ¬Р В РЎвЂР РЋР вЂљР В Р’ВµР В Р вЂ¦Р В РЎвЂР РЋР РЏ.",
-          "Eligible-Р РЋР вЂљР В Р’ВµР РЋРІР‚С›Р В Р’ВµР РЋР вЂљР В Р’В°Р В Р’В»Р РЋРІР‚в„– Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р В Р вЂ Р В Р’В°Р РЋР вЂ№Р РЋРІР‚С™ +1 Р В РЎвЂќР В РЎвЂўР РЋР С“Р В РЎВР В Р’ВµР РЋРІР‚С™Р В РЎвЂР В РЎвЂќР РЋРЎвЂњ Р В Р вЂ¦Р В Р’В° 10, Р В РЎвЂ”Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂўР В РЎВ +1 Р В РЎвЂќР В Р’В°Р В Р’В¶Р В РўвЂР РЋРІР‚в„–Р В Р’Вµ 3, Р В Р’В·Р В Р’В°Р РЋРІР‚С™Р В Р’ВµР В РЎВ +1 Р В РЎвЂќР В Р’В°Р В Р’В¶Р В РўвЂР РЋРІР‚в„–Р В Р’Вµ 4.",
-          "Р В РІР‚СњР В Р’В»Р РЋР РЏ Р РЋР вЂљР В Р’В°Р В Р’В·Р В Р’В±Р В Р’В»Р В РЎвЂўР В РЎвЂќР В РЎвЂР РЋР вЂљР В РЎвЂўР В Р вЂ Р В РЎвЂўР В РЎвЂќ Р РЋР С“Р РЋРІР‚РЋР В РЎвЂР РЋРІР‚С™Р В Р’В°Р РЋР вЂ№Р РЋРІР‚С™Р РЋР С“Р РЋР РЏ Р РЋРІР‚С™Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В РЎвЂќР В РЎвЂў eligible-Р РЋР вЂљР В Р’ВµР РЋРІР‚С›Р В Р’ВµР РЋР вЂљР В Р’В°Р В Р’В»Р РЋРІР‚в„–.",
-          "Pro Р РЋР С“Р РЋР вЂљР В Р’В°Р В Р’В·Р РЋРЎвЂњ Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р В Р вЂ Р В Р’В°Р В Р’ВµР РЋРІР‚С™ Р В Р вЂ Р РЋР С“Р РЋР вЂ№ Р В РЎвЂќР В РЎвЂўР РЋР С“Р В РЎВР В Р’ВµР РЋРІР‚С™Р В РЎвЂР В РЎвЂќР РЋРЎвЂњ Р РЋР вЂљР В Р’В°Р РЋР С“Р РЋРІвЂљВ¬Р В РЎвЂР РЋР вЂљР В Р’ВµР В Р вЂ¦Р В РЎвЂР РЋР РЏ, Р В Р вЂ Р РЋР С“Р В Р’Вµ Р РЋР С“Р РЋРІР‚С™Р В РЎвЂР В Р’В»Р В РЎвЂ Р В РЎвЂ”Р В РЎвЂР РЋР С“Р РЋР Р‰Р В РЎВР В Р’В° Р В РЎвЂ Р В Р вЂ Р РЋР С“Р В Р’Вµ Р В РЎвЂ”Р В Р’В°Р В РЎвЂќР В РЎвЂ.",
-          "Р В РІР‚ВР В Р’ВµР В Р’В· X DOM-Р В РЎвЂР В Р вЂ¦Р В Р’В¶Р В Р’ВµР В РЎвЂќР РЋРІР‚С™Р В Р’В°, Р В Р’В±Р В Р’ВµР В Р’В· Р В Р’В°Р В Р вЂ Р РЋРІР‚С™Р В РЎвЂўР В РЎвЂ”Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В Р’В° Р В РЎвЂ Р В Р’В±Р В Р’ВµР В Р’В· Р В Р’В·Р В Р’В°Р В РЎвЂ”Р В РЎвЂР РЋР С“Р В РЎвЂ Р В Р вЂ  composer."
+          "Р вЂ™Р С• Free Р Р†Р С‘Р Т‘Р Р…РЎвЂ№ Р С—Р ВµРЎР‚Р Р†РЎвЂ№Р Вµ 10 РЎвЂљР ВµР С РЎР‚Р В°РЎРѓРЎв‚¬Р С‘РЎР‚Р ВµР Р…Р С‘РЎРЏ.",
+          "Eligible-РЎР‚Р ВµРЎвЂћР ВµРЎР‚Р В°Р В»РЎвЂ№ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°РЎР‹РЎвЂљ +1 Р С”Р С•РЎРѓР СР ВµРЎвЂљР С‘Р С”РЎС“ Р Р…Р В° 10, Р С—Р С•РЎвЂљР С•Р С +1 Р С”Р В°Р В¶Р Т‘РЎвЂ№Р Вµ 3, Р В·Р В°РЎвЂљР ВµР С +1 Р С”Р В°Р В¶Р Т‘РЎвЂ№Р Вµ 4.",
+          "Р вЂќР В»РЎРЏ РЎР‚Р В°Р В·Р В±Р В»Р С•Р С”Р С‘РЎР‚Р С•Р Р†Р С•Р С” РЎРѓРЎвЂЎР С‘РЎвЂљР В°РЎР‹РЎвЂљРЎРѓРЎРЏ РЎвЂљР С•Р В»РЎРЉР С”Р С• eligible-РЎР‚Р ВµРЎвЂћР ВµРЎР‚Р В°Р В»РЎвЂ№.",
+          "Pro РЎРѓРЎР‚Р В°Р В·РЎС“ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°Р ВµРЎвЂљ Р Р†РЎРѓРЎР‹ Р С”Р С•РЎРѓР СР ВµРЎвЂљР С‘Р С”РЎС“ РЎР‚Р В°РЎРѓРЎв‚¬Р С‘РЎР‚Р ВµР Р…Р С‘РЎРЏ, Р Р†РЎРѓР Вµ РЎРѓРЎвЂљР С‘Р В»Р С‘ Р С—Р С‘РЎРѓРЎРЉР СР В° Р С‘ Р Р†РЎРѓР Вµ Р С—Р В°Р С”Р С‘.",
+          "Р вЂР ВµР В· X DOM-Р С‘Р Р…Р В¶Р ВµР С”РЎвЂљР В°, Р В±Р ВµР В· Р В°Р Р†РЎвЂљР С•Р С—Р С•РЎРѓРЎвЂљР В° Р С‘ Р В±Р ВµР В· Р В·Р В°Р С—Р С‘РЎРѓР С‘ Р Р† composer."
         ]
       }
     }
@@ -6237,13 +6237,13 @@ function renderGuideRightCopy(lang){
   function nextReferralUnlockLabel(lang, step){
     const ui = getReferralUiCopy(lang);
     const s = Number(step || 0) || 0;
-    if (s === 1) return `1 Р Р†РІР‚В РІР‚в„ў ${ui.bgSlots}: 5`;
-    if (s === 3) return `3 Р Р†РІР‚В РІР‚в„ў ${ui.bgSlots}: 8 + ${ui.onePack}`;
-    if (s === 7) return `7 Р Р†РІР‚В РІР‚в„ў ${ui.bgSlots}: 12 + ${ui.saveCap}: 120`;
-    if (s === 15) return `15 Р Р†РІР‚В РІР‚в„ў ${ui.unlimited} ${String(ui.bgSlots).toLowerCase()} + ${ui.allPacks}`;
-    if (s === 30) return `30 Р Р†РІР‚В РІР‚в„ў ${ui.proTrial}`;
-    if (s === 50) return `50 Р Р†РІР‚В РІР‚в„ў ${ui.discount}`;
-    if (s === 100) return `100 Р Р†РІР‚В РІР‚в„ў ${ui.toolkit}`;
+    if (s === 1) return `1 РІвЂ вЂ™ ${ui.bgSlots}: 5`;
+    if (s === 3) return `3 РІвЂ вЂ™ ${ui.bgSlots}: 8 + ${ui.onePack}`;
+    if (s === 7) return `7 РІвЂ вЂ™ ${ui.bgSlots}: 12 + ${ui.saveCap}: 120`;
+    if (s === 15) return `15 РІвЂ вЂ™ ${ui.unlimited} ${String(ui.bgSlots).toLowerCase()} + ${ui.allPacks}`;
+    if (s === 30) return `30 РІвЂ вЂ™ ${ui.proTrial}`;
+    if (s === 50) return `50 РІвЂ вЂ™ ${ui.discount}`;
+    if (s === 100) return `100 РІвЂ вЂ™ ${ui.toolkit}`;
     return ui.allUnlocked;
   }
 
@@ -6322,7 +6322,7 @@ function renderReferralRightCopy(lang){
         <div class="refPromoInfoCell"><span>${labelChunks}</span><b>${bonusChunks}</b></div>
       </div>
       <div class="refPromoLines">
-        <div><span class="muted">${esc(ui.unlocksNow)}:</span> ${unlockParts.join(" Р вЂ™Р’В· ")}</div>
+        <div><span class="muted">${esc(ui.unlocksNow)}:</span> ${unlockParts.join(" Р’В· ")}</div>
         <div><span class="muted">${esc(ui.nextUnlock)}:</span> ${esc(nextReferralUnlockLabel(lang, nextAt))}</div>
         <div><span class="muted">${labelPromoterNext}:</span> ${nextBonusAt > 0 ? `${nextBonusAt} ${esc(ui.eligible).toLowerCase()}` : esc(ui.allUnlocked || "Cap reached")}</div>
         <div><span class="muted">${esc(ui.antiAbuse)}</span></div>
@@ -6348,47 +6348,47 @@ function renderReferralRightCopy(lang){
   function syncModePanelCopy(){
     const ru = siteLang() === "ru";
     const controlsText = ru
-      ? "Min = Р РЋР С“Р В Р’В°Р В РЎВР РЋРІР‚в„–Р В Р’Вµ Р В РЎвЂќР В РЎвЂўР РЋР вЂљР В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР В РЎвЂР В Р’Вµ Р В РЎвЂўР РЋРІР‚С™Р В Р вЂ Р В Р’ВµР РЋРІР‚С™Р РЋРІР‚в„–. Mid = Р В РЎвЂўР РЋРІР‚С™Р В РўвЂР В Р’ВµР В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В Р’В°Р РЋР РЏ Р В Р’ВµР РЋР С“Р РЋРІР‚С™Р В Р’ВµР РЋР С“Р РЋРІР‚С™Р В Р вЂ Р В Р’ВµР В Р вЂ¦Р В Р вЂ¦Р В Р’В°Р РЋР РЏ Р В Р’В»Р В РЎвЂР В Р вЂ¦Р В РЎвЂР РЋР РЏ. Max = Р РЋРІР‚РЋР РЋРЎвЂњР РЋРІР‚С™Р РЋР Р‰ Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р В Р вЂ¦Р В Р’ВµР В Р’Вµ, Р В Р вЂ¦Р В РЎвЂў Р В Р вЂ Р РЋР С“Р РЋРІР‚В Р В Р’ВµР РЋРІР‚В°Р РЋРІР‚В Р В РЎвЂўР РЋРІР‚С™Р В Р вЂ Р В Р’ВµР РЋРІР‚С™ Р В РЎвЂўР В РўвЂР В Р вЂ¦Р В РЎвЂўР В РЎВР РЋРЎвЂњ Р РЋРІР‚РЋР В Р’ВµР В Р’В»Р В РЎвЂўР В Р вЂ Р В Р’ВµР В РЎвЂќР РЋРЎвЂњ. Tone Р В РЎВР В Р’ВµР В Р вЂ¦Р РЋР РЏР В Р’ВµР РЋРІР‚С™ Р В РЎвЂ”Р В РЎвЂўР В РўвЂР В Р’В°Р РЋРІР‚РЋР РЋРЎвЂњ. Preset Р РЋРІР‚С™Р В РЎвЂўР В Р вЂ¦Р В РЎвЂќР В РЎвЂў Р В Р вЂ¦Р В Р’В°Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В Р’В°Р В РЎвЂР В Р вЂ Р В Р’В°Р В Р’ВµР РЋРІР‚С™ Р РЋР С“Р РЋРІР‚С™Р В РЎвЂР В Р’В»Р РЋР Р‰. Best pass Р Р†Р вЂљРІР‚Сњ Р В РЎвЂўР РЋРІР‚С™Р В РўвЂР В Р’ВµР В Р’В»Р РЋР Р‰Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р В РЎвЂ”Р В Р’ВµР РЋР вЂљР В Р’ВµР В РЎвЂќР В Р’В»Р РЋР вЂ№Р РЋРІР‚РЋР В Р’В°Р РЋРІР‚С™Р В Р’ВµР В Р’В»Р РЋР Р‰, Р В Р’ВµР РЋР С“Р В Р’В»Р В РЎвЂ Р В РЎвЂ”Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂўР В РЎВ Р В Р вЂ¦Р РЋРЎвЂњР В Р’В¶Р В Р вЂ¦Р В РЎвЂў Р В РЎвЂ”Р В РЎвЂўР В РўвЂР РЋРІР‚РЋР В РЎвЂР РЋР С“Р РЋРІР‚С™Р В РЎвЂР РЋРІР‚С™Р РЋР Р‰ shape-Р В РўвЂР РЋРЎвЂњР В Р’В±Р В Р’В»Р В РЎвЂ Р В РЎвЂ Р В РўвЂР В РЎвЂўР В Р’В±Р В РЎвЂР РЋРІР‚С™Р РЋР Р‰ Р В РЎвЂ”Р РЋР вЂљР В РЎвЂўР В Р’В±Р В Р’ВµР В Р’В»Р РЋРІР‚в„– Р В РЎвЂўР В Р’В±Р РЋР вЂљР В Р’В°Р РЋРІР‚С™Р В Р вЂ¦Р В РЎвЂў."
+      ? "Min = РЎРѓР В°Р СРЎвЂ№Р Вµ Р С”Р С•РЎР‚Р С•РЎвЂљР С”Р С‘Р Вµ Р С•РЎвЂљР Р†Р ВµРЎвЂљРЎвЂ№. Mid = Р С•РЎвЂљР Т‘Р ВµР В»РЎРЉР Р…Р В°РЎРЏ Р ВµРЎРѓРЎвЂљР ВµРЎРѓРЎвЂљР Р†Р ВµР Р…Р Р…Р В°РЎРЏ Р В»Р С‘Р Р…Р С‘РЎРЏ. Max = РЎвЂЎРЎС“РЎвЂљРЎРЉ Р С—Р С•Р В»Р Р…Р ВµР Вµ, Р Р…Р С• Р Р†РЎРѓРЎвЂ Р ВµРЎвЂ°РЎвЂ Р С•РЎвЂљР Р†Р ВµРЎвЂљ Р С•Р Т‘Р Р…Р С•Р СРЎС“ РЎвЂЎР ВµР В»Р С•Р Р†Р ВµР С”РЎС“. Tone Р СР ВµР Р…РЎРЏР ВµРЎвЂљ Р С—Р С•Р Т‘Р В°РЎвЂЎРЎС“. Preset РЎвЂљР С•Р Р…Р С”Р С• Р Р…Р В°РЎРѓРЎвЂљРЎР‚Р В°Р С‘Р Р†Р В°Р ВµРЎвЂљ РЎРѓРЎвЂљР С‘Р В»РЎРЉ. Best pass РІР‚вЂќ Р С•РЎвЂљР Т‘Р ВµР В»РЎРЉР Р…РЎвЂ№Р в„– Р С—Р ВµРЎР‚Р ВµР С”Р В»РЎР‹РЎвЂЎР В°РЎвЂљР ВµР В»РЎРЉ, Р ВµРЎРѓР В»Р С‘ Р С—Р С•РЎвЂљР С•Р С Р Р…РЎС“Р В¶Р Р…Р С• Р С—Р С•Р Т‘РЎвЂЎР С‘РЎРѓРЎвЂљР С‘РЎвЂљРЎРЉ shape-Р Т‘РЎС“Р В±Р В»Р С‘ Р С‘ Р Т‘Р С•Р В±Р С‘РЎвЂљРЎРЉ Р С—РЎР‚Р С•Р В±Р ВµР В»РЎвЂ№ Р С•Р В±РЎР‚Р В°РЎвЂљР Р…Р С•."
       : "Min = shortest replies. Mid = a separate natural lane. Max = fuller, but still one-person replies. Tone changes the voice. Preset fine-tunes the feel. Best pass is optional and only cleans the saved bank after you decide to run it.";
     const repeatText = ru
-      ? "Р В РІР‚в„ўР РЋРІР‚в„–Р В РЎвЂќР В Р’В»Р РЋР вЂ№Р РЋРІР‚РЋР В Р’ВµР В Р вЂ¦Р В РЎвЂў = Р В РЎвЂ”Р РЋР вЂљР В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В РЎвЂў random fill. Р В РІР‚в„ўР В РЎвЂќР В Р’В»Р РЋР вЂ№Р РЋРІР‚РЋР В Р’ВµР В Р вЂ¦Р В РЎвЂў = Р В РЎвЂ”Р В РЎвЂўР РЋР С“Р В Р’В»Р В Р’Вµ Р В Р’В·Р В Р’В°Р В РЎвЂ”Р РЋРЎвЂњР РЋР С“Р В РЎвЂќР В Р’В° Best pass Р РЋР вЂљР В Р’ВµР В Р’В¶Р В Р’ВµР РЋРІР‚С™ shape-Р В РўвЂР РЋРЎвЂњР В Р’В±Р В Р’В»Р В РЎвЂ Р В РЎвЂ Р В РўвЂР В РЎвЂўР В Р’В±Р В РЎвЂР В Р вЂ Р В Р’В°Р В Р’ВµР РЋРІР‚С™ Р В Р вЂ¦Р В Р’ВµР В РўвЂР В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В Р’В°Р РЋР вЂ№Р РЋРІР‚В°Р В Р’ВµР В Р’Вµ Р В РЎвЂўР В Р’В±Р РЋР вЂљР В Р’В°Р РЋРІР‚С™Р В Р вЂ¦Р В РЎвЂў Р В РўвЂР В РЎвЂў Р РЋРІР‚В Р В Р’ВµР В Р’В»Р В РЎвЂ."
+      ? "Р вЂ™РЎвЂ№Р С”Р В»РЎР‹РЎвЂЎР ВµР Р…Р С• = Р С—РЎР‚Р С•РЎРѓРЎвЂљР С• random fill. Р вЂ™Р С”Р В»РЎР‹РЎвЂЎР ВµР Р…Р С• = Р С—Р С•РЎРѓР В»Р Вµ Р В·Р В°Р С—РЎС“РЎРѓР С”Р В° Best pass РЎР‚Р ВµР В¶Р ВµРЎвЂљ shape-Р Т‘РЎС“Р В±Р В»Р С‘ Р С‘ Р Т‘Р С•Р В±Р С‘Р Р†Р В°Р ВµРЎвЂљ Р Р…Р ВµР Т‘Р С•РЎРѓРЎвЂљР В°РЎР‹РЎвЂ°Р ВµР Вµ Р С•Р В±РЎР‚Р В°РЎвЂљР Р…Р С• Р Т‘Р С• РЎвЂ Р ВµР В»Р С‘."
       : "Off = pure random fill. On = after a run, Best pass prunes shape-level near-duplicates and refills the missing slots back to target.";
     const rightDesc = ru
-      ? "Р В Р Р‹Р В РЎвЂўР В Р’В±Р В РЎвЂР РЋР вЂљР В Р’В°Р В РІвЂћвЂ“ Р В РЎвЂќР В РЎвЂўР РЋР вЂљР В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР В РЎвЂР В Р’Вµ Р В Р’В¶Р В РЎвЂР В Р вЂ Р РЋРІР‚в„–Р В Р’Вµ Р В РЎвЂўР РЋРІР‚С™Р В Р вЂ Р В Р’ВµР РЋРІР‚С™Р РЋРІР‚в„–, Р В РЎвЂќР В РЎвЂўР РЋРІР‚С™Р В РЎвЂўР РЋР вЂљР РЋРІР‚в„–Р В Р’Вµ Р РЋРІР‚С™Р РЋРІР‚в„– Р РЋР вЂљР В Р’ВµР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В РЎвЂў Р В Р’В±Р РЋРІР‚в„– Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂ”Р РЋР вЂљР В Р’В°Р В Р вЂ Р В РЎвЂР В Р’В» Р В РЎвЂўР В РўвЂР В Р вЂ¦Р В РЎвЂўР В РЎВР РЋРЎвЂњ Р РЋРІР‚РЋР В Р’ВµР В Р’В»Р В РЎвЂўР В Р вЂ Р В Р’ВµР В РЎвЂќР РЋРЎвЂњ. Р В Р’В Р В Р’В°Р РЋР С“Р РЋРІвЂљВ¬Р В РЎвЂР РЋР вЂљР В Р’ВµР В Р вЂ¦Р В РЎвЂР В Р’Вµ Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В Р’В°Р РЋРІР‚ВР РЋРІР‚С™Р РЋР С“Р РЋР РЏ copy-only: Р В РЎвЂќР В РЎвЂўР В РЎвЂ”Р В РЎвЂР РЋР вЂљР РЋРЎвЂњР В Р’ВµР РЋРІвЂљВ¬Р РЋР Р‰ Р В Р’В·Р В РўвЂР В Р’ВµР РЋР С“Р РЋР Р‰, Р В Р вЂ Р РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р вЂ Р В Р’В»Р РЋР РЏР В Р’ВµР РЋРІвЂљВ¬Р РЋР Р‰ Р В Р вЂ Р РЋР вЂљР РЋРЎвЂњР РЋРІР‚РЋР В Р вЂ¦Р РЋРЎвЂњР РЋР вЂ№ Р В Р вЂ  X."
+      ? "Р РЋР С•Р В±Р С‘РЎР‚Р В°Р в„– Р С”Р С•РЎР‚Р С•РЎвЂљР С”Р С‘Р Вµ Р В¶Р С‘Р Р†РЎвЂ№Р Вµ Р С•РЎвЂљР Р†Р ВµРЎвЂљРЎвЂ№, Р С”Р С•РЎвЂљР С•РЎР‚РЎвЂ№Р Вµ РЎвЂљРЎвЂ№ РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С• Р В±РЎвЂ№ Р С•РЎвЂљР С—РЎР‚Р В°Р Р†Р С‘Р В» Р С•Р Т‘Р Р…Р С•Р СРЎС“ РЎвЂЎР ВµР В»Р С•Р Р†Р ВµР С”РЎС“. Р В Р В°РЎРѓРЎв‚¬Р С‘РЎР‚Р ВµР Р…Р С‘Р Вµ Р С•РЎРѓРЎвЂљР В°РЎвЂРЎвЂљРЎРѓРЎРЏ copy-only: Р С”Р С•Р С—Р С‘РЎР‚РЎС“Р ВµРЎв‚¬РЎРЉ Р В·Р Т‘Р ВµРЎРѓРЎРЉ, Р Р†РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎв‚¬РЎРЉ Р Р†РЎР‚РЎС“РЎвЂЎР Р…РЎС“РЎР‹ Р Р† X."
       : "Build short, natural replies you would actually post to one person. The extension stays copy-only: copy here, paste manually on X.";
-    const badge1 = ru ? "РЎР‚РЎСџРІР‚СљРІР‚в„– Fast copy" : "РЎР‚РЎСџРІР‚СљРІР‚в„– Fast copy";
-    const badge2 = ru ? "РЎР‚РЎСџР вЂ№РІР‚С”Р С—РЎвЂР РЏ Tone + preset" : "РЎР‚РЎСџР вЂ№РІР‚С”Р С—РЎвЂР РЏ Tone + preset";
-    const badge3 = ru ? "РЎР‚РЎСџР’В§Р’В  Best + clean fill" : "РЎР‚РЎСџР’В§Р’В  Best + clean fill";
+    const badge1 = ru ? "СЂСџвЂњвЂ№ Fast copy" : "СЂСџвЂњвЂ№ Fast copy";
+    const badge2 = ru ? "СЂСџР‹вЂєРїС‘РЏ Tone + preset" : "СЂСџР‹вЂєРїС‘РЏ Tone + preset";
+    const badge3 = ru ? "СЂСџВ§В  Best + clean fill" : "СЂСџВ§В  Best + clean fill";
     const listHtml = ru
-      ? '<li><b>Р В РІР‚в„ўР РЋРІР‚в„–Р В Р’В±Р В Р’ВµР РЋР вЂљР В РЎвЂ size</b> Р В РЎвЂ <b>tone</b>, Р В Р’В·Р В Р’В°Р РЋРІР‚С™Р В Р’ВµР В РЎВ Р В РЎвЂ”Р РЋР вЂљР В РЎвЂ Р В Р’В¶Р В Р’ВµР В Р’В»Р В Р’В°Р В Р вЂ¦Р В РЎвЂР В РЎвЂ Р В Р вЂ Р В РЎвЂќР В Р’В»Р РЋР вЂ№Р РЋРІР‚РЋР В РЎвЂ preset.</li><li><b>Quick 1</b> Р В Р’В±Р РЋРІР‚в„–Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂў Р В РўвЂР В Р’В°Р РЋРІР‚ВР РЋРІР‚С™ Р В РЎвЂўР В РўвЂР В Р вЂ¦Р РЋРЎвЂњ Р РЋР С“Р В Р вЂ Р В Р’ВµР В Р’В¶Р РЋРЎвЂњР РЋР вЂ№ Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќР РЋРЎвЂњ, Р В Р’В° <b>Batch 10</b> Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В Р’В°Р РЋРІР‚ВР РЋРІР‚С™Р РЋР С“Р РЋР РЏ loose-random Р В Р вЂ Р В Р вЂ¦Р РЋРЎвЂњР РЋРІР‚С™Р РЋР вЂљР В РЎвЂ Р В Р вЂ Р РЋРІР‚в„–Р В Р’В±Р РЋР вЂљР В Р’В°Р В Р вЂ¦Р В Р вЂ¦Р В РЎвЂўР В РЎвЂ“Р В РЎвЂў Р РЋР вЂљР В Р’В°Р В Р’В·Р В РЎВР В Р’ВµР РЋР вЂљР В Р’В°.</li><li><b>Best pass</b> Р В Р вЂ Р В РЎвЂќР В Р’В»Р РЋР вЂ№Р РЋРІР‚РЋР В Р’В°Р В РІвЂћвЂ“ Р РЋРІР‚С™Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В РЎвЂќР В РЎвЂў Р В РЎвЂќР В РЎвЂўР В РЎвЂ“Р В РўвЂР В Р’В° Р В Р вЂ¦Р РЋРЎвЂњР В Р’В¶Р В Р вЂ¦Р В РЎвЂў Р В РЎвЂ”Р В РЎвЂўР В РўвЂР РЋР вЂљР В Р’ВµР В Р’В·Р В Р’В°Р РЋРІР‚С™Р РЋР Р‰ shape-Р В РўвЂР РЋРЎвЂњР В Р’В±Р В Р’В»Р В РЎвЂ Р В РЎвЂ Р В РўвЂР В РЎвЂўР В Р’В±Р В РЎвЂР РЋРІР‚С™Р РЋР Р‰ Р В Р’В±Р В Р’В°Р В Р вЂ¦Р В РЎвЂќ Р В РЎвЂўР В Р’В±Р РЋР вЂљР В Р’В°Р РЋРІР‚С™Р В Р вЂ¦Р В РЎвЂў Р В РўвЂР В РЎвЂў Р В Р вЂ¦Р РЋРЎвЂњР В Р’В¶Р В Р вЂ¦Р В РЎвЂўР В РЎвЂ“Р В РЎвЂў Р В РЎвЂќР В РЎвЂўР В Р’В»Р В РЎвЂР РЋРІР‚РЋР В Р’ВµР РЋР С“Р РЋРІР‚С™Р В Р вЂ Р В Р’В°.</li><li><b>Best</b> Р В Р’В±Р В Р’ВµР РЋР вЂљР РЋРІР‚ВР РЋРІР‚С™ Р РЋР С“Р В РЎвЂР В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В Р’ВµР В РІвЂћвЂ“Р РЋРІвЂљВ¬Р РЋРЎвЂњР РЋР вЂ№ Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќР РЋРЎвЂњ Р В РЎвЂР В Р’В· Р РЋР С“Р В РЎвЂўР РЋРІР‚В¦Р РЋР вЂљР В Р’В°Р В Р вЂ¦Р РЋРІР‚ВР В Р вЂ¦Р В Р вЂ¦Р В РЎвЂўР В РЎвЂ“Р В РЎвЂў, Р В Р’В° <b>Best live</b> Р РЋРІР‚С™Р РЋР РЏР В Р вЂ¦Р В Р’ВµР РЋРІР‚С™ Р В Р вЂ¦Р В Р’ВµР РЋР С“Р В РЎвЂќР В РЎвЂўР В Р’В»Р РЋР Р‰Р В РЎвЂќР В РЎвЂў Р В Р вЂ¦Р В РЎвЂўР В Р вЂ Р РЋРІР‚в„–Р РЋРІР‚В¦ Р В Р вЂ Р В Р’В°Р РЋР вЂљР В РЎвЂР В Р’В°Р В Р вЂ¦Р РЋРІР‚С™Р В РЎвЂўР В Р вЂ  Р В РЎвЂ Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р вЂ Р В Р’В»Р РЋР РЏР В Р’ВµР РЋРІР‚С™ Р РЋР С“Р В Р’В°Р В РЎВР РЋРІР‚в„–Р В РІвЂћвЂ“ Р РЋР С“Р В РЎвЂР В Р’В»Р РЋР Р‰Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“.</li><li><b>Copy view</b> Р В РЎвЂќР В РЎвЂўР В РЎвЂ”Р В РЎвЂР РЋР вЂљР РЋРЎвЂњР В Р’ВµР РЋРІР‚С™ Р РЋРІР‚С™Р В Р’ВµР В РЎвЂќР РЋРЎвЂњР РЋРІР‚В°Р В РЎвЂР В РІвЂћвЂ“ Р В Р’В±Р В Р’В°Р В Р вЂ¦Р В РЎвЂќ, <b>Export .txt</b> Р РЋР С“Р В РЎвЂўР РЋРІР‚В¦Р РЋР вЂљР В Р’В°Р В Р вЂ¦Р РЋР РЏР В Р’ВµР РЋРІР‚С™ Р В Р’ВµР В РЎвЂ“Р В РЎвЂў Р В Р вЂ¦Р В Р’В°Р РЋР вЂљР РЋРЎвЂњР В Р’В¶Р РЋРЎвЂњ. Free cap: Р В РўвЂР В РЎвЂў <b>70</b> Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќ Р В Р вЂ¦Р В Р’В° Р РЋР вЂљР В Р’В°Р В Р’В·Р В РўвЂР В Р’ВµР В Р’В».</li>'
+      ? '<li><b>Р вЂ™РЎвЂ№Р В±Р ВµРЎР‚Р С‘ size</b> Р С‘ <b>tone</b>, Р В·Р В°РЎвЂљР ВµР С Р С—РЎР‚Р С‘ Р В¶Р ВµР В»Р В°Р Р…Р С‘Р С‘ Р Р†Р С”Р В»РЎР‹РЎвЂЎР С‘ preset.</li><li><b>Quick 1</b> Р В±РЎвЂ№РЎРѓРЎвЂљРЎР‚Р С• Р Т‘Р В°РЎвЂРЎвЂљ Р С•Р Т‘Р Р…РЎС“ РЎРѓР Р†Р ВµР В¶РЎС“РЎР‹ РЎРѓРЎвЂљРЎР‚Р С•Р С”РЎС“, Р В° <b>Batch 10</b> Р С•РЎРѓРЎвЂљР В°РЎвЂРЎвЂљРЎРѓРЎРЏ loose-random Р Р†Р Р…РЎС“РЎвЂљРЎР‚Р С‘ Р Р†РЎвЂ№Р В±РЎР‚Р В°Р Р…Р Р…Р С•Р С–Р С• РЎР‚Р В°Р В·Р СР ВµРЎР‚Р В°.</li><li><b>Best pass</b> Р Р†Р С”Р В»РЎР‹РЎвЂЎР В°Р в„– РЎвЂљР С•Р В»РЎРЉР С”Р С• Р С”Р С•Р С–Р Т‘Р В° Р Р…РЎС“Р В¶Р Р…Р С• Р С—Р С•Р Т‘РЎР‚Р ВµР В·Р В°РЎвЂљРЎРЉ shape-Р Т‘РЎС“Р В±Р В»Р С‘ Р С‘ Р Т‘Р С•Р В±Р С‘РЎвЂљРЎРЉ Р В±Р В°Р Р…Р С” Р С•Р В±РЎР‚Р В°РЎвЂљР Р…Р С• Р Т‘Р С• Р Р…РЎС“Р В¶Р Р…Р С•Р С–Р С• Р С”Р С•Р В»Р С‘РЎвЂЎР ВµРЎРѓРЎвЂљР Р†Р В°.</li><li><b>Best</b> Р В±Р ВµРЎР‚РЎвЂРЎвЂљ РЎРѓР С‘Р В»РЎРЉР Р…Р ВµР в„–РЎв‚¬РЎС“РЎР‹ РЎРѓРЎвЂљРЎР‚Р С•Р С”РЎС“ Р С‘Р В· РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎвЂР Р…Р Р…Р С•Р С–Р С•, Р В° <b>Best live</b> РЎвЂљРЎРЏР Р…Р ВµРЎвЂљ Р Р…Р ВµРЎРѓР С”Р С•Р В»РЎРЉР С”Р С• Р Р…Р С•Р Р†РЎвЂ№РЎвЂ¦ Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљР С•Р Р† Р С‘ Р С•РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎвЂљ РЎРѓР В°Р СРЎвЂ№Р в„– РЎРѓР С‘Р В»РЎРЉР Р…РЎвЂ№Р в„–.</li><li><b>Copy view</b> Р С”Р С•Р С—Р С‘РЎР‚РЎС“Р ВµРЎвЂљ РЎвЂљР ВµР С”РЎС“РЎвЂ°Р С‘Р в„– Р В±Р В°Р Р…Р С”, <b>Export .txt</b> РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎРЏР ВµРЎвЂљ Р ВµР С–Р С• Р Р…Р В°РЎР‚РЎС“Р В¶РЎС“. Free cap: Р Т‘Р С• <b>70</b> РЎРѓРЎвЂљРЎР‚Р С•Р С” Р Р…Р В° РЎР‚Р В°Р В·Р Т‘Р ВµР В».</li>'
       : '<li><b>Pick size</b> and <b>tone</b>, then add a preset only if you need a tighter feel.</li><li><b>Quick 1</b> gives one fresh line fast, while <b>Batch 10</b> stays loose-random inside the selected size.</li><li><b>Best pass</b> is optional: use it only when you want obvious lookalikes trimmed from the saved bank and the missing slots filled back up.</li><li><b>Best</b> uses your strongest saved line, while <b>Best live</b> pulls a few fresh options and keeps the strongest one.</li><li><b>Copy view</b> copies the current bank, <b>Export .txt</b> saves it outside the app. Free cap: up to <b>70</b> lines per section.</li>';
     const modeLabels = ru
-      ? { min: 'min Р вЂ™Р’В· Р В РЎвЂќР В РЎвЂўР РЋР вЂљР В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР В РЎвЂў', mid: 'mid Р вЂ™Р’В· Р В Р’В±Р В Р’В°Р В Р’В»Р В Р’В°Р В Р вЂ¦Р РЋР С“', max: 'max Р вЂ™Р’В· Р РЋРІР‚РЋР РЋРЎвЂњР РЋРІР‚С™Р РЋР Р‰ Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р В Р вЂ¦Р В Р’ВµР В Р’Вµ' }
-      : { min: 'min Р вЂ™Р’В· short', mid: 'mid Р вЂ™Р’В· balanced', max: 'max Р вЂ™Р’В· fuller' };
+      ? { min: 'min Р’В· Р С”Р С•РЎР‚Р С•РЎвЂљР С”Р С•', mid: 'mid Р’В· Р В±Р В°Р В»Р В°Р Р…РЎРѓ', max: 'max Р’В· РЎвЂЎРЎС“РЎвЂљРЎРЉ Р С—Р С•Р В»Р Р…Р ВµР Вµ' }
+      : { min: 'min Р’В· short', mid: 'mid Р’В· balanced', max: 'max Р’В· fuller' };
     const hDesc = ru
-      ? 'GMXReply Р В РЎвЂ”Р В РЎвЂўР В РЎВР В РЎвЂўР В РЎвЂ“Р В Р’В°Р В Р’ВµР РЋРІР‚С™ Р РЋР С“Р В РЎвЂўР В Р’В±Р В РЎвЂР РЋР вЂљР В Р’В°Р РЋРІР‚С™Р РЋР Р‰ English-only GM/GN Р В РЎвЂўР РЋРІР‚С™Р В Р вЂ Р В Р’ВµР РЋРІР‚С™Р РЋРІР‚в„–, Р В РЎвЂќР В РЎвЂўР РЋРІР‚С™Р В РЎвЂўР РЋР вЂљР РЋРІР‚в„–Р В Р’Вµ Р В Р’В·Р В Р вЂ Р РЋРЎвЂњР РЋРІР‚РЋР В Р’В°Р РЋРІР‚С™ Р В РЎвЂќР В Р’В°Р В РЎвЂќ Р РЋР вЂљР В Р’ВµР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ Р В РЎвЂўР РЋРІР‚С™Р В Р вЂ Р В Р’ВµР РЋРІР‚С™Р РЋРІР‚в„– Р В РЎвЂўР В РўвЂР В Р вЂ¦Р В РЎвЂўР В РЎВР РЋРЎвЂњ Р РЋРІР‚РЋР В Р’ВµР В Р’В»Р В РЎвЂўР В Р вЂ Р В Р’ВµР В РЎвЂќР РЋРЎвЂњ. Р В РІР‚СњР В Р’В°Р В Р’В»Р РЋР Р‰Р РЋРІвЂљВ¬Р В Р’Вµ Р РЋРІР‚С™Р РЋРІР‚в„– Р В РЎвЂ”Р РЋР вЂљР В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В РЎвЂў Р В РЎвЂќР В РЎвЂўР В РЎвЂ”Р В РЎвЂР РЋР вЂљР РЋРЎвЂњР В Р’ВµР РЋРІвЂљВ¬Р РЋР Р‰ Р В РЎвЂР РЋРІР‚В¦ Р В РўвЂР В Р’В»Р РЋР РЏ X.'
+      ? 'GMXReply Р С—Р С•Р СР С•Р С–Р В°Р ВµРЎвЂљ РЎРѓР С•Р В±Р С‘РЎР‚Р В°РЎвЂљРЎРЉ English-only GM/GN Р С•РЎвЂљР Р†Р ВµРЎвЂљРЎвЂ№, Р С”Р С•РЎвЂљР С•РЎР‚РЎвЂ№Р Вµ Р В·Р Р†РЎС“РЎвЂЎР В°РЎвЂљ Р С”Р В°Р С” РЎР‚Р ВµР В°Р В»РЎРЉР Р…РЎвЂ№Р Вµ Р С•РЎвЂљР Р†Р ВµРЎвЂљРЎвЂ№ Р С•Р Т‘Р Р…Р С•Р СРЎС“ РЎвЂЎР ВµР В»Р С•Р Р†Р ВµР С”РЎС“. Р вЂќР В°Р В»РЎРЉРЎв‚¬Р Вµ РЎвЂљРЎвЂ№ Р С—РЎР‚Р С•РЎРѓРЎвЂљР С• Р С”Р С•Р С—Р С‘РЎР‚РЎС“Р ВµРЎв‚¬РЎРЉ Р С‘РЎвЂ¦ Р Т‘Р В»РЎРЏ X.'
       : 'GMXReply helps you build English-only GM/GN replies that sound like real replies to one person, then copy them safely for X.';
     const hWhat1 = ru
-      ? 'English-only <b>GM</b> Р В РЎвЂ <b>GN</b> Р В РЎвЂўР РЋРІР‚С™Р В Р вЂ Р В Р’ВµР РЋРІР‚С™Р РЋРІР‚в„– Р В Р’В±Р В Р’ВµР В Р’В· group-tone Р В РЎвЂ Р В РЎВР РЋРЎвЂњР РЋР С“Р В РЎвЂўР РЋР вЂљР В Р вЂ¦Р РЋРІР‚в„–Р РЋРІР‚В¦ Р В РЎВР В Р’ВµР В РЎВР В Р вЂ¦Р РЋРІР‚в„–Р РЋРІР‚В¦ Р РЋР С“Р В Р’В»Р В РЎвЂўР В Р вЂ .'
+      ? 'English-only <b>GM</b> Р С‘ <b>GN</b> Р С•РЎвЂљР Р†Р ВµРЎвЂљРЎвЂ№ Р В±Р ВµР В· group-tone Р С‘ Р СРЎС“РЎРѓР С•РЎР‚Р Р…РЎвЂ№РЎвЂ¦ Р СР ВµР СР Р…РЎвЂ№РЎвЂ¦ РЎРѓР В»Р С•Р Р†.'
       : 'English-only <b>GM</b> and <b>GN</b> replies without group tone or meme junk.';
     const hWhat2 = ru
-      ? 'Safe copy-only Р РЋР вЂљР В Р’ВµР В Р’В¶Р В РЎвЂР В РЎВ Р В РўвЂР В Р’В»Р РЋР РЏ X: Р В РЎвЂќР В РЎвЂўР В РЎвЂ”Р В РЎвЂР РЋР вЂљР РЋРЎвЂњР В Р’ВµР РЋРІвЂљВ¬Р РЋР Р‰ Р В Р’В·Р В РўвЂР В Р’ВµР РЋР С“Р РЋР Р‰, Р В Р вЂ Р РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р вЂ Р В Р’В»Р РЋР РЏР В Р’ВµР РЋРІвЂљВ¬Р РЋР Р‰ Р В Р вЂ Р РЋР вЂљР РЋРЎвЂњР РЋРІР‚РЋР В Р вЂ¦Р РЋРЎвЂњР РЋР вЂ№ Р РЋР С“Р В Р’В°Р В РЎВ.'
+      ? 'Safe copy-only РЎР‚Р ВµР В¶Р С‘Р С Р Т‘Р В»РЎРЏ X: Р С”Р С•Р С—Р С‘РЎР‚РЎС“Р ВµРЎв‚¬РЎРЉ Р В·Р Т‘Р ВµРЎРѓРЎРЉ, Р Р†РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎв‚¬РЎРЉ Р Р†РЎР‚РЎС“РЎвЂЎР Р…РЎС“РЎР‹ РЎРѓР В°Р С.'
       : 'Safe copy-only flow for X: copy here, then paste manually yourself.';
     const hFree1 = ru
-      ? '<b>Free:</b> Р РЋР С“Р В РЎвЂўР В Р’В±Р В РЎвЂР РЋР вЂљР В Р’В°Р В РІвЂћвЂ“ Р В РЎвЂ Р РЋР вЂљР В Р’ВµР В РўвЂР В Р’В°Р В РЎвЂќР РЋРІР‚С™Р В РЎвЂР РЋР вЂљР РЋРЎвЂњР В РІвЂћвЂ“ Р В Р’В±Р В Р’В°Р В Р вЂ¦Р В РЎвЂќР В РЎвЂ, Р РЋР С“Р В РЎвЂўР РЋРІР‚В¦Р РЋР вЂљР В Р’В°Р В Р вЂ¦Р РЋР РЏР В РІвЂћвЂ“ Р В РўвЂР В РЎвЂў <b>70</b> Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќ Р В Р вЂ¦Р В Р’В° Р РЋР вЂљР В Р’В°Р В Р’В·Р В РўвЂР В Р’ВµР В Р’В».'
+      ? '<b>Free:</b> РЎРѓР С•Р В±Р С‘РЎР‚Р В°Р в„– Р С‘ РЎР‚Р ВµР Т‘Р В°Р С”РЎвЂљР С‘РЎР‚РЎС“Р в„– Р В±Р В°Р Р…Р С”Р С‘, РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎРЏР в„– Р Т‘Р С• <b>70</b> РЎРѓРЎвЂљРЎР‚Р С•Р С” Р Р…Р В° РЎР‚Р В°Р В·Р Т‘Р ВµР В».'
       : '<b>Free:</b> build and edit banks, save up to <b>70</b> lines per section.';
     const hFree2 = ru
-      ? '<b>Pro:</b> Р РЋР С“Р В Р вЂ¦Р В РЎвЂР В РЎВР В Р’В°Р В Р’ВµР РЋРІР‚С™ save-cap, Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р В Р вЂ Р В Р’В°Р В Р’ВµР РЋРІР‚С™ premium controls Р В РЎвЂ Р РЋРЎвЂњР РЋР С“Р В РЎвЂР В Р’В»Р В РЎвЂР В Р вЂ Р В Р’В°Р В Р’ВµР РЋРІР‚С™ Best live.'
+      ? '<b>Pro:</b> РЎРѓР Р…Р С‘Р СР В°Р ВµРЎвЂљ save-cap, Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°Р ВµРЎвЂљ premium controls Р С‘ РЎС“РЎРѓР С‘Р В»Р С‘Р Р†Р В°Р ВµРЎвЂљ Best live.'
       : '<b>Pro:</b> removes save caps, unlocks premium controls, and gives you a stronger Best live flow.';
     const guideHtml = ru
-      ? '<li><b>Step 1:</b> Р В РЎСџР В РЎвЂўР В РўвЂР В РЎвЂќР В Р’В»Р РЋР вЂ№Р РЋРІР‚РЋР В РЎвЂ Р РЋР С“Р В Р вЂ Р В РЎвЂўР В РІвЂћвЂ“ X handle Р В РЎвЂўР В РўвЂР В РЎвЂР В Р вЂ¦ Р РЋР вЂљР В Р’В°Р В Р’В·.</li><li><b>Step 2:</b> Р В Р Р‹Р В РЎвЂўР В Р’В±Р В РЎвЂР РЋР вЂљР В Р’В°Р В РІвЂћвЂ“ English-only reply banks Р В Р вЂ  <span class="kbd">GM</span> / <span class="kbd">GN</span>.</li><li><b>Step 3:</b> Р В РЎв„ўР В РЎвЂўР В РЎвЂ”Р В РЎвЂР РЋР вЂљР РЋРЎвЂњР В РІвЂћвЂ“ Р РЋР С“Р В РЎвЂў Р РЋР С“Р В Р’В°Р В РІвЂћвЂ“Р РЋРІР‚С™Р В Р’В° Р В РЎвЂР В Р’В»Р В РЎвЂ Р В РЎвЂР В Р’В· popup Р В РЎвЂ Р В Р вЂ Р РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р вЂ Р В Р’В»Р РЋР РЏР В РІвЂћвЂ“ Р В Р вЂ Р РЋР вЂљР РЋРЎвЂњР РЋРІР‚РЋР В Р вЂ¦Р РЋРЎвЂњР РЋР вЂ№ Р В Р вЂ  X.</li><li><b>Limits:</b> Free = Р В РўвЂР В РЎвЂў <b>70</b> Р РЋР С“Р В РЎвЂўР РЋРІР‚В¦Р РЋР вЂљР В Р’В°Р В Р вЂ¦Р РЋРІР‚ВР В Р вЂ¦Р В Р вЂ¦Р РЋРІР‚в„–Р РЋРІР‚В¦ Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќ Р В РўвЂР В Р’В»Р РЋР РЏ GM + <b>70</b> Р В РўвЂР В Р’В»Р РЋР РЏ GN. Р В РІР‚СћР РЋР С“Р В Р’В»Р В РЎвЂ Р РЋРЎвЂњР В Р вЂ¦Р В РЎвЂР В РЎвЂќР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р В РЎвЂ”Р РЋРЎвЂњР В Р’В» Р РЋРЎвЂњР В Р’В·Р В РЎвЂќР В РЎвЂР В РІвЂћвЂ“, Р В РЎвЂ”Р В Р’В°Р РЋРІР‚РЋР В РЎвЂќР В Р’В° Р В Р вЂ Р В Р’ВµР РЋР вЂљР В Р вЂ¦Р РЋРІР‚ВР РЋРІР‚С™ Р В РЎВР В Р’ВµР В Р вЂ¦Р РЋР Р‰Р РЋРІвЂљВ¬Р В Р’Вµ Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќ Р В Р вЂ Р В РЎВР В Р’ВµР РЋР С“Р РЋРІР‚С™Р В РЎвЂў Р РЋРІР‚С™Р В Р’В°Р В РІвЂћвЂ“Р В Р вЂ¦Р В РЎвЂўР В РЎвЂ“Р В РЎвЂў Р РЋРЎвЂњР В РўвЂР В Р’В»Р В РЎвЂР В Р вЂ¦Р В Р’ВµР В Р вЂ¦Р В РЎвЂР РЋР РЏ.</li>'
+      ? '<li><b>Step 1:</b> Р СџР С•Р Т‘Р С”Р В»РЎР‹РЎвЂЎР С‘ РЎРѓР Р†Р С•Р в„– X handle Р С•Р Т‘Р С‘Р Р… РЎР‚Р В°Р В·.</li><li><b>Step 2:</b> Р РЋР С•Р В±Р С‘РЎР‚Р В°Р в„– English-only reply banks Р Р† <span class="kbd">GM</span> / <span class="kbd">GN</span>.</li><li><b>Step 3:</b> Р С™Р С•Р С—Р С‘РЎР‚РЎС“Р в„– РЎРѓР С• РЎРѓР В°Р в„–РЎвЂљР В° Р С‘Р В»Р С‘ Р С‘Р В· popup Р С‘ Р Р†РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР в„– Р Р†РЎР‚РЎС“РЎвЂЎР Р…РЎС“РЎР‹ Р Р† X.</li><li><b>Limits:</b> Free = Р Т‘Р С• <b>70</b> РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎвЂР Р…Р Р…РЎвЂ№РЎвЂ¦ РЎРѓРЎвЂљРЎР‚Р С•Р С” Р Т‘Р В»РЎРЏ GM + <b>70</b> Р Т‘Р В»РЎРЏ GN. Р вЂўРЎРѓР В»Р С‘ РЎС“Р Р…Р С‘Р С”Р В°Р В»РЎРЉР Р…РЎвЂ№Р в„– Р С—РЎС“Р В» РЎС“Р В·Р С”Р С‘Р в„–, Р С—Р В°РЎвЂЎР С”Р В° Р Р†Р ВµРЎР‚Р Р…РЎвЂРЎвЂљ Р СР ВµР Р…РЎРЉРЎв‚¬Р Вµ РЎРѓРЎвЂљРЎР‚Р С•Р С” Р Р†Р СР ВµРЎРѓРЎвЂљР С• РЎвЂљР В°Р в„–Р Р…Р С•Р С–Р С• РЎС“Р Т‘Р В»Р С‘Р Р…Р ВµР Р…Р С‘РЎРЏ.</li>'
       : '<li><b>Step 1:</b> Connect your X handle once.</li><li><b>Step 2:</b> Build English-only reply banks in <span class="kbd">GM</span> / <span class="kbd">GN</span>.</li><li><b>Step 3:</b> Copy from the site or popup, then paste manually on X.</li><li><b>Limits:</b> Free = up to <b>70 saved lines</b> for GM + <b>70</b> for GN. If the unique pool is tight, batch returns fewer lines instead of padding with longer replies.</li>';
     const extensionUsage = ru ? 'Daily limit' : 'Daily limit';
     const limitsNote = ru
-      ? 'Free Р РЋРІР‚В¦Р В Р вЂ Р В Р’В°Р РЋРІР‚С™Р В Р’В°Р В Р’ВµР РЋРІР‚С™, Р РЋРІР‚РЋР РЋРІР‚С™Р В РЎвЂўР В Р’В±Р РЋРІР‚в„– Р РЋР С“Р В РЎвЂ”Р В РЎвЂўР В РЎвЂќР В РЎвЂўР В РІвЂћвЂ“Р В Р вЂ¦Р В РЎвЂў Р В РЎвЂ”Р В РЎвЂўР В РЎвЂ”Р РЋР вЂљР В РЎвЂўР В Р’В±Р В РЎвЂўР В Р вЂ Р В Р’В°Р РЋРІР‚С™Р РЋР Р‰ Р В Р вЂ Р РЋР С“Р РЋРІР‚В. Р В Р’В Р В Р’ВµР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ cap Р В Р вЂ¦Р В Р’В° Р РЋР С“Р В Р’В°Р В РІвЂћвЂ“Р РЋРІР‚С™Р В Р’Вµ Р Р†Р вЂљРІР‚Сњ Р РЋР РЉР РЋРІР‚С™Р В РЎвЂў Р РЋР С“Р В РЎвЂўР РЋРІР‚В¦Р РЋР вЂљР В Р’В°Р В Р вЂ¦Р РЋРІР‚ВР В Р вЂ¦Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќР В РЎвЂ. Р В Р’В Р В Р’В°Р РЋР С“Р РЋРІвЂљВ¬Р В РЎвЂР РЋР вЂљР В Р’ВµР В Р вЂ¦Р В РЎвЂР В Р’Вµ Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В Р’В°Р РЋРІР‚ВР РЋРІР‚С™Р РЋР С“Р РЋР РЏ copy-only.'
+      ? 'Free РЎвЂ¦Р Р†Р В°РЎвЂљР В°Р ВµРЎвЂљ, РЎвЂЎРЎвЂљР С•Р В±РЎвЂ№ РЎРѓР С—Р С•Р С”Р С•Р в„–Р Р…Р С• Р С—Р С•Р С—РЎР‚Р С•Р В±Р С•Р Р†Р В°РЎвЂљРЎРЉ Р Р†РЎРѓРЎвЂ. Р В Р ВµР В°Р В»РЎРЉР Р…РЎвЂ№Р в„– cap Р Р…Р В° РЎРѓР В°Р в„–РЎвЂљР Вµ РІР‚вЂќ РЎРЊРЎвЂљР С• РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎвЂР Р…Р Р…РЎвЂ№Р Вµ РЎРѓРЎвЂљРЎР‚Р С•Р С”Р С‘. Р В Р В°РЎРѓРЎв‚¬Р С‘РЎР‚Р ВµР Р…Р С‘Р Вµ Р С•РЎРѓРЎвЂљР В°РЎвЂРЎвЂљРЎРѓРЎРЏ copy-only.'
       : 'Free is enough to try everything. Saved lines are the real site cap. The extension stays copy-only.';
     const helpDesc = ru
-      ? 'Free Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р вЂ Р В Р’В»Р РЋР РЏР В Р’ВµР РЋРІР‚С™ save-cap. Р В Р’В Р В Р’В°Р РЋР С“Р РЋРІвЂљВ¬Р В РЎвЂР РЋР вЂљР В Р’ВµР В Р вЂ¦Р В РЎвЂР В Р’Вµ Р РЋР вЂљР В Р’В°Р В Р’В±Р В РЎвЂўР РЋРІР‚С™Р В Р’В°Р В Р’ВµР РЋРІР‚С™ Р В Р вЂ  manual copy-only Р РЋР вЂљР В Р’ВµР В Р’В¶Р В РЎвЂР В РЎВР В Р’Вµ. Pro Р РЋР С“Р В Р вЂ¦Р В РЎвЂР В РЎВР В Р’В°Р В Р’ВµР РЋРІР‚С™ cap Р В РЎвЂ Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р В Р вЂ Р В Р’В°Р В Р’ВµР РЋРІР‚С™ Р В Р вЂ Р РЋР С“Р РЋРІР‚В Р В РЎвЂ”Р В РЎвЂўР РЋР С“Р В Р’В»Р В Р’Вµ on-chain verify.'
+      ? 'Free Р С•РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎвЂљ save-cap. Р В Р В°РЎРѓРЎв‚¬Р С‘РЎР‚Р ВµР Р…Р С‘Р Вµ РЎР‚Р В°Р В±Р С•РЎвЂљР В°Р ВµРЎвЂљ Р Р† manual copy-only РЎР‚Р ВµР В¶Р С‘Р СР Вµ. Pro РЎРѓР Р…Р С‘Р СР В°Р ВµРЎвЂљ cap Р С‘ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°Р ВµРЎвЂљ Р Р†РЎРѓРЎвЂ Р С—Р С•РЎРѓР В»Р Вµ on-chain verify.'
       : 'Free keeps the saved-line cap. The extension stays manual copy-only. Pro removes caps and unlocks everything after on-chain verification.';
 
     const elHDesc = $("h_desc"); if (elHDesc) elHDesc.textContent = hDesc;
@@ -6400,11 +6400,11 @@ function renderReferralRightCopy(lang){
     const elHelpDesc = $("help_desc"); if (elHelpDesc) elHelpDesc.textContent = helpDesc;
     const elPromoDaily = $("promo_k_daily"); if (elPromoDaily) elPromoDaily.textContent = extensionUsage;
     const elWalletDesc = $("wallet_desc"); if (elWalletDesc) elWalletDesc.textContent = ru
-      ? "Upgrade Pro: Р РЋР С“Р В Р вЂ¦Р РЋР РЏР РЋРІР‚С™Р РЋР Р‰ save-cap, Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р РЋРІР‚С™Р РЋР Р‰ Р В Р вЂ Р РЋР С“Р В Р’Вµ themes/skins Р В РЎвЂ Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р РЋРЎвЂњР РЋРІР‚РЋР В РЎвЂР РЋРІР‚С™Р РЋР Р‰ Р В Р’В±Р В РЎвЂўР В Р’В»Р В Р’ВµР В Р’Вµ Р РЋР С“Р В РЎвЂР В Р’В»Р РЋР Р‰Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ live-generation controls."
+      ? "Upgrade Pro: РЎРѓР Р…РЎРЏРЎвЂљРЎРЉ save-cap, Р С•РЎвЂљР С”РЎР‚РЎвЂ№РЎвЂљРЎРЉ Р Р†РЎРѓР Вµ themes/skins Р С‘ Р С—Р С•Р В»РЎС“РЎвЂЎР С‘РЎвЂљРЎРЉ Р В±Р С•Р В»Р ВµР Вµ РЎРѓР С‘Р В»РЎРЉР Р…РЎвЂ№Р Вµ live-generation controls."
       : "Upgrade Pro: remove saved-line caps, unlock all themes/skins, and get stronger live-generation controls.";
     const elLimitTitle = $("limit_modal_title"); if (elLimitTitle) elLimitTitle.textContent = ru ? "Free cap reached" : "Free cap reached";
     const elLimitDesc = $("limit_modal_desc"); if (elLimitDesc) elLimitDesc.textContent = ru
-      ? "Р В РЎС›Р РЋРІР‚в„– Р РЋРЎвЂњР В РЎвЂ”Р РЋРІР‚ВР РЋР вЂљР РЋР С“Р РЋР РЏ Р В Р вЂ  free save-cap. Pro Р РЋР С“Р В Р вЂ¦Р В РЎвЂР В РЎВР В Р’В°Р В Р’ВµР РЋРІР‚С™ cap Р В Р вЂ¦Р В Р’В° Р РЋР С“Р В РЎвЂўР РЋРІР‚В¦Р РЋР вЂљР В Р’В°Р В Р вЂ¦Р РЋРІР‚ВР В Р вЂ¦Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В РЎвЂќР В РЎвЂ Р В РЎвЂ Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р В Р вЂ Р В Р’В°Р В Р’ВµР РЋРІР‚С™ Р В Р вЂ Р РЋР С“Р РЋР вЂ№ Р В РЎвЂќР В РЎвЂўР РЋР С“Р В РЎВР В Р’ВµР РЋРІР‚С™Р В РЎвЂР В РЎвЂќР РЋРЎвЂњ."
+      ? "Р СћРЎвЂ№ РЎС“Р С—РЎвЂРЎР‚РЎРѓРЎРЏ Р Р† free save-cap. Pro РЎРѓР Р…Р С‘Р СР В°Р ВµРЎвЂљ cap Р Р…Р В° РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎвЂР Р…Р Р…РЎвЂ№Р Вµ РЎРѓРЎвЂљРЎР‚Р С•Р С”Р С‘ Р С‘ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°Р ВµРЎвЂљ Р Р†РЎРѓРЎР‹ Р С”Р С•РЎРѓР СР ВµРЎвЂљР С‘Р С”РЎС“."
       : "You reached the free saved-line cap. Pro removes the cap on saved lines and unlocks the full cosmetics catalog.";
 
     ["gm","gn"].forEach((kind)=>{
@@ -6433,10 +6433,10 @@ function renderReferralRightCopy(lang){
       const b2 = $(kind + "_badge_2"); if (b2) b2.textContent = badge2;
       const b3 = $(kind + "_badge_3"); if (b3) b3.textContent = badge3;
       const pro1 = $(kind + "_pro_1"); if (pro1) pro1.innerHTML = ru
-        ? '<b>Unlimited</b> saved lines Р В РЎвЂ Р В Р’В±Р В РЎвЂўР В Р’В»Р В Р’ВµР В Р’Вµ Р РЋР С“Р В РЎвЂР В Р’В»Р РЋР Р‰Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ live-generation Р В РЎвЂР В Р вЂ¦Р РЋР С“Р РЋРІР‚С™Р РЋР вЂљР РЋРЎвЂњР В РЎВР В Р’ВµР В Р вЂ¦Р РЋРІР‚С™Р РЋРІР‚в„–.'
+        ? '<b>Unlimited</b> saved lines Р С‘ Р В±Р С•Р В»Р ВµР Вµ РЎРѓР С‘Р В»РЎРЉР Р…РЎвЂ№Р Вµ live-generation Р С‘Р Р…РЎРѓРЎвЂљРЎР‚РЎС“Р СР ВµР Р…РЎвЂљРЎвЂ№.'
         : '<b>Unlimited</b> saved lines and stronger live-generation tools.';
       const pro2 = $(kind + "_pro_2"); if (pro2) pro2.textContent = ru
-        ? "Best live Р РЋРІР‚С™Р РЋР РЏР В Р вЂ¦Р В Р’ВµР РЋРІР‚С™ Р В Р вЂ¦Р В Р’ВµР РЋР С“Р В РЎвЂќР В РЎвЂўР В Р’В»Р РЋР Р‰Р В РЎвЂќР В РЎвЂў Р В Р вЂ¦Р В РЎвЂўР В Р вЂ Р РЋРІР‚в„–Р РЋРІР‚В¦ Р В Р вЂ Р В Р’В°Р РЋР вЂљР В РЎвЂР В Р’В°Р В Р вЂ¦Р РЋРІР‚С™Р В РЎвЂўР В Р вЂ  Р В РЎвЂ Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р вЂ Р В Р’В»Р РЋР РЏР В Р’ВµР РЋРІР‚С™ Р РЋР С“Р В Р’В°Р В РЎВР РЋРІР‚в„–Р В РІвЂћвЂ“ Р РЋР С“Р В РЎвЂР В Р’В»Р РЋР Р‰Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“."
+        ? "Best live РЎвЂљРЎРЏР Р…Р ВµРЎвЂљ Р Р…Р ВµРЎРѓР С”Р С•Р В»РЎРЉР С”Р С• Р Р…Р С•Р Р†РЎвЂ№РЎвЂ¦ Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљР С•Р Р† Р С‘ Р С•РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎвЂљ РЎРѓР В°Р СРЎвЂ№Р в„– РЎРѓР С‘Р В»РЎРЉР Р…РЎвЂ№Р в„–."
         : "Best live pulls a few fresh options and keeps the strongest one.";
       const list = $(kind + "_right_list"); if (list) list.innerHTML = listHtml;
       const dailyLabel = $(kind + "_daily_label"); if (dailyLabel) dailyLabel.textContent = extensionUsage;
@@ -6448,17 +6448,17 @@ function renderReferralRightCopy(lang){
     const ru = siteLang() === "ru";
     const note = $("r_note");
     if (note) note.textContent = ru
-      ? "Р В РЎСџР В Р’В»Р РЋР вЂ№Р РЋРІвЂљВ¬Р В РЎвЂќР В РЎвЂ Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р В Р вЂ Р В Р’В°Р РЋР вЂ№Р РЋРІР‚С™Р РЋР С“Р РЋР РЏ Р РЋРІР‚С™Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В РЎвЂќР В РЎвЂў Р В РЎвЂўР РЋРІР‚С™ Р РЋР вЂљР В Р’ВµР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В РЎвЂўР В РЎвЂ“Р В РЎвЂў Р В РЎвЂР РЋР С“Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В Р’В·Р В РЎвЂўР В Р вЂ Р В Р’В°Р В Р вЂ¦Р В РЎвЂР РЋР РЏ Р В РЎвЂ”Р РЋР вЂљР В РЎвЂўР В РўвЂР РЋРЎвЂњР В РЎвЂќР РЋРІР‚С™Р В Р’В°. Р В РЎвЂєР В РўвЂР В Р вЂ¦Р В Р’В° Р РЋР вЂљР В Р’ВµР В РЎвЂ“Р В РЎвЂР РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В Р’В°Р РЋРІР‚В Р В РЎвЂР РЋР РЏ Р РЋР С“Р В Р’В°Р В РЎВР В Р’В° Р В РЎвЂ”Р В РЎвЂў Р РЋР С“Р В Р’ВµР В Р’В±Р В Р’Вµ Р В Р вЂ¦Р В РЎвЂР РЋРІР‚РЋР В Р’ВµР В РЎвЂ“Р В РЎвЂў Р В Р вЂ¦Р В Р’Вµ Р В РўвЂР В Р’В°Р РЋРІР‚ВР РЋРІР‚С™."
+      ? "Р СџР В»РЎР‹РЎв‚¬Р С”Р С‘ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°РЎР‹РЎвЂљРЎРѓРЎРЏ РЎвЂљР С•Р В»РЎРЉР С”Р С• Р С•РЎвЂљ РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С•Р С–Р С• Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ Р С—РЎР‚Р С•Р Т‘РЎС“Р С”РЎвЂљР В°. Р С›Р Т‘Р Р…Р В° РЎР‚Р ВµР С–Р С‘РЎРѓРЎвЂљРЎР‚Р В°РЎвЂ Р С‘РЎРЏ РЎРѓР В°Р СР В° Р С—Р С• РЎРѓР ВµР В±Р Вµ Р Р…Р С‘РЎвЂЎР ВµР С–Р С• Р Р…Р Вµ Р Т‘Р В°РЎвЂРЎвЂљ."
       : "Referral perks unlock only from real product usage. A signup alone does not move anything.";
     const desc = $("r_desc");
-    if (desc) desc.textContent = ru ? "Р В Р’В§Р РЋРІР‚С™Р В РЎвЂў Р РЋР вЂљР В Р’ВµР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В РЎвЂў Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р В Р вЂ Р В Р’В°Р В Р’ВµР РЋРІР‚С™ Р РЋРЎвЂњР РЋР вЂљР В РЎвЂўР В Р вЂ Р В Р вЂ¦Р В РЎвЂ:" : "What actually unlocks perks:";
+    if (desc) desc.textContent = ru ? "Р В§РЎвЂљР С• РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С• Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°Р ВµРЎвЂљ РЎС“РЎР‚Р С•Р Р†Р Р…Р С‘:" : "What actually unlocks perks:";
     const invited = $("r_invited_note");
     if (invited) invited.textContent = ru
-      ? "Р В РІР‚вЂќР В РўвЂР В Р’ВµР РЋР С“Р РЋР Р‰ Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В Р’В°Р РЋР вЂ№Р РЋРІР‚С™Р РЋР С“Р РЋР РЏ Р РЋРІР‚С™Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В РЎвЂќР В РЎвЂў Р РЋР вЂљР В Р’ВµР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ Р В РЎвЂР РЋР С“Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В Р’В·Р В РЎвЂўР В Р вЂ Р В Р’В°Р В Р вЂ¦Р В РЎвЂР РЋР РЏ. Р В Р’В¤Р РЋР вЂљР В РЎвЂўР В РўвЂ-Р РЋРІР‚С›Р В Р’В»Р В Р’В°Р В РЎвЂ“Р В РЎвЂ Р В РЎвЂ Р В РЎвЂ”Р РЋРЎвЂњР РЋР С“Р РЋРІР‚С™Р РЋРІР‚в„–Р В Р’Вµ Р РЋР вЂљР В Р’ВµР В РЎвЂ“Р В РЎвЂР РЋР С“Р РЋРІР‚С™Р РЋР вЂљР В Р’В°Р РЋРІР‚В Р В РЎвЂР В РЎвЂ Р В Р вЂ¦Р В Р’Вµ Р В РЎвЂ”Р В РЎвЂўР В РЎвЂ”Р В Р’В°Р В РўвЂР В Р’В°Р РЋР вЂ№Р РЋРІР‚С™ Р В Р вЂ  Р РЋР С“Р В РЎвЂ”Р В РЎвЂР РЋР С“Р В РЎвЂўР В РЎвЂќ."
+      ? "Р вЂ”Р Т‘Р ВµРЎРѓРЎРЉ Р С•РЎРѓРЎвЂљР В°РЎР‹РЎвЂљРЎРѓРЎРЏ РЎвЂљР С•Р В»РЎРЉР С”Р С• РЎР‚Р ВµР В°Р В»РЎРЉР Р…РЎвЂ№Р Вµ Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ. Р В¤РЎР‚Р С•Р Т‘-РЎвЂћР В»Р В°Р С–Р С‘ Р С‘ Р С—РЎС“РЎРѓРЎвЂљРЎвЂ№Р Вµ РЎР‚Р ВµР С–Р С‘РЎРѓРЎвЂљРЎР‚Р В°РЎвЂ Р С‘Р С‘ Р Р…Р Вµ Р С—Р С•Р С—Р В°Р Т‘Р В°РЎР‹РЎвЂљ Р Р† РЎРѓР С—Р С‘РЎРѓР С•Р С”."
       : "This list shows real usage only. Fraud-flagged or empty signups do not stay here.";
     const list = $("r_list");
     if (list) list.innerHTML = ru
-      ? '<li id="r_li1">Р В РЎСџР В РЎвЂўР В РўвЂР В Р’ВµР В Р’В»Р В РЎвЂР РЋР С“Р РЋР Р‰ Р РЋР С“Р В Р вЂ Р В РЎвЂўР В Р’ВµР В РІвЂћвЂ“ Р РЋР С“Р РЋР С“Р РЋРІР‚в„–Р В Р’В»Р В РЎвЂќР В РЎвЂўР В РІвЂћвЂ“. Р В РЎС›Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В РЎвЂќР В РЎвЂў Р В РЎвЂР РЋР С“Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В Р’В·Р В РЎвЂўР В Р вЂ Р В Р’В°Р В Р вЂ¦Р В РЎвЂР В Р’Вµ Р В РўвЂР В Р вЂ Р В РЎвЂР В РЎвЂ“Р В Р’В°Р В Р’ВµР РЋРІР‚С™ Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р РЋРІР‚С™Р В РЎвЂР РЋР РЏ.</li><li id="r_li2"><b>Confirmed</b> = Р РЋРІР‚РЋР В Р’ВµР В Р’В»Р В РЎвЂўР В Р вЂ Р В Р’ВµР В РЎвЂќ Р В РЎвЂ”Р В РЎвЂўР В РўвЂР В РЎвЂќР В Р’В»Р РЋР вЂ№Р РЋРІР‚РЋР В РЎвЂР В Р’В» handle Р В РЎвЂ”Р В РЎвЂў Р РЋРІР‚С™Р В Р вЂ Р В РЎвЂўР В Р’ВµР В РІвЂћвЂ“ Р РЋР С“Р РЋР С“Р РЋРІР‚в„–Р В Р’В»Р В РЎвЂќР В Р’Вµ.</li><li id="r_li3"><b>Active</b> = Р В РЎвЂ”Р В РЎвЂўР В РўвЂР РЋРІР‚С™Р В Р вЂ Р В Р’ВµР РЋР вЂљР В Р’В¶Р В РўвЂР РЋРІР‚ВР В Р вЂ¦Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В Р’В·Р В РЎвЂўР В Р вЂ Р В Р’В°Р РЋРІР‚С™Р В Р’ВµР В Р’В»Р РЋР Р‰ Р РЋР вЂљР В Р’ВµР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В РЎвЂў Р В РЎвЂР РЋР С“Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В Р’В·Р В РЎвЂўР В Р вЂ Р В Р’В°Р В Р’В» GM Р В РЎвЂР В Р’В»Р В РЎвЂ GN.</li><li id="r_li4"><b>Eligible</b> = active + Р В Р’В°Р В Р вЂ¦Р РЋРІР‚С™Р В РЎвЂР РЋРІР‚С›Р РЋР вЂљР В РЎвЂўР В РўвЂ + Р В РЎВР В РЎвЂР В Р вЂ¦Р В РЎвЂР В РЎВР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В Р’В°Р РЋР РЏ Р В Р’В°Р В РЎвЂќР РЋРІР‚С™Р В РЎвЂР В Р вЂ Р В Р вЂ¦Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р РЋР Р‰.</li>'
+      ? '<li id="r_li1">Р СџР С•Р Т‘Р ВµР В»Р С‘РЎРѓРЎРЉ РЎРѓР Р†Р С•Р ВµР в„– РЎРѓРЎРѓРЎвЂ№Р В»Р С”Р С•Р в„–. Р СћР С•Р В»РЎРЉР С”Р С• Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘Р Вµ Р Т‘Р Р†Р С‘Р С–Р В°Р ВµРЎвЂљ Р С•РЎвЂљР С”РЎР‚РЎвЂ№РЎвЂљР С‘РЎРЏ.</li><li id="r_li2"><b>Confirmed</b> = РЎвЂЎР ВµР В»Р С•Р Р†Р ВµР С” Р С—Р С•Р Т‘Р С”Р В»РЎР‹РЎвЂЎР С‘Р В» handle Р С—Р С• РЎвЂљР Р†Р С•Р ВµР в„– РЎРѓРЎРѓРЎвЂ№Р В»Р С”Р Вµ.</li><li id="r_li3"><b>Active</b> = Р С—Р С•Р Т‘РЎвЂљР Р†Р ВµРЎР‚Р В¶Р Т‘РЎвЂР Р…Р Р…РЎвЂ№Р в„– Р С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°РЎвЂљР ВµР В»РЎРЉ РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С• Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р В» GM Р С‘Р В»Р С‘ GN.</li><li id="r_li4"><b>Eligible</b> = active + Р В°Р Р…РЎвЂљР С‘РЎвЂћРЎР‚Р С•Р Т‘ + Р СР С‘Р Р…Р С‘Р СР В°Р В»РЎРЉР Р…Р В°РЎРЏ Р В°Р С”РЎвЂљР С‘Р Р†Р Р…Р С•РЎРѓРЎвЂљРЎРЉ.</li>'
       : '<li id="r_li1">Share your link. Only real usage moves unlocks.</li><li id="r_li2"><b>Confirmed</b> = a handle connected through your link.</li><li id="r_li3"><b>Active</b> = that confirmed user actually used GM or GN.</li><li id="r_li4"><b>Eligible</b> = active + anti-fraud + minimum activity.</li>';
   }
 
@@ -7059,7 +7059,7 @@ function closeLangMenu(){
 
     CLEAN_FILL_INFLIGHT[kind] = true;
     try{
-      if (msgEl && !opts?.silent) msgEl.innerHTML = `<span class="muted">Best passР Р†Р вЂљР’В¦</span>`;
+      if (msgEl && !opts?.silent) msgEl.innerHTML = `<span class="muted">Best passРІР‚В¦</span>`;
       const res = await refillCleanFill(kind, targetCount, opts || {});
       renderList(kind);
       if (msgEl && !opts?.keepMessage){
@@ -7092,7 +7092,7 @@ function cleanupKeyLines(lines){
     let t = String(s||"");
     t = t.replace(/\s+/g, " ").trim();
     // remove leading dashes that look botted
-    t = t.replace(/^(?:-|Р Р†Р вЂљРІР‚Сљ|Р Р†Р вЂљРІР‚Сњ)+\s*/,"");
+    t = t.replace(/^(?:-|РІР‚вЂњ|РІР‚вЂќ)+\s*/,"");
     return t;
   }
 
@@ -7520,7 +7520,7 @@ INIT_DONE = true;
     if (!shouldReload()) return;
     window.__gmxRecovering = true;
     try{
-      try{ if (typeof toast === "function") toast("warn", "RecoveringР Р†Р вЂљР’В¦ reloading", 2500); }catch{}
+      try{ if (typeof toast === "function") toast("warn", "RecoveringРІР‚В¦ reloading", 2500); }catch{}
     }catch{}
     setTimeout(()=>{ try{ location.reload(); }catch{} }, 1200);
   }

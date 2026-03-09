@@ -55,20 +55,20 @@ const DEFAULT_THEME = {
 
 const FALLBACK_LINES = {
   gm: [
-    "gm, hope your day starts easy РІВР‚РїС‘РЏ",
-    "good morning, nice read here РІВвЂў",
-    "gm, strong post and a clean start РІСљРЃ",
-    "gm, hope the morning treats you well РІВР‚РїС‘РЏ",
-    "good morning, this was a solid read РІВР‚РїС‘РЏ",
-    "gm, wishing you a smooth day ahead РІВвЂў",
+    "gm, hope your day starts easy вЂпёЏ",
+    "good morning, nice read here в•",
+    "gm, strong post and a clean start вњЁ",
+    "gm, hope the morning treats you well вЂпёЏ",
+    "good morning, this was a solid read вЂпёЏ",
+    "gm, wishing you a smooth day ahead в•",
   ],
   gn: [
-    "gn, hope you get a calm reset tonight СЂСџРЉв„ў",
-    "good night, soft close here РІСљРЃ",
-    "gn, rest well after this one СЂСџРЉв„ў",
-    "good night, hope you get an easy reset СЂСџВТ‘",
-    "gn, calm post to end the day on СЂСџРЉв„ў",
-    "good night, sleep well tonight РІСљРЃ",
+    "gn, hope you get a calm reset tonight рџЊ™",
+    "good night, soft close here вњЁ",
+    "gn, rest well after this one рџЊ™",
+    "good night, hope you get an easy reset рџґ",
+    "gn, calm post to end the day on рџЊ™",
+    "good night, sleep well tonight вњЁ",
   ],
 };
 
@@ -431,7 +431,7 @@ function scoreTemplate(text) {
     else if (emojiHits > 2) score -= (emojiHits - 2) * 3;
   } catch {}
   if (/!/.test(value)) score -= 4;
-  if (/[РІР‚вЂќРІР‚вЂњ-]/.test(value)) score -= 4;
+  if (/[вЂ”вЂ“-]/.test(value)) score -= 4;
 
   if (/(coffee|brain|screen|pace|hour|desk|today|tonight|tomorrow|morning|night|rest|slow|sleep|reset|sunrise)/i.test(value)) score += 5;
   if (/(good morning|good night|hope|wishing|sleep easy|quiet reset|soft landing)/i.test(value)) score += 5;
@@ -598,10 +598,10 @@ function renderStats(usage, refStats) {
         : "Guest";
 
   if (el.planValue) el.planValue.textContent = plan;
-  if (el.gmUsed) el.gmUsed.textContent = usage && usage.gm ? `${usage.gm.used}/${usage.gm.limit}` : "РІР‚вЂќ";
-  if (el.gnUsed) el.gnUsed.textContent = usage && usage.gn ? `${usage.gn.used}/${usage.gn.limit}` : "РІР‚вЂќ";
-  if (el.refEligible) el.refEligible.textContent = refStats && Number.isFinite(Number(refStats.eligibleRefs)) ? String(refStats.eligibleRefs) : "РІР‚вЂќ";
-  if (el.refConfirmed) el.refConfirmed.textContent = refStats && Number.isFinite(Number(refStats.confirmedRefs)) ? String(refStats.confirmedRefs) : "РІР‚вЂќ";
+  if (el.gmUsed) el.gmUsed.textContent = usage && usage.gm ? `${usage.gm.used}/${usage.gm.limit}` : "вЂ”";
+  if (el.gnUsed) el.gnUsed.textContent = usage && usage.gn ? `${usage.gn.used}/${usage.gn.limit}` : "вЂ”";
+  if (el.refEligible) el.refEligible.textContent = refStats && Number.isFinite(Number(refStats.eligibleRefs)) ? String(refStats.eligibleRefs) : "вЂ”";
+  if (el.refConfirmed) el.refConfirmed.textContent = refStats && Number.isFinite(Number(refStats.confirmedRefs)) ? String(refStats.confirmedRefs) : "вЂ”";
   if (el.statsHint) {
     el.statsHint.textContent = state.token
       ? "Connected snapshot from your backend. Buttons still only copy text."
@@ -708,7 +708,7 @@ async function persistLastText(text) {
 
 async function copyKind(kind, preferBest = false) {
   const safeKind = kind === "gn" ? "gn" : "gm";
-  setCopyStatus(`Loading ${preferBest ? "best " : ""}${safeKind.toUpperCase()}РІР‚В¦`);
+  setCopyStatus(`Loading ${preferBest ? "best " : ""}${safeKind.toUpperCase()}вЂ¦`);
   await ensureCache(safeKind, preferBest ? 5 : 1);
   let picked = consumeFromCache(safeKind, preferBest);
   if (!picked) {
@@ -776,7 +776,7 @@ async function queryAllTabs() {
 async function syncFromSite(options = {}) {
   const openIfMissing = options.openIfMissing !== false;
   const silent = options.silent === true;
-  if (!silent) setConnectStatus("Looking for an open site tabРІР‚В¦");
+  if (!silent) setConnectStatus("Looking for an open site tabвЂ¦");
   const tabs = await queryAllTabs();
   const siteTabs = (tabs || []).filter((tab) => isSiteUrl(tab.url));
 
@@ -844,7 +844,7 @@ async function connectHandle() {
     setConnectStatus("Enter a valid @handle", "bad");
     return;
   }
-  setConnectStatus("ConnectingРІР‚В¦");
+  setConnectStatus("ConnectingвЂ¦");
   const result = await apiRequest("/api/user/init", {
     method: "POST",
     body: { handle },
@@ -852,7 +852,7 @@ async function connectHandle() {
   if (!result.ok || !result.data || !result.data.token) {
     const msg = friendlyError(result);
     if (/Use site session instead/i.test(msg)) {
-      setConnectStatus("This handle already exists. Trying site syncРІР‚В¦");
+      setConnectStatus("This handle already exists. Trying site syncвЂ¦");
       const synced = await syncFromSite({ openIfMissing: true, silent: true });
       if (synced) {
         setConnectStatus(`Using site session @${state.handle}`, "good");
@@ -935,7 +935,7 @@ function bindEvents() {
       LEGACY_KEYS.handle,
       LEGACY_KEYS.token,
     ]);
-    const themeKeys = new Set([...Object.values(THEME_KEYS), ...Object.values(LEGACY_THEME_KEYS)]);
+    const themeKeys = new Set(Object.values(THEME_KEYS));
     let needsAuthRefresh = false;
     let needsThemeRefresh = false;
     let needsPreviewRefresh = false;
@@ -970,7 +970,7 @@ function bindEvents() {
   await applyThemeUi();
   applySessionUi();
   if (el.shortcutHint) {
-    el.shortcutHint.textContent = "Optional shortcut: assign one yourself in chrome://extensions/shortcuts for РІР‚СљOpen GMXReply quick panelРІР‚Сњ";
+    el.shortcutHint.textContent = "Optional shortcut: assign one yourself in chrome://extensions/shortcuts for вЂњOpen GMXReply quick panelвЂќ";
   }
   await syncFromSite({ openIfMissing: false, silent: true });
   await refreshSnapshot();
