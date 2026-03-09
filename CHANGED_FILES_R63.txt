@@ -1,6 +1,0 @@
-Backend/public/app.js
-Backend/frontend/public/app.js
-Backend/public/app.html
-Backend/frontend/src/legacy/legacyBody.html
-Backend/RECOVERY_SINGLE_BANK_R63_NOTE.txt
-Backend/CHANGED_FILES_R63.txt
