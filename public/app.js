@@ -272,10 +272,10 @@ function cleanFillCopy(kind){
       button: on ? (ru ? "Best pass: on" : "Best pass: on") : (ru ? "Best pass: off" : "Best pass: off"),
       hint: on
         ? (ru
-            ? "Р вЂ™Р С”Р В»РЎР‹РЎвЂЎР ВµР Р…Р С•: Best pass Р С—Р С•РЎРѓР В»Р Вµ Р В·Р В°Р С—РЎС“РЎРѓР С”Р В° РЎР‚Р ВµР В¶Р ВµРЎвЂљ shape-Р Т‘РЎС“Р В±Р В»Р С‘ Р Р† РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎвЂР Р…Р Р…Р С•Р С РЎРѓР С—Р С‘РЎРѓР С”Р Вµ Р С‘ Р Т‘Р С•Р В±Р С‘Р Р†Р В°Р ВµРЎвЂљ Р Р…Р ВµР Т‘Р С•РЎРѓРЎвЂљР В°РЎР‹РЎвЂ°Р ВµР Вµ Р С•Р В±РЎР‚Р В°РЎвЂљР Р…Р С• Р Т‘Р С• РЎвЂљР ВµР С”РЎС“РЎвЂ°Р ВµР в„– РЎвЂ Р ВµР В»Р С‘."
+            ? "Включено: Best pass после запуска режет shape-дубли в сохранённом списке и добивает недостающее обратно до текущей цели."
             : "On: Best pass prunes shape-level near-duplicates from the saved list, then refills the missing slots back to your current target.")
         : (ru
-            ? "Р вЂ™РЎвЂ№Р С”Р В»РЎР‹РЎвЂЎР ВµР Р…Р С•: Р С–Р ВµР Р…Р ВµРЎР‚Р В°РЎвЂ Р С‘РЎРЏ Р С•РЎРѓРЎвЂљР В°РЎвЂРЎвЂљРЎРѓРЎРЏ Р С—РЎР‚Р С•РЎРѓРЎвЂљР С• random fill. Р вЂ™Р С”Р В»РЎР‹РЎвЂЎР В°Р в„– РЎвЂљР С•Р В»РЎРЉР С”Р С• Р С”Р С•Р С–Р Т‘Р В° РЎвЂ¦Р С•РЎвЂЎР ВµРЎв‚¬РЎРЉ Р С—РЎР‚Р С•Р С–Р Р…Р В°РЎвЂљРЎРЉ Best pass Р С—Р С• Р В±Р В°Р Р…Р С”РЎС“ Р С‘ Р Т‘Р С•Р В±Р С‘РЎвЂљРЎРЉ Р С—РЎР‚Р С•Р В±Р ВµР В»РЎвЂ№ Р С•Р В±РЎР‚Р В°РЎвЂљР Р…Р С•."
+            ? "Выключено: генерация остаётся просто random fill. Включай только когда хочешь прогнать Best pass по банку и добить пробелы обратно."
             : "Off: generation stays pure random fill. Turn it on only when you want one cleanup pass on the saved bank and a refill back to target."),
       action: ru ? "Run best pass" : "Run best pass"
     };
@@ -468,7 +468,7 @@ function listCustomBgUsedTabs(){
     document.body.classList.toggle("hasUserBg", on);
   }
 
-  async function fitImageToCoverDataUrl(file, maxW=2400, maxH=1350, quality=0.90){
+  async function fitImageToCoverDataUrl(file, maxW=1920, maxH=1080, quality=0.86){
     // Downscale + crop-to-cover to keep localStorage small and ensure it fits the page.
     // Output: JPEG data URL.
     return new Promise((resolve, reject)=>{
@@ -637,7 +637,7 @@ function readFileAsDataURL(file){
     const src = await readFileAsDataURL(file);
     const img = await loadImage(src);
 
-    const MAX = 2400; // max dimension
+    const MAX = 2200; // max dimension
     let w = img.naturalWidth || img.width;
     let h = img.naturalHeight || img.height;
     if (!w || !h) return src;
@@ -716,12 +716,12 @@ function readFileAsDataURL(file){
   })();
 
 
-  // Wallpapers РІР‚вЂќ per-tab. Honest catalog: 2 free SVG + 58 photo packs + 8 premium lux wallpapers.
+  // Wallpapers — per-tab. Honest catalog: 2 free SVG + 58 photo packs + 8 premium lux wallpapers.
   const LS_WP_GLOBAL = "gmx_wp_all";
   const LS_WP_TAB_PREFIX = "gmx_wp_tab_"; // + tab name
   const SITE_WALLPAPER_FREE = [
-    ["free01", "Free РІР‚вЂќ Solana Waves"],
-    ["free02", "Free РІР‚вЂќ Solflare Glow"],
+    ["free01", "Free — Solana Waves"],
+    ["free02", "Free — Solflare Glow"],
   ];
   const SITE_WALLPAPER_PACK_COUNT = 58;
   const SITE_WALLPAPER_FREE_PACK_COUNT = 6;
@@ -900,63 +900,16 @@ function readFileAsDataURL(file){
   }
 
   function applyWallpaper(tab){
-  const id = getWallpaperForTab(tab);
-  const wp = WALLPAPERS.find(x=>x.id===id) || null;
-  let idx = -1;
-  try{ idx = wp ? WALLPAPERS.findIndex(x=>x.id===id) : -1; }catch{}
-  const ok = wp ? wallpaperUnlocked(wp, idx) : true;
-  const css = (id && ok) ? wallpaperUrl(id) : "none";
-  const wallOn = css !== "none";
-  const isPhotoPack = Boolean(id && /^v2_/i.test(String(id)));
-  const isLuxPack = Boolean(id && /^lux_/i.test(String(id)));
+    const id = getWallpaperForTab(tab);
+    const wp = WALLPAPERS.find(x=>x.id===id) || null;
+    let idx = -1;
+    try{ idx = wp ? WALLPAPERS.findIndex(x=>x.id===id) : -1; }catch{}
+    const ok = wp ? wallpaperUnlocked(wp, idx) : true;
 
-  document.documentElement.style.setProperty("--bg_wall", css);
-  document.documentElement.style.setProperty("--site_wall_opacity", wallOn ? (isLuxPack ? "0.48" : isPhotoPack ? "0.34" : "0.26") : "0");
-  document.documentElement.style.setProperty("--site_wall_blur", wallOn ? (isLuxPack ? "10px" : isPhotoPack ? "6px" : "2px") : "0px");
-  document.documentElement.style.setProperty("--site_wall_scale", wallOn ? (isLuxPack ? "1.08" : "1.05") : "1");
-  document.body.classList.toggle("hasWallBg", wallOn);
-}
-
-let __gmxCosmeticSyncTimer = 0;
-function isCosmeticStorageKey(key){
-  const k = String(key || "");
-  return /^gmx_(theme$|wp_|custom_bg|ext_theme|ext_view|ext_wp|ext_custom_bg)/i.test(k);
-}
-function scheduleCosmeticRefresh(reason){
-  try{ clearTimeout(__gmxCosmeticSyncTimer); }catch(_e){}
-  __gmxCosmeticSyncTimer = setTimeout(()=>{
-    const activeTab = (typeof currentTabName === "function") ? currentTabName() : "home";
-    try{ applyWallpaper(activeTab); }catch(_e){}
-    try{ applyUserBg(activeTab); }catch(_e){}
-    try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: reason || "cosmetic_change" }, "*"); }catch(_e){}
-  }, 60);
-}
-(function bootstrapCosmeticSyncBridge(){
-  try{
-    if (window.__gmxCosmeticSyncBridge === true) return;
-    window.__gmxCosmeticSyncBridge = true;
-    const proto = (typeof Storage !== "undefined" && Storage.prototype) ? Storage.prototype : null;
-    if (!proto) return;
-
-    const rawSet = proto.setItem;
-    const rawRemove = proto.removeItem;
-
-    if (typeof rawSet === "function"){
-      proto.setItem = function(key, value){
-        const out = rawSet.apply(this, arguments);
-        try{ if (this === localStorage && isCosmeticStorageKey(key)) scheduleCosmeticRefresh(`set:${key}`); }catch(_e){}
-        return out;
-      };
-    }
-    if (typeof rawRemove === "function"){
-      proto.removeItem = function(key){
-        const out = rawRemove.apply(this, arguments);
-        try{ if (this === localStorage && isCosmeticStorageKey(key)) scheduleCosmeticRefresh(`remove:${key}`); }catch(_e){}
-        return out;
-      };
-    }
-  }catch(_e){}
-})();
+    const css = (id && ok) ? wallpaperUrl(id) : "none";
+    document.documentElement.style.setProperty("--bg_wall", css);
+    document.body.classList.toggle("hasWallBg", css !== "none");
+  }
 
   
   function sanitizeI18nValue(lang, value, fallback){
@@ -970,7 +923,7 @@ function scheduleCosmeticRefresh(reason){
     if (typeof value === "string"){
       const txt = value.trim();
       if (!txt) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
-      if (!allowCyr && /[\u0400-\u04FF]/u.test(value)) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
+      if (!allowCyr && /[Ѐ-ӿ]/.test(value)) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
       return value;
     }
     if (value === undefined || value === null) return fallback;
@@ -1214,17 +1167,17 @@ function renderWallpaperUI(){
 // --- Flags + language chips (By language) ---
     function flagEmoji(code){
     const m = {
-      en:"СЂСџвЂЎС”СЂСџвЂЎС‘", es:"СЂСџвЂЎР„СЂСџвЂЎС‘", pt:"СЂСџвЂЎВµСЂСџвЂЎв„–", fr:"СЂСџвЂЎВ«СЂСџвЂЎВ·", de:"СЂСџвЂЎВ©СЂСџвЂЎР„", it:"СЂСџвЂЎВ®СЂСџвЂЎв„–", nl:"СЂСџвЂЎС–СЂСџвЂЎВ±",
-      tr:"СЂСџвЂЎв„–СЂСџвЂЎВ·", pl:"СЂСџвЂЎВµСЂСџвЂЎВ±", id:"СЂСџвЂЎВ®СЂСџвЂЎВ©", ru:"СЂСџвЂЎВ·СЂСџвЂЎС”", uk:"СЂСџвЂЎС”СЂСџвЂЎВ¦", hi:"СЂСџвЂЎВ®СЂСџвЂЎС–", ja:"СЂСџвЂЎР‡СЂСџвЂЎВµ", zh:"СЂСџвЂЎРЃСЂСџвЂЎС–"
+      en:"🇺🇸", es:"🇪🇸", pt:"🇵🇹", fr:"🇫🇷", de:"🇩🇪", it:"🇮🇹", nl:"🇳🇱",
+      tr:"🇹🇷", pl:"🇵🇱", id:"🇮🇩", ru:"🇷🇺", uk:"🇺🇦", hi:"🇮🇳", ja:"🇯🇵", zh:"🇨🇳"
     };
-    return m[code] || "СЂСџРЉС’";
+    return m[code] || "🌐";
   }
 
   function updateLangFlags(){
     const site = $("siteLang")?.value || "en";
     const gm = $("gmLang")?.value || "en";
     const gn = $("gnLang")?.value || "en";
-    if ($("siteLangFlag")) $("siteLangFlag").textContent = (site === "en") ? "СЂСџРЉС’" : flagEmoji(site);
+    if ($("siteLangFlag")) $("siteLangFlag").textContent = (site === "en") ? "🌐" : flagEmoji(site);
     if ($("gmLangFlag")) $("gmLangFlag").textContent = flagEmoji(gm);
     if ($("gnLangFlag")) $("gnLangFlag").textContent = flagEmoji(gn);
   }
@@ -2247,7 +2200,7 @@ const $ = (id) => document.getElementById(id);
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
     if (msgEl){
       if (on){
-        msgEl.innerHTML = `<span class="spinner"></span> <span class="muted">${escapeHtml(label||"WorkingРІР‚В¦")}</span>`;
+        msgEl.innerHTML = `<span class="spinner"></span> <span class="muted">${escapeHtml(label||"Working…")}</span>`;
       } else {
         // keep whatever message was set by the action; do not overwrite
       }
@@ -2379,13 +2332,13 @@ const $ = (id) => document.getElementById(id);
       ? {
           btn: (siteLang() === "ru") ? "Best: live" : "Best: live",
           hint: (siteLang() === "ru")
-            ? "Best live РЎвЂљРЎРЏР Р…Р ВµРЎвЂљ РЎРѓР Р†Р ВµР В¶Р С‘Р Вµ Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљРЎвЂ№, Р Р†РЎвЂ№Р В±Р С‘РЎР‚Р В°Р ВµРЎвЂљ РЎРѓР В°Р СРЎвЂ№Р в„– РЎРѓР С‘Р В»РЎРЉР Р…РЎвЂ№Р в„– Р С‘ РЎРѓРЎР‚Р В°Р В·РЎС“ РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎРЏР ВµРЎвЂљ Р ВµР С–Р С•."
+            ? "Best live тянет свежие варианты, выбирает самый сильный и сразу сохраняет его."
             : "Best live pulls fresh options, keeps the strongest one, and saves it."
         }
       : {
           btn: (siteLang() === "ru") ? "Best: saved" : "Best: saved",
           hint: (siteLang() === "ru")
-            ? "Best Р В±Р ВµРЎР‚РЎвЂРЎвЂљ РЎРѓР В°Р СРЎвЂ№Р в„– РЎРѓР С‘Р В»РЎРЉР Р…РЎвЂ№Р в„– Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљ Р С‘Р В· РЎвЂљР Р†Р С•Р ВµР С–Р С• РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎвЂР Р…Р Р…Р С•Р С–Р С• РЎРѓР С—Р С‘РЎРѓР С”Р В°."
+            ? "Best берёт самый сильный вариант из твоего сохранённого списка."
             : "Best uses the strongest line from your saved list."
         };
   }
@@ -2753,7 +2706,7 @@ const $ = (id) => document.getElementById(id);
         const j = await api("/api/version?x=1");
         const now = String(j.build || "");
         if (last && now && now !== last){
-          toast("ok", "Update installed. ReloadingРІР‚В¦");
+          toast("ok", "Update installed. Reloading…");
           setTimeout(()=>{ try{ location.reload(); }catch{} }, 700);
         }
         if (now) last = now;
@@ -2775,7 +2728,7 @@ const $ = (id) => document.getElementById(id);
     const v = $(valId);
     const f = $(fillId);
     const cap = normLimitForUI(limit);
-    if (v) v.textContent = (cap === Infinity) ? `${used}/РІв‚¬С›` : `${used}/${cap}`;
+    if (v) v.textContent = (cap === Infinity) ? `${used}/∞` : `${used}/${cap}`;
     if (f){
       const pct = (cap === Infinity) ? 100 : (cap ? Math.min(100, Math.round((used/cap)*100)) : 0);
       f.style.width = pct + "%";
@@ -2791,12 +2744,12 @@ function renderHelpModal(){
   const gnLimit = normLimitForUI(LAST_USAGE?.gn?.limit ?? 70);
 
   const savedEl = $("help_saved");
-  if (savedEl) savedEl.textContent = isPro() ? `GM ${gmSaved}/РІв‚¬С› РІР‚Сћ GN ${gnSaved}/РІв‚¬С›` : `GM ${gmSaved}/${SAVE_CAP_FREE} РІР‚Сћ GN ${gnSaved}/${SAVE_CAP_FREE}`;
+  if (savedEl) savedEl.textContent = isPro() ? `GM ${gmSaved}/∞ • GN ${gnSaved}/∞` : `GM ${gmSaved}/${SAVE_CAP_FREE} • GN ${gnSaved}/${SAVE_CAP_FREE}`;
 
   const dailyEl = $("help_daily");
   if (dailyEl) dailyEl.textContent = (isPro() || gmLimit===Infinity || gnLimit===Infinity)
-    ? `GM ${gmUsed}/РІв‚¬С› РІР‚Сћ GN ${gnUsed}/РІв‚¬С›`
-    : `GM ${gmUsed}/${gmLimit} РІР‚Сћ GN ${gnUsed}/${gnLimit}`;
+    ? `GM ${gmUsed}/∞ • GN ${gnUsed}/∞`
+    : `GM ${gmUsed}/${gmLimit} • GN ${gnUsed}/${gnLimit}`;
 
   // aggregate bars
   const savedFill = $("helpSavedFill");
@@ -2876,8 +2829,8 @@ async function refreshUsage(){
       const gnCapUI = normLimitForUI(gn.limit);
       const up = $("usedPill");
       if (up) up.textContent = (isPro() || gmCapUI===Infinity || gnCapUI===Infinity)
-        ? `GM ${gm.used}/РІв‚¬С› РІР‚Сћ GN ${gn.used}/РІв‚¬С›`
-        : `GM ${gm.used}/${gmCapUI} РІР‚Сћ GN ${gn.used}/${gnCapUI}`;
+        ? `GM ${gm.used}/∞ • GN ${gn.used}/∞`
+        : `GM ${gm.used}/${gmCapUI} • GN ${gn.used}/${gnCapUI}`;
 
       // Header status pills
       try{
@@ -3055,7 +3008,7 @@ function scoreLineForBest(kind, s){
   else score -= (clauses.length - 3) * 4;
 
   if (/[\.\!\?]$/.test(t)) score -= 2;
-  if (/[РІР‚вЂќРІР‚вЂњ-]/.test(t)) score -= 5;
+  if (/[—–-]/.test(t)) score -= 5;
   try {
     const emojiHits = (t.match(/[\u{1F300}-\u{1FAFF}]/gu) || []).length;
     if (emojiHits === 1) score += 5;
@@ -3198,18 +3151,18 @@ async function doBestServer(kind){
   const antiN = antiWindow(strength);
   const keyActive = activeKey(kind);
 
-  setBusy(kind, true, (siteLang() === "ru") ? "Р вЂ™РЎвЂ№Р В±Р С‘РЎР‚Р В°РЎР‹ Р В»РЎС“РЎвЂЎРЎв‚¬Р С‘Р в„– Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљРІР‚В¦" : "Picking the best replyРІР‚В¦");
+  setBusy(kind, true, (siteLang() === "ru") ? "Выбираю лучший вариант…" : "Picking the best reply…");
   try{
     const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}&count=5`, "GET", null, { timeoutMs: 30000 });
     const candidates = dedupeLines((bulk && bulk.list) ? bulk.list : []).map(x=>String(x||"").trim()).filter(Boolean);
     if (!candidates.length){
-      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((siteLang() === "ru") ? "Р РЋР ВµРЎР‚Р Р†Р ВµРЎР‚ Р Р…Р Вµ Р Р†Р ВµРЎР‚Р Р…РЎС“Р В» Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљРЎвЂ№" : "No fresh candidates returned")}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((siteLang() === "ru") ? "Сервер не вернул варианты" : "No fresh candidates returned")}</span>`;
       return;
     }
 
     const best = String(pickBestLine(kind, candidates) || "").trim();
     if (!best){
-      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((siteLang() === "ru") ? "Р СњР Вµ РЎС“Р Т‘Р В°Р В»Р С•РЎРѓРЎРЉ Р Р†РЎвЂ№Р В±РЎР‚Р В°РЎвЂљРЎРЉ Р В»РЎС“РЎвЂЎРЎв‚¬Р С‘Р в„– Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљ" : "Could not choose the best reply")}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((siteLang() === "ru") ? "Не удалось выбрать лучший вариант" : "Could not choose the best reply")}</span>`;
       return;
     }
 
@@ -3239,8 +3192,8 @@ async function doBestServer(kind){
     renderList(kind);
     if (msgEl){
       const head = already
-        ? ((siteLang() === "ru") ? "Best РЎС“Р В¶Р Вµ Р В±РЎвЂ№Р В» Р Р† РЎРѓР С—Р С‘РЎРѓР С”Р Вµ" : "Best already saved")
-        : (saved ? ((siteLang() === "ru") ? "Best Р Т‘Р С•Р В±Р В°Р Р†Р В»Р ВµР Р…" : "Best saved") : ((siteLang() === "ru") ? "Best РЎРѓР С”Р С•Р С—Р С‘РЎР‚Р С•Р Р†Р В°Р Р…" : "Best copied"));
+        ? ((siteLang() === "ru") ? "Best уже был в списке" : "Best already saved")
+        : (saved ? ((siteLang() === "ru") ? "Best добавлен" : "Best saved") : ((siteLang() === "ru") ? "Best скопирован" : "Best copied"));
       msgEl.innerHTML = `<span class="ok">${escapeHtml(head)}</span> <span class="muted small">${escapeHtml(best)}</span>`;
     }
     try{ await refreshUsage(); }catch(_e){}
@@ -3300,7 +3253,7 @@ function replaceRandomSavedLine(kind, newLine){
     const totalEl = kind==='gm' ? $('gmTotal') : $('gnTotal');
     const capEl = kind==='gm' ? $('gmCap') : $('gnCap');
     if (totalEl) totalEl.textContent = totalSaved(kind);
-    if (capEl) capEl.textContent = isPro() ? 'РІв‚¬С›' : String(SAVE_CAP_FREE);
+    if (capEl) capEl.textContent = isPro() ? '∞' : String(SAVE_CAP_FREE);
     const brEl = kind==='gm' ? $('gmSavedBreakdown') : $('gnSavedBreakdown');
     if (brEl){
       brEl.textContent = 'Saved bank: ' + totalSaved(kind);
@@ -3314,7 +3267,7 @@ function replaceRandomSavedLine(kind, newLine){
       const fillId = (kind==="gm") ? "gmSavedFill" : "gnSavedFill";
       const v = $(valId);
       const f = $(fillId);
-      if (v) v.textContent = isPro() ? `${used}/РІв‚¬С›` : `${used}/${cap}`;
+      if (v) v.textContent = isPro() ? `${used}/∞` : `${used}/${cap}`;
       if (f) f.style.width = isPro() ? "100%" : (Math.min(100, Math.round((used/cap)*100)) + "%");
 
       if (!$("help_modal")?.classList.contains("hidden")) renderHelpModal();
@@ -3447,7 +3400,7 @@ function replaceRandomSavedLine(kind, newLine){
       row.innerHTML = `
         <div class="idx">${pos+1}</div>
         <input class="lineInput" name="line" aria-label="Saved reply ${pos+1}" value="${escapeHtml(val)}" />
-        <button class="delBtn" title="Remove" type="button">Р“вЂ”</button>
+        <button class="delBtn" title="Remove" type="button">×</button>
       `;
       const input = row.querySelector("input");
       const del = row.querySelector("button");
@@ -3780,7 +3733,7 @@ if (effCount <= 0){
   return;
 }
       if (INFLIGHT[kind]){
-      if (msgEl) msgEl.innerHTML = '<span class="muted">WorkingРІР‚В¦</span>';
+      if (msgEl) msgEl.innerHTML = '<span class="muted">Working…</span>';
       return;
     }
     INFLIGHT[kind] = true;
@@ -4070,7 +4023,7 @@ async function loadLeaderboard(days){
         // rank in top list, else show ">50"
         const idx = top.findIndex(r=>String(r.handle||"")===String(me.handle||""));
         const rank = idx >= 0 ? String(idx+1) : ">50";
-        you.innerHTML = `${escapeHtml(t('lb_you')||'You')}: <b>#${rank}</b> @${h} Р’В· ${escapeHtml(t('lb_eligible')||'Eligible')}: <b>${eligible}</b>`;
+        you.innerHTML = `${escapeHtml(t('lb_you')||'You')}: <b>#${rank}</b> @${h} · ${escapeHtml(t('lb_eligible')||'Eligible')}: <b>${eligible}</b>`;
       } else {
         you.textContent = getHandle() ? "" : (t('connectFirst') || "Connect first.");
       }
@@ -4119,7 +4072,7 @@ function bindLeaderboardUI(){
   async function loadRefInvited(days=30){
     const body = $("refInvitedBody");
     if (!body) return;
-    body.innerHTML = `<tr><td colspan="4" class="muted">${t("r_loading") || "LoadingРІР‚В¦"}<\/td><\/tr>`;
+    body.innerHTML = `<tr><td colspan="4" class="muted">${t("r_loading") || "Loading…"}<\/td><\/tr>`;
     const j = await api("/api/referral/list?days=" + encodeURIComponent(String(days)));
     if (!j || !j.ok) throw new Error("ref_list_failed");
     const list = Array.isArray(j.list) ? j.list : [];
@@ -4143,7 +4096,7 @@ async function loadRefLeaderboard(days=90){
   const meEl = $("refLeaderMe");
   const lang = localStorage.getItem(LS_SITE_LANG) || "en";
   const ui = getReferralUiCopy(lang);
-  if (body) body.innerHTML = `<tr><td colspan="3" class="muted">${escapeHtml(ui.leaderboardLoading || "LoadingРІР‚В¦")}</td></tr>`;
+  if (body) body.innerHTML = `<tr><td colspan="3" class="muted">${escapeHtml(ui.leaderboardLoading || "Loading…")}</td></tr>`;
   const j = await api("/api/leaderboard/referrals?days=" + encodeURIComponent(String(days)));
   if (!j || !j.ok) throw new Error("leaderboard_failed");
   const top = Array.isArray(j.top) ? j.top : [];
@@ -4154,7 +4107,7 @@ async function loadRefLeaderboard(days=90){
   }
   if (meEl){
     if (j.me && j.me.handle){
-      meEl.textContent = `${ui.youLabel || "You"}: ${j.me.handle} РІР‚вЂќ ${ui.eligible}: ${Number(j.me.eligible||0)} (${ui.rulesLabel || "rules"}: РІвЂ°Тђ${j.rules?.minInserts||5} inserts + РІвЂ°Тђ${j.rules?.minActiveDays||3} active days in ${days}d)`;
+      meEl.textContent = `${ui.youLabel || "You"}: ${j.me.handle} — ${ui.eligible}: ${Number(j.me.eligible||0)} (${ui.rulesLabel || "rules"}: ≥${j.rules?.minInserts||5} inserts + ≥${j.rules?.minActiveDays||3} active days in ${days}d)`;
     } else {
       meEl.textContent = "";
     }
@@ -4321,7 +4274,7 @@ const msg = $("refMsg");
     try{
       const s = String(pk?.toString?.() || pk || "");
       if (!s) return "";
-      return s.slice(0,4) + "РІР‚В¦" + s.slice(-4);
+      return s.slice(0,4) + "…" + s.slice(-4);
     }catch{ return ""; }
   }
 
@@ -4476,7 +4429,7 @@ function openWalletModal(){
     renderWalletList();
     // receiver hint
     const r = $("sf_modal_receiver");
-    if (r) r.textContent = BILLING?.receiver ? shortPk(BILLING.receiver) : "РІР‚вЂќ";
+    if (r) r.textContent = BILLING?.receiver ? shortPk(BILLING.receiver) : "—";
     const hm = $("sf_modal_msg");
     if (hm) hm.textContent = "";
   }
@@ -4557,7 +4510,7 @@ if (src){
         const msg = $("sf_modal_msg");
         try{
           connectBtn.disabled = true;
-          if (msg) msg.textContent = "Opening walletРІР‚В¦";
+          if (msg) msg.textContent = "Opening wallet…";
           await connectWalletByChoice(picked);
           closeWalletModal();
           const out = $("w_msg");
@@ -4744,7 +4697,7 @@ if (src){
       return `$${plan.usd}`;
     }
     const sol = fmtSol(plan.solApprox || 0);
-    return sol ? `РІвЂ°в‚¬ ${sol} SOL` : "";
+    return sol ? `≈ ${sol} SOL` : "";
   }
 
   function renderPlanGrid(){
@@ -4831,7 +4784,7 @@ if (src){
       list.innerHTML = "";
       if (!items.length){
         list.innerHTML = `<div class="muted">No receipts yet.</div>`;
-        stats.textContent = "РІР‚вЂќ";
+        stats.textContent = "—";
         return;
       }
       stats.textContent = `${items.length} receipt${items.length===1?"":"s"}`;
@@ -4853,7 +4806,7 @@ if (src){
       }
     }catch(e){
       list.innerHTML = `<div class="muted">Receipts unavailable.</div>`;
-      stats.textContent = "РІР‚вЂќ";
+      stats.textContent = "—";
     }
   }
 
@@ -5116,7 +5069,7 @@ if (src){
     const list = $("w_activity_list");
     const msg = $("w_activity_msg");
     if (msg) msg.textContent = "";
-    if (list) list.innerHTML = '<div class="muted">LoadingРІР‚В¦</div>';
+    if (list) list.innerHTML = '<div class="muted">Loading…</div>';
     try{
       if (!getHandle()){
         if (list) list.innerHTML = '<div class="muted">Sign in to see activity.</div>';
@@ -5198,27 +5151,27 @@ async function payNow(){
       PAY_INFLIGHT = true;
       if (payBtn) payBtn.disabled = true;
 
-      setPayState("processing", "Creating checkoutРІР‚В¦");
-      if (msg) msg.textContent = "Creating paymentРІР‚В¦";
+      setPayState("processing", "Creating checkout…");
+      if (msg) msg.textContent = "Creating payment…";
       trackEvent("pay_click", { v, plan: selectedPlan.key, cur, source:"wallet_tab" });
 
       const intent = await api("/api/billing/intent", "POST", { planKey: selectedPlan.key, currency: cur });
 
-      setPayState("processing", "Binding walletРІР‚В¦");
-      if (msg) msg.textContent = "Sign the wallet message to bind this checkoutРІР‚В¦";
+      setPayState("processing", "Binding wallet…");
+      if (msg) msg.textContent = "Sign the wallet message to bind this checkout…";
       await bindWalletToIntent(intent);
 
-      setPayState("processing", "Building transactionРІР‚В¦");
-      if (msg) msg.textContent = "Building transactionРІР‚В¦";
+      setPayState("processing", "Building transaction…");
+      if (msg) msg.textContent = "Building transaction…";
       const built = await buildPaymentTx(intent);
 
-      setPayState("processing", "Approve in walletРІР‚В¦");
-      if (msg) msg.textContent = "Approve the transaction in your walletРІР‚В¦";
+      setPayState("processing", "Approve in wallet…");
+      if (msg) msg.textContent = "Approve the transaction in your wallet…";
       const payer = String(WALLET.publicKey?.toString?.() || "");
       const sig = await walletSendTransaction(built.tx, built.connection);
 
-      setPayState("confirming", "Confirming on-chainРІР‚В¦");
-      if (msg) msg.textContent = "Confirming & verifying on-chainРІР‚В¦";
+      setPayState("confirming", "Confirming on-chain…");
+      if (msg) msg.textContent = "Confirming & verifying on-chain…";
       const j = await verifyIntentWithRetry(intent.id, sig, payer);
 
       setPayState("verified", "Verified. Pro activated.");
@@ -5747,98 +5700,98 @@ function getReferralUiCopy(lang){
       discount: "50% off 1 month",
       toolkit: "Referral Toolkit",
       copied: "Copied.",
-      leaderboardLoading: "LoadingРІР‚В¦",
+      leaderboardLoading: "Loading…",
       leaderboardEmpty: "No data yet",
       youLabel: "You",
       rulesLabel: "rules"
     },
     es: {
-      title: "CР“С–mo funciona",
-      note: "Los referidos desbloquean ventajas solo despuР“В©s de uso real del producto (no solo registros).",
+      title: "Cómo funciona",
+      note: "Los referidos desbloquean ventajas solo después de uso real del producto (no solo registros).",
       desc: "Ruta de desbloqueo:",
       items: [
         "Confirmed cuenta cuando alguien conecta un handle con tu enlace.",
         "Active cuenta usuarios confirmados con uso registrado.",
-        "Eligible cuenta solo despuР“В©s de uso real, controles antifraude y el umbral mР“В­nimo de actividad.",
-        "Los referidos desbloquean ventajas. Free mantiene el lР“В­mite de lР“В­neas guardadas. Pro elimina lР“В­mites y desbloquea todo."
+        "Eligible cuenta solo después de uso real, controles antifraude y el umbral mínimo de actividad.",
+        "Los referidos desbloquean ventajas. Free mantiene el límite de líneas guardadas. Pro elimina límites y desbloquea todo."
       ],
       promoterTitle: "Detalles del promotor",
       baseDaily: "Base diaria",
       unlocksNow: "Desbloqueos actuales",
       nextUnlock: "Siguiente desbloqueo",
-      allUnlocked: "Todos los desbloqueos listados ya estР“РЋn activos",
-      antiAbuse: "Solo cuentan los referidos eligible. El registro por sР“В­ solo no desbloquea ventajas.",
+      allUnlocked: "Todos los desbloqueos listados ya están activos",
+      antiAbuse: "Solo cuentan los referidos eligible. El registro por sí solo no desbloquea ventajas.",
       confirmed: "Confirmados",
       active: "Activos",
-      eligible: "VР“РЋlidos",
+      eligible: "Válidos",
       legacy: "Older refs",
       clicks: "Clics",
       bgSlots: "Fondos",
-      saveCap: "LР“В­mite guardado",
+      saveCap: "Límite guardado",
       unlimited: "Ilimitado",
-      onePack: "1 pack cosmР“В©tico",
-      allPacks: "Todos los packs cosmР“В©ticos",
+      onePack: "1 pack cosmético",
+      allPacks: "Todos los packs cosméticos",
       proTrial: "Prueba Pro 7d",
       discount: "50% por 1 mes",
       toolkit: "Referral Toolkit",
       copied: "Copiado.",
-      leaderboardLoading: "CargandoРІР‚В¦",
-      leaderboardEmpty: "AР“С”n no hay datos",
-      youLabel: "TР“С”",
+      leaderboardLoading: "Cargando…",
+      leaderboardEmpty: "Aún no hay datos",
+      youLabel: "Tú",
       rulesLabel: "reglas"
     },
     ru: {
-      title: "Р С™Р В°Р С” РЎРЊРЎвЂљР С• РЎР‚Р В°Р В±Р С•РЎвЂљР В°Р ВµРЎвЂљ",
-      note: "Р В Р ВµРЎвЂћР ВµРЎР‚Р В°Р В»РЎвЂ№ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°РЎР‹РЎвЂљ Р В±Р С•Р Р…РЎС“РЎРѓРЎвЂ№ РЎвЂљР С•Р В»РЎРЉР С”Р С• Р С—Р С•РЎРѓР В»Р Вµ РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С•Р С–Р С• Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ Р С—РЎР‚Р С•Р Т‘РЎС“Р С”РЎвЂљР В°, Р В° Р Р…Р Вµ Р С—РЎР‚Р С•РЎРѓРЎвЂљР С• РЎР‚Р ВµР С–Р С‘РЎРѓРЎвЂљРЎР‚Р В°РЎвЂ Р С‘Р С‘.",
-      desc: "Р СџРЎС“РЎвЂљРЎРЉ РЎР‚Р В°Р В·Р В±Р В»Р С•Р С”Р С‘РЎР‚Р С•Р Р†Р С•Р С”:",
+      title: "Как это работает",
+      note: "Рефералы открывают бонусы только после реального использования продукта, а не просто регистрации.",
+      desc: "Путь разблокировок:",
       items: [
-        "Р СџР С•Р Т‘РЎвЂљР Р†Р ВµРЎР‚Р В¶Р Т‘РЎвЂР Р…Р Р…РЎвЂ№Р Вµ РЎРѓРЎвЂЎР С‘РЎвЂљР В°РЎР‹РЎвЂљРЎРѓРЎРЏ, Р С”Р С•Р С–Р Т‘Р В° РЎвЂЎР ВµР В»Р С•Р Р†Р ВµР С” Р С—Р С•Р Т‘Р С”Р В»РЎР‹РЎвЂЎР С‘Р В» РЎвЂ¦Р ВµР Р…Р Т‘Р В» Р С—Р С• РЎвЂљР Р†Р С•Р ВµР в„– РЎРѓРЎРѓРЎвЂ№Р В»Р С”Р Вµ.",
-        "Р С’Р С”РЎвЂљР С‘Р Р†Р Р…РЎвЂ№Р Вµ РЎРѓРЎвЂЎР С‘РЎвЂљР В°РЎР‹РЎвЂљРЎРѓРЎРЏ Р Т‘Р В»РЎРЏ Р С—Р С•Р Т‘РЎвЂљР Р†Р ВµРЎР‚Р В¶Р Т‘РЎвЂР Р…Р Р…РЎвЂ№РЎвЂ¦ Р С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°РЎвЂљР ВµР В»Р ВµР в„– РЎРѓ Р В·Р В°РЎвЂћР С‘Р С”РЎРѓР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р Р…РЎвЂ№Р С Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘Р ВµР С.",
-        "Р вЂ”Р В°РЎвЂЎРЎвЂљРЎвЂР Р…Р Р…РЎвЂ№Р Вµ РЎРѓРЎвЂЎР С‘РЎвЂљР В°РЎР‹РЎвЂљРЎРѓРЎРЏ РЎвЂљР С•Р В»РЎРЉР С”Р С• Р С—Р С•РЎРѓР В»Р Вµ РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С•Р С–Р С• Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ, Р В°Р Р…РЎвЂљР С‘РЎвЂћРЎР‚Р С•Р Т‘-Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С•Р С” Р С‘ Р СР С‘Р Р…Р С‘Р СР В°Р В»РЎРЉР Р…Р С•Р С–Р С• Р С—Р С•РЎР‚Р С•Р С–Р В° Р В°Р С”РЎвЂљР С‘Р Р†Р Р…Р С•РЎРѓРЎвЂљР С‘.",
-        "Р В Р ВµРЎвЂћР ВµРЎР‚Р В°Р В»РЎвЂ№ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°РЎР‹РЎвЂљ Р В±Р С•Р Р…РЎС“РЎРѓРЎвЂ№. Р СџРЎР‚Р С•Р СР С•РЎС“РЎвЂљР ВµРЎР‚РЎРѓР С”Р С‘Р Вµ РЎвЂЎР В°Р Р…Р С”Р С‘ Р СР С•Р С–РЎС“РЎвЂљ Р Т‘Р С•Р В±Р В°Р Р†Р С‘РЎвЂљРЎРЉ Р Т‘Р Р…Р ВµР Р†Р Р…Р С•Р в„– Р В±Р С•Р Р…РЎС“РЎРѓ Р С—Р С•Р Р†Р ВµРЎР‚РЎвЂ¦ Free. Р вЂ™Р С• Free РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎРЏР ВµРЎвЂљРЎРѓРЎРЏ Р В»Р С‘Р СР С‘РЎвЂљ РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎвЂР Р…Р Р…РЎвЂ№РЎвЂ¦ РЎРѓРЎвЂљРЎР‚Р С•Р С”. Pro РЎРѓР Р…Р С‘Р СР В°Р ВµРЎвЂљ Р В»Р С‘Р СР С‘РЎвЂљРЎвЂ№ Р С‘ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°Р ВµРЎвЂљ Р Р†РЎРѓРЎвЂ."
+        "Подтверждённые считаются, когда человек подключил хендл по твоей ссылке.",
+        "Активные считаются для подтверждённых пользователей с зафиксированным использованием.",
+        "Зачтённые считаются только после реального использования, антифрод-проверок и минимального порога активности.",
+        "Рефералы открывают бонусы. Промоутерские чанки могут добавить дневной бонус поверх Free. Во Free сохраняется лимит сохранённых строк. Pro снимает лимиты и открывает всё."
       ],
-      promoterTitle: "Р вЂќР ВµРЎвЂљР В°Р В»Р С‘ Р С—РЎР‚Р С•Р СР С•РЎС“РЎвЂљР ВµРЎР‚Р В°",
-      baseDaily: "Р вЂР В°Р В·Р В° Р Р† Р Т‘Р ВµР Р…РЎРЉ",
-      unlocksNow: "Р В§РЎвЂљР С• Р С•РЎвЂљР С”РЎР‚РЎвЂ№РЎвЂљР С• РЎРѓР ВµР в„–РЎвЂЎР В°РЎРѓ",
-      nextUnlock: "Р РЋР В»Р ВµР Т‘РЎС“РЎР‹РЎвЂ°Р В°РЎРЏ РЎР‚Р В°Р В·Р В±Р В»Р С•Р С”Р С‘РЎР‚Р С•Р Р†Р С”Р В°",
-      allUnlocked: "Р вЂ™РЎРѓР Вµ Р В·Р В°РЎРЏР Р†Р В»Р ВµР Р…Р Р…РЎвЂ№Р Вµ РЎР‚Р В°Р В·Р В±Р В»Р С•Р С”Р С‘РЎР‚Р С•Р Р†Р С”Р С‘ РЎС“Р В¶Р Вµ Р С—Р С•Р В»РЎС“РЎвЂЎР ВµР Р…РЎвЂ№",
-      antiAbuse: "Р РЋРЎвЂЎР С‘РЎвЂљР В°РЎР‹РЎвЂљРЎРѓРЎРЏ РЎвЂљР С•Р В»РЎРЉР С”Р С• Р В·Р В°РЎвЂЎРЎвЂљРЎвЂР Р…Р Р…РЎвЂ№Р Вµ РЎР‚Р ВµРЎвЂћР ВµРЎР‚Р В°Р В»РЎвЂ№. Р С›Р Т‘Р Р…Р В° РЎР‚Р ВµР С–Р С‘РЎРѓРЎвЂљРЎР‚Р В°РЎвЂ Р С‘РЎРЏ Р В±Р ВµР В· Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ Р Р…Р С‘РЎвЂЎР ВµР С–Р С• Р Р…Р Вµ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°Р ВµРЎвЂљ.",
-      confirmed: "Р СџР С•Р Т‘РЎвЂљР Р†Р ВµРЎР‚Р В¶Р Т‘РЎвЂР Р…Р Р…РЎвЂ№Р Вµ",
-      active: "Р С’Р С”РЎвЂљР С‘Р Р†Р Р…РЎвЂ№Р Вµ",
-      eligible: "Р вЂ”Р В°РЎвЂЎРЎвЂљРЎвЂР Р…Р Р…РЎвЂ№Р Вµ",
+      promoterTitle: "Детали промоутера",
+      baseDaily: "База в день",
+      unlocksNow: "Что открыто сейчас",
+      nextUnlock: "Следующая разблокировка",
+      allUnlocked: "Все заявленные разблокировки уже получены",
+      antiAbuse: "Считаются только зачтённые рефералы. Одна регистрация без использования ничего не открывает.",
+      confirmed: "Подтверждённые",
+      active: "Активные",
+      eligible: "Зачтённые",
       legacy: "Older refs",
-      clicks: "Р С™Р В»Р С‘Р С”Р С‘",
-      bgSlots: "Р РЋР В»Р С•РЎвЂљРЎвЂ№ РЎвЂћР С•Р Р…Р В°",
-      saveCap: "Р вЂєР С‘Р СР С‘РЎвЂљ РЎРѓРЎвЂљРЎР‚Р С•Р С”",
-      unlimited: "Р вЂР ВµР В· Р В»Р С‘Р СР С‘РЎвЂљР В°",
-      onePack: "1 Р С”Р С•РЎРѓР СР ВµРЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘Р в„– Р С—Р В°Р С”",
-      allPacks: "Р вЂ™РЎРѓР Вµ Р С”Р С•РЎРѓР СР ВµРЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘Р Вµ Р С—Р В°Р С”Р С‘",
+      clicks: "Клики",
+      bgSlots: "Слоты фона",
+      saveCap: "Лимит строк",
+      unlimited: "Без лимита",
+      onePack: "1 косметический пак",
+      allPacks: "Все косметические паки",
       proTrial: "Pro Trial 7d",
-      discount: "50% Р Р…Р В° 1 Р СР ВµРЎРѓРЎРЏРЎвЂ ",
+      discount: "50% на 1 месяц",
       toolkit: "Referral Toolkit",
-      copied: "Р РЋР С”Р С•Р С—Р С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С•.",
-      leaderboardLoading: "Р вЂ”Р В°Р С–РЎР‚РЎС“Р В·Р С”Р В°РІР‚В¦",
-      leaderboardEmpty: "Р вЂќР В°Р Р…Р Р…РЎвЂ№РЎвЂ¦ Р С—Р С•Р С”Р В° Р Р…Р ВµРЎвЂљ",
-      youLabel: "Р СћРЎвЂ№",
-      rulesLabel: "Р С—РЎР‚Р В°Р Р†Р С‘Р В»Р В°"
+      copied: "Скопировано.",
+      leaderboardLoading: "Загрузка…",
+      leaderboardEmpty: "Данных пока нет",
+      youLabel: "Ты",
+      rulesLabel: "правила"
     },
     de: {
       title: "So funktioniert's",
       note: "Referrals schalten Vorteile erst nach echter Produktnutzung frei, nicht nur nach Signups.",
       desc: "Unlock-Pfad:",
       items: [
-        "Confirmed zР“В¤hlt, wenn jemand mit deinem Link einen Handle verbindet.",
-        "Active zР“В¤hlt bestР“В¤tigte Nutzer mit erfasster Nutzung.",
-        "Eligible zР“В¤hlt erst nach echter Nutzung, Anti-Fraud-PrР“Сfungen und dem Mindest-AktivitР“В¤tsschwellenwert.",
-        "Referrals schalten Vorteile frei. Free behР“В¤lt das Limit fР“Сr gespeicherte Zeilen. Pro entfernt Limits und schaltet alles frei."
+        "Confirmed zählt, wenn jemand mit deinem Link einen Handle verbindet.",
+        "Active zählt bestätigte Nutzer mit erfasster Nutzung.",
+        "Eligible zählt erst nach echter Nutzung, Anti-Fraud-Prüfungen und dem Mindest-Aktivitätsschwellenwert.",
+        "Referrals schalten Vorteile frei. Free behält das Limit für gespeicherte Zeilen. Pro entfernt Limits und schaltet alles frei."
       ],
       promoterTitle: "Promoter-Details",
       baseDaily: "Tagesbasis",
       unlocksNow: "Aktuelle Unlocks",
-      nextUnlock: "NР“В¤chster Unlock",
-      allUnlocked: "Alle aufgefР“Сhrten Unlocks erreicht",
-      antiAbuse: "Nur eligible Referrals zР“В¤hlen. Ein Signup allein schaltet nichts frei.",
-      confirmed: "BestР“В¤tigt",
+      nextUnlock: "Nächster Unlock",
+      allUnlocked: "Alle aufgeführten Unlocks erreicht",
+      antiAbuse: "Nur eligible Referrals zählen. Ein Signup allein schaltet nichts frei.",
+      confirmed: "Bestätigt",
       active: "Aktiv",
       eligible: "Eligible",
       legacy: "Older refs",
@@ -5849,65 +5802,65 @@ function getReferralUiCopy(lang){
       onePack: "1 Kosmetik-Pack",
       allPacks: "Alle Kosmetik-Packs",
       proTrial: "Pro-Test 7d",
-      discount: "50% fР“Сr 1 Monat",
+      discount: "50% für 1 Monat",
       toolkit: "Referral Toolkit",
       copied: "Kopiert.",
-      leaderboardLoading: "LР“В¤dtРІР‚В¦",
+      leaderboardLoading: "Lädt…",
       leaderboardEmpty: "Noch keine Daten",
       youLabel: "Du",
       rulesLabel: "Regeln"
     },
     fr: {
-      title: "Comment Р“В§a marche",
-      note: "Les referrals dР“В©bloquent des avantages seulement aprР“РЃs une vraie utilisation du produit, pas juste une inscription.",
-      desc: "Parcours de dР“В©blocage :",
+      title: "Comment ça marche",
+      note: "Les referrals débloquent des avantages seulement après une vraie utilisation du produit, pas juste une inscription.",
+      desc: "Parcours de déblocage :",
       items: [
         "Confirmed compte quand quelqu'un connecte un handle avec ton lien.",
-        "Active compte les utilisateurs confirmР“В©s avec une utilisation enregistrР“В©e.",
-        "Eligible compte seulement aprР“РЃs une vraie utilisation, les contrР“Т‘les anti-fraude et le seuil minimum d'activitР“В©.",
-        "Les referrals dР“В©bloquent des avantages. Free garde la limite de lignes sauvegardР“В©es. Pro retire les limites et dР“В©bloque tout."
+        "Active compte les utilisateurs confirmés avec une utilisation enregistrée.",
+        "Eligible compte seulement après une vraie utilisation, les contrôles anti-fraude et le seuil minimum d'activité.",
+        "Les referrals débloquent des avantages. Free garde la limite de lignes sauvegardées. Pro retire les limites et débloque tout."
       ],
-      promoterTitle: "DР“В©tails du promoteur",
+      promoterTitle: "Détails du promoteur",
       baseDaily: "Base quotidienne",
-      unlocksNow: "DР“В©blocages actuels",
-      nextUnlock: "Prochain dР“В©blocage",
-      allUnlocked: "Tous les dР“В©blocages listР“В©s sont atteints",
-      antiAbuse: "Seuls les referrals eligible comptent. Une simple inscription ne dР“В©bloque rien.",
-      confirmed: "ConfirmР“В©s",
+      unlocksNow: "Déblocages actuels",
+      nextUnlock: "Prochain déblocage",
+      allUnlocked: "Tous les déblocages listés sont atteints",
+      antiAbuse: "Seuls les referrals eligible comptent. Une simple inscription ne débloque rien.",
+      confirmed: "Confirmés",
       active: "Actifs",
       eligible: "Valides",
       legacy: "Older refs",
       clicks: "Clics",
       bgSlots: "Slots fond",
       saveCap: "Limite sauvegarde",
-      unlimited: "IllimitР“В©",
-      onePack: "1 pack cosmР“В©tique",
-      allPacks: "Tous les packs cosmР“В©tiques",
+      unlimited: "Illimité",
+      onePack: "1 pack cosmétique",
+      allPacks: "Tous les packs cosmétiques",
       proTrial: "Essai Pro 7j",
       discount: "50% pour 1 mois",
       toolkit: "Referral Toolkit",
-      copied: "CopiР“В©.",
-      leaderboardLoading: "ChargementРІР‚В¦",
-      leaderboardEmpty: "Pas encore de donnР“В©es",
+      copied: "Copié.",
+      leaderboardLoading: "Chargement…",
+      leaderboardEmpty: "Pas encore de données",
       youLabel: "Toi",
-      rulesLabel: "rР“РЃgles"
+      rulesLabel: "règles"
     },
     hi: {
-      title: "Р°В¤Р‡Р°В¤в„– Р°В¤вЂўР°Тђв‚¬Р°В¤С‘Р°ТђвЂЎ Р°В¤вЂўР°В¤С•Р°В¤В® Р°В¤вЂўР°В¤В°Р°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬",
-      note: "Р°В¤В°Р°ТђвЂЎР°В¤В«Р°В¤В°Р°В¤Р† perks Р°В¤В¤Р°В¤В­Р°ТђР‚ unlock Р°В¤вЂўР°В¤В°Р°В¤В¤Р°ТђвЂЎ Р°В¤в„–Р°Тђв‚¬Р°В¤вЂљ Р°В¤СљР°В¤В¬ Р°В¤Р„Р°ТђРЊР°В¤В°Р°ТђвЂ№Р°В¤РЋР°В¤вЂўР°ТђРЊР°В¤Сџ Р°В¤вЂўР°В¤С• Р°В¤вЂ¦Р°В¤С‘Р°В¤Р†Р°ТђР‚ Р°В¤вЂ°Р°В¤Р„Р°В¤Р‡Р°ТђвЂ№Р°В¤вЂ” Р°В¤в„–Р°ТђвЂ№, Р°В¤С‘Р°В¤С—Р°В¤В°Р°ТђРЊР°В¤В« signup Р°В¤Р„Р°В¤В° Р°В¤РЃР°В¤в„–Р°ТђР‚Р°В¤вЂљР°ТђВ¤",
+      title: "यह कैसे काम करता है",
+      note: "रेफरल perks तभी unlock करते हैं जब प्रोडक्ट का असली उपयोग हो, सिर्फ signup पर नहीं।",
       desc: "Unlock path:",
       items: [
-        "Confirmed Р°В¤В¤Р°В¤В¬ Р°В¤вЂ”Р°В¤С—Р°В¤РЃР°В¤С• Р°В¤СљР°В¤С•Р°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬ Р°В¤СљР°В¤В¬ Р°В¤вЂўР°ТђвЂ№Р°В¤в‚¬ Р°В¤вЂ Р°В¤Р„Р°В¤вЂўР°ТђвЂЎ Р°В¤Р†Р°В¤С—Р°В¤вЂљР°В¤вЂў Р°В¤С‘Р°ТђвЂЎ handle connect Р°В¤вЂўР°В¤В°Р°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬Р°ТђВ¤",
-        "Active Р°В¤вЂ°Р°В¤РЃ confirmed users Р°В¤вЂўР°ТђвЂ№ Р°В¤вЂ”Р°В¤С—Р°В¤РЃР°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬ Р°В¤СљР°В¤С—Р°В¤РЃР°В¤вЂўР°В¤С• usage Р°В¤В°Р°В¤С—Р°В¤вЂўР°ТђвЂ°Р°В¤В°Р°ТђРЊР°В¤РЋ Р°В¤в„–Р°ТђРѓР°В¤вЂ  Р°В¤в„–Р°Тђв‚¬Р°ТђВ¤",
-        "Eligible Р°В¤В¤Р°В¤В­Р°ТђР‚ Р°В¤вЂ”Р°В¤С—Р°В¤РЃР°В¤С• Р°В¤СљР°В¤С•Р°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬ Р°В¤СљР°В¤В¬ real usage, anti-fraud checks Р°В¤вЂќР°В¤В° minimum activity threshold Р°В¤Р„Р°ТђвЂљР°В¤В°Р°В¤С• Р°В¤в„–Р°ТђвЂ№Р°ТђВ¤",
-        "Р°В¤В°Р°ТђвЂЎР°В¤В«Р°В¤В°Р°В¤Р† perks unlock Р°В¤вЂўР°В¤В°Р°В¤В¤Р°ТђвЂЎ Р°В¤в„–Р°Тђв‚¬Р°В¤вЂљР°ТђВ¤ Free Р°В¤В®Р°ТђвЂЎР°В¤вЂљ saved lines Р°В¤вЂўР°В¤С• cap Р°В¤В°Р°В¤в„–Р°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬Р°ТђВ¤ Pro limits Р°В¤в„–Р°В¤СџР°В¤С•Р°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬ Р°В¤вЂќР°В¤В° Р°В¤С‘Р°В¤В¬ unlock Р°В¤вЂўР°В¤В°Р°В¤В¤Р°В¤С• Р°В¤в„–Р°Тђв‚¬Р°ТђВ¤"
+        "Confirmed तब गिना जाता है जब कोई आपके लिंक से handle connect करता है।",
+        "Active उन confirmed users को गिनता है जिनका usage रिकॉर्ड हुआ है।",
+        "Eligible तभी गिना जाता है जब real usage, anti-fraud checks और minimum activity threshold पूरा हो।",
+        "रेफरल perks unlock करते हैं। Free में saved lines का cap रहता है। Pro limits हटाता है और सब unlock करता है।"
       ],
       promoterTitle: "Promoter details",
       baseDaily: "Base daily",
-      unlocksNow: "Р°В¤вЂ¦Р°В¤В¬ Р°В¤вЂўР°ТђРЊР°В¤Р‡Р°В¤С• unlock Р°В¤в„–Р°Тђв‚¬",
-      nextUnlock: "Р°В¤вЂ¦Р°В¤вЂ”Р°В¤Р†Р°В¤С• unlock",
-      allUnlocked: "Р°В¤С‘Р°В¤В­Р°ТђР‚ listed unlocks Р°В¤В®Р°В¤С—Р°В¤Р† Р°В¤С™Р°ТђРѓР°В¤вЂўР°ТђвЂЎ Р°В¤в„–Р°Тђв‚¬Р°В¤вЂљ",
-      antiAbuse: "Р°В¤С‘Р°В¤С—Р°В¤В°Р°ТђРЊР°В¤В« eligible referrals Р°В¤вЂ”Р°В¤С—Р°В¤РЃР°ТђвЂЎ Р°В¤СљР°В¤С•Р°В¤В¤Р°ТђвЂЎ Р°В¤в„–Р°Тђв‚¬Р°В¤вЂљР°ТђВ¤ Р°В¤С‘Р°В¤С—Р°В¤В°Р°ТђРЊР°В¤В« signup Р°В¤С‘Р°ТђвЂЎ Р°В¤вЂўР°ТђРѓР°В¤вЂє unlock Р°В¤РЃР°В¤в„–Р°ТђР‚Р°В¤вЂљ Р°В¤в„–Р°ТђвЂ№Р°В¤В¤Р°В¤С•Р°ТђВ¤",
+      unlocksNow: "अब क्या unlock है",
+      nextUnlock: "अगला unlock",
+      allUnlocked: "सभी listed unlocks मिल चुके हैं",
+      antiAbuse: "सिर्फ eligible referrals गिने जाते हैं। सिर्फ signup से कुछ unlock नहीं होता।",
       confirmed: "Confirmed",
       active: "Active",
       eligible: "Eligible",
@@ -5922,7 +5875,7 @@ function getReferralUiCopy(lang){
       discount: "50% off 1 month",
       toolkit: "Referral Toolkit",
       copied: "Copied.",
-      leaderboardLoading: "LoadingРІР‚В¦",
+      leaderboardLoading: "Loading…",
       leaderboardEmpty: "No data yet",
       youLabel: "You",
       rulesLabel: "rules"
@@ -5957,43 +5910,43 @@ function getReferralUiCopy(lang){
       discount: "50% korting 1 maand",
       toolkit: "Referral Toolkit",
       copied: "Gekopieerd.",
-      leaderboardLoading: "LadenРІР‚В¦",
+      leaderboardLoading: "Laden…",
       leaderboardEmpty: "Nog geen data",
       youLabel: "Jij",
       rulesLabel: "regels"
     },
     tr: {
-      title: "NasР”В±l Р“В§alР”В±Р•СџР”В±r",
-      note: "Referrals, sadece kayР”В±tla deР”Сџil, gerР“В§ek Р“СrР“Сn kullanР”В±mР”В± sonrasР”В± avantaj aР“В§ar.",
-      desc: "AР“В§Р”В±lma yolu:",
+      title: "Nasıl çalışır",
+      note: "Referrals, sadece kayıtla değil, gerçek ürün kullanımı sonrası avantaj açar.",
+      desc: "Açılma yolu:",
       items: [
-        "Confirmed, biri senin linkinle handle baР”СџladР”В±Р”СџР”В±nda sayР”В±lР”В±r.",
-        "Active, kullanР”В±mР”В± kayda geР“В§en confirmed kullanР”В±cР”В±larР”В± sayar.",
-        "Eligible, ancak gerР“В§ek kullanР”В±m, anti-fraud kontrolleri ve minimum aktivite eР•СџiР”Сџi sonrasР”В± sayР”В±lР”В±r.",
+        "Confirmed, biri senin linkinle handle bağladığında sayılır.",
+        "Active, kullanımı kayda geçen confirmed kullanıcıları sayar.",
+        "Eligible, ancak gerçek kullanım, anti-fraud kontrolleri ve minimum aktivite eşiği sonrası sayılır.",
         "Referrals unlock perks. Free keeps the saved-line cap. Pro removes caps and unlocks everything."
       ],
-      promoterTitle: "Promoter detaylarР”В±",
-      baseDaily: "GР“СnlР“Сk taban",
-      unlocksNow: "Р•С›u an aР“В§Р”В±k",
+      promoterTitle: "Promoter detayları",
+      baseDaily: "Günlük taban",
+      unlocksNow: "Şu an açık",
       nextUnlock: "Sonraki unlock",
-      allUnlocked: "Listelenen tР“Сm unlock'lar aР“В§Р”В±ldР”В±",
-      antiAbuse: "Sadece eligible referrals sayР”В±lР”В±r. Tek baР•СџР”В±na kayР”В±t avantaj aР“В§maz.",
-      confirmed: "OnaylР”В±",
+      allUnlocked: "Listelenen tüm unlock'lar açıldı",
+      antiAbuse: "Sadece eligible referrals sayılır. Tek başına kayıt avantaj açmaz.",
+      confirmed: "Onaylı",
       active: "Aktif",
       eligible: "Eligible",
       legacy: "Older refs",
-      clicks: "TР”В±klama",
+      clicks: "Tıklama",
       bgSlots: "BG slot",
-      saveCap: "KayР”В±t limiti",
-      unlimited: "SР”В±nР”В±rsР”В±z",
+      saveCap: "Kayıt limiti",
+      unlimited: "Sınırsız",
       onePack: "1 cosmetics pack",
-      allPacks: "TР“Сm cosmetics pack'ler",
+      allPacks: "Tüm cosmetics pack'ler",
       proTrial: "Pro Trial 7d",
       discount: "1 ay %50 indirim",
       toolkit: "Referral Toolkit",
-      copied: "KopyalandР”В±.",
-      leaderboardLoading: "YР“СkleniyorРІР‚В¦",
-      leaderboardEmpty: "HenР“Сz veri yok",
+      copied: "Kopyalandı.",
+      leaderboardLoading: "Yükleniyor…",
+      leaderboardEmpty: "Henüz veri yok",
       youLabel: "Sen",
       rulesLabel: "kurallar"
     },
@@ -6027,80 +5980,80 @@ function getReferralUiCopy(lang){
       discount: "Diskon 50% 1 bulan",
       toolkit: "Referral Toolkit",
       copied: "Disalin.",
-      leaderboardLoading: "MemuatРІР‚В¦",
+      leaderboardLoading: "Memuat…",
       leaderboardEmpty: "Belum ada data",
       youLabel: "Kamu",
       rulesLabel: "aturan"
     },
     ja: {
-      title: "РґВ»вЂўР·ВµвЂћРіРѓС—",
-      note: "Р·Т‘в„–РґВ»вЂ№Р·вЂ°в„–РµвЂ¦С‘РіРѓР‡РіР‚РѓР·в„ўВ»Р№РЉР†РіРѓВ РіРѓвЂРіРѓВ§РіРѓР‡РіРѓР„РіРѓРЏРµВ®СџР№С™вЂєРіРѓВ®Рµв‚¬В©Р·вЂќРЃРіРѓРЉР·СћС”РёР„РЊРіРѓвЂўРівЂљРЉРіРѓСџРµС•РЉРіРѓВ«РіРѓВ РіРѓвЂРёВ§Р€Р¶вЂќС•РіРѓвЂўРівЂљРЉРіРѓС•РіРѓв„ўРіР‚вЂљ",
-      desc: "РёВ§Р€Р¶вЂќС•РівЂљв„–РіС“вЂ РіС“С“РіС“вЂ”:",
+      title: "仕組み",
+      note: "紹介特典は、登録だけではなく実際の利用が確認された後にだけ解放されます。",
+      desc: "解放ステップ:",
       items: [
-        "Confirmed РіРѓР‡РіР‚РѓРіРѓвЂљРіРѓР„РіРѓСџРіРѓВ®РіС“Р„РіС“С–РівЂљР‡РіРѓвЂ№РівЂљвЂ°РёР„В°РіРѓвЂ№РіРѓРЉРіС“РЏРіС“С–РіС“вЂ°РіС“В«РівЂљвЂ™Р¶Р‹ТђР·В¶С™РіРѓв„ўРівЂљвЂ№РіРѓРЃРµР‰В Р·В®вЂ”РіРѓвЂўРівЂљРЉРіРѓС•РіРѓв„ўРіР‚вЂљ",
-        "Active РіРѓР‡РіР‚РѓРµв‚¬В©Р·вЂќРЃРµВ®СџР·С‘С•РіРѓРЉРёРЃВР№РЉР†РіРѓвЂўРівЂљРЉРіРѓСџ confirmed РіС“В¦РіС“СРівЂљВ¶РіС“СРівЂљвЂ™Р¶вЂўВ°РіРѓв‚¬РіРѓС•РіРѓв„ўРіР‚вЂљ",
-        "Eligible РіРѓР‡РіР‚РѓРµВ®СџРµв‚¬В©Р·вЂќРЃРіС“В»РґС‘РЊР¶В­Р€РіС“РѓРівЂљВ§РіС“С“РівЂљР‡РіС“В»Р¶СљР‚РґР…Р‹Р¶Т‘В»РµвЂ№вЂўР¶СњРЋРґВ»В¶РівЂљвЂ™Р¶С”Р‚РіРѓСџРіРѓвЂ”РіРѓСџРµС•РЉРіРѓВ«РіРѓВ РіРѓвЂРµР‰В Р·В®вЂ”РіРѓвЂўРівЂљРЉРіРѓС•РіРѓв„ўРіР‚вЂљ",
+        "Confirmed は、あなたのリンクから誰かがハンドルを接続すると加算されます。",
+        "Active は、利用実績が記録された confirmed ユーザーを数えます。",
+        "Eligible は、実利用・不正チェック・最低活動条件を満たした後にだけ加算されます。",
         "Referrals unlock perks. Free keeps the saved-line cap. Pro removes caps and unlocks everything."
       ],
-      promoterTitle: "РіС“вЂ”РіС“В­РіС“СћРіС“СРівЂљС—РіС“СРёВ©С–Р·Т‘В°",
-      baseDaily: "РµСџС”Р¶СљВ¬РіС“вЂЎРівЂљВ¤РіС“Р„РіС“С",
-      unlocksNow: "Р·РЏС•РµСљРЃРіРѓВ®РёВ§Р€Р¶вЂќС•",
-      nextUnlock: "Р¶В¬РЋРіРѓВ®РёВ§Р€Р¶вЂќС•",
-      allUnlocked: "РёРЋРЃР·В¤С”РґС‘В­РіРѓВ®РёВ§Р€Р¶вЂќС•РіРѓР‡РіРѓв„ўРіРѓв„–РіРѓВ¦Р№РѓвЂќР¶в‚¬С’Р¶С‘в‚¬РіРѓС—РіРѓВ§РіРѓв„ў",
-      antiAbuse: "РівЂљВ«РівЂљВ¦РіС“С–РіС“в‚¬РіРѓвЂўРівЂљРЉРівЂљвЂ№РіРѓВ®РіРѓР‡ eligible Р·Т‘в„–РґВ»вЂ№РіРѓВ®РіРѓС—РіРѓВ§РіРѓв„ўРіР‚вЂљР·в„ўВ»Р№РЉР†РіРѓВ РіРѓвЂРіРѓВ§РіРѓР‡Р·вЂ°в„–РµвЂ¦С‘РіРѓР‡РёВ§Р€Р¶вЂќС•РіРѓвЂўРівЂљРЉРіРѓС•РіРѓвЂєРівЂљвЂњРіР‚вЂљ",
-      confirmed: "Р·СћС”РёР„РЊР¶С‘в‚¬РіРѓС—",
-      active: "РівЂљСћРівЂљР‡РіС“вЂ РівЂљР€РіС“вЂ“",
-      eligible: "РµР‡С•РёВ±РЋ",
+      promoterTitle: "プロモーター詳細",
+      baseDaily: "基本デイリー",
+      unlocksNow: "現在の解放",
+      nextUnlock: "次の解放",
+      allUnlocked: "表示中の解放はすべて達成済みです",
+      antiAbuse: "カウントされるのは eligible 紹介のみです。登録だけでは特典は解放されません。",
+      confirmed: "確認済み",
+      active: "アクティブ",
+      eligible: "対象",
       legacy: "Older refs",
-      clicks: "РівЂљР‡РіС“Р„РіС“С“РівЂљР‡",
-      bgSlots: "BGРівЂљв„–РіС“В­РіС“С“РіС“в‚¬",
-      saveCap: "РґС—СњРµВ­ВРґС‘Р‰Р№в„ўС’",
-      unlimited: "Р·вЂћРЋРµв‚¬В¶Р№в„ўС’",
-      onePack: "РівЂљС–РівЂљв„–РіС“РЋ 1 РіС“вЂРіС“С“РівЂљР‡",
-      allPacks: "РіРѓв„ўРіРѓв„–РіРѓВ¦РіРѓВ®РівЂљС–РівЂљв„–РіС“РЋРіС“вЂРіС“С“РівЂљР‡",
+      clicks: "クリック",
+      bgSlots: "BGスロット",
+      saveCap: "保存上限",
+      unlimited: "無制限",
+      onePack: "コスメ 1 パック",
+      allPacks: "すべてのコスメパック",
       proTrial: "Pro Trial 7d",
-      discount: "1РіРѓвЂ№Р¶Сљв‚¬ 50% РівЂљР„РіС“вЂў",
+      discount: "1か月 50% オフ",
       toolkit: "Referral Toolkit",
-      copied: "РівЂљС–РіС“вЂќРіС“СРіРѓвЂ”РіРѓС•РіРѓвЂ”РіРѓСџРіР‚вЂљ",
-      leaderboardLoading: "РёР„В­РіРѓС—РёС•СРіРѓС—РґС‘В­РІР‚В¦",
-      leaderboardEmpty: "РіРѓС•РіРѓВ РіС“вЂЎРіС“СРівЂљС—РіРѓР‡РіРѓвЂљРівЂљР‰РіРѓС•РіРѓвЂєРівЂљвЂњ",
-      youLabel: "РіРѓвЂљРіРѓР„РіРѓСџ",
-      rulesLabel: "РіС“В«РіС“СРіС“В«"
+      copied: "コピーしました。",
+      leaderboardLoading: "読み込み中…",
+      leaderboardEmpty: "まだデータはありません",
+      youLabel: "あなた",
+      rulesLabel: "ルール"
     },
     zh: {
-      title: "РёС—С’РґР…СљР¶вЂ“в„–РµСРЏ",
-      note: "Р№вЂљР‚РёР‡В·РµТђвЂ“РµР‰В±РµРЏР„Р¶СљвЂ°РµСљРЃР·СљСџРµВ®С›РґР…С—Р·вЂќРЃРґС”В§РµвЂњРѓРµС’Р‹Р¶вЂ°РЊРґСС™РёВ§Р€Р№вЂќРѓРїСРЉРґС‘РЊР¶ВР‡РµРЏР„Р№СњВ Р¶С–РЃРµвЂ РЉРіР‚вЂљ",
-      desc: "РёВ§Р€Р№вЂќРѓРёВ·Р‡РµС•вЂћ:",
+      title: "运作方式",
+      note: "邀请奖励只有在真实使用产品后才会解锁，不是只靠注册。",
+      desc: "解锁路径:",
       items: [
-        "ConfirmedРїСС™Р¶СљвЂ°РґС”С”Р№Р‚С™РёС—вЂЎРґР…В Р·С™вЂћР№вЂњС•Р¶Р‹ТђРёС—С›Р¶Р‹Тђ handle РµС’Р‹РёВ®РЋРµвЂ¦ТђРіР‚вЂљ",
-        "ActiveРїСС™РµВ·Р†Р·РЋВ®РёВ®В¤РґС‘вЂќР¶СљвЂ°Р·СљСџРµВ®С›РґР…С—Р·вЂќРЃРёВ®В°РµР…вЂўР·С™вЂћР·вЂќРЃР¶в‚¬В·РёВ®РЋРµвЂ¦ТђРіР‚вЂљ",
-        "EligibleРїСС™РµРЏР„Р¶СљвЂ°Р№Р‚С™РёС—вЂЎР·СљСџРµВ®С›РґР…С—Р·вЂќРЃРіР‚РѓРµРЏРЊРґР…СљРµСР‰Р¶Р€Р‚Р¶СџТђРµвЂ™РЉР¶СљР‚РґР…Р‹Р¶Т‘В»РёВ·С“Р№вЂ”РЃР¶В§вЂєРµС’Р‹Р¶вЂ°РЊРёВ®РЋРµвЂ¦ТђРіР‚вЂљ",
-        "Р№вЂљР‚РёР‡В·РґСС™РёВ§Р€Р№вЂќРѓР¶вЂєТ‘РµВ¤С™Р¶СњС“Р·вЂєР‰РіР‚вЂљFree РґС—СњР·вЂўв„ўРµВ·Р†РґС—СњРµВ­ВРёРЋРЉР¶вЂўВ°РґС‘Р‰Р№в„ўС’РіР‚вЂљPro РґСС™Р·В§В»Р№в„ўВ¤Р№в„ўС’Рµв‚¬В¶Рµв„–В¶РёВ§Р€Р№вЂќРѓРµвЂ¦РЃР№С“РЃРµвЂ вЂ¦РµВ®в„–РіР‚вЂљ"
+        "Confirmed：有人通过你的链接连接 handle 后计入。",
+        "Active：已确认且有真实使用记录的用户计入。",
+        "Eligible：只有通过真实使用、反作弊检查和最低活跃门槛后才计入。",
+        "邀请会解锁更多权益。Free 保留已保存行数上限。Pro 会移除限制并解锁全部内容。"
       ],
-      promoterTitle: "Р¶Р‹РЃРµв„–С—РёР‡В¦Р¶С“вЂ¦",
-      baseDaily: "РµСџС”Р·РЋР‚Р¶вЂ”ТђР№СћСњРµС”В¦",
-      unlocksNow: "РµР…вЂњРµвЂ°РЊРµВ·Р†РёВ§Р€Р№вЂќРѓ",
-      nextUnlock: "РґС‘вЂ№РґС‘Р‚Р¶РЋР€РёВ§Р€Р№вЂќРѓ",
-      allUnlocked: "РµВ·Р†РёС•С•Рµв‚¬В°Р¶вЂ°Р‚Р¶СљвЂ°Рµв‚¬вЂ”РµвЂЎС”Р·С™вЂћРёВ§Р€Р№вЂќРѓР¶РЋР€РґР…РЊ",
-      antiAbuse: "РµРЏР„Р¶СљвЂ° eligible Р№вЂљР‚РёР‡В·Р¶вЂ°РЊРёВ®РЋР¶вЂўВ°РіР‚вЂљРґВ»вЂ¦Р¶С–РЃРµвЂ РЉРґС‘РЊРґСС™РёВ§Р€Р№вЂќРѓРґВ»В»РґР…вЂўР¶СњС“Р·вЂєР‰РіР‚вЂљ",
-      confirmed: "РµВ·Р†Р·РЋВ®РёВ®В¤",
-      active: "Р¶Т‘В»РёВ·С“",
-      eligible: "Р¶СљвЂ°Р¶вЂўв‚¬",
+      promoterTitle: "推广详情",
+      baseDaily: "基础日额度",
+      unlocksNow: "当前已解锁",
+      nextUnlock: "下一档解锁",
+      allUnlocked: "已达到所有列出的解锁档位",
+      antiAbuse: "只有 eligible 邀请才计数。仅注册不会解锁任何权益。",
+      confirmed: "已确认",
+      active: "活跃",
+      eligible: "有效",
       legacy: "Older refs",
-      clicks: "Р·вЂљв„–РµвЂЎВ»",
-      bgSlots: "РёС“РЉР¶в„ўР‡РґР…РЊ",
-      saveCap: "РґС—СњРµВ­ВРґС‘Р‰Р№в„ўС’",
-      unlimited: "Р¶вЂ”В Р№в„ўС’",
-      onePack: "1 РґС‘Р„РµВ¤вЂ“РёВ§вЂљРµРЉвЂ¦",
-      allPacks: "РµвЂ¦РЃР№С“РЃРµВ¤вЂ“РёВ§вЂљРµРЉвЂ¦",
+      clicks: "点击",
+      bgSlots: "背景位",
+      saveCap: "保存上限",
+      unlimited: "无限",
+      onePack: "1 个外观包",
+      allPacks: "全部外观包",
       proTrial: "Pro Trial 7d",
-      discount: "Р№В¦вЂ“Р¶Сљв‚¬ 5 Р¶Р‰В",
+      discount: "首月 5 折",
       toolkit: "Referral Toolkit",
-      copied: "РµВ·Р†РµВ¤РЊРµв‚¬В¶РіР‚вЂљ",
-      leaderboardLoading: "РµР‰В РёР…Р…РґС‘В­РІР‚В¦",
-      leaderboardEmpty: "Р¶С™вЂљР¶вЂ”В Р¶вЂўВ°Р¶РЊВ®",
-      youLabel: "РґР…В ",
-      rulesLabel: "РёВ§вЂћРµв‚¬в„ў"
+      copied: "已复制。",
+      leaderboardLoading: "加载中…",
+      leaderboardEmpty: "暂无数据",
+      youLabel: "你",
+      rulesLabel: "规则"
     }
   };
   return table[String(lang || "en").toLowerCase()] || table.en;
@@ -6114,7 +6067,7 @@ function getGuideUiCopy(lang){
         desc: "Build short X-style morning replies that feel easy to post right away. Good GM should sound awake, social, and human instead of stiff filler.",
         items: [
           "Fast = one short X-ready line. Think closer to 'gm, coffee carrying' than a full paragraph.",
-          "Balanced = 1РІР‚вЂњ2 natural clauses with a real morning turn.",
+          "Balanced = 1–2 natural clauses with a real morning turn.",
           "Full = richer, but still compact. No essay mode.",
           "Tone should shift vibe, not manufacture fake variation.",
           "Best gets stronger when you keep only lines you would actually paste on X."
@@ -6125,7 +6078,7 @@ function getGuideUiCopy(lang){
         desc: "Keep GN softer, calmer, and more sign-off friendly. The best GN lines feel like a real wind-down post, not a dressed-up slogan.",
         items: [
           "Fast = one short X-ready close for quick night use.",
-          "Balanced = a gentle 1РІР‚вЂњ2 clause good-night line.",
+          "Balanced = a gentle 1–2 clause good-night line.",
           "Full = fuller mood, still compact and postable.",
           "A little emoji is fine. Too much sparkle kills the line.",
           "Best improves after you delete robotic, flat, or over-hyped lines."
@@ -6145,36 +6098,36 @@ function getGuideUiCopy(lang){
     },
     ru: {
       gm: {
-        title: "Р С™Р В°Р С” Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°РЎвЂљРЎРЉ GM",
-        desc: "Р РЋР С•Р В±Р С‘РЎР‚Р В°Р в„– Р С”Р С•РЎР‚Р С•РЎвЂљР С”Р С‘Р Вµ X-style РЎС“РЎвЂљРЎР‚Р ВµР Р…Р Р…Р С‘Р Вµ Р С•РЎвЂљР Р†Р ВµРЎвЂљРЎвЂ№, Р С”Р С•РЎвЂљР С•РЎР‚РЎвЂ№Р Вµ РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С• РЎвЂ¦Р С•РЎвЂЎР ВµРЎвЂљРЎРѓРЎРЏ РЎРѓРЎР‚Р В°Р В·РЎС“ Р Р†РЎРѓРЎвЂљР В°Р Р†Р С‘РЎвЂљРЎРЉ. Р ТђР С•РЎР‚Р С•РЎв‚¬Р С‘Р в„– GM Р В·Р Р†РЎС“РЎвЂЎР С‘РЎвЂљ Р В¶Р С‘Р Р†Р С•, Р С—Р С•-РЎС“РЎвЂљРЎР‚Р ВµР Р…Р Р…Р ВµР СРЎС“ Р С‘ Р С—Р С•-РЎвЂЎР ВµР В»Р С•Р Р†Р ВµРЎвЂЎР ВµРЎРѓР С”Р С‘, Р В° Р Р…Р Вµ Р С”Р В°Р С” РЎРѓРЎС“РЎвЂ¦Р В°РЎРЏ Р В·Р В°Р С–Р С•РЎвЂљР С•Р Р†Р С”Р В°.",
+        title: "Как использовать GM",
+        desc: "Собирай короткие X-style утренние ответы, которые реально хочется сразу вставить. Хороший GM звучит живо, по-утреннему и по-человечески, а не как сухая заготовка.",
         items: [
-          "Fast = Р С•Р Т‘Р Р…Р В° Р С”Р С•РЎР‚Р С•РЎвЂљР С”Р В°РЎРЏ X-ready РЎРѓРЎвЂљРЎР‚Р С•Р С”Р В°. Р вЂР В»Р С‘Р В¶Р Вµ Р С” 'gm, coffee carrying', Р В° Р Р…Р Вµ Р С” Р В°Р В±Р В·Р В°РЎвЂ РЎС“ РЎвЂљР ВµР С”РЎРѓРЎвЂљР В°.",
-          "Balanced = Р ВµРЎРѓРЎвЂљР ВµРЎРѓРЎвЂљР Р†Р ВµР Р…Р Р…Р В°РЎРЏ РЎРѓРЎвЂљРЎР‚Р С•Р С”Р В° Р Р…Р В° 1РІР‚вЂњ2 РЎвЂЎР В°РЎРѓРЎвЂљР С‘ РЎРѓ Р Р…Р С•РЎР‚Р СР В°Р В»РЎРЉР Р…РЎвЂ№Р С РЎС“РЎвЂљРЎР‚Р ВµР Р…Р Р…Р С‘Р С Р С—Р С•Р Р†Р С•РЎР‚Р С•РЎвЂљР С•Р С.",
-          "Full = РЎвЂЎРЎС“РЎвЂљРЎРЉ Р Р…Р В°РЎРѓРЎвЂ№РЎвЂ°Р ВµР Р…Р Р…Р ВµР Вµ, Р Р…Р С• Р Р†РЎРѓРЎвЂ Р ВµРЎвЂ°РЎвЂ Р С”Р С•Р СР С—Р В°Р С”РЎвЂљР Р…Р С•. Р вЂР ВµР В· РЎР‚Р ВµР В¶Р С‘Р СР В° РЎРЊРЎРѓРЎРѓР Вµ.",
-          "Tone Р Т‘Р С•Р В»Р В¶Р ВµР Р… Р СР ВµР Р…РЎРЏРЎвЂљРЎРЉ Р Р†Р В°Р в„–Р В±, Р В° Р Р…Р Вµ РЎв‚¬РЎвЂљР В°Р СР С—Р С•Р Р†Р В°РЎвЂљРЎРЉ Р С‘РЎРѓР С”РЎС“РЎРѓРЎРѓРЎвЂљР Р†Р ВµР Р…Р Р…Р С•Р Вµ РЎР‚Р В°Р В·Р Р…Р С•Р С•Р В±РЎР‚Р В°Р В·Р С‘Р Вµ.",
-          "Best РЎР‚Р В°Р В±Р С•РЎвЂљР В°Р ВµРЎвЂљ РЎРѓР С‘Р В»РЎРЉР Р…Р ВµР Вµ, Р С”Р С•Р С–Р Т‘Р В° РЎвЂљРЎвЂ№ Р С•РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎв‚¬РЎРЉ РЎвЂљР С•Р В»РЎРЉР С”Р С• РЎвЂљР Вµ РЎРѓРЎвЂљРЎР‚Р С•Р С”Р С‘, Р С”Р С•РЎвЂљР С•РЎР‚РЎвЂ№Р Вµ РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С• Р Р†РЎРѓРЎвЂљР В°Р Р†Р С‘Р В» Р В±РЎвЂ№ Р Р† X."
+          "Fast = одна короткая X-ready строка. Ближе к 'gm, coffee carrying', а не к абзацу текста.",
+          "Balanced = естественная строка на 1–2 части с нормальным утренним поворотом.",
+          "Full = чуть насыщеннее, но всё ещё компактно. Без режима эссе.",
+          "Tone должен менять вайб, а не штамповать искусственное разнообразие.",
+          "Best работает сильнее, когда ты оставляешь только те строки, которые реально вставил бы в X."
         ]
       },
       gn: {
-        title: "Р С™Р В°Р С” Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°РЎвЂљРЎРЉ GN",
-        desc: "Р вЂќР ВµР В»Р В°Р в„– GN Р СРЎРЏР С–РЎвЂЎР Вµ, РЎРѓР С—Р С•Р С”Р С•Р в„–Р Р…Р ВµР Вµ Р С‘ Р В±Р В»Р С‘Р В¶Р Вµ Р С” Р Р…Р С•РЎР‚Р СР В°Р В»РЎРЉР Р…Р С•Р СРЎС“ sign-off. Р вЂєРЎС“РЎвЂЎРЎв‚¬Р С‘Р Вµ GN РЎРѓРЎвЂљРЎР‚Р С•Р С”Р С‘ Р С•РЎвЂ°РЎС“РЎвЂ°Р В°РЎР‹РЎвЂљРЎРѓРЎРЏ Р С”Р В°Р С” РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С•Р Вµ Р В·Р В°Р Р†Р ВµРЎР‚РЎв‚¬Р ВµР Р…Р С‘Р Вµ Р Т‘Р Р…РЎРЏ, Р В° Р Р…Р Вµ Р С”Р В°Р С” Р Р…Р В°РЎвЂљРЎРЏР Р…РЎС“РЎвЂљР В°РЎРЏ Р С•РЎвЂљР С”РЎР‚РЎвЂ№РЎвЂљР С”Р В°.",
+        title: "Как использовать GN",
+        desc: "Делай GN мягче, спокойнее и ближе к нормальному sign-off. Лучшие GN строки ощущаются как реальное завершение дня, а не как натянутая открытка.",
         items: [
-          "Fast = Р С•Р Т‘Р Р…Р В° Р С”Р С•РЎР‚Р С•РЎвЂљР С”Р В°РЎРЏ X-ready Р Р…Р С•РЎвЂЎР Р…Р В°РЎРЏ РЎРѓРЎвЂљРЎР‚Р С•Р С”Р В°.",
-          "Balanced = Р СРЎРЏР С–Р С”Р В°РЎРЏ good-night РЎРѓРЎвЂљРЎР‚Р С•Р С”Р В° Р Р…Р В° 1РІР‚вЂњ2 РЎвЂЎР В°РЎРѓРЎвЂљР С‘.",
-          "Full = Р В±Р С•Р В»РЎРЉРЎв‚¬Р Вµ Р Р…Р В°РЎРѓРЎвЂљРЎР‚Р С•Р ВµР Р…Р С‘РЎРЏ, Р Р…Р С• Р Р†РЎРѓРЎвЂ Р ВµРЎвЂ°РЎвЂ Р С”Р С•Р СР С—Р В°Р С”РЎвЂљР Р…Р С• Р С‘ Р С—Р С•РЎРѓРЎвЂљР В°Р В±Р ВµР В»РЎРЉР Р…Р С•.",
-          "Р СњР ВµР В±Р С•Р В»РЎРЉРЎв‚¬Р С•Р в„– emoji РІР‚вЂќ Р Р…Р С•РЎР‚Р СР В°Р В»РЎРЉР Р…Р С•. Р С™Р С•Р С–Р Т‘Р В° Р С‘РЎвЂ¦ РЎРѓР В»Р С‘РЎв‚¬Р С”Р С•Р С Р СР Р…Р С•Р С–Р С•, РЎРѓРЎвЂљРЎР‚Р С•Р С”Р В° РЎС“Р СР С‘РЎР‚Р В°Р ВµРЎвЂљ.",
-          "Best РЎРѓРЎвЂљР В°Р Р…Р С•Р Р†Р С‘РЎвЂљРЎРѓРЎРЏ РЎРѓР С‘Р В»РЎРЉР Р…Р ВµР Вµ, Р С”Р С•Р С–Р Т‘Р В° РЎвЂљРЎвЂ№ РЎС“Р Т‘Р В°Р В»РЎРЏР ВµРЎв‚¬РЎРЉ РЎР‚Р С•Р В±Р С•РЎвЂљР Р…РЎвЂ№Р Вµ, Р С—Р В»Р С•РЎРѓР С”Р С‘Р Вµ Р С‘ РЎРѓР В»Р С‘РЎв‚¬Р С”Р С•Р С РЎвЂ¦Р В°Р в„–Р С—Р С•Р Р†РЎвЂ№Р Вµ РЎРѓРЎвЂљРЎР‚Р С•Р С”Р С‘."
+          "Fast = одна короткая X-ready ночная строка.",
+          "Balanced = мягкая good-night строка на 1–2 части.",
+          "Full = больше настроения, но всё ещё компактно и постабельно.",
+          "Небольшой emoji — нормально. Когда их слишком много, строка умирает.",
+          "Best становится сильнее, когда ты удаляешь роботные, плоские и слишком хайповые строки."
         ]
       },
       ext: {
-        title: "Р С™Р В°Р С” РЎР‚Р В°Р В±Р С•РЎвЂљР В°РЎР‹РЎвЂљ РЎР‚Р В°Р В·Р В±Р В»Р С•Р С”Р С‘РЎР‚Р С•Р Р†Р С”Р С‘",
-        desc: "Р В Р ВµРЎвЂћР ВµРЎР‚Р В°Р В»РЎвЂ№ РЎРѓР Р…Р В°РЎвЂЎР В°Р В»Р В° Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°РЎР‹РЎвЂљ Р С”Р С•РЎРѓР СР ВµРЎвЂљР С‘Р С”РЎС“. Р РЋРЎвЂљР С‘Р В»Р С‘ Р С—Р С‘РЎРѓРЎРЉР СР В° Р С‘ Р С–Р С•РЎвЂљР С•Р Р†РЎвЂ№Р Вµ Р С—Р В°Р С”Р С‘ Р С—Р С•Р В»Р Р…Р С•РЎРѓРЎвЂљРЎРЉРЎР‹ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°РЎР‹РЎвЂљРЎРѓРЎРЏ РЎвЂЎР ВµРЎР‚Р ВµР В· Pro, Р В° РЎРѓР В°Р СР С• РЎР‚Р В°РЎРѓРЎв‚¬Р С‘РЎР‚Р ВµР Р…Р С‘Р Вµ Р С•РЎРѓРЎвЂљР В°РЎвЂРЎвЂљРЎРѓРЎРЏ Р В±Р ВµР В·Р С•Р С—Р В°РЎРѓР Р…РЎвЂ№Р С copy-only.",
+        title: "Как работают разблокировки",
+        desc: "Рефералы сначала открывают косметику. Стили письма и готовые паки полностью открываются через Pro, а само расширение остаётся безопасным copy-only.",
         items: [
-          "Р вЂ™Р С• Free Р Р†Р С‘Р Т‘Р Р…РЎвЂ№ Р С—Р ВµРЎР‚Р Р†РЎвЂ№Р Вµ 10 РЎвЂљР ВµР С РЎР‚Р В°РЎРѓРЎв‚¬Р С‘РЎР‚Р ВµР Р…Р С‘РЎРЏ.",
-          "Eligible-РЎР‚Р ВµРЎвЂћР ВµРЎР‚Р В°Р В»РЎвЂ№ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°РЎР‹РЎвЂљ +1 Р С”Р С•РЎРѓР СР ВµРЎвЂљР С‘Р С”РЎС“ Р Р…Р В° 10, Р С—Р С•РЎвЂљР С•Р С +1 Р С”Р В°Р В¶Р Т‘РЎвЂ№Р Вµ 3, Р В·Р В°РЎвЂљР ВµР С +1 Р С”Р В°Р В¶Р Т‘РЎвЂ№Р Вµ 4.",
-          "Р вЂќР В»РЎРЏ РЎР‚Р В°Р В·Р В±Р В»Р С•Р С”Р С‘РЎР‚Р С•Р Р†Р С•Р С” РЎРѓРЎвЂЎР С‘РЎвЂљР В°РЎР‹РЎвЂљРЎРѓРЎРЏ РЎвЂљР С•Р В»РЎРЉР С”Р С• eligible-РЎР‚Р ВµРЎвЂћР ВµРЎР‚Р В°Р В»РЎвЂ№.",
-          "Pro РЎРѓРЎР‚Р В°Р В·РЎС“ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°Р ВµРЎвЂљ Р Р†РЎРѓРЎР‹ Р С”Р С•РЎРѓР СР ВµРЎвЂљР С‘Р С”РЎС“ РЎР‚Р В°РЎРѓРЎв‚¬Р С‘РЎР‚Р ВµР Р…Р С‘РЎРЏ, Р Р†РЎРѓР Вµ РЎРѓРЎвЂљР С‘Р В»Р С‘ Р С—Р С‘РЎРѓРЎРЉР СР В° Р С‘ Р Р†РЎРѓР Вµ Р С—Р В°Р С”Р С‘.",
-          "Р вЂР ВµР В· X DOM-Р С‘Р Р…Р В¶Р ВµР С”РЎвЂљР В°, Р В±Р ВµР В· Р В°Р Р†РЎвЂљР С•Р С—Р С•РЎРѓРЎвЂљР В° Р С‘ Р В±Р ВµР В· Р В·Р В°Р С—Р С‘РЎРѓР С‘ Р Р† composer."
+          "Во Free видны первые 10 тем расширения.",
+          "Eligible-рефералы открывают +1 косметику на 10, потом +1 каждые 3, затем +1 каждые 4.",
+          "Для разблокировок считаются только eligible-рефералы.",
+          "Pro сразу открывает всю косметику расширения, все стили письма и все паки.",
+          "Без X DOM-инжекта, без автопоста и без записи в composer."
         ]
       }
     }
@@ -6237,13 +6190,13 @@ function renderGuideRightCopy(lang){
   function nextReferralUnlockLabel(lang, step){
     const ui = getReferralUiCopy(lang);
     const s = Number(step || 0) || 0;
-    if (s === 1) return `1 РІвЂ вЂ™ ${ui.bgSlots}: 5`;
-    if (s === 3) return `3 РІвЂ вЂ™ ${ui.bgSlots}: 8 + ${ui.onePack}`;
-    if (s === 7) return `7 РІвЂ вЂ™ ${ui.bgSlots}: 12 + ${ui.saveCap}: 120`;
-    if (s === 15) return `15 РІвЂ вЂ™ ${ui.unlimited} ${String(ui.bgSlots).toLowerCase()} + ${ui.allPacks}`;
-    if (s === 30) return `30 РІвЂ вЂ™ ${ui.proTrial}`;
-    if (s === 50) return `50 РІвЂ вЂ™ ${ui.discount}`;
-    if (s === 100) return `100 РІвЂ вЂ™ ${ui.toolkit}`;
+    if (s === 1) return `1 → ${ui.bgSlots}: 5`;
+    if (s === 3) return `3 → ${ui.bgSlots}: 8 + ${ui.onePack}`;
+    if (s === 7) return `7 → ${ui.bgSlots}: 12 + ${ui.saveCap}: 120`;
+    if (s === 15) return `15 → ${ui.unlimited} ${String(ui.bgSlots).toLowerCase()} + ${ui.allPacks}`;
+    if (s === 30) return `30 → ${ui.proTrial}`;
+    if (s === 50) return `50 → ${ui.discount}`;
+    if (s === 100) return `100 → ${ui.toolkit}`;
     return ui.allUnlocked;
   }
 
@@ -6322,7 +6275,7 @@ function renderReferralRightCopy(lang){
         <div class="refPromoInfoCell"><span>${labelChunks}</span><b>${bonusChunks}</b></div>
       </div>
       <div class="refPromoLines">
-        <div><span class="muted">${esc(ui.unlocksNow)}:</span> ${unlockParts.join(" Р’В· ")}</div>
+        <div><span class="muted">${esc(ui.unlocksNow)}:</span> ${unlockParts.join(" · ")}</div>
         <div><span class="muted">${esc(ui.nextUnlock)}:</span> ${esc(nextReferralUnlockLabel(lang, nextAt))}</div>
         <div><span class="muted">${labelPromoterNext}:</span> ${nextBonusAt > 0 ? `${nextBonusAt} ${esc(ui.eligible).toLowerCase()}` : esc(ui.allUnlocked || "Cap reached")}</div>
         <div><span class="muted">${esc(ui.antiAbuse)}</span></div>
@@ -6348,47 +6301,47 @@ function renderReferralRightCopy(lang){
   function syncModePanelCopy(){
     const ru = siteLang() === "ru";
     const controlsText = ru
-      ? "Min = РЎРѓР В°Р СРЎвЂ№Р Вµ Р С”Р С•РЎР‚Р С•РЎвЂљР С”Р С‘Р Вµ Р С•РЎвЂљР Р†Р ВµРЎвЂљРЎвЂ№. Mid = Р С•РЎвЂљР Т‘Р ВµР В»РЎРЉР Р…Р В°РЎРЏ Р ВµРЎРѓРЎвЂљР ВµРЎРѓРЎвЂљР Р†Р ВµР Р…Р Р…Р В°РЎРЏ Р В»Р С‘Р Р…Р С‘РЎРЏ. Max = РЎвЂЎРЎС“РЎвЂљРЎРЉ Р С—Р С•Р В»Р Р…Р ВµР Вµ, Р Р…Р С• Р Р†РЎРѓРЎвЂ Р ВµРЎвЂ°РЎвЂ Р С•РЎвЂљР Р†Р ВµРЎвЂљ Р С•Р Т‘Р Р…Р С•Р СРЎС“ РЎвЂЎР ВµР В»Р С•Р Р†Р ВµР С”РЎС“. Tone Р СР ВµР Р…РЎРЏР ВµРЎвЂљ Р С—Р С•Р Т‘Р В°РЎвЂЎРЎС“. Preset РЎвЂљР С•Р Р…Р С”Р С• Р Р…Р В°РЎРѓРЎвЂљРЎР‚Р В°Р С‘Р Р†Р В°Р ВµРЎвЂљ РЎРѓРЎвЂљР С‘Р В»РЎРЉ. Best pass РІР‚вЂќ Р С•РЎвЂљР Т‘Р ВµР В»РЎРЉР Р…РЎвЂ№Р в„– Р С—Р ВµРЎР‚Р ВµР С”Р В»РЎР‹РЎвЂЎР В°РЎвЂљР ВµР В»РЎРЉ, Р ВµРЎРѓР В»Р С‘ Р С—Р С•РЎвЂљР С•Р С Р Р…РЎС“Р В¶Р Р…Р С• Р С—Р С•Р Т‘РЎвЂЎР С‘РЎРѓРЎвЂљР С‘РЎвЂљРЎРЉ shape-Р Т‘РЎС“Р В±Р В»Р С‘ Р С‘ Р Т‘Р С•Р В±Р С‘РЎвЂљРЎРЉ Р С—РЎР‚Р С•Р В±Р ВµР В»РЎвЂ№ Р С•Р В±РЎР‚Р В°РЎвЂљР Р…Р С•."
+      ? "Min = самые короткие ответы. Mid = отдельная естественная линия. Max = чуть полнее, но всё ещё ответ одному человеку. Tone меняет подачу. Preset тонко настраивает стиль. Best pass — отдельный переключатель, если потом нужно подчистить shape-дубли и добить пробелы обратно."
       : "Min = shortest replies. Mid = a separate natural lane. Max = fuller, but still one-person replies. Tone changes the voice. Preset fine-tunes the feel. Best pass is optional and only cleans the saved bank after you decide to run it.";
     const repeatText = ru
-      ? "Р вЂ™РЎвЂ№Р С”Р В»РЎР‹РЎвЂЎР ВµР Р…Р С• = Р С—РЎР‚Р С•РЎРѓРЎвЂљР С• random fill. Р вЂ™Р С”Р В»РЎР‹РЎвЂЎР ВµР Р…Р С• = Р С—Р С•РЎРѓР В»Р Вµ Р В·Р В°Р С—РЎС“РЎРѓР С”Р В° Best pass РЎР‚Р ВµР В¶Р ВµРЎвЂљ shape-Р Т‘РЎС“Р В±Р В»Р С‘ Р С‘ Р Т‘Р С•Р В±Р С‘Р Р†Р В°Р ВµРЎвЂљ Р Р…Р ВµР Т‘Р С•РЎРѓРЎвЂљР В°РЎР‹РЎвЂ°Р ВµР Вµ Р С•Р В±РЎР‚Р В°РЎвЂљР Р…Р С• Р Т‘Р С• РЎвЂ Р ВµР В»Р С‘."
+      ? "Выключено = просто random fill. Включено = после запуска Best pass режет shape-дубли и добивает недостающее обратно до цели."
       : "Off = pure random fill. On = after a run, Best pass prunes shape-level near-duplicates and refills the missing slots back to target.";
     const rightDesc = ru
-      ? "Р РЋР С•Р В±Р С‘РЎР‚Р В°Р в„– Р С”Р С•РЎР‚Р С•РЎвЂљР С”Р С‘Р Вµ Р В¶Р С‘Р Р†РЎвЂ№Р Вµ Р С•РЎвЂљР Р†Р ВµРЎвЂљРЎвЂ№, Р С”Р С•РЎвЂљР С•РЎР‚РЎвЂ№Р Вµ РЎвЂљРЎвЂ№ РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С• Р В±РЎвЂ№ Р С•РЎвЂљР С—РЎР‚Р В°Р Р†Р С‘Р В» Р С•Р Т‘Р Р…Р С•Р СРЎС“ РЎвЂЎР ВµР В»Р С•Р Р†Р ВµР С”РЎС“. Р В Р В°РЎРѓРЎв‚¬Р С‘РЎР‚Р ВµР Р…Р С‘Р Вµ Р С•РЎРѓРЎвЂљР В°РЎвЂРЎвЂљРЎРѓРЎРЏ copy-only: Р С”Р С•Р С—Р С‘РЎР‚РЎС“Р ВµРЎв‚¬РЎРЉ Р В·Р Т‘Р ВµРЎРѓРЎРЉ, Р Р†РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎв‚¬РЎРЉ Р Р†РЎР‚РЎС“РЎвЂЎР Р…РЎС“РЎР‹ Р Р† X."
+      ? "Собирай короткие живые ответы, которые ты реально бы отправил одному человеку. Расширение остаётся copy-only: копируешь здесь, вставляешь вручную в X."
       : "Build short, natural replies you would actually post to one person. The extension stays copy-only: copy here, paste manually on X.";
-    const badge1 = ru ? "СЂСџвЂњвЂ№ Fast copy" : "СЂСџвЂњвЂ№ Fast copy";
-    const badge2 = ru ? "СЂСџР‹вЂєРїС‘РЏ Tone + preset" : "СЂСџР‹вЂєРїС‘РЏ Tone + preset";
-    const badge3 = ru ? "СЂСџВ§В  Best + clean fill" : "СЂСџВ§В  Best + clean fill";
+    const badge1 = ru ? "📋 Fast copy" : "📋 Fast copy";
+    const badge2 = ru ? "🎛️ Tone + preset" : "🎛️ Tone + preset";
+    const badge3 = ru ? "🧠 Best + clean fill" : "🧠 Best + clean fill";
     const listHtml = ru
-      ? '<li><b>Р вЂ™РЎвЂ№Р В±Р ВµРЎР‚Р С‘ size</b> Р С‘ <b>tone</b>, Р В·Р В°РЎвЂљР ВµР С Р С—РЎР‚Р С‘ Р В¶Р ВµР В»Р В°Р Р…Р С‘Р С‘ Р Р†Р С”Р В»РЎР‹РЎвЂЎР С‘ preset.</li><li><b>Quick 1</b> Р В±РЎвЂ№РЎРѓРЎвЂљРЎР‚Р С• Р Т‘Р В°РЎвЂРЎвЂљ Р С•Р Т‘Р Р…РЎС“ РЎРѓР Р†Р ВµР В¶РЎС“РЎР‹ РЎРѓРЎвЂљРЎР‚Р С•Р С”РЎС“, Р В° <b>Batch 10</b> Р С•РЎРѓРЎвЂљР В°РЎвЂРЎвЂљРЎРѓРЎРЏ loose-random Р Р†Р Р…РЎС“РЎвЂљРЎР‚Р С‘ Р Р†РЎвЂ№Р В±РЎР‚Р В°Р Р…Р Р…Р С•Р С–Р С• РЎР‚Р В°Р В·Р СР ВµРЎР‚Р В°.</li><li><b>Best pass</b> Р Р†Р С”Р В»РЎР‹РЎвЂЎР В°Р в„– РЎвЂљР С•Р В»РЎРЉР С”Р С• Р С”Р С•Р С–Р Т‘Р В° Р Р…РЎС“Р В¶Р Р…Р С• Р С—Р С•Р Т‘РЎР‚Р ВµР В·Р В°РЎвЂљРЎРЉ shape-Р Т‘РЎС“Р В±Р В»Р С‘ Р С‘ Р Т‘Р С•Р В±Р С‘РЎвЂљРЎРЉ Р В±Р В°Р Р…Р С” Р С•Р В±РЎР‚Р В°РЎвЂљР Р…Р С• Р Т‘Р С• Р Р…РЎС“Р В¶Р Р…Р С•Р С–Р С• Р С”Р С•Р В»Р С‘РЎвЂЎР ВµРЎРѓРЎвЂљР Р†Р В°.</li><li><b>Best</b> Р В±Р ВµРЎР‚РЎвЂРЎвЂљ РЎРѓР С‘Р В»РЎРЉР Р…Р ВµР в„–РЎв‚¬РЎС“РЎР‹ РЎРѓРЎвЂљРЎР‚Р С•Р С”РЎС“ Р С‘Р В· РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎвЂР Р…Р Р…Р С•Р С–Р С•, Р В° <b>Best live</b> РЎвЂљРЎРЏР Р…Р ВµРЎвЂљ Р Р…Р ВµРЎРѓР С”Р С•Р В»РЎРЉР С”Р С• Р Р…Р С•Р Р†РЎвЂ№РЎвЂ¦ Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљР С•Р Р† Р С‘ Р С•РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎвЂљ РЎРѓР В°Р СРЎвЂ№Р в„– РЎРѓР С‘Р В»РЎРЉР Р…РЎвЂ№Р в„–.</li><li><b>Copy view</b> Р С”Р С•Р С—Р С‘РЎР‚РЎС“Р ВµРЎвЂљ РЎвЂљР ВµР С”РЎС“РЎвЂ°Р С‘Р в„– Р В±Р В°Р Р…Р С”, <b>Export .txt</b> РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎРЏР ВµРЎвЂљ Р ВµР С–Р С• Р Р…Р В°РЎР‚РЎС“Р В¶РЎС“. Free cap: Р Т‘Р С• <b>70</b> РЎРѓРЎвЂљРЎР‚Р С•Р С” Р Р…Р В° РЎР‚Р В°Р В·Р Т‘Р ВµР В».</li>'
+      ? '<li><b>Выбери size</b> и <b>tone</b>, затем при желании включи preset.</li><li><b>Quick 1</b> быстро даёт одну свежую строку, а <b>Batch 10</b> остаётся loose-random внутри выбранного размера.</li><li><b>Best pass</b> включай только когда нужно подрезать shape-дубли и добить банк обратно до нужного количества.</li><li><b>Best</b> берёт сильнейшую строку из сохранённого, а <b>Best live</b> тянет несколько новых вариантов и оставляет самый сильный.</li><li><b>Copy view</b> копирует текущий банк, <b>Export .txt</b> сохраняет его наружу. Free cap: до <b>70</b> строк на раздел.</li>'
       : '<li><b>Pick size</b> and <b>tone</b>, then add a preset only if you need a tighter feel.</li><li><b>Quick 1</b> gives one fresh line fast, while <b>Batch 10</b> stays loose-random inside the selected size.</li><li><b>Best pass</b> is optional: use it only when you want obvious lookalikes trimmed from the saved bank and the missing slots filled back up.</li><li><b>Best</b> uses your strongest saved line, while <b>Best live</b> pulls a few fresh options and keeps the strongest one.</li><li><b>Copy view</b> copies the current bank, <b>Export .txt</b> saves it outside the app. Free cap: up to <b>70</b> lines per section.</li>';
     const modeLabels = ru
-      ? { min: 'min Р’В· Р С”Р С•РЎР‚Р С•РЎвЂљР С”Р С•', mid: 'mid Р’В· Р В±Р В°Р В»Р В°Р Р…РЎРѓ', max: 'max Р’В· РЎвЂЎРЎС“РЎвЂљРЎРЉ Р С—Р С•Р В»Р Р…Р ВµР Вµ' }
-      : { min: 'min Р’В· short', mid: 'mid Р’В· balanced', max: 'max Р’В· fuller' };
+      ? { min: 'min · коротко', mid: 'mid · баланс', max: 'max · чуть полнее' }
+      : { min: 'min · short', mid: 'mid · balanced', max: 'max · fuller' };
     const hDesc = ru
-      ? 'GMXReply Р С—Р С•Р СР С•Р С–Р В°Р ВµРЎвЂљ РЎРѓР С•Р В±Р С‘РЎР‚Р В°РЎвЂљРЎРЉ English-only GM/GN Р С•РЎвЂљР Р†Р ВµРЎвЂљРЎвЂ№, Р С”Р С•РЎвЂљР С•РЎР‚РЎвЂ№Р Вµ Р В·Р Р†РЎС“РЎвЂЎР В°РЎвЂљ Р С”Р В°Р С” РЎР‚Р ВµР В°Р В»РЎРЉР Р…РЎвЂ№Р Вµ Р С•РЎвЂљР Р†Р ВµРЎвЂљРЎвЂ№ Р С•Р Т‘Р Р…Р С•Р СРЎС“ РЎвЂЎР ВµР В»Р С•Р Р†Р ВµР С”РЎС“. Р вЂќР В°Р В»РЎРЉРЎв‚¬Р Вµ РЎвЂљРЎвЂ№ Р С—РЎР‚Р С•РЎРѓРЎвЂљР С• Р С”Р С•Р С—Р С‘РЎР‚РЎС“Р ВµРЎв‚¬РЎРЉ Р С‘РЎвЂ¦ Р Т‘Р В»РЎРЏ X.'
+      ? 'GMXReply помогает собирать English-only GM/GN ответы, которые звучат как реальные ответы одному человеку. Дальше ты просто копируешь их для X.'
       : 'GMXReply helps you build English-only GM/GN replies that sound like real replies to one person, then copy them safely for X.';
     const hWhat1 = ru
-      ? 'English-only <b>GM</b> Р С‘ <b>GN</b> Р С•РЎвЂљР Р†Р ВµРЎвЂљРЎвЂ№ Р В±Р ВµР В· group-tone Р С‘ Р СРЎС“РЎРѓР С•РЎР‚Р Р…РЎвЂ№РЎвЂ¦ Р СР ВµР СР Р…РЎвЂ№РЎвЂ¦ РЎРѓР В»Р С•Р Р†.'
+      ? 'English-only <b>GM</b> и <b>GN</b> ответы без group-tone и мусорных мемных слов.'
       : 'English-only <b>GM</b> and <b>GN</b> replies without group tone or meme junk.';
     const hWhat2 = ru
-      ? 'Safe copy-only РЎР‚Р ВµР В¶Р С‘Р С Р Т‘Р В»РЎРЏ X: Р С”Р С•Р С—Р С‘РЎР‚РЎС“Р ВµРЎв‚¬РЎРЉ Р В·Р Т‘Р ВµРЎРѓРЎРЉ, Р Р†РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎв‚¬РЎРЉ Р Р†РЎР‚РЎС“РЎвЂЎР Р…РЎС“РЎР‹ РЎРѓР В°Р С.'
+      ? 'Safe copy-only режим для X: копируешь здесь, вставляешь вручную сам.'
       : 'Safe copy-only flow for X: copy here, then paste manually yourself.';
     const hFree1 = ru
-      ? '<b>Free:</b> РЎРѓР С•Р В±Р С‘РЎР‚Р В°Р в„– Р С‘ РЎР‚Р ВµР Т‘Р В°Р С”РЎвЂљР С‘РЎР‚РЎС“Р в„– Р В±Р В°Р Р…Р С”Р С‘, РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎРЏР в„– Р Т‘Р С• <b>70</b> РЎРѓРЎвЂљРЎР‚Р С•Р С” Р Р…Р В° РЎР‚Р В°Р В·Р Т‘Р ВµР В».'
+      ? '<b>Free:</b> собирай и редактируй банки, сохраняй до <b>70</b> строк на раздел.'
       : '<b>Free:</b> build and edit banks, save up to <b>70</b> lines per section.';
     const hFree2 = ru
-      ? '<b>Pro:</b> РЎРѓР Р…Р С‘Р СР В°Р ВµРЎвЂљ save-cap, Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°Р ВµРЎвЂљ premium controls Р С‘ РЎС“РЎРѓР С‘Р В»Р С‘Р Р†Р В°Р ВµРЎвЂљ Best live.'
+      ? '<b>Pro:</b> снимает save-cap, открывает premium controls и усиливает Best live.'
       : '<b>Pro:</b> removes save caps, unlocks premium controls, and gives you a stronger Best live flow.';
     const guideHtml = ru
-      ? '<li><b>Step 1:</b> Р СџР С•Р Т‘Р С”Р В»РЎР‹РЎвЂЎР С‘ РЎРѓР Р†Р С•Р в„– X handle Р С•Р Т‘Р С‘Р Р… РЎР‚Р В°Р В·.</li><li><b>Step 2:</b> Р РЋР С•Р В±Р С‘РЎР‚Р В°Р в„– English-only reply banks Р Р† <span class="kbd">GM</span> / <span class="kbd">GN</span>.</li><li><b>Step 3:</b> Р С™Р С•Р С—Р С‘РЎР‚РЎС“Р в„– РЎРѓР С• РЎРѓР В°Р в„–РЎвЂљР В° Р С‘Р В»Р С‘ Р С‘Р В· popup Р С‘ Р Р†РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР в„– Р Р†РЎР‚РЎС“РЎвЂЎР Р…РЎС“РЎР‹ Р Р† X.</li><li><b>Limits:</b> Free = Р Т‘Р С• <b>70</b> РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎвЂР Р…Р Р…РЎвЂ№РЎвЂ¦ РЎРѓРЎвЂљРЎР‚Р С•Р С” Р Т‘Р В»РЎРЏ GM + <b>70</b> Р Т‘Р В»РЎРЏ GN. Р вЂўРЎРѓР В»Р С‘ РЎС“Р Р…Р С‘Р С”Р В°Р В»РЎРЉР Р…РЎвЂ№Р в„– Р С—РЎС“Р В» РЎС“Р В·Р С”Р С‘Р в„–, Р С—Р В°РЎвЂЎР С”Р В° Р Р†Р ВµРЎР‚Р Р…РЎвЂРЎвЂљ Р СР ВµР Р…РЎРЉРЎв‚¬Р Вµ РЎРѓРЎвЂљРЎР‚Р С•Р С” Р Р†Р СР ВµРЎРѓРЎвЂљР С• РЎвЂљР В°Р в„–Р Р…Р С•Р С–Р С• РЎС“Р Т‘Р В»Р С‘Р Р…Р ВµР Р…Р С‘РЎРЏ.</li>'
+      ? '<li><b>Step 1:</b> Подключи свой X handle один раз.</li><li><b>Step 2:</b> Собирай English-only reply banks в <span class="kbd">GM</span> / <span class="kbd">GN</span>.</li><li><b>Step 3:</b> Копируй со сайта или из popup и вставляй вручную в X.</li><li><b>Limits:</b> Free = до <b>70</b> сохранённых строк для GM + <b>70</b> для GN. Если уникальный пул узкий, пачка вернёт меньше строк вместо тайного удлинения.</li>'
       : '<li><b>Step 1:</b> Connect your X handle once.</li><li><b>Step 2:</b> Build English-only reply banks in <span class="kbd">GM</span> / <span class="kbd">GN</span>.</li><li><b>Step 3:</b> Copy from the site or popup, then paste manually on X.</li><li><b>Limits:</b> Free = up to <b>70 saved lines</b> for GM + <b>70</b> for GN. If the unique pool is tight, batch returns fewer lines instead of padding with longer replies.</li>';
-    const extensionUsage = ru ? 'Daily limit' : 'Daily limit';
+    const extensionUsage = ru ? 'Extension usage' : 'Extension usage';
     const limitsNote = ru
-      ? 'Free РЎвЂ¦Р Р†Р В°РЎвЂљР В°Р ВµРЎвЂљ, РЎвЂЎРЎвЂљР С•Р В±РЎвЂ№ РЎРѓР С—Р С•Р С”Р С•Р в„–Р Р…Р С• Р С—Р С•Р С—РЎР‚Р С•Р В±Р С•Р Р†Р В°РЎвЂљРЎРЉ Р Р†РЎРѓРЎвЂ. Р В Р ВµР В°Р В»РЎРЉР Р…РЎвЂ№Р в„– cap Р Р…Р В° РЎРѓР В°Р в„–РЎвЂљР Вµ РІР‚вЂќ РЎРЊРЎвЂљР С• РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎвЂР Р…Р Р…РЎвЂ№Р Вµ РЎРѓРЎвЂљРЎР‚Р С•Р С”Р С‘. Р В Р В°РЎРѓРЎв‚¬Р С‘РЎР‚Р ВµР Р…Р С‘Р Вµ Р С•РЎРѓРЎвЂљР В°РЎвЂРЎвЂљРЎРѓРЎРЏ copy-only.'
+      ? 'Free хватает, чтобы спокойно попробовать всё. Реальный cap на сайте — это сохранённые строки. Расширение остаётся copy-only.'
       : 'Free is enough to try everything. Saved lines are the real site cap. The extension stays copy-only.';
     const helpDesc = ru
-      ? 'Free Р С•РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎвЂљ save-cap. Р В Р В°РЎРѓРЎв‚¬Р С‘РЎР‚Р ВµР Р…Р С‘Р Вµ РЎР‚Р В°Р В±Р С•РЎвЂљР В°Р ВµРЎвЂљ Р Р† manual copy-only РЎР‚Р ВµР В¶Р С‘Р СР Вµ. Pro РЎРѓР Р…Р С‘Р СР В°Р ВµРЎвЂљ cap Р С‘ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°Р ВµРЎвЂљ Р Р†РЎРѓРЎвЂ Р С—Р С•РЎРѓР В»Р Вµ on-chain verify.'
+      ? 'Free оставляет save-cap. Расширение работает в manual copy-only режиме. Pro снимает cap и открывает всё после on-chain verify.'
       : 'Free keeps the saved-line cap. The extension stays manual copy-only. Pro removes caps and unlocks everything after on-chain verification.';
 
     const elHDesc = $("h_desc"); if (elHDesc) elHDesc.textContent = hDesc;
@@ -6400,11 +6353,11 @@ function renderReferralRightCopy(lang){
     const elHelpDesc = $("help_desc"); if (elHelpDesc) elHelpDesc.textContent = helpDesc;
     const elPromoDaily = $("promo_k_daily"); if (elPromoDaily) elPromoDaily.textContent = extensionUsage;
     const elWalletDesc = $("wallet_desc"); if (elWalletDesc) elWalletDesc.textContent = ru
-      ? "Upgrade Pro: РЎРѓР Р…РЎРЏРЎвЂљРЎРЉ save-cap, Р С•РЎвЂљР С”РЎР‚РЎвЂ№РЎвЂљРЎРЉ Р Р†РЎРѓР Вµ themes/skins Р С‘ Р С—Р С•Р В»РЎС“РЎвЂЎР С‘РЎвЂљРЎРЉ Р В±Р С•Р В»Р ВµР Вµ РЎРѓР С‘Р В»РЎРЉР Р…РЎвЂ№Р Вµ live-generation controls."
+      ? "Upgrade Pro: снять save-cap, открыть все themes/skins и получить более сильные live-generation controls."
       : "Upgrade Pro: remove saved-line caps, unlock all themes/skins, and get stronger live-generation controls.";
     const elLimitTitle = $("limit_modal_title"); if (elLimitTitle) elLimitTitle.textContent = ru ? "Free cap reached" : "Free cap reached";
     const elLimitDesc = $("limit_modal_desc"); if (elLimitDesc) elLimitDesc.textContent = ru
-      ? "Р СћРЎвЂ№ РЎС“Р С—РЎвЂРЎР‚РЎРѓРЎРЏ Р Р† free save-cap. Pro РЎРѓР Р…Р С‘Р СР В°Р ВµРЎвЂљ cap Р Р…Р В° РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…РЎвЂР Р…Р Р…РЎвЂ№Р Вµ РЎРѓРЎвЂљРЎР‚Р С•Р С”Р С‘ Р С‘ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°Р ВµРЎвЂљ Р Р†РЎРѓРЎР‹ Р С”Р С•РЎРѓР СР ВµРЎвЂљР С‘Р С”РЎС“."
+      ? "Ты упёрся в free save-cap. Pro снимает cap на сохранённые строки и открывает всю косметику."
       : "You reached the free saved-line cap. Pro removes the cap on saved lines and unlocks the full cosmetics catalog.";
 
     ["gm","gn"].forEach((kind)=>{
@@ -6433,10 +6386,10 @@ function renderReferralRightCopy(lang){
       const b2 = $(kind + "_badge_2"); if (b2) b2.textContent = badge2;
       const b3 = $(kind + "_badge_3"); if (b3) b3.textContent = badge3;
       const pro1 = $(kind + "_pro_1"); if (pro1) pro1.innerHTML = ru
-        ? '<b>Unlimited</b> saved lines Р С‘ Р В±Р С•Р В»Р ВµР Вµ РЎРѓР С‘Р В»РЎРЉР Р…РЎвЂ№Р Вµ live-generation Р С‘Р Р…РЎРѓРЎвЂљРЎР‚РЎС“Р СР ВµР Р…РЎвЂљРЎвЂ№.'
+        ? '<b>Unlimited</b> saved lines и более сильные live-generation инструменты.'
         : '<b>Unlimited</b> saved lines and stronger live-generation tools.';
       const pro2 = $(kind + "_pro_2"); if (pro2) pro2.textContent = ru
-        ? "Best live РЎвЂљРЎРЏР Р…Р ВµРЎвЂљ Р Р…Р ВµРЎРѓР С”Р С•Р В»РЎРЉР С”Р С• Р Р…Р С•Р Р†РЎвЂ№РЎвЂ¦ Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљР С•Р Р† Р С‘ Р С•РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎвЂљ РЎРѓР В°Р СРЎвЂ№Р в„– РЎРѓР С‘Р В»РЎРЉР Р…РЎвЂ№Р в„–."
+        ? "Best live тянет несколько новых вариантов и оставляет самый сильный."
         : "Best live pulls a few fresh options and keeps the strongest one.";
       const list = $(kind + "_right_list"); if (list) list.innerHTML = listHtml;
       const dailyLabel = $(kind + "_daily_label"); if (dailyLabel) dailyLabel.textContent = extensionUsage;
@@ -6448,17 +6401,17 @@ function renderReferralRightCopy(lang){
     const ru = siteLang() === "ru";
     const note = $("r_note");
     if (note) note.textContent = ru
-      ? "Р СџР В»РЎР‹РЎв‚¬Р С”Р С‘ Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°РЎР‹РЎвЂљРЎРѓРЎРЏ РЎвЂљР С•Р В»РЎРЉР С”Р С• Р С•РЎвЂљ РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С•Р С–Р С• Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ Р С—РЎР‚Р С•Р Т‘РЎС“Р С”РЎвЂљР В°. Р С›Р Т‘Р Р…Р В° РЎР‚Р ВµР С–Р С‘РЎРѓРЎвЂљРЎР‚Р В°РЎвЂ Р С‘РЎРЏ РЎРѓР В°Р СР В° Р С—Р С• РЎРѓР ВµР В±Р Вµ Р Р…Р С‘РЎвЂЎР ВµР С–Р С• Р Р…Р Вµ Р Т‘Р В°РЎвЂРЎвЂљ."
+      ? "Плюшки открываются только от реального использования продукта. Одна регистрация сама по себе ничего не даёт."
       : "Referral perks unlock only from real product usage. A signup alone does not move anything.";
     const desc = $("r_desc");
-    if (desc) desc.textContent = ru ? "Р В§РЎвЂљР С• РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С• Р С•РЎвЂљР С”РЎР‚РЎвЂ№Р Р†Р В°Р ВµРЎвЂљ РЎС“РЎР‚Р С•Р Р†Р Р…Р С‘:" : "What actually unlocks perks:";
+    if (desc) desc.textContent = ru ? "Что реально открывает уровни:" : "What actually unlocks perks:";
     const invited = $("r_invited_note");
     if (invited) invited.textContent = ru
-      ? "Р вЂ”Р Т‘Р ВµРЎРѓРЎРЉ Р С•РЎРѓРЎвЂљР В°РЎР‹РЎвЂљРЎРѓРЎРЏ РЎвЂљР С•Р В»РЎРЉР С”Р С• РЎР‚Р ВµР В°Р В»РЎРЉР Р…РЎвЂ№Р Вµ Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ. Р В¤РЎР‚Р С•Р Т‘-РЎвЂћР В»Р В°Р С–Р С‘ Р С‘ Р С—РЎС“РЎРѓРЎвЂљРЎвЂ№Р Вµ РЎР‚Р ВµР С–Р С‘РЎРѓРЎвЂљРЎР‚Р В°РЎвЂ Р С‘Р С‘ Р Р…Р Вµ Р С—Р С•Р С—Р В°Р Т‘Р В°РЎР‹РЎвЂљ Р Р† РЎРѓР С—Р С‘РЎРѓР С•Р С”."
+      ? "Здесь остаются только реальные использования. Фрод-флаги и пустые регистрации не попадают в список."
       : "This list shows real usage only. Fraud-flagged or empty signups do not stay here.";
     const list = $("r_list");
     if (list) list.innerHTML = ru
-      ? '<li id="r_li1">Р СџР С•Р Т‘Р ВµР В»Р С‘РЎРѓРЎРЉ РЎРѓР Р†Р С•Р ВµР в„– РЎРѓРЎРѓРЎвЂ№Р В»Р С”Р С•Р в„–. Р СћР С•Р В»РЎРЉР С”Р С• Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘Р Вµ Р Т‘Р Р†Р С‘Р С–Р В°Р ВµРЎвЂљ Р С•РЎвЂљР С”РЎР‚РЎвЂ№РЎвЂљР С‘РЎРЏ.</li><li id="r_li2"><b>Confirmed</b> = РЎвЂЎР ВµР В»Р С•Р Р†Р ВµР С” Р С—Р С•Р Т‘Р С”Р В»РЎР‹РЎвЂЎР С‘Р В» handle Р С—Р С• РЎвЂљР Р†Р С•Р ВµР в„– РЎРѓРЎРѓРЎвЂ№Р В»Р С”Р Вµ.</li><li id="r_li3"><b>Active</b> = Р С—Р С•Р Т‘РЎвЂљР Р†Р ВµРЎР‚Р В¶Р Т‘РЎвЂР Р…Р Р…РЎвЂ№Р в„– Р С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°РЎвЂљР ВµР В»РЎРЉ РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С• Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р В» GM Р С‘Р В»Р С‘ GN.</li><li id="r_li4"><b>Eligible</b> = active + Р В°Р Р…РЎвЂљР С‘РЎвЂћРЎР‚Р С•Р Т‘ + Р СР С‘Р Р…Р С‘Р СР В°Р В»РЎРЉР Р…Р В°РЎРЏ Р В°Р С”РЎвЂљР С‘Р Р†Р Р…Р С•РЎРѓРЎвЂљРЎРЉ.</li>'
+      ? '<li id="r_li1">Поделись своей ссылкой. Только использование двигает открытия.</li><li id="r_li2"><b>Confirmed</b> = человек подключил handle по твоей ссылке.</li><li id="r_li3"><b>Active</b> = подтверждённый пользователь реально использовал GM или GN.</li><li id="r_li4"><b>Eligible</b> = active + антифрод + минимальная активность.</li>'
       : '<li id="r_li1">Share your link. Only real usage moves unlocks.</li><li id="r_li2"><b>Confirmed</b> = a handle connected through your link.</li><li id="r_li3"><b>Active</b> = that confirmed user actually used GM or GN.</li><li id="r_li4"><b>Eligible</b> = active + anti-fraud + minimum activity.</li>';
   }
 
@@ -7059,7 +7012,7 @@ function closeLangMenu(){
 
     CLEAN_FILL_INFLIGHT[kind] = true;
     try{
-      if (msgEl && !opts?.silent) msgEl.innerHTML = `<span class="muted">Best passРІР‚В¦</span>`;
+      if (msgEl && !opts?.silent) msgEl.innerHTML = `<span class="muted">Best pass…</span>`;
       const res = await refillCleanFill(kind, targetCount, opts || {});
       renderList(kind);
       if (msgEl && !opts?.keepMessage){
@@ -7092,7 +7045,7 @@ function cleanupKeyLines(lines){
     let t = String(s||"");
     t = t.replace(/\s+/g, " ").trim();
     // remove leading dashes that look botted
-    t = t.replace(/^(?:-|РІР‚вЂњ|РІР‚вЂќ)+\s*/,"");
+    t = t.replace(/^(?:-|–|—)+\s*/,"");
     return t;
   }
 
@@ -7520,7 +7473,7 @@ INIT_DONE = true;
     if (!shouldReload()) return;
     window.__gmxRecovering = true;
     try{
-      try{ if (typeof toast === "function") toast("warn", "RecoveringРІР‚В¦ reloading", 2500); }catch{}
+      try{ if (typeof toast === "function") toast("warn", "Recovering… reloading", 2500); }catch{}
     }catch{}
     setTimeout(()=>{ try{ location.reload(); }catch{} }, 1200);
   }
