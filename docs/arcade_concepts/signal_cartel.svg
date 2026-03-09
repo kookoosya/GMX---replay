@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="Signal Cartel">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#00e57d"/>
+      <stop offset="100%" stop-color="#00c8ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="#0b1020"/>
+  <rect x="40" y="40" width="1200" height="640" rx="28" fill="url(#g)" opacity="0.18"/>
+  <circle cx="250" cy="180" r="110" fill="url(#g)" opacity="0.22"/>
+  <circle cx="1000" cy="530" r="140" fill="url(#g)" opacity="0.18"/>
+  <path d="M120 560C280 420 430 640 620 500C810 360 930 250 1160 320" fill="none" stroke="url(#g)" stroke-width="14" stroke-linecap="round" opacity="0.8"/>
+  <text x="84" y="118" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="48" font-weight="700">Signal Cartel</text>
+  <text x="86" y="168" fill="#d7def5" font-family="Arial, Helvetica, sans-serif" font-size="24">GMXReply Arcade concept placeholder</text>
+</svg>

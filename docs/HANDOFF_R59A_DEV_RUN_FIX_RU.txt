@@ -1,0 +1,22 @@
+GMXReply R59A DEV RUN FIX
+
+Что исправлено:
+- добавлен актуальный Backend/tools/dev-run.mjs
+- это фикс для случая, когда npm run dev поднимает backend, но не стартует frontend из-за старого dev wrapper
+
+Почему это случилось:
+- в прошлом cumulative pack не был вложен tools/dev-run.mjs
+- локально мог остаться старый файл, который не распознаёт только что поднятый backend как свой текущий instance
+
+Что заменить:
+- Backend/tools/dev-run.mjs
+
+Что проверить:
+1. закрыть старые node/vite окна
+2. снова выполнить в Backend: npm run dev
+3. убедиться, что стартуют и backend, и frontend
+4. открыть http://127.0.0.1:5173/app
+
+Временный обходной путь, если нужно запустить сразу:
+- Backend: node index.js
+- Frontend: cd frontend && npm run dev

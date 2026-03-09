@@ -1,0 +1,18 @@
+GMXReply R70 DEV RUNTIME FIX
+
+Что исправлено
+- Vite dev legacy shell больше не зависит от 5173 для /app.js, /mode.js, /entitlements.js.
+- В local dev эти legacy-скрипты теперь грузятся с backend origin (обычно 127.0.0.1:10000).
+- В vite proxy добавлены legacy static paths: /app.js, /mode.js, /entitlements.js, /arcade.js, /themes.json, /extension-config.json, /favicon.ico.
+
+Какие файлы изменены
+- frontend/src/LegacyApp.tsx
+- frontend/src/legacy/legacyApp.ts
+- frontend/vite.config.ts
+
+Что проверить
+- npm run dev в Backend
+- npm run dev в frontend
+- открыть http://127.0.0.1:5173/app
+- в Network должно быть: /app.js, /mode.js, /entitlements.js -> 200, без ERR_CONNECTION_REFUSED
+- GM/GN tabs должны открываться

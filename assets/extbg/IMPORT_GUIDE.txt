@@ -1,0 +1,14 @@
+Extension wallpapers import guide
+
+Photo wallpapers:
+- put/generated as extv3_XX.webp
+- thumbs go to extbg/thumbs/extv3_XX.webp
+
+Crypto/stylized SVG:
+- use lux_ext_<slug>.svg
+
+Free reserved ids:
+- ext_free_01.svg
+- ext_free_02.svg
+
+Use Backend/tools/wallpaper_batch_helper.py to keep ids and thumbs clean.

@@ -1,0 +1,87 @@
+GMXReply handoff — 2026-03-02 admin / popup / generation pass
+
+Baseline
+- Source of truth used: user archive "Bac 2.zip" plus the latest cumulative layer already provided in this chat.
+- Work was done as a cumulative overlay on top of that state, not as a rewrite.
+
+What was done in this pass
+1) Legacy admin cleanup
+- Removed these legacy admin cards from both source + public legacy HTML:
+  - Admin: X selectors hotfix
+  - Admin: extension health
+  - Admin: FAQ base
+- Files:
+  - frontend/src/legacy/legacyBody.html
+  - public/app.html
+- This directly addresses the extra admin blocks still visible in the legacy /app flow.
+
+2) Popup width / clarity
+- Rebuilt popup layout CSS so the extension opens as a normal readable popup instead of a cramped narrow strip.
+- Added explicit width, spacing, card layout, readable typography, stronger controls, and proper grid blocks for stats.
+- File:
+  - extension/popup.css
+
+3) Faster site language -> extension sync
+- Legacy site language changes now immediately send GMX_SYNC_NOW.
+- Extension site_sync retry cadence was tightened and de-duplicated so updates land much faster.
+- Popup now rechecks UI state on storage changes, focus, and visibility return.
+- Files:
+  - frontend/src/legacy/legacyApp.ts
+  - public/app.js
+  - extension/site_sync.js
+  - extension/popup.js
+
+4) Better tab copy around generation controls
+- Added clearer helper text inside GM/GN tabs explaining what Size / Writing style / Preset pack do.
+- Improved visible anti-repeat copy in English from vague wording to clearer product wording.
+- Renamed style options and preset pack names to read more like product choices instead of placeholder labels.
+- Files:
+  - frontend/src/legacy/legacyBody.html
+  - public/app.html
+  - frontend/src/legacy/legacyApp.ts
+  - public/app.js
+  - frontend/src/legacy/siteI18nCatalog.ts
+  - public/i18n/siteI18n.js
+  - frontend/public/i18n/siteI18n.js
+  - shared/i18n/locales/en.json
+
+5) Generation quality pass
+- Reworked backend reply composition so outputs are less repetitive and less low-effort.
+- The old generator was mostly a tiny greeting + tiny vibe pool. It now uses broader opener / secondary pools and style-specific tails.
+- Styles now nudge tone in a less spammy way and with less forced slang.
+- This is still template generation, but it should produce cleaner and less samey GM/GN batches than the previous logic.
+- File:
+  - index.js
+
+What is NOT done yet
+- No full production rebuild was done here.
+- frontend/dist and public/bridge assets were not regenerated in this container.
+- I did not run full npm install / npm run dev / npm run build inside this environment.
+- React bridge pages still need another dedicated polish pass if the goal is full parity and final product copy across every bridge screen.
+- The generator is improved, but this is still template-based. If the product needs a much higher ceiling later, the next step is a stronger phrase system or curated pools per style/market context.
+
+What was checked
+- JS syntax checks passed:
+  - extension/popup.js
+  - extension/site_sync.js
+  - public/app.js
+  - index.js
+  - public/i18n/siteI18n.js
+  - frontend/public/i18n/siteI18n.js
+- TypeScript parse check passed via transpile for:
+  - frontend/src/legacy/legacyApp.ts
+  - frontend/src/legacy/siteI18nCatalog.ts
+
+Important stale-build note
+- If the user is looking at Vite dev on 127.0.0.1:5173, the live source files that matter are under frontend/src/legacy/*.
+- If the user is looking at backend static /app, the live files that matter are public/app.*.
+- If any old built asset still shows removed admin blocks, it is stale and needs a local rebuild or dev restart.
+
+Recommended next step
+1) User replaces files from this cumulative pack.
+2) Restart dev.
+3) Check three things first:
+   - legacy /admin no longer shows the removed blocks
+   - popup opens wide and readable
+   - site language change reflects in popup much faster
+4) Then review actual GM/GN batch quality again and do one more focused tuning pass if needed.

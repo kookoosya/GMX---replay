@@ -1,0 +1,27 @@
+Done in this patch
+
+1) Moved site i18n source of truth out of inline JS/TS into:
+   shared/i18n/locales/*.json
+
+2) Added generators:
+   - tools/i18n_sync.mjs
+   - tools/i18n_audit.js
+
+3) Generated runtime catalogs:
+   - frontend/src/legacy/siteI18nCatalog.ts
+   - public/i18n/siteI18n.js
+
+4) Rewired runtime:
+   - frontend/src/legacy/legacyApp.ts now imports createSiteI18nCatalog()
+   - public/app.js now reads from window.GMX_SITE_I18N
+   - public/app.html now loads /i18n/siteI18n.js before /app.js
+
+5) Preserved selected site language across reloads:
+   - removed forced LS_SITE_LANG reset in frontend/src/legacy/legacyApp.ts
+   - removed forced LS_SITE_LANG reset in public/app.js
+
+Workflow now:
+- edit locale JSON files
+- npm run i18n:sync
+- npm run audit:i18n
+- then test/build/commit

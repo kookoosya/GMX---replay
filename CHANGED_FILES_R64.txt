@@ -1,0 +1,16 @@
+Backend/extension/content.js
+Backend/extension/popup.html
+Backend/extension/popup.js
+Backend/frontend/public/app.js
+Backend/frontend/public/mode.js
+Backend/frontend/public/themes.json
+Backend/frontend/src/bridgeI18n.ts
+Backend/frontend/src/features/arcade/arcadeCovers.ts
+Backend/frontend/src/legacy/legacyBody.html
+Backend/frontend/src/pages/ArcadePage.tsx
+Backend/frontend/tsconfig.app.json
+Backend/frontend/tsconfig.json
+Backend/public/app.js
+Backend/public/bridge/...
+Backend/CHANGED_FILES_R64.txt
+Backend/RECOVERY_AUDIT_R64_NOTE.txt

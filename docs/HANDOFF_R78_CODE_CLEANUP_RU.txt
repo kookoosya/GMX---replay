@@ -1,0 +1,64 @@
+GMXReply R78 — code cleanup pass
+
+Что найдено
+- Best на site/bridge/frontend public app.js был слишком мягкий и спокойно выбирал greet-only мусор
+- Extension popup всё ещё жил на лимите ext wallpapers 57, хотя pack уже 58
+- Extension Themes табы могли заходить в пустую панель из-за ленивого рендера только активного view
+- Arcade карточки стартовали с remote cover и ломались, если удалённая картинка не открывалась
+- Backend generation не был достаточно живучим: ranked/saveRecent могли ронять generate/generate-bulk без мягкой деградации
+- Mid/Max ответы могли терять emoji после sanitize/style-прохода
+
+Что изменено
+- index.js
+  - добавлены pickStableEmoji() и ensureSingleEmojiTail()
+  - mid/max теперь гарантируют один emoji-хвост, если стиль не noemoji
+  - replyQualityScore сильнее штрафует mid/max без emoji
+  - добавлены safeGenerateRankedCandidates(), fallbackGenerateList(), safeSaveRecent()
+  - /api/generate и /api/generate-bulk используют safe fallback вместо жёсткого 500 на ranked/saveRecent хвостах
+
+- public/app.js
+- frontend/public/app.js
+- public/bridge/app.js
+  - усилен Best scoring
+  - добавлен bestLineShape()
+  - Best теперь держит один лучший вариант на shape-группу и перестал тянуть greeting-only мусор как якобы лучший
+  - extthemes при входе теперь форс-рендерят theme/wall/custom панели до setExtView()
+  - FREE_VISIBLE_EXT_WALLPAPERS увеличен до 6
+  - в free переведены extv3_03 и extv3_04
+  - нормализация ext wallpaper ids доведена до 58
+
+- extension/popup.js
+  - EXT_WALLPAPER_OPTIONS доведён до 58
+  - canonicalExtWallpaperId() и legacy migration тоже доведены до 58
+  - Best scoring в popup усилен, чтобы Best GM/GN не выбирал пустой greet-only мусор
+
+- public/arcade.js
+- frontend/public/arcade.js
+- public/bridge/arcade.js
+  - карточки теперь стартуют с local category cover из /assets/arcade/covers/*.webp
+  - remote cover только апгрейдит local cover, если реально загружается
+  - битая remote image больше не оставляет пустую карточку
+
+Что проверить локально
+1. /app
+   - GM / GN -> Quick 1 / Batch 10 / Best
+   - Best не должен выбирать "Morning legend"-уровень мусора, если есть содержательнее строка
+
+2. /app -> Extension Themes
+   - Pick a theme / Wallpapers / Custom background
+   - вкладки не должны быть пустыми при первом заходе
+   - unlocked count для wallpapers должен быть 6/60 на free старте
+
+3. extension popup
+   - список wallpapers должен доходить до Photo Pack 58
+   - Best GM / Best GN не должен брать greeting-only вариант, если в cache есть сильнее строка
+
+4. /arcade.html
+   - карточки сразу имеют local cover
+   - если remote картинка доступна, она заменяет local
+   - если remote умерла, local остаётся
+
+5. API
+   - /api/generate-bulk?kind=gm&mode=mid&count=10
+   - /api/generate-bulk?kind=gn&mode=max&count=10
+   - mid/max не должны приходить голыми без emoji, если стиль не noemoji

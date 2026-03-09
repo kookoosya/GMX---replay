@@ -1,0 +1,46 @@
+GMXReply — HANDOFF R42 RU
+
+Что сделано
+1. Добавлена безопасная заготовка под быстрый импорт новых обоев без ломания рабочей логики сайта и extension.
+2. Добавлен helper:
+   Backend/tools/wallpaper_batch_helper.py
+3. Helper умеет:
+   - сканировать текущий inventory
+   - показывать next ids
+   - импортировать обычные картинки в webp
+   - делать thumbs
+   - импортировать crypto/stylized svg
+   - генерировать готовые snippets для WALLPAPERS / EXT_WALLPAPERS
+4. Добавлены документы:
+   - Backend/docs/WALLPAPER_QUICK_PIPELINE_RU.txt
+   - Backend/docs/WALLPAPER_CURRENT_INVENTORY_R42.txt
+   - Backend/docs/generated/site_wallpapers_snippet.js
+   - Backend/docs/generated/ext_wallpapers_snippet.js
+   - Backend/docs/generated/wallpaper_inventory.json
+5. Добавлены маленькие guide-файлы прямо в asset-папки, чтобы не путаться при следующих пакетах.
+6. Текущая рабочая логика themes/wallpapers/extension не тронута, чтобы не сломать уже рабочий результат.
+
+Что НЕ сделано
+1. Не внедрён runtime dynamic manifest, который бы подхватывал новые обои вообще без обновления app.js.
+   Это сделано намеренно, чтобы не рисковать стабильностью.
+2. Не добавлены новые реальные картинки в этом пакете. Это именно инфраструктурная заготовка.
+
+Что осталось
+1. Когда пользователь пришлёт новую пачку обоев, прогнать их через helper.
+2. После этого обновить snippets и при необходимости встроить новые id в app.js / popup flows следующим cumulative-паком.
+3. Затем можно перейти к следующему большому блоку проекта:
+   - referrals polish
+   - wallet / modal / light mode polish
+   - arcade later
+
+Smoke-check
+1. Сайт должен запускаться как и раньше.
+2. Themes / Wallpapers на сайте должны по-прежнему открываться.
+3. Extension wallpapers должны по-прежнему применяться.
+4. Новые docs/tools не должны ни на что runtime-влиять.
+
+Что делать дальше, если чат умрёт
+1. Брать текущую базу + R40 + R41 + R42 как cumulative-слои.
+2. Считать, что wallpapers runtime сейчас стабилен.
+3. Для новых картинок использовать helper и generated snippets как каноническую заготовку.
+4. Не размазывать ассеты снова по разным папкам. Канон остаётся Backend/assets.

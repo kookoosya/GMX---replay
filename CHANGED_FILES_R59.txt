@@ -1,0 +1,10 @@
+index.js
+public/app.html
+public/app.js
+public/extension-config.json
+frontend/public/app.js
+frontend/public/extension-config.json
+frontend/src/legacy/legacyBody.html
+extension/popup.html
+extension/popup.js
+RECOVERY_SAFE_PASS_R59_NOTE.txt

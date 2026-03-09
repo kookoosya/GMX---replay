@@ -1,0 +1,102 @@
+GMXReply — NEW CHAT START (RU) — R48
+
+Baseline / Source of truth
+
+Работаем от моей текущей локальной рабочей базы, где уже накатана подтверждённо рабочая цепочка архивов до R47.
+
+Если в новом чате нужно восстановиться только по архивам из прошлого диалога, то использовать такую цепочку:
+- GMXReply_R38_LIGHT_THEMES_WP_EXTFIX (2).zip
+- GMXReply_CUMULATIVE_R40_LEGACY_BOOT_ASSETS_FIX.zip
+- GMXReply_CUMULATIVE_R41_THEMES_WP_EXTSYNC_BIGPACK.zip
+- GMXReply_CUMULATIVE_R42_WALLPAPER_PIPELINE_READY.zip
+- GMXReply_CUMULATIVE_R43_REFERRALS_PROMOTER_BIGPACK.zip
+- GMXReply_CUMULATIVE_R44_WALLET_MODAL_I18N_BIGPACK.zip
+- GMXReply_CUMULATIVE_R46_GM_GN_RETUNE_FAQ_CLEANUP.zip
+- GMXReply_CUMULATIVE_R47_GM_GN_XSTYLE_SUPPORT_BIGPACK.zip
+- плюс transition pack R48 только как handoff/context
+
+Важно
+- Я не разработчик.
+- Ты делаешь конкретные правки по файлам и отдаёшь готовый cumulative zip.
+- Я только заменяю файлы.
+- Никаких мелких patch zip.
+- Никаких "сделай сам".
+- Никаких удалений .git и моих резервов.
+
+Как со мной работать
+Каждый шаг:
+- один cumulative zip
+- внутри только файлы на замену в структуре Backend/...
+- обязательно внутри Backend/docs/HANDOFF_Rxx_RU.txt
+
+В handoff обязательно писать:
+- что сделано
+- что НЕ сделано
+- что осталось
+- что проверить
+- что делать дальше, если чат умрёт
+
+Что уже стабилизировано
+- сайт поднимается
+- themes / wallpapers работают
+- extension wallpapers применяются быстро
+- legacy boot и asset headers уже фиксились
+- referrals / promoter logic уже частично выровнены
+- wallet / modal / i18n / support wording уже проходили крупные чистки
+
+Главный текущий приоритет
+PRIORITY #1 — Generation quality for GM/GN under X replies
+
+Проблема
+Сейчас GM/GN generation всё ещё местами уходит в неправильный тип текста:
+- слишком однотипно
+- местами как личный sign-off / diary line
+- местами не похоже на reply к чужому post
+- min/mid/max ещё не дожаты под реальный X-style
+
+Что нужно сделать первым
+1. Переписать английскую ветку generation GM/GN в Backend/index.js под real X-style replies.
+2. Использовать большие curated pools, в том числе из пользовательских примеров из прошлого чата.
+3. GM/GN должны быть именно reply to someone else's GM/GN post, а не "я закрываю день".
+4. Усилить anti-repeat:
+   - per-handle anti-repeat
+   - global anti-repeat
+   - fingerprint/shape filtering
+5. Чётко развести:
+   - Fast / min
+   - Balanced / mid
+   - Full / max
+6. Проверить, чтобы UI справа и подсказки соответствовали реальной generation-логике.
+
+Как должны звучать ответы
+Правильные примеры:
+- Gm legend 🔥
+- Morning king 👑
+- Gm frens! WAGMI ☀️
+- Gn! 🌙
+- Sleep well soldier 🫡
+- Gn! See you in the AM
+
+Неправильные примеры:
+- gn, calling it a little earlier tonight
+- letting the day go small
+- closing it out before the mood slips
+- nothing left worth forcing tonight
+
+Практический вектор для реализации
+Лучше делать curated banks + анти-повтор, а не снова собирать всё из слабых абстрактных clause-комбинаций.
+
+Что не трогаем сейчас
+- Arcade
+- платежи
+- security
+- глубокие backend-хвосты вне generation
+
+Формат работы дальше
+Работаем большими пакетами, не мелкими патчами.
+
+Первый ожидаемый результат в новом чате
+Один большой cumulative zip, где уже дожат generation-блок:
+- Backend/index.js
+- связанные UI/i18n файлы
+- Backend/docs/HANDOFF_R49_RU.txt

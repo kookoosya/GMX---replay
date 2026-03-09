@@ -1,0 +1,56 @@
+GMXReply HANDOFF · 2026-03-02 · ext_r4_localbase_insert_fix
+
+Source of truth used:
+- Bac 2.zip (project base)
+- r3 extension patch was reviewed, but this pack fixes the regressions from that pass
+
+What was actually broken:
+1) Local extension connect was made worse by forcing any local origin to 127.0.0.1:10000.
+   - In React+Vite dev, the working API base can be the Vite origin (ex: 127.0.0.1:5173) because Vite proxies /api.
+   - If backend port shifts, forcing 10000 breaks popup connect and status.
+2) X inline insert was still brittle when local lists were empty / stale.
+3) Button clicks could steal focus from the X composer before insert.
+
+What this pack changes:
+- extension/popup.js
+  - keeps any localhost/127 origin as-is (does NOT rewrite 5173 -> 10000)
+  - tries the stored local origin first, then probes local ports 10000..10020 as fallback
+  - keeps prod fallback after local candidates
+- extension/content.js
+  - keeps any localhost/127 origin as-is
+  - safer editor readback (prefers X data-text nodes)
+  - safer clear/replace pipeline for the X composer
+  - prevents focus-steal on GM/GN button press (pointerdown/mousedown preventDefault)
+  - if saved list is empty but extension session exists, GM/GN now fall back to direct API generation instead of dead-ending
+- extension/site_sync.js
+  - sync now prefers window.__GMX_API_ORIGIN when the React/Vite shell exposes it, otherwise uses location.origin
+- extension/manifest.json
+  - version bumped to 1.0.13
+
+Files in this pack:
+- extension/content.js
+- extension/popup.js
+- extension/site_sync.js
+- extension/manifest.json
+
+How to test now:
+1) Replace files from this pack
+2) Reload the extension in chrome://extensions
+3) Open the local GMXReply site once so site_sync refreshes storage
+4) Re-open popup and test Connect @handle again
+5) Hard refresh x.com
+6) Open a reply composer and test GM / GN
+
+Important console note:
+- Errors mentioning files like contents.27786a0d.js / hEyG3 / other extension bundle names are NOT GMXReply
+- They are noise from other installed extensions
+- The GMXReply-relevant fixes in this pack are local base handling + inline insert stability
+
+Next likely step if anything is still off:
+- If popup still cannot connect, inspect chrome.storage.local.apiBase after opening the site
+- If GM/GN still render but do not insert, capture ONE fresh screenshot after this exact pack and continue from that DOM state only
+
+Project direction still unchanged:
+- main repo remains React + Vite first
+- Supabase wiring later in one pass after current fixes are stable
+- Arcade React+Vite archive is separate merge work after site/extension are stable

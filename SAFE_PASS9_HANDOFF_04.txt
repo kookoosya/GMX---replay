@@ -1,0 +1,90 @@
+GMXReply — SAFE_PASS9 — CUMULATIVE AUDIT FIX 04
+
+Baseline for this pack
+- Continue from SAFE_PASS9_CUMULATIVE_AUDIT_FIX_03
+- Focus of this pass: deep safe cleanup + runtime audit hardening + popup fallback cleanup
+
+What was done
+1. Added cross-platform cleanup script
+- New file: tools/safe_cleanup.mjs
+- New npm scripts:
+  - npm run cleanup:safe
+  - npm run cleanup:safe:dry
+- SAFE_PASS9_DELETE_DEAD_FILES.bat now simply runs the node cleanup script
+
+2. Cleanup targets are now explicit and repeatable
+- Deletes dead extension file:
+  - extension/cosmetics.json
+- Deletes dead docs / old handoff tails:
+  - docs/DEV_ONE_COMMAND_RU.md
+  - docs/DEV_README_RU.txt
+  - docs/HANDOFF_R78_CODE_CLEANUP_RU.txt
+  - docs/reference/ARCADE_REFERENCE_RU.txt
+  - docs/reference/USER_GMGN_REFERENCE_RU.txt
+- Deletes dead helper tools:
+  - tools/env-status.ps1
+  - tools/env-sync.ps1
+  - tools/migrate-sqlite-to-supabase.mjs
+  - tools/test-supabase-usage.mjs
+  - tools/wallpaper_batch_helper.py
+- Deletes dead assets:
+  - assets/extbg/v2_001.webp ... v2_040.webp
+  - assets/wallets/phantom.png
+  - assets/wallets/solflare.png
+  - assets/wallpapers/inbox/README.txt
+- Removes empty dirs when safe:
+  - docs/reference
+  - docs
+  - assets/wallpapers/inbox
+
+3. Runtime audit is now stricter
+- tools/runtime_audit.mjs now also reports dead files still present
+- Before cleanup on the old tree: issues=94
+- After running cleanup on the same tree: issues=0
+
+4. Popup fallback copy was cleaned again
+- extension/popup.js fallback lines are now less postcard-like and less emoji-heavy
+- This only touches popup fallback path, not the main generation endpoint
+
+Files in this cumulative pack
+- package.json
+- tools/safe_cleanup.mjs
+- tools/runtime_audit.mjs
+- SAFE_PASS9_DELETE_DEAD_FILES.bat
+- extension/popup.js
+- SAFE_PASS9_HANDOFF_04.txt
+
+What to run locally
+1. From Backend root:
+   npm run cleanup:safe
+2. Then verify:
+   npm run audit:runtime
+
+Expected result after cleanup
+- extension wallpapers expected=68 actual=68
+- dead files present count=0
+- app/mode/arcade/siteI18n parity stays ok
+- Runtime audit done. issues=0
+
+What to check manually
+- /app
+- /bridge
+- extension popup
+- GM
+- GN
+- Best
+- extension wallpapers
+- saved view after refresh
+
+What remains next
+1. Next cleanup pass can target deeper code-level dead branches inside app.js / popup.js only after smoke remains stable
+2. Then another generation pass:
+- near-duplicate control
+- mid/max separation
+- emoji policy tuning
+3. Then separate arcade pass only if browser/runtime still shows card drift
+
+Important
+- This pack does not rely on fantasy cleanup
+- Tree cleanup is now reproducible by command
+- Runtime audit now proves whether dead tails are still present or not

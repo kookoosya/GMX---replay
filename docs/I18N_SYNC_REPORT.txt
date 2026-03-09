@@ -1,0 +1,19 @@
+GMXReply i18n sync report
+Updated: 2026-03-08T13:31:35.697Z
+Locales: en, de, fr, es, pt, it, nl, tr, pl, id, ru, uk, hi, ja, zh
+
+en: copied-from-en=6, identical-to-en=356/356 (100%)
+de: copied-from-en=6, identical-to-en=117/356 (33%)
+fr: copied-from-en=6, identical-to-en=116/356 (33%)
+es: copied-from-en=6, identical-to-en=116/356 (33%)
+pt: copied-from-en=6, identical-to-en=117/356 (33%)
+it: copied-from-en=6, identical-to-en=98/356 (28%)
+nl: copied-from-en=6, identical-to-en=105/356 (29%)
+tr: copied-from-en=6, identical-to-en=100/356 (28%)
+pl: copied-from-en=6, identical-to-en=103/356 (29%)
+id: copied-from-en=6, identical-to-en=103/356 (29%)
+ru: copied-from-en=6, identical-to-en=60/356 (17%)
+uk: copied-from-en=6, identical-to-en=84/356 (24%)
+hi: copied-from-en=6, identical-to-en=133/356 (37%)
+ja: copied-from-en=6, identical-to-en=133/356 (37%)
+zh: copied-from-en=6, identical-to-en=133/356 (37%)

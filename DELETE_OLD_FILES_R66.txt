@@ -1,0 +1,10 @@
+Delete these old files/folders if you apply patch-only instead of full archive:
+- Backend/docs/HANDOFF_R58_RU.txt
+- Backend/docs/NEW_CHAT_START_R58_RECOVERY_RU.txt
+- Backend/public/bridge/i18n
+- Backend/frontend/src/features/arcade/externalPortalCatalog.ts
+- Backend/frontend/src/features/arcade/gameMonetizePack.ts
+- Backend/frontend/src/features/arcade/migrationBundle.ts
+- Backend/frontend/src/features/arcade/supabaseFoundation.ts
+- Backend/frontend/src/features/arcade/supabaseGatewayScaffold.ts
+- Backend/frontend/src/features/arcade/supabaseLiveMergePlan.ts

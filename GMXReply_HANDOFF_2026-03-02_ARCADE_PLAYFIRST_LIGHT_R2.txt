@@ -1,0 +1,71 @@
+GMXReply — CUMULATIVE HANDOFF
+Date: 2026-03-02
+Pack: arcade_playfirst_light_r2
+Baseline used: Bac 2.zip (treated as the only source of truth)
+
+WHAT WAS CHANGED
+1) Arcade route was rebuilt into a lighter play-first page.
+- Replaced the huge Phase 53-style management / migration / Supabase-heavy ArcadePage shell with a direct gameplay-first shell.
+- The route now prioritizes playing, not internal scaffolding.
+- Result: the Arcade tab should feel much less bloated.
+
+2) 5 core games are now surfaced clearly and immediately.
+- The top of /arcade now shows a visible Core pack with 5 instant-launch games:
+  - Neon Strike
+  - Payload Lab
+  - Steel Jaguar
+  - Star Spark
+  - Boss Vault
+- This directly addresses the “it launches 1 game, should be 5” complaint in the visible UX.
+
+3) All 25 React games are now directly accessible on the same route.
+- The page now exposes the full 25-game React library as a real selectable grid.
+- There is also a clearer quick-launch free shelf at the top of that library.
+- This directly addresses the “there should be 25 games” complaint in the route UX.
+
+4) Games now lazy-load instead of front-loading the entire arcade bundle.
+- ArcadePage no longer eagerly imports every single game module on first paint.
+- Each selected game is loaded only when the user opens it.
+- This is the main technical weight reduction in this pass.
+
+5) The playfield is now single-focus.
+- Only the currently selected game module mounts in the playfield.
+- The page still gives access to all core + React games, but only the active module is mounted.
+- This avoids the old “too much stuff at once” feeling.
+
+6) Shared local ladders are still visible.
+- The leaderboard panel remains on the page.
+- Runtime status updates still react to local arcade events.
+
+FILES IN THIS PACK
+- frontend/src/pages/ArcadePage.tsx
+
+IMPORTANT NOTES
+- This pass intentionally removes the bulky migration/export/Supabase console from the live /arcade route UI.
+- The source code for the broader arcade migration system still exists in the project; it is just no longer cluttering the main player-facing Arcade page.
+- This pass does NOT touch the safe copy-only extension flow.
+- This pass does NOT reintroduce any X injection.
+
+WHAT IS STILL NOT DONE
+1) Extension polish still needs separate passes if more UX tightening is wanted.
+2) If you want the legacy arcade bridge visible again, it should come back only as a separate dev-only surface, not inside the main player-facing /arcade route.
+3) Supabase wiring is still deferred and should still be done in one clean pass later.
+4) Render/deploy wiring is still deferred.
+
+SANITY CHECK
+- Syntax sanity for the rewritten TSX file was checked locally with TypeScript transpileModule.
+- Full frontend build was NOT run here because the archive does not include frontend node_modules / vite type packages in this environment.
+
+RECOMMENDED NEXT STEP
+Next sensible move from this exact state:
+- open /arcade and verify the 5 core buttons + 25 React library feel right in the live UI
+- if the route now feels correct, then the next pass should be visual polish for the game cards / spacing / stronger art-first presentation
+- after arcade UX stabilizes, return to extension polish and then the larger Supabase pass
+
+HOW TO APPLY
+- Replace the file from this pack over your Bac 2 working copy
+- Reload the frontend dev server if it is already running
+- Open /arcade and test:
+  - 5 core games visible immediately
+  - 25 React games visible in library
+  - selected game loads into a single playfield

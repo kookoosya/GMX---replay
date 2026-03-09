@@ -1,0 +1,83 @@
+GMXReply · HANDOFF · 2026-03-02 · EXT CONNECT + X INLINE FIX R2
+
+SOURCE OF TRUTH USED
+- Base worked from: Bac 2.zip (user said this is the real working archive)
+- Old overlay archives were NOT treated as source of truth
+- Arcade archive was reviewed only for planning context, NOT merged into main repo in this pass
+
+WHAT WAS BROKEN RIGHT NOW
+1) Extension popup connect could fail with "Failed to fetch"
+2) X inline GM/GN buttons were rendering, but placement was unstable and insert could fail / hit stale composer
+3) In local React+Vite dev, extension API requests could point at the frontend dev server instead of backend
+
+ROOT CAUSE FOUND
+- site_sync was storing apiBase = location.origin
+- when the site is opened through local React/Vite (127.0.0.1:5173 / localhost:5173), the extension then reuses 5173 as API base
+- popup/content/background fetches from the extension context can fail when they hit the Vite dev server instead of the backend API
+- content.js also kept binding to a specific composer node; X often rerenders that node, so clicks could target a stale box
+- current inline placement logic still leaned on dock-right absolute positioning, which is fragile on X
+
+FILES CHANGED IN THIS PACK
+- extension/content.js
+- extension/popup.js
+- extension/background.js
+- extension/site_sync.js
+- extension/manifest.json
+
+WHAT WAS CHANGED
+1) Local API base hardening
+- In popup/content/background normBase(), local frontend ports now normalize to:
+  http://127.0.0.1:10000
+- This keeps extension API calls pointed at backend during React+Vite local dev
+- Production domains still normalize exactly as before
+
+2) site -> extension sync fix
+- extension/site_sync.js now stores backend apiBase when the site runs on local frontend ports (like 5173)
+- bestEnabled sync tail no longer references an out-of-scope constant for localStorage writes
+
+3) X button insert reliability
+- content.js now resolves a live composer again right before insert (avoids stale node issue after X rerenders)
+- setTextboxText() is now multi-step:
+  - whole-text execCommand insert
+  - range/text-node insert
+  - human-like char typing
+  - final direct DOM fallback
+- insert now verifies that text actually appeared before reporting success
+
+4) X button placement
+- Primary placement is now inline in the same action row as native Reply/Post
+- GM/GN are inserted immediately before the native Reply/Post button cluster
+- If X layout is too cramped/off-screen, fallback is below the composer instead of disappearing
+
+5) Version bump
+- extension/manifest.json -> 1.0.11
+
+WHAT WAS NOT DONE IN THIS PASS
+- No site session/reset/i18n changes in app/public/frontend this round
+- No Arcade merge yet
+- No Supabase live wiring yet
+- No Render deployment config changes yet
+
+ARCADE / NEXT STAGE STATUS
+- User provided Phase 53 Arcade React+Vite archive + handoff files
+- Reviewed only as planning input
+- Keep that archive as Arcade source of truth until we explicitly merge games into the main working repo
+- Supabase should still be wired once, after the current site/extension core is stable
+
+HOW TO TEST THIS PACK
+1) Replace files from this zip into the real project
+2) Reload the Chrome extension in chrome://extensions
+3) Hard refresh x.com
+4) Open the site once in local dev so site_sync rewrites apiBase correctly
+5) In popup:
+   - Connect @handle again
+   - Confirm "Failed to fetch" is gone
+6) On x.com:
+   - Open a reply composer
+   - Confirm GM/GN sit right before native Reply/Post (or below composer only if X squeezes layout)
+   - Click GM/GN and confirm text actually appears
+
+IF SOMETHING IS STILL WRONG
+- The next pass should stay focused on extension/content.js only, using a fresh screenshot of the exact X composer DOM state
+- Do NOT start Supabase wiring before extension/site session + X insert are stable
+- Do NOT merge Arcade into main repo until this extension/session block is verified stable

@@ -1,0 +1,82 @@
+GMXReply — GENERATION TARGET R48 (RU)
+
+Кратко
+GM/GN в этом проекте = reply к чужому посту в X.
+Не личный пост о себе.
+Не дневниковая строка.
+Не sign-off narration.
+
+Нужны 4 основных банка
+1. GM ordinary
+2. GN ordinary
+3. GM crypto
+4. GN crypto
+
+И 3 размера
+1. Fast/min
+- 1 короткая строка
+- сразу postable
+- без воды
+- без абстрактных кусков
+
+2. Balanced/mid
+- чуть живее
+- можно 1 короткую доп. часть
+- но всё ещё выглядит как естественный reply в X
+
+3. Full/max
+- теплее / насыщеннее
+- но без простыней и без ощущения "пишу письмо"
+
+Что важно по тону
+- social / warm / crypto должны реально отличаться
+- emoji не везде, а по смыслу
+- crypto-ответы не должны везде повторять одни и те же WAGMI / moon / diamond hands
+- ordinary-ответы не должны быть пресными или дневниковыми
+
+Примеры правильного направления
+GM ordinary short:
+- Gm! ☀️
+- Gm legend 🔥
+- Morning king 👑
+- Gm frens ✨
+- Rise and grind! ☕
+- Morning sunshine ☀️
+
+GN ordinary short:
+- Gn! 🌙
+- Gn legend ✨
+- Sleep well soldier 🫡
+- Sweet dreams king 👑
+- Gn babe 😴
+- Gn! See you in the AM
+
+GM crypto short:
+- Gm frens! WAGMI ☀️
+- Gm degens LFG 🔥
+- Morning ser, diamond hands 💎
+- Gm! Bull run loading ☀️
+- Good morning frens, to the moon 🚀
+- Gm! New ATH soon 🌕
+
+GN crypto short:
+- Gn frens! WAGMI tomorrow 🌙
+- Gn degens, sweet dreams 💤
+- Night ser, diamond hands 💎
+- Gn! Rest before the pump 🌕
+- Good night frens, moon soon 🚀
+- Gn! HODL through the night 💎
+
+Неправильное направление
+- gm, keeping the open light today
+- gm, keeping the start natural
+- gn, calling it a little earlier tonight
+- closing it out before the mood slips
+- nothing left worth forcing tonight
+
+Implementation note
+Для English GM/GN лучше сделать curated arrays и потом:
+- scoring
+- anti-repeat
+- fingerprint dedupe
+- optional emoji compatibility by tone

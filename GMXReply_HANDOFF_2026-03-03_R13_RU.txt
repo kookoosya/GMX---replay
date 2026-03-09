@@ -1,0 +1,50 @@
+GMXReply — CUMULATIVE PACK R13 (комплексно, без "по 1 правке")
+
+BASELINE:
+- Работать строго поверх свежего архива пользователя (Bac 2.zip).
+
+ЧТО ПОЧИНИЛИ/СДЕЛАЛИ В ЭТОМ ПАКЕ:
+
+1) PRO: УБРАН ЛИШНИЙ FAQ ПРО "Оплатил, но Pro не активировался" (третий раз повторявшаяся проблема)
+- Удалён hardcoded пункт из HTML списка FAQ (он и показывался в UI).
+  - public/app.html
+  - frontend/src/legacy/legacyBody.html
+- Удалён текст из RU i18n, чтобы он нигде не всплывал при пересборках/каталогах:
+  - public/i18n/siteI18n.js
+  - frontend/public/i18n/siteI18n.js
+  - frontend/src/legacy/siteI18nCatalog.ts
+  - shared/i18n/locales/ru.json
+
+2) HOME: ПОЛНОСТЬЮ УБРАН "Try instantly (free)" БЛОК
+- удалён целиком (не скрыт) из:
+  - public/app.html
+  - frontend/src/legacy/legacyBody.html
+
+3) EXT THEMES/WALLPAPERS: РЕАЛЬНЫЙ АНТИ-ЛАГ
+- Добавлена пагинация для EXT grids: по умолчанию рисуется 24 карточки, дальше кнопка Show more (+24)
+- Убран IntersectionObserver для EXT wallpaper thumbnails (он часто даёт stutter на больших сетках)
+- Добавлены кнопки:
+  - extThemeMoreBtn
+  - extWpMoreBtn
+Файлы:
+  - frontend/src/legacy/legacyApp.ts
+  - public/app.html
+  - frontend/src/legacy/legacyBody.html
+
+КАК ПРОВЕРИТЬ:
+1) npm run dev
+2) Home: блока Try instantly больше нет
+3) Pro: FAQ содержит только 2 пункта (про wallet/handle и про storage), пункта про bundle нет
+4) Themes -> Extension Themes:
+   - сразу показывается ограниченная сетка
+   - есть Show more (N)
+   - клики и переключения должны перестать фризить
+
+ВАЖНО:
+- Это cumulative пакет: содержит сразу все замены для этих проблем, чтобы не ставить по одному микропатчу.
+
+ЧТО ДЕЛАТЬ ДАЛЬШЕ (следующий шаг, если всё ещё лагает):
+- Жёстко отключить любые авто-refresh таймеры пока открыт tab Themes/ExtThemes.
+- Рендерить только активный pane (Theme/Wall/Custom), остальные вообще не трогать.
+- Добавить фильтр/поиск по темам (ещё уменьшает DOM).
+

@@ -1,0 +1,59 @@
+GMXReply — CUMULATIVE PACK R36 — THEMES/WALLPAPERS SYNC + NEW PHOTO PACK
+
+Source of truth
+- This archive is the only baseline for the next chat.
+- If anything from older packs conflicts with this one, trust THIS archive.
+
+What was fixed (confirmed in files)
+1) Hard sync of runtime JS
+- Backend/public/app.js and Backend/frontend/public/app.js are now identical (no more 10/10/10/10 vs 8/8/4/4 split).
+- Limits are now 8 / 8 / 4 / 4 everywhere in app.js.
+- Unlock copy is the new one: "+1 every 3 refs at first, then +1 every 4".
+
+2) Wallpaper packs made actually visible in UI (not just stored in assets)
+- Site wallpapers: added IDs v2_041..v2_057 into the first 60 WALLPAPERS so they are not cut off by .slice(0,60).
+- Extension wallpapers: added IDs extv3_41..extv3_57 into the first 60 EXT_WALLPAPERS so they are not cut off by .slice(0,60).
+
+3) Single-source resolvers (no multi-fallback stacks)
+- Site wallpaper CSS resolver now supports:
+  - v2_* -> /assets/wallpapers/v2_XXX.webp
+  - v3_* -> /assets/wallpapers/v3/site/v3_XX.webp (kept for compatibility)
+  - everything else -> .svg (legacy)
+- Extension wallpaper thumbs now support:
+  - extv3_* -> /assets/extbg/extv3_XX.webp
+  - everything else -> .svg (legacy)
+
+4) Extension popup resolver made compatible with both packs
+- Backend/extension/popup.js now resolves:
+  - extv3_* -> .webp
+  - others -> .svg
+- This prevents breaking legacy ext_* wallpapers while still using the new photo pack.
+
+5) New wallpapers added (from your latest message)
+- Added 17 new images as:
+  - Backend/assets/wallpapers/v2_041.webp .. v2_057.webp
+  - Backend/assets/extbg/extv3_41.webp .. extv3_57.webp
+
+What was NOT done yet (still pending)
+- No thumbs system yet (previews still use the full images for v2/extv3), so if you want perfectly smooth scrolling on weaker machines, next step is to add /assets/thumbs and load those in the grid.
+- No final purge of old SVG wallpaper packs (w01.. etc). They are still present, but only the first 60 entries are shown in UI.
+- No Arcade work in this pack (focus kept strictly on themes/wallpapers/runtime sync).
+
+What to do next (priority order)
+1) Smoke-pass (fast)
+- Run dev and check:
+  - Site -> Themes -> Wallpapers: confirm v2_041..v2_057 show and apply quickly.
+  - Extension popup -> Wallpapers: confirm extv3_41..extv3_57 show and apply without the old freeze.
+  - Switch language and revisit Wallpapers/Extension Wallpapers (ensure nothing disappears / breaks).
+2) If any scroll/apply lag remains:
+- Add a small thumbs pack and switch the gallery grid to thumbs (full image only on apply).
+3) Only after themes/wallpapers are fully stable:
+- Continue Arcade / other tasks.
+
+Files changed in this pack (high level)
+- Backend/public/app.js
+- Backend/frontend/public/app.js
+- Backend/extension/popup.js
+- Backend/assets/wallpapers/v2_041.webp..v2_057.webp (new)
+- Backend/assets/extbg/extv3_41.webp..extv3_57.webp (new)
+

@@ -1,0 +1,69 @@
+GMXReply — R38 (Light) — Themes / Wallpapers / Extension
+
+Goal of this pack
+- Do the 3 agreed priorities:
+  1) Fix EXT_POPUP_TABS hard bug (was polluted with wallpaper objects)
+  2) Make the REAL photo packs visible (site v2_001..040 + ext extv3_01..40) instead of the old SVG placeholders
+  3) Full asset rev: remove unused/duplicate wallpaper SVG packs + remove unused v3 folder so the archive becomes lighter
+
+What was DONE (facts in files)
+
+A) P0: EXT_POPUP_TABS fixed (hard runtime bug)
+- File: Backend/public/app.js (and mirrored Backend/frontend/public/app.js)
+- EXT_POPUP_TABS now contains ONLY tuples like ["gm","wp_apply_gm"].
+- Removed the accidental injected objects {id:"v3_01"...} that broke loops like: for (const [k] of EXT_POPUP_TABS)
+
+B) P0: Photo packs are now the primary visible wallpapers (site + extension)
+- Site wallpapers catalog rebuilt:
+  - First 8 free-visible: free01, free02, v2_001..v2_006
+  - Then premium: v2_007..v2_057
+  - Total in list: 59 (kept under the hard .slice(0,60))
+- Extension wallpapers catalog rebuilt:
+  - First 4 free-visible: ext_free_01, ext_free_02, extv3_01, extv3_02
+  - Then premium: extv3_03..extv3_57
+  - Total in list: 59 (kept under .slice(0,60))
+- Files:
+  - Backend/public/app.js
+  - Backend/frontend/public/app.js
+  - Backend/frontend/src/legacy/legacyApp.ts (so dev/build stays consistent)
+  - Backend/extension/popup.js (popup selector options rebuilt)
+
+C) P1: Asset rev / size reduction (remove unused packs)
+- Removed legacy placeholder packs that were no longer used after switching UI to v2/extv3:
+  - Backend/assets/wallpapers/w*.svg (kept free01.svg + free02.svg + small lux_* svgs)
+  - Backend/assets/extbg/ext_*.svg (kept ext_free_01.svg + ext_free_02.svg + small lux_ext_* svgs)
+- Removed unused v3 folder (not referenced by runtime now):
+  - Backend/assets/wallpapers/v3/
+  - Backend/assets/wallpapers/thumbs/v3/
+
+D) Safety: migration so old saved selections don’t break
+- Added normalization:
+  - if storage has old wXX / v3_XX -> migrated to v2_001 (fallback free01)
+  - if storage has old ext_XX -> migrated to ext_free_01
+- Files:
+  - Backend/public/app.js
+  - Backend/frontend/public/app.js
+  - Backend/frontend/src/legacy/legacyApp.ts
+  - Backend/extension/popup.js (normalizes stored wallpaper id)
+
+Result (size)
+- Backend/assets reduced from ~19MB to ~11MB by removing unused packs.
+- Whole Backend folder now ~16MB unpacked.
+
+What is NOT DONE yet (next work)
+1) Smoke-pass in your environment (important):
+   - Site: Themes -> Wallpapers: scroll + apply a few v2_00X and v2_04X
+   - Site: Extension Themes -> Wallpapers: scroll + apply extv3_0X
+   - Extension popup: select extv3_01, extv3_40, extv3_57 and check apply speed
+2) If you want to add MORE wallpapers (new files):
+   - Drop new files into:
+     - Backend/assets/wallpapers/v2_XXX.webp and thumbs/v2_XXX.webp
+     - Backend/assets/extbg/extv3_XX.webp and thumbs/extv3_XX.webp
+   - Then extend the catalog loops (currently capped at v2_057 / extv3_57).
+   - We can automate catalog generation later (script) so you never touch JS/TS by hand.
+
+What to do FIRST after you download
+1) Run dev as usual.
+2) Confirm wallpapers visible now are photos (v2_001..)
+3) Confirm extension wallpapers are photos (extv3_01..)
+4) Confirm no broken tabs / no disappearing UI in Extension Themes (this was caused by EXT_POPUP_TABS bug).

@@ -1,0 +1,21 @@
+GMXReply i18n workflow
+
+Source of truth:
+- shared/i18n/locales/en.json
+- shared/i18n/locales/<lang>.json
+
+How to change copy safely:
+1) Edit the text in the locale JSON files.
+2) Run: npm run i18n:sync
+3) Run: npm run audit:i18n
+4) Only then build / commit.
+
+What sync does:
+- Normalizes every locale to the EN schema.
+- Pads missing keys/array items from EN so tabs never break.
+- Regenerates frontend/src/legacy/siteI18nCatalog.ts
+- Regenerates public/i18n/siteI18n.js
+
+Important:
+- If you add a new key only in EN, sync will copy the EN text into every other locale until you replace it with a real translation.
+- This keeps the UI structurally complete on every language, but identical text still means that locale has not been translated yet.

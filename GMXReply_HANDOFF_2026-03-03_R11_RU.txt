@@ -1,0 +1,56 @@
+GMXReply CUMULATIVE PACK R11 (2026-03-03)
+
+BASELINE:
+- Работали строго поверх свежего Bac 2.zip (source of truth)
+
+ЧТО СДЕЛАНО (по твоим скринам + лаги):
+1) УБРАНО ЛИШНЕЕ ИЗ HOME:
+- Полностью вырезан блок Home: "Try instantly (free)" (заголовок h_try_title + note + кнопки)
+- Убрано и в public/app.html и в frontend/src/legacy/legacyBody.html (чтобы не возвращалось из legacy)
+
+2) УБРАНО ЛИШНЕЕ ИЗ PRO (то что было со стрелкой):
+- Удалён FAQ-пункт "Оплатил, но Pro не активировался / What if I paid but Pro isn't active?"
+- Убрано в HTML (public/app.html + legacyBody.html)
+- Убрано и из i18n w_faq_list (public/i18n/siteI18n.js + frontend/public/i18n/siteI18n.js), чтобы не появлялось при подстановке переводов
+
+3) THEMES/WALLPAPERS EXT TAB: ЖЁСТКИЙ АНТИ-ФРИЗ (без виртуализации библиотеками)
+- Добавлена пагинация "Show more" для Extension Themes и Extension Wallpapers:
+  - По умолчанию рисуем только 24 карточки (EXT_GRID_PAGE=24)
+  - Кнопка "Show more (N)" догружает следующую порцию ещё +24
+  - Это убирает огромный initial DOM и делает UI стабильнее на кликах/переключениях
+- Убрана ленивка через IntersectionObserver именно для EXT grid thumbs:
+  - Вместо observeLazyBg ставим thumb.style.backgroundImage напрямую
+  - Меньше observer-шума и дерготни при скролле/переключениях
+
+ФАЙЛЫ В ПАКЕ (на замену):
+- public/app.html
+- public/app.js
+- public/i18n/siteI18n.js
+- frontend/src/legacy/legacyBody.html
+- frontend/src/legacy/legacyApp.ts
+- frontend/public/i18n/siteI18n.js
+
+КАК ПРОВЕРИТЬ:
+1) npm run dev
+2) Home: блока "Try instantly (free)" больше нет
+3) Pro: FAQ пункта про "paid but pro isn't active" больше нет
+4) Themes → Extension themes:
+   - сначала показывается 24 карточки + кнопка Show more (если есть ещё)
+   - клики по карточкам не должны фризить страницу
+5) Themes → Wallpapers:
+   - то же самое, 24 + Show more
+
+ЧТО ДЕЛАТЬ ДАЛЬШЕ (если лаги всё ещё есть):
+- Следующий гарантированный шаг: поиск/фильтр по themes/wallpapers + "Render only on active tab"
+- Плюс: отключить/замедлить любые авто-refresh таймеры, пока открыт таб Themes (чтобы UI не трогался во время выбора)
+
+SECURITY / АНТИ-ПОДМЕНА ОПЛАТЫ (предложения, без внедрения в этом паке):
+- Любая активация Pro должна происходить ТОЛЬКО после server-side проверки on-chain tx:
+  - backend читает chain RPC, проверяет: to-address (allowlist), amount>=price, token/chain, tx status, confirmations
+  - backend сам пишет "pro=true" для handle, фронт не решает ничего
+- На фронте:
+  - никогда не хранить "адрес получателя" как изменяемое значение из localStorage/URL
+  - получатель/chain/price должны приходить с backend (signed config)
+- CSP в ответах сайта (запрет inline script где возможно), строгий allowlist доменов
+- Верификация bundle/receipt: серверная подпись ответа (HMAC/ed25519) чтобы нельзя было подменить JSON в пути
+

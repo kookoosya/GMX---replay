@@ -1,0 +1,80 @@
+GMXReply HANDOFF · 2026-03-02 · X insert + popup connect fix r3
+
+SOURCE OF TRUTH USED
+- Base for real project structure: Bac 2.zip
+- Patch built on top of the latest extension overlay already tested in chat:
+  GMXReply_CUMULATIVE_PACK_2026-03-02_ext_connect_x_inline_fix_r2.zip
+
+WHAT WAS BROKEN
+1) X inline GM/GN buttons were visible, but insert still failed (toast: "Could not insert.")
+2) Popup connect still showed "Connect failed: Failed to fetch" in local dev in some runs
+
+ROOT CAUSES FIXED IN THIS PACK
+1) content.js insertion flow was too destructive:
+   - old fallback path used box.textContent = "" and box.textContent += ...
+   - on X composer this can wipe editor scaffold / inner nodes
+   - after that, later insert attempts can fail or get reverted
+
+2) popup.js local connect was still too brittle:
+   - if apiBase was empty/default, popup could still try the wrong base first
+   - local dev should prefer backend 127.0.0.1:10000 before production fallback
+
+CHANGES IN THIS PACK
+- extension/content.js
+  - rewrote setTextboxText() into a safer multi-stage insert pipeline
+  - removed destructive root-level box.textContent clears
+  - added safer editor helpers:
+    - normalizeEditorText
+    - readEditorText
+    - focusEditorBox
+    - emitEditorInput
+    - buildPasteEvent
+    - findWritableLeaf
+    - writeEditorLeaf
+  - insert order now:
+    1. execCommand(insertText)
+    2. synthetic paste event
+    3. execCommand(insertHTML)
+    4. scoped leaf write (preserve editor root)
+    5. per-char fallback without nuking editor root
+  - message listener now explicitly returns false (sync response path is clear)
+
+- extension/popup.js
+  - added LOCAL_DEV_BASE = http://127.0.0.1:10000
+  - added base candidate fallback logic
+  - connect now tries candidate bases in order and stores the first successful base
+  - status refresh now probes across candidate bases and self-heals stored apiBase when needed
+
+- extension/manifest.json
+  - version bumped to 1.0.12
+
+FILES IN THIS ZIP
+- extension/content.js
+- extension/popup.js
+- extension/manifest.json
+- this handoff txt
+
+SMOKE CHECK DONE
+- node --check extension/content.js
+- node --check extension/popup.js
+- manifest.json valid JSON
+
+HOW TO TEST NOW
+1) Replace files from this zip
+2) Reload the extension in chrome://extensions
+3) Re-open popup and connect again with @handle
+4) Open x.com and hard refresh the page
+5) Open reply composer and test GM/GN again
+
+IF CONNECT STILL FAILS
+- Confirm backend is actually reachable at http://127.0.0.1:10000
+- This pack now tries local first, then production fallback
+- If it still fails, next debug target is backend /api/user/init itself (not popup UI)
+
+IF X INSERT STILL FAILS
+- Need one fresh screenshot AFTER this exact pack is installed
+- Next likely target would be a DOM-specific selector edge in current X rollout, not the old destructive insert path
+
+ARCADE / SUPABASE STATUS
+- Arcade React+Vite archive is NOT merged into main site in this pack
+- Supabase is still intentionally deferred for one final clean pass later

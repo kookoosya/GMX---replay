@@ -1,0 +1,96 @@
+GMXReply — SAFE_PASS9 — HANDOFF 05
+
+Что сделано в этом pass
+
+1. Generation quality / duplicate control
+- site Best и popup Best теперь жёстче режут canned openers и bland shape-повторы
+- добавлены штрафы за слабые стартовые формы типа:
+  - "gm, this ..."
+  - "gn, keeping ..."
+  - "saving this one"
+  - старые phase clichés типа "before the feed gets loud"
+- repeatKey жёстче схлопывает canned shapes, чтобы anti-repeat и Best реже выбирали почти одно и то же
+
+2. Popup fallback cleanup
+- fallback lines в extension/popup.js переписаны на более живые и менее открытка-образные
+- fallback больше не тянет старый bland safe мусор как основную запасную линию
+
+3. Vite legacy-shell / bridge drift cleanup
+- frontend/src/legacy/legacyBody.html:
+  - promo_k_legacy: Legacy -> Older refs
+  - r_col_inserts: Inserts -> Used
+- frontend/src/pages/ArcadePage.tsx:
+  - "Redirecting to the approved arcade library…" -> "Redirecting to Arcade…"
+- те же старые строки вычищены прямо из текущих bridge built assets:
+  - public/bridge/assets/legacy-shell-*.js
+  - public/bridge/assets/ArcadePage-*.js
+
+4. Safe cleanup / audit strengthened
+- tools/safe_cleanup.mjs теперь удаляет старые SAFE_PASS9 handoff tails:
+  - SAFE_PASS9_HANDOFF.txt
+  - SAFE_PASS9_HANDOFF_02.txt
+  - SAFE_PASS9_HANDOFF_03.txt
+  - SAFE_PASS9_HANDOFF_04.txt
+- tools/runtime_audit.mjs теперь дополнительно ловит stale user-facing drift в:
+  - frontend/src/legacy/legacyBody.html
+  - frontend/src/pages/ArcadePage.tsx
+  - public/bridge/assets/legacy-shell-*.js
+  - public/bridge/assets/ArcadePage-*.js
+
+Что проверить локально
+
+1. Cleanup + audit
+- npm run cleanup:safe
+- npm run audit:runtime
+
+Ожидаемо:
+- dead files present count=0
+- Runtime audit done. issues=0
+
+2. Site / bridge / popup
+- /app
+- /bridge
+- extension popup
+
+3. Generation
+- GM Best несколько раз подряд
+- GN Best несколько раз подряд
+- popup Best несколько раз подряд
+Проверить:
+- меньше canned ответов
+- меньше повторов одной и той же формы
+- fallback не выглядит как старая открытка
+
+4. Referrals / legacy shell
+Проверить в Vite shell / bridge, что больше нет:
+- Legacy
+- Inserts
+и вместо них:
+- Older refs
+- Used
+
+5. Arcade redirect copy
+Проверить, что больше нет текста:
+- approved arcade library
+и теперь:
+- Redirecting to Arcade…
+
+Что осталось дальше
+
+1. Ещё один deeper pass по generation
+- сильнее развести mid / max
+- отдельно усилить emoji policy для max
+- ещё жёстче добить dull-safe boilerplate
+
+2. Arcade content pass
+- если в браузере ещё всплывёт runtime drift по карточкам / covers / source labels
+- тогда отдельно чистить dataset дальше, но не смешивать это с generation cleanup
+
+3. Tree cleanup only after browser smoke
+- если локально после этого pack всё живо, можно идти глубже по неиспользуемым frontend/src legacy tails
+- но только после проверки реального runtime
+
+Команды
+- npm run cleanup:safe
+- npm run audit:runtime
+- npm run dev

@@ -1,0 +1,62 @@
+GMXReply R64 — SITE / EXTENSION AUDIT + BUILD PASS
+
+What was audited in this pass:
+- /app legacy site shell
+- /bridge React shell
+- /arcade route entry
+- extension popup / session sync
+- public vs frontend/public drift
+- public/app.html vs frontend/src/legacy/legacyBody.html drift
+- static bridge build output in public/bridge
+
+What was fixed:
+1) Frontend build now passes again.
+   - fixed bridgeI18n typing drift
+   - fixed ArcadePage broken import
+   - fixed arcade cover helper typing
+   - limited TS root include to the active runtime tree so old broken arcade prototype files do not break the real build
+
+2) Bridge static output was rebuilt and re-synced.
+   - public/bridge now contains real built assets again
+   - public/bridge/index.html points to files that actually exist
+
+3) Legacy site parity was restored.
+   - frontend/src/legacy/legacyBody.html now matches public/app.html body exactly
+   - public/app.js and frontend/public/app.js are synced again
+   - public/mode.js and public/themes.json were synced to frontend/public to remove dev/prod drift
+
+4) Extension popup cleanup.
+   - removed dead popup theme-control refs that had no matching HTML
+   - cleaned popup fallback GM/GN lines to calmer English-only copy
+   - aligned popup mode labels with site wording
+
+5) Old extension inline-X file was marked clearly as deprecated archive.
+   - extension/content.js is still kept in repo for history only
+   - manifest.json still does NOT load it
+
+Validation completed in container:
+- frontend npm run build: OK
+- node --check index.js: OK
+- node --check public/app.js: OK
+- node --check frontend/public/app.js: OK
+- node --check extension/popup.js: OK
+- node --check extension/site_sync.js: OK
+- node --check tools/dev-run.mjs: OK
+- node --check extension/content.js: OK
+- public/bridge asset refs verified against existing files: OK
+- public vs frontend/public runtime parity for app.js / mode.js / themes.json / extension-config.json / entitlements.js / arcade.js / siteI18n.js: OK
+
+What to test locally now:
+1) npm run dev from Backend
+2) open /app and click every main tab:
+   Home, GM, GN, Referrals, Leaderboard, Themes, Extension Themes, Upgrade Pro, Admin
+3) open /bridge and confirm it loads instead of a broken static shell
+4) open /arcade and confirm the route opens
+5) load extension popup and verify:
+   - session sync works
+   - copy buttons work
+   - popup text is English-only and copy-only
+
+Important scope note:
+- Supabase was intentionally left untouched in this pass.
+- Old unused arcade prototype files still exist in source, but they are no longer allowed to break the active frontend build.

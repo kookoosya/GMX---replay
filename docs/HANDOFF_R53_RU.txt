@@ -1,0 +1,82 @@
+GMXReply — HANDOFF R53 (RU)
+
+Источник правды
+- База для этого шага: текущая рабочая копия после прошлых generation-паков в этой сессии.
+- Этот R53 = cumulative generation pass поверх того, что уже было проверено пользователем до R52.
+
+Что сделано
+1. Полностью переделан English GM/GN generation-путь в Backend/index.js под direct curated banks вместо самодельной склейки хвостов.
+2. В основу взят новый пользовательский txt-референс с явным делением на:
+   - GM ordinary min/mid/max
+   - GN ordinary min/mid/max
+   - GM crypto min/mid/max
+   - GN crypto min/mid/max
+3. Для ordinary/crypto теперь используются прямые X-native банки по режимам, а не генерация из маленьких шаблонов.
+4. Min теперь реально короткий и ближе к X-reply-формату, с эмодзи и короткими формами из пользовательского референса.
+5. Mid теперь идёт как короткий естественный reply-слой из пользовательского референса.
+6. Max теперь берётся из длинных тёплых/эмоциональных пользовательских референсов, без склейки мусорных хвостов.
+7. Добавлены прямые builder banks для gm/gn на min/mid/max как safe fallback.
+8. Warm / calmer / playful теперь строятся от direct banks через фильтрацию и fallback, а не через старую мусорную микро-прозу.
+9. Усилен reply fingerprint:
+   - добавлены новые vocative/address нормализации
+   - добавлены my love / cutie pie / kings / queens / soldiers / chads / army и др.
+10. Ослаблен emoji-ban для GM: звезда больше не вырезается из GM-строк.
+11. В scoring усилен вес эмодзи для min/mid, чтобы короткие reply-строки безлико не выдавливали emoji-first варианты.
+12. Обновлены UI help/hints:
+   - public/app.js
+   - frontend/public/app.js
+   - public/app.html
+   - frontend/src/legacy/legacyBody.html
+   Подсказки теперь явно объясняют, что:
+   - Min = очень короткие X-style replies, часто с emoji
+   - Mid = natural short replies
+   - Max = longer / warmer / more expressive replies
+13. Убрана старая misleading-подсказка про "min pool ~30"; теперь текст мягче и не врёт про размер банка.
+
+Что НЕ сделано
+- Не подключался внешний AI fallback.
+- Не делалась отдельная ручная ревизия каждого warm/calmer/playful/builder-выхода на 1000+ прогонов.
+- Не трогались Arcade / платежи / security / реферальные хвосты.
+
+Что проверить после накатки
+1. GM ordinary:
+   - min Quick 1
+   - min Batch 10
+   - mid Quick 1 / Batch 10
+   - max Quick 1 / Batch 10
+2. GN ordinary:
+   - min / mid / max
+3. GM crypto:
+   - min / mid / max
+4. GN crypto:
+   - min / mid / max
+5. Проверить, что min больше не уходит в длинные фразы и не теряет emoji по умолчанию.
+6. Проверить, что Batch 10 даёт реально разные shapes, а не только смену обращения.
+7. Проверить и сайт, и extension, если extension тянет тот же backend output.
+
+На что смотреть особенно внимательно
+- нет ли слишком сладких / флиртующих ordinary max-строк там, где это не нужно
+- нет ли слишком агрессивных crypto max-строк для обычного ordinary tone
+- нет ли остаточных странных строк в builder
+- не режет ли anti-repeat слишком жёстко большие пачки 70
+
+Если чат умрёт — что делать дальше
+1. Продолжать строго от текущего рабочего архива пользователя + этот R53 cumulative pack.
+2. Не откатываться к R47/R48/R49 по догадке.
+3. Следующий логичный шаг = taste-pass R54:
+   - составить blacklist слов/обращений/эмодзи, которые пользователь считает кринжом
+   - составить whitelist X-native vocatives
+   - отдельно подчистить ordinary max vs crypto max
+   - при необходимости сделать отдельный stricter monetization preset для Pro/Best
+4. Формат дальше не менять:
+   - один cumulative zip
+   - только Backend/... файлы на замену
+   - новый Backend/docs/HANDOFF_Rxx_RU.txt
+
+Файлы в этом паке
+- Backend/index.js
+- Backend/public/app.js
+- Backend/frontend/public/app.js
+- Backend/public/app.html
+- Backend/frontend/src/legacy/legacyBody.html
+- Backend/docs/HANDOFF_R53_RU.txt

@@ -1,0 +1,84 @@
+GMXReply — CUMULATIVE PACK R39 — ARCADE + SERVER/ASSETS FIX
+
+Base assumption
+- This pack is meant to be applied over your current working folder named Backend/ (even if your source archive was called Backend2.zip).
+- Your assets archive (assets1.zip / assets2.zip) MUST be extracted into Backend/assets/.
+  If you keep assets as a sibling folder, server will not find them.
+
+What was fixed (DONE)
+
+1) Backend/index.js hard bug (server could crash / undefined app/path/__dirname)
+- Removed the broken top-of-file block that referenced app/path/__dirname before initialization.
+- Added a correct static mount AFTER app is created:
+  - /assets  -> Backend/assets
+  - /bridge/assets -> Backend/assets
+- Added response headers for static assets to stop Chromium CORP blocking:
+  - Access-Control-Allow-Origin: *
+  - Cross-Origin-Resource-Policy: cross-origin
+
+2) Helmet settings adjusted for Arcade embeds + asset loads
+- Added:
+  - crossOriginResourcePolicy: { policy: "cross-origin" }
+- Disabled COEP (required for many cross-origin iframes/embeds to work):
+  - crossOriginEmbedderPolicy: false
+- Set COOP to allow popups:
+  - crossOriginOpenerPolicy: same-origin-allow-popups
+
+This directly targets the error you saw:
+- ERR_BLOCKED_BY_RESPONSE.NotSameOrigin (free01.svg / other assets)
+
+3) Arcade: real cover images for game tiles (instead of placeholder gradients)
+- New helper:
+  - frontend/src/features/arcade/arcadeCovers.ts
+  Provides buildArcadeCoverCss(category) -> "gradient overlay + url(/assets/arcade/covers/<key>.webp) center/cover".
+
+- Updated catalogs to use image covers:
+  - frontend/src/features/arcade/externalPortalCatalog.ts
+  - frontend/src/features/arcade/gameMonetizePack.ts
+
+- Custom games now also get a proper image cover (generic) instead of random gradients.
+- Old stored custom tiles are auto-upgraded:
+  - if stored cover is NOT already /assets/arcade/covers/..., it will use buildArcadeCoverCss(category).
+
+4) New small assets added (Arcade cover pack)
+- Added folder:
+  - Backend/assets/arcade/covers/
+- Added 13 lightweight webp covers (800x450) for:
+  action, arcade, crypto, generic, idle, platformer, puzzle, racing, shooter, simulation, sports, strategy, survivor
+
+Files included in this cumulative pack (REPLACE/ADD)
+- Backend/index.js
+- Backend/frontend/src/features/arcade/arcadeCovers.ts (new)
+- Backend/frontend/src/features/arcade/externalPortalCatalog.ts
+- Backend/frontend/src/features/arcade/gameMonetizePack.ts
+- Backend/assets/arcade/covers/*.webp (new)
+
+How to apply
+1) Extract this zip OVER your working folder so paths become:
+   Backend/index.js
+   Backend/frontend/src/features/arcade/...
+   Backend/assets/arcade/covers/...
+
+2) Ensure assets are in the right place:
+   - Extract assets1.zip into Backend/assets/
+   - After extraction you should have:
+     Backend/assets/wallpapers/...
+     Backend/assets/extbg/...
+     Backend/assets/arcade/covers/...
+
+3) Run dev as usual:
+   - npm install (if needed)
+   - npm run dev
+
+Quick smoke checklist (5 minutes)
+- Server starts (no crash at startup).
+- /app loads without CORP errors in console.
+- /arcade shows tiles with real image covers (not only gradients).
+- Clicking a game opens embed if allowed; otherwise "Open original" works.
+
+What is NOT done yet (NEXT)
+- Full Themes/Wallpapers/Extension polish is NOT in this pack.
+  Next step after Arcade:
+  1) Make Themes/Wallpapers use thumb previews (no lag) + normalize new wallpapers you sent.
+  2) Fix any remaining Extension wallpaper apply delays.
+

@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GMXReply Quick Panel</title>
+  <link rel="stylesheet" href="popup.css" />
+  <link rel="stylesheet" href="quick.css" />
+</head>
+<body data-view="quick">
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <img src="icons/icon48.png" class="logo" alt="GMXReply" />
+        <div>
+          <div class="title">GMXReply Quick Panel</div>
+          <div class="subtitle">Pinned copy-first helper</div>
+        </div>
+      </div>
+      <div class="topRight">
+        <button id="openSite" class="linkbtn" type="button">Open site</button>
+        <button id="openArcade" class="linkbtn" type="button">Open Arcade</button>
+        <button id="openX" class="linkbtn" type="button">Open X</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row headRow">
+        <div>
+          <div class="sectionTitle">Fast copy</div>
+          <div class="hint">Pull a reply here, then paste it yourself on X.</div>
+        </div>
+        <select id="modeSelect" class="select" aria-label="Length mode">
+          <option value="min">Fast</option>
+          <option value="mid" selected>Balanced</option>
+          <option value="max">Full</option>
+        </select>
+      </div>
+
+      <div class="copyGrid bigGrid">
+        <button id="copyGm" class="primary" type="button">GM</button>
+        <button id="copyGn" class="primary" type="button">GN</button>
+      </div>
+      <div class="copyGrid">
+        <button id="copyBestGm" class="secondary" type="button">Best GM</button>
+        <button id="copyBestGn" class="secondary" type="button">Best GN</button>
+      </div>
+
+      <div id="copyStatus" class="small">Ready to copy</div>
+      <div class="previewCard">
+        <div class="label">Last copied</div>
+        <div id="previewText" class="previewText">Nothing copied yet</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row headRow">
+        <div>
+          <div class="sectionTitle">Session</div>
+          <div class="hint" id="sessionHint">Use site sync first. Manual handle connect is only a fallback for new accounts.</div>
+        </div>
+        <div class="value" id="sessionValue">Guest</div>
+      </div>
+
+      <div class="row buttonRow threeRow">
+        <button class="secondary compact grow" id="syncSiteBtn" type="button">Use site session</button>
+        <button class="secondary compact" id="connectBtn" type="button">Connect</button>
+        <button class="ghost compact" id="disconnectBtn" type="button">Reset</button>
+      </div>
+
+      <div class="row connectRow">
+        <input id="handleInput" placeholder="@yourhandle" />
+      </div>
+      <div id="connectStatus" class="small"></div>
+    </div>
+
+    <div class="card">
+      <div class="sectionTitle">Snapshot</div>
+      <div class="grid">
+        <div class="kv"><div class="k">Plan</div><div class="v" id="planValue">Guest</div></div>
+        <div class="kv"><div class="k">API base</div><div class="v" id="baseValue">—</div></div>
+        <div class="kv"><div class="k">GM used</div><div class="v" id="gmUsed">—</div></div>
+        <div class="kv"><div class="k">GN used</div><div class="v" id="gnUsed">—</div></div>
+        <div class="kv"><div class="k">Eligible</div><div class="v" id="refEligible">—</div></div>
+        <div class="kv"><div class="k">Confirmed</div><div class="v" id="refConfirmed">—</div></div>
+      </div>
+      <div class="small" id="statsHint">Manual copy only. No x.com injection, no auto-posting.</div>
+    </div>
+
+    <div class="foot" id="shortcutHint">Optional shortcut: assign one yourself in chrome://extensions/shortcuts for “Open GMXReply quick panel”</div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

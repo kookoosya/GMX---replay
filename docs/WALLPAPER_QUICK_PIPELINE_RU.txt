@@ -1,0 +1,98 @@
+GMXReply — QUICK WALLPAPER PIPELINE (RU)
+
+Зачем это добавлено
+Эта заготовка нужна, чтобы дальше быстро встраивать новые обои без нового хаоса по путям, именам и id.
+
+Канонические папки
+1. Сайт full:
+Backend/assets/wallpapers/
+
+2. Сайт thumbs:
+Backend/assets/wallpapers/thumbs/
+
+3. Extension full:
+Backend/assets/extbg/
+
+4. Extension thumbs:
+Backend/assets/extbg/thumbs/
+
+Канонические схемы имён
+1. Обычные фото для сайта
+v2_001.webp
+v2_002.webp
+...
+Следующий id смотри в:
+Backend/docs/WALLPAPER_CURRENT_INVENTORY_R42.txt
+
+2. Обычные фото для extension
+extv3_01.webp
+extv3_02.webp
+...
+Следующий id смотри там же
+
+3. Крипто / stylized / special svg для сайта
+lux_<slug>.svg
+пример:
+lux_ct_warroom.svg
+lux_solana_temple.svg
+
+4. Крипто / stylized / special svg для extension
+lux_ext_<slug>.svg
+пример:
+lux_ext_ct_warroom.svg
+lux_ext_solana_temple.svg
+
+5. Free наборы не трогаем без причины
+free01.svg
+free02.svg
+ext_free_01.svg
+ext_free_02.svg
+
+Что уже подготовлено
+1. Backend/tools/wallpaper_batch_helper.py
+Он умеет:
+- показать текущий inventory
+- сгенерировать docs/snippets
+- импортировать обычные картинки в webp
+- автоматически делать thumbs
+- импортировать svg crypto wallpapers по правильной схеме имён
+
+2. Backend/docs/generated/site_wallpapers_snippet.js
+Готовый snippet для массива WALLPAPERS
+
+3. Backend/docs/generated/ext_wallpapers_snippet.js
+Готовый snippet для массива EXT_WALLPAPERS
+
+4. Backend/docs/generated/wallpaper_inventory.json
+Машиночитаемый inventory для следующего чата
+
+Как дальше работать, когда ты кидаешь новые картинки
+Сценарий A — обычные фото
+Ты просто присылаешь пачку картинок
+Я прогоняю их через helper
+Он сам делает:
+- нормальные webp
+- thumbs
+- новые id
+- обновлённые snippets
+Потом я отдаю тебе один cumulative zip
+
+Сценарий B — крипто / прикольные stylized svg
+Ты присылаешь svg или говоришь, какой slug/name нужен
+Я кладу их как:
+- lux_<slug>.svg
+- lux_ext_<slug>.svg
+Потом обновляю snippets и отдаю cumulative zip
+
+Важное правило
+Source of truth по картинкам теперь не размазываем по public/assets и прочему мусору.
+Канон:
+Backend/assets
+
+Что НЕ автоматизировано до конца
+Прямой runtime manifest без обновления app.js я специально не делал, чтобы не ломать уже рабочую сборку.
+Сейчас схема безопасная:
+ассеты + helper + generated snippets + один cumulative pack на обновление.
+
+Самый важный смысл
+Дальше новые обои можно вливать быстро и чисто, без ручного копания в 5 местах и без новых рассинхронов.

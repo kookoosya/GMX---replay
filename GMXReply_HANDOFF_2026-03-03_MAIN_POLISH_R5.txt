@@ -1,0 +1,97 @@
+GMXReply HANDOFF — MAIN POLISH R5 — 2026-03-03
+
+BASELINE USED
+- Base: Bac 2.zip
+- Applied on top of latest working cumulative state available in chat: extension_fix_gen_quality_r4
+- This pack is cumulative replacement-only, not full project archive.
+
+WHAT WAS DONE
+1) Billing / pricing
+- Yearly plan changed from $100 to $80.
+- File: index.js
+- Server billing API should now return 1 year = $80 and site plan cards should reflect that automatically after backend restart.
+
+2) Generator quality improved
+- Reworked backend GM/GN generation tone to sound warmer and more human.
+- Added more natural “good morning / good night” style wishes.
+- Restored light emoji presence in a controlled way (not emoji spam).
+- Min / Mid / Max now separate more clearly:
+  - min = short warm opener
+  - mid = natural balanced line
+  - max = fuller line with softer close
+- Best-line scoring no longer aggressively kills single emojis.
+- Files:
+  - index.js
+  - public/app.js
+  - frontend/src/legacy/legacyApp.ts
+
+3) Extension fallback copy improved
+- Popup fallback GM/GN lines are now warmer and include light emoji.
+- Popup scoring also no longer over-penalizes single emojis.
+- File: extension/popup.js
+
+4) Extension theme sync hardened
+- Popup theme catalog now merges bundled themes + site themes.json.
+- This helps if the site has newer theme definitions than the extension bundle.
+- File: extension/popup.js
+
+5) Theme catalog mismatch fixed
+- public/themes.json and extension/themes.json were refreshed from the current site theme catalog.
+- Both files now contain 100 themes, so higher theme IDs should stop falling back to classic.
+- Files:
+  - public/themes.json
+  - extension/themes.json
+
+6) Right-side UI descriptions normalized
+- Static right-side GM/GN descriptions were changed to reflect the real safe copy-only flow.
+- Added runtime override copy for right-side help blocks (GM / GN / extension unlocks).
+- New copy explains:
+  - extension is copy-only
+  - styles change tone only
+  - referral unlocks are for cosmetics first
+  - Pro unlocks all styles / packs / cosmetics
+- Runtime override currently supports:
+  - English
+  - Russian
+  - all other languages fall back to English for these specific right-side helper blocks
+- Files:
+  - public/app.js
+  - frontend/src/legacy/legacyApp.ts
+  - public/app.html
+  - frontend/src/legacy/legacyBody.html
+
+NOT CHANGED IN THIS PACK
+- Arcade / games were intentionally not touched
+- No return to X DOM injection
+- No auto-insert into X composer
+- No change to safe copy-only extension model
+- No Supabase wiring yet
+
+ABOUT THE ERRORS USER SAW
+- ERR_CONNECTION_REFUSED for /api and /assets likely happens when frontend/Vite is open without backend running behind dev proxy.
+- That is mostly a dev-run state issue, not the main code target for this pack.
+- If testing locally, use the normal full dev flow so backend is alive too.
+
+SMOKE / VALIDATION NOTES
+- JS syntax check passed for:
+  - index.js
+  - extension/popup.js
+  - public/app.js
+- Frontend full build smoke could not be completed inside this container because local frontend typings/deps are incomplete here (TS reported missing vite/client type definition), so this pack was validated by targeted file checks instead of full build.
+
+NEXT BEST STEP
+1) Restart backend + frontend together
+2) Test yearly plan card = $80
+3) Test high-number extension themes (previously failing / falling back)
+4) Generate GM/GN in min / mid / max and verify tone is warmer
+5) Open GM / GN / Themes tabs and verify right-side help text now matches copy-only logic
+
+FILES IN THIS PACK
+- index.js
+- extension/popup.js
+- extension/themes.json
+- public/app.js
+- public/app.html
+- public/themes.json
+- frontend/src/legacy/legacyApp.ts
+- frontend/src/legacy/legacyBody.html

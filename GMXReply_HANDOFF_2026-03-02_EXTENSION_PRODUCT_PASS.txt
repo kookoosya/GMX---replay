@@ -1,0 +1,63 @@
+GMXReply cumulative handoff · 2026-03-02 · extension product pass
+
+Source of truth used in this session
+- Base used for this pass: GMXReply_CUMULATIVE_PACK_2026-03-02_failclosed_quality_pass.zip
+- Bac 2.zip was NOT mounted in this tool session
+- This archive is a replacement pack, not the full repo baseline
+
+What was changed now
+1) extension/content.js
+- Fixed the biggest visible extension UX issue on X: inline GM/GN/Best buttons no longer hard-force only one cramped placement next to Reply/Post
+- Added adaptive toolbar placement:
+  - tries inline placement next to the native Reply/Post button first
+  - measures whether the bar is clipped / squeezed / too narrow
+  - if X layout clips it, the toolbar falls back to a full-width docked row under the composer instead of leaving a tiny broken sliver
+- Added new helper flow:
+  - setBarLayout()
+  - getDockSlotForBox()
+  - barLooksClipped()
+  - mountBarInline()
+  - mountBarDocked()
+- Updated injected inline CSS:
+  - supports inline vs dock layouts via data-gmx-layout
+  - docked layout wraps cleanly and stretches buttons
+  - removed the old brittle single-line-only behavior as the only render mode
+
+2) extension/popup.js
+- Added ensurePopupScaffold() so popup can self-heal if popup.html is stale / mismatched / missing required IDs
+- If required popup nodes are missing, popup.js now rebuilds a complete usable popup shell in JS and keeps the existing logic working on top of it
+- Added updateViewportMode() and resize handling so popup switches into compact stacked mode on narrow widths instead of feeling broken
+- Fixed popup theme variable mismatch:
+  - --accent2 -> --accent-2
+  - this lets the second accent actually apply to the popup skin
+
+3) extension/popup.css
+- Reworked popup shell to be more resilient:
+  - fluid width instead of hard brittle fixed width
+  - safe min/max inline sizing
+  - compact mode support
+  - better full-width button behavior on narrow popup widths
+- Popup background now supports wallpaper via --wall, so popup skin is no longer silently ignoring the synced wallpaper value
+- Added a proper fallback logo tile so the popup looks complete even if the static HTML is stale
+
+What was checked
+- node --check extension/content.js OK
+- node --check extension/popup.js OK
+
+What is still NOT fully verified
+- No full npm run dev here (full repo baseline not mounted)
+- No real browser smoke in Chrome in this tool session
+- popup.html itself was not in the replacement pack, so JS self-heal was used to make popup robust even if popup markup is stale
+
+Expected result from this pass
+- On X, the GM/GN/Best toolbar should stop rendering as a thin clipped strip; when the action row is too tight, it should move into a normal full-width row under the composer
+- Extension popup should behave like a complete product even if the popup HTML layer is stale, and should stay readable on narrower widths
+
+Best next step
+1) Real browser smoke on Chrome:
+- open X composer
+- verify inline toolbar near Reply/Post
+- verify it docks below the composer when space is tight
+- verify popup opens at normal width and no longer collapses
+2) If anything still clips on specific X DOM variants, tune mountBarInline() geometry thresholds using the real DOM
+3) After browser smoke, do one more pass on popup wording / layout polish only if needed

@@ -1,0 +1,31 @@
+GMXReply build fix handoff
+Date: 2026-02-28
+
+Issue fixed:
+- frontend build failed in src/components/TopNav.tsx
+- cause: file imported react-router-dom, but frontend/package.json does not include that dependency
+- same file also had strict TypeScript implicit-any errors
+
+What to replace:
+1) Replace file:
+   frontend/src/components/TopNav.tsx
+   with the attached replacement file GMXReply_REPLACE_TopNav.tsx
+
+What changed in the replacement:
+- removed react-router-dom dependency entirely
+- added strict TypeScript types
+- replaced NavLink usage with plain anchor tags
+- keeps active-state class logic
+- supports both normal routes and /bridge routes
+
+Why this is the safest fix now:
+- no package install needed
+- no router dependency introduced into the React bridge yet
+- fixes current build blocker without changing app architecture
+
+After replacing the file:
+- run: npm run build
+
+If next error appears:
+- fix only the next blocking file, do not reopen legacy referral hotfix chain
+- continue controlled migration path: baseline -> Referrals React screen -> Admin React screen

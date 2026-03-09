@@ -1,0 +1,25 @@
+GMXReply wallpaper inventory
+
+Canonical source folders
+- Backend/assets/wallpapers
+- Backend/assets/wallpapers/thumbs
+- Backend/assets/extbg
+- Backend/assets/extbg/thumbs
+
+Current counts
+- Site free SVG: 2
+- Site photo WEBP: 57
+- Site crypto/lux SVG: 8
+- Extension free SVG: 2
+- Extension photo WEBP: 57
+- Extension crypto/lux SVG: 8
+
+Next IDs
+- Site photo: v2_058
+- Extension photo: extv3_58
+
+Free unlock convention
+- Site photos: first 6 photo wallpapers are free
+- Extension photos: first 2 photo wallpapers are free
+- free01/free02 and ext_free_01/ext_free_02 stay free
+- lux_* and lux_ext_* stay premium

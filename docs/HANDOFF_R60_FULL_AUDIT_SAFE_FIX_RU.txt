@@ -1,0 +1,132 @@
+GMXReply R60 — full audit safe fix pass
+
+Что реально найдено
+
+1. Frontend был собран из конфликтующих слоёв.
+   Recovery-архив и отдельный frontend.zip расходятся минимум по 9 ключевым файлам.
+   Из-за этого часть Vite-кода была новее, а часть старее.
+
+2. Arcade был реально сломан по source-level:
+   - frontend/src/pages/ArcadePage.tsx импортировал ../lib/api, которого нет
+   - frontend/src/features/arcade/externalPortalCatalog.ts в старом слое не экспортировал getDefaultExternalPortalGames
+   - frontend/src/features/arcade/storage.ts был обрезан и не экспортировал функции, которые требуют runtimeAdapter и migrationBundle
+
+3. 401 на /api/user/init был не "падением бекенда", а плохим auth-flow:
+   - legacy /app и Vite bridge слишком рано дёргали init
+   - reconnect в local dev не передавал devReset
+   - из-за этого для уже существующего handle получался 401 even though локально это надо было уметь пережить
+
+4. В extension popup была живая UI-дыра:
+   - popup.js ожидал themeSelect / wallpaperSelect / useWallpaper
+   - popup.html этих элементов вообще не содержал
+   - поэтому appearance-controls визуально просто не существовали
+
+5. /bridge в recovery был неполным runtime bundle.
+   В этот pack снова положены compiled assets для public/bridge/assets.
+
+Что исправлено
+
+Backend/public
+- app.js
+  - initSession больше не делает лишний init call, если есть handle, но нет token
+  - connect в local dev теперь шлёт devReset:1
+- app.html
+  - приложен канонический shell из recovery
+- extension-config.json
+  - приложен канонический config из recovery
+- bridge/index.html
+  - приложен вместе с bridge/assets
+- bridge/assets/*
+  - восстановлен compiled layer для /bridge
+
+Backend/frontend
+- src/App.tsx
+  - bridge connect в local dev шлёт devReset:1
+  - добавлен friendlier текст для existing_session_required
+- src/pages/ArcadePage.tsx
+  - import ../lib/api -> ../api
+- src/features/arcade/externalPortalCatalog.ts
+  - возвращён richer recovery-вариант
+  - добавлен alias export type ArcadeGame = ExternalPortalGame
+- src/features/arcade/storage.ts
+  - переписан полностью
+  - добавлены saveCheckpoint / loadCheckpoint / getCheckpointSummary
+  - добавлены buildArcadeMigrationManifest / exportArcadeDeepResumeBundle / importArcadeDeepResumeBundle
+  - убран битый import несуществующего ArcadeGame-типа
+- src/pages/ReferralsPage.tsx
+  - возвращён recovery-вариант с promoter block
+- src/legacy/legacyApp.ts
+  - те же auth/devReset fixes, что и в public/app.js
+- src/legacy/legacyBody.html
+  - возвращён канонический recovery shell
+- src/legacy/app.css
+  - возвращён recovery CSS
+- src/legacy/siteI18nCatalog.ts
+  - возвращён recovery вариант
+- public/app.js
+  - синхронизирован с Backend/public/app.js
+- public/i18n/siteI18n.js
+  - возвращён recovery вариант
+
+Backend/extension
+- popup.js
+  - connectHandle теперь поддерживает local dev reconnect через devReset
+- popup.html
+  - добавлены отсутствовавшие appearance controls:
+    - themeSelect
+    - useWallpaper
+    - wallpaperSelect
+
+Backend/tools
+- dev-run.mjs
+  - приложен актуальный launcher, чтобы не оставался старый wrapper
+
+Что проверить локально
+
+1. Backend dev
+cd "C:\Users\user\Desktop\GMX - Replay\Backend"
+npm run dev
+
+Проверить:
+- backend и frontend поднимаются
+- /app открывается
+- /bridge открывается
+- нет missing chunk ошибок на /bridge
+
+2. Vite frontend
+cd "C:\Users\user\Desktop\GMX - Replay\Backend\frontend"
+npm run dev
+
+Проверить:
+- /arcade больше не падает по externalPortalCatalog.ts
+- нет 500 на ArcadePage imports
+- bridge connect / connect handle в local dev не умирает на existing_session_required
+
+3. Auth UX
+Проверить:
+- если local dev и handle уже существует, Connect должен уметь зайти без бессмысленного 401-loop
+- legacy /app не должен сам спамить /api/user/init, если handle есть, а token нет
+
+4. Extension popup
+Проверить:
+- в popup реально появился блок Appearance
+- theme select / wallpaper select / wallpaper toggle видны
+- session connect и site sync живы
+
+Что ещё осталось
+
+1. public/bridge compiled bundle не пересобирался заново из source, а восстановлен из рабочего слоя.
+   Для полного source parity позже лучше сделать нормальный frontend build + sync.
+
+2. content.js всё ещё лежит как dormant legacy file.
+   Он не активен по manifest, но его можно отдельно вычистить в следующем проходе.
+
+3. Generation quality / anti-repeat / UI copy следующий проходом:
+   - full client anti-repeat parity
+   - full site/extension parity
+   - финальная чистка generation surface
+
+Главный итог
+
+Этот pack не косметический.
+Он закрывает реальный source-conflict между recovery и старым frontend-слоем, чинит Arcade compile/runtime узлы, убирает лишний local-dev auth break, возвращает missing popup controls и снова делает /bridge комплектным.

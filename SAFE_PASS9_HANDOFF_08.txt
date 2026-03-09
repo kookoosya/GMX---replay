@@ -1,0 +1,56 @@
+GMXReply — SAFE_PASS9 — cumulative fix 08
+
+What was found
+1. Batch random for GM/GN was choking on global shape history and stale recent-shape bans, especially in min mode. That is why the saved bank stalled around 14 instead of filling toward 70.
+2. Min mode still had too few strong seed lines and too many canned short shapes, so output kept collapsing into bland greetings.
+3. Best pass toggles could still inherit stale browser state. This pack force-resets both clean-fill toggles to off once on first load of the new build.
+4. Payment failed before wallet approval because browser-side blockhash fetch depended on public RPC availability.
+5. Arcade still rendered generated SVG covers first, so even valid remote covers looked broken or never visibly upgraded.
+
+Root causes
+- Backend generator was over-filtering bulk output through global recent-shape history.
+- Min pool was too small and quality penalties still punished valid short GM/GN too hard.
+- Billing relied on browser RPC for latest blockhash.
+- Arcade used local fallback first instead of remote-first with fallback-on-error.
+
+Files changed
+- index.js
+- public/app.js
+- frontend/public/app.js
+- public/bridge/app.js
+- public/arcade.js
+- frontend/public/arcade.js
+- public/bridge/arcade.js
+
+What changed
+- Loosened generateRankedCandidates for bulk/min so it no longer dies on global recent-shape bans.
+- Increased pool size / retry budget for min bulk generation.
+- safeGenerateRankedCandidates now tops up short lists with fallback output instead of returning tiny pools.
+- Reduced penalties for short greet-only min lines.
+- Min mode now always keeps one emoji unless noemoji style is selected.
+- Added a bigger ordinary + crypto GM/GN boost pool based on the user-provided examples.
+- Added server-side /api/billing/tx-context to return latest blockhash from server RPC fallback chain.
+- Client payment flow now asks the server for blockhash first and only falls back to browser RPC if server context is unavailable.
+- Arcade now uses remote image first and falls back to local generated cover on image error.
+- Unsplash imageUrl values are allowed again so cards do not collapse into the same generated placeholder.
+- Local SVG fallback cover was toned down so even fallback cards look cleaner.
+- Clean-fill / Best pass toggles are force-reset to off once on first load of this build.
+
+Local checks to run
+1. Hard refresh the site after replacing files.
+2. In GM and GN:
+   - Best pass toggle should start off
+   - Batch 10 in min should fill much wider than before
+   - emoji should appear more often
+3. Wallet:
+   - connect wallet
+   - choose SOL plan
+   - Pay now should no longer fail immediately on blockhash fetch
+4. Arcade:
+   - first row should show real remote covers where imageUrl exists
+   - cards should no longer all look like the same generated art
+
+What is still next
+1. If payment still fails after wallet approval, next pass must inspect verify/on-chain phase rather than blockhash phase.
+2. If you want true official covers for every remaining game, next pass should replace placeholder unsplash URLs with per-title source URLs one by one.
+3. After browser smoke, do another cleanup pass only if these runtime fixes hold.

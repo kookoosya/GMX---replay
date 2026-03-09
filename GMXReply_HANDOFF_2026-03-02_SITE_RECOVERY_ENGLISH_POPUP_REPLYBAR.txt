@@ -1,0 +1,38 @@
+GMXReply cumulative pass 2026-03-02
+
+Baseline used in this session
+- Source pack: GMXReply_CUMULATIVE_PACK_2026-03-02_readability_best_security_toolbar_v2.zip
+- Working reference used for extension sanity checks: Bac_UPDATED_WORKING.zip
+- Bac_UPDATED_WORKING.zip was available in this session and used as a real source of truth reference.
+
+What was fixed in this pass
+1) Site boot crash fixed
+- Rebuilt frontend/src/legacy/legacyApp.ts directly from current public/app.js so the legacy React bridge mirror is complete again.
+- This fixes the fatal runtime error: ReferenceError: applyLang is not defined.
+- The legacy mirror now includes the full current app logic again, including Best mode UI logic already present in public/app.js.
+
+2) Extension popup made English-only and more readable
+- Removed popup language switch UI from extension/popup.html.
+- extension/popup.js now runs popup UI in English only and ignores popup language toggling.
+- extension/popup.css was lightened for stronger readability: brighter cards, darker text, lighter overlay, wider popup.
+
+3) X inline toolbar corrected
+- extension/content.js no longer renders the extra inline Best button on X.
+- Inline toolbar now keeps only GM and GN next to the native Reply/Post button.
+- Placement logic was changed to target immediately LEFT of the native Reply/Post button in normal layouts.
+- Auto-fallback to a full-width row under the composer was removed for the normal action-row path. If space is tight, the bar goes compact instead of dropping below.
+- Best mode still works through GM/GN clicks: when bestEnabled is on, clicking GM or GN uses Best logic for that exact kind.
+
+What was not fully re-tested here
+- Full browser smoke on real x.com DOM was not run inside this environment.
+- npm run dev / npm run build were not run because this is a replacement pack, not the full checked-out project.
+
+What to verify next in the real project
+1) Reload unpacked extension in Chrome
+2) Hard refresh the site and x.com
+3) Confirm popup is readable and has no language switch
+4) Open a reply composer on X and confirm GM/GN sit next to Reply, not below the composer
+5) Confirm site boot no longer fails with applyLang is not defined
+
+If one thing is still off
+- If X still uses a different DOM wrapper and GM/GN are not attached directly beside Reply, capture a fresh composer screenshot after this pack. The next pass should adjust only extension/content.js placement selectors, not touch the rest again.

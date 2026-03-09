@@ -1,0 +1,75 @@
+GMXReply — HANDOFF R44 (RU)
+
+Что сделано
+1) Добит большой блок wallet / modal / light-mode polish.
+- public/app.css и frontend/src/legacy/app.css приведены к более стабильному виду для модалок и кошелька.
+- modal overlay теперь корректно скроллится на маленькой высоте экрана.
+- modalCard получил max-height + overflow:auto, чтобы контент не уезжал за экран.
+- wallet picker стал устойчивее по layout:
+  - нормальный grid/list рендер
+  - лучшее поведение на mobile
+  - читаемый truncation у адреса кошелька
+  - более стабильные active/hover состояния
+- light mode для wallet/modal/pay-state стал контрастнее:
+  - текст в modalCard
+  - walletName / walletSub
+  - token buttons
+  - kbd / info pills / pay state box
+
+2) Добит i18n-хвост для Upgrade Pro / wallet-лейблов.
+- Во всех shared/i18n/locales/*.json добавлены отсутствующие ключи:
+  - gm_pack_label
+  - gn_pack_label
+- Во всех локалях выровнены ключи, чтобы old Wallet не возвращался вместо Upgrade Pro:
+  - t_wallet
+  - w_title
+  - wp_apply_wallet
+- Исправлен FAQ-блок:
+  - убран старый текст про “send us the bundle”
+  - заменён на diagnostics/support copy
+  - RU FAQ снова приведён к 3 пунктам
+- Исправлен последний pay item в w_right_list, чтобы не торчал старый англоязычный хвост в локалях.
+
+3) Пересинхронизированы generated i18n outputs.
+- Обновлены:
+  - public/i18n/siteI18n.js
+  - frontend/public/i18n/siteI18n.js
+  - frontend/src/legacy/siteI18nCatalog.ts
+- Прогнан audit:
+  node tools/i18n_audit.js --strict
+  -> missing keys и array mismatch убраны.
+
+Что НЕ сделано
+- Runtime-логика оплаты / chain verify / wallet connect в этот пакет не трогалась.
+- Legacy HTML не переписывался структурно, только CSS + i18n слой.
+- React bridge Upgrade Pro page отдельно не перерабатывался.
+- toolSupport / diagnostics wording глубоко по всем языкам не шлифовались отдельно — основной visible хвост убран, но полная лингвистическая редактура всех локалей ещё может понадобиться позже.
+
+Что проверить
+1) Site / wallet tab
+- tab больше не откатывается к “Wallet” в локалях, где раньше возвращался старый label
+- title внутри вкладки тоже соответствует Upgrade Pro
+- Apply-to label для wallpaper target не пишет старый wallet label
+
+2) Wallet / modal UX
+- на небольшой высоте экрана модалки не уезжают вниз и нормально скроллятся
+- wallet connect modal не ломает layout
+- адрес кошелька не разносит pill по ширине
+- кнопки в wallet/modal на mobile не слипаются
+
+3) Light mode
+- wallet card / modal / wallet picker / pay state читаемы
+- token buttons читаемы
+- help / limit / success / wallet modal не выглядят тёмными карточками в light mode
+
+4) i18n
+- audit:i18n:strict проходит
+- ru/de/es/fr и другие языки не теряют gm_pack_label / gn_pack_label
+- FAQ в RU снова из 3 пунктов
+
+Что дальше делать
+Следующий большой блок логично брать такой:
+1) i18n cleanup last pass по остаточным старым текстам в support/tools/help copy
+2) wallet / billing visual cleanup второго круга (если по реальному UI всплывут ещё конкретные косяки)
+3) потом referrals/admin visual cleanup
+4) arcade отдельно, не смешивать с бизнес/UI стабилизацией

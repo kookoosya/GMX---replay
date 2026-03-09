@@ -1,0 +1,29 @@
+GMXReply recovery pack R61
+
+Scope of this pass:
+- Fix Windows dev startup loops caused by hidden old dev runners / busy default ports.
+- Do NOT touch Supabase flow in this pass.
+
+Changed files:
+- Backend/tools/dev-run.mjs
+- Backend/index.js
+
+What changed:
+1) dev-run no longer insists on reusing busy default ports.
+   If 10000 or 5173 is already occupied, it now chooses the next free fallback port
+   (10001+, 5174+) instead of getting trapped in a reclaim/restart loop.
+
+2) dev-run now uses a per-run backend token.
+   Backend exposes this token in /api/health and /api/version during dev-run launches.
+   The runner only accepts the backend instance with the current token, so an old hidden
+   process can no longer be mistaken for the newly started backend.
+
+3) dev-run writes a small lock file for future launches.
+   A later R61+ run can stop the previous R61+ dev runner before starting a new one.
+
+Expected local behavior after replacing files:
+- npm run dev starts even if an old hidden backend/frontend is still holding 10000/5173.
+- Console may show fallback ports like:
+  backend: http://127.0.0.1:10001
+  site:    http://127.0.0.1:5174/app
+- Use the exact URLs printed in the console banner for that run.

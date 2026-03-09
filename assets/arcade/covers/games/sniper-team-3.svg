@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="24" y1="28" x2="612" y2="332" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="rgba(255,255,255,0.20)"/>
+      <stop offset="1" stop-color="rgba(255,255,255,0.04)"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" rx="28" fill="#0a1020"/>
+  <rect x="18" y="18" width="604" height="324" rx="24" fill="url(#bg)"/>
+  <circle cx="552" cy="80" r="88" fill="hsla(305, 92%, 92%, 0.12)"/>
+  <circle cx="520" cy="290" r="120" fill="rgba(255,255,255,0.08)"/>
+  <path d="M40 286C136 238 216 214 332 206C406 201 478 209 598 254V334H40V286Z" fill="rgba(6,10,22,0.28)"/>
+  <rect x="36" y="34" width="112" height="34" rx="17" fill="rgba(7,10,22,0.30)"/>
+  <text x="92" y="56" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" letter-spacing="1.3">SHOOTER</text>
+  <rect x="500" y="34" width="104" height="34" rx="17" fill="rgba(7,10,22,0.30)"/>
+  <text x="552" y="56" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" letter-spacing="1.3">FREE</text>
+  <text x="40" y="120" fill="rgba(255,255,255,0.18)" font-family="Arial, Helvetica, sans-serif" font-size="88" font-weight="800">ST</text>
+  <text x="40" y="212" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="800">Sniper Team</text>
+  <text x="40" y="252" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="800">3</text>
+  <text x="40" y="292" fill="rgba(255,255,255,0.92)" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600">GameDistribution embed</text>
+  <rect x="40" y="306" width="248" height="20" rx="10" fill="rgba(7,10,22,0.22)"/>
+  <text x="52" y="320" fill="rgba(255,255,255,0.88)" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="1.2">GMX ARCADE COVER</text>
+</svg>

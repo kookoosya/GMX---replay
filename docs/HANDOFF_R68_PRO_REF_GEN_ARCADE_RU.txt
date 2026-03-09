@@ -1,0 +1,62 @@
+GMXReply — R68 targeted pass
+
+Что сделано
+
+1. Pro cleanup
+- убран лишний debug/support хвост в правой карточке Pro
+- убран FAQ блок из Pro side card
+- правки синхронизированы в public/app.html и frontend/src/legacy/legacyBody.html
+
+2. Referrals layout
+- bridge referrals получил layout-pass
+- описание/правила больше не должны висеть снизу как раньше
+- добавлен referralsStack + grid2 layout для правой колонки
+- пропатчены и source, и built bridge assets
+
+3. Generator uniqueness
+- backend generation теперь использует seeded randomness по handle/kind/mode/style + device/user-agent/ip hint + time bucket
+- curated bank больше не просто тупо shuffle через Math.random
+- для min/max widened synthetic pool, чтобы ответы сильнее различались между пользователями
+- mid оставлен более зажатым и безопасным, без агрессивного расширения поверхности
+- bulk / single / public random используют новый seed path
+
+4. Arcade covers
+- если remote cover image не загрузился, карточка теперь не пустая
+- fallback идёт на локальный category cover background
+- пропатчены и source, и built Arcade asset
+
+Какие файлы изменены
+- index.js
+- public/app.html
+- frontend/src/legacy/legacyBody.html
+- frontend/src/styles.css
+- frontend/src/pages/ReferralsPage.tsx
+- frontend/src/pages/ArcadePage.tsx
+- public/bridge/assets/index-D-nZpHRH.css
+- public/bridge/assets/page-referrals-CDH5PGrj.js
+- public/bridge/assets/ArcadePage-D7YjbdiP.js
+
+Что проверить локально
+
+1. Site /app
+- вкладка Pro
+- в правой карточке больше нет лишнего support/debug textarea
+- лишний FAQ section убран
+
+2. Bridge /referrals
+- rules/description стоят справа на широком экране, а не падают вниз
+- mobile не сломан
+
+3. Generator
+- /api/generate-bulk?kind=gm&mode=min&lang=en&style=classic&anti_last_n=0&count=40
+- /api/generate-bulk?kind=gn&mode=max&lang=en&style=classic&anti_last_n=0&count=40
+- ответы у разных пользователей должны чаще расходиться по составу и порядку
+- mid не должен уйти в дичь
+
+4. Arcade
+- карточки без рабочего remote image больше не пустые
+- должен показываться category fallback cover
+
+Что осталось дальше
+- если захочешь, следующим pass можно отдельно добить именно curated bank quality для max и mid вручную
+- если в bridge still нужна идеальная композиция referrals, можно уже сделать не CSS-reflow, а явную DOM-перестройку source + built

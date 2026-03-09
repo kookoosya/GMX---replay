@@ -1,0 +1,56 @@
+GMXReply — HANDOFF (RU) — R43_REFERRALS_PROMOTER_BIGPACK
+
+Что сделано
+1) Backend promoter bonus logic доведена до рабочего состояния.
+- /api/referral/stats теперь возвращает реальные значения:
+  confirmedRefs, activeRefs, strictEligibleRefs, eligibleRefs, dailyLimit, freeDaily,
+  dailyBonus, bonusPer20, bonusChunks, nextBonusAt, promoter, bonusCap.
+- Логика бонуса:
+  - eligible = max(active, legacy)
+  - chunks = floor(eligible / 20)
+  - bonusPer20 = 10, а с 50 confirmed/eligible -> 12
+  - dailyBonus = chunks * bonusPer20, но под safety cap GMX_REF_BONUS_CAP
+  - dailyLimit = FREE_DAILY_BASE + dailyBonus
+
+2) Реальные лимиты теперь используют promoter bonus.
+- /api/usage и access entitlements получают уже не base-only лимит, а base + promoter bonus.
+- Это значит, что лимиты в UI и реальные consume/random/bulk маршруты теперь согласованы.
+
+3) React Referrals screen расширен.
+- Добавлен отдельный блок Promoter bonus:
+  - base daily
+  - daily bonus
+  - bonus per 20
+  - 20-ref chunks
+  - статус active / not active yet
+  - next promoter step / cap reached
+- Основной stat card теперь показывает уже реальный daily limit.
+
+Что НЕ сделано
+- Legacy referrals HTML/CSS отдельно не переписывались: существующий legacy UI уже умеет показывать promoter KPI и теперь должен наполниться реальными значениями от backend.
+- Wallet/light-mode/modal хвосты в этот пакет не включались.
+- Arcade не трогался.
+
+Что проверить
+1) /api/referral/stats
+- dailyBonus не 0, если eligible >= 20
+- bonusPer20 = 12, если confirmed или eligible >= 50
+- nextBonusAt идёт 20 -> 40 -> 60 ... пока cap не достигнут
+
+2) Site referrals (legacy)
+- KPI блок promoter details показывает реальные числа
+- daily inserts совпадает с dailyLimit
+
+3) React bridge /bridge/referrals
+- новый блок Promoter bonus виден
+- daily limit и next promoter step отображаются корректно
+
+4) Реальные лимиты
+- /api/usage limit для free-пользователя с promoter bonus больше base
+- consume/random/bulk у free-пользователя режутся по тому же реальному limit
+
+Что делать дальше
+Следующий большой блок логично брать таким:
+- wallet + modal + light-mode polish
+- потом i18n хвосты последних языков
+- потом уже referrals/admin visual cleanup или arcade отдельно

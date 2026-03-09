@@ -1,0 +1,70 @@
+GMXReply cumulative handoff — 2026-03-02
+
+Baseline used in this pass
+- Source pack used as source of truth in this session: GMXReply_CUMULATIVE_PACK_2026-03-02_restore_extension_from_Bac_UPDATED_WORKING.zip
+- User also uploaded Bac_UPDATED_WORKING.zip earlier and the extension in the current pack had already been restored from that working baseline.
+- Bac 2.zip was not mounted in this specific tool run.
+
+What was done in this pass
+1) Extension popup readability
+- extension/popup.css
+  - Raised contrast and lightened the visual layer.
+  - Wider popup (368px), better card readability, better text contrast, safer scrolling.
+- extension/popup.js
+  - Hardened apiBase normalization to trusted hosts only (gmxreply.com / localhost / 127.0.0.1).
+  - Best toggle hint made clearer.
+  - Popup now live-refreshes Best mode / typing profile / site language while open.
+
+2) Extension Best mode logic
+- extension/background.js
+  - Hotkeys now respect bestEnabled.
+  - When Best mode is ON, keyboard commands send GMX_INSERT_BEST instead of plain GMX_INSERT.
+  - Background now refuses to run hotkeys on non-X tabs.
+
+3) X toolbar placement
+- extension/content.js
+  - Added cramped-layout detection.
+  - If X squeezes the toolbar next to Reply/Post, GM/GN automatically move into a normal full-width row under the composer instead of collapsing into a thin strip.
+
+4) Site <-> extension Best mode sync
+- extension/site_sync.js
+  - bestEnabled is now synced from site localStorage key gmx_best_enabled into extension sync storage.
+  - Added reverse sync for bestEnabled changes coming from popup/extension back into the site localStorage.
+  - Sanitized and capped synced list payloads to reduce storage abuse / bloat risk.
+
+5) Site Best mode (legacy + Vite legacy bridge)
+- public/app.html
+- frontend/src/legacy/legacyBody.html
+  - Added visible Best mode toggle rows in both GM and GN tabs.
+- public/app.js
+- frontend/src/legacy/legacyApp.ts
+  - Added persistent best mode key: gmx_best_enabled
+  - Added UI sync for Best mode toggle/button labels
+  - Added message sync hook for GMX_BEST_MODE_SYNC
+  - Existing Best button now behaves in two modes:
+    - OFF: old behavior (pick/copy best from saved list)
+    - ON: live behavior (generate fresh candidates, choose strongest, save/copy it)
+
+Security hardening done (incremental, not “perfect security”)
+- Restricted extension apiBase normalization to trusted hosts in popup/background.
+- Blocked hotkey execution on non-X tabs.
+- Reduced fail-open UX in toolbar placement (falls back below composer instead of broken clip state).
+- Added list sanitization + capping in site_sync before writing to extension storage.
+
+What is still NOT fully closed
+- No full browser smoke was run here (Chrome/X.com not available in tool environment).
+- No full npm run dev / npm run build run was done because this is still a replacement-pack, not the whole repo baseline.
+- “Always safe from hacks” is not something honestly solved in one pass. This pass only adds concrete hardening in the places above.
+- React-native admin/business gating deep audit is still not fully exhausted in this pass.
+
+Next recommended step
+1) Apply this cumulative pack over the project
+2) Reload unpacked extension in Chrome
+3) Hard refresh gmxreply site and x.com
+4) Test:
+   - popup readability
+   - popup Best toggle
+   - site GM/GN Best mode toggle
+   - keyboard hotkeys with Best mode ON
+   - GM/GN toolbar next to Reply and fallback below composer on narrow layouts
+5) If toolbar still breaks on a specific X layout, capture a fresh screenshot of the composer area after this pack so placement can be tuned against the real DOM state

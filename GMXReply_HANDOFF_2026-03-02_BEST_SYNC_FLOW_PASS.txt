@@ -1,0 +1,58 @@
+GMXReply cumulative handoff — 2026-03-02
+
+Baseline used
+- Source baseline: user archive Bac 2.zip (Backend working folder)
+- Top layer continued from the last cumulative pack, then merged forward
+
+What was already in the cumulative layer before this pass
+- Referral i18n fixes across legacy + bridge-related locale flow
+- Bridge i18n layer and language resolution
+- Admin bridge cleanup and backend-driven presets
+- Extension popup/site sync hardening for stale session and handle-mismatch snapshots
+- i18n sync/audit fixes so shared locales propagate correctly
+
+What this pass changed
+1) Extension content flow
+- Fixed a real Best-mode logic bug in extension/content.js
+- The overlap score key was read as scored[0].ov, but bestMatchScores() returns overlap
+- Result before fix: Best mode did not correctly detect zero-overlap cases, so the intended fallback-to-bulk/generation path was skipped in some cases
+- Now it reads scored[0].overlap and the fallback rule works as intended
+
+2) React bridge -> extension sync
+- Added requestSiteExtensionSync() in frontend/src/api.ts
+- setAuth() now triggers GMX_SYNC_NOW immediately after connect
+- clearAuth() now triggers GMX_SYNC_NOW immediately after disconnect
+- This reduces stale extension state after bridge auth changes
+
+3) Access / redeem flow
+- frontend/src/pages/AccessPage.tsx now triggers requestSiteExtensionSync() after a successful redeem flow
+- This gives site_sync an immediate nudge to refresh extension entitlements/cosmetics instead of waiting for a later focus/visibility cycle
+
+What was checked here
+- node --check passed for:
+  - extension/background.js
+  - extension/content.js
+  - extension/popup.js
+  - extension/site_sync.js
+- Full npm build/dev was NOT run in this container
+- React/TS files were edited conservatively but still need smoke-check in the real project folder
+
+Most important manual checks to run next in your real dev setup
+1) npm run dev
+2) Open /bridge and connect a handle
+   - extension popup should reflect session without waiting for a tab refocus
+3) Disconnect in /bridge
+   - extension popup should clear the session fast
+4) Redeem a code in /bridge/access
+   - extension plan / gating should update after sync instead of holding stale data
+5) On x.com inline GM/GN with Best mode
+   - on a tweet with poor overlap vs saved list, Best should now fall back to bulk/generation instead of acting like overlap was present
+
+What is still not finished
+- Full deep admin cleanup in every remaining legacy admin surface
+- Full business gating audit across every edge path (site, bridge, popup, content, background)
+- Full React bridge i18n parity for every remaining page/state
+- Production rebuild / final smoke pass for frontend/dist and public/bridge
+
+Files included in this cumulative pack
+- All files that currently differ from the user baseline, plus this handoff file

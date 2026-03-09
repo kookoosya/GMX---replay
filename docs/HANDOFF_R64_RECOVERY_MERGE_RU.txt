@@ -1,0 +1,34 @@
+R64 recovery merge
+
+Base:
+- GMXReply_BACKEND_FULL_RECOVERY_R58_SINGLEBANK_R63.zip as the main code truth
+Merged in:
+- bridge runtime assets from Backend.zip
+- dev-run wrapper from R60
+- local-dev session reset fix for existing handle without token
+- popup DOM/runtime parity fix for appearance controls
+- ArcadePage import fix
+
+Main intent:
+- keep R63 single-bank + clean-fill generation UX
+- restore missing bridge runtime
+- stop local dev 401 on init for existing users without a token
+- stop Vite Arcade import break
+
+Changed files in this cumulative pack:
+- Backend/public/app.js
+- Backend/frontend/public/app.js
+- Backend/public/bridge/assets/*
+- Backend/frontend/src/pages/ArcadePage.tsx
+- Backend/frontend/src/features/arcade/*
+- Backend/extension/popup.html
+- Backend/extension/popup.js
+- Backend/tools/dev-run.mjs
+- Backend/docs/HANDOFF_R64_RECOVERY_MERGE_RU.txt
+
+Local checks:
+1) npm run dev in Backend should start backend + frontend
+2) /app should use single saved bank and Clean fill button
+3) /bridge should open without missing chunk errors
+4) frontend /arcade should not fail on ./arcadeCovers import
+5) extension popup should show Appearance controls

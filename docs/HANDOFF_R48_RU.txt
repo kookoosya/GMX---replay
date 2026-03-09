@@ -1,0 +1,175 @@
+GMXReply — HANDOFF R48 (RU)
+
+Статус этого пакета
+Это безопасный transition pack перед переходом в новый чат.
+
+ВАЖНО:
+- Это НЕ новый проверенный кодовый фикс поверх R47.
+- Последний подтверждённо рабочий кодовый слой в этом чате = до R47.
+- Этот R48-пакет нужен, чтобы не потерять контекст, backlog и точную постановку следующего большого блока.
+- Непроверенный partial rewrite generation в этот архив НЕ включён специально, чтобы не поломать рабочую базу.
+
+Что стабильно работает на текущей базе
+1. Сайт поднимается.
+2. Themes / Wallpapers работают.
+3. Extension wallpapers применяются быстро и без заметных фризов.
+4. Legacy boot / asset headers уже фикcились.
+5. Referrals / promoter block уже частично выровнены.
+6. Wallet / modal / i18n / support wording уже проходили крупные чистки.
+
+Последний подтверждённый рабочий кодовый слой
+Если собирать проект только по архивам из этого чата, то рабочая цепочка такая:
+- GMXReply_R38_LIGHT_THEMES_WP_EXTFIX (2).zip
+- GMXReply_CUMULATIVE_R40_LEGACY_BOOT_ASSETS_FIX.zip
+- GMXReply_CUMULATIVE_R41_THEMES_WP_EXTSYNC_BIGPACK.zip
+- GMXReply_CUMULATIVE_R42_WALLPAPER_PIPELINE_READY.zip
+- GMXReply_CUMULATIVE_R43_REFERRALS_PROMOTER_BIGPACK.zip
+- GMXReply_CUMULATIVE_R44_WALLET_MODAL_I18N_BIGPACK.zip
+- GMXReply_CUMULATIVE_R46_GM_GN_RETUNE_FAQ_CLEANUP.zip
+- GMXReply_CUMULATIVE_R47_GM_GN_XSTYLE_SUPPORT_BIGPACK.zip
+- затем этот transition pack R48
+
+Что пытались делать в R48, но НЕ довели до безопасного архива
+1. Большой rewrite генерации GM/GN в Backend/index.js.
+2. Переориентация generation с "личного sign-off / diary line" на "reply to someone else's GM/GN post".
+3. Усиление anti-repeat не только per-handle, но и через global recent pool.
+4. Перепривязка UI copy под новую логику generation.
+
+Почему partial code НЕ положен в архив
+- Код generation был в промежуточном состоянии.
+- Без финального smoke-check был риск отдать битый cumulative zip.
+- Пользователь отдельно подтвердил, что облажаться с generation нельзя, потому что ожидается большой трафик и реальное использование.
+
+Главная текущая проблема проекта
+PRIORITY #1 = Generation quality for GM/GN under X replies.
+
+Что именно сейчас плохо по живому тесту
+1. GM / Fast(min) выдаёт однотипные короткие линии вроде:
+   - gm, keeping the open light today
+   - gm, not forcing the first hour
+   - gm, keeping the start natural
+   Это звучит слабо, однотипно и не похоже на reply в X.
+
+2. GN тоже уходит не туда:
+   - gn, calling it a little earlier tonight
+   - gn, closing it out before the mood slips
+   - night, nothing left worth forcing tonight
+   Это больше похоже на личный sign-off, а не на ответ на чужой post.
+
+3. Результаты слишком однотипны.
+
+4. Min/Fast, Mid/Balanced и Max/Full ещё не разведены по характеру так, как нужно.
+
+5. Emoji после R47 частично вернулись, но логика их использования ещё не дожата.
+   Они должны появляться уместно, по тону строки, а не случайно и не нулевым количеством.
+
+Правильная постановка generation (очень важно)
+GM/GN в этом проекте = это не самостоятельный пост о себе.
+GM/GN в этом проекте = это reply на чужой GM/GN-пост в X.
+
+То есть правильный тип ответа:
+- Gm legend 🔥
+- Morning king 👑
+- Gm frens! WAGMI ☀️
+- Gn! 🌙
+- Sleep well soldier 🫡
+- Gn! See you in the AM
+
+Неправильный тип ответа:
+- gn, calling it a little earlier tonight
+- closing it out before the mood slips
+- letting the room wake up first
+- nothing left worth forcing tonight
+
+Что нужно сделать первым в новом чате
+1. Переписать английскую generation-ветку в Backend/index.js под curated X-style reply banks.
+2. Использовать большие пулы, а не слабую procedural комбинацию коротких абстрактных кусочков.
+3. Жёстко разделить:
+   - GM social
+   - GM crypto
+   - GM warm/flirty
+   - GM builder/calm
+   - GN social
+   - GN crypto
+   - GN warm/flirty
+   - GN calm
+4. Развести размеры:
+   - Fast/min = короткие one-liners для реального reply
+   - Balanced/mid = чуть живее, но всё ещё X-ready
+   - Full/max = длиннее и теплее, но не простыня и не дневник
+5. Усилить anti-repeat:
+   - per-handle recent
+   - global recent
+   - shape/fingerprint filtering
+   - большие curated pools, чтобы не схлопнуться на 10k пользователей
+6. Обновить правые guide-блоки и labels так, чтобы они соответствовали реальной логике generation.
+
+На что можно опираться
+Пользователь дал большой набор примеров и прямо разрешил брать оттуда половину или даже больше как базу для curated pools.
+Нужно использовать их как исходный материал для банков:
+- GM ordinary min / mid / max
+- GN ordinary min / mid / max
+- GM crypto min / mid / max
+- GN crypto min / mid / max
+
+Практическая рекомендация по implementation
+Лучше не пытаться снова собрать generation только через мелкие куски вида prefix + clause + tail.
+Для английского GM/GN лучше сделать curated banks + лёгкие безопасные вариации:
+- base line
+- optional emoji tail (по тону)
+- optional crypto token phrase
+- optional warm suffix
+И только потом scoring + anti-repeat.
+
+Что менять первым
+Код:
+- Backend/index.js
+
+Тексты/UI после этого:
+- Backend/public/app.js
+- Backend/frontend/public/app.js
+- Backend/public/app.html
+- Backend/frontend/src/legacy/legacyBody.html
+- Backend/shared/i18n/locales/en.json
+- Backend/public/i18n/siteI18n.js
+- Backend/frontend/public/i18n/siteI18n.js
+- Backend/frontend/src/legacy/siteI18nCatalog.ts
+
+Что не трогать, пока generation не добит
+- Arcade
+- security/payments
+- глубокие backend-хвосты вне generation
+- новые большие визуальные блоки
+
+Что проверить после следующего большого generation-пака
+1. GM → Random 1 / Batch 10 / Best
+2. GN → Random 1 / Batch 10 / Best
+3. Fast / Balanced / Full
+4. social vs crypto distinction
+5. repeat guard на малом и высоком значении
+6. чтобы ответы выглядели как reply в X, а не как личные дневниковые строки
+
+Smoke-check для следующего чата
+- node --check index.js
+- node --check public/app.js
+- node --check frontend/public/app.js
+- node tools/i18n_sync.mjs
+- node tools/i18n_audit.js --strict
+- живой сэмпл generation минимум:
+  - GM Fast x20
+  - GM Balanced x20
+  - GM Full x20
+  - GN Fast x20
+  - GN Balanced x20
+  - GN Full x20
+
+Что ещё НЕ сделано в проекте в целом
+- второй круг access/admin/support polish
+- часть remaining i18n/support хвостов
+- arcade пока не трогать
+
+Что делать дальше, если чат умирает
+1. Начать новый чат именно с generation-блока.
+2. Не просить мелкий patch.
+3. Требовать один большой cumulative zip.
+4. После generation уже возвращаться к оставшимся UI/admin хвостам.

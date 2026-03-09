@@ -1,0 +1,42 @@
+GMXReply Phase 3 patch
+Date: 2026-02-28
+
+What this patch changes
+1) React bridge tabs stop doing full page reloads.
+   - TopNav now intercepts clicks inside /bridge and uses history.pushState.
+   - App tracks current bridge route in React state and listens to popstate.
+
+2) Bridge pages lazy-load.
+   - ReferralsPage and AdminPage now load through React.lazy + Suspense.
+   - This turns them into separate chunks instead of putting everything into one initial bundle.
+
+3) Root entry is split.
+   - main.tsx no longer imports both App and LegacyApp up front.
+   - It dynamically imports App for /bridge* and LegacyApp for everything else.
+   - Result: bridge build stops dragging the entire legacy UI into the first chunk.
+
+4) Vite chunking is now explicit.
+   - frontend/vite.config.ts adds manualChunks for react vendor, generic vendor, legacy shell, referrals page, admin page.
+   - This is the correct response to the previous large-chunk warning, not just increasing the warning limit.
+
+Files in this patch
+- frontend/src/App.tsx
+- frontend/src/components/TopNav.tsx
+- frontend/src/main.tsx
+- frontend/src/styles.css
+- frontend/vite.config.ts
+
+Why this phase matters
+- It makes /bridge behave like a real React shell instead of a set of hard reload links.
+- It improves the migration foundation before deeper UI moves.
+- It reduces coupling between bridge and legacy code.
+
+Next recommended phase
+- Referrals polish as the first migrated business screen:
+  * better empty/error/loading states
+  * derived KPI cards
+  * cleaner list filtering / count status summary
+- then Admin hardening:
+  * better guardrails around code generation
+  * copy/export actions
+  * explicit entitlement presets

@@ -1,0 +1,118 @@
+GMXReply — HANDOFF R59 SAFE PASS 1 (RU)
+
+База для этого cumulative pack:
+- recovery source of truth = GMXReply_BACKEND_FULL_RECOVERY_R58_FROM_R47_PLUS_R57.zip
+- поверх подтянут main assets из отдельного assets.zip
+- для /bridge восстановлен compiled assets layer из рабочего Backend.zip
+
+Что исправлено в этом проходе
+
+1. Generation quality / English-only surface
+- Backend/index.js
+  - добавлен normalizeStyle()
+  - опасные legacy styles degen / alpha / meme / emoji больше не пробрасывают старый мусорный tone, а нормализуются в safe classic
+- Backend/public/app.js
+  - из user-facing tone списка убраны degen / alpha / meme / emoji
+  - из preset packs убраны king / degen / aggro
+  - оставлены safe packs: classic / focus / minimal / builder / kind
+- Backend/public/extension-config.json
+  - reply languages урезаны до English-only
+  - styles / presetPacks синхронизированы с новым safe user-facing surface
+
+2. Min mode больше не врёт
+- Backend/public/app.js
+  - убран mode ladder, который подмешивал mid/max при выбранном min
+  - last-resort bulk больше не прыгает в другой mode
+  - min остаётся min, даже если большая пачка заполняется не полностью
+
+3. UI honesty / copy-only truth
+- Backend/public/app.js
+  - добавлен syncEnglishOnlyReplyUi()
+  - сайт теперь принудительно держит reply generation на English
+  - reply language controls скрываются как неактуальные для продукта
+  - правые тексты и часть product copy переведены в copy-only truthful wording
+  - labels Global / English list переписаны в Global / Main list
+  - daily inserts wording заменён на daily copies там, где это критично для UX
+- Backend/public/app.html
+- Backend/frontend/src/legacy/legacyBody.html
+  - стартовые статические тексты выровнены под copy-only и English-only reply generation
+
+4. Runtime completeness
+- Backend/public/bridge/assets/*
+  - восстановлен полный compiled assets layer для /bridge
+  - recovery archive был битый в этой части: index.html ссылался на чанки, которых не было
+
+5. Arcade точечный compile fix
+- Backend/frontend/src/pages/ArcadePage.tsx
+  - исправлен импорт ../lib/api -> ../api
+
+6. Assets layer
+- Backend/assets/*
+  - добавлен основной assets layer из отдельного assets.zip
+  - конфликтов по одинаковым файлам не было, это безопасное расширение каталога
+
+Какие файлы в cumulative pack
+- Backend/index.js
+- Backend/public/app.js
+- Backend/public/app.html
+- Backend/public/extension-config.json
+- Backend/public/bridge/assets/*
+- Backend/frontend/src/pages/ArcadePage.tsx
+- Backend/frontend/src/legacy/legacyBody.html
+- Backend/assets/*
+
+Что проверить локально
+
+1. Backend
+cd "C:\Users\user\Desktop\GMX - Replay\Backend"
+npm run dev
+
+Проверить:
+- /app открывается
+- /bridge открывается и не падает по missing js/css chunks
+- /assets/... реально отдаются
+
+2. Generation
+Проверить на сайте:
+- GM/GN generation только English
+- min при больших batch больше не подмешивает mid/max
+- в UI больше нет ложного смысла про one-click insert
+- extension copy-only wording не конфликтует с сайтом
+
+3. Arcade / frontend
+cd "C:\Users\user\Desktop\GMX - Replay\Backend\frontend"
+npm run dev
+
+Проверить:
+- route ArcadePage больше не падает из-за ../lib/api
+
+Что ещё НЕ доделано
+
+1. Client anti-repeat parity
+- backend shape fingerprint уже лучше
+- но client repeatKey всё ещё слабее backend fingerprint
+- следующий safe-pass: усилить client-side near-duplicate filter
+
+2. Full site / extension parity
+- extension popup всё ещё сильно проще сайта
+- нужно отдельно привести settings truth и help text к одному контракту
+
+3. Legacy cleanup
+- extension/content.js всё ещё лежит как dormant legacy мусор
+- надо удалить/изолировать аккуратно, но не в этом проходе
+
+4. I18N cleanup
+- сейчас truth для новых critical labels держится через runtime override в app.js
+- это безопасно для recovery-pass, но потом надо дочистить source translations аккуратно, без поломки UI
+
+5. Generation backend text bank cleanup deeper
+- сейчас user-facing мусорные styles уже убраны с поверхности
+- но deeper cleanup самого phrase bank можно делать отдельно, точечно, после local smoke-check
+
+Сделанная техпроверка
+- node --check Backend/index.js = OK
+- node --check Backend/public/app.js = OK
+
+Следующий правильный шаг
+- не распыляться
+- после твоего локального smoke-check идти в client anti-repeat + site/extension parity pass

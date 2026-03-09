@@ -1,0 +1,24 @@
+SAFE PASS9 / FIX 07
+
+Done
+- forced Best live + Best pass default state OFF on first bootstrap for existing browsers
+- added payment RPC fallback so checkout does not die on one forbidden endpoint
+- loosened generator sanitizing that was stripping crypto words and emoji
+- seeded richer gm/gn banks with emoji-heavy min/mid/max lines
+- loosened min-mode profile so short real gm/gn lines survive
+- filled arcade imageUrl values from the uploaded 50-game list
+- refreshed popup fallback lines
+
+Check locally
+- hard refresh the site once
+- GM and GN: Best live toggle should start off
+- GM and GN: Best pass toggle should start off
+- Batch 10 in min should fill much wider and keep emoji
+- crypto tone should stop deleting BTC / charts / moon / sats style words
+- wallet payment should retry on fallback RPC instead of dying on one 403 endpoint
+- arcade cards should stop falling back to generic per-category art for the 37 missing covers
+
+Still next
+- payment server-side verification smoke in a real wallet flow
+- deeper best scoring cleanup if Best still prefers weak bland lines
+- arcade dataset polish beyond the supplied 50-game list

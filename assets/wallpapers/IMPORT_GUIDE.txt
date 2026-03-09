@@ -1,0 +1,14 @@
+Site wallpapers import guide
+
+Photo wallpapers:
+- put/generated as v2_XXX.webp
+- thumbs go to wallpapers/thumbs/v2_XXX.webp
+
+Crypto/stylized SVG:
+- use lux_<slug>.svg
+
+Free reserved ids:
+- free01.svg
+- free02.svg
+
+Use Backend/tools/wallpaper_batch_helper.py to keep ids and thumbs clean.

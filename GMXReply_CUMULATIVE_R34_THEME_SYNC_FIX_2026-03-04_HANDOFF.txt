@@ -1,0 +1,69 @@
+GMXReply - HANDOFF - R34 theme sync fix - 2026-03-04
+
+Source used
+- Backend.zip as current baseline root (working root inside archive = Backend/)
+- frontend.zip as separate source tree
+- assets.zip as separate asset tree reference
+
+What was changed in this pack
+1) Backend/public/app.js
+- Fixed a broken EXT_POPUP_TABS block where wallpaper objects had been injected into the tab list
+- Added idle batched background assignment for extension wallpaper thumbs to reduce render jank
+- Added multi-path ext wallpaper asset resolver so legacy, bridge, extbg, and v3 paths can all resolve
+- Limited legacy THEMES and EXT_THEMES to 60 in the runtime file
+- Limited legacy EXT_WALLPAPERS to 60 in the runtime file
+- Normalized old extv3_* storage IDs back to legacy/site IDs (ext_free_01 / ext_03 etc.) before selection/render
+- Patched applyExtWallpaper to always save normalized IDs
+- Patched renderExtWallpapers to render using the new asset resolver + deferred backgrounds
+- Patched setExtView so inactive heavy grids are cleared when switching panes (less retained DOM / fewer extra re-renders)
+
+2) frontend/src/legacy/legacyApp.ts
+- Added the same ext wallpaper ID normalization helper in source
+- Patched applyExtWallpaper to save normalized IDs
+- Patched renderExtWallpapers to read normalized IDs
+
+3) Backend/extension/popup.js
+- Replaced popup wallpaper options from extv3_01..40 with canonical storage IDs used by the site (ext_free_01, ext_free_02, ext_03..ext_60)
+- Added normalization so old extv3_* saved values are mapped back to canonical site IDs
+- Expanded wallpaper asset resolution to try both canonical IDs and extv3 aliases
+- Patched popup state load + select binding defaults to use canonical IDs
+
+Why this matters
+- This directly fixes a real mismatch between site and extension wallpaper IDs
+- Old popup selections saved as extv3_* now map back to the site cards correctly
+- Site selections for ext_41..ext_60 can now resolve in the popup instead of failing silently
+- The extension themes UI in legacy runtime should be lighter because inactive grids are cleared and wallpaper thumbs are assigned in batches
+
+Checks completed
+- node --check passed for:
+  - Backend/public/app.js
+  - Backend/extension/popup.js
+
+Important honest note
+- I did NOT rebuild the hashed bridge bundle in Backend/public/bridge/assets in this pass
+- I patched the live legacy runtime file (Backend/public/app.js) and the source file (frontend/src/legacy/legacyApp.ts)
+- If your current workflow is the dev runner (Vite + backend), the source change is in place for the frontend tree
+- If you specifically rely on the already-built static bridge bundle, that still needs a rebuild from the frontend source to carry the same fix into the hashed bridge asset
+
+Recommended next step
+1) Smoke-check in browser first:
+- /app -> Themes
+- /app -> Extension Themes -> Theme / Wallpaper / Custom tabs
+- Switch between the three tabs several times
+- Confirm the UI no longer stutters as hard and selected wallpaper stays marked
+- Confirm old saved wallpaper still highlights the matching card
+
+2) Then verify extension popup:
+- Open popup
+- Pick ext_free_01, ext_03, ext_40, ext_41, ext_60
+- Confirm the popup background changes for each
+- Confirm returning to /app -> Extension Themes still shows the same selected card
+
+3) After that
+- Rebuild / verify the bridge output so the same logic lands in Backend/public/bridge/assets
+- Then continue with deeper theme polish if needed
+
+Files in this pack
+- Backend/public/app.js
+- Backend/extension/popup.js
+- frontend/src/legacy/legacyApp.ts

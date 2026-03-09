@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="660" viewBox="0 0 1040 660">
+  <defs>
+    <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B0F1A"/>
+      <stop offset="0.55" stop-color="#1A0B3A"/>
+      <stop offset="1" stop-color="#0B3A3A"/>
+    </linearGradient>
+    <radialGradient id="gVignette" cx="50%" cy="52%" r="78%">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.08"/>
+      <stop offset="0.55" stop-color="#000000" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0.72"/>
+    </radialGradient>
+    <linearGradient id="gGrid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.02"/>
+    </linearGradient>
+    <linearGradient id="gFrame" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.12"/>
+      <stop offset="0.35" stop-color="#FFFFFF" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.10"/>
+    </linearGradient>
+    <radialGradient id="gGlow" cx="40%" cy="35%" r="85%">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="gGlow2" cx="65%" cy="55%" r="95%">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.18"/>
+      <stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gGlass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.12"/>
+      <stop offset="0.35" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="gUp" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5BFFB8" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#00E5FF" stop-opacity="0.75"/>
+    </linearGradient>
+    <linearGradient id="gDn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FF4B91" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#FFB86C" stop-opacity="0.75"/>
+    </linearGradient>
+    <filter id="fNoise" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="12" />
+      <feColorMatrix type="matrix" values="
+        1 0 0 0 0
+        0 1 0 0 0
+        0 0 1 0 0
+        0 0 0 0.18 0"/>
+    </filter>
+    <filter id="fSoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" />
+    </filter>
+  </defs>
+
+  <rect width="1040" height="660" fill="url(#gBg)"/>
+  <rect width="1040" height="660" filter="url(#fNoise)" opacity="0.22"/>
+  <g opacity="1">
+    <path d="M0 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M56 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M112 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M168 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M224 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M280 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M336 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M392 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M448 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M504 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M560 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M616 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M672 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M728 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M784 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M840 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M896 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M952 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M1008 0 V660" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M0 0 H1040" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M0 56 H1040" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M0 112 H1040" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M0 168 H1040" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M0 224 H1040" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M0 280 H1040" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M0 336 H1040" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M0 392 H1040" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M0 448 H1040" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M0 504 H1040" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M0 560 H1040" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/><path d="M0 616 H1040" stroke="url(#gGrid)" stroke-width="1" opacity="0.10"/>
+  </g>
+  <g filter="url(#fSoft)" opacity="0.65">
+    <circle cx="74.1" cy="601.3" r="44.2" fill="url(#gGlow)" opacity="0.053"/><circle cx="71.4" cy="162.5" r="44.7" fill="url(#gGlow)" opacity="0.061"/><circle cx="583.7" cy="513.3" r="21.5" fill="url(#gGlow)" opacity="0.044"/><circle cx="219.8" cy="209.6" r="52.2" fill="url(#gGlow)" opacity="0.056"/><circle cx="482.6" cy="266.2" r="27.4" fill="url(#gGlow)" opacity="0.086"/><circle cx="680.5" cy="498.7" r="20.4" fill="url(#gGlow)" opacity="0.077"/><circle cx="204.5" cy="68.3" r="46.8" fill="url(#gGlow)" opacity="0.037"/><circle cx="566.0" cy="260.0" r="39.2" fill="url(#gGlow)" opacity="0.072"/><circle cx="941.8" cy="445.6" r="42.5" fill="url(#gGlow)" opacity="0.062"/><circle cx="646.9" cy="317.3" r="47.3" fill="url(#gGlow)" opacity="0.095"/>
+  </g>
+  <g opacity="0.55">
+    <rect x="240.4" y="491.4" width="2.9" height="132.4" rx="1.5" fill="url(#gUp)" opacity="0.25"/><rect x="237.4" y="580.3" width="8.8" height="23.4" rx="2.9" fill="url(#gUp)" opacity="0.42"/><rect x="897.3" y="462.2" width="2.4" height="93.9" rx="1.2" fill="url(#gUp)" opacity="0.25"/><rect x="894.9" y="518.9" width="7.2" height="17.1" rx="2.4" fill="url(#gUp)" opacity="0.42"/><rect x="187.0" y="319.8" width="3.0" height="145.2" rx="1.5" fill="url(#gUp)" opacity="0.25"/><rect x="184.0" y="399.9" width="9.1" height="45.2" rx="3.0" fill="url(#gUp)" opacity="0.42"/><rect x="232.1" y="354.7" width="4.6" height="185.5" rx="2.3" fill="url(#gDn)" opacity="0.25"/><rect x="227.4" y="509.5" width="13.9" height="43.0" rx="4.6" fill="url(#gDn)" opacity="0.42"/><rect x="849.8" y="211.2" width="3.5" height="197.3" rx="1.8" fill="url(#gDn)" opacity="0.25"/><rect x="846.2" y="377.4" width="10.5" height="44.2" rx="3.5" fill="url(#gDn)" opacity="0.42"/><rect x="55.8" y="423.6" width="3.3" height="132.6" rx="1.6" fill="url(#gUp)" opacity="0.25"/><rect x="52.5" y="487.2" width="9.9" height="49.0" rx="3.3" fill="url(#gUp)" opacity="0.42"/><rect x="738.7" y="414.4" width="3.7" height="120.3" rx="1.8" fill="url(#gUp)" opacity="0.25"/><rect x="735.0" y="477.9" width="11.1" height="36.8" rx="3.7" fill="url(#gUp)" opacity="0.42"/><rect x="805.5" y="431.0" width="3.2" height="75.1" rx="1.6" fill="url(#gDn)" opacity="0.25"/><rect x="802.3" y="480.9" width="9.6" height="20.6" rx="3.2" fill="url(#gDn)" opacity="0.42"/><rect x="213.5" y="324.1" width="3.9" height="191.2" rx="1.9" fill="url(#gUp)" opacity="0.25"/><rect x="209.6" y="441.8" width="11.7" height="53.5" rx="3.9" fill="url(#gUp)" opacity="0.42"/><rect x="265.6" y="432.8" width="2.8" height="173.9" rx="1.4" fill="url(#gUp)" opacity="0.25"/><rect x="262.7" y="511.5" width="8.5" height="75.2" rx="2.8" fill="url(#gUp)" opacity="0.42"/><rect x="183.5" y="438.5" width="3.5" height="128.3" rx="1.8" fill="url(#gDn)" opacity="0.25"/><rect x="180.0" y="533.8" width="10.5" height="52.1" rx="3.5" fill="url(#gDn)" opacity="0.42"/><rect x="804.7" y="406.3" width="1.8" height="105.5" rx="0.9" fill="url(#gDn)" opacity="0.25"/><rect x="802.9" y="485.4" width="5.5" height="25.9" rx="1.8" fill="url(#gDn)" opacity="0.42"/>
+  </g>
+  
+    <g opacity="0.92">
+      <rect x="156.0" y="105.6" width="728.0" height="475.2" rx="32" fill="url(#gGlass)" stroke="url(#gFrame)" stroke-width="1.6" opacity="0.55"/>
+      <rect x="166.0" y="115.6" width="708.0" height="455.2" rx="26" fill="none" stroke="url(#gGlow)" stroke-width="2.0" opacity="0.35"/>
+      <rect x="176.0" y="125.6" width="688.0" height="435.2" rx="22" fill="none" stroke="url(#gGlow2)" stroke-width="1.4" opacity="0.22"/>
+    </g>
+    
+  <g opacity="0.85">
+    <path d="M 22 112 L 22 22 L 112 22" stroke="url(#gFrame)" stroke-width="2.0" fill="none" opacity="0.65"/><path d="M 1018 112 L 1018 22 L 928 22" stroke="url(#gFrame)" stroke-width="2.0" fill="none" opacity="0.65"/><path d="M 22 548 L 22 638 L 112 638" stroke="url(#gFrame)" stroke-width="2.0" fill="none" opacity="0.65"/><path d="M 1018 548 L 1018 638 L 928 638" stroke="url(#gFrame)" stroke-width="2.0" fill="none" opacity="0.65"/>
+  </g>
+  <rect width="1040" height="660" fill="url(#gVignette)"/>
+</svg>

@@ -1,0 +1,37 @@
+GMXReply — CUMULATIVE PACK R14 (2026-03-03)
+
+BASELINE:
+- Работать строго от свежего архива пользователя (Bac 2.zip). Этот пак — накопительный заменяющий слой.
+
+ЦЕЛЬ ЭТОГО ПАКА:
+- Убить «5 минут грузятся темы для extension» и общий лаг из‑за бесконечных перерисовок.
+
+ЧТО БЫЛО НЕ ТАК (по факту):
+- refreshRefStats() после каждого апдейта рефералов дергал renderThemes() и renderExtThemes().
+- Это пересоздавало DOM-сетки (themeGrid / extThemeGrid / extWpGrid) снова и снова.
+- В итоге chunkedRender каждый раз начинал с нуля (grid.innerHTML=""), и при частых refresh (или при scheduleRefStatsRefresh) грид ощущался как «никогда не догружается».
+
+ЧТО СДЕЛАНО:
+1) Добавлены лёгкие функции обновления KPI без рендера сеток:
+   - updateThemesUnlockKpisOnly()
+   - updateExtUnlockKpisOnly()
+
+2) refreshRefStats() теперь НЕ пересобирает тяжёлые гриды на каждый апдейт.
+   - Если открыт tab "themes" → renderThemes()
+   - Иначе → updateThemesUnlockKpisOnly()
+   - Если открыт tab "extthemes" → рендерится только активный subview (theme/wall/custom)
+   - Иначе → updateExtUnlockKpisOnly()
+
+ФАЙЛЫ ИЗМЕНЕНЫ:
+- public/app.js
+- frontend/src/legacy/legacyApp.ts
+
+КАК ПРОВЕРИТЬ:
+1) npm run dev
+2) Открыть вкладку Extension Themes и подождать: грид должен догрузиться быстро и НЕ сбрасываться/моргать сам по себе.
+3) Подождать авто-рефреш рефералов (или вызвать руками refresh stats): выбранный таб не должен заново чистить и перерисовывать сетку.
+4) Переключить вкладки (themes/extthemes): KPI (unlocked) обновляются, но гриды не пересобираются, если вкладка не открыта.
+
+ЧТО ДЕЛАТЬ ДАЛЬШЕ ЕСЛИ ЛАГ ОСТАЛСЯ:
+- Жёстко стопать scheduleRefStatsRefresh() пока открыт tab extThemes, и возобновлять после выхода.
+- Добавить поиск/фильтр + дальнейшее уменьшение initial chunk (12) только если реально нужно.

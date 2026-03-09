@@ -1,0 +1,86 @@
+GMXReply · HANDOFF · 2026-03-02 · X INLINE BUTTON / INSERT REPAIR
+
+SOURCE OF TRUTH USED
+- Primary source used in this pass: Bac 2.zip
+- The mounted cumulative archive GMXReply_CUMULATIVE_PACK_2026-03-02_session_i18n_xdock_sessionpersist_fix.zip was checked only for comparison.
+- For the files touched in this pass, the current Bac 2 source already matched that previous cumulative pack, so all edits were made strictly on top of Bac 2.
+
+REAL PROJECT STATE CONFIRMED FROM CODE
+- Root package.json: Bac 2/package.json
+- Main dev command: npm run dev
+- npm run dev resolves to: node tools/dev-run.mjs
+- Backend entry: index.js at repo root
+- Backend-served legacy site files still exist in: public/app.js, public/app.html, public/app.css
+- Frontend app lives in: frontend/
+- Frontend stack is React 18 + Vite 5 (confirmed in frontend/package.json)
+- React/Vite shell is already present (frontend/src/App.tsx, frontend/src/main.tsx, pages/*)
+- Legacy bridge is still present (frontend/src/legacy/* and frontend/src/LegacyApp.tsx)
+- Extension lives separately in: extension/
+
+WHAT WAS BROKEN NOW
+1) X inline GM/GN could disappear after the last dock-right pass
+- The dock-right absolute placement could end up clipped/off-screen on some live X DOM variants.
+- Result: buttons looked like they were missing.
+
+2) X insert could fail silently
+- The insert flow relied too heavily on one guessed contenteditable node plus execCommand insertText.
+- If X changed which inner node is the real editable target, clicking GM/GN could do nothing even when the bar was visible.
+
+WHAT WAS FIXED IN THIS PACK
+1) STRONGER COMPOSER DETECTION
+- File: extension/content.js
+- Added broader editable-node discovery for X composers.
+- The script now resolves the active editable child more reliably instead of only trusting a single div[role="textbox"] match.
+- Composer lists are now ranked and deduplicated before binding the toolbar.
+
+2) STRONGER INSERT PIPELINE WITH VALIDATION + RETRY
+- File: extension/content.js
+- Reworked setTextboxText() into a multi-step insert flow:
+  - resolve real editable target
+  - clear composer safely
+  - try full insert in one pass
+  - fallback to human-like typing
+  - fallback to direct DOM write
+- Insert now verifies that the expected text is actually present after writing.
+- If the first bound composer went stale during X re-render, the script re-finds the current composer and retries once.
+- If text still is not present, the action now fails loudly in code instead of silently pretending success.
+
+3) MORE STABLE INLINE PLACEMENT NEXT TO NATIVE REPLY
+- File: extension/content.js
+- Added an inline-row placement mode before the previous dock-right fallback.
+- First choice now: insert GM/GN directly into the same action row, immediately before the native Reply/Post button cluster.
+- If that row variant is not suitable, only then it falls back to dock-right.
+- If dock-right would render off-screen or misaligned, it falls back below the composer instead of disappearing.
+
+4) EXTENSION VERSION BUMP
+- File: extension/manifest.json
+- Version bumped to 1.0.11 so the repaired build is easy to distinguish after reload.
+
+FILES CHANGED IN THIS PACK
+- extension/content.js
+- extension/manifest.json
+
+STATIC CHECKS DONE
+- node --check extension/content.js
+- node --check extension/popup.js
+- node --check extension/background.js
+- node --check extension/site_sync.js
+- manifest.json parsed successfully
+
+WHAT STILL NEEDS REAL BROWSER SMOKE
+- Reload the unpacked extension in Chrome
+- Hard refresh x.com
+- Open a reply composer on a real tweet
+- Confirm GM and GN appear next to native Reply/Post, not in the media row
+- Click GM and GN and confirm text actually lands inside the X composer
+- Also test after closing and reopening the reply dialog, because X frequently re-renders the composer node
+
+HOW TO APPLY
+1. Unpack this zip over the current project
+2. Reload the Chrome extension
+3. Hard refresh x.com
+4. Re-test inline buttons and insert
+
+IF ANOTHER PASS IS NEEDED
+- If placement is still wrong, the next pass should stay focused only on extension/content.js and use a fresh screenshot of the exact live X DOM from your browser.
+- Site/session/i18n files should not be touched again unless a new concrete regression appears.

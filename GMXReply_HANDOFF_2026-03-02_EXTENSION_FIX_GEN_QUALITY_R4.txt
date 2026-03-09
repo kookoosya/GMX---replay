@@ -1,0 +1,65 @@
+GMXReply handoff - 2026-03-02 - EXTENSION_FIX_GEN_QUALITY_R4
+
+Baseline:
+- Built from Bac 2 only.
+- Arcade/game work intentionally postponed.
+
+What was fixed now:
+1) Extension crash in site_sync
+- Reworked extension/site_sync.js.
+- The line around nextToken no longer depends on chrome.storage returning a valid object.
+- Added safe read/write wrappers for chrome.storage.local.
+- If storage is unavailable or returns bad data, sync now fails softly instead of throwing.
+- site_sync also keeps the no-churn behavior: it does not rewrite storage if nothing actually changed.
+
+2) Extension popup quality fallback
+- Updated extension/popup.js fallback GM/GN lines.
+- Replaced bland generic fallback text with more human, concrete one-liners.
+- Reworked popup best-pick scoring so cached/fallback picks prefer natural short lines and penalize stale filler.
+
+3) Core text generation quality
+- Reworked index.js generator logic.
+- composeReply now builds from more concrete, human-sounding phrase pools instead of repetitive generic filler.
+- applyStyle tails were toned down so styles stop adding as much robotic noise.
+- replyQualityScore now rewards grounded wording and penalizes bland repeated stock words.
+
+4) Bulk generation quality on every level
+- Added ranked candidate generation in index.js.
+- /api/public/random now ranks a small pool before returning one reply.
+- /api/public/random-bulk now returns ranked bulk instead of raw random unique lines.
+- /api/generate uses the stronger ranked single path through generateUnique.
+- /api/generate-bulk now returns ranked candidates instead of first random uniques.
+- Result: site, popup, and all flows using backend bulk now get stronger text on average.
+
+5) Site-side Best selection
+- Reworked public/app.js scoreLineForBest.
+- Best-copy now prefers short human lines with concrete words/actions.
+- Penalizes marketing tone, bland filler, and empty greeting-only lines more aggressively.
+
+Files in this cumulative pack:
+- extension/site_sync.js
+- extension/popup.js
+- extension/popup.html
+- extension/popup.css
+- extension/quick.html
+- index.js
+- public/app.js
+- this handoff txt
+
+Syntax checks completed:
+- node --check extension/site_sync.js
+- node --check extension/popup.js
+- node --check public/app.js
+- node --check index.js
+
+Recommended next manual checks:
+1) Reload extension.
+2) Open site, login, then click Use site session in popup.
+3) Confirm there is no crash in extension and no noisy storage loop behavior.
+4) Generate GM/GN in popup and on site for min/mid/max.
+5) Compare whether text now feels less repetitive and less generic.
+
+Next logical work after this:
+- Do a focused UX pass on main product flow (/, /app, /arcade entry consistency).
+- Then prepare the clean Supabase wiring pass.
+- Games stay postponed until core product is stable.

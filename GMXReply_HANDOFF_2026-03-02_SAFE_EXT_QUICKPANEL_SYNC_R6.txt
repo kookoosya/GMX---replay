@@ -1,0 +1,86 @@
+GMXReply HANDOFF · 2026-03-02 · SAFE_EXT_QUICKPANEL_SYNC_R6
+
+SOURCE OF TRUTH FOR THIS STEP
+- Base project remains the user's working archive (Bac 2) plus later cumulative replacements.
+- This pack only contains the new replacement files for the extension.
+
+WHAT WAS CHANGED NOW
+1) Extension kept in SAFE COPY-ONLY mode
+- Still NO content scripts on x.com
+- Still NO DOM injection into X
+- Copy is manual only: user copies in extension, pastes in X manually
+
+2) Site session sync restored safely
+- Re-added extension/content script ONLY on GMXReply site origins:
+  - https://www.gmxreply.com/*
+  - https://gmxreply.com/*
+  - http://localhost:*/*
+  - http://127.0.0.1:*/*
+- New site_sync.js only syncs apiBase + handle/token from GMXReply site into extension storage
+- This fixes the main auth regression from the previous safe pack:
+  - existing accounts can now reconnect through the already logged-in site session
+  - no more forced handle-only connect for existing users
+
+3) Quick panel added
+- New quick.html + quick.css
+- Quick panel is a persistent extension window/tab that stays open while posting
+- Background service worker opens/focuses the quick panel
+- Added Chrome command target:
+  - Open GMXReply quick panel
+- IMPORTANT: no default shortcut is forced now
+- User can assign any custom shortcut manually in chrome://extensions/shortcuts
+- This avoids the old Ctrl+Shift+G conflict with X search
+
+4) Popup simplified and hardened
+- Big main buttons: GM / GN
+- Secondary: Best GM / Best GN
+- New button: Use site session
+- New button: Quick panel
+- Connect remains only as fallback for new account creation
+- If handle already exists, popup now points user to site session sync instead of failing silently
+- Added local fallback text pool so copy still works even if backend is temporarily unreachable
+- Added storage listener so popup/quick page react to site sync changes
+
+5) Manifest updated
+- version -> 1.1.1
+- background service worker added
+- tabs permission added
+- GMXReply site-only content script added
+- still no x.com content script
+
+FILES IN THIS PACK
+- extension/manifest.json
+- extension/background.js
+- extension/popup.html
+- extension/popup.css
+- extension/popup.js
+- extension/site_sync.js
+- extension/quick.html
+- extension/quick.css
+
+HOW TO CHECK NOW
+1. Replace files from this pack over the project.
+2. Reload the extension in chrome://extensions.
+3. Keep the GMXReply site open and logged in.
+4. Click extension icon:
+   - Use site session should bind the popup to the same logged-in account
+   - GM/GN buttons should copy text immediately
+5. Click Quick panel:
+   - a persistent small window should open (or focus if already open)
+   - it should stay open while posting on X
+6. If wanted, assign your own shortcut in chrome://extensions/shortcuts for:
+   - Open GMXReply quick panel
+
+KNOWN LIMITS
+- No automatic insert into X by design
+- Manual paste is still required
+- This pack does NOT touch site session/reset logic on the site itself
+- This pack does NOT do Supabase wiring yet
+- This pack does NOT do Render deployment wiring yet
+- This pack does NOT merge more Arcade changes (those were already added in the previous pack)
+
+NEXT RECOMMENDED STEP
+1. Verify extension session stability with the site open
+2. If stable, next pack should target site session/reset cleanup on the website itself
+3. After that, do one focused Supabase wiring pass
+4. Then Render/deploy wiring

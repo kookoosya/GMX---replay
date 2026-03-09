@@ -1,0 +1,43 @@
+GMXReply cumulative pass 2026-03-02
+
+Baseline used in this pass
+- Source pack: GMXReply_CUMULATIVE_PACK_2026-03-02_site_recover_popup_english_replybar_fix.zip
+- Working reference for extension visual baseline: Bac_UPDATED_WORKING.zip
+
+What was fixed in this pass
+1) Site connect crash fixed
+- Added a real isLocalDevHost() helper back into public/app.js and frontend/src/legacy/legacyApp.ts.
+- This removes the runtime connect error: isLocalDevHost is not defined.
+- Local dev reset logic now works only on localhost / 127.0.0.1 again.
+
+2) Site translations restored inside the Vite legacy shell
+- frontend/src/LegacyApp.tsx now imports frontend/src/legacy/siteI18nCatalog.ts and exposes it as window.GMX_SITE_I18N before startLegacyApp().
+- The legacy runtime inside React/Vite now receives the full multi-language catalog instead of falling back to English-only.
+- This fixes the “language switch changes nothing” problem in the Vite site shell.
+
+3) Extension popup returned to a readable dark product look
+- extension/popup.css was rebuilt as a dark readable UI again.
+- Popup remains English-only (no language switch), but text contrast is stronger and the layout stays wide/readable.
+
+4) X toolbar placement hardened again
+- extension/content.js now uses a stronger findActionRowForBox() pass.
+- It first tries to lock onto the real composer toolbar / action row, including data-testid=toolBar and wider flex parents that actually contain the native Reply/Post button.
+- GM/GN are inserted immediately to the LEFT of Reply/Post in normal layouts.
+- If X still reflows the bar vertically, the script retries placement a few times and only then falls back below the box.
+- This is safer against small X DOM shifts than the previous brittle row guess.
+
+What was not fully re-tested here
+- Full browser smoke on real x.com DOM was not run in this environment.
+- npm run dev / npm run build were not run because this is still a replacement pack, not the full checked-out project.
+
+What to verify next in the real project
+1) Reload unpacked extension in Chrome
+2) Hard refresh the site on 127.0.0.1:5173
+3) Confirm connect no longer throws isLocalDevHost is not defined
+4) Switch site language to NL / JA / ZH / ID / TR and confirm visible text actually changes
+5) Open an X reply composer and confirm GM/GN attach beside Reply, not floating in the middle-left of the composer
+6) Click GM/GN after the site is connected and confirm insertion works
+
+If one thing is still off
+- If X still uses a different wrapper and GM/GN are not beside Reply, the next pass should adjust only extension/content.js around findActionRowForBox() and ensureBarForBox() using a fresh post-fix screenshot.
+- If translations still do not change, the next pass should inspect the actual route being used (/app vs /bridge vs /) and verify which shell is mounted in the browser.

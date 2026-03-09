@@ -1,0 +1,53 @@
+GMXReply cumulative handoff — 2026-03-03 REF_FIX_THEME_GEN_R7
+
+Baseline used
+- Source of truth: Bac 2.zip
+- Overlaid previous known-good cumulative pieces only where needed (r5 for generation/app polish, r6 for extension theme sync base), then patched manually.
+- Nothing was deleted from the archive.
+
+What was fixed in this pack
+1) Referrals 429 / repeated stats calls
+- Added throttled referral stats flow in public/app.js and frontend/src/legacy/legacyApp.ts
+- refreshRefStats now caches recent result, avoids duplicate in-flight calls, and patchDynamicCopy schedules instead of spamming immediate refreshes
+- refLoad button no longer does a second fallback /api/referral/stats call
+
+2) Referral link row hidden
+- Referral link UI is now visible by default in public/app.html and frontend/src/legacy/legacyBody.html
+- JS also force-reveals the link row after stats load
+
+3) Extension async listener warning
+- extension/background.js now responds immediately for GMX_OPEN_QUICK_PANEL and opens panel asynchronously
+- extension/site_sync.js already uses immediate queued response for GMX_FORCE_SITE_SYNC
+
+4) Extension themes / wallpapers finally apply
+- extension/popup.js uses theme sync keys from storage (site theme, ext theme, ext view, wallpaper, custom bg)
+- Stronger shell theming: popup now changes accent, background, card tint, overlays, borders
+- Wallpaper loading now prefers fetched SVG converted to data URL, then falls back to remote URL
+- extension/popup.css updated so the theme colors are visible and wallpaper is not buried under a heavy black overlay
+
+5) Generation quality
+- index.js uses human-style ranked generation from prior polish pass, then patched further
+- generateRankedCandidates now returns the actual top candidate for count=1 (not random near-top)
+- bulk generation keeps the best first, then fills from the next best unique lines
+- emoji frequency increased across min/mid/max so replies do not feel empty
+- public/app.js and frontend/src/legacy/legacyApp.ts Best scoring now prefers warmer, more human lines and picks top-first instead of random near-top
+
+6) Annual pricing
+- index.js keeps 1 year at $80
+
+Files in this cumulative pack
+- extension/background.js
+- extension/popup.js
+- extension/popup.css
+- extension/site_sync.js
+- public/app.js
+- public/app.html
+- frontend/src/legacy/legacyApp.ts
+- frontend/src/legacy/legacyBody.html
+- index.js
+- this handoff txt
+
+Notes
+- The console 404/ERR_CONNECTION_REFUSED for local API/assets still happens if backend is not running; this pack does not remove the need to start the site/backend in dev mode.
+- No cleanup/deletions were done.
+- Arcade was not touched in this pass.

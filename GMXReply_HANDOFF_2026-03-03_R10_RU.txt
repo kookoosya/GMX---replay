@@ -1,0 +1,43 @@
+GMXReply — CUMULATIVE PACK R10 (2026-03-03)
+Baseline: Bac 2.zip (fresh рабочий архив пользователя) — source of truth
+
+Что сделал (по факту файлов):
+
+1) EXT Themes / Wallpapers — ещё одна волна оптимизации (должно убрать «люто лагает» при авто-обновлениях)
+- public/app.js
+  - refreshRefStats(): убрал тяжёлые full rerender'ы extension grids на каждом poll'е.
+    Теперь:
+    - пересчёт unlock-состояния делается через сигнатуру (pro + referrals)
+    - если unlock-состояние не менялось: только лёгкое обновление lockTag/оверлеев на уже отрисованных карточках
+    - если unlock-состояние изменилось: site Themes + styles/packs обновляются как раньше, extension grids — через лёгкий updateExtLockTags()
+  - markExtThemeSelection / markExtWallpaperSelection: O(1) переключение active (без прохода по всем карточкам)
+  - renderExtThemes(): добавил data-theme-id на карточки (для O(1) selection)
+  - renderExtWallpapers(): убрал IntersectionObserver для ext wallpaper thumbs (локальные SVG ставим сразу), чтобы не создавать/держать десятки наблюдений
+
+2) Убрал лишние куски в Home/Pro (по твоим скринам)
+- public/app.html
+  - Home: секцию “Try instantly (free)” спрятал (элементы сохранены в DOM в hidden-блоке, чтобы ничего не ломать в JS), оставил короткую заметку
+  - Pro: удалил FAQ-строку “What if I paid but Pro isn't active? …send bundle.” (это раздражало в Pro блоке)
+
+3) Небольшая CSS-оптимизация рендера карточек
+- public/app.css
+  - добавил content-visibility + contain-intrinsic-size для .themeCard и .wpCard
+
+Что НЕ делал (важно):
+- Генерацию (quality/min-mid-max/tone/preset/best/repeat-guard) в этом паке не трогал
+- Safe copy-only extension режим НЕ трогал (никакого DOM inject в X, никаких GM/GN кнопок в x.com)
+
+Как проверить:
+1) npm run dev
+2) Themes → Extension Themes / Wallpapers:
+   - быстро кликать темы/обои
+   - оставить открытой вкладку 10–20 секунд (чтобы прошёл авто refreshRefStats)
+   - теперь не должно быть «полного пересборa» сетки и заметных фризов от авто-обновления
+3) Referrals → Load stats несколько раз
+
+Если всё ещё лагает сильно:
+- следующий шаг: сделать виртуализацию сеток (пагинация/поиск/показ 20–40 + кнопка Show more) и отключить любые авто-render'ы сеток, пока вкладка не активна.
+
+Следующие приоритеты после стабилизации Themes:
+1) Генерация: довести min/mid/max + tone/preset/best + repeat guard до реально живого качества
+2) Referrals UI: уплотнить иерархию, убрать пустоту, сделать метрики читабельнее

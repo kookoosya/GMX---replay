@@ -1,0 +1,48 @@
+{
+  "manifest_version": 3,
+  "name": "GMXReply",
+  "version": "1.1.1",
+  "description": "Safe copy-only GM/GN companion. No X DOM injection. Stable site session sync + quick panel.",
+  "action": {
+    "default_title": "GMXReply",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://www.gmxreply.com/*",
+    "https://gmxreply.com/*",
+    "http://localhost:*/*",
+    "http://127.0.0.1:*/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.gmxreply.com/*",
+        "https://gmxreply.com/*",
+        "http://localhost:*/*",
+        "http://127.0.0.1:*/*"
+      ],
+      "js": [
+        "site_sync.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "open-quick-panel": {
+      "description": "Open GMXReply quick panel"
+    }
+  }
+}

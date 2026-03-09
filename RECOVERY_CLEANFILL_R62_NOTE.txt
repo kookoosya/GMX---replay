@@ -1,0 +1,15 @@
+GMXReply R62 — Clean fill pass
+
+What changed
+- Removed visible Repeat guard slider from GM/GN panels.
+- Added Clean fill toggle button (off/on) per GM and GN.
+- Added visible Clean now button.
+- Normal generation now stays loose-random by default.
+- Clean fill is optional: when run, it prunes shape-level near-duplicates from the saved bank and refills the missing slots back to target.
+- Auto Clean fill can be enabled with the new toggle; after batch generation it prunes/refills automatically.
+
+Changed files
+- Backend/public/app.js
+- Backend/frontend/public/app.js
+- Backend/public/app.html
+- Backend/frontend/src/legacy/legacyBody.html

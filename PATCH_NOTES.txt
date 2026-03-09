@@ -1,0 +1,18 @@
+GMXReply Patch: restore extension language/session stability (from Bac baseline)
+
+What this patch does
+- Restores extension/site_sync.js to the stable baseline: full sync of session + saved lists + prefs from SITE -> extension storage (sync), no local overrides.
+- Restores extension/background.js to sync-only storageGet (no local merge that caused stale/mixed prefs).
+- Restores extension/popup.js language selection logic to baseline.
+- Restores extension/popup.css to baseline dark UI (removes white/contrast regressions).
+- Restores extension/manifest.json to baseline permissions/structure.
+
+How to apply
+1) Unzip this patch into your project root (same level as /extension folder) with overwrite.
+2) In Chrome: chrome://extensions -> Developer mode -> Reload GMXReply extension.
+3) Clear any old local extension storage once:
+   - Right click extension -> Inspect popup -> Application -> Storage -> Extension Storage -> Clear
+4) Open site (/app) -> connect once -> popup should show same language and stable session.
+
+Why
+Bac 2 introduced a trimmed site_sync and storage.local overriding sync, causing mixed EN/RU and "looks like logout" symptoms.
