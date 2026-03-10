@@ -3727,7 +3727,18 @@ if (effCount <= 0){
       const friendly = friendlyUiErrorMessage(m, { scope:"generate" });
       msgEl.innerHTML = `<span class="bad">${escapeHtml(friendly)}</span>`;
       logEvent("gen_error", { kind, err: m, friendly });
-    } finally { INFLIGHT[kind] = false; try{ ABORT[kind] = null; }catch{} setBusy(kind, false); try{ renderList(kind); }catch{} }
+    } finally {
+      INFLIGHT[kind] = false;
+      try{ ABORT[kind] = null; }catch{}
+      setBusy(kind, false);
+      try{ renderList(kind); }catch{}
+      try{
+        const staleMsg = String(msgEl?.textContent || "").replace(/\s+/g, " ").trim();
+        if (staleMsg === "Working..." || staleMsg === "Best pass..."){
+          msgEl.innerHTML = "";
+        }
+      }catch{}
+    }
   }
 
   
