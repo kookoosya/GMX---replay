@@ -238,13 +238,13 @@ const LS_GM_RECENT = "gmx_gm_recent";
   function lsKeyCleanFill(kind){
     return (kind === "gn") ? LS_GN_CLEAN_FILL : LS_GM_CLEAN_FILL;
   }
-  const LS_CLEAN_FILL_BOOTSTRAP = "gmx_clean_fill_bootstrap_v3";
+  const LS_CLEAN_FILL_BOOTSTRAP = "gmx_clean_fill_bootstrap_v4";
 
 function bootstrapCleanFillDefaults(){
   try{
     if (localStorage.getItem(LS_CLEAN_FILL_BOOTSTRAP) === "1") return;
-    localStorage.setItem(LS_GM_CLEAN_FILL, "0");
-    localStorage.setItem(LS_GN_CLEAN_FILL, "0");
+    localStorage.setItem(LS_GM_CLEAN_FILL, "1");
+    localStorage.setItem(LS_GN_CLEAN_FILL, "1");
     localStorage.setItem(LS_CLEAN_FILL_BOOTSTRAP, "1");
   }catch(_e){}
 }
@@ -275,8 +275,8 @@ function cleanFillCopy(kind){
             ? "Включено: Best pass после запуска режет shape-дубли в сохранённом списке и добивает недостающее обратно до текущей цели."
             : "On: Best pass prunes shape-level near-duplicates from the saved list, then refills the missing slots back to your current target.")
         : (ru
-            ? "Выключено: генерация остаётся просто random fill. Включай только когда хочешь прогнать Best pass по банку и добить пробелы обратно."
-            : "Off: generation stays pure random fill. Turn it on only when you want one cleanup pass on the saved bank and a refill back to target."),
+            ? "Выключено: сначала идёт loose random fill. Если первая пачка слишком узкая, Batch автоматически добирает недостающее. Включай Best pass, когда хочешь ещё и чистить сохранённый банк после запуска."
+            : "Off: generation starts as loose random fill. If the first batch comes back too thin, Batch auto-refills the missing slots. Turn Best pass on when you also want the saved bank cleaned after the run."),
       action: ru ? "Run best pass" : "Run best pass"
     };
   }
@@ -2728,7 +2728,7 @@ const $ = (id) => document.getElementById(id);
     const v = $(valId);
     const f = $(fillId);
     const cap = normLimitForUI(limit);
-    if (v) v.textContent = (cap === Infinity) ? `${used}/в€ћ` : `${used}/${cap}`;
+    if (v) v.textContent = (cap === Infinity) ? `${used}/unlimited` : `${used}/${cap}`;
     if (f){
       const pct = (cap === Infinity) ? 100 : (cap ? Math.min(100, Math.round((used/cap)*100)) : 0);
       f.style.width = pct + "%";
@@ -2744,11 +2744,11 @@ function renderHelpModal(){
   const gnLimit = normLimitForUI(LAST_USAGE?.gn?.limit ?? 70);
 
   const savedEl = $("help_saved");
-  if (savedEl) savedEl.textContent = isPro() ? `GM ${gmSaved}/в€ћ вЂў GN ${gnSaved}/в€ћ` : `GM ${gmSaved}/${SAVE_CAP_FREE} вЂў GN ${gnSaved}/${SAVE_CAP_FREE}`;
+  if (savedEl) savedEl.textContent = isPro() ? `GM ${gmSaved}/unlimited вЂў GN ${gnSaved}/unlimited` : `GM ${gmSaved}/${SAVE_CAP_FREE} вЂў GN ${gnSaved}/${SAVE_CAP_FREE}`;
 
   const dailyEl = $("help_daily");
   if (dailyEl) dailyEl.textContent = (isPro() || gmLimit===Infinity || gnLimit===Infinity)
-    ? `GM ${gmUsed}/в€ћ вЂў GN ${gnUsed}/в€ћ`
+    ? `GM ${gmUsed}/unlimited вЂў GN ${gnUsed}/unlimited`
     : `GM ${gmUsed}/${gmLimit} вЂў GN ${gnUsed}/${gnLimit}`;
 
   // aggregate bars
@@ -2829,7 +2829,7 @@ async function refreshUsage(){
       const gnCapUI = normLimitForUI(gn.limit);
       const up = $("usedPill");
       if (up) up.textContent = (isPro() || gmCapUI===Infinity || gnCapUI===Infinity)
-        ? `GM ${gm.used}/в€ћ вЂў GN ${gn.used}/в€ћ`
+        ? `GM ${gm.used}/unlimited вЂў GN ${gn.used}/unlimited`
         : `GM ${gm.used}/${gmCapUI} вЂў GN ${gn.used}/${gnCapUI}`;
 
       // Header status pills
@@ -3253,7 +3253,7 @@ function replaceRandomSavedLine(kind, newLine){
     const totalEl = kind==='gm' ? $('gmTotal') : $('gnTotal');
     const capEl = kind==='gm' ? $('gmCap') : $('gnCap');
     if (totalEl) totalEl.textContent = totalSaved(kind);
-    if (capEl) capEl.textContent = isPro() ? 'в€ћ' : String(SAVE_CAP_FREE);
+    if (capEl) capEl.textContent = isPro() ? 'unlimited' : String(SAVE_CAP_FREE);
     const brEl = kind==='gm' ? $('gmSavedBreakdown') : $('gnSavedBreakdown');
     if (brEl){
       brEl.textContent = 'Saved bank: ' + totalSaved(kind);
@@ -3267,7 +3267,7 @@ function replaceRandomSavedLine(kind, newLine){
       const fillId = (kind==="gm") ? "gmSavedFill" : "gnSavedFill";
       const v = $(valId);
       const f = $(fillId);
-      if (v) v.textContent = isPro() ? `${used}/в€ћ` : `${used}/${cap}`;
+      if (v) v.textContent = isPro() ? `${used}/unlimited` : `${used}/${cap}`;
       if (f) f.style.width = isPro() ? "100%" : (Math.min(100, Math.round((used/cap)*100)) + "%");
 
       if (!$("help_modal")?.classList.contains("hidden")) renderHelpModal();
@@ -3700,7 +3700,7 @@ async function generate(kind, count){
 
     const strength = getAntiStrength(kind);
     const antiN = 0;
-    const autoClean = getCleanFillEnabled(kind);
+    const autoClean = getCleanFillEnabled(kind) || count > 1;
 
     if ((kind==="gm" ? gmView : gnView) === "lang") ensureIndexed(kind, lang);
 
@@ -4072,7 +4072,7 @@ function bindLeaderboardUI(){
   async function loadRefInvited(days=30){
     const body = $("refInvitedBody");
     if (!body) return;
-    body.innerHTML = `<tr><td colspan="4" class="muted">${t("r_loading") || "LoadingвЂ¦"}<\/td><\/tr>`;
+    body.innerHTML = `<tr><td colspan="4" class="muted">${t("r_loading") || "Loading..."}<\/td><\/tr>`;
     const j = await api("/api/referral/list?days=" + encodeURIComponent(String(days)));
     if (!j || !j.ok) throw new Error("ref_list_failed");
     const list = Array.isArray(j.list) ? j.list : [];
@@ -4096,7 +4096,7 @@ async function loadRefLeaderboard(days=90){
   const meEl = $("refLeaderMe");
   const lang = localStorage.getItem(LS_SITE_LANG) || "en";
   const ui = getReferralUiCopy(lang);
-  if (body) body.innerHTML = `<tr><td colspan="3" class="muted">${escapeHtml(ui.leaderboardLoading || "LoadingвЂ¦")}</td></tr>`;
+  if (body) body.innerHTML = `<tr><td colspan="3" class="muted">${escapeHtml(ui.leaderboardLoading || "Loading...")}</td></tr>`;
   const j = await api("/api/leaderboard/referrals?days=" + encodeURIComponent(String(days)));
   if (!j || !j.ok) throw new Error("leaderboard_failed");
   const top = Array.isArray(j.top) ? j.top : [];
@@ -5069,7 +5069,7 @@ if (src){
     const list = $("w_activity_list");
     const msg = $("w_activity_msg");
     if (msg) msg.textContent = "";
-    if (list) list.innerHTML = '<div class="muted">LoadingвЂ¦</div>';
+    if (list) list.innerHTML = '<div class="muted">Loading...</div>';
     try{
       if (!getHandle()){
         if (list) list.innerHTML = '<div class="muted">Sign in to see activity.</div>';
@@ -5735,7 +5735,7 @@ function getReferralUiCopy(lang){
       discount: "50% por 1 mes",
       toolkit: "Referral Toolkit",
       copied: "Copiado.",
-      leaderboardLoading: "CargandoвЂ¦",
+      leaderboardLoading: "Cargando...",
       leaderboardEmpty: "AГєn no hay datos",
       youLabel: "TГє",
       rulesLabel: "reglas"
@@ -5767,13 +5767,13 @@ function getReferralUiCopy(lang){
       onePack: "1 РєРѕСЃРјРµС‚РёС‡РµСЃРєРёР№ РїР°Рє",
       allPacks: "Р’СЃРµ РєРѕСЃРјРµС‚РёС‡РµСЃРєРёРµ РїР°РєРё",
       proTrial: "Pro Trial 7d",
-      discount: "50% РЅР° 1 РјРµСЃСЏС†",
+      discount: "50% на 1 месяц",
       toolkit: "Referral Toolkit",
-      copied: "РЎРєРѕРїРёСЂРѕРІР°РЅРѕ.",
+      copied: "Скопировано.",
       leaderboardLoading: "Загрузка...",
-      leaderboardEmpty: "Р”Р°РЅРЅС‹С… РїРѕРєР° РЅРµС‚",
-      youLabel: "РўС‹",
-      rulesLabel: "РїСЂР°РІРёР»Р°"
+      leaderboardEmpty: "Данных пока нет",
+      youLabel: "Ты",
+      rulesLabel: "правила"
     },
     de: {
       title: "So funktioniert's",
@@ -5805,7 +5805,7 @@ function getReferralUiCopy(lang){
       discount: "50% fГјr 1 Monat",
       toolkit: "Referral Toolkit",
       copied: "Kopiert.",
-      leaderboardLoading: "LГ¤dtвЂ¦",
+      leaderboardLoading: "Lädt...",
       leaderboardEmpty: "Noch keine Daten",
       youLabel: "Du",
       rulesLabel: "Regeln"
@@ -5840,7 +5840,7 @@ function getReferralUiCopy(lang){
       discount: "50% pour 1 mois",
       toolkit: "Referral Toolkit",
       copied: "CopiГ©.",
-      leaderboardLoading: "ChargementвЂ¦",
+      leaderboardLoading: "Chargement...",
       leaderboardEmpty: "Pas encore de donnГ©es",
       youLabel: "Toi",
       rulesLabel: "rГЁgles"
@@ -5910,7 +5910,7 @@ function getReferralUiCopy(lang){
       discount: "50% korting 1 maand",
       toolkit: "Referral Toolkit",
       copied: "Gekopieerd.",
-      leaderboardLoading: "LadenвЂ¦",
+      leaderboardLoading: "Laden...",
       leaderboardEmpty: "Nog geen data",
       youLabel: "Jij",
       rulesLabel: "regels"
@@ -5945,7 +5945,7 @@ function getReferralUiCopy(lang){
       discount: "1 ay %50 indirim",
       toolkit: "Referral Toolkit",
       copied: "KopyalandД±.",
-      leaderboardLoading: "YГјkleniyorвЂ¦",
+      leaderboardLoading: "Yükleniyor...",
       leaderboardEmpty: "HenГјz veri yok",
       youLabel: "Sen",
       rulesLabel: "kurallar"
@@ -5980,7 +5980,7 @@ function getReferralUiCopy(lang){
       discount: "Diskon 50% 1 bulan",
       toolkit: "Referral Toolkit",
       copied: "Disalin.",
-      leaderboardLoading: "MemuatвЂ¦",
+      leaderboardLoading: "Memuat...",
       leaderboardEmpty: "Belum ada data",
       youLabel: "Kamu",
       rulesLabel: "aturan"

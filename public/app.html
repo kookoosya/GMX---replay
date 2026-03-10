@@ -104,7 +104,7 @@ body.hasUserBg input{
 <div class="pillGroup left">
 <div class="pill" id="apiPill"><span class="dot" id="apiDot"></span><strong>API</strong><span class="muted" id="apiText">checking...</span></div>
 <div class="pill"><strong id="ui_handle">Handle</strong><span class="muted" id="handlePill">not set</span></div>
-<div class="pill"><strong id="ui_used">Used</strong><span class="muted" id="usedPill">GM 0/70 РІР‚Сћ GN 0/70</span></div>
+<div class="pill"><strong id="ui_used">Used</strong><span class="muted" id="usedPill">GM 0/70 • GN 0/70</span></div>
 <div class="pill"><strong id="ui_plan">Plan</strong><span class="muted" id="planPill">Free</span></div>
 <div class="pill"><strong id="ui_sync">Sync</strong><span class="muted" id="syncPill">-</span></div>
 </div>
@@ -116,7 +116,7 @@ body.hasUserBg input{
   <button class="langBtn" id="siteLangBtn" type="button" aria-haspopup="listbox" aria-expanded="false">
     <img class="flagImg" id="siteLangFlag" alt="" src="/assets/flags/en.svg">
     <span class="langLabel" id="siteLangLabel">English</span>
-    <span class="caret">РІвЂ“С•</span>
+    <span class="caret">▼</span>
   </button>
   <div class="langMenu hidden" id="siteLangMenu" role="listbox" aria-label="Language"></div>
   <select aria-label="siteLang" id="siteLang" name="siteLang" class="hidden"></select>
@@ -151,7 +151,7 @@ body.hasUserBg input{
       <button class="btn" id="fatalReload" type="button">Reload</button>
       <button class="btn secondary" id="fatalGoHome" type="button">Go Home</button>
     </div>
-    <div class="muted small" style="margin-top:10px">Tip: if you use many Chrome extensions (wallets, security tools), try Incognito with extensions off to confirm itРІР‚в„ўs not an injected script.</div>
+    <div class="muted small" style="margin-top:10px">Tip: if you use many Chrome extensions (wallets, security tools), try Incognito with extensions off to confirm it's not an injected script.</div>
   </div>
 </div>
 <div class="tabs">
@@ -196,12 +196,12 @@ body.hasUserBg input{
 <div class="card sideCard">
 <div class="title" id="h_status">Quick guide</div>
 <div class="desc" id="h_desc">
-            GMXReply helps you build English-only GM and GN replies that sound like real replies to one person РІР‚вЂќ then copy them safely for X.
+            GMXReply helps you build English-only GM and GN replies that sound like real replies to one person — then copy them safely for X.
           </div>
 <div class="sideMeta" style="margin-top:10px">
-  <span class="sideBadge" id="h_badge_fast">РІС™РЋ Fast</span>
-  <span class="sideBadge" id="h_badge_safe">СЂСџвЂєРЋРїС‘РЏ No seed phrase</span>
-  <span class="sideBadge" id="h_badge_onchain">РІСљвЂ¦ On-chain verify</span>
+  <span class="sideBadge" id="h_badge_fast">Fast</span>
+  <span class="sideBadge" id="h_badge_safe">No seed phrase</span>
+  <span class="sideBadge" id="h_badge_onchain">On-chain verify</span>
 </div>
 <div class="sideSection">
   <div class="sideTitle" id="h_what_title">What you get</div>
@@ -290,9 +290,9 @@ body.hasUserBg input{
 <div style="min-width:160px;flex:1">
 <label id="gm_size" for="gmMode">Size</label>
 <select aria-label="gmMode" id="gmMode" name="gmMode">
-<option value="min">Fast Р’В· short</option>
-<option value="mid">Balanced Р’В· default</option>
-<option value="max">Full Р’В· richer</option>
+<option value="min">Fast · short</option>
+<option value="mid">Balanced · default</option>
+<option value="max">Full · richer</option>
 </select>
 </div>
 <div style="min-width:220px;flex:1">
@@ -301,7 +301,7 @@ body.hasUserBg input{
 </div>
 <div style="min-width:220px;flex:1;display:none">
 <label id="gm_lang" for="gmLang">English-only lane</label>
-<div class="selectWithFlag"><span class="flag" id="gmLangFlag">РїС‘РЏ</span><select aria-label="gmLang" id="gmLang" name="gmLang"></select></div>
+<div class="selectWithFlag"><span class="flag" id="gmLangFlag">EN</span><select aria-label="gmLang" id="gmLang" name="gmLang"></select></div>
 </div>
 <div style="min-width:220px;flex:1;display:none">
 <label id="gm_view" for="gmViewGlobal">List</label>
@@ -386,9 +386,9 @@ body.hasUserBg input{
 <div class="title" id="gm_right">How to use GM</div>
 <div class="desc" id="gm_right_desc">Build short morning lines that feel postable right away. GM should sound light, awake, and human instead of loud or over-written.</div>
 <div class="sideMeta" style="margin-top:10px">
-  <span class="sideBadge" id="gm_badge_1">СЂСџвЂњвЂ№ Fast copy</span>
-  <span class="sideBadge" id="gm_badge_2">СЂСџР‹вЂєРїС‘РЏ Tone + preset</span>
-  <span class="sideBadge" id="gm_badge_3">СЂСџВ§В  Best + clean fill</span>
+  <span class="sideBadge" id="gm_badge_1">Fast copy</span>
+  <span class="sideBadge" id="gm_badge_2">Tone + preset</span>
+  <span class="sideBadge" id="gm_badge_3">Best + clean fill</span>
 </div>
 <div class="sideSection">
   <div class="sideTitle" id="gm_limits_title">Free limits (forever)</div>
@@ -438,9 +438,9 @@ body.hasUserBg input{
 <div style="min-width:160px;flex:1">
 <label id="gn_size" for="gnMode">Size</label>
 <select aria-label="gnMode" id="gnMode" name="gnMode">
-<option value="min">Fast Р’В· short</option>
-<option value="mid">Balanced Р’В· default</option>
-<option value="max">Full Р’В· richer</option>
+<option value="min">Fast · short</option>
+<option value="mid">Balanced · default</option>
+<option value="max">Full · richer</option>
 </select>
 </div>
 <div style="min-width:220px;flex:1">
@@ -449,7 +449,7 @@ body.hasUserBg input{
 </div>
 <div style="min-width:220px;flex:1;display:none">
 <label id="gn_lang" for="gnLang">English-only lane</label>
-<div class="selectWithFlag"><span class="flag" id="gnLangFlag">РїС‘РЏ</span><select aria-label="gnLang" id="gnLang" name="gnLang"></select></div>
+<div class="selectWithFlag"><span class="flag" id="gnLangFlag">EN</span><select aria-label="gnLang" id="gnLang" name="gnLang"></select></div>
 </div>
 <div style="min-width:220px;flex:1;display:none">
 <label id="gn_view" for="gnViewGlobal">List</label>
@@ -534,9 +534,9 @@ body.hasUserBg input{
 <div class="title" id="gn_right">How to use GN</div>
 <div class="desc" id="gn_right_desc">Keep GN softer, quieter, and more wind-down friendly. The better GN lines sound like a calm sign-off, not a dressed-up slogan.</div>
 <div class="sideMeta" style="margin-top:10px">
-  <span class="sideBadge" id="gn_badge_1">СЂСџРЉв„ў Night-friendly</span>
-  <span class="sideBadge" id="gn_badge_2">СЂСџР‹вЂєРїС‘РЏ Tone + preset</span>
-  <span class="sideBadge" id="gn_badge_3">СЂСџВ§В  Best + clean fill</span>
+  <span class="sideBadge" id="gn_badge_1">Night-friendly</span>
+  <span class="sideBadge" id="gn_badge_2">Tone + preset</span>
+  <span class="sideBadge" id="gn_badge_3">Best + clean fill</span>
 </div>
 <div class="sideSection">
   <div class="sideTitle" id="gn_limits_title">Free limits (forever)</div>
@@ -633,7 +633,7 @@ body.hasUserBg input{
       </tr>
     </thead>
     <tbody id="refInvitedBody">
-      <tr><td colspan="4" class="muted" id="r_invited_placeholder">Press РІР‚СљLoad statsРІР‚Сњ to fetch the list.</td></tr>
+      <tr><td colspan="4" class="muted" id="r_invited_placeholder">Press "Load stats" to fetch the list.</td></tr>
     </tbody>
   </table>
 </div>
@@ -944,7 +944,7 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
 <div class="hr"></div>
 <div class="title" id="w_faq_title">FAQ</div>
 <ul class="clean" id="w_faq_list">
-  <li><b>Is Pro tied to my wallet?</b> No РІР‚вЂќ Pro is tied to your X handle. You can pay from any wallet.</li>
+  <li><b>Is Pro tied to my wallet?</b> No — Pro is tied to your X handle. You can pay from any wallet.</li>
   <li><b>Do you store my replies?</b> Lists are stored locally in your browser. Cloud sync is Pro-only.</li>
 </ul>
 
@@ -1020,7 +1020,7 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
 
   <div class="split" style="margin-top:12px;gap:14px;flex-wrap:wrap">
     <div style="min-width:260px;flex:1">
-      <div class="small muted">7 days РІР‚вЂќ Top 3</div>
+      <div class="small muted">7 days — Top 3</div>
       <div class="tableWrap">
         <table class="table" id="adminLbTable7">
           <thead><tr><th>#</th><th>Handle</th><th>Eligible</th><th></th></tr></thead>
@@ -1030,7 +1030,7 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
     </div>
 
     <div style="min-width:260px;flex:1">
-      <div class="small muted">30 days РІР‚вЂќ Top 3</div>
+      <div class="small muted">30 days — Top 3</div>
       <div class="tableWrap">
         <table class="table" id="adminLbTable30">
           <thead><tr><th>#</th><th>Handle</th><th>Eligible</th><th></th></tr></thead>
@@ -1148,7 +1148,7 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
           <tr><td>Themes & wallpapers</td><td>Limited + referral unlocks</td><td>All unlocked</td></tr>
           <tr><td>Writing styles & preset packs</td><td>Limited + referral unlocks</td><td>All unlocked</td></tr>
           <tr><td>Extension skins & wallpapers</td><td>Limited + referral unlocks</td><td>All unlocked</td></tr>
-          <tr><td>Cloud sync</td><td>РІР‚вЂќ</td><td>Included</td></tr>
+          <tr><td>Cloud sync</td><td>—</td><td>Included</td></tr>
         </tbody>
       </table>
     </div>
@@ -1166,18 +1166,18 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
       <div class="card" style="flex:1;min-width:280px">
         <div class="title" style="font-size:16px">Free (forever)</div>
         <div class="meterBlock" style="margin-top:10px">
-          <div class="meterRow"><div class="muted">Saved lines</div><div class="spacer"></div><div class="pill" id="help_saved">GM 0/70 РІР‚Сћ GN 0/70</div></div>
+          <div class="meterRow"><div class="muted">Saved lines</div><div class="spacer"></div><div class="pill" id="help_saved">GM 0/70 • GN 0/70</div></div>
           <div class="meter"><span id="helpSavedFill"></span></div>
-          <div class="meterRow" style="margin-top:10px"><div class="muted">Daily limit</div><div class="spacer"></div><div class="pill" id="help_daily">GM 0/70 РІР‚Сћ GN 0/70</div></div>
+          <div class="meterRow" style="margin-top:10px"><div class="muted">Daily limit</div><div class="spacer"></div><div class="pill" id="help_daily">GM 0/70 • GN 0/70</div></div>
           <div class="meter"><span id="helpDailyFill"></span></div>
         </div>
         <div class="hr"></div>
         <ul class="clean">
           <li><span class="kbd">10</span> themes + <span class="kbd">5</span> writing styles (unlock more via referrals).</li>
-          <li>Generation is free РІР‚вЂќ you can build your GM/GN lists without paying.</li>
+          <li>Generation is free — you can build your GM/GN lists without paying.</li>
           <li>No wallet required to use Free.</li>
         </ul>
-        <div class="muted" style="margin-top:8px">Tip: Free is enough for many people РІР‚вЂќ Pro is for power users who want no limits.</div>
+        <div class="muted" style="margin-top:8px">Tip: Free is enough for many people — Pro is for power users who want no limits.</div>
       </div>
       <div class="card" style="flex:1;min-width:280px">
         <div class="title" style="font-size:16px">Pro unlocks</div>

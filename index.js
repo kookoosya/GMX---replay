@@ -2996,17 +2996,17 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
   const wantPool = Math.max(count * (mode === "min" ? 20 : 16), mode === "min" ? 64 : 48);
   const maxTries = Math.max(3200, count * (mode === "min" ? 760 : 520));
 
-  const collect = ({ allowHistory = false, relaxGlobalShape = false, relaxGlobalExact = false } = {}) => {
+  const collect = ({ allowHistory = false, relaxGlobalShape = false, relaxGlobalExact = false, relaxHistoryShape = false, relaxSeenShape = false } = {}) => {
     while (pool.length < wantPool && tries < maxTries) {
       tries++;
       const candidate = sanitizeSingle(composeReply(kind, mode, lang, style), mode, kind);
       if (!candidate || !passesModeProfile(candidate, mode)) continue;
       const fp = shapeFingerprint(candidate, kind);
       if (!fp) continue;
-      if (!allowHistory && (recent.has(candidate) || recentShapes.has(fp) || recentShapeList.some((shape) => isNearDuplicateShape(shape, fp)))) continue;
+      if (!allowHistory && (recent.has(candidate) || (!relaxHistoryShape && (recentShapes.has(fp) || recentShapeList.some((shape) => isNearDuplicateShape(shape, fp)))))) continue;
       if (!relaxGlobalExact && globalRecent.has(candidate)) continue;
       if (!relaxGlobalShape && (globalShapes.has(fp) || globalShapeList.some((shape) => isNearDuplicateShape(shape, fp)))) continue;
-      if (seenText.has(candidate) || seenShape.has(fp) || seenShapeList.some((shape) => isNearDuplicateShape(shape, fp))) continue;
+      if (seenText.has(candidate) || (!relaxSeenShape && (seenShape.has(fp) || seenShapeList.some((shape) => isNearDuplicateShape(shape, fp))))) continue;
       seenText.add(candidate);
       seenShape.add(fp);
       seenShapeList.push(fp);
@@ -3030,6 +3030,36 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
   }
   if (pool.length < count) {
     collect({ allowHistory: true, relaxGlobalShape: true, relaxGlobalExact: true });
+  }
+  if (pool.length < count) {
+    collect({
+      allowHistory: true,
+      relaxGlobalShape: true,
+      relaxGlobalExact: true,
+      relaxHistoryShape: true,
+      relaxSeenShape: true
+    });
+  }
+
+
+  if (pool.length < count) {
+    const emergencyMaxTries = Math.max(600, count * 120);
+    let emergencyTries = 0;
+    while (pool.length < count && emergencyTries < emergencyMaxTries) {
+      emergencyTries++;
+      const candidate = sanitizeSingle(composeReply(kind, mode, lang, style), mode, kind);
+      if (!candidate) continue;
+      const fp = shapeFingerprint(candidate, kind) || candidate.toLowerCase();
+      if (seenText.has(candidate)) continue;
+      seenText.add(candidate);
+      seenShape.add(fp);
+      seenShapeList.push(fp);
+      pool.push({
+        text: candidate,
+        fp,
+        score: replyQualityScore(candidate, kind, mode) - 0.25,
+      });
+    }
   }
 
   pool.sort((a, b) => b.score - a.score);
