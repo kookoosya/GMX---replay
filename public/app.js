@@ -6763,13 +6763,18 @@ function closeLangMenu(){
     const addedShapeKeys = [];
     let refilled = 0;
     let attempts = 0;
-    while (cur.length < desiredTotal && attempts < 5){
+    let stalled = 0;
+    while (cur.length < desiredTotal && attempts < 8){
       attempts++;
       const missing = desiredTotal - cur.length;
-      const reqCount = Math.min(240, missing + 40);
+      const reqCount = Math.min(360, missing + 80 + (stalled * 40));
       const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=0&count=${reqCount}`, "GET", null, { signal: opts?.signal, timeoutMs: 30000 });
       const list = Array.isArray(bulk?.list) ? bulk.list : [];
-      if (!list.length) break;
+      if (!list.length) {
+        stalled++;
+        if (stalled >= 2) break;
+        continue;
+      }
       let progress = 0;
       for (const raw of list){
         const t = normalizeLine(raw);
@@ -6788,7 +6793,12 @@ function closeLangMenu(){
         progress++;
         if (cur.length >= desiredTotal) break;
       }
-      if (progress <= 0) break;
+      if (progress <= 0) {
+        stalled++;
+        if (stalled >= 2) break;
+        continue;
+      }
+      stalled = 0;
     }
 
     writeKey(key, cur);
@@ -7302,4 +7312,5 @@ INIT_DONE = true;
 
 
 })();
+
 

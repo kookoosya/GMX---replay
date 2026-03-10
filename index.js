@@ -2996,7 +2996,7 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
   const wantPool = Math.max(count * (mode === "min" ? 20 : 16), mode === "min" ? 64 : 48);
   const maxTries = Math.max(3200, count * (mode === "min" ? 760 : 520));
 
-  const collect = ({ allowHistory = false, relaxGlobalShape = false } = {}) => {
+  const collect = ({ allowHistory = false, relaxGlobalShape = false, relaxGlobalExact = false } = {}) => {
     while (pool.length < wantPool && tries < maxTries) {
       tries++;
       const candidate = sanitizeSingle(composeReply(kind, mode, lang, style), mode, kind);
@@ -3004,7 +3004,7 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
       const fp = shapeFingerprint(candidate, kind);
       if (!fp) continue;
       if (!allowHistory && (recent.has(candidate) || recentShapes.has(fp) || recentShapeList.some((shape) => isNearDuplicateShape(shape, fp)))) continue;
-      if (globalRecent.has(candidate)) continue;
+      if (!relaxGlobalExact && globalRecent.has(candidate)) continue;
       if (!relaxGlobalShape && (globalShapes.has(fp) || globalShapeList.some((shape) => isNearDuplicateShape(shape, fp)))) continue;
       if (seenText.has(candidate) || seenShape.has(fp) || seenShapeList.some((shape) => isNearDuplicateShape(shape, fp))) continue;
       seenText.add(candidate);
@@ -3027,6 +3027,9 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
   }
   if (pool.length < count) {
     collect({ allowHistory: true, relaxGlobalShape: true });
+  }
+  if (pool.length < count) {
+    collect({ allowHistory: true, relaxGlobalShape: true, relaxGlobalExact: true });
   }
 
   pool.sort((a, b) => b.score - a.score);
