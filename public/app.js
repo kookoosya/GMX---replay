@@ -238,13 +238,13 @@ const LS_GM_RECENT = "gmx_gm_recent";
   function lsKeyCleanFill(kind){
     return (kind === "gn") ? LS_GN_CLEAN_FILL : LS_GM_CLEAN_FILL;
   }
-  const LS_CLEAN_FILL_BOOTSTRAP = "gmx_clean_fill_bootstrap_v4";
+  const LS_CLEAN_FILL_BOOTSTRAP = "gmx_clean_fill_bootstrap_v5";
 
 function bootstrapCleanFillDefaults(){
   try{
     if (localStorage.getItem(LS_CLEAN_FILL_BOOTSTRAP) === "1") return;
-    localStorage.setItem(LS_GM_CLEAN_FILL, "1");
-    localStorage.setItem(LS_GN_CLEAN_FILL, "1");
+    localStorage.setItem(LS_GM_CLEAN_FILL, "0");
+    localStorage.setItem(LS_GN_CLEAN_FILL, "0");
     localStorage.setItem(LS_CLEAN_FILL_BOOTSTRAP, "1");
   }catch(_e){}
 }
@@ -3700,7 +3700,7 @@ async function generate(kind, count){
 
     const strength = getAntiStrength(kind);
     const antiN = 0;
-    const autoClean = getCleanFillEnabled(kind) || count > 1;
+    const autoClean = getCleanFillEnabled(kind);
 
     if ((kind==="gm" ? gmView : gnView) === "lang") ensureIndexed(kind, lang);
 

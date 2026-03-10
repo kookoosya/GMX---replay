@@ -2664,7 +2664,7 @@ const BANKS = {
   },
 };
 
-const RE_BANNED_WORDS = /\b(?:captain|sunshine|anon|my\s+g|goat|boss|chief|soldier|army|frens|friends|everyone|everybody|y['’]all|gang|pepe|wojak|champ|queen|babe|cutie|baby|love|darling|warrior|kings|queens|fam|team|chads?)\b/gi;
+const RE_BANNED_WORDS = /\b(?:captain|sunshine|anon|my\s+g|goat|boss|chief|soldier|army|frens|friends|everyone|everybody|y['’]all|gang|pepe|wojak|champ|queen|babe|cutie|baby|love|darling|warrior|kings|queens|fam|team|chads?|mate|ser|legend)\b/gi;
 const RE_BANNED_CRYPTO_HYPE = /\b(?:wagmi|lfg|hodl|ath|moon|ape|aping|bags?)\b|diamond\s+hands?/gi;
 const RE_BANNED_MARKET_EMOJI = /[\u{1F4C8}\u{1F4C9}\u{1F4CA}\u{1F4B0}\u{1F48E}\u{1F680}\u{26A1}\u{1F438}\u{1F410}]/gu;
 const RE_ANY_EMOJI = /[\p{Extended_Pictographic}]/gu;
@@ -2712,6 +2712,159 @@ function tightenMinimal(text, kind) {
   return out.trim();
 }
 
+function diversifyGreetingLead(text, kind, mode) {
+  const src = String(text || "").trim();
+  if (!src) return src;
+
+  const pick = (list) => list[Math.floor(Math.random() * list.length)];
+
+  const gmMin = [
+    "GM",
+    "Big GM",
+    "Grand rising",
+    "G to the M",
+    "Morning king"
+  ];
+
+  const gmFull = [
+    "Good morning",
+    "GM",
+    "Big GM",
+    "Grand rising",
+    "G to the M",
+    "Morning king",
+    "Easy morning",
+    "Fresh morning",
+    "Morning start"
+  ];
+
+  const gnMin = [
+    "GN",
+    "Night",
+    "Sleep easy",
+    "Rest easy"
+  ];
+
+  const gnFull = [
+    "Good night",
+    "GN",
+    "Sleep easy",
+    "Rest easy tonight",
+    "Easy night",
+    "Quiet night",
+    "Soft landing tonight",
+    "Calm close tonight",
+    "Night reset"
+  ];
+
+  if (kind === "gm") {
+    const list = mode === "min" ? gmMin : gmFull;
+    if (/^(good morning|morning|gm)\b/i.test(src)) {
+      return src.replace(/^(good morning|morning|gm)\b/i, pick(list));
+    }
+  }
+
+  if (kind === "gn") {
+    const list = mode === "min" ? gnMin : gnFull;
+    if (/^(good night|night|gn)\b/i.test(src)) {
+      return src.replace(/^(good night|night|gn)\b/i, pick(list));
+    }
+  }
+
+  return src;
+}
+function pickOne(list) {
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function rotateGreetingLead(text, kind) {
+  const src = String(text || "").trim();
+  if (!src) return src;
+
+  if (kind === "gm" && /^(good morning|gm)\b/i.test(src)) {
+    const rest = src.replace(/^(good morning|gm)\b/i, "").trim();
+    const lead = rest
+      ? pickOne(["Good morning", "GM", "Big GM", "Grand rising", "G to the M"])
+      : pickOne(["Good morning", "GM", "Big GM", "Grand rising", "G to the M", "Morning king"]);
+    return rest ? `${lead} ${rest}` : lead;
+  }
+
+  if (kind === "gn" && /^(good night|gn)\b/i.test(src)) {
+    const rest = src.replace(/^(good night|gn)\b/i, "").trim();
+    const lead = rest
+      ? pickOne(["Good night", "GN", "Sleep easy", "Rest easy tonight", "Easy night"])
+      : pickOne(["Good night", "GN", "Sleep easy", "Rest easy", "Easy night", "Soft night"]);
+    return rest ? `${lead} ${rest}` : lead;
+  }
+
+  return src;
+}
+
+function normalizeHumanReply(text, kind, mode) {
+  let out = String(text || "").trim();
+  if (!out) return out;
+
+  out = rotateGreetingLead(out, kind);
+
+  out = out.replace(/\bGm\b/g, "GM");
+  out = out.replace(/\bGn\b/g, "GN");
+
+  out = out.replace(/\b(morning|night|king|dear|lovely|mate|ser|legend|boss)\s+\1\b/gi, "$1");
+  out = out.replace(/\b(gm|gn)\s+\1\b/gi, "$1");
+  out = out.replace(/\bgood\s+morning\s+good\s+morning\b/gi, "Good morning");
+  out = out.replace(/\bgood\s+night\s+good\s+night\b/gi, "Good night");
+
+  out = out.replace(/\bking\s+(dear|lovely|mate|ser|legend)\b/gi, "king");
+  out = out.replace(/\b(dear|lovely)\s+king\b/gi, "$1");
+  out = out.replace(/\bmorning\s+king\s+king\b/gi, "Morning king");
+  out = out.replace(/\b(big\s+gm|grand\s+rising|g\s+to\s+the\s+m)\s+(dear|lovely|mate|ser|legend)\b/gi, "$1");
+  out = out.replace(/\bmorning\s+king\s+(dear|lovely|mate|ser|legend)\b/gi, "Morning king");
+
+  out = out.replace(/\s{2,}/g, " ").trim();
+  out = out.replace(/\s+([,.!?])/g, "$1");
+
+  if (/\b(king\s+dear|dear\s+king|king\s+king)\b/i.test(out)) return "";
+  if (/\b(big\s+gm|grand\s+rising|g\s+to\s+the\s+m)\s+(dear|lovely|mate|ser|legend)\b/i.test(out)) return "";
+
+  return out;
+}
+
+function diversifySoftEmoji(text, kind) {
+  const src = String(text || "").trim();
+  if (!src) return src;
+
+  const gmEmoji = [
+    "\u2600\uFE0F",
+    "\uD83C\uDF1E",
+    "\u2728",
+    "\uD83D\uDC9B",
+    "\uD83E\uDDE1",
+    "\uD83D\uDC9A",
+    "\uD83E\uDD0D"
+  ];
+
+  const gnEmoji = [
+    "\uD83C\uDF19",
+    "\u2B50",
+    "\u2728",
+    "\uD83D\uDC9C",
+    "\uD83D\uDC99",
+    "\uD83E\uDD0D",
+    "\uD83D\uDC9B"
+  ];
+
+  const list = kind === "gn" ? gnEmoji : gmEmoji;
+
+  if (/[\p{Extended_Pictographic}]$/u.test(src)) {
+    return src.replace(/[\p{Extended_Pictographic}]$/u, pickOne(list));
+  }
+
+  if (Math.random() < 0.35) {
+    return src + " " + pickOne(list);
+  }
+
+  return src;
+}
 function sanitizeSingle(text, mode, kind) {
   let out = String(text || "");
   out = out.replace(/[—–]/g, " ");
@@ -2744,6 +2897,9 @@ function sanitizeSingle(text, mode, kind) {
   out = out.replace(/\b(night)\s+(night)\b/gi, "$1");
   out = out.replace(/\s{2,}/g, " ").trim();
   out = out.replace(/^[,\s]+|[,\s]+$/g, "");
+  out = normalizeHumanReply(out, kind, mode);
+  out = diversifySoftEmoji(out, kind);
+  if (!out) return "";
   return out;
 }
 
@@ -2874,7 +3030,9 @@ function replyQualityScore(text, kind, mode) {
   if (RE_BANNED_WORDS.test(t)) score -= 50;
   if (RE_BANNED_CRYPTO_HYPE.test(t)) score -= 24;
   if (RE_BANNED_MARKET_EMOJI.test(t)) score -= 25;
-  if (/\b(feed|open|room|brain|lane|soldier|army|frens|goat|boss|pepe|wojak)\b/i.test(t)) score -= 20;
+  if (/\b(feed|open|room|brain|lane|soldier|army|frens|goat|boss|pepe|wojak|mate|ser|legend)\b/i.test(t)) score -= 20;
+  if (/\b(king\s+dear|dear\s+king|king\s+king|morning\s+king\s+king)\b/i.test(t)) score -= 80;
+  if (/\b(big\s+gm|grand\s+rising|g\s+to\s+the\s+m)\s+(dear|lovely|mate|ser|legend)\b/i.test(t)) score -= 45;
 
   const uniq = new Set(words.map((w) => w.toLowerCase()));
   score += Math.min(8, uniq.size);
