@@ -2200,7 +2200,7 @@ const $ = (id) => document.getElementById(id);
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
     if (msgEl){
       if (on){
-        msgEl.innerHTML = `<span class="spinner"></span> <span class="muted">${escapeHtml(label||"WorkingвЂ¦")}</span>`;
+        msgEl.innerHTML = `<span class="spinner"></span> <span class="muted">${escapeHtml(label||"Working...")}</span>`;
       } else {
         // keep whatever message was set by the action; do not overwrite
       }
@@ -2706,7 +2706,7 @@ const $ = (id) => document.getElementById(id);
         const j = await api("/api/version?x=1");
         const now = String(j.build || "");
         if (last && now && now !== last){
-          toast("ok", "Update installed. ReloadingвЂ¦");
+          toast("ok", "Update installed. Reloading...");
           setTimeout(()=>{ try{ location.reload(); }catch{} }, 700);
         }
         if (now) last = now;
@@ -3151,7 +3151,7 @@ async function doBestServer(kind){
   const antiN = antiWindow(strength);
   const keyActive = activeKey(kind);
 
-  setBusy(kind, true, (siteLang() === "ru") ? "Р’С‹Р±РёСЂР°СЋ Р»СѓС‡С€РёР№ РІР°СЂРёР°РЅС‚вЂ¦" : "Picking the best replyвЂ¦");
+  setBusy(kind, true, (siteLang() === "ru") ? "Выбираю лучший вариант..." : "Picking the best reply...");
   try{
     const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}&count=5`, "GET", null, { timeoutMs: 30000 });
     const candidates = dedupeLines((bulk && bulk.list) ? bulk.list : []).map(x=>String(x||"").trim()).filter(Boolean);
@@ -3733,7 +3733,7 @@ if (effCount <= 0){
   return;
 }
       if (INFLIGHT[kind]){
-      if (msgEl) msgEl.innerHTML = '<span class="muted">WorkingвЂ¦</span>';
+      if (msgEl) msgEl.innerHTML = '<span class="muted">Working...</span>';
       return;
     }
     INFLIGHT[kind] = true;
@@ -4274,7 +4274,7 @@ const msg = $("refMsg");
     try{
       const s = String(pk?.toString?.() || pk || "");
       if (!s) return "";
-      return s.slice(0,4) + "вЂ¦" + s.slice(-4);
+      return s.slice(0,4) + "..." + s.slice(-4);
     }catch{ return ""; }
   }
 
@@ -4510,7 +4510,7 @@ if (src){
         const msg = $("sf_modal_msg");
         try{
           connectBtn.disabled = true;
-          if (msg) msg.textContent = "Opening walletвЂ¦";
+          if (msg) msg.textContent = "Opening wallet...";
           await connectWalletByChoice(picked);
           closeWalletModal();
           const out = $("w_msg");
@@ -5151,27 +5151,27 @@ async function payNow(){
       PAY_INFLIGHT = true;
       if (payBtn) payBtn.disabled = true;
 
-      setPayState("processing", "Creating checkoutвЂ¦");
-      if (msg) msg.textContent = "Creating paymentвЂ¦";
+      setPayState("processing", "Creating checkout...");
+      if (msg) msg.textContent = "Creating payment...";
       trackEvent("pay_click", { v, plan: selectedPlan.key, cur, source:"wallet_tab" });
 
       const intent = await api("/api/billing/intent", "POST", { planKey: selectedPlan.key, currency: cur });
 
-      setPayState("processing", "Binding walletвЂ¦");
-      if (msg) msg.textContent = "Sign the wallet message to bind this checkoutвЂ¦";
+      setPayState("processing", "Binding wallet...");
+      if (msg) msg.textContent = "Sign the wallet message to bind this checkout...";
       await bindWalletToIntent(intent);
 
-      setPayState("processing", "Building transactionвЂ¦");
-      if (msg) msg.textContent = "Building transactionвЂ¦";
+      setPayState("processing", "Building transaction...");
+      if (msg) msg.textContent = "Building transaction...";
       const built = await buildPaymentTx(intent);
 
-      setPayState("processing", "Approve in walletвЂ¦");
-      if (msg) msg.textContent = "Approve the transaction in your walletвЂ¦";
+      setPayState("processing", "Approve in wallet...");
+      if (msg) msg.textContent = "Approve the transaction in your wallet...";
       const payer = String(WALLET.publicKey?.toString?.() || "");
       const sig = await walletSendTransaction(built.tx, built.connection);
 
-      setPayState("confirming", "Confirming on-chainвЂ¦");
-      if (msg) msg.textContent = "Confirming & verifying on-chainвЂ¦";
+      setPayState("confirming", "Confirming on-chain...");
+      if (msg) msg.textContent = "Confirming & verifying on-chain...";
       const j = await verifyIntentWithRetry(intent.id, sig, payer);
 
       setPayState("verified", "Verified. Pro activated.");
@@ -5700,7 +5700,7 @@ function getReferralUiCopy(lang){
       discount: "50% off 1 month",
       toolkit: "Referral Toolkit",
       copied: "Copied.",
-      leaderboardLoading: "LoadingвЂ¦",
+      leaderboardLoading: "Loading...",
       leaderboardEmpty: "No data yet",
       youLabel: "You",
       rulesLabel: "rules"
@@ -5770,7 +5770,7 @@ function getReferralUiCopy(lang){
       discount: "50% РЅР° 1 РјРµСЃСЏС†",
       toolkit: "Referral Toolkit",
       copied: "РЎРєРѕРїРёСЂРѕРІР°РЅРѕ.",
-      leaderboardLoading: "Р—Р°РіСЂСѓР·РєР°вЂ¦",
+      leaderboardLoading: "Загрузка...",
       leaderboardEmpty: "Р”Р°РЅРЅС‹С… РїРѕРєР° РЅРµС‚",
       youLabel: "РўС‹",
       rulesLabel: "РїСЂР°РІРёР»Р°"
@@ -5875,7 +5875,7 @@ function getReferralUiCopy(lang){
       discount: "50% off 1 month",
       toolkit: "Referral Toolkit",
       copied: "Copied.",
-      leaderboardLoading: "LoadingвЂ¦",
+      leaderboardLoading: "Loading...",
       leaderboardEmpty: "No data yet",
       youLabel: "You",
       rulesLabel: "rules"
@@ -7284,7 +7284,7 @@ INIT_DONE = true;
     if (!shouldReload()) return;
     window.__gmxRecovering = true;
     try{
-      try{ if (typeof toast === "function") toast("warn", "RecoveringвЂ¦ reloading", 2500); }catch{}
+      try{ if (typeof toast === "function") toast("warn", "Recovering... reloading", 2500); }catch{}
     }catch{}
     setTimeout(()=>{ try{ location.reload(); }catch{} }, 1200);
   }
