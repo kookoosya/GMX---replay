@@ -272,10 +272,10 @@ function cleanFillCopy(kind){
       button: on ? (ru ? "Best pass: on" : "Best pass: on") : (ru ? "Best pass: off" : "Best pass: off"),
       hint: on
         ? (ru
-            ? "Р’РєР»СЋС‡РµРЅРѕ: Best pass РїРѕСЃР»Рµ Р·Р°РїСѓСЃРєР° СЂРµР¶РµС‚ shape-РґСѓР±Р»Рё РІ СЃРѕС…СЂР°РЅС‘РЅРЅРѕРј СЃРїРёСЃРєРµ Рё РґРѕР±РёРІР°РµС‚ РЅРµРґРѕСЃС‚Р°СЋС‰РµРµ РѕР±СЂР°С‚РЅРѕ РґРѕ С‚РµРєСѓС‰РµР№ С†РµР»Рё."
+            ? "Включено: Best pass после запуска режет shape-дубли в сохранённом списке и добивает недостающее обратно до текущей цели."
             : "On: Best pass prunes shape-level near-duplicates from the saved list, then refills the missing slots back to your current target.")
         : (ru
-            ? "Р’С‹РєР»СЋС‡РµРЅРѕ: РіРµРЅРµСЂР°С†РёСЏ РѕСЃС‚Р°С‘С‚СЃСЏ РїСЂРѕСЃС‚Рѕ random fill. Р’РєР»СЋС‡Р°Р№ С‚РѕР»СЊРєРѕ РєРѕРіРґР° С…РѕС‡РµС€СЊ РїСЂРѕРіРЅР°С‚СЊ Best pass РїРѕ Р±Р°РЅРєСѓ Рё РґРѕР±РёС‚СЊ РїСЂРѕР±РµР»С‹ РѕР±СЂР°С‚РЅРѕ."
+            ? "Выключено: генерация остаётся просто random fill. Включай только когда хочешь прогнать Best pass по банку и добить пробелы обратно."
             : "Off: generation stays pure random fill. Turn it on only when you want one cleanup pass on the saved bank and a refill back to target."),
       action: ru ? "Run best pass" : "Run best pass"
     };
