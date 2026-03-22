@@ -34,6 +34,9 @@ Thumbs.db
 .idea/
 .aider*
 
+# Local dev lock
+.gmx-dev-run.lock.json
+
 # Local recovery / temporary patch artifacts
 _recovery/
 archive/
