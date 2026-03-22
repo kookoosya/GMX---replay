@@ -56,6 +56,12 @@ export async function startAppShell() {
   if (window.__GMX_APP_SHELL_BOOT_PROMISE) return window.__GMX_APP_SHELL_BOOT_PROMISE;
 
   window.__GMX_APP_SHELL_BOOT_PROMISE = (async () => {
+    // The legacy `/app` expects a few global scripts (mode, entitlements, auth factory)
+    // that are normally loaded by `public/app.html`. When rendering via the React shell,
+    // we need to inject them explicitly in a safe order.
+    await injectAppShellRuntime("/mode.js", "gmx-legacy-mode");
+    await injectAppShellRuntime("/entitlements.js", "gmx-legacy-entitlements");
+    await injectAppShellRuntime("/app.auth.js", "gmx-legacy-auth");
     await injectAppShellRuntime("/app.js", "gmx-app-shell-runtime");
     await waitForAppShellReady();
     window.__GMX_APP_SHELL_STARTED = true;

@@ -1,4 +1,4 @@
-﻿import fs from "node:fs";
+import fs from "node:fs";
 import path from "node:path";
 
 function fail(msg) {
@@ -50,7 +50,9 @@ function mustHaveId(id) {
   }
 }
 
-mustHaveId("gmRand70");
-mustHaveId("gnRand70");
+mustHaveId("gmRand1");
+mustHaveId("gmRand10");
+mustHaveId("gnRand1");
+mustHaveId("gnRand10");
 
 console.log("SMOKE_OK");

@@ -86,8 +86,27 @@
       </div>
       <div class="small" id="statsHint">Manual copy only. No x.com injection, no auto-posting.</div>
     </div>
+    <div class="card">
+      <div class="sectionTitle">Prediction alerts</div>
+      <div class="hint">Extension sends a notification when a new bot signal card is published (private API feed, 3-5/day). Signals are informational and can be wrong.</div>
+      <div class="row" style="margin-top:10px;gap:10px;align-items:flex-end;flex-wrap:wrap">
+        <label class="label" style="display:flex;gap:8px;align-items:center">
+          <input id="alertsEnabled" type="checkbox" />
+          Alerts enabled
+        </label>
+        <div style="min-width:140px">
+          <label class="label" for="alertsInterval">Check every</label>
+          <select id="alertsInterval" class="select">
+            <option value="5">5 min</option>
+            <option value="10">10 min</option>
+            <option value="15">15 min</option>
+          </select>
+        </div>
+      </div>
+      <div id="alertsStatus" class="small" style="margin-top:8px"></div>
+    </div>
 
-    <div class="foot" id="shortcutHint">Optional shortcut: assign one yourself in chrome://extensions/shortcuts for “Open GMXReply quick panel”</div>
+    <div class="foot" id="shortcutHint">Optional shortcut: assign one yourself in chrome://extensions/shortcuts for "Open GMXReply quick panel"</div>
   </div>
 
   <script src="popup.js"></script>

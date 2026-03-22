@@ -59,15 +59,19 @@
       border: 1px solid rgba(255,255,255,.08); border-radius: 18px; overflow: hidden; background: rgba(2,6,23,.92); cursor: pointer;
       box-shadow: 0 22px 44px rgba(0,0,0,.20);
     }
-    .tileMedia { position: relative; min-height: 182px; background: #020617; }
-    .tileMedia img { width: 100%; height: 182px; object-fit: cover; display: block; }
-    .tileOverlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(2,6,23,.04) 0%, rgba(2,6,23,.84) 100%); }
+    .tileMedia { position: relative; min-height: 210px; background: #020617; }
+    .tileMedia img { width: 100%; height: 210px; object-fit: cover; object-position: center; display: block; filter: contrast(1.08) saturate(1.08); }
+    .tileOverlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(2,6,23,.04) 0%, rgba(2,6,23,.22) 55%, rgba(2,6,23,.72) 100%);
+    }
     .tileTop, .tileBottom {
       position: absolute; left: 0; right: 0; padding: 16px; display: flex; justify-content: space-between; gap: 10px;
     }
     .tileTop { top: 0; align-items: flex-start; }
-    .tileBottom { bottom: 0; flex-direction: column; }
-    .tileIcon { font-size: 34px; line-height: 1; }
+    .tileBottom { bottom: 0; flex-direction: column; background: linear-gradient(180deg, rgba(2,6,23,.00) 0%, rgba(2,6,23,.42) 36%, rgba(2,6,23,.74) 100%); }
+    .tileIcon { font-size: 18px; line-height: 1; padding: 6px 10px; border-radius: 999px; background: rgba(0,0,0,.38); border: 1px solid rgba(255,255,255,.18); }
     .tileBadges { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
     .tileBadge {
       padding: 6px 10px; border-radius: 999px; font-size: 11px; font-weight: 900; letter-spacing: .8px;
@@ -75,8 +79,8 @@
     }
     .tileBadgePro { background: rgba(250,204,21,.24); }
     .tileBadgeLock { background: rgba(255,255,255,.18); }
-    .tileTitle { font-size: 22px; font-weight: 900; }
-    .tileMeta { font-size: 12px; opacity: .92; }
+    .tileTitle { font-size: 22px; font-weight: 900; line-height: 1.04; text-shadow: 0 8px 20px rgba(0,0,0,.86); }
+    .tileMeta { font-size: 11px; opacity: .98; letter-spacing: .4px; text-shadow: 0 4px 12px rgba(0,0,0,.80); }
     .tileBody { padding: 16px; display: grid; gap: 10px; }
     .tileNote { min-height: 42px; font-size: 14px; opacity: .78; line-height: 1.42; }
     .tileFoot { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; opacity: .72; }
@@ -97,6 +101,6 @@
     <div id="arcadeRoot"></div>
     <div id="arcadeStatus"></div>
   </div>
-  <script defer src="/arcade.js?v=SAFE12"></script>
+  <script defer src="/arcade.js?v=SAFE14"></script>
 </body>
 </html>

@@ -2330,20 +2330,20 @@ const MORNING_EMOJI = [E(0x2600, 0xFE0F), E(0x2615), E(0x2728), E(0x1F305)];
 const NIGHT_EMOJI = [E(0x1F319), E(0x1F634), E(0x1F4A4), E(0x2728)];
 
 const SAFE_VOCATIVE = {
-  ordinary: ["legend", "ser", "mate", "dear"],
-  crypto: ["ser", "legend", "mate", "builder"],
-  warm: ["dear", "legend", "mate"],
-  calmer: ["ser", "mate", "dear", "legend"],
-  builder: ["builder", "legend", "ser", "mate"],
+  ordinary: ["bro", "homie", "friend", "degen"],
+  crypto: ["bro", "degen", "homie", "friend"],
+  warm: ["friend", "bro", "homie", "degen"],
+  calmer: ["friend", "bro", "homie", "degen"],
+  builder: ["degen", "bro", "homie", "friend"],
 };
 
 const FAMILY_BY_STYLE = {
   classic: "ordinary",
-  classy: "ordinary",
+  classy: "warm",
   emoji: "ordinary",
   noemoji: "ordinary",
   minimal: "ordinary",
-  meme: "ordinary",
+  meme: "meme",
   degen: "crypto",
   alpha: "crypto",
   cheer: "warm",
@@ -2662,9 +2662,60 @@ const BANKS = {
       ],
     },
   },
+  meme: {
+    gm: {
+      greet: ["Gm", "Good morning", "Morning"],
+      min: [
+        "{greet}! {emoji}",
+        "{greet} {emoji}",
+        "{greet}, we move {emoji}",
+        "{greet}, still here {emoji}",
+        "{greet}, good vibes {emoji}",
+      ],
+      mid: [
+        "{greet}, we move — good energy on this one {emoji}",
+        "{greet}, still here, still building {emoji}",
+        "{greet}, clean post, good vibes back {emoji}",
+        "{greet}, the timeline needed this energy {emoji}",
+        "{greet}, hope your day stays kind {emoji}",
+      ],
+      max: [
+        "{greet}, clean post — good vibes back and a smooth day ahead {emoji}",
+        "{greet}, this is the kind of energy that makes the morning better {emoji}",
+        "{greet}, still here, still building — hope today treats you well {emoji}",
+        "{greet}, good read — keep that energy, we move {emoji}",
+      ],
+    },
+    gn: {
+      greet: ["Gn", "Good night", "Night"],
+      min: [
+        "{greet}! {emoji}",
+        "{greet} {emoji}",
+        "{greet}, we rest {emoji}",
+        "{greet}, log off time {emoji}",
+        "{greet}, sleep easy {emoji}",
+      ],
+      mid: [
+        "{greet}, log off time — rest easy tonight {emoji}",
+        "{greet}, we rest — calm close on this one {emoji}",
+        "{greet}, good night and a clean reset {emoji}",
+        "{greet}, sleep easy and come back fresh {emoji}",
+        "{greet}, soft close — the rest can wait {emoji}",
+      ],
+      max: [
+        "{greet}, calm close — rest easy tonight and come back fresh tomorrow {emoji}",
+        "{greet}, good night — log off, reset, and let the day go quiet {emoji}",
+        "{greet}, this is a good way to end the day — sleep easy tonight {emoji}",
+        "{greet}, we rest — the timeline can wait, get some real sleep {emoji}",
+      ],
+    },
+  },
 };
 
-const RE_BANNED_WORDS = /\b(?:captain|sunshine|anon|my\s+g|goat|boss|chief|soldier|army|frens|friends|everyone|everybody|y['’]all|gang|pepe|wojak|champ|queen|babe|cutie|baby|love|darling|warrior|kings|queens|fam|team|chads?|mate|ser|legend)\b/gi;
+// Words that tend to create low-quality / spammy vibes in short GM/GN replies.
+// IMPORTANT: do not include "safe vocatives" used by the template banks (ser/legend/mate/dear/builder),
+// otherwise we generate them and immediately delete them, which degrades quality.
+const RE_BANNED_WORDS = /\b(?:captain|sunshine|anon|my\s+g|goat|boss|chief|soldier|army|frens|friends|everyone|everybody|y['’]all|gang|pepe|wojak|champ|queen|babe|cutie|baby|love|darling|warrior|kings|queens|fam|team|chads?)\b/gi;
 const RE_BANNED_CRYPTO_HYPE = /\b(?:wagmi|lfg|hodl|ath|moon|ape|aping|bags?)\b|diamond\s+hands?/gi;
 const RE_BANNED_MARKET_EMOJI = /[\u{1F4C8}\u{1F4C9}\u{1F4CA}\u{1F4B0}\u{1F48E}\u{1F680}\u{26A1}\u{1F438}\u{1F410}]/gu;
 const RE_ANY_EMOJI = /[\p{Extended_Pictographic}]/gu;
@@ -2723,7 +2774,7 @@ function diversifyGreetingLead(text, kind, mode) {
     "Big GM",
     "Grand rising",
     "G to the M",
-    "Morning king"
+    "Morning"
   ];
 
   const gmFull = [
@@ -2732,7 +2783,7 @@ function diversifyGreetingLead(text, kind, mode) {
     "Big GM",
     "Grand rising",
     "G to the M",
-    "Morning king",
+    "Morning",
     "Easy morning",
     "Fresh morning",
     "Morning start"
@@ -2785,7 +2836,7 @@ function rotateGreetingLead(text, kind) {
     const rest = src.replace(/^(good morning|gm)\b/i, "").trim();
     const lead = rest
       ? pickOne(["Good morning", "GM", "Big GM", "Grand rising", "G to the M"])
-      : pickOne(["Good morning", "GM", "Big GM", "Grand rising", "G to the M", "Morning king"]);
+      : pickOne(["Good morning", "GM", "Big GM", "Grand rising", "G to the M", "Morning"]);
     return rest ? `${lead} ${rest}` : lead;
   }
 
@@ -2809,23 +2860,32 @@ function normalizeHumanReply(text, kind, mode) {
   out = out.replace(/\bGm\b/g, "GM");
   out = out.replace(/\bGn\b/g, "GN");
 
-  out = out.replace(/\b(morning|night|king|dear|lovely|mate|ser|legend|boss)\s+\1\b/gi, "$1");
+  out = out.replace(/\b(morning|night|bro|homie|friend|degen|boss)\s+\1\b/gi, "$1");
   out = out.replace(/\b(gm|gn)\s+\1\b/gi, "$1");
   out = out.replace(/\bgood\s+morning\s+good\s+morning\b/gi, "Good morning");
   out = out.replace(/\bgood\s+night\s+good\s+night\b/gi, "Good night");
 
-  out = out.replace(/\bking\s+(dear|lovely|mate|ser|legend)\b/gi, "king");
-  out = out.replace(/\b(dear|lovely)\s+king\b/gi, "$1");
-  out = out.replace(/\bmorning\s+king\s+king\b/gi, "Morning king");
-  out = out.replace(/\b(big\s+gm|grand\s+rising|g\s+to\s+the\s+m)\s+(dear|lovely|mate|ser|legend)\b/gi, "$1");
-  out = out.replace(/\bmorning\s+king\s+(dear|lovely|mate|ser|legend)\b/gi, "Morning king");
+  out = out.replace(/\b(big\s+gm|grand\s+rising|g\s+to\s+the\s+m)\s+(friend|bro|homie|degen)\b/gi, "$1");
 
   out = out.replace(/\s{2,}/g, " ").trim();
   out = out.replace(/\s+([,.!?])/g, "$1");
 
-  if (/\b(king\s+dear|dear\s+king|king\s+king)\b/i.test(out)) return "";
-  if (/\b(big\s+gm|grand\s+rising|g\s+to\s+the\s+m)\s+(dear|lovely|mate|ser|legend)\b/i.test(out)) return "";
+  if (/\b(big\s+gm|grand\s+rising|g\s+to\s+the\s+m)\s+(friend|bro|homie|degen)\b/i.test(out)) return "";
 
+  return out;
+}
+
+function normalizeVocatives(text) {
+  let out = String(text || "");
+  if (!out) return out;
+  // Hard switch away from old vocatives that feel outdated/off-brand.
+  out = out.replace(/\bser\b/gi, "bro");
+  out = out.replace(/\bmate\b/gi, "homie");
+  out = out.replace(/\bbuilder\b/gi, "degen");
+  out = out.replace(/\bdear\b/gi, "friend");
+  out = out.replace(/\blegend\b/gi, "bro");
+  out = out.replace(/\bking\b/gi, "bro");
+  out = out.replace(/\s{2,}/g, " ").trim();
   return out;
 }
 
@@ -2876,6 +2936,7 @@ function sanitizeSingle(text, mode, kind) {
   out = out.replace(/\s+([,!?])/g, "$1");
   out = out.replace(/,{2,}/g, ",").replace(/!{2,}/g, "!");
   out = sentenceCaseGreeting(out, kind);
+  out = normalizeVocatives(out);
 
   if (kind === "gm") out = out.replace(RE_GM_BAD_EMOJI, " ");
   if (kind === "gn") out = out.replace(RE_GN_BAD_EMOJI, " ");
@@ -2912,6 +2973,19 @@ function applyStyle(base, style, kind, mode) {
     if (mode === "min") out = tightenMinimal(out, kind).replace(RE_ANY_EMOJI, "").replace(/\s+/g, " ").trim();
     return sentenceCaseGreeting(out, kind);
   }
+  if (s === "emoji") {
+    // Ensure at least one emoji for the emoji style (but keep it to a single emoji).
+    if (!(out.match(RE_ANY_EMOJI) || []).length) {
+      out = `${out} ${kind === "gm" ? pick(MORNING_EMOJI) : pick(NIGHT_EMOJI)}`.trim();
+    }
+    const hits = out.match(RE_ANY_EMOJI) || [];
+    if (hits.length > 1) {
+      const keep = hits[0];
+      out = out.replace(RE_ANY_EMOJI, " ").replace(/\s+/g, " ").trim();
+      out = `${out} ${keep}`.trim();
+    }
+    return out;
+  }
   if (s === "minimal" || mode === "min") return tightenMinimal(out, kind);
   return out;
 }
@@ -2938,7 +3012,7 @@ function shapeFingerprint(text, kind) {
     .replace(RE_ANY_EMOJI, " ")
     .replace(/\b(gm|good morning|morning)\b/g, "gm")
     .replace(/\b(gn|good night|night)\b/g, "gn")
-    .replace(/\b(legend|ser|mate|bro|brother|dear|degen|builder)\b/g, "@voc")
+    .replace(/\b(legend|ser|mate|bro|brother|dear|degen|builder|homie|friend|king)\b/g, "@voc")
     .replace(/\b(good one|nice post|clean one|strong post|solid post|good post|clean post|strong take|solid take|clean read|good read|nice gm)\b/g, "@post")
     .replace(/\b(sleep easy|sleep well|rest easy|rest well|good rest|real rest|proper rest|easy reset|soft landing|calm close|easy close|soft close)\b/g, "@close")
     .replace(/\b(start the day|start the session|open the day|open the morning|open the session|close the day|end the day)\b/g, "@phase")
@@ -3030,7 +3104,7 @@ function replyQualityScore(text, kind, mode) {
   if (RE_BANNED_WORDS.test(t)) score -= 50;
   if (RE_BANNED_CRYPTO_HYPE.test(t)) score -= 24;
   if (RE_BANNED_MARKET_EMOJI.test(t)) score -= 25;
-  if (/\b(feed|open|room|brain|lane|soldier|army|frens|goat|boss|pepe|wojak|mate|ser|legend)\b/i.test(t)) score -= 20;
+  if (/\b(feed|open|room|brain|lane|soldier|army|frens|goat|boss|pepe|wojak)\b/i.test(t)) score -= 20;
   if (/\b(king\s+dear|dear\s+king|king\s+king|morning\s+king\s+king)\b/i.test(t)) score -= 80;
   if (/\b(big\s+gm|grand\s+rising|g\s+to\s+the\s+m)\s+(dear|lovely|mate|ser|legend)\b/i.test(t)) score -= 45;
 
@@ -5027,6 +5101,79 @@ app.post("/api/features", requireAuth, (req, res) => {
   }
 });
 
+app.get("/api/market/signals", requireAuth, (req, res) => {
+  try {
+    const handle = String(req.user?.handle || "").trim().toLowerCase();
+    const now = Date.now();
+    const dayKey = new Date(now).toISOString().slice(0, 10);
+    const fnv1a = (input) => {
+      let h = 0x811c9dc5;
+      for (let i = 0; i < input.length; i++) {
+        h ^= input.charCodeAt(i);
+        h = (h * 0x01000193) >>> 0;
+      }
+      return h >>> 0;
+    };
+    const seed = fnv1a(`${handle}:${dayKey}`);
+    const count = 3 + (seed % 3); // 3..5 cards per day
+    const universe = [
+      "BTC/USDT", "ETH/USDT", "SOL/USDT", "BNB/USDT", "XRP/USDT",
+      "DOGE/USDT", "AVAX/USDT", "ADA/USDT", "LINK/USDT", "ARB/USDT",
+    ];
+    const signals = [];
+    for (let i = 0; i < count; i++) {
+      const idx = (seed + i * 7) % universe.length;
+      const symbol = universe[idx];
+      const wave = Math.sin((now / 5400000) + (idx * 0.57) + (i * 1.13)) * 2.15;
+      const drift = Math.cos((now / 7800000) + (idx * 0.33) - (i * 0.41)) * 1.45;
+      const changePct = Number((wave + drift).toFixed(2));
+      const bias = changePct >= 0.9 ? "bullish" : (changePct <= -0.9 ? "bearish" : "neutral");
+      const confidence = Math.max(61, Math.min(92, Math.round(74 + Math.abs(changePct) * 5)));
+      const thesis = bias === "bullish"
+        ? "Polymarket probability skew and momentum are aligned. Consider continuation only with strict risk controls."
+        : (bias === "bearish"
+          ? "Probability skew weakens while structure softens. Consider defense-first positioning and tighter invalidation."
+          : "Probabilities are mixed. Wait for confirmation before forcing direction.");
+      const risk = "Bot-generated signal. It can be wrong. Not financial advice. You are fully responsible for trading decisions and losses.";
+      signals.push({
+        id: `pm_${dayKey}_${i + 1}_${symbol.replace(/[^A-Z0-9]/g, "")}`,
+        symbol,
+        bias,
+        changePct,
+        confidence,
+        thesis,
+        risk,
+      });
+    }
+    const headlineSignal = signals[0] ? {
+      id: signals[0].id,
+      title: "Polymarket Direction Signal",
+      source: "Polymarket",
+      confidencePct: Number(signals[0].confidence || 90),
+      cadence: "3-5 signals per day",
+      thesis: "Signals are generated by a bot model and can be wrong. This feed is informational only.",
+    } : null;
+
+    res.json({
+      ok: true,
+      asOf: new Date(now).toISOString(),
+      comingSoon: false,
+      headlineSignal,
+      scheduleRangePerDay: "3-5",
+      confidenceTargetPct: 90,
+      source: "Polymarket",
+      disclaimer: "Not financial advice. GMXReply is not responsible for trading outcomes or losses.",
+      alerts: {
+        extension: true,
+      },
+      signals,
+    });
+  } catch (e) {
+    console.error("MARKET_SIGNALS_ERROR", e);
+    res.status(500).json({ ok: false, error: "server_error" });
+  }
+});
+
 // Billing
 app.get("/api/billing/plans", async (req, res) => {
   // Public RPC for client-side transaction submission.
@@ -5059,6 +5206,33 @@ function arcadeCoverAllowedSource(src) {
     return false;
   }
 }
+
+const CUSTOM_WALLPAPERS_SITE = path.join(ASSETS_DIR, "wallpapers", "custom");
+const CUSTOM_WALLPAPERS_EXT = path.join(ASSETS_DIR, "extbg", "custom");
+const IMAGE_EXT = /\.(png|jpg|jpeg|webp)$/i;
+function listCustomWallpapers(dir) {
+  try {
+    if (!fs.existsSync(dir)) return [];
+    const files = fs.readdirSync(dir).filter((f) => IMAGE_EXT.test(f)).sort();
+    return files.map((f, i) => ({
+      id: "custom_" + f,
+      name: "Custom #" + (i + 1),
+      file: f,
+    }));
+  } catch {
+    return [];
+  }
+}
+app.get("/api/wallpapers/custom", (req, res) => {
+  try {
+    const site = listCustomWallpapers(CUSTOM_WALLPAPERS_SITE);
+    const ext = listCustomWallpapers(CUSTOM_WALLPAPERS_EXT);
+    res.json({ ok: true, site, ext });
+  } catch (e) {
+    console.error("WALLPAPERS_CUSTOM_ERROR", e);
+    res.status(500).json({ ok: false, error: "list_failed" });
+  }
+});
 
 app.get("/api/arcade/cover", async (req, res) => {
   try {

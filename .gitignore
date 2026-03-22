@@ -32,3 +32,25 @@ logs
 Thumbs.db
 .vscode/
 .idea/
+.aider*
+
+# Local recovery / temporary patch artifacts
+_recovery/
+archive/
+reports/
+*.bak
+*.bak.*
+*.backup
+*.orig
+*.rej
+*.corrupt
+*.corrupt.bak
+*.preview.js
+
+# Local one-off helper scripts
+fix_*.cjs
+tools/gmx-stage*.mjs
+tools/test-best*.mjs
+tools/diag-hook.mjs
+tools/print-gen-samples.mjs
+WORK_STATUS.md

@@ -1,4 +1,4 @@
-﻿(async () => {
+(async () => {
   const API = location.origin;
 
   const ADMIN_HANDLE = "@Kristofer_Sol_";
@@ -33,6 +33,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
+const ASSET_REV = "20260310a";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -88,6 +89,18 @@ function unlockedCountByRefs(total, freeCount=FREE_VISIBLE_THEMES){
         grid.appendChild(frag);
       }catch{}
     }
+  }
+
+  async function yieldToUiFrame(){
+    await new Promise((resolve)=>{
+      try{
+        if (typeof requestAnimationFrame === "function"){
+          requestAnimationFrame(()=>resolve());
+          return;
+        }
+      }catch{}
+      setTimeout(()=>resolve(), 0);
+    });
   }
 
   let __LAZY_OBSERVER = null;
@@ -377,6 +390,7 @@ const TABS = [
   ["home","wp_apply_home"],
   ["gm","wp_apply_gm"],
   ["gn","wp_apply_gn"],
+  ["prediction","wp_apply_prediction"],
   ["referrals","wp_apply_referrals"],
   ["leaderboard","wp_apply_leaderboard"],
   ["themes","wp_apply_themes"],
@@ -468,7 +482,7 @@ function listCustomBgUsedTabs(){
     document.body.classList.toggle("hasUserBg", on);
   }
 
-  async function fitImageToCoverDataUrl(file, maxW=1920, maxH=1080, quality=0.86){
+  async function fitImageToCoverDataUrl(file, maxW=2560, maxH=1440, quality=0.88){
     // Downscale + crop-to-cover to keep localStorage small and ensure it fits the page.
     // Output: JPEG data URL.
     return new Promise((resolve, reject)=>{
@@ -633,27 +647,39 @@ function readFileAsDataURL(file){
     });
   }
 
-  async function compressImageToJpegDataURL(file){
+  async function compressImageToJpegDataURL(file, options){
     const src = await readFileAsDataURL(file);
     const img = await loadImage(src);
-
-    const MAX = 2200; // max dimension
+    const opts = options || {};
+    const profile = String(opts.profile || "generic").toLowerCase();
+    const MAX = profile === "site" ? 2560 : (profile === "ext" ? 1600 : 2200);
+    const targetRatio = profile === "site" ? (16 / 9) : (profile === "ext" ? (9 / 16) : 0);
     let w = img.naturalWidth || img.width;
     let h = img.naturalHeight || img.height;
     if (!w || !h) return src;
-
-    const scale = Math.min(1, MAX / Math.max(w, h));
-    const tw = Math.max(1, Math.round(w * scale));
-    const th = Math.max(1, Math.round(h * scale));
-
+    let sx = 0;
+    let sy = 0;
+    let sw = w;
+    let sh = h;
+    if (targetRatio > 0){
+      const srcRatio = w / h;
+      if (srcRatio > targetRatio){
+        sw = Math.max(1, Math.round(h * targetRatio));
+        sx = Math.max(0, Math.round((w - sw) / 2));
+      } else if (srcRatio < targetRatio){
+        sh = Math.max(1, Math.round(w / targetRatio));
+        sy = Math.max(0, Math.round((h - sh) / 2));
+      }
+    }
+    const scale = Math.min(1, MAX / Math.max(sw, sh));
+    const tw = Math.max(1, Math.round(sw * scale));
+    const th = Math.max(1, Math.round(sh * scale));
     const canvas = document.createElement("canvas");
     canvas.width = tw;
     canvas.height = th;
     const ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0, tw, th);
-
-    // Use jpeg to keep it small
-    return canvas.toDataURL("image/jpeg", 0.86);
+    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, tw, th);
+    return canvas.toDataURL("image/jpeg", 0.88);
   }
 
   // Background themes per tab (CSS-only, no assets)
@@ -709,6 +735,7 @@ function readFileAsDataURL(file){
       favorites: ()=> mk(24,10,78,20, topSoft2),
 
       referrals: ()=> mk(20,14,86,22, stripe90),
+      prediction:()=> mk(18,12,82,22, conicPay),
       themes:    ()=> mk(18,10,84,20, sheen45),
       extthemes: ()=> mk(18,12,82,22, sheen225),
       wallet:    ()=> mk(22,12,76,22, conicPay)
@@ -716,14 +743,14 @@ function readFileAsDataURL(file){
   })();
 
 
-  // Wallpapers вЂ” per-tab. Honest catalog: 2 free SVG + 58 photo packs + 8 premium lux wallpapers.
+  // Wallpapers — per-tab. Honest catalog: 2 free SVG + 50 pack slots + 8 premium lux wallpapers = 60 total.
   const LS_WP_GLOBAL = "gmx_wp_all";
   const LS_WP_TAB_PREFIX = "gmx_wp_tab_"; // + tab name
   const SITE_WALLPAPER_FREE = [
-    ["free01", "Free вЂ” Solana Waves"],
-    ["free02", "Free вЂ” Solflare Glow"],
+    ["free01", "Free — Solana Waves"],
+    ["free02", "Free — Solflare Glow"],
   ];
-  const SITE_WALLPAPER_PACK_COUNT = 58;
+  const SITE_WALLPAPER_PACK_COUNT = 50;
   const SITE_WALLPAPER_FREE_PACK_COUNT = 6;
   const SITE_WALLPAPER_LUX = [
     ["lux_anime_neon_alley", "Anime Neon Alley"],
@@ -734,6 +761,16 @@ function readFileAsDataURL(file){
     ["lux_noir_detective", "Noir Detective"],
     ["lux_onchain_spaceport", "Onchain Spaceport"],
     ["lux_solana_temple", "Solana Temple"],
+  ];
+  const CRYPTO_SITE_WALL_SOURCES = [
+    "https://source.unsplash.com/1920x1080/?bitcoin,crypto,trading,neon",
+    "https://source.unsplash.com/1920x1080/?ethereum,blockchain,night,city",
+    "https://source.unsplash.com/1920x1080/?solana,crypto,gradient,technology",
+    "https://source.unsplash.com/1920x1080/?dogecoin,meme,crypto,neon",
+    "https://source.unsplash.com/1920x1080/?bonk,crypto,market,screen",
+    "https://source.unsplash.com/1920x1080/?x,finance,charts,neon",
+    "https://source.unsplash.com/1920x1080/?trading,terminal,crypto,desk",
+    "https://source.unsplash.com/1920x1080/?blockchain,network,glow,dark"
   ];
   function buildSiteWallpapers(){
     const out = SITE_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
@@ -749,12 +786,21 @@ function readFileAsDataURL(file){
     return out;
   }
   const WALLPAPERS = buildSiteWallpapers();
+  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_refresh_20260318";
+  function migrateLegacyWallpaperSelectionOnce(){
+    try{
+      if (localStorage.getItem(WALLPAPER_REFRESH_MIGRATION_KEY) === "1") return;
+      // keep IDs stable; visual refresh now happens in URL resolver
+      localStorage.setItem(WALLPAPER_REFRESH_MIGRATION_KEY, "1");
+    }catch{}
+  }
 
   const WALLPAPER_TABS = [
     ["all","wp_apply_all"],
     ["home","wp_apply_home"],
     ["gm","wp_apply_gm"],
     ["gn","wp_apply_gn"],
+    ["prediction","wp_apply_prediction"],
     ["studio","wp_apply_studio"],
     ["packs","wp_apply_packs"],
     ["bulk","wp_apply_bulk"],
@@ -766,11 +812,31 @@ function readFileAsDataURL(file){
     ["wallet","wp_apply_wallet"]
   ];
 
+  const CUSTOM_WP_RE = /^custom_[a-zA-Z0-9_.-]+\.(png|jpg|jpeg|webp)$/i;
+  let CUSTOM_WALLPAPERS_SITE = [];
+  let CUSTOM_WALLPAPERS_EXT = [];
+  let CUSTOM_WALLPAPERS_LOADED = false;
+  async function loadCustomWallpapers(){
+    if (CUSTOM_WALLPAPERS_LOADED) return false;
+    try{
+      const r = await fetch("/api/wallpapers/custom", { cache:"no-store" });
+      const j = await r.json();
+      if (j?.ok){
+        CUSTOM_WALLPAPERS_LOADED = true;
+        CUSTOM_WALLPAPERS_SITE = (j.site||[]).map(x=>({ ...x, tier:"custom" }));
+        CUSTOM_WALLPAPERS_EXT = (j.ext||[]).map(x=>({ ...x, tier:"custom" }));
+        return CUSTOM_WALLPAPERS_SITE.length > 0 || CUSTOM_WALLPAPERS_EXT.length > 0;
+      }
+    }catch{}
+    return false;
+  }
+
   // ---- Wallpaper migration / validation (keeps old saved ids from breaking the UI)
   function normalizeWallpaperId(id){
     const v = String(id||"").trim();
     if (!v) return "";
     if (WALLPAPERS.some(x=>x.id===v)) return v;
+    if (CUSTOM_WP_RE.test(v)) return v;
     // migrate legacy svg ids (w01..w99) or removed v3 ids to a safe default
     if (/^w\d+$/i.test(v) || /^v3_\d+$/i.test(v)) return (WALLPAPERS.find(x=>x.id==="v2_001")?"v2_001":"free01");
     return (WALLPAPERS.find(x=>x.id==="v2_001")?"v2_001":"free01");
@@ -795,12 +861,13 @@ function readFileAsDataURL(file){
   normalizeAllWallpapers();
 
   function normalizeExtWallpaperIdLocal(id){
-    const v = String(id||"").trim().toLowerCase();
+    const v = String(id||"").trim();
     if (!v) return "";
-    if (EXT_WALLPAPERS.some(x=>String(x.id||"").toLowerCase()===v)) return v;
+    if (EXT_WALLPAPERS.some(x=>String(x.id||"").toLowerCase()===v.toLowerCase())) return v;
+    if (CUSTOM_WP_RE.test(v)) return v;
     let m = v.match(/^extv3_(\d{1,2})$/i);
     if (m){
-      const n = String(Math.max(1, Math.min(58, Number(m[1]) || 1))).padStart(2, "0");
+      const n = String(Math.max(1, Math.min(50, Number(m[1]) || 1))).padStart(2, "0");
       return `extv3_${n}`;
     }
     m = v.match(/^ext_free_(\d{1,2})$/i);
@@ -810,30 +877,125 @@ function readFileAsDataURL(file){
     }
     m = v.match(/^ext_(\d{1,2})$/i);
     if (m){
-      const num = Math.max(1, Math.min(58, Number(m[1]) || 1));
+      const num = Math.max(1, Math.min(50, Number(m[1]) || 1));
       return `extv3_${String(num).padStart(2, "0")}`;
     }
     if (/^lux_ext_[a-z0-9_]+$/i.test(v)) return v;
     return "ext_free_01";
   }
 
+  function svgDataUri(svg){
+    return `data:image/svg+xml;utf8,${encodeURIComponent(String(svg || ""))}`;
+  }
+
+  const SITE_PACK_PALETTES = [
+    { coin: "BTC", c1: "#f7931a", c2: "#ffb347", vibe: "Bitcoin orange" },
+    { coin: "ETH", c1: "#627eea", c2: "#c2d9ff", vibe: "Ethereum blue" },
+    { coin: "SOL", c1: "#9945ff", c2: "#14f195", vibe: "Solana gradient" },
+    { coin: "AVAX", c1: "#e84142", c2: "#ff6b6b", vibe: "Avalanche red" },
+    { coin: "ARB", c1: "#28a0f0", c2: "#00d4ff", vibe: "Arbitrum cyan" },
+    { coin: "OP", c1: "#ff0420", c2: "#ff6b7a", vibe: "Optimism red" },
+    { coin: "SUI", c1: "#6fbcf0", c2: "#00b4d8", vibe: "Sui blue" },
+    { coin: "BNB", c1: "#f3ba2f", c2: "#fcd535", vibe: "BNB gold" },
+    { coin: "DOGE", c1: "#c2a633", c2: "#e8d44d", vibe: "Dogecoin" },
+    { coin: "XRP", c1: "#23292f", c2: "#00aae4", vibe: "XRP ripple" },
+    { coin: "LINK", c1: "#2a5ada", c2: "#375bd2", vibe: "Chainlink" },
+    { coin: "APT", c1: "#12b3a8", c2: "#00ffdd", vibe: "Aptos teal" }
+  ];
+
+  function sitePackWallpaperDataUri(id, thumb){
+    const n = Math.max(1, Number(String(id || "").slice(3)) || 1);
+    const p = SITE_PACK_PALETTES[(n - 1) % SITE_PACK_PALETTES.length];
+    const w = thumb ? 480 : 1920;
+    const h = thumb ? 270 : 1080;
+    const sw = thumb ? 2 : 6;
+    const pts = thumb ? 8 : 16;
+    const linePath = Array.from({length:pts}).map((_,i)=>{
+      const x = (w * i) / (pts - 1);
+      const base = h * (0.5 + 0.35 * Math.sin(i * 0.8 + n) * Math.cos(i * 0.3));
+      const y = Math.round(h - base - (i % 3) * (h * 0.02));
+      return `${i===0?"M":"L"} ${Math.round(x)} ${y}`;
+    }).join(" ");
+    const bars = Array.from({length: thumb ? 12 : 28}).map((_,i)=>{
+      const x = w * (0.08 + (i / (thumb ? 12 : 28)) * 0.78);
+      const bh = h * (0.12 + 0.25 * Math.sin((i + n) * 0.5) ** 2);
+      const y = h - h * 0.18 - bh;
+      const fill = (i + n) % 5 === 0 ? p.c2 : p.c1;
+      return `<rect x="${Math.round(x)}" y="${Math.round(y)}" width="${Math.max(4, w * 0.018)}" height="${Math.round(bh)}" rx="2" fill="${fill}" opacity="0.85"/>`;
+    }).join("");
+    const dots = Array.from({length: thumb ? 24 : 64}).map((_,i)=>{
+      const x = (i % (thumb ? 6 : 8) + 0.5) * (w / (thumb ? 6 : 8));
+      const y = ((i / (thumb ? 6 : 8) | 0) + 0.5) * (h / (thumb ? 4 : 8));
+      return `<circle cx="${Math.round(x)}" cy="${Math.round(y)}" r="${thumb ? 1 : 2}" fill="white" opacity="${0.04 + 0.03 * (n % 3)}"/>`;
+    }).join("");
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#0a0e1a"/><stop offset="40%" stop-color="#0d1322"/><stop offset="100%" stop-color="#060912"/></linearGradient><linearGradient id="glow" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${p.c1}" stop-opacity="0.35"/><stop offset="100%" stop-color="${p.c2}" stop-opacity="0.08"/></linearGradient><linearGradient id="line" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="${p.c1}" stop-opacity="0.3"/><stop offset="50%" stop-color="${p.c2}" stop-opacity="0.9"/><stop offset="100%" stop-color="${p.c1}" stop-opacity="0.4"/></linearGradient><filter id="blur"><feGaussianBlur stdDeviation="${thumb ? 8 : 24}"/></filter></defs><rect width="${w}" height="${h}" fill="url(#bg)"/><ellipse cx="${w*0.85}" cy="${h*0.12}" rx="${w*0.35}" ry="${h*0.2}" fill="${p.c1}" opacity="0.12" filter="url(#blur)"/><ellipse cx="${w*0.15}" cy="${h*0.9}" rx="${w*0.3}" ry="${h*0.25}" fill="${p.c2}" opacity="0.1" filter="url(#blur)"/><g opacity="0.5">${dots}</g>${bars}<path d="${linePath}" fill="none" stroke="url(#line)" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round"/><rect x="0" y="0" width="${w}" height="${h*0.38}" fill="url(#glow)" opacity="0.5"/><text x="${w*0.06}" y="${h*0.22}" font-family="Inter,Segoe UI,sans-serif" font-size="${thumb ? 36 : 120}" font-weight="900" fill="white" opacity="0.96">${p.coin}</text><text x="${w*0.06}" y="${thumb ? h*0.32 : h*0.28}" font-family="Inter,Segoe UI,sans-serif" font-size="${thumb ? 12 : 28}" font-weight="600" fill="rgba(255,255,255,0.75)">DeFi · ${p.vibe}</text></svg>`;
+    return svgDataUri(svg);
+  }
+
+  const EXT_PACK_PALETTES = [
+    { tag: "GM", c1: "#9945ff", c2: "#14f195" },
+    { tag: "DEGEN", c1: "#ff6b35", c2: "#f7931a" },
+    { tag: "ALPHA", c1: "#00d4ff", c2: "#7c3aed" },
+    { tag: "WAGMI", c1: "#22c55e", c2: "#10b981" },
+    { tag: "NGMI", c1: "#ef4444", c2: "#f97316" },
+    { tag: "LFG", c1: "#8b5cf6", c2: "#ec4899" },
+    { tag: "SER", c1: "#06b6d4", c2: "#3b82f6" },
+    { tag: "APE", c1: "#eab308", c2: "#f59e0b" },
+    { tag: "MOON", c1: "#a855f7", c2: "#6366f1" },
+    { tag: "CHAD", c1: "#14b8a6", c2: "#0d9488" },
+    { tag: "SIZE", c1: "#f43f5e", c2: "#ec4899" },
+    { tag: "CT", c1: "#64748b", c2: "#94a3b8" }
+  ];
+
+  function extPackWallpaperDataUri(id, thumb){
+    const n = Math.max(1, Number(String(id || "").slice(6)) || 1);
+    const p = EXT_PACK_PALETTES[(n - 1) % EXT_PACK_PALETTES.length];
+    const w = thumb ? 360 : 1080;
+    const h = thumb ? 640 : 1920;
+    const bars = Array.from({length: thumb ? 8 : 18}).map((_,i)=>{
+      const x = w * (0.12 + (i / (thumb ? 8 : 18)) * 0.68);
+      const bh = h * (0.15 + 0.2 * Math.sin((i + n) * 0.6) ** 2);
+      const y = h - h * 0.22 - bh;
+      const fill = (i + n) % 4 === 0 ? p.c2 : p.c1;
+      return `<rect x="${Math.round(x)}" y="${Math.round(y)}" width="${Math.max(6, w * 0.04)}" height="${Math.round(bh)}" rx="4" fill="${fill}" opacity="0.88"/>`;
+    }).join("");
+    const ticker = Array.from({length: thumb ? 5 : 12}).map((_,i)=>{
+      const y = h * (0.15 + (i / (thumb ? 5 : 12)) * 0.5);
+      const opacity = 0.06 + 0.04 * (i % 3);
+      return `<line x1="${w*0.08}" y1="${Math.round(y)}" x2="${w*0.92}" y2="${Math.round(y)}" stroke="white" stroke-width="1" opacity="${opacity}"/>`;
+    }).join("");
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="bg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#080c14"/><stop offset="35%" stop-color="#0a0f18"/><stop offset="100%" stop-color="#050810"/></linearGradient><linearGradient id="accent" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${p.c1}" stop-opacity="0.4"/><stop offset="100%" stop-color="${p.c2}" stop-opacity="0.05"/></linearGradient><filter id="blur"><feGaussianBlur stdDeviation="${thumb ? 12 : 40}"/></filter></defs><rect width="${w}" height="${h}" fill="url(#bg)"/><ellipse cx="${w*0.5}" cy="${h*0.15}" rx="${w*0.6}" ry="${h*0.12}" fill="${p.c1}" opacity="0.15" filter="url(#blur)"/><rect x="0" y="0" width="${w}" height="${h*0.35}" fill="url(#accent)"/>${ticker}${bars}<text x="${w*0.1}" y="${thumb ? h*0.2 : h*0.18}" font-family="Inter,Segoe UI,sans-serif" font-size="${thumb ? 32 : 90}" font-weight="900" fill="white" opacity="0.96">${p.tag}</text><text x="${w*0.1}" y="${thumb ? h*0.26 : h*0.24}" font-family="Inter,Segoe UI,sans-serif" font-size="${thumb ? 10 : 22}" font-weight="600" fill="rgba(255,255,255,0.7)">Crypto Twitter · Extension</text></svg>`;
+    return svgDataUri(svg);
+  }
+
   function extWallpaperAssetPath(id){
     const norm = normalizeExtWallpaperIdLocal(id);
     if (!norm) return "";
-    if (norm.startsWith("extv3_")) return norm + ".webp";
+    if (norm.startsWith("extv3_")) {
+      const lux = EXT_WALLPAPER_LUX.map(([v])=>String(v || "")).filter(Boolean);
+      const num = Math.max(1, Number(norm.slice(6)) || 1);
+      const mapped = lux.length ? lux[(num - 1) % lux.length] : norm;
+      if (mapped.startsWith("lux_ext_")) return mapped + ".svg";
+      return norm + ".webp";
+    }
     return norm + ".svg";
   }
 
   function extWallpaperFullUrl(id){
-    const p = extWallpaperAssetPath(id);
-    return p ? `/assets/extbg/${p}` : "";
+    const norm = normalizeExtWallpaperIdLocal(id);
+    if (!norm) return "";
+    if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
+    if (norm.startsWith("extv3_")) return extPackWallpaperDataUri(norm, false);
+    const p = extWallpaperAssetPath(norm);
+    return p ? `/assets/extbg/${p}?v=${ASSET_REV}` : "";
   }
 
   function extWallpaperThumbUrl(id){
     const norm = normalizeExtWallpaperIdLocal(id);
     if (!norm) return "";
-    if (norm.startsWith("extv3_")) return `/assets/extbg/thumbs/${norm}.webp`;
-    return `/assets/extbg/${norm}.svg`;
+    if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
+    if (norm.startsWith("extv3_")) return extPackWallpaperDataUri(norm, true);
+    return `/assets/extbg/${norm}.svg?v=${ASSET_REV}`;
   }
   try{
     const cur = localStorage.getItem(LS_EXT_WP);
@@ -842,7 +1004,7 @@ function readFileAsDataURL(file){
     else localStorage.removeItem(LS_EXT_WP);
   }catch{}
 
-  const TOP_LEVEL_TABS = ["home","gm","gn","referrals","leaderboard","themes","extthemes","wallet","admin"];
+  const TOP_LEVEL_TABS = ["home","gm","gn","prediction","referrals","leaderboard","themes","extthemes","wallet","admin"];
   function normalizeTopLevelTab(raw){
     const name = String(raw || "").trim().toLowerCase();
     if (name === "upgrade") return "wallet";
@@ -873,20 +1035,31 @@ function readFileAsDataURL(file){
 
   function wallpaperAssetPath(id){
     if (!id) return "";
-    if (typeof id === "string" && id.startsWith("v2_")) return id + ".webp";
-    return id + ".svg";
+    if (typeof id === "string" && id.startsWith("v2_")) {
+      const lux = SITE_WALLPAPER_LUX.map(([v])=>String(v || "")).filter(Boolean);
+      const num = Math.max(1, Number(String(id).slice(3)) || 1);
+      const mapped = lux.length ? lux[(num - 1) % lux.length] : id;
+      if (mapped.startsWith("lux_")) return mapped + ".svg";
+      return id + ".webp";
+    }
+    return String(id) + ".svg";
   }
 
   function wallpaperFullUrl(id){
-    const p = wallpaperAssetPath(id);
-    return p ? `/assets/wallpapers/${p}` : "";
+    const norm = normalizeWallpaperId(id);
+    if (!norm) return "";
+    if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
+    if (norm.startsWith("v2_")) return sitePackWallpaperDataUri(norm, false);
+    const p = wallpaperAssetPath(norm);
+    return p ? `/assets/wallpapers/${p}?v=${ASSET_REV}` : "";
   }
 
   function wallpaperThumbUrl(id){
-    if (!id) return "";
-    if (typeof id === "string" && id.startsWith("v2_")) return `/assets/wallpapers/thumbs/${id}.webp`;
-    // SVGs are already lightweight enough for thumbs.
-    return `/assets/wallpapers/${id}.svg`;
+    const norm = normalizeWallpaperId(id);
+    if (!norm) return "";
+    if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
+    if (norm.startsWith("v2_")) return sitePackWallpaperDataUri(norm, true);
+    return `/assets/wallpapers/${norm}.svg?v=${ASSET_REV}`;
   }
 
   function wallpaperUrl(id){
@@ -896,14 +1069,15 @@ function readFileAsDataURL(file){
 
   function wallpaperUnlocked(wp, idx){
     if (!wp) return false;
+    if (wp.tier === "custom") return true;
     return isPro() || (idx < unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS));
   }
 
   function applyWallpaper(tab){
     const id = getWallpaperForTab(tab);
-    const wp = WALLPAPERS.find(x=>x.id===id) || null;
+    const wp = WALLPAPERS.find(x=>x.id===id) || CUSTOM_WALLPAPERS_SITE.find(x=>x.id===id) || null;
     let idx = -1;
-    try{ idx = wp ? WALLPAPERS.findIndex(x=>x.id===id) : -1; }catch{}
+    try{ idx = wp ? [...WALLPAPERS,...CUSTOM_WALLPAPERS_SITE].findIndex(x=>x.id===id) : -1; }catch{}
     const ok = wp ? wallpaperUnlocked(wp, idx) : true;
 
     const css = (id && ok) ? wallpaperUrl(id) : "none";
@@ -923,7 +1097,7 @@ function readFileAsDataURL(file){
     if (typeof value === "string"){
       const txt = value.trim();
       if (!txt) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
-      if (!allowCyr && /[РЂ-Уї]/.test(value)) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
+      if (!allowCyr && /[\u0400-\u04FF]/.test(value)) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
       return value;
     }
     if (value === undefined || value === null) return fallback;
@@ -990,19 +1164,25 @@ function renderWallpaperUI(){
       ? (localStorage.getItem(LS_WP_GLOBAL) || "")
       : (localStorage.getItem(wallpaperKeyForTab(targetTab)) || "");
 
-    const unlocked = unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS);
-    const unlockedAll = isPro() || unlocked >= WALLPAPERS.length;
-    const nextReq = reqRefsForUnlockIndex(unlocked, FREE_VISIBLE_WALLPAPERS);
+    const allWps = [...WALLPAPERS, ...CUSTOM_WALLPAPERS_SITE];
+    const unlocked = unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS) + CUSTOM_WALLPAPERS_SITE.length;
+    const unlockedAll = isPro() || unlocked >= allWps.length;
+    const nextReq = reqRefsForUnlockIndex(unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS), FREE_VISIBLE_WALLPAPERS);
     st.innerHTML = unlockedAll
       ? `<span class="ok">Unlocked.</span> All wallpapers available.`
       : `<span class="warn">Locked.</span> First ${FREE_VISIBLE_WALLPAPERS} wallpapers are free. Next unlock at <b>${nextReq} ref</b> (+1 every 3 refs at first, then +1 every 4).`;
 
-    const items = WALLPAPERS.map((wp, idx)=>({ wp, idx }));
+    loadCustomWallpapers().then((loaded)=>{
+      if (loaded && document.contains(grid)) renderWallpaperUI();
+    });
+
+    const items = allWps.map((wp, idx)=>({ wp, idx }));
     chunkedRender(grid, items, ({ wp, idx })=>{
       const isUnlocked = wallpaperUnlocked(wp, idx);
       const card = document.createElement("button");
       card.type = "button";
       card.dataset.wpId = wp.id;
+      card.dataset.tier = wp.tier || (idx < FREE_VISIBLE_WALLPAPERS ? "free" : "premium");
       card.className = "wpCard" + (isUnlocked ? "" : " mystery") + (wp.id===activeId ? " active" : "");
 
       const thumb = document.createElement("div");
@@ -1022,11 +1202,11 @@ function renderWallpaperUI(){
 
       const meta = document.createElement("div");
       meta.className = "wpMeta";
-      meta.textContent = (idx < FREE_VISIBLE_WALLPAPERS) ? "Free" : (isPro() ? "Pro" : "Locked");
+      meta.textContent = (wp.tier === "custom") ? "Custom" : ((idx < FREE_VISIBLE_WALLPAPERS) ? "Free" : (isPro() ? "Pro" : "Locked"));
 
       const tag = document.createElement("div");
       tag.className = "wpTag";
-      tag.textContent = (idx < FREE_VISIBLE_WALLPAPERS) ? "FREE" : (isUnlocked ? "UNLOCKED" : (reqRefsForUnlockIndex(idx, FREE_VISIBLE_WALLPAPERS) + " ref"));
+      tag.textContent = (wp.tier === "custom") ? "CUSTOM" : ((idx < FREE_VISIBLE_WALLPAPERS) ? "FREE" : (isUnlocked ? "UNLOCKED" : (reqRefsForUnlockIndex(idx, FREE_VISIBLE_WALLPAPERS) + " ref")));
 
       card.appendChild(thumb);
       card.appendChild(name);
@@ -1166,18 +1346,15 @@ function renderWallpaperUI(){
   let REPLY_LANGS = [["en","English"]];
 // --- Flags + language chips (By language) ---
     function flagEmoji(code){
-    const m = {
-      en:"рџ‡єрџ‡ё", es:"рџ‡Єрџ‡ё", pt:"рџ‡µрџ‡№", fr:"рџ‡«рџ‡·", de:"рџ‡©рџ‡Є", it:"рџ‡®рџ‡№", nl:"рџ‡ірџ‡±",
-      tr:"рџ‡№рџ‡·", pl:"рџ‡µрџ‡±", id:"рџ‡®рџ‡©", ru:"рџ‡·рџ‡є", uk:"рџ‡єрџ‡¦", hi:"рџ‡®рџ‡і", ja:"рџ‡Їрџ‡µ", zh:"рџ‡Ёрџ‡і"
-    };
-    return m[code] || "рџЊђ";
+    const c = String(code || "").trim().toUpperCase();
+    return c || "GLB";
   }
 
   function updateLangFlags(){
     const site = $("siteLang")?.value || "en";
     const gm = $("gmLang")?.value || "en";
     const gn = $("gnLang")?.value || "en";
-    if ($("siteLangFlag")) $("siteLangFlag").textContent = (site === "en") ? "рџЊђ" : flagEmoji(site);
+    if ($("siteLangFlag")) $("siteLangFlag").textContent = (site === "en") ? "GLB" : flagEmoji(site);
     if ($("gmLangFlag")) $("gmLangFlag").textContent = flagEmoji(gm);
     if ($("gnLangFlag")) $("gnLangFlag").textContent = flagEmoji(gn);
   }
@@ -1307,7 +1484,7 @@ function renderWallpaperUI(){
     ["ext_free_01", "Free 01"],
     ["ext_free_02", "Free 02"],
   ];
-  const EXT_WALLPAPER_PACK_COUNT = 58;
+  const EXT_WALLPAPER_PACK_COUNT = 50;
   const EXT_WALLPAPER_FREE_PACK_COUNT = 4;
   const EXT_WALLPAPER_LUX = [
     ["lux_ext_anime_neon_alley", "Anime Neon Alley"],
@@ -1318,6 +1495,16 @@ function renderWallpaperUI(){
     ["lux_ext_noir_detective", "Noir Detective"],
     ["lux_ext_onchain_spaceport", "Onchain Spaceport"],
     ["lux_ext_solana_temple", "Solana Temple"],
+  ];
+  const CRYPTO_EXT_WALL_SOURCES = [
+    "https://source.unsplash.com/1080x1920/?bitcoin,crypto,vertical,neon",
+    "https://source.unsplash.com/1080x1920/?ethereum,blockchain,vertical,dark",
+    "https://source.unsplash.com/1080x1920/?solana,crypto,vertical,gradient",
+    "https://source.unsplash.com/1080x1920/?dogecoin,meme,crypto,vertical",
+    "https://source.unsplash.com/1080x1920/?bonk,crypto,vertical,market",
+    "https://source.unsplash.com/1080x1920/?x,finance,vertical,chart",
+    "https://source.unsplash.com/1080x1920/?trading,terminal,vertical",
+    "https://source.unsplash.com/1080x1920/?blockchain,network,vertical"
   ];
   function buildExtWallpapers(){
     const out = EXT_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
@@ -1332,6 +1519,14 @@ function renderWallpaperUI(){
     return out;
   }
   const EXT_WALLPAPERS = buildExtWallpapers();
+  function migrateLegacyExtWallpaperSelectionOnce(){
+    try{
+      const done = "gmx_ext_wallpaper_refresh_20260318";
+      if (localStorage.getItem(done) === "1") return;
+      // keep IDs stable; visual refresh now happens in URL resolver
+      localStorage.setItem(done, "1");
+    }catch{}
+  }
 
 
 
@@ -1650,11 +1845,12 @@ function renderExtCustomBgUI(){
         if (!file) return;
         if (nm) nm.textContent = file.name || "";
 
-        const dataUrl = await compressImageToJpegDataURL(file);
+        const dataUrl = await compressImageToJpegDataURL(file, { profile: "ext" });
         localStorage.setItem(extCustomBgKeyForTab(tab), dataUrl);
         extSyncNow();
 
         renderExtCustomBgUI();
+        if (st) st.innerHTML = `<span class="ok">Saved.</span> Auto-fitted for extension popup ratio.`;
         toast("ok", (t("toast_custom_bg_saved")||"Custom background saved."));
       }catch(e){
         st.innerHTML = `<span class="bad">Error.</span> Could not save background.`;
@@ -1947,21 +2143,26 @@ function renderExtWallpapers(){
   if (!grid || !st) return;
 
   initExtWallpaperControls();
+  loadCustomWallpapers().then((loaded)=>{
+    if (loaded && document.contains(grid)) renderExtWallpapers();
+  });
+  const allExtWps = [...EXT_WALLPAPERS, ...CUSTOM_WALLPAPERS_EXT];
   const selectedTarget = syncExtWallpaperTargetUI(targetSel, targetSel?.value || currentExtWallpaperTarget());
-  const total = EXT_WALLPAPERS.length;
-  const unlocked = unlockedCountByRefs(total, FREE_VISIBLE_EXT_WALLPAPERS);
+  const total = allExtWps.length;
+  const unlocked = unlockedCountByRefs(EXT_WALLPAPERS.length, FREE_VISIBLE_EXT_WALLPAPERS) + CUSTOM_WALLPAPERS_EXT.length;
   const chosenDirect = getExtWallpaperForView(selectedTarget);
   const fallbackGlobal = selectedTarget === "all" ? "" : getExtWallpaperForView("all");
   const chosen = chosenDirect || fallbackGlobal || "";
   const wEl = $("extWpUnlocked");
   if (wEl) wEl.textContent = `${Math.min(unlocked,total)}/${total}`;
 
-  const items = EXT_WALLPAPERS.map((wp, idx)=>({ wp, idx }));
+  const items = allExtWps.map((wp, idx)=>({ wp, idx }));
   chunkedRender(grid, items, ({ wp, idx })=>{
-    const isUnlocked = isPro() || (idx < unlocked);
+    const isUnlocked = wp.tier === "custom" || isPro() || (idx < unlockedCountByRefs(EXT_WALLPAPERS.length, FREE_VISIBLE_EXT_WALLPAPERS));
     const card = document.createElement("button");
     card.type = "button";
     card.dataset.wpId = wp.id;
+    card.dataset.tier = wp.tier || (idx < FREE_VISIBLE_EXT_WALLPAPERS ? "free" : "premium");
     card.className = "wpCard" + (wp.id === chosen ? " active" : "") + (!isUnlocked ? " mystery" : "");
 
     const thumb = document.createElement("div");
@@ -1982,11 +2183,11 @@ function renderExtWallpapers(){
 
     const meta = document.createElement("div");
     meta.className = "wpMeta";
-    meta.textContent = wp.tier || "";
+    meta.textContent = (wp.tier === "custom") ? "Custom" : (wp.tier || "");
 
     const tag = document.createElement("div");
     tag.className = "wpTag";
-    tag.textContent = unlockTagText(idx, isUnlocked, FREE_VISIBLE_EXT_WALLPAPERS);
+    tag.textContent = (wp.tier === "custom") ? "CUSTOM" : unlockTagText(idx, isUnlocked, FREE_VISIBLE_EXT_WALLPAPERS);
 
     card.appendChild(thumb);
     card.appendChild(name);
@@ -2017,7 +2218,7 @@ function renderExtWallpapers(){
     st.innerHTML = `<span class="muted">None.</span> Pick a wallpaper for <b>${escapeHtml(extWallpaperLabel(selectedTarget))}</b>.`;
     return;
   }
-  const chosenName = EXT_WALLPAPERS.find(x=>x.id===chosen)?.name || chosen;
+  const chosenName = EXT_WALLPAPERS.find(x=>x.id===chosen)?.name || CUSTOM_WALLPAPERS_EXT.find(x=>x.id===chosen)?.name || chosen;
   if (chosenDirect){
     st.innerHTML = `<span class="ok">Selected.</span> ${escapeHtml(chosenName)} for <b>${escapeHtml(extWallpaperLabel(selectedTarget))}</b>.`;
   } else {
@@ -2216,6 +2417,34 @@ const $ = (id) => document.getElementById(id);
     applyUserBg(tab);
   }
 
+  function ensurePredictionTabVisible(){
+    try{
+      const tabs = document.querySelector(".tabs");
+      if (!tabs) return;
+      let btn = document.getElementById("t_prediction");
+      if (!btn){
+        btn = document.createElement("button");
+        btn.className = "tab";
+        btn.id = "t_prediction";
+        btn.dataset.tab = "prediction";
+        btn.textContent = "Prediction Market";
+        const before = document.getElementById("t_wallet");
+        if (before && before.parentNode === tabs) tabs.insertBefore(btn, before);
+        else tabs.appendChild(btn);
+      }
+      btn.classList.remove("hidden");
+      let pane = document.getElementById("tab-prediction");
+      if (!pane){
+        pane = document.createElement("div");
+        pane.id = "tab-prediction";
+        pane.className = "hidden";
+        pane.innerHTML = `<div class="card"><div class="title">Prediction Market</div><div class="note">Coming soon.</div></div>`;
+        tabs.insertAdjacentElement("afterend", pane);
+      }
+      pane.classList.add("hidden");
+    }catch{}
+  }
+
     function showTab(name){
     name = normalizeTopLevelTab(name);
     CURRENT_TAB = name;
@@ -2237,6 +2466,9 @@ const $ = (id) => document.getElementById(id);
     if (name === "leaderboard"){
       try{ bindLeaderboardUI(); }catch(e){}
       try{ loadLeaderboard(LB_DAYS||7); }catch(e){}
+    }
+    if (name === "prediction"){
+      try{ loadPredictionSignals({ force:true }); }catch(e){}
     }
     if (name === "extthemes") {
       try{ renderExtThemes(); }catch(e){}
@@ -2287,6 +2519,7 @@ const $ = (id) => document.getElementById(id);
   }
   try{ globalThis.__gmxShowTab = tab; }catch(_e){}
   try{ globalThis.switchTab = tab; }catch(_e){}
+  ensurePredictionTabVisible();
   document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click", ()=>tab(b.dataset.tab)));
 
   function normalizeHandle(input){ return __getGMXAuth().normalizeHandle(input); }
@@ -2294,7 +2527,7 @@ const $ = (id) => document.getElementById(id);
   function getHandle(){ return __getGMXAuth().getHandle(); }
 
   function siteLang(){
-    try{ return localStorage.getItem(LS_SITE_LANG) === "ru" ? "ru" : "en"; }catch(_e){ return "en"; }
+    try{ return String(localStorage.getItem(LS_SITE_LANG) || "en").toLowerCase(); }catch(_e){ return "en"; }
   }
   function getBestMode(){
     try{ return localStorage.getItem(LS_BEST_ENABLED) === "1"; }catch(_e){ return false; }
@@ -2321,16 +2554,12 @@ const $ = (id) => document.getElementById(id);
   function bestCopyText(){
     return getBestMode()
       ? {
-          btn: (siteLang() === "ru") ? "Best: live" : "Best: live",
-          hint: (siteLang() === "ru")
-            ? "Best live С‚СЏРЅРµС‚ СЃРІРµР¶РёРµ РІР°СЂРёР°РЅС‚С‹, РІС‹Р±РёСЂР°РµС‚ СЃР°РјС‹Р№ СЃРёР»СЊРЅС‹Р№ Рё СЃСЂР°Р·Сѓ СЃРѕС…СЂР°РЅСЏРµС‚ РµРіРѕ."
-            : "Best live pulls fresh options, keeps the strongest one, and saves it."
+          btn: "Best: live",
+          hint: "Best live pulls fresh options, keeps the strongest one, and saves it."
         }
       : {
-          btn: (siteLang() === "ru") ? "Best: saved" : "Best: saved",
-          hint: (siteLang() === "ru")
-            ? "Best Р±РµСЂС‘С‚ СЃР°РјС‹Р№ СЃРёР»СЊРЅС‹Р№ РІР°СЂРёР°РЅС‚ РёР· С‚РІРѕРµРіРѕ СЃРѕС…СЂР°РЅС‘РЅРЅРѕРіРѕ СЃРїРёСЃРєР°."
-            : "Best uses the strongest line from your saved list."
+          btn: "Best: saved",
+          hint: "Best uses the strongest line from your saved list."
         };
   }
   function syncBestModeUi(){
@@ -2600,12 +2829,12 @@ function renderHelpModal(){
   const gnLimit = normLimitForUI(LAST_USAGE?.gn?.limit ?? 70);
 
   const savedEl = $("help_saved");
-  if (savedEl) savedEl.textContent = isPro() ? `GM ${gmSaved}/unlimited вЂў GN ${gnSaved}/unlimited` : `GM ${gmSaved}/${SAVE_CAP_FREE} вЂў GN ${gnSaved}/${SAVE_CAP_FREE}`;
+  if (savedEl) savedEl.textContent = isPro() ? `GM ${gmSaved}/unlimited • GN ${gnSaved}/unlimited` : `GM ${gmSaved}/${SAVE_CAP_FREE} • GN ${gnSaved}/${SAVE_CAP_FREE}`;
 
   const dailyEl = $("help_daily");
   if (dailyEl) dailyEl.textContent = (isPro() || gmLimit===Infinity || gnLimit===Infinity)
-    ? `GM ${gmUsed}/unlimited вЂў GN ${gnUsed}/unlimited`
-    : `GM ${gmUsed}/${gmLimit} вЂў GN ${gnUsed}/${gnLimit}`;
+    ? `GM ${gmUsed}/unlimited • GN ${gnUsed}/unlimited`
+    : `GM ${gmUsed}/${gmLimit} • GN ${gnUsed}/${gnLimit}`;
 
   // aggregate bars
   const savedFill = $("helpSavedFill");
@@ -2685,8 +2914,8 @@ async function refreshUsage(){
       const gnCapUI = normLimitForUI(gn.limit);
       const up = $("usedPill");
       if (up) up.textContent = (isPro() || gmCapUI===Infinity || gnCapUI===Infinity)
-        ? `GM ${gm.used}/unlimited вЂў GN ${gn.used}/unlimited`
-        : `GM ${gm.used}/${gmCapUI} вЂў GN ${gn.used}/${gnCapUI}`;
+        ? `GM ${gm.used}/unlimited • GN ${gn.used}/unlimited`
+        : `GM ${gm.used}/${gmCapUI} • GN ${gn.used}/${gnCapUI}`;
 
       // Header status pills
       try{
@@ -2818,7 +3047,7 @@ function bestLineShape(kind, s){
     .replace(/[\u{1F300}-\u{1FAFF}]/gu, " ")
     .replace(/\b(gm|good morning|morning)\b/g, "gm")
     .replace(/\b(gn|good night|night)\b/g, "gn")
-    .replace(/\b(legend|ser|mate|bro|builder|degen|anon|friend)\b/g, "@voc")
+    .replace(/\b(legend|bro|degen|anon|friend|homie)\b/g, "@voc")
     .replace(/\b(clean|good|quiet|simple|steady|calm|nice|solid|strong|soft|easy|kind|warm|smooth)\b/g, "@adj")
     .replace(/\b(good one|nice post|clean one|strong post|solid post|good post|clean post|strong take|solid take|clean read|good read|nice gm|solid read|nice read)\b/g, "@post")
     .replace(/\b(sleep easy|sleep well|rest easy|rest well|good rest|real rest|proper rest|easy reset|soft landing|calm close|easy close|soft close)\b/g, "@close")
@@ -2842,7 +3071,7 @@ function scoreLineForBest(kind, s){
   const clauses = t.split(",").map(x => x.trim()).filter(Boolean);
   const concreteRx = /(coffee|brain|screen|pace|hour|desk|today|tonight|tomorrow|morning|night|rest|scroll|tab|room|start|stop|sleep|reset|sunrise|sunset|bed|wake|waking|closing|working|loading|watching|shipping|waiting|window|rain|light|chair|thread|reply)/i;
   const motionRx = /(starting|keeping|calling|logging|leaving|waking|closing|working|loading|watching|shipping|waiting|forcing|scrolling|typing|sending|holding|parking|dragging|landing|resetting|sleeping)/i;
-  const greetOnlyRx = /^(gm|good morning|morning|gn|good night|night)(?:\s+(legend|ser|mate|bro|builder|degen|anon))?(?:\s*[\u{1F300}-\u{1FAFF}])?$/iu;
+  const greetOnlyRx = /^(gm|good morning|morning|gn|good night|night)(?:\s+(legend|bro|degen|anon|friend|homie))?(?:\s*[\u{1F300}-\u{1FAFF}])?$/iu;
   const fillerRx = /(nice read here|this was a solid read|strong post and a clean start|wishing you a smooth day ahead|hope your day starts easy|hope the morning treats you well|hope you get a calm reset tonight|soft close here|rest well after this one|hope you get an easy reset|calm post to end the day on|sleep well tonight)/i;
   const hollowRx = /(strong post|solid read|clean read|nice read|good read|clean post|good post|solid post|strong take|clean take|good take)/i;
   const cannedStarterRx = /^(gm|gn)\s*,?\s*(this|keeping|saving|holding)\b/i;
@@ -2864,7 +3093,7 @@ function scoreLineForBest(kind, s){
   else score -= (clauses.length - 3) * 4;
 
   if (/[\.\!\?]$/.test(t)) score -= 2;
-  if (/[вЂ”вЂ“-]/.test(t)) score -= 5;
+  if (/[—–-]/.test(t)) score -= 5;
   try {
     const emojiHits = (t.match(/[\u{1F300}-\u{1FAFF}]/gu) || []).length;
     if (emojiHits === 1) score += 5;
@@ -3007,18 +3236,18 @@ async function doBestServer(kind){
   const antiN = antiWindow(strength);
   const keyActive = activeKey(kind);
 
-  setBusy(kind, true, (siteLang() === "ru") ? "Выбираю лучший вариант..." : "Picking the best reply...");
+  setBusy(kind, true, "Picking the best reply...");
   try{
     const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}&count=5`, "GET", null, { timeoutMs: 30000 });
     const candidates = dedupeLines((bulk && bulk.list) ? bulk.list : []).map(x=>String(x||"").trim()).filter(Boolean);
     if (!candidates.length){
-      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((siteLang() === "ru") ? "РЎРµСЂРІРµСЂ РЅРµ РІРµСЂРЅСѓР» РІР°СЂРёР°РЅС‚С‹" : "No fresh candidates returned")}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml("No fresh candidates returned")}</span>`;
       return;
     }
 
     const best = String(pickBestLine(kind, candidates) || "").trim();
     if (!best){
-      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((siteLang() === "ru") ? "РќРµ СѓРґР°Р»РѕСЃСЊ РІС‹Р±СЂР°С‚СЊ Р»СѓС‡С€РёР№ РІР°СЂРёР°РЅС‚" : "Could not choose the best reply")}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml("Could not choose the best reply")}</span>`;
       return;
     }
 
@@ -3034,22 +3263,20 @@ async function doBestServer(kind){
     let saved = false;
 
     if (!already){
-      if (remainingSlots(kind) <= 0){
-        saved = !!replaceRandomSavedLine(kind, best);
-      } else {
-        cur.push(best);
-        writeKey(keyActive, cur);
-        saved = true;
-      }
-      if (saved) pushRecent(kind, [repeatKey(best, Math.max(1, strength))]);
-    }
+  if (remainingSlots(kind) > 0){
+    cur.push(best);
+    writeKey(keyActive, cur);
+    saved = true;
+    pushRecent(kind, [repeatKey(best, Math.max(1, strength))]);
+  }
+}
 
     try{ navigator.clipboard.writeText(best); }catch(_e){}
     renderList(kind);
     if (msgEl){
       const head = already
-        ? ((siteLang() === "ru") ? "Best СѓР¶Рµ Р±С‹Р» РІ СЃРїРёСЃРєРµ" : "Best already saved")
-        : (saved ? ((siteLang() === "ru") ? "Best РґРѕР±Р°РІР»РµРЅ" : "Best saved") : ((siteLang() === "ru") ? "Best СЃРєРѕРїРёСЂРѕРІР°РЅ" : "Best copied"));
+        ? "Best already saved"
+        : (saved ? "Best saved" : "Best copied");
       msgEl.innerHTML = `<span class="ok">${escapeHtml(head)}</span> <span class="muted small">${escapeHtml(best)}</span>`;
     }
     try{ await refreshUsage(); }catch(_e){}
@@ -3090,10 +3317,12 @@ async function doBestServer(kind){
 
 function replaceRandomSavedLine(kind, newLine){
   const key = activeKey(kind);
-  const cur = readKey(key);
-  if (!cur || !cur.length) return false;
+  const next = normalizeLine(newLine);
+  const cur = dedupeLines(readKey(key));
+  if (!next || !cur.length) return false;
+  if (cur.some((x)=>String(x || "").trim().toLowerCase() === next.toLowerCase())) return false;
   const idx = Math.floor(Math.random() * cur.length);
-  cur[idx] = newLine;
+  cur[idx] = next;
   writeKey(key, cur);
   return true;
 }
@@ -3211,9 +3440,11 @@ function replaceRandomSavedLine(kind, newLine){
     if (!container || !countEl) return;
 
     const key = activeKey(kind);
-    const lines = readKey(key);
+const rawLines = readKey(key);
+const lines = dedupeLines((rawLines || []).map(normalizeLine).filter(Boolean));
+if (lines.join("\n") !== rawLines.join("\n")) writeKey(key, lines);
 
-    countEl.textContent = lines.length;
+countEl.textContent = lines.length;
     updateSavedUI(kind);
 
     container.innerHTML = "";
@@ -3247,7 +3478,9 @@ function replaceRandomSavedLine(kind, newLine){
       return;
     }
 
-    items.forEach((item, pos)=>{
+    // Large saved banks can be expensive to paint in one synchronous pass.
+    // Render line rows in chunks to keep the UI responsive while Best/Clean runs.
+    chunkedRender(container, items, (item, pos)=>{
       const i = item.idx;
       const val = item.val;
 
@@ -3281,9 +3514,8 @@ function replaceRandomSavedLine(kind, newLine){
         writeKey(key, cur);
         renderList(kind);
       });
-
-      container.appendChild(row);
-    });
+      return row;
+    }, { key: `lineRows_${kind}`, chunk: 26 });
   }
 
   function setView(kind, scope){
@@ -3556,7 +3788,7 @@ async function generate(kind, count){
 
     const strength = getAntiStrength(kind);
     const antiN = 0;
-    const autoClean = getCleanFillEnabled(kind);
+    const autoClean = (count <= 1) ? getCleanFillEnabled(kind) : false;
 
     if ((kind==="gm" ? gmView : gnView) === "lang") ensureIndexed(kind, lang);
 
@@ -3572,22 +3804,12 @@ async function generate(kind, count){
     const effCount = (remSlots === Infinity) ? count : Math.max(0, Math.min(count, remSlots));
     
 if (effCount <= 0){
-  // At cap: allow variety by REPLACING an existing saved line (does not increase list size)
-  try{
-    const capCtrl = new AbortController();
-    const j = await api(`/api/generate?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}`, "GET", null, { signal: capCtrl.signal, timeoutMs: 20000 });
-    const r = String(j.reply || "").trim();
-    if (r && replaceRandomSavedLine(kind, r)){
-      renderList(kind);
-      if (msgEl) msgEl.innerHTML = `<span class="ok">Replaced 1</span> <span class="muted small">(free cap ${saveCap()})</span>`;
-      postEvent('limit_hit', { where:'save_cap', kind });
-      return;
-    }
-  }catch{}
-  if (msgEl) msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()}). You can still edit existing lines. Upgrade for more.</span>`;
+  if (msgEl) msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()}). You can still copy lines, but no saved line will be replaced automatically.</span>`;
   postEvent('limit_hit', { where:'save_cap', kind });
+  renderList(kind);
   return;
 }
+
       if (INFLIGHT[kind]){
       if (msgEl) msgEl.innerHTML = '<span class="muted">Working...</span>';
       return;
@@ -3598,6 +3820,7 @@ if (effCount <= 0){
     const ctrl = new AbortController();
     ABORT[kind] = ctrl;
 
+    let didRender = false;
     try{
       if (count === 1){
         const tries = Math.max(1, Math.min(4, 1 + Math.floor(strength/2)));
@@ -3632,27 +3855,24 @@ if (effCount <= 0){
         });
         if (already){
           renderList(kind);
+          didRender = true;
           if (msgEl) msgEl.innerHTML = `<span class="muted">Duplicate ignored.</span>`;
           return;
         }
-        // respect free cap: when at cap, replace a random existing line (keeps list size at 70)
         if (remainingSlots(kind) <= 0){
-          if (r && replaceRandomSavedLine(kind, r)){
-            renderList(kind);
-            if (msgEl) msgEl.innerHTML = `<span class="ok">Replaced 1</span> <span class="muted small">(free cap ${saveCap()})</span>`;
-            postEvent('limit_hit', { where:'save_cap', kind });
-            return;
-          }
-          if (msgEl) msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()} lines). You can still edit existing lines. Upgrade for more.</span>`;
-          postEvent('limit_hit', { where:'save_cap', kind });
-          renderList(kind);
-          return;
-        }
+  if (msgEl) msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()} lines). You can still copy lines, but no saved line will be replaced automatically.</span>`;
+  postEvent('limit_hit', { where:'save_cap', kind });
+  renderList(kind);
+  return;
+}
         cur.push(r);
         writeKey(keyActive, cur);
 
         pushRecent(kind, [repeatKey(reply, Math.max(1, strength))]);
-        renderList(kind);
+        if (!autoClean){
+          renderList(kind);
+          didRender = true;
+        }
         msgEl.innerHTML = `<span class="ok">Added 1</span>`;
         logEvent("gen_one", { kind, lang, style, pack: packId, view: (kind==="gm"?gmView:gnView) });
         try{ await refreshUsage(); }catch{}
@@ -3675,19 +3895,40 @@ if (effCount <= 0){
           }
         };
 
-        const buffer = 30;
+        const buffer = 24;
+        const genDeadline = Date.now() + 45000;
         let attempts = 0;
-        while (accepted.length < effCount && attempts < 4){
+        while (accepted.length < effCount && attempts < 1){
+          if (Date.now() > genDeadline) break;
           attempts++;
           const missing = effCount - accepted.length;
-          const reqCount = Math.min(220, missing + buffer);
-          const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=0&count=${reqCount}`, "GET", null, { signal: ctrl.signal, timeoutMs: 30000 });
+          const reqCount = Math.min(140, missing + buffer);
+          const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=0&count=${reqCount}`, "GET", null, { signal: ctrl.signal, timeoutMs: 12000 });
           takeLines(bulk.list || []);
           if (!Array.isArray(bulk.list) || bulk.list.length === 0) break;
         }
 
-        const incoming = accepted.slice(0, effCount);
-        const shuffled = incoming.slice().sort(()=>Math.random()-0.5);
+        const incoming = accepted.slice();
+        const preferBest = autoClean || getBestMode();
+        let selected = [];
+        if (preferBest){
+          const byShape = new Map();
+          for (const line of incoming){
+            const v = String(line || "").trim();
+            if (!v) continue;
+            const sc = scoreLineForBest(kind, v);
+            if (!Number.isFinite(sc) || sc <= -1e8) continue;
+            const shape = bestLineShape(kind, v) || v.toLowerCase();
+            const prev = byShape.get(shape);
+            if (!prev || sc > prev.sc || (sc === prev.sc && v.length > prev.v.length)) byShape.set(shape, { v, sc });
+          }
+          selected = Array.from(byShape.values())
+            .sort((a,b)=> b.sc - a.sc || b.v.length - a.v.length)
+            .slice(0, effCount)
+            .map(x=>x.v);
+        } else {
+          selected = incoming.slice(0, effCount).sort(()=>Math.random()-0.5);
+        }
 
         const applyToKey = (k, list)=>{
           if (!list || !list.length) return;
@@ -3695,8 +3936,8 @@ if (effCount <= 0){
           const merged = mergeAppendUnique(cur, list);
           writeKey(k, merged);
         };
-        applyToKey(keyActive, shuffled);
-        pushRecent(kind, shuffled.map(x=>repeatKey(x, Math.max(1, CLEAN_FILL_STRENGTH))));
+        applyToKey(keyActive, selected);
+        pushRecent(kind, selected.map(x=>repeatKey(x, Math.max(1, CLEAN_FILL_STRENGTH))));
         renderList(kind);
 
         let added = Math.max(0, readKey(keyActive).length - beforeCount);
@@ -3705,6 +3946,7 @@ if (effCount <= 0){
           const targetTotal = (remSlots === Infinity) ? (beforeCount + effCount) : Math.min(saveCap(), beforeCount + effCount);
           cleanRes = await oneClickCleanup(kind, { targetCount: targetTotal, silent: true, keepMessage: true, signal: ctrl.signal });
           renderList(kind);
+          didRender = true;
           added = Math.max(0, (cleanRes?.finalCount ?? readKey(keyActive).length) - beforeCount);
         }
 
@@ -3717,7 +3959,7 @@ if (effCount <= 0){
         } else if (added < effCount){
           msgEl.innerHTML = `<span class="warn">Added ${added}/${effCount}. Random fill stopped early because the pool got too narrow. Change tone or preset for a wider pull.</span>`;
         } else {
-          msgEl.innerHTML = `<span class="ok">Added ${added}</span>`;
+          msgEl.innerHTML = `<span class="ok">Added ${added}</span> <span class="muted small">Run Best pass manually if you want cleanup/refill.</span>`;
         }
         logEvent("gen_bulk", { kind, lang, style, pack: packId, count: effCount, view: (kind==="gm"?gmView:gnView), cleanFill: autoClean });
         try{ await refreshUsage(); }catch{}
@@ -3731,13 +3973,9 @@ if (effCount <= 0){
       INFLIGHT[kind] = false;
       try{ ABORT[kind] = null; }catch{}
       setBusy(kind, false);
-      try{ renderList(kind); }catch{}
-      try{
-        const staleMsg = String(msgEl?.textContent || "").replace(/\s+/g, " ").trim();
-        if (staleMsg === "Working..." || staleMsg === "Best pass..."){
-          msgEl.innerHTML = "";
-        }
-      }catch{}
+      if (!didRender){
+        try{ renderList(kind); }catch{}
+      }
     }
   }
 
@@ -3916,6 +4154,163 @@ function bindLeaderboardUI(){
   if (b7) b7.addEventListener("click", ()=>set(7));
   if (b30) b30.addEventListener("click", ()=>set(30));
 }
+
+// ----- Prediction market -----
+let PM_LAST_JSON = "";
+const PM_FILTERS = { asset: "all", bias: "all", minConf: 0 };
+let PM_LAST_SIGNALS = [];
+let PM_LAST_HEADLINE = null;
+function syncPredictionFilterCopy(){
+  const bias = $("pm_bias");
+  if (bias) {
+    const cur = String(bias.value || "all");
+    bias.innerHTML = [
+      `<option value="all">${escapeHtml(t("all") || "All")}</option>`,
+      `<option value="bullish">${escapeHtml(t("bullish") || "Bullish")}</option>`,
+      `<option value="bearish">${escapeHtml(t("bearish") || "Bearish")}</option>`,
+      `<option value="neutral">${escapeHtml(t("neutral") || "Neutral")}</option>`
+    ].join("");
+    bias.value = ["all","bullish","bearish","neutral"].includes(cur) ? cur : "all";
+  }
+  const conf = $("pm_conf");
+  if (conf) {
+    const cur = String(conf.value || "0");
+    conf.innerHTML = [
+      `<option value="0">${escapeHtml(t("any") || "Any")}</option>`,
+      `<option value="60">60%+</option>`,
+      `<option value="70">70%+</option>`,
+      `<option value="80">80%+</option>`
+    ].join("");
+    conf.value = ["0","60","70","80"].includes(cur) ? cur : "0";
+  }
+}
+function fillPredictionAssetFilter(list){
+  const sel = $("pm_asset");
+  if (!sel) return;
+  const prev = String(sel.value || PM_FILTERS.asset || "all");
+  const symbols = Array.from(new Set((Array.isArray(list) ? list : []).map((x)=>String(x?.symbol||"").trim()).filter(Boolean))).sort();
+  sel.innerHTML = `<option value="all">${escapeHtml(t("all") || "All")}</option>` + symbols.map((s)=>`<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join("");
+  sel.value = symbols.includes(prev) ? prev : "all";
+  PM_FILTERS.asset = sel.value;
+}
+function filteredPredictionSignals(list){
+  const rows = Array.isArray(list) ? list : [];
+  return rows.filter((row)=>{
+    const symbol = String(row?.symbol || "").trim();
+    const bias = String(row?.bias || "neutral").toLowerCase();
+    const conf = Number(row?.confidence || 0);
+    if (PM_FILTERS.asset !== "all" && symbol !== PM_FILTERS.asset) return false;
+    if (PM_FILTERS.bias !== "all" && bias !== PM_FILTERS.bias) return false;
+    if (conf < Number(PM_FILTERS.minConf || 0)) return false;
+    return true;
+  });
+}
+function renderPredictionSignals(list){
+  const host = $("pmList");
+  if (!host) return;
+  const rows = filteredPredictionSignals(list);
+  if (!rows.length){
+    const h = PM_LAST_HEADLINE && typeof PM_LAST_HEADLINE === "object" ? PM_LAST_HEADLINE : null;
+    if (h){
+      const title = escapeHtml(String(h.title || "Bot signal coming soon"));
+      const source = escapeHtml(String(h.source || "Polymarket"));
+      const confidence = Number(h.confidencePct || 90);
+      const cadence = escapeHtml(String(h.cadence || "3-5 signals per day"));
+      const thesis = escapeHtml(String(h.thesis || "Signals are generated by a bot and can be wrong."));
+      host.classList.add("pmList");
+      host.innerHTML = `
+        <div class="lineRow pmSignalRow">
+          <div class="split pmSignalHead">
+            <div class="pmSymbolWrap"><b class="pmSymbol">${title}</b> <span class="badge pmBiasNeutral">${escapeHtml("coming soon")}</span></div>
+            <div class="muted">${source} · ${escapeHtml(String(confidence))}% target</div>
+          </div>
+          <div class="pmConfTrack"><div class="pmConfFill" style="width:${Math.max(0, Math.min(100, confidence))}%"></div></div>
+          <div class="small pmThesis">${cadence}</div>
+          <div class="muted small pmRisk">${thesis}</div>
+        </div>
+      `;
+      return;
+    }
+    host.innerHTML = `<div class="muted">${escapeHtml(t("pm_empty") || "Coming soon. First live bot signal drops soon.")}</div>`;
+    return;
+  }
+  host.classList.add("pmList");
+  host.innerHTML = rows.map((row)=>{
+    const symbol = escapeHtml(String(row.symbol || "PAIR").toUpperCase());
+    const bias = String(row.bias || "neutral").toLowerCase();
+    const move = Number(row.changePct || 0);
+    const moveLabel = `${move > 0 ? "+" : ""}${move.toFixed(2)}%`;
+    const confidence = Number(row.confidence || 0);
+    const thesis = escapeHtml(String(row.thesis || ""));
+    const risk = escapeHtml(String(row.risk || ""));
+    const biasClass = bias === "bullish" ? "pmBiasBull" : (bias === "bearish" ? "pmBiasBear" : "pmBiasNeutral");
+    const confPct = Math.max(0, Math.min(100, confidence));
+    const moveClass = move >= 0 ? "pmMoveUp" : "pmMoveDown";
+    return `
+      <div class="lineRow pmSignalRow">
+        <div class="split pmSignalHead">
+          <div class="pmSymbolWrap"><b class="pmSymbol">${symbol}</b> <span class="badge ${biasClass}">${escapeHtml(bias)}</span></div>
+          <div class="muted"><span class="${moveClass}">${escapeHtml(moveLabel)}</span> · ${escapeHtml(String(confidence))}% conf</div>
+        </div>
+        <div class="pmConfTrack"><div class="pmConfFill" style="width:${confPct}%"></div></div>
+        <div class="small pmThesis">${thesis}</div>
+        <div class="muted small pmRisk">${risk}</div>
+      </div>
+    `;
+  }).join("");
+}
+async function loadPredictionSignals(opts){
+  const force = !!(opts && opts.force);
+  const status = $("pm_status");
+  const locked = $("pm_locked_note");
+  const hasSession = !!(getHandle() && getToken());
+  if (!hasSession){
+    PM_LAST_SIGNALS = [];
+    PM_LAST_HEADLINE = {
+      id: "pm_public_soon",
+      title: "Polymarket Direction Signal",
+      source: "Polymarket",
+      confidencePct: 90,
+      cadence: "3-5 signals per day",
+      thesis: "Coming soon for public feed. Signals are generated by a bot and can be wrong."
+    };
+    fillPredictionAssetFilter([]);
+    renderPredictionSignals([]);
+    if (status) status.textContent = "Coming soon for everyone. Live private API feed runs 3-5 bot cards/day.";
+    if (locked) locked.textContent = t("pm_locked_note") || "Bot signals are informational only. They may be inaccurate and are not guaranteed outcomes.";
+    return;
+  }
+  if (status) status.textContent = t("loading") || "Loading...";
+  try{
+    const j = await api("/api/market/signals", "GET");
+    const payload = JSON.stringify(j || {});
+    if (!force && payload === PM_LAST_JSON){
+      if (status) status.textContent = t("pm_status") || "Signals are up to date.";
+      return;
+    }
+    PM_LAST_JSON = payload;
+    PM_LAST_SIGNALS = Array.isArray(j?.signals) ? j.signals : [];
+    PM_LAST_HEADLINE = (j && typeof j.headlineSignal === "object") ? j.headlineSignal : null;
+    fillPredictionAssetFilter(PM_LAST_SIGNALS);
+    if (locked) {
+      locked.textContent = t("pm_locked_note") || "Bot signals are informational only. They may be inaccurate and are not guaranteed outcomes.";
+    }
+    renderPredictionSignals(PM_LAST_SIGNALS);
+    if (status){
+      if (j?.comingSoon) {
+        status.textContent = t("pm_status") || "Coming soon: 3-5 signals/day · 90% confidence target · Polymarket";
+      } else {
+        const at = j?.asOf ? new Date(j.asOf).toLocaleTimeString() : "";
+        const cadence = String(j?.scheduleRangePerDay || "3-5");
+        const base = `${cadence} signals/day`;
+        status.textContent = at ? `${base} · updated: ${at}` : base;
+      }
+    }
+  }catch(e){
+    const msg = friendlyUiErrorMessage(e?.message || "failed");
+    if (status) status.textContent = msg;
+  }
+}
 // ----- Referrals -----
 
   function escHtml(s){
@@ -3970,7 +4365,7 @@ async function loadRefLeaderboard(days=90){
   }
   if (meEl){
     if (j.me && j.me.handle){
-      meEl.textContent = `${ui.youLabel || "You"}: ${j.me.handle} вЂ” ${ui.eligible}: ${Number(j.me.eligible||0)} (${ui.rulesLabel || "rules"}: в‰Ґ${j.rules?.minInserts||5} inserts + в‰Ґ${j.rules?.minActiveDays||3} active days in ${days}d)`;
+      meEl.textContent = `${ui.youLabel || "You"}: ${j.me.handle} — ${ui.eligible}: ${Number(j.me.eligible||0)} (${ui.rulesLabel || "rules"}: ≥${j.rules?.minInserts||5} inserts + ≥${j.rules?.minActiveDays||3} active days in ${days}d)`;
     } else {
       meEl.textContent = "";
     }
@@ -4025,6 +4420,29 @@ const msg = $("refMsg");
     const ui = getReferralUiCopy(lang);
     if (msg) msg.innerHTML = '<span class="ok">' + escapeHtml(ui.copied || "Copied.") + '</span>';
   };
+  const pmRefreshBtn = $("pm_refresh");
+  if (pmRefreshBtn) pmRefreshBtn.onclick = ()=>{ loadPredictionSignals({ force:true }); };
+  syncPredictionFilterCopy();
+  const pmAssetSel = $("pm_asset");
+  if (pmAssetSel) pmAssetSel.addEventListener("change", ()=>{
+    PM_FILTERS.asset = String(pmAssetSel.value || "all");
+    renderPredictionSignals(PM_LAST_SIGNALS);
+  });
+  const pmBiasSel = $("pm_bias");
+  if (pmBiasSel) pmBiasSel.addEventListener("change", ()=>{
+    PM_FILTERS.bias = String(pmBiasSel.value || "all").toLowerCase();
+    renderPredictionSignals(PM_LAST_SIGNALS);
+  });
+  const pmConfSel = $("pm_conf");
+  if (pmConfSel) pmConfSel.addEventListener("change", ()=>{
+    PM_FILTERS.minConf = Number(pmConfSel.value || 0) || 0;
+    renderPredictionSignals(PM_LAST_SIGNALS);
+  });
+  setInterval(()=>{
+    try{
+      if (CURRENT_TAB === "prediction") loadPredictionSignals({ force:false });
+    }catch{}
+  }, 60000);
 
 // ----- Wallet / Billing -----
   let BILLING = { receiver:"", plans:[], solUsd:0, rpcPublic:"" };
@@ -4292,7 +4710,7 @@ function openWalletModal(){
     renderWalletList();
     // receiver hint
     const r = $("sf_modal_receiver");
-    if (r) r.textContent = BILLING?.receiver ? shortPk(BILLING.receiver) : "вЂ”";
+    if (r) r.textContent = BILLING?.receiver ? shortPk(BILLING.receiver) : "—";
     const hm = $("sf_modal_msg");
     if (hm) hm.textContent = "";
   }
@@ -4560,7 +4978,7 @@ if (src){
       return `$${plan.usd}`;
     }
     const sol = fmtSol(plan.solApprox || 0);
-    return sol ? `в‰€ ${sol} SOL` : "";
+    return sol ? `≈ ${sol} SOL` : "";
   }
 
   function renderPlanGrid(){
@@ -4647,7 +5065,7 @@ if (src){
       list.innerHTML = "";
       if (!items.length){
         list.innerHTML = `<div class="muted">No receipts yet.</div>`;
-        stats.textContent = "вЂ”";
+        stats.textContent = "—";
         return;
       }
       stats.textContent = `${items.length} receipt${items.length===1?"":"s"}`;
@@ -4669,7 +5087,7 @@ if (src){
       }
     }catch(e){
       list.innerHTML = `<div class="muted">Receipts unavailable.</div>`;
-      stats.textContent = "вЂ”";
+      stats.textContent = "—";
     }
   }
 
@@ -5531,485 +5949,126 @@ function pruneLegacyAdminPanels(){
     try{ patchDynamicCopy(lang, merged); }catch(e){}
   }
 
-function getReferralUiCopy(lang){
-  const table = {
-    en: {
-      title: "How it works",
-      note: "Referrals unlock perks only after real product usage (not just signups).",
-      desc: "Unlock path:",
-      items: [
-        "Confirmed counts when someone connects a handle with your link.",
-        "Active counts confirmed users with recorded usage.",
-        "Eligible counts only after real usage, anti-fraud checks, and the minimum activity threshold.",
-        "Referrals unlock perks. Promoter chunks can add a daily bonus on top of Free. Free keeps the saved-line cap. Pro removes caps and unlocks everything."
-      ],
-      promoterTitle: "Promoter details",
-      baseDaily: "Base daily",
-      unlocksNow: "Unlocks now",
-      nextUnlock: "Next unlock",
-      allUnlocked: "All listed unlocks reached",
-      antiAbuse: "Only eligible referrals count. Signups alone do not unlock perks.",
-      confirmed: "Confirmed",
-      active: "Active",
-      eligible: "Eligible",
-      legacy: "Older refs",
-      clicks: "Clicks",
-      bgSlots: "BG slots",
-      saveCap: "Save cap",
-      unlimited: "Unlimited",
-      onePack: "1 cosmetics pack",
-      allPacks: "All cosmetics packs",
-      proTrial: "Pro Trial 7d",
-      discount: "50% off 1 month",
-      toolkit: "Referral Toolkit",
-      copied: "Copied.",
-      leaderboardLoading: "Loading...",
-      leaderboardEmpty: "No data yet",
-      youLabel: "You",
-      rulesLabel: "rules"
-    },
-    es: {
-      title: "CГіmo funciona",
-      note: "Los referidos desbloquean ventajas solo despuГ©s de uso real del producto (no solo registros).",
-      desc: "Ruta de desbloqueo:",
-      items: [
-        "Confirmed cuenta cuando alguien conecta un handle con tu enlace.",
-        "Active cuenta usuarios confirmados con uso registrado.",
-        "Eligible cuenta solo despuГ©s de uso real, controles antifraude y el umbral mГ­nimo de actividad.",
-        "Los referidos desbloquean ventajas. Free mantiene el lГ­mite de lГ­neas guardadas. Pro elimina lГ­mites y desbloquea todo."
-      ],
-      promoterTitle: "Detalles del promotor",
-      baseDaily: "Base diaria",
-      unlocksNow: "Desbloqueos actuales",
-      nextUnlock: "Siguiente desbloqueo",
-      allUnlocked: "Todos los desbloqueos listados ya estГЎn activos",
-      antiAbuse: "Solo cuentan los referidos eligible. El registro por sГ­ solo no desbloquea ventajas.",
-      confirmed: "Confirmados",
-      active: "Activos",
-      eligible: "VГЎlidos",
-      legacy: "Older refs",
-      clicks: "Clics",
-      bgSlots: "Fondos",
-      saveCap: "LГ­mite guardado",
-      unlimited: "Ilimitado",
-      onePack: "1 pack cosmГ©tico",
-      allPacks: "Todos los packs cosmГ©ticos",
-      proTrial: "Prueba Pro 7d",
-      discount: "50% por 1 mes",
-      toolkit: "Referral Toolkit",
-      copied: "Copiado.",
-      leaderboardLoading: "Cargando...",
-      leaderboardEmpty: "AГєn no hay datos",
-      youLabel: "TГє",
-      rulesLabel: "reglas"
-    },
-    ru: {
-      title: "РљР°Рє СЌС‚Рѕ СЂР°Р±РѕС‚Р°РµС‚",
-      note: "Р РµС„РµСЂР°Р»С‹ РѕС‚РєСЂС‹РІР°СЋС‚ Р±РѕРЅСѓСЃС‹ С‚РѕР»СЊРєРѕ РїРѕСЃР»Рµ СЂРµР°Р»СЊРЅРѕРіРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РїСЂРѕРґСѓРєС‚Р°, Р° РЅРµ РїСЂРѕСЃС‚Рѕ СЂРµРіРёСЃС‚СЂР°С†РёРё.",
-      desc: "РџСѓС‚СЊ СЂР°Р·Р±Р»РѕРєРёСЂРѕРІРѕРє:",
-      items: [
-        "РџРѕРґС‚РІРµСЂР¶РґС‘РЅРЅС‹Рµ СЃС‡РёС‚Р°СЋС‚СЃСЏ, РєРѕРіРґР° С‡РµР»РѕРІРµРє РїРѕРґРєР»СЋС‡РёР» С…РµРЅРґР» РїРѕ С‚РІРѕРµР№ СЃСЃС‹Р»РєРµ.",
-        "РђРєС‚РёРІРЅС‹Рµ СЃС‡РёС‚Р°СЋС‚СЃСЏ РґР»СЏ РїРѕРґС‚РІРµСЂР¶РґС‘РЅРЅС‹С… РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ СЃ Р·Р°С„РёРєСЃРёСЂРѕРІР°РЅРЅС‹Рј РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј.",
-        "Р—Р°С‡С‚С‘РЅРЅС‹Рµ СЃС‡РёС‚Р°СЋС‚СЃСЏ С‚РѕР»СЊРєРѕ РїРѕСЃР»Рµ СЂРµР°Р»СЊРЅРѕРіРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ, Р°РЅС‚РёС„СЂРѕРґ-РїСЂРѕРІРµСЂРѕРє Рё РјРёРЅРёРјР°Р»СЊРЅРѕРіРѕ РїРѕСЂРѕРіР° Р°РєС‚РёРІРЅРѕСЃС‚Рё.",
-        "Р РµС„РµСЂР°Р»С‹ РѕС‚РєСЂС‹РІР°СЋС‚ Р±РѕРЅСѓСЃС‹. РџСЂРѕРјРѕСѓС‚РµСЂСЃРєРёРµ С‡Р°РЅРєРё РјРѕРіСѓС‚ РґРѕР±Р°РІРёС‚СЊ РґРЅРµРІРЅРѕР№ Р±РѕРЅСѓСЃ РїРѕРІРµСЂС… Free. Р’Рѕ Free СЃРѕС…СЂР°РЅСЏРµС‚СЃСЏ Р»РёРјРёС‚ СЃРѕС…СЂР°РЅС‘РЅРЅС‹С… СЃС‚СЂРѕРє. Pro СЃРЅРёРјР°РµС‚ Р»РёРјРёС‚С‹ Рё РѕС‚РєСЂС‹РІР°РµС‚ РІСЃС‘."
-      ],
-      promoterTitle: "Р”РµС‚Р°Р»Рё РїСЂРѕРјРѕСѓС‚РµСЂР°",
-      baseDaily: "Р‘Р°Р·Р° РІ РґРµРЅСЊ",
-      unlocksNow: "Р§С‚Рѕ РѕС‚РєСЂС‹С‚Рѕ СЃРµР№С‡Р°СЃ",
-      nextUnlock: "РЎР»РµРґСѓСЋС‰Р°СЏ СЂР°Р·Р±Р»РѕРєРёСЂРѕРІРєР°",
-      allUnlocked: "Р’СЃРµ Р·Р°СЏРІР»РµРЅРЅС‹Рµ СЂР°Р·Р±Р»РѕРєРёСЂРѕРІРєРё СѓР¶Рµ РїРѕР»СѓС‡РµРЅС‹",
-      antiAbuse: "РЎС‡РёС‚Р°СЋС‚СЃСЏ С‚РѕР»СЊРєРѕ Р·Р°С‡С‚С‘РЅРЅС‹Рµ СЂРµС„РµСЂР°Р»С‹. РћРґРЅР° СЂРµРіРёСЃС‚СЂР°С†РёСЏ Р±РµР· РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РЅРёС‡РµРіРѕ РЅРµ РѕС‚РєСЂС‹РІР°РµС‚.",
-      confirmed: "РџРѕРґС‚РІРµСЂР¶РґС‘РЅРЅС‹Рµ",
-      active: "РђРєС‚РёРІРЅС‹Рµ",
-      eligible: "Р—Р°С‡С‚С‘РЅРЅС‹Рµ",
-      legacy: "Older refs",
-      clicks: "РљР»РёРєРё",
-      bgSlots: "РЎР»РѕС‚С‹ С„РѕРЅР°",
-      saveCap: "Р›РёРјРёС‚ СЃС‚СЂРѕРє",
-      unlimited: "Р‘РµР· Р»РёРјРёС‚Р°",
-      onePack: "1 РєРѕСЃРјРµС‚РёС‡РµСЃРєРёР№ РїР°Рє",
-      allPacks: "Р’СЃРµ РєРѕСЃРјРµС‚РёС‡РµСЃРєРёРµ РїР°РєРё",
-      proTrial: "Pro Trial 7d",
-      discount: "50% на 1 месяц",
-      toolkit: "Referral Toolkit",
-      copied: "Скопировано.",
-      leaderboardLoading: "Загрузка...",
-      leaderboardEmpty: "Данных пока нет",
-      youLabel: "Ты",
-      rulesLabel: "правила"
-    },
-    de: {
-      title: "So funktioniert's",
-      note: "Referrals schalten Vorteile erst nach echter Produktnutzung frei, nicht nur nach Signups.",
-      desc: "Unlock-Pfad:",
-      items: [
-        "Confirmed zГ¤hlt, wenn jemand mit deinem Link einen Handle verbindet.",
-        "Active zГ¤hlt bestГ¤tigte Nutzer mit erfasster Nutzung.",
-        "Eligible zГ¤hlt erst nach echter Nutzung, Anti-Fraud-PrГјfungen und dem Mindest-AktivitГ¤tsschwellenwert.",
-        "Referrals schalten Vorteile frei. Free behГ¤lt das Limit fГјr gespeicherte Zeilen. Pro entfernt Limits und schaltet alles frei."
-      ],
-      promoterTitle: "Promoter-Details",
-      baseDaily: "Tagesbasis",
-      unlocksNow: "Aktuelle Unlocks",
-      nextUnlock: "NГ¤chster Unlock",
-      allUnlocked: "Alle aufgefГјhrten Unlocks erreicht",
-      antiAbuse: "Nur eligible Referrals zГ¤hlen. Ein Signup allein schaltet nichts frei.",
-      confirmed: "BestГ¤tigt",
-      active: "Aktiv",
-      eligible: "Eligible",
-      legacy: "Older refs",
-      clicks: "Klicks",
-      bgSlots: "BG-Slots",
-      saveCap: "Speicherlimit",
-      unlimited: "Unbegrenzt",
-      onePack: "1 Kosmetik-Pack",
-      allPacks: "Alle Kosmetik-Packs",
-      proTrial: "Pro-Test 7d",
-      discount: "50% fГјr 1 Monat",
-      toolkit: "Referral Toolkit",
-      copied: "Kopiert.",
-      leaderboardLoading: "Lädt...",
-      leaderboardEmpty: "Noch keine Daten",
-      youLabel: "Du",
-      rulesLabel: "Regeln"
-    },
-    fr: {
-      title: "Comment Г§a marche",
-      note: "Les referrals dГ©bloquent des avantages seulement aprГЁs une vraie utilisation du produit, pas juste une inscription.",
-      desc: "Parcours de dГ©blocage :",
-      items: [
-        "Confirmed compte quand quelqu'un connecte un handle avec ton lien.",
-        "Active compte les utilisateurs confirmГ©s avec une utilisation enregistrГ©e.",
-        "Eligible compte seulement aprГЁs une vraie utilisation, les contrГґles anti-fraude et le seuil minimum d'activitГ©.",
-        "Les referrals dГ©bloquent des avantages. Free garde la limite de lignes sauvegardГ©es. Pro retire les limites et dГ©bloque tout."
-      ],
-      promoterTitle: "DГ©tails du promoteur",
-      baseDaily: "Base quotidienne",
-      unlocksNow: "DГ©blocages actuels",
-      nextUnlock: "Prochain dГ©blocage",
-      allUnlocked: "Tous les dГ©blocages listГ©s sont atteints",
-      antiAbuse: "Seuls les referrals eligible comptent. Une simple inscription ne dГ©bloque rien.",
-      confirmed: "ConfirmГ©s",
-      active: "Actifs",
-      eligible: "Valides",
-      legacy: "Older refs",
-      clicks: "Clics",
-      bgSlots: "Slots fond",
-      saveCap: "Limite sauvegarde",
-      unlimited: "IllimitГ©",
-      onePack: "1 pack cosmГ©tique",
-      allPacks: "Tous les packs cosmГ©tiques",
-      proTrial: "Essai Pro 7j",
-      discount: "50% pour 1 mois",
-      toolkit: "Referral Toolkit",
-      copied: "CopiГ©.",
-      leaderboardLoading: "Chargement...",
-      leaderboardEmpty: "Pas encore de donnГ©es",
-      youLabel: "Toi",
-      rulesLabel: "rГЁgles"
-    },
-    hi: {
-      title: "а¤Їа¤№ а¤•аҐ€а¤ёаҐ‡ а¤•а¤ѕа¤® а¤•а¤°а¤¤а¤ѕ а¤№аҐ€",
-      note: "а¤°аҐ‡а¤«а¤°а¤І perks а¤¤а¤­аҐЂ unlock а¤•а¤°а¤¤аҐ‡ а¤№аҐ€а¤‚ а¤ња¤¬ а¤ЄаҐЌа¤°аҐ‹а¤Ўа¤•аҐЌа¤џ а¤•а¤ѕ а¤…а¤ёа¤ІаҐЂ а¤‰а¤Єа¤ЇаҐ‹а¤— а¤№аҐ‹, а¤ёа¤їа¤°аҐЌа¤« signup а¤Єа¤° а¤Ёа¤№аҐЂа¤‚аҐ¤",
-      desc: "Unlock path:",
-      items: [
-        "Confirmed а¤¤а¤¬ а¤—а¤їа¤Ёа¤ѕ а¤ња¤ѕа¤¤а¤ѕ а¤№аҐ€ а¤ња¤¬ а¤•аҐ‹а¤€ а¤†а¤Єа¤•аҐ‡ а¤Іа¤їа¤‚а¤• а¤ёаҐ‡ handle connect а¤•а¤°а¤¤а¤ѕ а¤№аҐ€аҐ¤",
-        "Active а¤‰а¤Ё confirmed users а¤•аҐ‹ а¤—а¤їа¤Ёа¤¤а¤ѕ а¤№аҐ€ а¤ња¤їа¤Ёа¤•а¤ѕ usage а¤°а¤їа¤•аҐ‰а¤°аҐЌа¤Ў а¤№аҐЃа¤† а¤№аҐ€аҐ¤",
-        "Eligible а¤¤а¤­аҐЂ а¤—а¤їа¤Ёа¤ѕ а¤ња¤ѕа¤¤а¤ѕ а¤№аҐ€ а¤ња¤¬ real usage, anti-fraud checks а¤”а¤° minimum activity threshold а¤ЄаҐ‚а¤°а¤ѕ а¤№аҐ‹аҐ¤",
-        "а¤°аҐ‡а¤«а¤°а¤І perks unlock а¤•а¤°а¤¤аҐ‡ а¤№аҐ€а¤‚аҐ¤ Free а¤®аҐ‡а¤‚ saved lines а¤•а¤ѕ cap а¤°а¤№а¤¤а¤ѕ а¤№аҐ€аҐ¤ Pro limits а¤№а¤џа¤ѕа¤¤а¤ѕ а¤№аҐ€ а¤”а¤° а¤ёа¤¬ unlock а¤•а¤°а¤¤а¤ѕ а¤№аҐ€аҐ¤"
-      ],
-      promoterTitle: "Promoter details",
-      baseDaily: "Base daily",
-      unlocksNow: "а¤…а¤¬ а¤•аҐЌа¤Їа¤ѕ unlock а¤№аҐ€",
-      nextUnlock: "а¤…а¤—а¤Іа¤ѕ unlock",
-      allUnlocked: "а¤ёа¤­аҐЂ listed unlocks а¤®а¤їа¤І а¤љаҐЃа¤•аҐ‡ а¤№аҐ€а¤‚",
-      antiAbuse: "а¤ёа¤їа¤°аҐЌа¤« eligible referrals а¤—а¤їа¤ЁаҐ‡ а¤ња¤ѕа¤¤аҐ‡ а¤№аҐ€а¤‚аҐ¤ а¤ёа¤їа¤°аҐЌа¤« signup а¤ёаҐ‡ а¤•аҐЃа¤› unlock а¤Ёа¤№аҐЂа¤‚ а¤№аҐ‹а¤¤а¤ѕаҐ¤",
-      confirmed: "Confirmed",
-      active: "Active",
-      eligible: "Eligible",
-      legacy: "Older refs",
-      clicks: "Clicks",
-      bgSlots: "BG slots",
-      saveCap: "Save cap",
-      unlimited: "Unlimited",
-      onePack: "1 cosmetics pack",
-      allPacks: "All cosmetics packs",
-      proTrial: "Pro Trial 7d",
-      discount: "50% off 1 month",
-      toolkit: "Referral Toolkit",
-      copied: "Copied.",
-      leaderboardLoading: "Loading...",
-      leaderboardEmpty: "No data yet",
-      youLabel: "You",
-      rulesLabel: "rules"
-    },
-    nl: {
-      title: "Hoe het werkt",
-      note: "Referrals ontgrendelen voordelen pas na echt productgebruik, niet alleen na aanmeldingen.",
-      desc: "Ontgrendelpad:",
-      items: [
-        "Bevestigd telt zodra iemand met jouw link een handle koppelt.",
-        "Actief telt bevestigde gebruikers met geregistreerd gebruik.",
-        "Eligible telt pas na echt gebruik, anti-fraud checks en de minimale activiteitsdrempel.",
-        "Referrals ontgrendelen voordelen. Free houdt de limiet voor opgeslagen regels. Pro haalt limieten weg en ontgrendelt alles."
-      ],
-      promoterTitle: "Promoter-details",
-      baseDaily: "Basis per dag",
-      unlocksNow: "Nu ontgrendeld",
-      nextUnlock: "Volgende unlock",
-      allUnlocked: "Alle genoemde unlocks zijn bereikt",
-      antiAbuse: "Alleen eligible referrals tellen mee. Alleen aanmelden ontgrendelt niets.",
-      confirmed: "Bevestigd",
-      active: "Actief",
-      eligible: "Eligible",
-      legacy: "Older refs",
-      clicks: "Kliks",
-      bgSlots: "BG-slots",
-      saveCap: "Opslaglimiet",
-      unlimited: "Onbeperkt",
-      onePack: "1 cosmetics pack",
-      allPacks: "Alle cosmetics packs",
-      proTrial: "Pro Trial 7d",
-      discount: "50% korting 1 maand",
-      toolkit: "Referral Toolkit",
-      copied: "Gekopieerd.",
-      leaderboardLoading: "Laden...",
-      leaderboardEmpty: "Nog geen data",
-      youLabel: "Jij",
-      rulesLabel: "regels"
-    },
-    tr: {
-      title: "NasД±l Г§alД±ЕџД±r",
-      note: "Referrals, sadece kayД±tla deДџil, gerГ§ek ГјrГјn kullanД±mД± sonrasД± avantaj aГ§ar.",
-      desc: "AГ§Д±lma yolu:",
-      items: [
-        "Confirmed, biri senin linkinle handle baДџladД±ДџД±nda sayД±lД±r.",
-        "Active, kullanД±mД± kayda geГ§en confirmed kullanД±cД±larД± sayar.",
-        "Eligible, ancak gerГ§ek kullanД±m, anti-fraud kontrolleri ve minimum aktivite eЕџiДџi sonrasД± sayД±lД±r.",
-        "Referrals unlock perks. Free keeps the saved-line cap. Pro removes caps and unlocks everything."
-      ],
-      promoterTitle: "Promoter detaylarД±",
-      baseDaily: "GГјnlГјk taban",
-      unlocksNow: "Ећu an aГ§Д±k",
-      nextUnlock: "Sonraki unlock",
-      allUnlocked: "Listelenen tГјm unlock'lar aГ§Д±ldД±",
-      antiAbuse: "Sadece eligible referrals sayД±lД±r. Tek baЕџД±na kayД±t avantaj aГ§maz.",
-      confirmed: "OnaylД±",
-      active: "Aktif",
-      eligible: "Eligible",
-      legacy: "Older refs",
-      clicks: "TД±klama",
-      bgSlots: "BG slot",
-      saveCap: "KayД±t limiti",
-      unlimited: "SД±nД±rsД±z",
-      onePack: "1 cosmetics pack",
-      allPacks: "TГјm cosmetics pack'ler",
-      proTrial: "Pro Trial 7d",
-      discount: "1 ay %50 indirim",
-      toolkit: "Referral Toolkit",
-      copied: "KopyalandД±.",
-      leaderboardLoading: "Yükleniyor...",
-      leaderboardEmpty: "HenГјz veri yok",
-      youLabel: "Sen",
-      rulesLabel: "kurallar"
-    },
-    id: {
-      title: "Cara kerja",
-      note: "Referral hanya membuka benefit setelah pemakaian produk nyata, bukan cuma signup.",
-      desc: "Jalur unlock:",
-      items: [
-        "Confirmed dihitung saat seseorang menghubungkan handle lewat link kamu.",
-        "Active menghitung user confirmed yang punya usage tercatat.",
-        "Eligible baru dihitung setelah penggunaan nyata, cek anti-fraud, dan ambang aktivitas minimum.",
-        "Referral membuka benefit. Free tetap memakai batas baris tersimpan. Pro menghapus limit dan membuka semuanya."
-      ],
-      promoterTitle: "Detail promoter",
-      baseDaily: "Basis harian",
-      unlocksNow: "Unlock saat ini",
-      nextUnlock: "Unlock berikutnya",
-      allUnlocked: "Semua unlock yang terdaftar sudah tercapai",
-      antiAbuse: "Hanya referral eligible yang dihitung. Signup saja tidak membuka benefit.",
-      confirmed: "Confirmed",
-      active: "Active",
-      eligible: "Eligible",
-      legacy: "Older refs",
-      clicks: "Klik",
-      bgSlots: "Slot BG",
-      saveCap: "Batas simpan",
-      unlimited: "Unlimited",
-      onePack: "1 cosmetics pack",
-      allPacks: "Semua cosmetics pack",
-      proTrial: "Pro Trial 7d",
-      discount: "Diskon 50% 1 bulan",
-      toolkit: "Referral Toolkit",
-      copied: "Disalin.",
-      leaderboardLoading: "Memuat...",
-      leaderboardEmpty: "Belum ada data",
-      youLabel: "Kamu",
-      rulesLabel: "aturan"
-    },
-    ja: {
-      title: "д»•зµ„гЃї",
-      note: "зґ№д»‹з‰№е…ёгЃЇгЂЃз™»йЊІгЃ гЃ‘гЃ§гЃЇгЃЄгЃЏе®џйљ›гЃ®е€©з”ЁгЃЊзўєиЄЌгЃ•г‚ЊгЃџеѕЊгЃ«гЃ гЃ‘и§Јж”ѕгЃ•г‚ЊгЃѕгЃ™гЂ‚",
-      desc: "и§Јж”ѕг‚№гѓ†гѓѓгѓ—:",
-      items: [
-        "Confirmed гЃЇгЂЃгЃ‚гЃЄгЃџгЃ®гѓЄгѓіг‚ЇгЃ‹г‚‰иЄ°гЃ‹гЃЊгѓЏгѓігѓ‰гѓ«г‚’жЋҐз¶љгЃ™г‚‹гЃЁеЉ з®—гЃ•г‚ЊгЃѕгЃ™гЂ‚",
-        "Active гЃЇгЂЃе€©з”Ёе®џзёѕгЃЊиЁйЊІгЃ•г‚ЊгЃџ confirmed гѓ¦гѓјг‚¶гѓјг‚’ж•°гЃ€гЃѕгЃ™гЂ‚",
-        "Eligible гЃЇгЂЃе®џе€©з”Ёгѓ»дёЌж­ЈгѓЃг‚§гѓѓг‚Їгѓ»жњЂдЅЋжґ»е‹•жќЎд»¶г‚’жєЂгЃџгЃ—гЃџеѕЊгЃ«гЃ гЃ‘еЉ з®—гЃ•г‚ЊгЃѕгЃ™гЂ‚",
-        "Referrals unlock perks. Free keeps the saved-line cap. Pro removes caps and unlocks everything."
-      ],
-      promoterTitle: "гѓ—гѓ­гѓўгѓјг‚їгѓји©ізґ°",
-      baseDaily: "еџєжњ¬гѓ‡г‚¤гѓЄгѓј",
-      unlocksNow: "зЏѕењЁгЃ®и§Јж”ѕ",
-      nextUnlock: "ж¬ЎгЃ®и§Јж”ѕ",
-      allUnlocked: "иЎЁз¤єдё­гЃ®и§Јж”ѕгЃЇгЃ™гЃ№гЃ¦йЃ”ж€ђжё€гЃїгЃ§гЃ™",
-      antiAbuse: "г‚«г‚¦гѓігѓ€гЃ•г‚Њг‚‹гЃ®гЃЇ eligible зґ№д»‹гЃ®гЃїгЃ§гЃ™гЂ‚з™»йЊІгЃ гЃ‘гЃ§гЃЇз‰№е…ёгЃЇи§Јж”ѕгЃ•г‚ЊгЃѕгЃ›г‚“гЂ‚",
-      confirmed: "зўєиЄЌжё€гЃї",
-      active: "г‚ўг‚Їгѓ†г‚Јгѓ–",
-      eligible: "еЇѕи±Ў",
-      legacy: "Older refs",
-      clicks: "г‚ЇгѓЄгѓѓг‚Ї",
-      bgSlots: "BGг‚№гѓ­гѓѓгѓ€",
-      saveCap: "дїќе­дёЉй™ђ",
-      unlimited: "з„Ўе€¶й™ђ",
-      onePack: "г‚іг‚№гѓЎ 1 гѓ‘гѓѓг‚Ї",
-      allPacks: "гЃ™гЃ№гЃ¦гЃ®г‚іг‚№гѓЎгѓ‘гѓѓг‚Ї",
-      proTrial: "Pro Trial 7d",
-      discount: "1гЃ‹жњ€ 50% г‚Єгѓ•",
-      toolkit: "Referral Toolkit",
-      copied: "г‚ігѓ”гѓјгЃ—гЃѕгЃ—гЃџгЂ‚",
-      leaderboardLoading: "иЄ­гЃїиѕјгЃїдё­вЂ¦",
-      leaderboardEmpty: "гЃѕгЃ гѓ‡гѓјг‚їгЃЇгЃ‚г‚ЉгЃѕгЃ›г‚“",
-      youLabel: "гЃ‚гЃЄгЃџ",
-      rulesLabel: "гѓ«гѓјгѓ«"
-    },
-    zh: {
-      title: "иїђдЅњж–№ејЏ",
-      note: "й‚ЂиЇ·еҐ–еЉ±еЏЄжњ‰ењЁзњџе®ћдЅїз”Ёдє§е“ЃеђЋж‰Ќдјљи§Јй”ЃпјЊдёЌжЇеЏЄйќ жіЁе†ЊгЂ‚",
-      desc: "и§Јй”Ѓи·Їеѕ„:",
-      items: [
-        "Confirmedпјљжњ‰дєєйЂљиї‡дЅ зљ„й“ѕжЋҐиїћжЋҐ handle еђЋи®Ўе…ҐгЂ‚",
-        "Activeпјље·ІзЎ®и®¤дё”жњ‰зњџе®ћдЅїз”Ёи®°еЅ•зљ„з”Ёж€·и®Ўе…ҐгЂ‚",
-        "EligibleпјљеЏЄжњ‰йЂљиї‡зњџе®ћдЅїз”ЁгЂЃеЏЌдЅњејЉжЈЂжџҐе’ЊжњЂдЅЋжґ»и·ѓй—Ёж§›еђЋж‰Ќи®Ўе…ҐгЂ‚",
-        "й‚ЂиЇ·дјљи§Јй”Ѓж›ґе¤љжќѓз›ЉгЂ‚Free дїќз•™е·Ідїќе­иЎЊж•°дёЉй™ђгЂ‚Pro дјљз§»й™¤й™ђе€¶е№¶и§Јй”Ѓе…ЁйѓЁе†…е®№гЂ‚"
-      ],
-      promoterTitle: "жЋЁе№їиЇ¦жѓ…",
-      baseDaily: "еџєзЎЂж—Ґйўќеє¦",
-      unlocksNow: "еЅ“е‰Ќе·Іи§Јй”Ѓ",
-      nextUnlock: "дё‹дёЂжЎЈи§Јй”Ѓ",
-      allUnlocked: "е·Іиѕѕе€°ж‰Ђжњ‰е€—е‡єзљ„и§Јй”ЃжЎЈдЅЌ",
-      antiAbuse: "еЏЄжњ‰ eligible й‚ЂиЇ·ж‰Ќи®Ўж•°гЂ‚д»…жіЁе†ЊдёЌдјљи§Јй”Ѓд»»дЅ•жќѓз›ЉгЂ‚",
-      confirmed: "е·ІзЎ®и®¤",
-      active: "жґ»и·ѓ",
-      eligible: "жњ‰ж•€",
-      legacy: "Older refs",
-      clicks: "з‚№е‡»",
-      bgSlots: "иѓЊж™ЇдЅЌ",
-      saveCap: "дїќе­дёЉй™ђ",
-      unlimited: "ж— й™ђ",
-      onePack: "1 дёЄе¤–и§‚еЊ…",
-      allPacks: "е…ЁйѓЁе¤–и§‚еЊ…",
-      proTrial: "Pro Trial 7d",
-      discount: "й¦–жњ€ 5 жЉ",
-      toolkit: "Referral Toolkit",
-      copied: "е·Іе¤Ќе€¶гЂ‚",
-      leaderboardLoading: "еЉ иЅЅдё­вЂ¦",
-      leaderboardEmpty: "жљ‚ж— ж•°жЌ®",
-      youLabel: "дЅ ",
-      rulesLabel: "и§„е€™"
-    }
+function getReferralUiCopy(_lang){
+  const fallback = {
+    title: "How it works",
+    note: "Referrals unlock perks only after real product usage (not just signups).",
+    desc: "What actually unlocks perks:",
+    items: [
+      "Share your link. Only real usage moves unlocks.",
+      "<b>Confirmed</b> = a handle connected through your link.",
+      "<b>Active</b> = that confirmed user actually used GM or GN.",
+      "<b>Eligible</b> = max(active, carry-over)."
+    ],
+    promoterTitle: "Promoter details",
+    baseDaily: "Base daily",
+    unlocksNow: "Unlocks now",
+    nextUnlock: "Next unlock",
+    allUnlocked: "All listed unlocks reached",
+    antiAbuse: "Only eligible referrals count. Signups alone do not unlock perks.",
+    confirmed: "Confirmed",
+    active: "Active",
+    eligible: "Eligible",
+    legacy: "Carry-over",
+    clicks: "Clicks",
+    bgSlots: "BG slots",
+    saveCap: "Save cap",
+    unlimited: "Unlimited",
+    onePack: "1 cosmetics pack",
+    allPacks: "All cosmetics packs",
+    proTrial: "Pro Trial 7d",
+    discount: "50% off 1 month",
+    toolkit: "Referral Toolkit",
+    copied: "Copied.",
+    leaderboardLoading: "Loading...",
+    leaderboardEmpty: "No data yet",
+    youLabel: "You",
+    rulesLabel: "rules",
+    invitedNote: "This list shows real usage only. Fraud-flagged or empty signups do not stay here."
   };
-  return table[String(lang || "en").toLowerCase()] || table.en;
+  const items = [
+    t("r_li1") || fallback.items[0],
+    t("r_li2c") || t("r_li2") || fallback.items[1],
+    t("r_li3") || fallback.items[2],
+    t("r_li4") || fallback.items[3]
+  ];
+  return {
+    title: t("r_how") || fallback.title,
+    note: t("r_note") || fallback.note,
+    desc: t("r_desc") || fallback.desc,
+    items,
+    promoterTitle: t("ref_promoter_details") || fallback.promoterTitle,
+    baseDaily: t("ref_daily_limit_title") || fallback.baseDaily,
+    unlocksNow: fallback.unlocksNow,
+    nextUnlock: fallback.nextUnlock,
+    allUnlocked: fallback.allUnlocked,
+    antiAbuse: t("ref_abuse_note") || fallback.antiAbuse,
+    confirmed: t("ref_k_confirmed") || fallback.confirmed,
+    active: t("ref_k_active") || fallback.active,
+    eligible: t("ref_k_eligible") || fallback.eligible,
+    legacy: t("ref_k_legacy") || fallback.legacy,
+    clicks: fallback.clicks,
+    bgSlots: fallback.bgSlots,
+    saveCap: fallback.saveCap,
+    unlimited: fallback.unlimited,
+    onePack: fallback.onePack,
+    allPacks: fallback.allPacks,
+    proTrial: fallback.proTrial,
+    discount: fallback.discount,
+    toolkit: fallback.toolkit,
+    copied: t("toast_copied") || fallback.copied,
+    leaderboardLoading: t("r_loading") || fallback.leaderboardLoading,
+    leaderboardEmpty: t("lb_empty") || fallback.leaderboardEmpty,
+    youLabel: t("lb_you") || fallback.youLabel,
+    rulesLabel: fallback.rulesLabel,
+    invitedNote: t("r_invited_note") || fallback.invitedNote
+  };
 }
 
-function getGuideUiCopy(lang){
-  const table = {
-    en: {
-      gm: {
-        title: "How to use GM",
-        desc: "Build short X-style morning replies that feel easy to post right away. Good GM should sound awake, social, and human instead of stiff filler.",
-        items: [
-          "Fast = one short X-ready line. Think closer to 'gm, coffee carrying' than a full paragraph.",
-          "Balanced = 1вЂ“2 natural clauses with a real morning turn.",
-          "Full = richer, but still compact. No essay mode.",
-          "Tone should shift vibe, not manufacture fake variation.",
-          "Best gets stronger when you keep only lines you would actually paste on X."
-        ]
-      },
-      gn: {
-        title: "How to use GN",
-        desc: "Keep GN softer, calmer, and more sign-off friendly. The best GN lines feel like a real wind-down post, not a dressed-up slogan.",
-        items: [
-          "Fast = one short X-ready close for quick night use.",
-          "Balanced = a gentle 1вЂ“2 clause good-night line.",
-          "Full = fuller mood, still compact and postable.",
-          "A little emoji is fine. Too much sparkle kills the line.",
-          "Best improves after you delete robotic, flat, or over-hyped lines."
-        ]
-      },
-      ext: {
-        title: "How unlocks work",
-        desc: "Referral unlocks expand cosmetics first. Writing styles and preset packs fully open with Pro, while the extension stays safe copy-only.",
-        items: [
-          "Free previews the first 10 extension themes.",
-          "Eligible referrals unlock +1 cosmetic at 10, then +1 every 3 at first, then +1 every 4.",
-          "Only eligible referrals count toward unlocks.",
-          "Pro unlocks all extension cosmetics, all writing styles, and all packs right away.",
-          "No X DOM injection, no auto-posting, no composer writing."
-        ]
-      }
+function getGuideUiCopy(_lang){
+  const toList = (val, fallback)=> Array.isArray(val) && val.length ? val : fallback;
+  return {
+    gm: {
+      title: t("gm_right") || "How to use GM",
+      desc: t("gm_right_desc") || "Build short English morning replies that are natural, direct, and easy to paste.",
+      items: toList(t("gm_right_list"), [
+        "Use Random 1/10/70 to add fresh lines.",
+        "Use Repeat guard to avoid near-duplicates in batches.",
+        "Use Filter to search inside saved lines."
+      ])
     },
-    ru: {
-      gm: {
-        title: "РљР°Рє РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ GM",
-        desc: "РЎРѕР±РёСЂР°Р№ РєРѕСЂРѕС‚РєРёРµ X-style СѓС‚СЂРµРЅРЅРёРµ РѕС‚РІРµС‚С‹, РєРѕС‚РѕСЂС‹Рµ СЂРµР°Р»СЊРЅРѕ С…РѕС‡РµС‚СЃСЏ СЃСЂР°Р·Сѓ РІСЃС‚Р°РІРёС‚СЊ. РҐРѕСЂРѕС€РёР№ GM Р·РІСѓС‡РёС‚ Р¶РёРІРѕ, РїРѕ-СѓС‚СЂРµРЅРЅРµРјСѓ Рё РїРѕ-С‡РµР»РѕРІРµС‡РµСЃРєРё, Р° РЅРµ РєР°Рє СЃСѓС…Р°СЏ Р·Р°РіРѕС‚РѕРІРєР°.",
-        items: [
-          "Fast = РѕРґРЅР° РєРѕСЂРѕС‚РєР°СЏ X-ready СЃС‚СЂРѕРєР°. Р‘Р»РёР¶Рµ Рє 'gm, coffee carrying', Р° РЅРµ Рє Р°Р±Р·Р°С†Сѓ С‚РµРєСЃС‚Р°.",
-          "Balanced = РµСЃС‚РµСЃС‚РІРµРЅРЅР°СЏ СЃС‚СЂРѕРєР° РЅР° 1вЂ“2 С‡Р°СЃС‚Рё СЃ РЅРѕСЂРјР°Р»СЊРЅС‹Рј СѓС‚СЂРµРЅРЅРёРј РїРѕРІРѕСЂРѕС‚РѕРј.",
-          "Full = С‡СѓС‚СЊ РЅР°СЃС‹С‰РµРЅРЅРµРµ, РЅРѕ РІСЃС‘ РµС‰С‘ РєРѕРјРїР°РєС‚РЅРѕ. Р‘РµР· СЂРµР¶РёРјР° СЌСЃСЃРµ.",
-          "Tone РґРѕР»Р¶РµРЅ РјРµРЅСЏС‚СЊ РІР°Р№Р±, Р° РЅРµ С€С‚Р°РјРїРѕРІР°С‚СЊ РёСЃРєСѓСЃСЃС‚РІРµРЅРЅРѕРµ СЂР°Р·РЅРѕРѕР±СЂР°Р·РёРµ.",
-          "Best СЂР°Р±РѕС‚Р°РµС‚ СЃРёР»СЊРЅРµРµ, РєРѕРіРґР° С‚С‹ РѕСЃС‚Р°РІР»СЏРµС€СЊ С‚РѕР»СЊРєРѕ С‚Рµ СЃС‚СЂРѕРєРё, РєРѕС‚РѕСЂС‹Рµ СЂРµР°Р»СЊРЅРѕ РІСЃС‚Р°РІРёР» Р±С‹ РІ X."
-        ]
-      },
-      gn: {
-        title: "РљР°Рє РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ GN",
-        desc: "Р”РµР»Р°Р№ GN РјСЏРіС‡Рµ, СЃРїРѕРєРѕР№РЅРµРµ Рё Р±Р»РёР¶Рµ Рє РЅРѕСЂРјР°Р»СЊРЅРѕРјСѓ sign-off. Р›СѓС‡С€РёРµ GN СЃС‚СЂРѕРєРё РѕС‰СѓС‰Р°СЋС‚СЃСЏ РєР°Рє СЂРµР°Р»СЊРЅРѕРµ Р·Р°РІРµСЂС€РµРЅРёРµ РґРЅСЏ, Р° РЅРµ РєР°Рє РЅР°С‚СЏРЅСѓС‚Р°СЏ РѕС‚РєСЂС‹С‚РєР°.",
-        items: [
-          "Fast = РѕРґРЅР° РєРѕСЂРѕС‚РєР°СЏ X-ready РЅРѕС‡РЅР°СЏ СЃС‚СЂРѕРєР°.",
-          "Balanced = РјСЏРіРєР°СЏ good-night СЃС‚СЂРѕРєР° РЅР° 1вЂ“2 С‡Р°СЃС‚Рё.",
-          "Full = Р±РѕР»СЊС€Рµ РЅР°СЃС‚СЂРѕРµРЅРёСЏ, РЅРѕ РІСЃС‘ РµС‰С‘ РєРѕРјРїР°РєС‚РЅРѕ Рё РїРѕСЃС‚Р°Р±РµР»СЊРЅРѕ.",
-          "РќРµР±РѕР»СЊС€РѕР№ emoji вЂ” РЅРѕСЂРјР°Р»СЊРЅРѕ. РљРѕРіРґР° РёС… СЃР»РёС€РєРѕРј РјРЅРѕРіРѕ, СЃС‚СЂРѕРєР° СѓРјРёСЂР°РµС‚.",
-          "Best СЃС‚Р°РЅРѕРІРёС‚СЃСЏ СЃРёР»СЊРЅРµРµ, РєРѕРіРґР° С‚С‹ СѓРґР°Р»СЏРµС€СЊ СЂРѕР±РѕС‚РЅС‹Рµ, РїР»РѕСЃРєРёРµ Рё СЃР»РёС€РєРѕРј С…Р°Р№РїРѕРІС‹Рµ СЃС‚СЂРѕРєРё."
-        ]
-      },
-      ext: {
-        title: "РљР°Рє СЂР°Р±РѕС‚Р°СЋС‚ СЂР°Р·Р±Р»РѕРєРёСЂРѕРІРєРё",
-        desc: "Р РµС„РµСЂР°Р»С‹ СЃРЅР°С‡Р°Р»Р° РѕС‚РєСЂС‹РІР°СЋС‚ РєРѕСЃРјРµС‚РёРєСѓ. РЎС‚РёР»Рё РїРёСЃСЊРјР° Рё РіРѕС‚РѕРІС‹Рµ РїР°РєРё РїРѕР»РЅРѕСЃС‚СЊСЋ РѕС‚РєСЂС‹РІР°СЋС‚СЃСЏ С‡РµСЂРµР· Pro, Р° СЃР°РјРѕ СЂР°СЃС€РёСЂРµРЅРёРµ РѕСЃС‚Р°С‘С‚СЃСЏ Р±РµР·РѕРїР°СЃРЅС‹Рј copy-only.",
-        items: [
-          "Р’Рѕ Free РІРёРґРЅС‹ РїРµСЂРІС‹Рµ 10 С‚РµРј СЂР°СЃС€РёСЂРµРЅРёСЏ.",
-          "Eligible-СЂРµС„РµСЂР°Р»С‹ РѕС‚РєСЂС‹РІР°СЋС‚ +1 РєРѕСЃРјРµС‚РёРєСѓ РЅР° 10, РїРѕС‚РѕРј +1 РєР°Р¶РґС‹Рµ 3, Р·Р°С‚РµРј +1 РєР°Р¶РґС‹Рµ 4.",
-          "Р”Р»СЏ СЂР°Р·Р±Р»РѕРєРёСЂРѕРІРѕРє СЃС‡РёС‚Р°СЋС‚СЃСЏ С‚РѕР»СЊРєРѕ eligible-СЂРµС„РµСЂР°Р»С‹.",
-          "Pro СЃСЂР°Р·Сѓ РѕС‚РєСЂС‹РІР°РµС‚ РІСЃСЋ РєРѕСЃРјРµС‚РёРєСѓ СЂР°СЃС€РёСЂРµРЅРёСЏ, РІСЃРµ СЃС‚РёР»Рё РїРёСЃСЊРјР° Рё РІСЃРµ РїР°РєРё.",
-          "Р‘РµР· X DOM-РёРЅР¶РµРєС‚Р°, Р±РµР· Р°РІС‚РѕРїРѕСЃС‚Р° Рё Р±РµР· Р·Р°РїРёСЃРё РІ composer."
-        ]
-      }
+    gn: {
+      title: t("gn_right") || "How to use GN",
+      desc: t("gn_right_desc") || "Build short English night replies that are calm, human, and easy to paste.",
+      items: toList(t("gn_right_list"), [
+        "Use Random 1/10/70 to add fresh lines.",
+        "Use Repeat guard to avoid near-duplicates in batches.",
+        "Use Filter to search inside saved lines."
+      ])
+    },
+    ext: {
+      title: t("extthemes_right_title") || "How unlocks work",
+      desc: t("extthemes_right_desc") || "Extension skins and wallpapers sync from the site.",
+      items: toList(t("extthemes_right_list"), [
+        "Skins and wallpapers are applied from the site.",
+        "Only one skin is active at a time.",
+        "Pro unlocks all cosmetics."
+      ])
     }
   };
-  const key = String(lang || "en").toLowerCase() === "ru" ? "ru" : "en";
-  return table[key] || table.en;
 }
 
 function renderGuideRightCopy(lang){
   const ui = getGuideUiCopy(lang);
   if ($("gm_right")) $("gm_right").textContent = ui.gm.title;
   if ($("gm_right_desc")) $("gm_right_desc").textContent = ui.gm.desc;
-  if ($("gm_right_list")) $("gm_right_list").innerHTML = ui.gm.items.map((x)=>`<li>${escapeHtml(x)}</li>`).join("");
+  if ($("gm_right_list")) $("gm_right_list").innerHTML = ui.gm.items.map((x)=>`<li>${x}</li>`).join("");
   if ($("gn_right")) $("gn_right").textContent = ui.gn.title;
   if ($("gn_right_desc")) $("gn_right_desc").textContent = ui.gn.desc;
-  if ($("gn_right_list")) $("gn_right_list").innerHTML = ui.gn.items.map((x)=>`<li>${escapeHtml(x)}</li>`).join("");
+  if ($("gn_right_list")) $("gn_right_list").innerHTML = ui.gn.items.map((x)=>`<li>${x}</li>`).join("");
   if ($("extthemes_right_title")) $("extthemes_right_title").textContent = ui.ext.title;
   if ($("extthemes_right_desc")) $("extthemes_right_desc").textContent = ui.ext.desc;
-  if ($("extthemes_right_list")) $("extthemes_right_list").innerHTML = ui.ext.items.map((x)=>`<li>${escapeHtml(x)}</li>`).join("");
+  if ($("extthemes_right_list")) $("extthemes_right_list").innerHTML = ui.ext.items.map((x)=>`<li>${x}</li>`).join("");
 }
 
   function deriveReferralUnlocks(eligible, rawUnlocks){
@@ -6053,30 +6112,28 @@ function renderGuideRightCopy(lang){
   function nextReferralUnlockLabel(lang, step){
     const ui = getReferralUiCopy(lang);
     const s = Number(step || 0) || 0;
-    if (s === 1) return `1 в†’ ${ui.bgSlots}: 5`;
-    if (s === 3) return `3 в†’ ${ui.bgSlots}: 8 + ${ui.onePack}`;
-    if (s === 7) return `7 в†’ ${ui.bgSlots}: 12 + ${ui.saveCap}: 120`;
-    if (s === 15) return `15 в†’ ${ui.unlimited} ${String(ui.bgSlots).toLowerCase()} + ${ui.allPacks}`;
-    if (s === 30) return `30 в†’ ${ui.proTrial}`;
-    if (s === 50) return `50 в†’ ${ui.discount}`;
-    if (s === 100) return `100 в†’ ${ui.toolkit}`;
+    if (s === 1) return `1 -> ${ui.bgSlots}: 5`;
+    if (s === 3) return `3 -> ${ui.bgSlots}: 8 + ${ui.onePack}`;
+    if (s === 7) return `7 -> ${ui.bgSlots}: 12 + ${ui.saveCap}: 120`;
+    if (s === 15) return `15 -> ${ui.unlimited} ${String(ui.bgSlots).toLowerCase()} + ${ui.allPacks}`;
+    if (s === 30) return `30 -> ${ui.proTrial}`;
+    if (s === 50) return `50 -> ${ui.discount}`;
+    if (s === 100) return `100 -> ${ui.toolkit}`;
     return ui.allUnlocked;
   }
 
 function renderReferralRightCopy(lang){
   const ui = getReferralUiCopy(lang);
   const title = $("r_how");
-  
-    const desc = $("r_desc");
-    if (desc) desc.textContent = ru ? "Р§С‚Рѕ СЂРµР°Р»СЊРЅРѕ РѕС‚РєСЂС‹РІР°РµС‚ СѓСЂРѕРІРЅРё:" : "What actually unlocks perks:";
-    const invited = $("r_invited_note");
-    if (invited) invited.textContent = ru
-      ? "Р—РґРµСЃСЊ РѕСЃС‚Р°СЋС‚СЃСЏ С‚РѕР»СЊРєРѕ СЂРµР°Р»СЊРЅС‹Рµ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ. Р¤СЂРѕРґ-С„Р»Р°РіРё Рё РїСѓСЃС‚С‹Рµ СЂРµРіРёСЃС‚СЂР°С†РёРё РЅРµ РїРѕРїР°РґР°СЋС‚ РІ СЃРїРёСЃРѕРє."
-      : "This list shows real usage only. Fraud-flagged or empty signups do not stay here.";
-    const list = $("r_list");
-    if (list) list.innerHTML = ru
-      ? '<li id="r_li1">РџРѕРґРµР»РёСЃСЊ СЃРІРѕРµР№ СЃСЃС‹Р»РєРѕР№. РўРѕР»СЊРєРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ РґРІРёРіР°РµС‚ РѕС‚РєСЂС‹С‚РёСЏ.</li><li id="r_li2"><b>Confirmed</b> = С‡РµР»РѕРІРµРє РїРѕРґРєР»СЋС‡РёР» handle РїРѕ С‚РІРѕРµР№ СЃСЃС‹Р»РєРµ.</li><li id="r_li3"><b>Active</b> = РїРѕРґС‚РІРµСЂР¶РґС‘РЅРЅС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЂРµР°Р»СЊРЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°Р» GM РёР»Рё GN.</li><li id="r_li4"><b>Eligible</b> = active + Р°РЅС‚РёС„СЂРѕРґ + РјРёРЅРёРјР°Р»СЊРЅР°СЏ Р°РєС‚РёРІРЅРѕСЃС‚СЊ.</li>'
-      : '<li id="r_li1">Share your link. Only real usage moves unlocks.</li><li id="r_li2"><b>Confirmed</b> = a handle connected through your link.</li><li id="r_li3"><b>Active</b> = that confirmed user actually used GM or GN.</li><li id="r_li4"><b>Eligible</b> = active + anti-fraud + minimum activity.</li>';
+  if (title) title.textContent = ui.title;
+  const desc = $("r_desc");
+  if (desc) desc.textContent = ui.desc;
+  const invited = $("r_invited_note");
+  if (invited) invited.textContent = ui.invitedNote;
+  const list = $("r_list");
+  if (list) {
+    list.innerHTML = ui.items.map((line, i)=>`<li id="r_li${i + 1}">${line}</li>`).join("");
+  }
   }
 
   function patchDynamicCopy(lang, merged){
@@ -6087,6 +6144,7 @@ function renderReferralRightCopy(lang){
       }
     }catch{}
     try{ renderReferralRightCopy(lang); }catch{}
+    try{ syncPredictionFilterCopy(); }catch{}
     try{ syncModePanelCopy(); }catch{}
     try{ syncCleanFillUi(); }catch{}
     try{ syncReferralCardCopy(); }catch{}
@@ -6468,13 +6526,14 @@ function closeLangMenu(){
         const f = customFile.files && customFile.files[0];
         if (!f) return;
         if ($("customBgName")) $("customBgName").textContent = f.name || "";
-        const data = await compressImageToJpegDataURL(f);
+        const data = await compressImageToJpegDataURL(f, { profile: "site" });
         setCustomBgForTab(target, data);
         renderCustomBgUI();
         {
           const previewTab = (target === "all") ? currentTabName() : target;
           applyUserBg(previewTab);
         }
+        if ($("customBg_status")) $("customBg_status").innerHTML = `<span class="ok">Saved.</span> Auto-fitted for desktop and mobile cover mode.`;
         toast("ok", (t("toast_custom_bg_saved")||"Custom background saved."));
       }catch(e){
         if ($("customBg_status")) $("customBg_status").textContent = "Could not save this image (too large or blocked by browser storage).";
@@ -6513,7 +6572,7 @@ function closeLangMenu(){
     t = t.replace(/\b(gm|good morning|morning)\b/g, "gm");
     t = t.replace(/\b(gn|good night|night)\b/g, "gn");
     if (strength >= 1){
-      t = t.replace(/\b(legend|ser|mate|dear|degen|builder)\b/g, "@voc");
+      t = t.replace(/\b(legend|bro|degen|friend|homie)\b/g, "@voc");
     }
     if (strength >= 2){
       t = t.replace(/[~`!@#$%^&*()_=+\[\]{};:'",.<>/?\\|]/g, " ");
@@ -6594,6 +6653,37 @@ function closeLangMenu(){
     return out;
   }
 
+  async function dedupeLinesByShapeAsync(lines, strength, yieldEvery){
+    const out = [];
+    const seenExact = new Set();
+    const seenShape = new Set();
+    const step = Math.max(40, Number(yieldEvery) || 180);
+    let scanned = 0;
+    for (const raw of (lines || [])){
+      scanned++;
+      const t = normalizeLine(raw);
+      if (!t) {
+        if ((scanned % step) === 0) await yieldToUiFrame();
+        continue;
+      }
+      const exact = t.toLowerCase();
+      if (seenExact.has(exact)) {
+        if ((scanned % step) === 0) await yieldToUiFrame();
+        continue;
+      }
+      const shape = repeatKey(t, Math.max(1, strength));
+      if (shape && seenShape.has(shape)) {
+        if ((scanned % step) === 0) await yieldToUiFrame();
+        continue;
+      }
+      seenExact.add(exact);
+      if (shape) seenShape.add(shape);
+      out.push(t);
+      if ((scanned % step) === 0) await yieldToUiFrame();
+    }
+    return out;
+  }
+
   async function refillCleanFill(kind, targetCount, opts){
     const key = activeKey(kind);
     const modeEl  = kind==="gm" ? $("gmMode") : $("gnMode");
@@ -6609,10 +6699,11 @@ function closeLangMenu(){
     if (!packLocked && pack && pack.style) style = pack.style;
 
     const before = readKey(key);
-    const cleaned = dedupeLinesByShape(before, CLEAN_FILL_STRENGTH);
+    const cleaned = await dedupeLinesByShapeAsync(before, CLEAN_FILL_STRENGTH, 200);
     const removed = Math.max(0, before.length - cleaned.length);
     let cur = cleaned.slice();
     writeKey(key, cur);
+    await yieldToUiFrame();
 
     const remSlotsNow = remainingSlots(kind);
     let desiredTotal = Number.isFinite(targetCount) ? Math.max(0, Math.trunc(targetCount)) : before.length;
@@ -6627,11 +6718,13 @@ function closeLangMenu(){
     let refilled = 0;
     let attempts = 0;
     let stalled = 0;
-    while (cur.length < desiredTotal && attempts < 8){
+    const refillDeadline = Date.now() + 45000;
+    while (cur.length < desiredTotal && attempts < 3){
+      if (Date.now() > refillDeadline) break;
       attempts++;
       const missing = desiredTotal - cur.length;
-      const reqCount = Math.min(360, missing + 80 + (stalled * 40));
-      const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=0&count=${reqCount}`, "GET", null, { signal: opts?.signal, timeoutMs: 30000 });
+      const reqCount = Math.min(180, missing + 50 + (stalled * 20));
+      const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=0&count=${reqCount}`, "GET", null, { signal: opts?.signal, timeoutMs: 12000 });
       const list = Array.isArray(bulk?.list) ? bulk.list : [];
       if (!list.length) {
         stalled++;
@@ -6639,7 +6732,9 @@ function closeLangMenu(){
         continue;
       }
       let progress = 0;
+      let scannedBatch = 0;
       for (const raw of list){
+        scannedBatch++;
         const t = normalizeLine(raw);
         if (!t) continue;
         const exact = t.toLowerCase();
@@ -6654,6 +6749,7 @@ function closeLangMenu(){
         cur.push(t);
         refilled++;
         progress++;
+        if ((scannedBatch % 120) === 0) await yieldToUiFrame();
         if (cur.length >= desiredTotal) break;
       }
       if (progress <= 0) {
@@ -6719,7 +6815,7 @@ function cleanupKeyLines(lines){
     let t = String(s||"");
     t = t.replace(/\s+/g, " ").trim();
     // remove leading dashes that look botted
-    t = t.replace(/^(?:-|вЂ“|вЂ”)+\s*/,"");
+    t = t.replace(/^(?:-|–|—)+\s*/,"");
     return t;
   }
 
@@ -6863,38 +6959,6 @@ function cleanupKeyLines(lines){
     return JSON.stringify(bundle, null, 2);
   }
 
-  function diagnosticsBundle(){
-    const uiLang = localStorage.getItem(LS_SITE_LANG) || "en";
-    const gmLang = currentLang("gm");
-    const gnLang = currentLang("gn");
-    const diag = {
-      product: "GMXReply",
-      ts: new Date().toISOString(),
-      handle: getHandle(),
-      isPro: isPro(),
-      refCount: REF_COUNT || 0,
-      sub: SUB ? { active:true, tier: SUB.tier || SUB.plan || "", until: SUB.until || SUB.expires || "" } : { active:false },
-      uiLang,
-      settings: {
-        gm: { pack: localStorage.getItem(LS_GM_PACK)||"classic", cleanFill: getCleanFillEnabled("gm"), view: gmView, replyLang: gmLang, style: $("gmStyle") ? $("gmStyle").value : "" },
-        gn: { pack: localStorage.getItem(LS_GN_PACK)||"classic", cleanFill: getCleanFillEnabled("gn"), view: gnView, replyLang: gnLang, style: $("gnStyle") ? $("gnStyle").value : "" },
-      },
-      lists: {
-        gmTotal: totalSaved("gm"),
-        gnTotal: totalSaved("gn"),
-        gmLangs: getLangIndex("gm"),
-        gnLangs: getLangIndex("gn"),
-      },
-      theme: localStorage.getItem("gmx_theme") || "classic",
-      hasCustomBg: !!localStorage.getItem(LS_CUSTOM_BG_GLOBAL),
-      storage: {
-        approxBytes: (()=>{ try{ let n=0; for (const k in localStorage){ const v=localStorage.getItem(k)||""; n += (k.length+v.length)*2; } return n; } catch { return null; } })()
-      },
-      ua: navigator.userAgent
-    };
-    return JSON.stringify(diag, null, 2);
-  }
-
   function logsBundle(){
     const out = {
       ts: new Date().toISOString(),
@@ -6962,18 +7026,6 @@ function cleanupKeyLines(lines){
         const data = supportBundle();
         await copyToClipboard(data);
         if (note) note.textContent = "Support bundle copied. Send it only if support asks for it.";
-      });
-    }
-
-    const diagBtn = $("toolDiag");
-    if (diagBtn){
-      diagBtn.addEventListener("click", async ()=>{
-        const out = diagnosticsBundle();
-        const ta = $("supportOut");
-        if (ta) ta.value = out;
-        await copyToClipboard(out);
-        if (note) note.textContent = "Support snapshot copied. Send it only if support asks for it.";
-        logEvent("support_diag", { size: out.length });
       });
     }
 
@@ -7065,6 +7117,22 @@ function cleanupKeyLines(lines){
   bindProTools();
   bindProControls();
 
+  if (typeof window !== "undefined" && /^(127\.0\.0\.1|localhost)$/.test(location.hostname)) {
+    window.__GMX_TEST__ = Object.assign(window.__GMX_TEST__ || {}, {
+      activeKey,
+      writeKey,
+      readKey,
+      renderList,
+      oneClickCleanup,
+      refillCleanFill,
+      getHandle,
+      setCleanFillEnabled,
+      getCleanFillEnabled,
+      normalizeLine,
+      dedupeLines
+    });
+  }
+
   AUTH_OK = !!(getHandle() && getToken());
 
   // restore session if exists
@@ -7078,6 +7146,8 @@ function cleanupKeyLines(lines){
   try{ bindExtTabs(); }catch{}
   try{ initExtWallpaperControls(); }catch{}
   try{ normalizeStoredExtWallpaperSelections(); }catch{}
+  try{ migrateLegacyWallpaperSelectionOnce(); }catch{}
+  try{ migrateLegacyExtWallpaperSelectionOnce(); }catch{}
   try{ renderExtThemes(); }catch{}
   try{ renderExtWallpapers(); }catch{}
   try{ renderExtCustomBgUI(); }catch{}
@@ -7175,5 +7245,3 @@ INIT_DONE = true;
 
 
 })();
-
-

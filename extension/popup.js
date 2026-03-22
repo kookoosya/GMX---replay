@@ -6,6 +6,11 @@ const STORAGE_KEYS = {
   mode: "gmx_ext_mode_v2",
   lastText: "gmx_ext_last_text_v2",
 };
+const ALERT_KEYS = {
+  enabled: "gmx_market_alerts_enabled_v1",
+  interval: "gmx_market_alerts_interval_v1",
+};
+const ASSET_REV = "20260310a";
 const LEGACY_KEYS = {
   base: "apiBase",
   handle: "handle",
@@ -55,20 +60,20 @@ const DEFAULT_THEME = {
 
 const FALLBACK_LINES = {
   gm: [
-    "gm, hope your day starts easy вЂпёЏ",
-    "good morning, nice read here в•",
-    "gm, strong post and a clean start вњЁ",
-    "gm, hope the morning treats you well вЂпёЏ",
-    "good morning, this was a solid read вЂпёЏ",
-    "gm, wishing you a smooth day ahead в•",
+    "gm, hope your day starts easy",
+    "good morning, nice read here",
+    "gm, strong post and a clean start",
+    "gm, hope the morning treats you well",
+    "good morning, this was a solid read",
+    "gm, wishing you a smooth day ahead",
   ],
   gn: [
-    "gn, hope you get a calm reset tonight рџЊ™",
-    "good night, soft close here вњЁ",
-    "gn, rest well after this one рџЊ™",
-    "good night, hope you get an easy reset рџґ",
-    "gn, calm post to end the day on рџЊ™",
-    "good night, sleep well tonight вњЁ",
+    "gn, hope you get a calm reset tonight",
+    "good night, soft close here",
+    "gn, rest well after this one",
+    "good night, hope you get an easy reset",
+    "gn, calm post to end the day on",
+    "good night, sleep well tonight",
   ],
 };
 
@@ -87,6 +92,8 @@ const state = {
   themeCatalog: null,
   cache: { gm: [], gn: [] },
   fallbackIndex: { gm: 0, gn: 0 },
+  alertsEnabled: true,
+  alertsInterval: 5,
 };
 
 // Ensure legacy wallpaper ids don't break the popup after packs are cleaned
@@ -156,6 +163,9 @@ const el = {
   refConfirmed: document.getElementById("refConfirmed"),
   statsHint: document.getElementById("statsHint"),
   shortcutHint: document.getElementById("shortcutHint"),
+  alertsEnabled: document.getElementById("alertsEnabled"),
+  alertsInterval: document.getElementById("alertsInterval"),
+  alertsStatus: document.getElementById("alertsStatus"),
 };
 
 function normalizeHandle(raw) {
@@ -183,7 +193,7 @@ function replyShapeKey(text) {
   value = value
     .replace(/\b(gm|good morning|morning)\b/g, "gm")
     .replace(/\b(gn|good night|night)\b/g, "gn")
-    .replace(/\b(legend|ser|mate|dear|builder)\b/g, "@voc")
+    .replace(/\b(legend|ser|mate|dear|builder|king|bro|homie|degen|friend)\b/g, "@voc")
     .replace(/\b(good one|nice post|clean one|strong post|solid post|good post|clean post|strong take|solid take|clean read|good read|nice gm)\b/g, "@post")
     .replace(/\b(sleep easy|sleep well|rest easy|rest well|good rest|real rest|proper rest|easy reset|soft landing|calm close|easy close|soft close)\b/g, "@close")
     .replace(/\b(start the day|start the session|open the day|open the morning|open the session|close the day|end the day)\b/g, "@phase")
@@ -240,34 +250,14 @@ function withAlpha(raw, alpha, fallback = [110, 231, 255]) {
 
 async function getThemeCatalog() {
   if (Array.isArray(state.themeCatalog)) return state.themeCatalog;
-
-  const mergeCatalog = (target, incoming) => {
-    const map = new Map();
-    for (const item of (target || [])) {
-      const id = String(item && item.id || "").trim();
-      if (!id) continue;
-      map.set(id, item);
-    }
-    for (const item of (incoming || [])) {
-      const id = String(item && item.id || "").trim();
-      if (!id) continue;
-      map.set(id, item);
-    }
-    return Array.from(map.values());
-  };
-
   let list = [];
-  try {
-    const response = await fetch(chrome.runtime.getURL("themes.json"), { cache: "no-store" });
-    const data = await response.json().catch(() => null);
-    list = Array.isArray(data && data.themes) ? data.themes : [];
-  } catch {}
 
   try {
     const response = await fetch(`${normalizeBase(state.base)}/themes.json`, { cache: "no-store" });
     const data = await response.json().catch(() => null);
     const remote = Array.isArray(data && data.themes) ? data.themes : [];
-    if (remote.length) list = mergeCatalog(list, remote);
+    // Thin client: site catalog is the source of truth.
+    if (remote.length) list = remote;
   } catch {}
 
   state.themeCatalog = list.length ? list : [DEFAULT_THEME];
@@ -350,6 +340,46 @@ function prefetchWallpaper(url){
 
 const WALL_CACHE = new Map();
 
+function svgDataUri(svg) {
+  return `data:image/svg+xml;utf8,${encodeURIComponent(String(svg || ""))}`;
+}
+
+const EXT_PACK_PALETTES = [
+  { tag: "GM", c1: "#9945ff", c2: "#14f195" },
+  { tag: "DEGEN", c1: "#ff6b35", c2: "#f7931a" },
+  { tag: "ALPHA", c1: "#00d4ff", c2: "#7c3aed" },
+  { tag: "WAGMI", c1: "#22c55e", c2: "#10b981" },
+  { tag: "NGMI", c1: "#ef4444", c2: "#f97316" },
+  { tag: "LFG", c1: "#8b5cf6", c2: "#ec4899" },
+  { tag: "SER", c1: "#06b6d4", c2: "#3b82f6" },
+  { tag: "APE", c1: "#eab308", c2: "#f59e0b" },
+  { tag: "MOON", c1: "#a855f7", c2: "#6366f1" },
+  { tag: "CHAD", c1: "#14b8a6", c2: "#0d9488" },
+  { tag: "SIZE", c1: "#f43f5e", c2: "#ec4899" },
+  { tag: "CT", c1: "#64748b", c2: "#94a3b8" }
+];
+
+function extPackWallpaperDataUri(id, thumb) {
+  const n = Math.max(1, Number(String(id || "").slice(6)) || 1);
+  const p = EXT_PACK_PALETTES[(n - 1) % EXT_PACK_PALETTES.length];
+  const w = thumb ? 360 : 1080;
+  const h = thumb ? 640 : 1920;
+  const bars = Array.from({length: thumb ? 8 : 18}).map((_,i)=>{
+    const x = w * (0.12 + (i / (thumb ? 8 : 18)) * 0.68);
+    const bh = h * (0.15 + 0.2 * Math.sin((i + n) * 0.6) ** 2);
+    const y = h - h * 0.22 - bh;
+    const fill = (i + n) % 4 === 0 ? p.c2 : p.c1;
+    return `<rect x="${Math.round(x)}" y="${Math.round(y)}" width="${Math.max(6, w * 0.04)}" height="${Math.round(bh)}" rx="4" fill="${fill}" opacity="0.88"/>`;
+  }).join("");
+  const ticker = Array.from({length: thumb ? 5 : 12}).map((_,i)=>{
+    const y = h * (0.15 + (i / (thumb ? 5 : 12)) * 0.5);
+    const opacity = 0.06 + 0.04 * (i % 3);
+    return `<line x1="${w*0.08}" y1="${Math.round(y)}" x2="${w*0.92}" y2="${Math.round(y)}" stroke="white" stroke-width="1" opacity="${opacity}"/>`;
+  }).join("");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="bg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#080c14"/><stop offset="35%" stop-color="#0a0f18"/><stop offset="100%" stop-color="#050810"/></linearGradient><linearGradient id="accent" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${p.c1}" stop-opacity="0.4"/><stop offset="100%" stop-color="${p.c2}" stop-opacity="0.05"/></linearGradient><filter id="blur"><feGaussianBlur stdDeviation="${thumb ? 12 : 40}"/></filter></defs><rect width="${w}" height="${h}" fill="url(#bg)"/><ellipse cx="${w*0.5}" cy="${h*0.15}" rx="${w*0.6}" ry="${h*0.12}" fill="${p.c1}" opacity="0.15" filter="url(#blur)"/><rect x="0" y="0" width="${w}" height="${h*0.35}" fill="url(#accent)"/>${ticker}${bars}<text x="${w*0.1}" y="${thumb ? h*0.2 : h*0.18}" font-family="Inter,Segoe UI,sans-serif" font-size="${thumb ? 32 : 90}" font-weight="900" fill="white" opacity="0.96">${p.tag}</text><text x="${w*0.1}" y="${thumb ? h*0.26 : h*0.24}" font-family="Inter,Segoe UI,sans-serif" font-size="${thumb ? 10 : 22}" font-weight="600" fill="rgba(255,255,255,0.7)">Crypto Twitter · Extension</text></svg>`;
+  return svgDataUri(svg);
+}
+
 function normalizeExtWallpaperId(raw) {
   return canonicalExtWallpaperId(raw);
 }
@@ -367,19 +397,7 @@ async function resolveWallpaperSource(base, wallpaperId) {
     try{ prefetchWallpaper(localUrl); }catch{}
     return localUrl;
   }
-
-  const fullUrl = `${normalizeBase(base)}/assets/extbg/${encodeURIComponent(id)}.webp`;
-  const thumbUrl = `${normalizeBase(base)}/assets/extbg/thumbs/${encodeURIComponent(id)}.webp`;
-
-  let finalUrl = fullUrl;
-  let ok = false;
-
-  try{
-    ok = Boolean(await Promise.resolve(prefetchWallpaper(fullUrl)));
-  }catch{}
-
-  if (!ok) finalUrl = thumbUrl;
-
+  const finalUrl = extPackWallpaperDataUri(id, false);
   WALL_CACHE.set(cacheKey, finalUrl);
   try{ prefetchWallpaper(finalUrl); }catch{}
   return finalUrl;
@@ -431,7 +449,7 @@ function scoreTemplate(text) {
     else if (emojiHits > 2) score -= (emojiHits - 2) * 3;
   } catch {}
   if (/!/.test(value)) score -= 4;
-  if (/[вЂ”вЂ“-]/.test(value)) score -= 4;
+  if (/[—–-]/.test(value)) score -= 4;
 
   if (/(coffee|brain|screen|pace|hour|desk|today|tonight|tomorrow|morning|night|rest|slow|sleep|reset|sunrise)/i.test(value)) score += 5;
   if (/(good morning|good night|hope|wishing|sleep easy|quiet reset|soft landing)/i.test(value)) score += 5;
@@ -489,6 +507,7 @@ async function loadState() {
   try {
     data = await chrome.storage.local.get([
       ...Object.values(STORAGE_KEYS),
+      ...Object.values(ALERT_KEYS),
       ...Object.values(LEGACY_KEYS),
       ...Object.values(THEME_KEYS),
       ...Object.values(LEGACY_THEME_KEYS),
@@ -527,6 +546,39 @@ async function loadState() {
   if (el.handleInput) el.handleInput.value = state.handle ? `@${state.handle}` : "";
   if (el.modeSelect) el.modeSelect.value = state.mode;
   if (el.previewText) el.previewText.textContent = state.lastText || "Nothing copied yet";
+  state.alertsEnabled = data[ALERT_KEYS.enabled] !== false;
+  const interval = Number(data[ALERT_KEYS.interval] || 5);
+  state.alertsInterval = [5, 10, 15].includes(interval) ? interval : 5;
+  if (el.alertsEnabled) el.alertsEnabled.checked = !!state.alertsEnabled;
+  if (el.alertsInterval) el.alertsInterval.value = String(state.alertsInterval);
+  if (el.alertsStatus) {
+    el.alertsStatus.textContent = state.alertsEnabled
+      ? `Active. Poll every ${state.alertsInterval} min.`
+      : "Disabled.";
+  }
+}
+
+async function saveAlertSettings() {
+  const enabled = !!(el.alertsEnabled && el.alertsEnabled.checked);
+  const interval = Number(el.alertsInterval && el.alertsInterval.value || state.alertsInterval || 5);
+  state.alertsEnabled = enabled;
+  state.alertsInterval = [5, 10, 15].includes(interval) ? interval : 5;
+  await saveState({
+    [ALERT_KEYS.enabled]: state.alertsEnabled,
+    [ALERT_KEYS.interval]: state.alertsInterval,
+  });
+  if (el.alertsStatus) {
+    el.alertsStatus.textContent = state.alertsEnabled
+      ? `Active. Poll every ${state.alertsInterval} min.`
+      : "Disabled.";
+  }
+  try {
+    chrome.runtime.sendMessage({
+      type: "GMX_MARKET_ALERTS_CONFIG_CHANGED",
+      enabled: state.alertsEnabled,
+      interval: state.alertsInterval,
+    });
+  } catch {}
 }
 
 async function rememberBase(base) {
@@ -598,10 +650,10 @@ function renderStats(usage, refStats) {
         : "Guest";
 
   if (el.planValue) el.planValue.textContent = plan;
-  if (el.gmUsed) el.gmUsed.textContent = usage && usage.gm ? `${usage.gm.used}/${usage.gm.limit}` : "вЂ”";
-  if (el.gnUsed) el.gnUsed.textContent = usage && usage.gn ? `${usage.gn.used}/${usage.gn.limit}` : "вЂ”";
-  if (el.refEligible) el.refEligible.textContent = refStats && Number.isFinite(Number(refStats.eligibleRefs)) ? String(refStats.eligibleRefs) : "вЂ”";
-  if (el.refConfirmed) el.refConfirmed.textContent = refStats && Number.isFinite(Number(refStats.confirmedRefs)) ? String(refStats.confirmedRefs) : "вЂ”";
+  if (el.gmUsed) el.gmUsed.textContent = usage && usage.gm ? `${usage.gm.used}/${usage.gm.limit}` : "—";
+  if (el.gnUsed) el.gnUsed.textContent = usage && usage.gn ? `${usage.gn.used}/${usage.gn.limit}` : "—";
+  if (el.refEligible) el.refEligible.textContent = refStats && Number.isFinite(Number(refStats.eligibleRefs)) ? String(refStats.eligibleRefs) : "—";
+  if (el.refConfirmed) el.refConfirmed.textContent = refStats && Number.isFinite(Number(refStats.confirmedRefs)) ? String(refStats.confirmedRefs) : "—";
   if (el.statsHint) {
     el.statsHint.textContent = state.token
       ? "Connected snapshot from your backend. Buttons still only copy text."
@@ -619,6 +671,9 @@ function setCopyStatus(text, tone = "") {
   if (!el.copyStatus) return;
   el.copyStatus.textContent = text || "";
   el.copyStatus.className = `small${tone ? ` ${tone}` : ""}`;
+}
+function requestSignalPoll() {
+  try { chrome.runtime.sendMessage({ type: "GMX_MARKET_SIGNAL_POLL_NOW" }); } catch {}
 }
 
 function consumeFromCache(kind, preferBest = false) {
@@ -708,7 +763,7 @@ async function persistLastText(text) {
 
 async function copyKind(kind, preferBest = false) {
   const safeKind = kind === "gn" ? "gn" : "gm";
-  setCopyStatus(`Loading ${preferBest ? "best " : ""}${safeKind.toUpperCase()}вЂ¦`);
+  setCopyStatus(`Loading ${preferBest ? "best " : ""}${safeKind.toUpperCase()}...`);
   await ensureCache(safeKind, preferBest ? 5 : 1);
   let picked = consumeFromCache(safeKind, preferBest);
   if (!picked) {
@@ -757,6 +812,7 @@ async function refreshSnapshot() {
 
   const refs = await apiRequest("/api/referral/stats", { acceptStatuses: [401, 403] });
   renderStats(usage.ok ? usage.data : null, refs.ok ? refs.data : null);
+  requestSignalPoll();
   void ensureCache("gm", 4);
   void ensureCache("gn", 4);
 }
@@ -776,7 +832,7 @@ async function queryAllTabs() {
 async function syncFromSite(options = {}) {
   const openIfMissing = options.openIfMissing !== false;
   const silent = options.silent === true;
-  if (!silent) setConnectStatus("Looking for an open site tabвЂ¦");
+  if (!silent) setConnectStatus("Looking for an open site tab...");
   const tabs = await queryAllTabs();
   const siteTabs = (tabs || []).filter((tab) => isSiteUrl(tab.url));
 
@@ -844,7 +900,7 @@ async function connectHandle() {
     setConnectStatus("Enter a valid @handle", "bad");
     return;
   }
-  setConnectStatus("ConnectingвЂ¦");
+  setConnectStatus("Connecting...");
   const result = await apiRequest("/api/user/init", {
     method: "POST",
     body: { handle },
@@ -852,7 +908,7 @@ async function connectHandle() {
   if (!result.ok || !result.data || !result.data.token) {
     const msg = friendlyError(result);
     if (/Use site session instead/i.test(msg)) {
-      setConnectStatus("This handle already exists. Trying site syncвЂ¦");
+      setConnectStatus("This handle already exists. Trying site sync...");
       const synced = await syncFromSite({ openIfMissing: true, silent: true });
       if (synced) {
         setConnectStatus(`Using site session @${state.handle}`, "good");
@@ -903,6 +959,12 @@ function bindEvents() {
       void ensureCache("gm", 4);
       void ensureCache("gn", 4);
     });
+  }
+  if (el.alertsEnabled) {
+    el.alertsEnabled.addEventListener("change", () => { void saveAlertSettings(); });
+  }
+  if (el.alertsInterval) {
+    el.alertsInterval.addEventListener("change", () => { void saveAlertSettings(); });
   }
 
   if (el.copyGm) el.copyGm.addEventListener("click", () => void copyKind("gm", false));
@@ -970,7 +1032,7 @@ function bindEvents() {
   await applyThemeUi();
   applySessionUi();
   if (el.shortcutHint) {
-    el.shortcutHint.textContent = "Optional shortcut: assign one yourself in chrome://extensions/shortcuts for вЂњOpen GMXReply quick panelвЂќ";
+    el.shortcutHint.textContent = "Optional shortcut: assign one yourself in chrome://extensions/shortcuts for \"Open GMXReply quick panel\"";
   }
   await syncFromSite({ openIfMissing: false, silent: true });
   await refreshSnapshot();

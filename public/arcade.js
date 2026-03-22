@@ -735,11 +735,12 @@
     const raw = String(value || "").trim().toLowerCase();
     if (raw === "io") return "IO";
     if (raw === "rpg") return "RPG";
-    if (raw === "СЃРёРјСѓР»СЏС‚РѕСЂ") return "Simulation";
-    if (raw === "РіРѕР»РѕРІРѕР»РѕРјРєР°") return "Puzzle";
-    if (raw === "РїР»Р°С‚С„РѕСЂРјРµСЂ") return "Platformer";
-    if (raw === "СЃС‚СЂР°С‚РµРіРёСЏ") return "Strategy";
-    if (raw === "РІС‹Р¶РёРІР°РЅРёРµ") return "Survivor";
+    // Legacy import aliases from older non-English catalogs.
+    if (raw === "\u0441\u0438\u043c\u0443\u043b\u044f\u0442\u043e\u0440") return "Simulation";
+    if (raw === "\u0433\u043e\u043b\u043e\u0432\u043e\u043b\u043e\u043c\u043a\u0430") return "Puzzle";
+    if (raw === "\u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u0435\u0440") return "Platformer";
+    if (raw === "\u0441\u0442\u0440\u0430\u0442\u0435\u0433\u0438\u044f") return "Strategy";
+    if (raw === "\u0432\u044b\u0436\u0438\u0432\u0430\u043d\u0438\u0435") return "Survivor";
     const key = raw.replace(/[^a-z]+/g, "");
     return CATEGORY_LABELS[key] || "Arcade";
   }
@@ -747,34 +748,60 @@
     const key = String(category || "").trim().toLowerCase().replace(/[^a-z]+/g, "");
     return CATEGORY_NOTES[key] || "Browser game slot with direct launch.";
   }
+  function categoryIconTag(category){
+    const key = String(category || "").trim().toLowerCase();
+    const map = {
+      shooter: "FPS",
+      action: "ACT",
+      racing: "RACE",
+      sports: "SPORT",
+      rpg: "RPG",
+      puzzle: "PUZZLE",
+      platformer: "PLAT",
+      strategy: "STRAT",
+      survivor: "SURV",
+      simulation: "SIM",
+      arcade: "ARC",
+      io: "IO",
+      casual: "CASUAL"
+    };
+    return map[key] || "GAME";
+  }
   const GAMES = RAW_GAMES.map((game) => {
     const category = normalizeArcadeCategory(game && game.category);
     return {
       ...game,
       category,
+      icon: categoryIconTag(category),
       shortNote: normalizedArcadeNote(game, category)
     };
   });
   const PAGE_SIZE = 15;
-  const CATEGORY_COVERS = {
-    action: "/assets/arcade/covers/action.webp",
-    arcade: "/assets/arcade/covers/arcade.webp",
-    crypto: "/assets/arcade/covers/crypto.webp",
-    idle: "/assets/arcade/covers/idle.webp",
-    platformer: "/assets/arcade/covers/platformer.webp",
-    puzzle: "/assets/arcade/covers/puzzle.webp",
-    racing: "/assets/arcade/covers/racing.webp",
-    shooter: "/assets/arcade/covers/shooter.webp",
-    simulation: "/assets/arcade/covers/simulation.webp",
-    sports: "/assets/arcade/covers/sports.webp",
-    strategy: "/assets/arcade/covers/strategy.webp",
-    survivor: "/assets/arcade/covers/survivor.webp",
-    generic: "/assets/arcade/covers/generic.webp"
+  const CATEGORY_COVER_COLORS = {
+    action: ["#ef4444", "#7f1d1d"],
+    arcade: ["#8b5cf6", "#312e81"],
+    crypto: ["#f59e0b", "#7c2d12"],
+    idle: ["#0ea5e9", "#0c4a6e"],
+    platformer: ["#22c55e", "#14532d"],
+    puzzle: ["#a855f7", "#581c87"],
+    racing: ["#f97316", "#7c2d12"],
+    shooter: ["#3b82f6", "#1e3a8a"],
+    simulation: ["#14b8a6", "#134e4a"],
+    sports: ["#06b6d4", "#164e63"],
+    strategy: ["#84cc16", "#365314"],
+    survivor: ["#f43f5e", "#881337"],
+    generic: ["#64748b", "#0f172a"],
   };
+  function categoryCoverSvgDataUri(label, c1, c2){
+    const text = String(label || "GAME").slice(0, 12).toUpperCase();
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 540'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'><stop offset='0%' stop-color='${c1}'/><stop offset='100%' stop-color='${c2}'/></linearGradient></defs><rect width='900' height='540' fill='url(#g)'/><circle cx='760' cy='90' r='120' fill='rgba(255,255,255,.12)'/><circle cx='120' cy='460' r='180' fill='rgba(255,255,255,.08)'/><text x='58' y='460' font-family='Inter,Segoe UI,Arial' font-size='96' font-weight='800' fill='rgba(255,255,255,.92)'>${text}</text></svg>`;
+    return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+  }
   function categoryCover(game) {
     const raw = String(game && game.category || "").toLowerCase().trim();
     const key = raw.replace(/[^a-z]+/g, "");
-    return CATEGORY_COVERS[key] || CATEGORY_COVERS.generic;
+    const colors = CATEGORY_COVER_COLORS[key] || CATEGORY_COVER_COLORS.generic;
+    return categoryCoverSvgDataUri(game && game.category || "Game", colors[0], colors[1]);
   }
   const LOCAL_GAME_COVERS = new Set([
     "obby-vs-zombies",
@@ -786,13 +813,9 @@
     "zombie-redemption"
   ]);
   function localGameCover(game) {
-    try {
-      const id = String(game && game.id || "").trim();
-      if (!id || !LOCAL_GAME_COVERS.has(id)) return "";
-      return `/assets/arcade/covers/games/${encodeURIComponent(id)}.svg`;
-    } catch {
-      return "";
-    }
+    const slug = game && (game.id || game.slug || "");
+    if (!slug || !LOCAL_GAME_COVERS.has(slug)) return "";
+    return `/assets/arcade/covers/games/${slug}.svg`;
   }
   function fallbackCover(game) {
     return localGameCover(game) || categoryCover(game);
@@ -808,8 +831,27 @@
       return "";
     }
   }
+  function liveScreenshotCover(game){
+    try{
+      const launch = String(game && (game.launchUrl || game.embedUrl) || "").trim();
+      if (!/^https?:\/\//i.test(launch)) return "";
+      let source = launch;
+      try{
+        const u = new URL(launch);
+        // For CrazyGames, page URLs usually render better than embed frames.
+        if (/crazygames\.com$/i.test(u.hostname || "")) {
+          const m = String(u.pathname || "").match(/^\/embed\/([^/?#]+)/i);
+          if (m && m[1]) source = `https://www.crazygames.com/game/${m[1]}`;
+        }
+      }catch{}
+      return `https://image.thum.io/get/width/900/crop/540/noanimate/${source}`;
+    }catch{
+      return "";
+    }
+  }
   function preferredCover(game) {
-    return localGameCover(game) || remoteCoverUrl(game) || categoryCover(game);
+    // Prefer explicit game covers first to avoid tiny iframe-like screenshots.
+    return localGameCover(game) || remoteCoverUrl(game) || categoryCover(game) || liveScreenshotCover(game);
   }
   function upgradeTileCovers(scope) {
     try {
@@ -913,7 +955,7 @@
           <div>
             <div class="eyebrow">Live game slot</div>
             <h2>${esc(game.name)}</h2>
-            <div class="sub">${esc(game.sourceLabel)} В· ${esc(game.category)}</div>
+            <div class="sub">${esc(game.sourceLabel)} · ${esc(game.category)}</div>
           </div>
           <div class="playerActions">
             <button class="ghostBtn" id="backToLibrary">Back to library</button>
@@ -962,7 +1004,7 @@
           <div>
             <div class="eyebrow">Live arcade shelf</div>
             <h1>Arcade</h1>
-            <div class="heroText">Stable 50 game catalog with cleaner card copy, readable covers, and direct launch flow.</div>
+            <div class="heroText">Stable 50 game catalog with real game covers, cleaner card copy, and direct launch flow.</div>
           </div>
           <div class="planCard">
             <div id="planLabel" class="planMain">${esc(planLabel())}</div>
@@ -975,7 +1017,7 @@
         <div class="libraryHead">
           <div>
             <h2>Game library</h2>
-            <div class="sub">Showing ${visible.length} of ${list.length} filtered games В· total catalog ${GAMES.length}</div>
+            <div class="sub">Showing ${visible.length} of ${list.length} filtered games · total catalog ${GAMES.length}</div>
           </div>
           <div class="filtersRow" id="accessFilters"></div>
         </div>
@@ -1055,7 +1097,7 @@
                 </div>
                 <div class="tileBottom">
                   <div class="tileTitle">${esc(game.name)}</div>
-                  <div class="tileMeta">${esc(game.category)} В· ${esc(game.sourceLabel)}</div>
+                  <div class="tileMeta">${esc(game.category)} · ${esc(game.sourceLabel)}</div>
                 </div>
               </div>
               <div class="tileBody">

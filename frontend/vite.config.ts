@@ -73,6 +73,7 @@ export default defineConfig(({ command }) => ({
       "/contents": { target: BACKEND, changeOrigin: true },
       "/app.js": { target: BACKEND, changeOrigin: true },
       "/app.css": { target: BACKEND, changeOrigin: true },
+      "/app.auth.js": { target: BACKEND, changeOrigin: true },
       "/mode.js": { target: BACKEND, changeOrigin: true },
       "/entitlements.js": { target: BACKEND, changeOrigin: true },
       "/themes.json": { target: BACKEND, changeOrigin: true },
