@@ -2,7 +2,7 @@
   const API = location.origin;
 
   const ADMIN_HANDLE = "@Kristofer_Sol_";
-  let SAVE_CAP_FREE = 70;
+  let SAVE_CAP_FREE = 50;
   const EMPTY = "__EMPTY__";
 
   let SUB = null;
@@ -482,7 +482,7 @@ function listCustomBgUsedTabs(){
     document.body.classList.toggle("hasUserBg", on);
   }
 
-  async function fitImageToCoverDataUrl(file, maxW=1920, maxH=1080, quality=0.86){
+  async function fitImageToCoverDataUrl(file, maxW=2560, maxH=1440, quality=0.88){
     // Downscale + crop-to-cover to keep localStorage small and ensure it fits the page.
     // Output: JPEG data URL.
     return new Promise((resolve, reject)=>{
@@ -521,113 +521,8 @@ function listCustomBgUsedTabs(){
   }
 
 
-  function renderCustomBgUI(){
-    const tabSel = $("customBgTab");
-    const st = $("customBg_status");
-    const nm = $("customBgName");
-    if (!tabSel || !st) return;
-
-    const prev = tabSel.value || "all";
-    tabSel.innerHTML = "";
-
-    const used = listCustomBgUsedTabs();
-    const usedCount = used.length;
-    const unlocked = customBgUnlockedTabCount(); // ordered count
-    const tabsOnly = TABS.filter(t=>t[0]!=="all").map(t=>t[0]);
-
-    // build options
-    TABS_PUBLIC.forEach(([key, labelKey])=>{
-      const opt = document.createElement("option");
-      opt.value = key;
-
-      // label: keep existing i18n for apply-to
-      opt.textContent = t(labelKey);
-
-      if (key !== "all" && !isPro()){
-        const alreadyUsed = used.includes(key);
-        if (!alreadyUsed){
-          // If free slots remaining, allow any new tab
-          if (usedCount < 3){
-            opt.disabled = false;
-          } else {
-            const idx = tabsOnly.indexOf(key);
-            const allow = (idx >= 0 && idx < unlocked);
-            opt.disabled = !allow;
-            if (!allow){
-              const need = requiredRefsForCustomBgTab(key);
-              opt.textContent = `${t(labelKey)} (${need} ref)`;
-            }
-          }
-        }
-      }
-
-      tabSel.appendChild(opt);
-    });
-
-    // restore selection
-    const found = Array.from(tabSel.options).some(o=>o.value===prev && !o.disabled);
-    tabSel.value = found ? prev : "all";
-
-    const target = tabSel.value || "all";
-    const has = !!localStorage.getItem(customBgKeyForTab(target));
-    if (nm){ nm.textContent = has ? "Saved background" : ""; }
-
-    // status text
-    if (isPro()){
-      st.textContent = has ? "Custom background is active for this target." : "Choose an image to set a custom background.";
-    } else {
-      const freeLeft = Math.max(0, 3 - usedCount);
-      if (target === "all"){
-        st.textContent = "Free: apply a custom background to All pages (does not count toward your 3 free tabs).";
-      } else if (used.includes(target)){
-        st.textContent = has ? "Custom background is active for this tab." : "No custom background set for this tab.";
-      } else if (freeLeft > 0){
-        st.textContent = `Free: you can set custom backgrounds for ${freeLeft} more tab(s).`;
-      } else {
-        const need = requiredRefsForCustomBgTab(target);
-        st.textContent = `Locked: need ${need} referrals to unlock more tabs (or upgrade to Pro).`;
-      }
-    }
-  }
-
-  function syncCustomBgUI(){
-    const rm = $("customBgRemove");
-    const clearBtn = $("customBgClear");
-    const tabSel = $("customBgTab");
-
-    // Bind listeners once (Themes tab can be opened/closed many times)
-    if (!syncCustomBgUI._bound){
-      syncCustomBgUI._bound = true;
-
-      if (tabSel){
-        tabSel.addEventListener("change", ()=>{
-          renderCustomBgUI();
-          const target = (tabSel.value || "all");
-          const previewTab = (target === "all") ? currentTabName() : target;
-          applyUserBg(previewTab);
-        });
-      }
-
-      if (clearBtn){
-        clearBtn.addEventListener("click", ()=>{
-          if (!requireConnected("Themes")) return;
-          const target = ($("customBgTab")?.value || "all");
-          setCustomBgForTab(target, null);
-          renderCustomBgUI();
-          const previewTab = (target === "all") ? currentTabName() : target;
-          applyUserBg(previewTab);
-          toast("ok", (t("toast_custom_bg_cleared")||"Custom background cleared."));
-        });
-      }
-    }
-
-    if (rm){ rm.disabled = false; }
-
-    renderCustomBgUI();
-    const target = (tabSel?.value || "all");
-    const previewTab = (target === "all") ? currentTabName() : target;
-    applyUserBg(previewTab);
-  }
+  function renderCustomBgUI(){ /* merged into wallpapers tab */ }
+  function syncCustomBgUI(){ /* merged into wallpapers tab */ }
 
 function readFileAsDataURL(file){
     return new Promise((resolve, reject)=>{
@@ -750,7 +645,7 @@ function readFileAsDataURL(file){
     ["free01", "Free — Solana Waves"],
     ["free02", "Free — Solflare Glow"],
   ];
-  const SITE_WALLPAPER_PACK_COUNT = 50;
+  const SITE_WALLPAPER_PACK_COUNT = 8;
   const SITE_WALLPAPER_FREE_PACK_COUNT = 6;
   const SITE_WALLPAPER_LUX = [
     ["lux_anime_neon_alley", "Anime Neon Alley"],
@@ -762,13 +657,23 @@ function readFileAsDataURL(file){
     ["lux_onchain_spaceport", "Onchain Spaceport"],
     ["lux_solana_temple", "Solana Temple"],
   ];
+  const CRYPTO_SITE_WALL_SOURCES = [
+    "https://source.unsplash.com/1920x1080/?bitcoin,crypto,trading,neon",
+    "https://source.unsplash.com/1920x1080/?ethereum,blockchain,night,city",
+    "https://source.unsplash.com/1920x1080/?solana,crypto,gradient,technology",
+    "https://source.unsplash.com/1920x1080/?dogecoin,meme,crypto,neon",
+    "https://source.unsplash.com/1920x1080/?bonk,crypto,market,screen",
+    "https://source.unsplash.com/1920x1080/?x,finance,charts,neon",
+    "https://source.unsplash.com/1920x1080/?trading,terminal,crypto,desk",
+    "https://source.unsplash.com/1920x1080/?blockchain,network,glow,dark"
+  ];
   function buildSiteWallpapers(){
     const out = SITE_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
     for (let i=1; i<=SITE_WALLPAPER_PACK_COUNT; i++){
       const n = String(i).padStart(3, "0");
       out.push({
         id: `v2_${n}`,
-        name: `Photo Pack #${n}`,
+        name: `Aurora #${n}`,
         tier: i <= SITE_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
       });
     }
@@ -780,22 +685,7 @@ function readFileAsDataURL(file){
   function migrateLegacyWallpaperSelectionOnce(){
     try{
       if (localStorage.getItem(WALLPAPER_REFRESH_MIGRATION_KEY) === "1") return;
-      const luxIds = SITE_WALLPAPER_LUX.map(([id])=>id).filter(Boolean);
-      if (!luxIds.length) return;
-      const mapSite = (id)=>{
-        const v = String(id || "").trim();
-        if (!/^v2_\d+$/i.test(v)) return v;
-        const num = Math.max(1, Number(v.slice(3)) || 1);
-        return luxIds[(num - 1) % luxIds.length];
-      };
-      const g = localStorage.getItem(LS_WP_GLOBAL) || "";
-      if (g) localStorage.setItem(LS_WP_GLOBAL, mapSite(g));
-      for (const [tab] of TABS){
-        if (tab === "all") continue;
-        const key = LS_WP_TAB_PREFIX + tab;
-        const cur = localStorage.getItem(key) || "";
-        if (cur) localStorage.setItem(key, mapSite(cur));
-      }
+      // keep IDs stable; visual refresh now happens in URL resolver
       localStorage.setItem(WALLPAPER_REFRESH_MIGRATION_KEY, "1");
     }catch{}
   }
@@ -817,11 +707,34 @@ function readFileAsDataURL(file){
     ["wallet","wp_apply_wallet"]
   ];
 
+  const CUSTOM_WP_RE = /^custom_[a-zA-Z0-9_.-]+\.(png|jpg|jpeg|webp)$/i;
+  const CUSTOM_WP_FREE_COUNT = 5;
+  const CUSTOM_UPLOAD_ID = "custom_upload";
+  let CUSTOM_WALLPAPERS_SITE = [];
+  let CUSTOM_WALLPAPERS_EXT = [];
+  let CUSTOM_WALLPAPERS_LOADED = false;
+  async function loadCustomWallpapers(){
+    if (CUSTOM_WALLPAPERS_LOADED) return false;
+    try{
+      const r = await fetch("/api/wallpapers/custom", { cache:"no-store" });
+      const j = await r.json();
+      if (j?.ok){
+        CUSTOM_WALLPAPERS_LOADED = true;
+        CUSTOM_WALLPAPERS_SITE = (j.site||[]).map(x=>({ ...x, tier:"custom" }));
+        CUSTOM_WALLPAPERS_EXT = (j.ext||[]).map(x=>({ ...x, tier:"custom" }));
+        return CUSTOM_WALLPAPERS_SITE.length > 0 || CUSTOM_WALLPAPERS_EXT.length > 0;
+      }
+    }catch{}
+    return false;
+  }
+
   // ---- Wallpaper migration / validation (keeps old saved ids from breaking the UI)
   function normalizeWallpaperId(id){
     const v = String(id||"").trim();
     if (!v) return "";
     if (WALLPAPERS.some(x=>x.id===v)) return v;
+    if (v === CUSTOM_UPLOAD_ID) return v;
+    if (CUSTOM_WP_RE.test(v)) return v;
     // migrate legacy svg ids (w01..w99) or removed v3 ids to a safe default
     if (/^w\d+$/i.test(v) || /^v3_\d+$/i.test(v)) return (WALLPAPERS.find(x=>x.id==="v2_001")?"v2_001":"free01");
     return (WALLPAPERS.find(x=>x.id==="v2_001")?"v2_001":"free01");
@@ -846,9 +759,11 @@ function readFileAsDataURL(file){
   normalizeAllWallpapers();
 
   function normalizeExtWallpaperIdLocal(id){
-    const v = String(id||"").trim().toLowerCase();
+    const v = String(id||"").trim();
     if (!v) return "";
-    if (EXT_WALLPAPERS.some(x=>String(x.id||"").toLowerCase()===v)) return v;
+    if (EXT_WALLPAPERS.some(x=>String(x.id||"").toLowerCase()===v.toLowerCase())) return v;
+    if (v === CUSTOM_UPLOAD_ID) return v;
+    if (CUSTOM_WP_RE.test(v)) return v;
     let m = v.match(/^extv3_(\d{1,2})$/i);
     if (m){
       const n = String(Math.max(1, Math.min(50, Number(m[1]) || 1))).padStart(2, "0");
@@ -892,27 +807,16 @@ function readFileAsDataURL(file){
     const p = SITE_PACK_PALETTES[(n - 1) % SITE_PACK_PALETTES.length];
     const w = thumb ? 480 : 1920;
     const h = thumb ? 270 : 1080;
-    const sw = thumb ? 2 : 6;
-    const pts = thumb ? 8 : 16;
-    const linePath = Array.from({length:pts}).map((_,i)=>{
-      const x = (w * i) / (pts - 1);
-      const base = h * (0.5 + 0.35 * Math.sin(i * 0.8 + n) * Math.cos(i * 0.3));
-      const y = Math.round(h - base - (i % 3) * (h * 0.02));
-      return `${i===0?"M":"L"} ${Math.round(x)} ${y}`;
-    }).join(" ");
-    const bars = Array.from({length: thumb ? 12 : 28}).map((_,i)=>{
-      const x = w * (0.08 + (i / (thumb ? 12 : 28)) * 0.78);
-      const bh = h * (0.12 + 0.25 * Math.sin((i + n) * 0.5) ** 2);
-      const y = h - h * 0.18 - bh;
-      const fill = (i + n) % 5 === 0 ? p.c2 : p.c1;
-      return `<rect x="${Math.round(x)}" y="${Math.round(y)}" width="${Math.max(4, w * 0.018)}" height="${Math.round(bh)}" rx="2" fill="${fill}" opacity="0.85"/>`;
-    }).join("");
-    const dots = Array.from({length: thumb ? 24 : 64}).map((_,i)=>{
-      const x = (i % (thumb ? 6 : 8) + 0.5) * (w / (thumb ? 6 : 8));
-      const y = ((i / (thumb ? 6 : 8) | 0) + 0.5) * (h / (thumb ? 4 : 8));
-      return `<circle cx="${Math.round(x)}" cy="${Math.round(y)}" r="${thumb ? 1 : 2}" fill="white" opacity="${0.04 + 0.03 * (n % 3)}"/>`;
-    }).join("");
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#0a0e1a"/><stop offset="40%" stop-color="#0d1322"/><stop offset="100%" stop-color="#060912"/></linearGradient><linearGradient id="glow" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${p.c1}" stop-opacity="0.35"/><stop offset="100%" stop-color="${p.c2}" stop-opacity="0.08"/></linearGradient><linearGradient id="line" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="${p.c1}" stop-opacity="0.3"/><stop offset="50%" stop-color="${p.c2}" stop-opacity="0.9"/><stop offset="100%" stop-color="${p.c1}" stop-opacity="0.4"/></linearGradient><filter id="blur"><feGaussianBlur stdDeviation="${thumb ? 8 : 24}"/></filter></defs><rect width="${w}" height="${h}" fill="url(#bg)"/><ellipse cx="${w*0.85}" cy="${h*0.12}" rx="${w*0.35}" ry="${h*0.2}" fill="${p.c1}" opacity="0.12" filter="url(#blur)"/><ellipse cx="${w*0.15}" cy="${h*0.9}" rx="${w*0.3}" ry="${h*0.25}" fill="${p.c2}" opacity="0.1" filter="url(#blur)"/><g opacity="0.5">${dots}</g>${bars}<path d="${linePath}" fill="none" stroke="url(#line)" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round"/><rect x="0" y="0" width="${w}" height="${h*0.38}" fill="url(#glow)" opacity="0.5"/><text x="${w*0.06}" y="${h*0.22}" font-family="Inter,Segoe UI,sans-serif" font-size="${thumb ? 36 : 120}" font-weight="900" fill="white" opacity="0.96">${p.coin}</text><text x="${w*0.06}" y="${thumb ? h*0.32 : h*0.28}" font-family="Inter,Segoe UI,sans-serif" font-size="${thumb ? 12 : 28}" font-weight="600" fill="rgba(255,255,255,0.75)">DeFi · ${p.vibe}</text></svg>`;
+    const blur = thumb ? 60 : 180;
+    const orbs = [
+      { cx: 0.15 + (n % 7) * 0.1, cy: 0.2, r: 0.4, c: p.c1, op: 0.22 },
+      { cx: 0.85 - (n % 5) * 0.08, cy: 0.75, r: 0.35, c: p.c2, op: 0.18 },
+      { cx: 0.5 + (n % 3) * 0.15, cy: 0.5, r: 0.3, c: p.c1, op: 0.08 },
+      { cx: 0.3, cy: 0.9, r: 0.25, c: p.c2, op: 0.12 },
+      { cx: 0.7, cy: 0.1, r: 0.2, c: p.c1, op: 0.1 }
+    ];
+    const orbEls = orbs.map((o,i)=>`<ellipse cx="${w*o.cx}" cy="${h*o.cy}" rx="${w*o.r}" ry="${h*o.r*0.6}" fill="${o.c}" opacity="${o.op}" filter="url(#blur)"/>`).join("");
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#070a12"/><stop offset="50%" stop-color="#0a0e18"/><stop offset="100%" stop-color="#050810"/></linearGradient><radialGradient id="top" cx="0.5" cy="0" r="1"><stop offset="0%" stop-color="${p.c1}" stop-opacity="0.15"/><stop offset="100%" stop-color="transparent"/></radialGradient><filter id="blur"><feGaussianBlur stdDeviation="${blur}"/></filter></defs><rect width="${w}" height="${h}" fill="url(#bg)"/>${orbEls}<rect width="${w}" height="${h}" fill="url(#top)" opacity="0.6"/></svg>`;
     return svgDataUri(svg);
   }
 
@@ -936,19 +840,14 @@ function readFileAsDataURL(file){
     const p = EXT_PACK_PALETTES[(n - 1) % EXT_PACK_PALETTES.length];
     const w = thumb ? 360 : 1080;
     const h = thumb ? 640 : 1920;
-    const bars = Array.from({length: thumb ? 8 : 18}).map((_,i)=>{
-      const x = w * (0.12 + (i / (thumb ? 8 : 18)) * 0.68);
-      const bh = h * (0.15 + 0.2 * Math.sin((i + n) * 0.6) ** 2);
-      const y = h - h * 0.22 - bh;
-      const fill = (i + n) % 4 === 0 ? p.c2 : p.c1;
-      return `<rect x="${Math.round(x)}" y="${Math.round(y)}" width="${Math.max(6, w * 0.04)}" height="${Math.round(bh)}" rx="4" fill="${fill}" opacity="0.88"/>`;
-    }).join("");
-    const ticker = Array.from({length: thumb ? 5 : 12}).map((_,i)=>{
-      const y = h * (0.15 + (i / (thumb ? 5 : 12)) * 0.5);
-      const opacity = 0.06 + 0.04 * (i % 3);
-      return `<line x1="${w*0.08}" y1="${Math.round(y)}" x2="${w*0.92}" y2="${Math.round(y)}" stroke="white" stroke-width="1" opacity="${opacity}"/>`;
-    }).join("");
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="bg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#080c14"/><stop offset="35%" stop-color="#0a0f18"/><stop offset="100%" stop-color="#050810"/></linearGradient><linearGradient id="accent" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${p.c1}" stop-opacity="0.4"/><stop offset="100%" stop-color="${p.c2}" stop-opacity="0.05"/></linearGradient><filter id="blur"><feGaussianBlur stdDeviation="${thumb ? 12 : 40}"/></filter></defs><rect width="${w}" height="${h}" fill="url(#bg)"/><ellipse cx="${w*0.5}" cy="${h*0.15}" rx="${w*0.6}" ry="${h*0.12}" fill="${p.c1}" opacity="0.15" filter="url(#blur)"/><rect x="0" y="0" width="${w}" height="${h*0.35}" fill="url(#accent)"/>${ticker}${bars}<text x="${w*0.1}" y="${thumb ? h*0.2 : h*0.18}" font-family="Inter,Segoe UI,sans-serif" font-size="${thumb ? 32 : 90}" font-weight="900" fill="white" opacity="0.96">${p.tag}</text><text x="${w*0.1}" y="${thumb ? h*0.26 : h*0.24}" font-family="Inter,Segoe UI,sans-serif" font-size="${thumb ? 10 : 22}" font-weight="600" fill="rgba(255,255,255,0.7)">Crypto Twitter · Extension</text></svg>`;
+    const blur = thumb ? 40 : 120;
+    const orbs = [
+      { cx: 0.2 + (n % 5) * 0.1, cy: 0.25, r: 0.5, c: p.c1, op: 0.2 },
+      { cx: 0.8 - (n % 4) * 0.1, cy: 0.7, r: 0.4, c: p.c2, op: 0.18 },
+      { cx: 0.5, cy: 0.5, r: 0.35, c: p.c1, op: 0.06 }
+    ];
+    const orbEls = orbs.map(o=>`<ellipse cx="${w*o.cx}" cy="${h*o.cy}" rx="${w*o.r}" ry="${h*o.r*0.8}" fill="${o.c}" opacity="${o.op}" filter="url(#blur)"/>`).join("");
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="bg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#070a12"/><stop offset="100%" stop-color="#050810"/></linearGradient><filter id="blur"><feGaussianBlur stdDeviation="${blur}"/></filter></defs><rect width="${w}" height="${h}" fill="url(#bg)"/>${orbEls}</svg>`;
     return svgDataUri(svg);
   }
 
@@ -968,6 +867,10 @@ function readFileAsDataURL(file){
   function extWallpaperFullUrl(id){
     const norm = normalizeExtWallpaperIdLocal(id);
     if (!norm) return "";
+    if (norm === CUSTOM_UPLOAD_ID){
+      try{ return localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
+    }
+    if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
     if (norm.startsWith("extv3_")) return extPackWallpaperDataUri(norm, false);
     const p = extWallpaperAssetPath(norm);
     return p ? `/assets/extbg/${p}?v=${ASSET_REV}` : "";
@@ -976,6 +879,10 @@ function readFileAsDataURL(file){
   function extWallpaperThumbUrl(id){
     const norm = normalizeExtWallpaperIdLocal(id);
     if (!norm) return "";
+    if (norm === CUSTOM_UPLOAD_ID){
+      try{ return localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
+    }
+    if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
     if (norm.startsWith("extv3_")) return extPackWallpaperDataUri(norm, true);
     return `/assets/extbg/${norm}.svg?v=${ASSET_REV}`;
   }
@@ -1030,6 +937,10 @@ function readFileAsDataURL(file){
   function wallpaperFullUrl(id){
     const norm = normalizeWallpaperId(id);
     if (!norm) return "";
+    if (norm === CUSTOM_UPLOAD_ID){
+      try{ return localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
+    }
+    if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
     if (norm.startsWith("v2_")) return sitePackWallpaperDataUri(norm, false);
     const p = wallpaperAssetPath(norm);
     return p ? `/assets/wallpapers/${p}?v=${ASSET_REV}` : "";
@@ -1038,8 +949,11 @@ function readFileAsDataURL(file){
   function wallpaperThumbUrl(id){
     const norm = normalizeWallpaperId(id);
     if (!norm) return "";
+    if (norm === CUSTOM_UPLOAD_ID){
+      try{ return localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
+    }
+    if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
     if (norm.startsWith("v2_")) return sitePackWallpaperDataUri(norm, true);
-    // SVGs are already lightweight enough for thumbs.
     return `/assets/wallpapers/${norm}.svg?v=${ASSET_REV}`;
   }
 
@@ -1048,17 +962,29 @@ function readFileAsDataURL(file){
     return full ? `url("${full}")` : "none";
   }
 
-  function wallpaperUnlocked(wp, idx){
+  function wallpaperUnlocked(wp, idx, effectiveCustomLen){
     if (!wp) return false;
-    return isPro() || (idx < unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS));
+    if (wp.tier === "custom"){
+      const customIdx = idx;
+      return isPro() || customIdx < CUSTOM_WP_FREE_COUNT;
+    }
+    const mainIdx = idx - (effectiveCustomLen || 0);
+    return isPro() || (mainIdx < unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS));
   }
 
+  function effectiveCustomWallpapersSite(){
+    const out = [...CUSTOM_WALLPAPERS_SITE];
+    try{ if (localStorage.getItem(LS_CUSTOM_BG_GLOBAL)) out.push({ id: CUSTOM_UPLOAD_ID, name: "My upload", tier: "custom" }); }catch{}
+    return out;
+  }
   function applyWallpaper(tab){
     const id = getWallpaperForTab(tab);
-    const wp = WALLPAPERS.find(x=>x.id===id) || null;
+    const effectiveCustom = effectiveCustomWallpapersSite();
+    const allWps = [...effectiveCustom, ...WALLPAPERS];
+    const wp = effectiveCustom.find(x=>x.id===id) || WALLPAPERS.find(x=>x.id===id) || null;
     let idx = -1;
-    try{ idx = wp ? WALLPAPERS.findIndex(x=>x.id===id) : -1; }catch{}
-    const ok = wp ? wallpaperUnlocked(wp, idx) : true;
+    try{ idx = wp ? allWps.findIndex(x=>x.id===id) : -1; }catch{}
+    const ok = wp ? wallpaperUnlocked(wp, idx, effectiveCustom.length) : true;
 
     const css = (id && ok) ? wallpaperUrl(id) : "none";
     document.documentElement.style.setProperty("--bg_wall", css);
@@ -1144,19 +1070,29 @@ function renderWallpaperUI(){
       ? (localStorage.getItem(LS_WP_GLOBAL) || "")
       : (localStorage.getItem(wallpaperKeyForTab(targetTab)) || "");
 
-    const unlocked = unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS);
-    const unlockedAll = isPro() || unlocked >= WALLPAPERS.length;
-    const nextReq = reqRefsForUnlockIndex(unlocked, FREE_VISIBLE_WALLPAPERS);
+    const effectiveCustom = effectiveCustomWallpapersSite();
+    const allWps = [...effectiveCustom, ...WALLPAPERS];
+    const mainUnlocked = unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS);
+    const customUnlocked = Math.min(effectiveCustom.length, isPro() ? effectiveCustom.length : CUSTOM_WP_FREE_COUNT);
+    const unlocked = mainUnlocked + customUnlocked;
+    const unlockedAll = isPro() || unlocked >= allWps.length;
+    const nextReq = reqRefsForUnlockIndex(unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS), FREE_VISIBLE_WALLPAPERS);
     st.innerHTML = unlockedAll
-      ? `<span class="ok">Unlocked.</span> All wallpapers available.`
-      : `<span class="warn">Locked.</span> First ${FREE_VISIBLE_WALLPAPERS} wallpapers are free. Next unlock at <b>${nextReq} ref</b> (+1 every 3 refs at first, then +1 every 4).`;
+      ? `<span class="ok">Unlocked.</span> All wallpapers available. First ${CUSTOM_WP_FREE_COUNT} custom free, rest Pro.`
+      : `<span class="warn">Locked.</span> First ${FREE_VISIBLE_WALLPAPERS} main + ${CUSTOM_WP_FREE_COUNT} custom free. Next unlock at <b>${nextReq} ref</b>.`;
 
-    const items = WALLPAPERS.map((wp, idx)=>({ wp, idx }));
+    loadCustomWallpapers().then((loaded)=>{
+      if (loaded && document.contains(grid)) renderWallpaperUI();
+    });
+
+    const items = allWps.map((wp, idx)=>({ wp, idx }));
     chunkedRender(grid, items, ({ wp, idx })=>{
-      const isUnlocked = wallpaperUnlocked(wp, idx);
+      const isUnlocked = wallpaperUnlocked(wp, idx, effectiveCustom.length);
       const card = document.createElement("button");
       card.type = "button";
       card.dataset.wpId = wp.id;
+      const mainIdx = wp.tier === "custom" ? -1 : (idx - effectiveCustom.length);
+      card.dataset.tier = wp.tier || (mainIdx >= 0 && mainIdx < FREE_VISIBLE_WALLPAPERS ? "free" : "premium");
       card.className = "wpCard" + (isUnlocked ? "" : " mystery") + (wp.id===activeId ? " active" : "");
 
       const thumb = document.createElement("div");
@@ -1176,11 +1112,11 @@ function renderWallpaperUI(){
 
       const meta = document.createElement("div");
       meta.className = "wpMeta";
-      meta.textContent = (idx < FREE_VISIBLE_WALLPAPERS) ? "Free" : (isPro() ? "Pro" : "Locked");
+      meta.textContent = (wp.tier === "custom") ? "Custom" : ((mainIdx >= 0 && mainIdx < FREE_VISIBLE_WALLPAPERS) ? "Free" : (isPro() ? "Pro" : "Locked"));
 
       const tag = document.createElement("div");
       tag.className = "wpTag";
-      tag.textContent = (idx < FREE_VISIBLE_WALLPAPERS) ? "FREE" : (isUnlocked ? "UNLOCKED" : (reqRefsForUnlockIndex(idx, FREE_VISIBLE_WALLPAPERS) + " ref"));
+      tag.textContent = (wp.tier === "custom") ? "CUSTOM" : ((mainIdx >= 0 && mainIdx < FREE_VISIBLE_WALLPAPERS) ? "FREE" : (isUnlocked ? "UNLOCKED" : (reqRefsForUnlockIndex(mainIdx, FREE_VISIBLE_WALLPAPERS) + " ref")));
 
       card.appendChild(thumb);
       card.appendChild(name);
@@ -1196,17 +1132,15 @@ function renderWallpaperUI(){
 
       card.addEventListener("click", ()=>{
         if (!isUnlocked){
-          toast("warn", (t("locked_unlock_at") || "Locked. Unlock at {n} referrals (+1 every 3 refs at first, then +1 every 4) or Pro.").replace("{n}", String(reqRefsForUnlockIndex(idx, FREE_VISIBLE_WALLPAPERS))));
+          const reqIdx = wp.tier === "custom" ? idx : (idx - effectiveCustom.length);
+          toast("warn", (t("locked_unlock_at") || "Locked. Unlock at {n} referrals (+1 every 3 refs at first, then +1 every 4) or Pro.").replace("{n}", String(reqRefsForUnlockIndex(reqIdx, FREE_VISIBLE_WALLPAPERS))));
           return;
         }
 
-        // Apply wallpaper implies wallpaper should be visible: clear custom background for the same target.
         if (targetTab === "all"){
           localStorage.setItem(LS_WP_GLOBAL, wp.id);
-          clearCustomBgForTab("all");
         } else {
           setWallpaperForTab(targetTab, wp.id);
-          clearCustomBgForTab(targetTab);
         }
 
         // Avoid full grid re-render (prevents UI freeze).
@@ -1239,54 +1173,41 @@ function renderWallpaperUI(){
   function setThemeWallView(view){
     const themeBtn  = $("tabTheme");
     const wallBtn   = $("tabWall");
-    const customBtn = $("tabCustom");
     const themePane  = $("themePane");
     const wallPane   = $("wallPane");
-    const customPane = $("customPane");
     const wpNote = $("wp_note");
-    const cbNote = $("customBg_note");
-    if (!themeBtn || !wallBtn || !customBtn || !themePane || !wallPane || !customPane) return;
+    if (!themeBtn || !wallBtn || !themePane || !wallPane) return;
 
-    const v = (view === "wall" || view === "custom") ? view : "theme";
+    const v = (view === "wall") ? "wall" : "theme";
     localStorage.setItem(LS_THEMEWALL_VIEW, v);
 
     const themeOn  = (v === "theme");
     const wallOn   = (v === "wall");
-    const customOn = (v === "custom");
 
     themeBtn.classList.toggle("active", themeOn);
     wallBtn.classList.toggle("active", wallOn);
-    customBtn.classList.toggle("active", customOn);
 
     themeBtn.setAttribute("aria-selected", themeOn ? "true" : "false");
     wallBtn.setAttribute("aria-selected", wallOn ? "true" : "false");
-    customBtn.setAttribute("aria-selected", customOn ? "true" : "false");
 
     themePane.classList.toggle("hidden", !themeOn);
     wallPane.classList.toggle("hidden", !wallOn);
-    customPane.classList.toggle("hidden", !customOn);
 
     if (wpNote) wpNote.classList.toggle("hidden", !wallOn);
-    if (cbNote) cbNote.classList.toggle("hidden", !customOn);
 
     if (wallOn){
       try{ renderWallpaperUI(); }catch{}
-    }
-    if (customOn){
-      try{ syncCustomBgUI(); }catch{}
     }
   }
 
   function initThemeWallTabs(){
     const themeBtn  = $("tabTheme");
     const wallBtn   = $("tabWall");
-    const customBtn = $("tabCustom");
     if (themeBtn)  themeBtn.addEventListener("click", ()=>setThemeWallView("theme"));
     if (wallBtn)   wallBtn.addEventListener("click",  ()=>setThemeWallView("wall"));
-    if (customBtn) customBtn.addEventListener("click", ()=>setThemeWallView("custom"));
 
     const saved = localStorage.getItem(LS_THEMEWALL_VIEW) || "theme";
-    setThemeWallView(saved);
+    setThemeWallView(saved === "custom" ? "wall" : saved);
   }
 
 
@@ -1470,12 +1391,22 @@ function renderWallpaperUI(){
     ["lux_ext_onchain_spaceport", "Onchain Spaceport"],
     ["lux_ext_solana_temple", "Solana Temple"],
   ];
+  const CRYPTO_EXT_WALL_SOURCES = [
+    "https://source.unsplash.com/1080x1920/?bitcoin,crypto,vertical,neon",
+    "https://source.unsplash.com/1080x1920/?ethereum,blockchain,vertical,dark",
+    "https://source.unsplash.com/1080x1920/?solana,crypto,vertical,gradient",
+    "https://source.unsplash.com/1080x1920/?dogecoin,meme,crypto,vertical",
+    "https://source.unsplash.com/1080x1920/?bonk,crypto,vertical,market",
+    "https://source.unsplash.com/1080x1920/?x,finance,vertical,chart",
+    "https://source.unsplash.com/1080x1920/?trading,terminal,vertical",
+    "https://source.unsplash.com/1080x1920/?blockchain,network,vertical"
+  ];
   function buildExtWallpapers(){
     const out = EXT_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
     for (let i=1; i<=EXT_WALLPAPER_PACK_COUNT; i++){
       out.push({
         id: `extv3_${String(i).padStart(2, "0")}`,
-        name: `Photo Pack ${i}`,
+        name: `Aurora ${i}`,
         tier: i <= EXT_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
       });
     }
@@ -1487,20 +1418,7 @@ function renderWallpaperUI(){
     try{
       const done = "gmx_ext_wallpaper_refresh_20260318";
       if (localStorage.getItem(done) === "1") return;
-      const luxIds = EXT_WALLPAPER_LUX.map(([id])=>id).filter(Boolean);
-      if (!luxIds.length) return;
-      const mapExt = (id)=>{
-        const v = String(id || "").trim();
-        if (!/^extv3_\d+$/i.test(v)) return v;
-        const num = Math.max(1, Number(v.slice(6)) || 1);
-        return luxIds[(num - 1) % luxIds.length];
-      };
-      const views = ["all","home","gm","gn","referrals","themes","wallet"];
-      for (const view of views){
-        const k = extWallpaperKeyForView(view);
-        const cur = localStorage.getItem(k) || "";
-        if (cur) localStorage.setItem(k, mapExt(cur));
-      }
+      // keep IDs stable; visual refresh now happens in URL resolver
       localStorage.setItem(done, "1");
     }catch{}
   }
@@ -1849,7 +1767,7 @@ function renderExtCustomBgUI(){
 
 function normalizeExtViewValue(view){
   const v = String(view || "").trim().toLowerCase();
-  return (v === "wall" || v === "custom") ? v : "theme";
+  return (v === "wall") ? "wall" : "theme";
 }
 
 function setExtView(view, opts){
@@ -1860,29 +1778,23 @@ function setExtView(view, opts){
   if (!options.silent && prev !== safeView) extSyncNow("ext_view");
   const btnTheme = $("extTabTheme");
   const btnWall = $("extTabWall");
-  const btnCustom = $("extTabCustom");
   const paneTheme = $("extThemePane");
   const paneWall = $("extWallPane");
-  const paneCustom = $("extCustomPane");
-  if (!btnTheme || !btnWall || !btnCustom || !paneTheme || !paneWall || !paneCustom) return;
+  if (!btnTheme || !btnWall || !paneTheme || !paneWall) return;
 
   btnTheme.classList.toggle("active", safeView==="theme");
   btnWall.classList.toggle("active", safeView==="wall");
-  btnCustom.classList.toggle("active", safeView==="custom");
 
   btnTheme.setAttribute("aria-selected", safeView==="theme" ? "true" : "false");
   btnWall.setAttribute("aria-selected", safeView==="wall" ? "true" : "false");
-  btnCustom.setAttribute("aria-selected", safeView==="custom" ? "true" : "false");
 
   paneTheme.classList.toggle("hidden", safeView!=="theme");
   paneWall.classList.toggle("hidden", safeView!=="wall");
-  paneCustom.classList.toggle("hidden", safeView!=="custom");
 
-  const hasRenderedContent = (safeView==="theme" ? !!paneTheme.querySelector(".themeCard") : (safeView==="wall" ? !!paneWall.querySelector(".wpCard") : !!paneCustom.querySelector("input,textarea,.btn,.hint,.ok,.warn,.muted")));
+  const hasRenderedContent = (safeView==="theme" ? !!paneTheme.querySelector(".themeCard") : !!paneWall.querySelector(".wpCard"));
   const shouldRender = options.force === true || prev !== safeView || !hasRenderedContent;
   if (safeView==="theme" && shouldRender) renderExtThemes();
   if (safeView==="wall" && shouldRender) renderExtWallpapers();
-  if (safeView==="custom" && shouldRender) renderExtCustomBgUI();
 }
 
   let __extSyncDebounce = 0;
@@ -1944,10 +1856,7 @@ function markExtWallpaperSelection(id){
 
   function applyExtWallpaper(id, targetView){
     const safeId = normalizeExtWallpaperIdLocal(id);
-    const total = EXT_WALLPAPERS.length;
-    const unlocked = unlockedCountByRefs(total, FREE_VISIBLE_EXT_WALLPAPERS);
-    const idx = EXT_WALLPAPERS.findIndex(x=>x.id===safeId);
-    if (!isPro() && (idx < 0 || idx >= unlocked)) return;
+    if (!safeId) return;
     const safeTarget = normalizeExtWallpaperView(targetView || currentExtWallpaperTarget());
     setExtWallpaperForView(safeTarget, safeId);
     try{ localStorage.removeItem(LS_EXT_CUSTOM_BG_LEGACY); }catch(e){}
@@ -2120,21 +2029,33 @@ function renderExtWallpapers(){
   if (!grid || !st) return;
 
   initExtWallpaperControls();
+  loadCustomWallpapers().then((loaded)=>{
+    if (loaded && document.contains(grid)) renderExtWallpapers();
+  });
+  const effectiveExtCustom = (()=>{
+    const out = [...CUSTOM_WALLPAPERS_EXT];
+    try{ if (localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL)) out.push({ id: CUSTOM_UPLOAD_ID, name: "My upload", tier: "custom" }); }catch{}
+    return out;
+  })();
+  const allExtWps = [...EXT_WALLPAPERS, ...effectiveExtCustom];
   const selectedTarget = syncExtWallpaperTargetUI(targetSel, targetSel?.value || currentExtWallpaperTarget());
-  const total = EXT_WALLPAPERS.length;
-  const unlocked = unlockedCountByRefs(total, FREE_VISIBLE_EXT_WALLPAPERS);
+  const total = allExtWps.length;
+  const mainUnlockedExt = unlockedCountByRefs(EXT_WALLPAPERS.length, FREE_VISIBLE_EXT_WALLPAPERS);
+  const customUnlockedExt = Math.min(effectiveExtCustom.length, isPro() ? effectiveExtCustom.length : CUSTOM_WP_FREE_COUNT);
+  const unlocked = mainUnlockedExt + customUnlockedExt;
   const chosenDirect = getExtWallpaperForView(selectedTarget);
   const fallbackGlobal = selectedTarget === "all" ? "" : getExtWallpaperForView("all");
   const chosen = chosenDirect || fallbackGlobal || "";
   const wEl = $("extWpUnlocked");
   if (wEl) wEl.textContent = `${Math.min(unlocked,total)}/${total}`;
 
-  const items = EXT_WALLPAPERS.map((wp, idx)=>({ wp, idx }));
+  const items = allExtWps.map((wp, idx)=>({ wp, idx }));
   chunkedRender(grid, items, ({ wp, idx })=>{
-    const isUnlocked = isPro() || (idx < unlocked);
+    const isUnlocked = wp.tier === "custom" ? (idx - EXT_WALLPAPERS.length < CUSTOM_WP_FREE_COUNT || isPro()) : (isPro() || idx < mainUnlockedExt);
     const card = document.createElement("button");
     card.type = "button";
     card.dataset.wpId = wp.id;
+    card.dataset.tier = wp.tier || (idx < FREE_VISIBLE_EXT_WALLPAPERS ? "free" : "premium");
     card.className = "wpCard" + (wp.id === chosen ? " active" : "") + (!isUnlocked ? " mystery" : "");
 
     const thumb = document.createElement("div");
@@ -2155,11 +2076,11 @@ function renderExtWallpapers(){
 
     const meta = document.createElement("div");
     meta.className = "wpMeta";
-    meta.textContent = wp.tier || "";
+    meta.textContent = (wp.tier === "custom") ? "Custom" : (wp.tier || "");
 
     const tag = document.createElement("div");
     tag.className = "wpTag";
-    tag.textContent = unlockTagText(idx, isUnlocked, FREE_VISIBLE_EXT_WALLPAPERS);
+    tag.textContent = (wp.tier === "custom") ? "CUSTOM" : unlockTagText(idx, isUnlocked, FREE_VISIBLE_EXT_WALLPAPERS);
 
     card.appendChild(thumb);
     card.appendChild(name);
@@ -2190,7 +2111,7 @@ function renderExtWallpapers(){
     st.innerHTML = `<span class="muted">None.</span> Pick a wallpaper for <b>${escapeHtml(extWallpaperLabel(selectedTarget))}</b>.`;
     return;
   }
-  const chosenName = EXT_WALLPAPERS.find(x=>x.id===chosen)?.name || chosen;
+  const chosenName = EXT_WALLPAPERS.find(x=>x.id===chosen)?.name || effectiveExtCustom.find(x=>x.id===chosen)?.name || chosen;
   if (chosenDirect){
     st.innerHTML = `<span class="ok">Selected.</span> ${escapeHtml(chosenName)} for <b>${escapeHtml(extWallpaperLabel(selectedTarget))}</b>.`;
   } else {
@@ -2204,11 +2125,9 @@ function bindExtTabs(){
 
   const themeBtn  = $("extTabTheme");
   const wallBtn   = $("extTabWall");
-  const customBtn = $("extTabCustom");
 
   if (themeBtn)  themeBtn.addEventListener("click", ()=>setExtView("theme"));
   if (wallBtn)   wallBtn.addEventListener("click",  ()=>setExtView("wall"));
-  if (customBtn) customBtn.addEventListener("click", ()=>setExtView("custom"));
 }
 
 function initExtWallpaperControls(){
@@ -2216,6 +2135,31 @@ function initExtWallpaperControls(){
   initExtWallpaperControls._done = true;
   const sel = $("extWpTarget");
   const clearBtn = $("extWpClear");
+  const addBtn = $("extWpAddCustom");
+  const addFile = $("extWpAddFile");
+  if (addBtn && addFile){
+    addBtn.onclick = ()=>{ if (requireConnected("Extension themes")) addFile.click(); };
+  }
+  if (addFile){
+    addFile.addEventListener("change", async ()=>{
+      try{
+        if (!requireConnected("Extension themes")) { addFile.value = ""; return; }
+        const f = addFile.files && addFile.files[0];
+        if (!f) return;
+        const data = await compressImageToJpegDataURL(f, { profile: "ext" });
+        localStorage.setItem(LS_EXT_CUSTOM_BG_GLOBAL, data);
+        const target = ($("extWpTarget")?.value || "all");
+        setExtWallpaperForView(normalizeExtWallpaperView(target), CUSTOM_UPLOAD_ID);
+        extSyncNow("ext_wallpaper");
+        try{ renderExtWallpapers(); }catch{}
+        toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved."));
+      }catch(e){
+        toast("warn", (t("err_custom_wp_save")||"Could not save image."));
+      }finally{
+        addFile.value = "";
+      }
+    });
+  }
   if (sel){
     syncExtWallpaperTargetUI(sel);
     sel.addEventListener("change", ()=>{
@@ -2918,7 +2862,6 @@ async function refreshUsage(){
       fillPacks();
       try{ window.__syncProControls && window.__syncProControls(); }catch(e){}
 
-      syncCustomBgUI();
       applyUserBg();
       initWallpapers();
 
@@ -3173,14 +3116,21 @@ async function doBest(kind){
     if (container){
       container.querySelectorAll(".lineRow.selected").forEach(r=>r.classList.remove("selected"));
       const rows = Array.from(container.querySelectorAll(".lineRow"));
-      const row = rows.find(r => (r.querySelector("input")?.value||"").trim() === bestTrim);
+      const row = rows.find(r => {
+        const inp = r.querySelector("input");
+        const txt = r.querySelector(".lineText");
+        const v = (inp?.value || txt?.textContent || "").trim();
+        return v === bestTrim;
+      });
       if (row){
         row.classList.add("selected");
         row.classList.add("bestFlash");
         try{ row.scrollIntoView({ behavior:"smooth", block:"center" }); }catch(_e){}
         try{
+          const cell = row.querySelector(".lineCell");
           const inp = row.querySelector("input");
-          if (inp){ inp.focus(); inp.select(); }
+          if (cell && !row.classList.contains("editing")) cell.click();
+          else if (inp){ inp.focus(); inp.select(); }
         }catch(_e){}
         setTimeout(()=>row.classList.remove("bestFlash"), 1600);
       }
@@ -3450,8 +3400,7 @@ countEl.textContent = lines.length;
       return;
     }
 
-    // Large saved banks can be expensive to paint in one synchronous pass.
-    // Render line rows in chunks to keep the UI responsive while Best/Clean runs.
+    // Large saved banks: readable display, edit-on-click (no sea of inputs).
     chunkedRender(container, items, (item, pos)=>{
       const i = item.idx;
       const val = item.val;
@@ -3459,28 +3408,71 @@ countEl.textContent = lines.length;
       const row = document.createElement("div");
       row.className = "lineRow";
       row.innerHTML = `
-        <div class="idx">${pos+1}</div>
-        <input class="lineInput" name="line" aria-label="Saved reply ${pos+1}" value="${escapeHtml(val)}" />
-        <button class="delBtn" title="Remove" type="button">&times;</button>
+        <span class="idx">${pos+1}</span>
+        <div class="lineCell" role="button" tabindex="0">
+          <span class="lineText">${escapeHtml(val)}</span>
+          <input class="lineInput" name="line" aria-label="Saved reply ${pos+1}" value="${escapeHtml(val)}" style="display:none" />
+        </div>
+        <button class="delBtn" title="Remove" type="button" aria-label="Remove">&times;</button>
       `;
+      const cell = row.querySelector(".lineCell");
+      const textEl = row.querySelector(".lineText");
       const input = row.querySelector("input");
       const del = row.querySelector("button");
 
-      input.addEventListener("input", ()=>{
-        const cur = readKey(key);
+      function commitEdit(){
         const v = input.value.trim();
         if (!v){
+          const cur = readKey(key);
           cur.splice(i, 1);
           writeKey(key, cur);
           renderList(kind);
           return;
         }
+        const cur = readKey(key);
         cur[i] = v;
         writeKey(key, cur);
         countEl.textContent = cur.length;
+        textEl.textContent = v;
+        input.style.display = "none";
+        textEl.style.display = "";
+        row.classList.remove("editing");
+      }
+
+      function startEdit(){
+        row.classList.add("editing");
+        input.value = textEl.textContent;
+        input.style.display = "";
+        textEl.style.display = "none";
+        input.focus();
+        input.select();
+      }
+
+      cell.addEventListener("click", (e)=>{
+        if (e.target === del) return;
+        if (!row.classList.contains("editing")) startEdit();
+      });
+      input.addEventListener("blur", commitEdit);
+      input.addEventListener("keydown", (e)=>{
+        if (e.key === "Enter"){ e.preventDefault(); commitEdit(); }
+        if (e.key === "Escape"){
+          e.preventDefault();
+          input.value = textEl.textContent;
+          input.style.display = "none";
+          textEl.style.display = "";
+          row.classList.remove("editing");
+        }
+      });
+      input.addEventListener("input", ()=>{
+        const v = input.value.trim();
+        if (!v) return;
+        const cur = readKey(key);
+        cur[i] = v;
+        writeKey(key, cur);
       });
 
-      del.addEventListener("click", ()=>{
+      del.addEventListener("click", (e)=>{
+        e.stopPropagation();
         const cur = readKey(key);
         cur.splice(i, 1);
         writeKey(key, cur);
@@ -3867,9 +3859,11 @@ if (effCount <= 0){
           }
         };
 
-        const buffer = 30;
+        const buffer = 24;
+        const genDeadline = Date.now() + 45000;
         let attempts = 0;
         while (accepted.length < effCount && attempts < 1){
+          if (Date.now() > genDeadline) break;
           attempts++;
           const missing = effCount - accepted.length;
           const reqCount = Math.min(140, missing + buffer);
@@ -4021,6 +4015,20 @@ async function refreshRefStats(force=false){
     const promoNote = $("refPromoNote");
     if (promoNote){
       try{ renderReferralPromoNote(j, confirmed, active, eligible); }catch{}
+    }
+    const nextStep = nextReferralUnlockAt(eligible);
+    const wrap = $("refProgressWrap");
+    const nextEl = $("refProgressNext");
+    const fillEl = $("refProgressFill");
+    if (wrap && nextEl && fillEl){
+      if (nextStep > 0){
+        wrap.classList.remove("hidden");
+        nextEl.textContent = String(nextStep);
+        const pct = Math.min(100, Math.round((eligible / nextStep) * 100));
+        fillEl.style.width = pct + "%";
+      } else {
+        wrap.classList.add("hidden");
+      }
     }
 
     const promoDetails = $("promoDetails");
@@ -4968,7 +4976,7 @@ if (src){
       const secondary = planPriceSecondary(p, selectedCurrency);
 
       // simple badges
-      p.badge = (Number(p.days||0) >= 365) ? "Best value" : (Number(p.days||0) >= 180 ? "Popular" : "");
+      p.badge = (Number(p.days||0) >= 365) ? "2 mo free" : (Number(p.days||0) >= 180 ? "Popular" : "");
       if (!p.badge) p.badge = "";
 
       btn.innerHTML = `
@@ -6342,7 +6350,6 @@ function closeLangMenu(){
       fillPacks();
   applyTheme(localStorage.getItem("gmx_theme") || "classic");
   renderThemes();
-  syncCustomBgUI();
   applyUserBg();
   initWallpapers();
 
@@ -6453,6 +6460,34 @@ function closeLangMenu(){
   const gnFilterClearBtn = $("gnFilterClear");
   if (gnFilterClearBtn) gnFilterClearBtn.onclick = ()=>{ if (gnFilterInp) gnFilterInp.value=""; renderList("gn"); };
 
+  // Quick presets: Casual / Pro / Fun
+  document.querySelectorAll(".quickPresets [data-preset]").forEach(btn=>{
+    btn.onclick = ()=>{
+      const wrap = btn.closest(".quickPresets");
+      const kind = wrap?.dataset?.kind || "gm";
+      const preset = btn.dataset.preset || "casual";
+      const modeEl = kind==="gm" ? $("gmMode") : $("gnMode");
+      const styleEl = kind==="gm" ? $("gmStyle") : $("gnStyle");
+      const packEl = kind==="gm" ? $("gmPack") : $("gnPack");
+      if (preset==="casual"){ if(modeEl) modeEl.value="mid"; if(styleEl) styleEl.value="classic"; if(packEl) packEl.value="classic"; }
+      else if (preset==="pro"){ if(modeEl) modeEl.value="mid"; if(styleEl) styleEl.value="alpha"; if(packEl) packEl.value="king"; }
+      else if (preset==="fun"){ if(modeEl) modeEl.value="min"; if(styleEl) styleEl.value="cheer"; if(packEl) packEl.value="classic"; }
+      wrap?.querySelectorAll("[data-preset]").forEach(b=>b.classList.toggle("active", b===btn));
+    };
+  });
+
+  // Ctrl+Enter = Batch 10 when on GM/GN tab
+  document.addEventListener("keydown", (e)=>{
+    if (!(e.ctrlKey||e.metaKey) || e.key!=="Enter") return;
+    const active = $("t_gm")?.classList.contains("active") ? "gm" : ($("t_gn")?.classList.contains("active") ? "gn" : null);
+    if (!active) return;
+    const target = e.target; if (!target) return;
+    const inGM = active==="gm" && target.closest("#tab-gm");
+    const inGN = active==="gn" && target.closest("#tab-gn");
+    if (inGM && getHandle()){ e.preventDefault(); generate("gm", 10); }
+    else if (inGN && getHandle()){ e.preventDefault(); generate("gn", 10); }
+  });
+
   // draft autosave
   const gmPaste = $("gmPaste");
   const gnPaste = $("gnPaste");
@@ -6462,70 +6497,35 @@ function closeLangMenu(){
   if (gnPaste) gnPaste.addEventListener("input", ()=>saveDraft("gn"));
 
 
-  // custom background (themes)
-  const customPick = $("customBgPick");
-  const customFile = $("customBgFile");
-  const customRm = $("customBgRemove");
-  const customClear = $("customBgClear");
-  const customTabSel = $("customBgTab");
-
-  if (customPick && customFile){
-    customPick.onclick = ()=>{
-      if(!requireConnected("Themes")) return;
-      const target = (customTabSel?.value || "all");
-      if (!canSetCustomBgOnTab(target)){
-        const need = requiredRefsForCustomBgTab(target);
-        if ($("customBg_status")) $("customBg_status").textContent = `Locked: need ${need} referrals to unlock this tab (or upgrade to Pro).`;
-        return;
-      }
-      customFile.click();
-    };
+  // Add wallpaper (themes - custom upload in wallpapers tab)
+  const wpAddCustom = $("wpAddCustom");
+  const wpAddFile = $("wpAddFile");
+  if (wpAddCustom && wpAddFile){
+    wpAddCustom.onclick = ()=>{ if (requireConnected("Themes")) wpAddFile.click(); };
   }
-
-  if (customFile){
-    customFile.addEventListener("change", async ()=>{
+  if (wpAddFile){
+    wpAddFile.addEventListener("change", async ()=>{
       try{
-        if (!requireConnected("Themes")) { customFile.value = ""; return; }
-        const target = (customTabSel?.value || "all");
-        if (!canSetCustomBgOnTab(target)){
-          const need = requiredRefsForCustomBgTab(target);
-          if ($("customBg_status")) $("customBg_status").textContent = `Locked: need ${need} referrals to unlock this tab (or upgrade to Pro).`;
-          customFile.value = "";
-          return;
-        }
-        const f = customFile.files && customFile.files[0];
+        if (!requireConnected("Themes")) { wpAddFile.value = ""; return; }
+        const f = wpAddFile.files && wpAddFile.files[0];
         if (!f) return;
-        if ($("customBgName")) $("customBgName").textContent = f.name || "";
         const data = await compressImageToJpegDataURL(f, { profile: "site" });
-        setCustomBgForTab(target, data);
-        renderCustomBgUI();
-        {
-          const previewTab = (target === "all") ? currentTabName() : target;
-          applyUserBg(previewTab);
-        }
-        if ($("customBg_status")) $("customBg_status").innerHTML = `<span class="ok">Saved.</span> Auto-fitted for desktop and mobile cover mode.`;
-        toast("ok", (t("toast_custom_bg_saved")||"Custom background saved."));
+        localStorage.setItem(LS_CUSTOM_BG_GLOBAL, data);
+        const targetTab = ($("wpTab")?.value || "all");
+        if (targetTab === "all") localStorage.setItem(LS_WP_GLOBAL, CUSTOM_UPLOAD_ID);
+        else setWallpaperForTab(targetTab, CUSTOM_UPLOAD_ID);
+        try{ renderWallpaperUI(); }catch{}
+        const previewTab = (targetTab === "all") ? currentTabName() : targetTab;
+        applyWallpaper(previewTab);
+        applyUserBg(previewTab);
+        toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved."));
       }catch(e){
-        if ($("customBg_status")) $("customBg_status").textContent = "Could not save this image (too large or blocked by browser storage).";
+        toast("warn", (t("err_custom_wp_save")||"Could not save image (too large or blocked)."));
       }finally{
-        customFile.value = "";
+        wpAddFile.value = "";
       }
     });
   }
-
-  if (customRm){
-    customRm.addEventListener("click", ()=>{
-      if (!requireConnected("Themes")) return;
-      const target = (customTabSel?.value || "all");
-      setCustomBgForTab(target, null);
-      renderCustomBgUI();
-      applyUserBg();
-      toast("ok", (t("toast_removed")||"Removed."));
-    });
-  }
-
-  // init custom bg UI (fills select + clear)
-  try{ syncCustomBgUI(); }catch(e){}
   function pushRecent(kind, keys){
     try{
       const cur = getRecent(kind);
@@ -6688,11 +6688,13 @@ function closeLangMenu(){
     let refilled = 0;
     let attempts = 0;
     let stalled = 0;
-    while (cur.length < desiredTotal && attempts < 8){
+    const refillDeadline = Date.now() + 45000;
+    while (cur.length < desiredTotal && attempts < 3){
+      if (Date.now() > refillDeadline) break;
       attempts++;
       const missing = desiredTotal - cur.length;
-      const reqCount = Math.min(360, missing + 80 + (stalled * 40));
-      const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=0&count=${reqCount}`, "GET", null, { signal: opts?.signal, timeoutMs: 30000 });
+      const reqCount = Math.min(180, missing + 50 + (stalled * 20));
+      const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=0&count=${reqCount}`, "GET", null, { signal: opts?.signal, timeoutMs: 12000 });
       const list = Array.isArray(bulk?.list) ? bulk.list : [];
       if (!list.length) {
         stalled++;

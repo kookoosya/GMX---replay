@@ -1,9 +1,0 @@
-R34 quick audit
-
-- This archive is a full replace baseline with `.git`.
-- Cleaned: wal/shm, logs, mnt, frontend/dist, *.bak* removed.
-- Merged in: split frontend, assets, public.
-- index.js updated from latest uploaded working copy.
-- Safe fixes applied in extension popup wallpaper handling + user-facing theme/pro texts.
-
-Next chat priority: finish themes/ext themes, unify assets, then arcade.

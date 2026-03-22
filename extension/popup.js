@@ -100,6 +100,7 @@ const state = {
 function canonicalExtWallpaperId(id){
   const v = String(id||'').trim().toLowerCase();
   if (!v) return '';
+  if (v === "custom_upload") return "custom_upload";
   if (EXT_WALLPAPER_OPTIONS.some(x=>String(x.id||'').toLowerCase()===v)) return v;
   let m = v.match(/^extv3_(\d{1,2})$/i);
   if (m) {
@@ -139,6 +140,7 @@ function sanitizeThemeId(raw, catalog) {
 const el = {
   openSite: document.getElementById("openSite"),
   openArcade: document.getElementById("openArcade"),
+  openArcadeGotd: document.getElementById("openArcadeGotd"),
   openX: document.getElementById("openX"),
   openQuick: document.getElementById("openQuick"),
   syncSiteBtn: document.getElementById("syncSiteBtn"),
@@ -283,7 +285,11 @@ async function applyThemeUi() {
   if (requestedView === "custom" && state.extCustomBg) {
     wallSource = state.extCustomBg;
   } else if (requestedView === "wall" && state.extWallpaper) {
-    wallSource = await resolveWallpaperSource(state.base, state.extWallpaper);
+    if ((state.extWallpaper === "custom_upload" || String(state.extWallpaper || "").toLowerCase() === "custom_upload") && state.extCustomBg) {
+      wallSource = state.extCustomBg;
+    } else {
+      wallSource = await resolveWallpaperSource(state.base, state.extWallpaper);
+    }
   }
   const effectiveView = wallSource ? requestedView : "theme";
   state.extView = effectiveView;
@@ -364,19 +370,14 @@ function extPackWallpaperDataUri(id, thumb) {
   const p = EXT_PACK_PALETTES[(n - 1) % EXT_PACK_PALETTES.length];
   const w = thumb ? 360 : 1080;
   const h = thumb ? 640 : 1920;
-  const bars = Array.from({length: thumb ? 8 : 18}).map((_,i)=>{
-    const x = w * (0.12 + (i / (thumb ? 8 : 18)) * 0.68);
-    const bh = h * (0.15 + 0.2 * Math.sin((i + n) * 0.6) ** 2);
-    const y = h - h * 0.22 - bh;
-    const fill = (i + n) % 4 === 0 ? p.c2 : p.c1;
-    return `<rect x="${Math.round(x)}" y="${Math.round(y)}" width="${Math.max(6, w * 0.04)}" height="${Math.round(bh)}" rx="4" fill="${fill}" opacity="0.88"/>`;
-  }).join("");
-  const ticker = Array.from({length: thumb ? 5 : 12}).map((_,i)=>{
-    const y = h * (0.15 + (i / (thumb ? 5 : 12)) * 0.5);
-    const opacity = 0.06 + 0.04 * (i % 3);
-    return `<line x1="${w*0.08}" y1="${Math.round(y)}" x2="${w*0.92}" y2="${Math.round(y)}" stroke="white" stroke-width="1" opacity="${opacity}"/>`;
-  }).join("");
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="bg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#080c14"/><stop offset="35%" stop-color="#0a0f18"/><stop offset="100%" stop-color="#050810"/></linearGradient><linearGradient id="accent" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${p.c1}" stop-opacity="0.4"/><stop offset="100%" stop-color="${p.c2}" stop-opacity="0.05"/></linearGradient><filter id="blur"><feGaussianBlur stdDeviation="${thumb ? 12 : 40}"/></filter></defs><rect width="${w}" height="${h}" fill="url(#bg)"/><ellipse cx="${w*0.5}" cy="${h*0.15}" rx="${w*0.6}" ry="${h*0.12}" fill="${p.c1}" opacity="0.15" filter="url(#blur)"/><rect x="0" y="0" width="${w}" height="${h*0.35}" fill="url(#accent)"/>${ticker}${bars}<text x="${w*0.1}" y="${thumb ? h*0.2 : h*0.18}" font-family="Inter,Segoe UI,sans-serif" font-size="${thumb ? 32 : 90}" font-weight="900" fill="white" opacity="0.96">${p.tag}</text><text x="${w*0.1}" y="${thumb ? h*0.26 : h*0.24}" font-family="Inter,Segoe UI,sans-serif" font-size="${thumb ? 10 : 22}" font-weight="600" fill="rgba(255,255,255,0.7)">Crypto Twitter · Extension</text></svg>`;
+  const blur = thumb ? 40 : 120;
+  const orbs = [
+    { cx: 0.2 + (n % 5) * 0.1, cy: 0.25, r: 0.5, c: p.c1, op: 0.2 },
+    { cx: 0.8 - (n % 4) * 0.1, cy: 0.7, r: 0.4, c: p.c2, op: 0.18 },
+    { cx: 0.5, cy: 0.5, r: 0.35, c: p.c1, op: 0.06 }
+  ];
+  const orbEls = orbs.map(o=>`<ellipse cx="${w*o.cx}" cy="${h*o.cy}" rx="${w*o.r}" ry="${h*o.r*0.8}" fill="${o.c}" opacity="${o.op}" filter="url(#blur)"/>`).join("");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="bg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#070a12"/><stop offset="100%" stop-color="#050810"/></linearGradient><filter id="blur"><feGaussianBlur stdDeviation="${blur}"/></filter></defs><rect width="${w}" height="${h}" fill="url(#bg)"/>${orbEls}</svg>`;
   return svgDataUri(svg);
 }
 
@@ -985,6 +986,7 @@ function bindEvents() {
   if (el.openQuick) el.openQuick.addEventListener("click", () => void openQuickPanel());
   if (el.openSite) el.openSite.addEventListener("click", () => void openTab(`${state.base || DEFAULT_BASE}/app`));
   if (el.openArcade) el.openArcade.addEventListener("click", () => void openTab(`${state.base || DEFAULT_BASE}/arcade.html`));
+  if (el.openArcadeGotd) el.openArcadeGotd.addEventListener("click", () => void openTab(`${state.base || DEFAULT_BASE}/arcade.html`));
   if (el.openX) el.openX.addEventListener("click", () => void openTab("https://x.com"));
 
   chrome.storage.onChanged.addListener((changes, area) => {

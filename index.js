@@ -212,7 +212,7 @@ const CONFIG = {
   // Daily free generation limit (GM and GN each). Override via env GMX_FREE_DAILY.
   FREE_DAILY_BASE: Math.max(0, Math.min(500, Number(process.env.GMX_FREE_DAILY || '70') || 70)),
   // Free saved lines cap (GM and GN each). Override via env GMX_SAVE_CAP_FREE.
-  SAVE_CAP_FREE: Math.max(10, Math.min(1000, Number(process.env.GMX_SAVE_CAP_FREE || '70') || 70)),
+  SAVE_CAP_FREE: Math.max(10, Math.min(1000, Number(process.env.GMX_SAVE_CAP_FREE || '50') || 50)),
   // Backend sentinel for unlimited (kept for backwards-compatible UI parsing).
   PRO_DAILY_SENTINEL: 999999,
   // Abuse protection (server-side; UI still shows Unlimited for Pro).
@@ -5201,7 +5201,7 @@ function arcadeCoverAllowedSource(src) {
   try {
     const url = new URL(value);
     const host = String(url.hostname || "").toLowerCase();
-    return host === "images.crazygames.com" || host === "images.unsplash.com";
+    return host === "images.crazygames.com" || host === "imgs.crazygames.com" || host === "images.unsplash.com";
   } catch {
     return false;
   }

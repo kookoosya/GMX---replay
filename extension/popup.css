@@ -299,7 +299,7 @@ button, input, select{ font: inherit; }
   .topRight{ gap: 6px; }
 }
 
-body.has-wallpaper{ --wall-fit: contain; }
+body.has-wallpaper{ --wall-fit: cover; }
 body.has-wallpaper .panel, body.has-wallpaper .card, body.has-wallpaper .surface { backdrop-filter: blur(16px) saturate(1.12); background: linear-gradient(180deg, rgba(7,10,20,0.50), rgba(7,10,20,0.70)); border-color: rgba(255,255,255,0.14); }
 
 .wrap::before{

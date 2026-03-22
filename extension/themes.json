@@ -1,703 +1,703 @@
 {
   "ok": true,
-  "updatedAt": "2026-03-03",
+  "updatedAt": "2026-03-10",
   "themes": [
     {
       "id": "classic",
-      "name": "Solana Glass",
-      "note": "Purple x cyan mainnet glow",
+      "name": "Glass Violet",
+      "note": "Purple to cyan gradient",
       "a": "rgba(153,69,255,1)",
       "b": "rgba(20,241,149,1)"
     },
     {
       "id": "midnight",
-      "name": "Mempool Midnight",
-      "note": "Blue mempool under neon fog",
+      "name": "Midnight Blue",
+      "note": "Deep blue with cyan accent",
       "a": "rgba(88,101,242,1)",
       "b": "rgba(0,194,255,1)"
     },
     {
       "id": "sunrise",
-      "name": "Pump Sunrise",
-      "note": "Warm chart breakout glow",
+      "name": "Sunrise",
+      "note": "Warm orange to pink",
       "a": "rgba(255,122,24,1)",
       "b": "rgba(255,63,128,1)"
     },
     {
       "id": "emerald",
-      "name": "Liquidity Green",
-      "note": "Fresh orderbook green",
+      "name": "Emerald",
+      "note": "Fresh green to teal",
       "a": "rgba(0,229,146,1)",
       "b": "rgba(0,194,255,1)"
     },
     {
       "id": "gold",
-      "name": "Whale Gold",
-      "note": "Premium treasury gold",
+      "name": "Gold",
+      "note": "Warm golden gradient",
       "a": "rgba(255,214,92,1)",
       "b": "rgba(255,143,31,1)"
     },
     {
       "id": "berry",
-      "name": "Airdrop Bloom",
-      "note": "Magenta airdrop haze",
+      "name": "Berry",
+      "note": "Magenta to purple",
       "a": "rgba(255,78,168,1)",
       "b": "rgba(148,93,255,1)"
     },
     {
       "id": "ice",
-      "name": "Cold Wallet",
-      "note": "Frosted custody blue",
+      "name": "Ice",
+      "note": "Frosted blue to white",
       "a": "rgba(88,225,255,1)",
       "b": "rgba(222,247,255,1)"
     },
     {
       "id": "lava",
-      "name": "Liquidation Heat",
-      "note": "Hot liquidation tape",
+      "name": "Lava",
+      "note": "Hot orange and amber",
       "a": "rgba(255,88,37,1)",
       "b": "rgba(255,196,79,1)"
     },
     {
       "id": "matrix",
-      "name": "Terminal Green",
-      "note": "Onchain terminal matrix glow",
+      "name": "Matrix",
+      "note": "Neon green terminal",
       "a": "rgba(32,255,163,1)",
       "b": "rgba(0,214,124,1)"
     },
     {
       "id": "violet",
-      "name": "Validator Violet",
-      "note": "Deep validator shimmer",
+      "name": "Violet",
+      "note": "Deep purple shimmer",
       "a": "rgba(186,117,255,1)",
       "b": "rgba(128,90,255,1)"
     },
     {
       "id": "ocean",
-      "name": "Deep Pool",
-      "note": "Oceanic liquidity depth",
+      "name": "Ocean",
+      "note": "Blue to cyan depth",
       "a": "rgba(0,158,255,1)",
       "b": "rgba(44,225,255,1)"
     },
     {
       "id": "sand",
-      "name": "Desert Ledger",
-      "note": "Warm parchment ledger light",
+      "name": "Sand",
+      "note": "Warm cream and amber",
       "a": "rgba(255,210,150,1)",
       "b": "rgba(255,153,51,1)"
     },
     {
       "id": "carbon",
-      "name": "Cold Storage",
-      "note": "Muted pro terminal graphite",
+      "name": "Carbon",
+      "note": "Muted slate gray",
       "a": "rgba(168,176,195,1)",
       "b": "rgba(88,96,118,1)"
     },
     {
       "id": "plasma",
-      "name": "Plasma DEX",
-      "note": "Hot pink x cyan exchange tape",
+      "name": "Plasma",
+      "note": "Hot pink to cyan",
       "a": "rgba(255,73,152,1)",
       "b": "rgba(0,224,255,1)"
     },
     {
       "id": "mint",
-      "name": "Stable Mint",
-      "note": "Clean stablecoin mint",
+      "name": "Mint",
+      "note": "Cool mint to blue",
       "a": "rgba(124,255,219,1)",
       "b": "rgba(42,192,255,1)"
     },
     {
       "id": "royal",
-      "name": "Genesis Purple",
-      "note": "Purple treasury x gold crown",
+      "name": "Royal",
+      "note": "Purple to gold crown",
       "a": "rgba(140,99,255,1)",
       "b": "rgba(255,210,92,1)"
     },
     {
       "id": "peach",
-      "name": "Peach Candle",
-      "note": "Soft bullish candle wash",
+      "name": "Peach",
+      "note": "Soft peach to coral",
       "a": "rgba(255,181,138,1)",
       "b": "rgba(255,118,107,1)"
     },
     {
       "id": "storm",
-      "name": "Hash Storm",
-      "note": "Dark blockstorm glow",
+      "name": "Storm",
+      "note": "Storm blue to indigo",
       "a": "rgba(56,189,248,1)",
       "b": "rgba(99,102,241,1)"
     },
     {
       "id": "neon",
-      "name": "Neon Orderflow",
-      "note": "Sharp exchange terminal neon",
+      "name": "Neon",
+      "note": "Neon teal to violet",
       "a": "rgba(0,255,208,1)",
       "b": "rgba(123,97,255,1)"
     },
     {
       "id": "mono",
-      "name": "Stealth OTC",
-      "note": "Monochrome desk mode",
+      "name": "Stealth",
+      "note": "Monochrome light gray",
       "a": "rgba(222,229,243,1)",
       "b": "rgba(112,126,149,1)"
     },
     {
       "id": "p01",
-      "name": "Crypto Pack 01",
-      "note": "Alt palette 01 for the extension terminal",
+      "name": "Palette 01",
+      "note": "Cyan to violet",
       "a": "rgba(0,229,255,1)",
       "b": "rgba(124,92,255,1)"
     },
     {
       "id": "p02",
-      "name": "Crypto Pack 02",
+      "name": "Palette 02",
       "note": "Alt palette 02 for the extension terminal",
       "a": "rgba(255,75,145,1)",
       "b": "rgba(0,229,255,1)"
     },
     {
       "id": "p03",
-      "name": "Crypto Pack 03",
+      "name": "Palette 03",
       "note": "Alt palette 03 for the extension terminal",
       "a": "rgba(24,33,68,1)",
       "b": "rgba(124,92,255,1)"
     },
     {
       "id": "p04",
-      "name": "Crypto Pack 04",
+      "name": "Palette 04",
       "note": "Alt palette 04 for the extension terminal",
       "a": "rgba(0,229,125,1)",
       "b": "rgba(255,75,145,1)"
     },
     {
       "id": "p05",
-      "name": "Crypto Pack 05",
+      "name": "Palette 05",
       "note": "Alt palette 05 for the extension terminal",
       "a": "rgba(0,200,255,1)",
       "b": "rgba(0,229,125,1)"
     },
     {
       "id": "p06",
-      "name": "Crypto Pack 06",
+      "name": "Palette 06",
       "note": "Alt palette 06 for the extension terminal",
       "a": "rgba(255,75,145,1)",
       "b": "rgba(255,210,77,1)"
     },
     {
       "id": "p07",
-      "name": "Crypto Pack 07",
+      "name": "Palette 07",
       "note": "Alt palette 07 for the extension terminal",
       "a": "rgba(70,29,132,1)",
       "b": "rgba(0,200,255,1)"
     },
     {
       "id": "p08",
-      "name": "Crypto Pack 08",
+      "name": "Palette 08",
       "note": "Alt palette 08 for the extension terminal",
       "a": "rgba(255,210,77,1)",
       "b": "rgba(124,92,255,1)"
     },
     {
       "id": "p09",
-      "name": "Crypto Pack 09",
+      "name": "Palette 09",
       "note": "Alt palette 09 for the extension terminal",
       "a": "rgba(0,229,255,1)",
       "b": "rgba(255,122,0,1)"
     },
     {
       "id": "p10",
-      "name": "Crypto Pack 10",
+      "name": "Palette 10",
       "note": "Alt palette 10 for the extension terminal",
       "a": "rgba(0,229,125,1)",
       "b": "rgba(26,132,86,1)"
     },
     {
       "id": "p11",
-      "name": "Crypto Pack 11",
+      "name": "Palette 11",
       "note": "Alt palette 11 for the extension terminal",
       "a": "rgba(220,38,38,1)",
       "b": "rgba(124,92,255,1)"
     },
     {
       "id": "p12",
-      "name": "Crypto Pack 12",
+      "name": "Palette 12",
       "note": "Alt palette 12 for the extension terminal",
       "a": "rgba(34,197,94,1)",
       "b": "rgba(0,229,255,1)"
     },
     {
       "id": "p13",
-      "name": "Crypto Pack 13",
+      "name": "Palette 13",
       "note": "Alt palette 13 for the extension terminal",
       "a": "rgba(229,231,235,1)",
       "b": "rgba(124,92,255,1)"
     },
     {
       "id": "p14",
-      "name": "Crypto Pack 14",
+      "name": "Palette 14",
       "note": "Alt palette 14 for the extension terminal",
       "a": "rgba(167,139,250,1)",
       "b": "rgba(0,229,255,1)"
     },
     {
       "id": "p15",
-      "name": "Crypto Pack 15",
+      "name": "Palette 15",
       "note": "Alt palette 15 for the extension terminal",
       "a": "rgba(255,122,0,1)",
       "b": "rgba(255,75,145,1)"
     },
     {
       "id": "p16",
-      "name": "Crypto Pack 16",
+      "name": "Palette 16",
       "note": "Alt palette 16 for the extension terminal",
       "a": "rgba(148,163,184,1)",
       "b": "rgba(59,130,246,1)"
     },
     {
       "id": "p17",
-      "name": "Crypto Pack 17",
+      "name": "Palette 17",
       "note": "Alt palette 17 for the extension terminal",
       "a": "rgba(186,230,253,1)",
       "b": "rgba(124,92,255,1)"
     },
     {
       "id": "p18",
-      "name": "Crypto Pack 18",
+      "name": "Palette 18",
       "note": "Alt palette 18 for the extension terminal",
       "a": "rgba(255,122,0,1)",
       "b": "rgba(0,200,255,1)"
     },
     {
       "id": "p19",
-      "name": "Crypto Pack 19",
+      "name": "Palette 19",
       "note": "Alt palette 19 for the extension terminal",
       "a": "rgba(17,24,39,1)",
       "b": "rgba(0,200,255,1)"
     },
     {
       "id": "p20",
-      "name": "Crypto Pack 20",
+      "name": "Palette 20",
       "note": "Alt palette 20 for the extension terminal",
       "a": "rgba(250,250,250,1)",
       "b": "rgba(0,229,255,1)"
     },
     {
       "id": "p21",
-      "name": "Crypto Pack 21",
+      "name": "Palette 21",
       "note": "Alt palette 21 for the extension terminal",
       "a": "rgba(163,230,53,1)",
       "b": "rgba(0,200,255,1)"
     },
     {
       "id": "p22",
-      "name": "Crypto Pack 22",
+      "name": "Palette 22",
       "note": "Alt palette 22 for the extension terminal",
       "a": "rgba(124,92,255,1)",
       "b": "rgba(255,75,145,1)"
     },
     {
       "id": "p23",
-      "name": "Crypto Pack 23",
+      "name": "Palette 23",
       "note": "Alt palette 23 for the extension terminal",
       "a": "rgba(0,200,255,1)",
       "b": "rgba(2,132,199,1)"
     },
     {
       "id": "p24",
-      "name": "Crypto Pack 24",
+      "name": "Palette 24",
       "note": "Alt palette 24 for the extension terminal",
       "a": "rgba(0,229,125,1)",
       "b": "rgba(0,200,255,1)"
     },
     {
       "id": "p25",
-      "name": "Crypto Pack 25",
+      "name": "Palette 25",
       "note": "Alt palette 25 for the extension terminal",
       "a": "rgba(255,75,145,1)",
       "b": "rgba(124,92,255,1)"
     },
     {
       "id": "p26",
-      "name": "Crypto Pack 26",
+      "name": "Palette 26",
       "note": "Alt palette 26 for the extension terminal",
       "a": "rgba(15,23,42,1)",
       "b": "rgba(255,210,77,1)"
     },
     {
       "id": "p27",
-      "name": "Crypto Pack 27",
+      "name": "Palette 27",
       "note": "Alt palette 27 for the extension terminal",
       "a": "rgba(0,229,255,1)",
       "b": "rgba(255,210,77,1)"
     },
     {
       "id": "p28",
-      "name": "Crypto Pack 28",
+      "name": "Palette 28",
       "note": "Alt palette 28 for the extension terminal",
       "a": "rgba(20,184,166,1)",
       "b": "rgba(124,92,255,1)"
     },
     {
       "id": "p29",
-      "name": "Crypto Pack 29",
+      "name": "Palette 29",
       "note": "Alt palette 29 for the extension terminal",
       "a": "rgba(59,130,246,1)",
       "b": "rgba(124,92,255,1)"
     },
     {
       "id": "p30",
-      "name": "Crypto Pack 30",
+      "name": "Palette 30",
       "note": "Alt palette 30 for the extension terminal",
       "a": "rgba(5,7,14,1)",
       "b": "rgba(124,92,255,1)"
     },
     {
       "id": "p31",
-      "name": "Crypto Pack 31",
+      "name": "Palette 31",
       "note": "Alt palette 31 for the extension terminal",
       "a": "rgba(215,238,43,1)",
       "b": "rgba(37,130,244,1)"
     },
     {
       "id": "p32",
-      "name": "Crypto Pack 32",
+      "name": "Palette 32",
       "note": "Alt palette 32 for the extension terminal",
       "a": "rgba(95,238,43,1)",
       "b": "rgba(195,37,244,1)"
     },
     {
       "id": "p33",
-      "name": "Crypto Pack 33",
+      "name": "Palette 33",
       "note": "Alt palette 33 for the extension terminal",
       "a": "rgba(43,238,111,1)",
       "b": "rgba(244,37,40,1)"
     },
     {
       "id": "p34",
-      "name": "Crypto Pack 34",
+      "name": "Palette 34",
       "note": "Alt palette 34 for the extension terminal",
       "a": "rgba(43,238,231,1)",
       "b": "rgba(202,244,37,1)"
     },
     {
       "id": "p35",
-      "name": "Crypto Pack 35",
+      "name": "Palette 35",
       "note": "Alt palette 35 for the extension terminal",
       "a": "rgba(43,124,238,1)",
       "b": "rgba(37,244,123,1)"
     },
     {
       "id": "p36",
-      "name": "Crypto Pack 36",
+      "name": "Palette 36",
       "note": "Alt palette 36 for the extension terminal",
       "a": "rgba(82,43,238,1)",
       "b": "rgba(37,113,244,1)"
     },
     {
       "id": "p37",
-      "name": "Crypto Pack 37",
+      "name": "Palette 37",
       "note": "Alt palette 37 for the extension terminal",
       "a": "rgba(202,43,238,1)",
       "b": "rgba(213,37,244,1)"
     },
     {
       "id": "p38",
-      "name": "Crypto Pack 38",
+      "name": "Palette 38",
       "note": "Alt palette 38 for the extension terminal",
       "a": "rgba(238,43,153,1)",
       "b": "rgba(244,51,37,1)"
     },
     {
       "id": "p39",
-      "name": "Crypto Pack 39",
+      "name": "Palette 39",
       "note": "Alt palette 39 for the extension terminal",
       "a": "rgba(238,52,43,1)",
       "b": "rgba(185,244,37,1)"
     },
     {
       "id": "p40",
-      "name": "Crypto Pack 40",
+      "name": "Palette 40",
       "note": "Alt palette 40 for the extension terminal",
       "a": "rgba(238,173,43,1)",
       "b": "rgba(37,244,140,1)"
     },
     {
       "id": "p41",
-      "name": "Crypto Pack 41",
+      "name": "Palette 41",
       "note": "Alt palette 41 for the extension terminal",
       "a": "rgba(183,238,43,1)",
       "b": "rgba(37,95,244,1)"
     },
     {
       "id": "p42",
-      "name": "Crypto Pack 42",
+      "name": "Palette 42",
       "note": "Alt palette 42 for the extension terminal",
       "a": "rgba(62,238,43,1)",
       "b": "rgba(230,37,244,1)"
     },
     {
       "id": "p43",
-      "name": "Crypto Pack 43",
+      "name": "Palette 43",
       "note": "Alt palette 43 for the extension terminal",
       "a": "rgba(43,238,144,1)",
       "b": "rgba(244,68,37,1)"
     },
     {
       "id": "p44",
-      "name": "Crypto Pack 44",
+      "name": "Palette 44",
       "note": "Alt palette 44 for the extension terminal",
       "a": "rgba(43,212,238,1)",
       "b": "rgba(168,244,37,1)"
     },
     {
       "id": "p45",
-      "name": "Crypto Pack 45",
+      "name": "Palette 45",
       "note": "Alt palette 45 for the extension terminal",
       "a": "rgba(43,91,238,1)",
       "b": "rgba(37,244,157,1)"
     },
     {
       "id": "p46",
-      "name": "Crypto Pack 46",
+      "name": "Palette 46",
       "note": "Alt palette 46 for the extension terminal",
       "a": "rgba(114,43,238,1)",
       "b": "rgba(37,78,244,1)"
     },
     {
       "id": "p47",
-      "name": "Crypto Pack 47",
+      "name": "Palette 47",
       "note": "Alt palette 47 for the extension terminal",
       "a": "rgba(235,43,238,1)",
       "b": "rgba(244,37,240,1)"
     },
     {
       "id": "p48",
-      "name": "Crypto Pack 48",
+      "name": "Palette 48",
       "note": "Alt palette 48 for the extension terminal",
       "a": "rgba(238,43,121,1)",
       "b": "rgba(244,85,37,1)"
     },
     {
       "id": "p49",
-      "name": "Crypto Pack 49",
+      "name": "Palette 49",
       "note": "Alt palette 49 for the extension terminal",
       "a": "rgba(238,85,43,1)",
       "b": "rgba(151,244,37,1)"
     },
     {
       "id": "p50",
-      "name": "Crypto Pack 50",
+      "name": "Palette 50",
       "note": "Alt palette 50 for the extension terminal",
       "a": "rgba(238,205,43,1)",
       "b": "rgba(37,244,175,1)"
     },
     {
       "id": "p51",
-      "name": "Crypto Pack 51",
+      "name": "Palette 51",
       "note": "Alt palette 51 for the extension terminal",
       "a": "rgba(150,238,43,1)",
       "b": "rgba(37,61,244,1)"
     },
     {
       "id": "p52",
-      "name": "Crypto Pack 52",
+      "name": "Palette 52",
       "note": "Alt palette 52 for the extension terminal",
       "a": "rgba(43,238,56,1)",
       "b": "rgba(244,37,223,1)"
     },
     {
       "id": "p53",
-      "name": "Crypto Pack 53",
+      "name": "Palette 53",
       "note": "Alt palette 53 for the extension terminal",
       "a": "rgba(43,238,176,1)",
       "b": "rgba(244,102,37,1)"
     },
     {
       "id": "p54",
-      "name": "Crypto Pack 54",
+      "name": "Palette 54",
       "note": "Alt palette 54 for the extension terminal",
       "a": "rgba(43,179,238,1)",
       "b": "rgba(133,244,37,1)"
     },
     {
       "id": "p55",
-      "name": "Crypto Pack 55",
+      "name": "Palette 55",
       "note": "Alt palette 55 for the extension terminal",
       "a": "rgba(43,59,238,1)",
       "b": "rgba(37,244,192,1)"
     },
     {
       "id": "p56",
-      "name": "Crypto Pack 56",
+      "name": "Palette 56",
       "note": "Alt palette 56 for the extension terminal",
       "a": "rgba(147,43,238,1)",
       "b": "rgba(37,44,244,1)"
     },
     {
       "id": "p57",
-      "name": "Crypto Pack 57",
+      "name": "Palette 57",
       "note": "Alt palette 57 for the extension terminal",
       "a": "rgba(238,43,209,1)",
       "b": "rgba(244,37,206,1)"
     },
     {
       "id": "p58",
-      "name": "Crypto Pack 58",
+      "name": "Palette 58",
       "note": "Alt palette 58 for the extension terminal",
       "a": "rgba(238,43,88,1)",
       "b": "rgba(244,120,37,1)"
     },
     {
       "id": "p59",
-      "name": "Crypto Pack 59",
+      "name": "Palette 59",
       "note": "Alt palette 59 for the extension terminal",
       "a": "rgba(238,117,43,1)",
       "b": "rgba(116,244,37,1)"
     },
     {
       "id": "p60",
-      "name": "Crypto Pack 60",
+      "name": "Palette 60",
       "note": "Alt palette 60 for the extension terminal",
       "a": "rgba(238,238,43,1)",
       "b": "rgba(37,244,209,1)"
     },
     {
       "id": "p61",
-      "name": "Crypto Pack 61",
+      "name": "Palette 61",
       "note": "Alt palette 61 for the extension terminal",
       "a": "rgba(117,238,43,1)",
       "b": "rgba(47,37,244,1)"
     },
     {
       "id": "p62",
-      "name": "Crypto Pack 62",
+      "name": "Palette 62",
       "note": "Alt palette 62 for the extension terminal",
       "a": "rgba(43,238,88,1)",
       "b": "rgba(244,37,188,1)"
     },
     {
       "id": "p63",
-      "name": "Crypto Pack 63",
+      "name": "Palette 63",
       "note": "Alt palette 63 for the extension terminal",
       "a": "rgba(43,238,209,1)",
       "b": "rgba(244,137,37,1)"
     },
     {
       "id": "p64",
-      "name": "Crypto Pack 64",
+      "name": "Palette 64",
       "note": "Alt palette 64 for the extension terminal",
       "a": "rgba(43,147,238,1)",
       "b": "rgba(99,244,37,1)"
     },
     {
       "id": "p65",
-      "name": "Crypto Pack 65",
+      "name": "Palette 65",
       "note": "Alt palette 65 for the extension terminal",
       "a": "rgba(59,43,238,1)",
       "b": "rgba(37,244,226,1)"
     },
     {
       "id": "p66",
-      "name": "Crypto Pack 66",
+      "name": "Palette 66",
       "note": "Alt palette 66 for the extension terminal",
       "a": "rgba(179,43,238,1)",
       "b": "rgba(65,37,244,1)"
     },
     {
       "id": "p67",
-      "name": "Crypto Pack 67",
+      "name": "Palette 67",
       "note": "Alt palette 67 for the extension terminal",
       "a": "rgba(238,43,176,1)",
       "b": "rgba(244,37,171,1)"
     },
     {
       "id": "p68",
-      "name": "Crypto Pack 68",
+      "name": "Palette 68",
       "note": "Alt palette 68 for the extension terminal",
       "a": "rgba(238,43,56,1)",
       "b": "rgba(244,154,37,1)"
     },
     {
       "id": "p69",
-      "name": "Crypto Pack 69",
+      "name": "Palette 69",
       "note": "Alt palette 69 for the extension terminal",
       "a": "rgba(238,150,43,1)",
       "b": "rgba(82,244,37,1)"
     },
     {
       "id": "p70",
-      "name": "Crypto Pack 70",
+      "name": "Palette 70",
       "note": "Alt palette 70 for the extension terminal",
       "a": "rgba(205,238,43,1)",
       "b": "rgba(37,244,244,1)"
     },
     {
       "id": "p71",
-      "name": "Crypto Pack 71",
+      "name": "Palette 71",
       "note": "Alt palette 71 for the extension terminal",
       "a": "rgba(85,238,43,1)",
       "b": "rgba(82,37,244,1)"
     },
     {
       "id": "p72",
-      "name": "Crypto Pack 72",
+      "name": "Palette 72",
       "note": "Alt palette 72 for the extension terminal",
       "a": "rgba(43,238,121,1)",
       "b": "rgba(244,37,154,1)"
     },
     {
       "id": "p73",
-      "name": "Crypto Pack 73",
+      "name": "Palette 73",
       "note": "Alt palette 73 for the extension terminal",
       "a": "rgba(43,235,238,1)",
       "b": "rgba(244,171,37,1)"
     },
     {
       "id": "p74",
-      "name": "Crypto Pack 74",
+      "name": "Palette 74",
       "note": "Alt palette 74 for the extension terminal",
       "a": "rgba(43,114,238,1)",
       "b": "rgba(65,244,37,1)"
     },
     {
       "id": "p75",
-      "name": "Crypto Pack 75",
+      "name": "Palette 75",
       "note": "Alt palette 75 for the extension terminal",
       "a": "rgba(91,43,238,1)",
       "b": "rgba(37,226,244,1)"
     },
     {
       "id": "p76",
-      "name": "Crypto Pack 76",
+      "name": "Palette 76",
       "note": "Alt palette 76 for the extension terminal",
       "a": "rgba(212,43,238,1)",
       "b": "rgba(99,37,244,1)"
     },
     {
       "id": "p77",
-      "name": "Crypto Pack 77",
+      "name": "Palette 77",
       "note": "Alt palette 77 for the extension terminal",
       "a": "rgba(238,43,144,1)",
       "b": "rgba(244,37,137,1)"
     },
     {
       "id": "p78",
-      "name": "Crypto Pack 78",
+      "name": "Palette 78",
       "note": "Alt palette 78 for the extension terminal",
       "a": "rgba(238,62,43,1)",
       "b": "rgba(244,188,37,1)"
     },
     {
       "id": "p79",
-      "name": "Crypto Pack 79",
+      "name": "Palette 79",
       "note": "Alt palette 79 for the extension terminal",
       "a": "rgba(238,183,43,1)",
       "b": "rgba(47,244,37,1)"
     },
     {
       "id": "p80",
-      "name": "Crypto Pack 80",
+      "name": "Palette 80",
       "note": "Alt palette 80 for the extension terminal",
       "a": "rgba(173,238,43,1)",
       "b": "rgba(37,209,244,1)"

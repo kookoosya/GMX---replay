@@ -1,7 +1,0 @@
-R66 cleanup summary:
-- removed stale docs and bridge i18n leftovers
-- removed unused arcade scaffold files not in active runtime
-- kept one active arcade route: /arcade.html
-- cleaned active English UI copy to match current product behavior
-- kept extension as copy-only flow
-- kept single-bank GM/GN behavior and optional Best pass

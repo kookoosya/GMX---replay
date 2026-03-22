@@ -1,5 +1,9 @@
 # GMXReply — today checklist (VS Code + Git + Render)
 
+## Push to GitHub
+After changes: `git add -A && git commit -m "…" && git push origin main`
+Render auto-deploys on push to `main`. GitHub Actions runs build on every push.
+
 ## Local dev (2 terminals, no .bat)
 
 > IMPORTANT: open the site as **http://127.0.0.1:5173** (not `localhost`) to avoid IPv6 `ERR_CONNECTION_REFUSED`.

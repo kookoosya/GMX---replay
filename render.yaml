@@ -3,7 +3,7 @@ services:
     name: gmxreply
     runtime: node
     branch: main
-    buildCommand: npm install && npm --prefix frontend install && npm run build
+    buildCommand: npm ci && npm ci --prefix frontend && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
@@ -18,6 +18,16 @@ services:
         sync: false
       - key: ADMIN_SECRET
         generateValue: true
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: DB_MODE
+        value: sqlite
+      - key: SOLANA_RPC
+        sync: false
+      - key: SOL_RECEIVER
+        sync: false
     disk:
       name: data
       mountPath: /var/data

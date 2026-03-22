@@ -1,0 +1,33 @@
+# GMXReply — идеи и что полезно доработать
+
+## Реально полезное для сайта
+
+### 1. Качество генерации GM/GN
+- **Curated банки**: 4 банка — GM ordinary, GN ordinary, GM crypto, GN crypto
+- **Разнообразие**: crypto-ответы не должны везде повторять WAGMI/moon/diamond hands
+- **Scoring + anti-repeat + fingerprint dedupe** — ответы сильнее различаются между пользователями
+- **Emoji по тону**: утренние для GM (☀️☕✨🌅), ночные для GN (🌙😴💤✨)
+
+### 2. Thumbs для обоев
+- Загрузка превью (thumbs) в сетке вместо полных картинок — меньше лаг на слабых машинах
+- Полное изображение только при применении
+
+### 3. Arcade
+- **Монетизация**: полный Pro checkout flow (сейчас только UI gate)
+- **Real cover images**: категорийные .webp для action, racing, puzzle и т.д. (arcadeCovers.ts)
+- **Quick insert** в Arcade: URL / GameMonetize ID / embed — уже частично есть
+
+### 4. Referrals
+- Unlock gating в site + extension (Phase 5)
+- Admin unlock-credit коды уже есть в backend
+
+### 5. Техдолг (по R69)
+- Ревизия index.js generation helpers
+- Parity public/app.js vs frontend/public/app.js
+- Arcade source list + cover fetch chain
+
+## Что уже сделано
+- Custom wallpapers: API, import script, assets
+- Arcade local covers для 7 игр (SVG)
+- Разные стили кнопок обоев (free/premium/custom)
+- Custom background: cover для любого экрана

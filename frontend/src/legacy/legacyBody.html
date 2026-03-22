@@ -586,9 +586,6 @@
           <button class="tabBtn" id="tabWall" role="tab" aria-selected="false" aria-controls="wallPane" type="button">
             <span id="wp_title">Wallpapers</span>
           </button>
-          <button class="tabBtn" id="tabCustom" role="tab" aria-selected="false" aria-controls="customPane" type="button">
-            <span id="customBg_title">Custom background</span>
-          </button>
         </div>
 
         <div class="tabPane" id="themePane" role="tabpanel" aria-labelledby="tabTheme">
@@ -603,8 +600,10 @@
               <label id="wpTab_label" for="wpTab">Apply to</label>
               <select id="wpTab" aria-label="wpTab"></select>
             </div>
-            <div style="min-width:180px">
+            <div style="min-width:180px;display:flex;gap:8px;flex-wrap:wrap">
               <div class="labelSpacer" aria-hidden="true"></div>
+              <button class="btn ghost" id="wpAddCustom" type="button"><span id="wp_add_title">Add wallpaper</span></button>
+              <input accept="image/*" aria-label="wpAddFile" id="wpAddFile" type="file" class="hidden"/>
               <button class="btn secondary" id="wpClear" type="button">Clear</button>
             </div>
           </div>
@@ -612,34 +611,6 @@
           <div class="wpGrid" id="wpGrid"></div>
           <div class="note" id="wpStatus" style="margin-top:10px"></div>
         </div>
-
-        <div class="tabPane hidden" id="customPane" role="tabpanel" aria-labelledby="tabCustom">
-          <div class="split" style="flex-wrap:wrap;gap:12px">
-            <div style="min-width:240px;flex:1">
-              <label for="customBgTab">Apply to</label>
-              <select id="customBgTab" aria-label="customBgTab"></select>
-            </div>
-            <div style="min-width:180px">
-              <div class="labelSpacer" aria-hidden="true"></div>
-              <button class="btn secondary" id="customBgClear" type="button">Clear</button>
-            </div>
-          </div>
-          <div class="hr"></div>
-          <div class="split" style="flex-wrap:wrap">
-            <div style="min-width:260px;flex:1">
-              <label id="customBg_label" for="customBgPick">Upload image</label>
-              <button class="btn ghost" id="customBgPick" type="button">Choose image</button>
-              <span class="muted" id="customBgName" style="margin-left:10px;display:inline-block;max-width:240px;
-overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
-              <input accept="image/*" aria-label="customBgFile" id="customBgFile" name="customBgFile" type="file" class="hidden"/>
-            </div>
-            <div style="min-width:220px">
-              <div class="labelSpacer" aria-hidden="true"></div>
-              <button class="btn secondary" id="customBgRemove" type="button">Remove</button>
-            </div>
-          </div>
-          <div class="note" id="customBg_status" style="margin-top:10px"></div>
-</div>
       </div>
     </div>
 
@@ -663,9 +634,6 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
       <div class="hr"></div>
       <div class="desc hidden" id="wp_note">
         Choose a wallpaper per tab so the user can tell sections apart at a glance instead of getting lost in one repeated background.
-      </div>
-      <div class="desc hidden" id="customBg_note">
-        Custom background is for Pro. Upload one image and the app fits it for desktop and mobile automatically.
       </div>
       <ul class="clean" id="themes_right_list"></ul>
     </div>
@@ -691,9 +659,6 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
   <button class="tabBtn" id="extTabWall" role="tab" aria-selected="false" aria-controls="extWallPane" type="button">
     <span id="ext_wp_title">Wallpapers</span>
   </button>
-  <button class="tabBtn" id="extTabCustom" role="tab" aria-selected="false" aria-controls="extCustomPane" type="button">
-    <span id="ext_custom_title">Custom background</span>
-  </button>
 </div>
 
 <div class="tabPane" id="extThemePane" role="tabpanel" aria-labelledby="extTabTheme">
@@ -709,8 +674,10 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
       <label id="extWpTarget_label" for="extWpTarget">Apply to</label>
       <select id="extWpTarget" aria-label="extWpTarget"></select>
     </div>
-    <div style="min-width:180px">
+    <div style="min-width:180px;display:flex;gap:8px;flex-wrap:wrap">
       <div class="labelSpacer" aria-hidden="true"></div>
+      <button class="btn ghost" id="extWpAddCustom" type="button"><span id="ext_wp_add_title">Add wallpaper</span></button>
+      <input accept="image/*" id="extWpAddFile" type="file" class="hidden"/>
       <button class="btn secondary" id="extWpClear" type="button">Clear</button>
     </div>
   </div>
@@ -719,32 +686,6 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
   <div class="note" id="extWpStatus" style="margin-top:10px"></div>
 </div>
 
-<div class="hidden" id="extCustomPane">
-  <div class="split" style="gap:12px;flex-wrap:wrap;align-items:flex-end">
-    <div style="min-width:240px;flex:1">
-      <label for="extCustomBgTab" id="extCustomBgTab_label">Apply to</label>
-      <select id="extCustomBgTab"></select>
-    </div>
-    <div style="min-width:180px">
-      <div class="labelSpacer"></div>
-      <button class="btn secondary" type="button" id="extCustomBgClear">Clear</button>
-    </div>
-  </div>
-  <div class="hr"></div>
-  <div class="split" style="gap:12px;flex-wrap:wrap;align-items:center">
-    <div style="min-width:260px;flex:1">
-      <label id="extCustomBg_label" for="extCustomBgPick">Upload image</label>
-      <button class="btn ghost" id="extCustomBgPick" type="button">Choose image</button>
-      <span class="muted" id="extCustomBgName" style="margin-left:10px"></span>
-      <input accept="image/*" id="extCustomBgFile" type="file" class="hidden"/>
-      <div class="muted" id="extCustomBgHint" style="margin-top:6px">We auto-fit your image to the extension popup.</div>
-    </div>
-    <div style="min-width:180px">
-      <button class="btn" type="button" id="extCustomBgRemove">Remove</button>
-    </div>
-  </div>
-  <div class="muted" id="extCustomBgStatus" style="margin-top:10px"></div>
-</div>
 </div>
 <div class="card">
 <div class="title" id="extthemes_right_title">How unlocks work</div>

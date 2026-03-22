@@ -8,7 +8,11 @@
 <meta content="no-store, no-cache, must-revalidate, proxy-revalidate" http-equiv="Cache-Control"/>
 <meta content="no-cache" http-equiv="Pragma"/>
 <meta content="0" http-equiv="Expires"/>
-<title>GMXReply</title>
+<meta name="description" content="GM &amp; GN replies that sound human. Build banks, copy, paste on X. No seed phrase. Themes, wallpapers, games."/>
+<meta property="og:title" content="GMXReply · GM &amp; GN that sound like you"/>
+<meta property="og:description" content="Human-sounding GM and GN replies. Build banks, copy, paste on X. Safe, fast, no seed phrase."/>
+<meta property="og:type" content="website"/>
+<title>GMXReply · GM &amp; GN that sound like you</title>
 <script src="/mode.js?v=SAFE12"></script>
 <link href="/app.css?v=SAFE16" rel="stylesheet"/>
 
@@ -171,8 +175,8 @@ body.hasUserBg input{
 <div id="tab-home">
 <div class="grid">
 <div class="card">
-<div class="title" id="h_title">Connect</div>
-<div class="note" id="home_desc">Start here: connect your X handle, activate a code, and check your current limits before you move anywhere else.</div>
+<div class="title" id="h_title">GM &amp; GN that sound like you</div>
+<div class="note" id="home_desc">Build reply banks, copy, paste on X. No seed phrase. Connect once and start in seconds.</div>
 <div class="note" id="h_note">
             Connect your real X handle once. The app uses it to tie usage, referrals, and upgrades to the right account.
           </div>
@@ -181,6 +185,7 @@ body.hasUserBg input{
 <div class="split" style="margin-top:12px">
 <button class="btn" id="btnConnect">Connect</button>
 <button class="btn ghost" id="btnReset">Reset local</button>
+<a class="btn secondary link" href="/arcade.html" id="btnArcade">Play Arcade</a>
 <a class="btn secondary link" href="/get-extension" id="btnExt">Download Chrome Extension</a>
 </div>
 <div class="hr"></div>
@@ -204,18 +209,23 @@ body.hasUserBg input{
   <span class="sideBadge" id="h_badge_safe">No seed phrase</span>
   <span class="sideBadge" id="h_badge_onchain">On-chain verify</span>
 </div>
+<div class="sideMeta" style="margin-top:8px;flex-wrap:wrap">
+  <span class="sideBadge" style="background:rgba(59,130,246,.18)">50K+ replies</span>
+  <span class="sideBadge" style="background:rgba(34,197,94,.18)">Games from CrazyGames</span>
+</div>
 <div class="sideSection">
   <div class="sideTitle" id="h_what_title">What you get</div>
   <ul class="clean small" id="h_what_list">
     <li id="h_what_1">Human-sounding <b>GM</b> and <b>GN</b> replies with natural diversity.</li>
     <li id="h_what_2">Safe copy-only extension flow for X: copy here, paste manually yourself.</li>
     <li id="h_what_3">Premium themes & wallpapers that apply across the whole product.</li>
+    <li id="h_what_4"><b>Arcade</b> — 40+ browser games (Agar.io, Geometry Dash, Smash Karts) with one-click launch.</li>
   </ul>
 </div>
 <div class="sideSection">
   <div class="sideTitle" id="h_free_title">Free vs Pro</div>
   <ul class="clean small" id="h_freepro_list">
-    <li id="h_freepro_1"><b>Free:</b> build & edit lists, save up to <b>70</b> lines per section, and keep the extension in safe copy-only mode.</li>
+    <li id="h_freepro_1"><b>Free:</b> build & edit lists, save up to <b>50</b> lines per section, and keep the extension in safe copy-only mode.</li>
     <li id="h_freepro_2"><b>Pro:</b> removes save caps, unlocks premium controls, and gives you a stronger Best live flow.</li>
   </ul>
 </div>
@@ -224,7 +234,7 @@ body.hasUserBg input{
 <li><b>Step 1:</b> Connect your X handle (one-time).</li>
 <li><b>Step 2:</b> Build English-only reply banks in <span class="kbd">GM</span> / <span class="kbd">GN</span>.</li>
 <li><b>Step 3:</b> Copy from the site or popup, then paste manually on X.</li>
-<li><b>Limits:</b> Free = up to <b>70 saved lines</b> for GM + <b>70</b> for GN. Editing is unlimited. If the unique pool is tight, batch returns fewer lines instead of padding with longer ones.</li>
+<li><b>Limits:</b> Free = up to <b>50 saved lines</b> for GM + <b>50</b> for GN. Editing is unlimited. If the unique pool is tight, batch returns fewer lines instead of padding with longer ones.</li>
 </ul>
 <div class="hr"></div>
 <div class="split" style="gap:12px;flex-wrap:wrap">
@@ -372,7 +382,12 @@ body.hasUserBg input{
 </div>
 </div>
 <div class="note muted" id="gmProMovedNote" style="margin-top:10px;display:none"></div>
-<div class="muted small" id="gmControlsHelp" style="margin-top:10px">Fast = shortest opener. Balanced = the natural middle lane. Full = richer but still compact. Tone changes the voice, preset tightens the shape, and Best pass runs only when you choose it.</div>
+<div class="quickPresets" data-kind="gm" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+  <button class="btn ghost mini" type="button" data-preset="casual" title="Natural, balanced">Casual</button>
+  <button class="btn ghost mini" type="button" data-preset="pro" title="Market/alpha tone">Pro</button>
+  <button class="btn ghost mini" type="button" data-preset="fun" title="Warm, light">Fun</button>
+</div>
+<div class="muted small" id="gmControlsHelp" style="margin-top:8px">Fast = short. Balanced = default. Full = richer. <kbd>Ctrl+Enter</kbd> = Batch 10.</div>
 <div class="split" id="gmBestModeRow" style="margin-top:10px;align-items:center;gap:10px;flex-wrap:wrap">
   <div class="muted small" id="gmBestModeHint" style="flex:1;min-width:220px">Best uses the strongest saved line that already sounds postable.</div>
   <button class="btn ghost" id="gmBestModeToggle" type="button">Best: saved</button>
@@ -421,7 +436,7 @@ body.hasUserBg input{
 <div class="listTop">
 <div class="split">
 <span class="badge"><span id="gm_badge_this">This list</span>: <b id="gmCount">0</b></span>
-<span class="badge"><span id="gm_badge_total">Saved</span>: <b id="gmTotal">0</b> / <b id="gmCap">70</b></span>
+<span class="badge"><span id="gm_badge_total">Saved</span>: <b id="gmTotal">0</b> / <b id="gmCap">50</b></span>
 </div>
 <div class="split" style="margin-top:10px;flex-wrap:wrap">
   <input aria-label="gmFilter" id="gmFilter" name="gmFilter" placeholder="Filter saved lines…" style="flex:1;min-width:220px"/>
@@ -456,7 +471,7 @@ body.hasUserBg input{
     <div class="meterRow"><div class="meterLabel" id="gm_daily_label">Daily limit</div><div class="meterVal" id="gmDailyVal">0/70</div></div>
     <div class="meter"><span id="gmDailyFill"></span></div>
 
-    <div class="meterRow" style="margin-top:6px"><div class="meterLabel" id="gm_saved_label">Saved lines (site)</div><div class="meterVal" id="gmSavedVal">0/70</div></div>
+    <div class="meterRow" style="margin-top:6px"><div class="meterLabel" id="gm_saved_label">Saved lines (site)</div><div class="meterVal" id="gmSavedVal">0/50</div></div>
     <div class="meter"><span id="gmSavedFill"></span></div>
   </div>
   <div class="muted small" style="margin-top:8px"><span id="gm_limits_note">Free is enough to try everything. Saved lines are the real site cap. The extension stays copy-only.</span></div>
@@ -482,7 +497,7 @@ body.hasUserBg input{
 <li><b>Quick 1</b> gives one fresh morning line, and <b>Batch 10</b> builds a cleaner working stack.</li>
 <li><b>Best</b> favors the strongest saved line, so pruning weak lines improves the result.</li>
 <li><b>Edit any line</b> by clicking it and rewriting it in your own voice.</li>
-<li><b>Free cap:</b> up to <b>70</b> saved GM lines total (adding stops when full, editing always works).</li>
+<li><b>Free cap:</b> up to <b>50</b> saved GM lines total (adding stops when full, editing always works).</li>
 </ul>
 </div>
 </div>
@@ -520,7 +535,12 @@ body.hasUserBg input{
 </div>
 </div>
 <div class="note muted" id="gnProMovedNote" style="margin-top:10px;display:none"></div>
-<div class="muted small" id="gnControlsHelp" style="margin-top:10px">Fast = shortest sign-off. Balanced = the natural middle lane. Full = fuller close, still calm. Tone changes the voice, preset tightens the shape, and Best pass runs only when you choose it.</div>
+<div class="quickPresets" data-kind="gn" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+  <button class="btn ghost mini" type="button" data-preset="casual" title="Natural, balanced">Casual</button>
+  <button class="btn ghost mini" type="button" data-preset="pro" title="Market/alpha tone">Pro</button>
+  <button class="btn ghost mini" type="button" data-preset="fun" title="Warm, light">Fun</button>
+</div>
+<div class="muted small" id="gnControlsHelp" style="margin-top:8px">Fast = short. Balanced = default. Full = richer. <kbd>Ctrl+Enter</kbd> = Batch 10.</div>
 <div class="split" id="gnBestModeRow" style="margin-top:10px;align-items:center;gap:10px;flex-wrap:wrap">
   <div class="muted small" id="gnBestModeHint" style="flex:1;min-width:220px">Best uses the strongest saved line that already sounds like a calm close.</div>
   <button class="btn ghost" id="gnBestModeToggle" type="button">Best: saved</button>
@@ -569,7 +589,7 @@ body.hasUserBg input{
 <div class="listTop">
 <div class="split">
 <span class="badge"><span id="gn_badge_this">This list</span>: <b id="gnCount">0</b></span>
-<span class="badge"><span id="gn_badge_total">Saved</span>: <b id="gnTotal">0</b> / <b id="gnCap">70</b></span>
+<span class="badge"><span id="gn_badge_total">Saved</span>: <b id="gnTotal">0</b> / <b id="gnCap">50</b></span>
 </div>
 <div class="split" style="margin-top:10px;flex-wrap:wrap">
   <input aria-label="gnFilter" id="gnFilter" name="gnFilter" placeholder="Filter saved lines…" style="flex:1;min-width:220px"/>
@@ -604,7 +624,7 @@ body.hasUserBg input{
     <div class="meterRow"><div class="meterLabel" id="gn_daily_label">Daily limit</div><div class="meterVal" id="gnDailyVal">0/70</div></div>
     <div class="meter"><span id="gnDailyFill"></span></div>
 
-    <div class="meterRow" style="margin-top:6px"><div class="meterLabel" id="gn_saved_label">Saved lines (site)</div><div class="meterVal" id="gnSavedVal">0/70</div></div>
+    <div class="meterRow" style="margin-top:6px"><div class="meterLabel" id="gn_saved_label">Saved lines (site)</div><div class="meterVal" id="gnSavedVal">0/50</div></div>
     <div class="meter"><span id="gnSavedFill"></span></div>
   </div>
   <div class="muted small" style="margin-top:8px"><span id="gn_limits_note">Same logic as GM. Saved lines are the real site cap. The extension stays copy-only.</span></div>
@@ -630,7 +650,7 @@ body.hasUserBg input{
 <li><b>Quick 1</b> gives one fresh night line, and <b>Batch 10</b> builds a cleaner working stack.</li>
 <li><b>Best</b> favors the strongest saved line, so pruning flat lines improves the result.</li>
 <li><b>Edit any line</b> by clicking it and rewriting it in your own voice.</li>
-<li><b>Free cap:</b> up to <b>70</b> saved GN lines total (adding stops when full, editing always works).</li>
+<li><b>Free cap:</b> up to <b>50</b> saved GN lines total (adding stops when full, editing always works).</li>
 </ul>
 </div>
 </div>
@@ -664,6 +684,10 @@ body.hasUserBg input{
 </div>
 
 <div class="muted" id="refMsg" style="margin-top:10px"></div>
+<div class="refProgressWrap hidden" id="refProgressWrap" style="margin-top:12px">
+  <div class="muted small" id="refProgressLabel">Next unlock at <b id="refProgressNext">1</b> eligible</div>
+  <div class="meter" style="margin-top:6px"><span id="refProgressFill"></span></div>
+</div>
   <details class="foldSmall" id="promoDetails" style="margin-top:12px" open>
   <summary><b>Referral status</b></summary>
   <div class="kpiRow" id="promoKpiRow">
@@ -719,7 +743,7 @@ body.hasUserBg input{
       <div class="card">
         <div class="title" id="themes_title">Themes</div>
         <div class="note" id="themes_desc">
-          Themes change the look of the site. Wallpapers and custom backgrounds change the mood. Locked items always show clearly before you try to apply them.
+          Themes change the look of the site. Wallpapers and custom uploads change the mood. First 5 custom wallpapers free, rest Pro. Locked items show clearly before you try.
         </div>
         <div class="hr"></div>
         <div class="kpiRow">
@@ -737,9 +761,6 @@ body.hasUserBg input{
           <button class="tabBtn" id="tabWall" role="tab" aria-selected="false" aria-controls="wallPane" type="button">
             <span id="wp_title">Wallpapers</span>
           </button>
-          <button class="tabBtn" id="tabCustom" role="tab" aria-selected="false" aria-controls="customPane" type="button">
-            <span id="customBg_title">Custom background</span>
-          </button>
         </div>
 
         <div class="tabPane" id="themePane" role="tabpanel" aria-labelledby="tabTheme">
@@ -754,8 +775,10 @@ body.hasUserBg input{
               <label id="wpTab_label" for="wpTab">Apply to</label>
               <select id="wpTab" aria-label="wpTab"></select>
             </div>
-            <div style="min-width:180px">
+            <div style="min-width:180px;display:flex;gap:8px;flex-wrap:wrap">
               <div class="labelSpacer" aria-hidden="true"></div>
+              <button class="btn ghost" id="wpAddCustom" type="button"><span id="wp_add_title">Add wallpaper</span></button>
+              <input accept="image/*" aria-label="wpAddFile" id="wpAddFile" type="file" class="hidden"/>
               <button class="btn secondary" id="wpClear" type="button">Clear</button>
             </div>
           </div>
@@ -763,34 +786,6 @@ body.hasUserBg input{
           <div class="wpGrid" id="wpGrid"></div>
           <div class="note" id="wpStatus" style="margin-top:10px"></div>
         </div>
-
-        <div class="tabPane hidden" id="customPane" role="tabpanel" aria-labelledby="tabCustom">
-          <div class="split" style="flex-wrap:wrap;gap:12px">
-            <div style="min-width:240px;flex:1">
-              <label for="customBgTab">Apply to</label>
-              <select id="customBgTab" aria-label="customBgTab"></select>
-            </div>
-            <div style="min-width:180px">
-              <div class="labelSpacer" aria-hidden="true"></div>
-              <button class="btn secondary" id="customBgClear" type="button">Clear</button>
-            </div>
-          </div>
-          <div class="hr"></div>
-          <div class="split" style="flex-wrap:wrap">
-            <div style="min-width:260px;flex:1">
-              <label id="customBg_label" for="customBgPick">Upload image</label>
-              <button class="btn ghost" id="customBgPick" type="button">Choose image</button>
-              <span class="muted" id="customBgName" style="margin-left:10px;display:inline-block;max-width:240px;
-overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
-              <input accept="image/*" aria-label="customBgFile" id="customBgFile" name="customBgFile" type="file" class="hidden"/>
-            </div>
-            <div style="min-width:220px">
-              <div class="labelSpacer" aria-hidden="true"></div>
-              <button class="btn secondary" id="customBgRemove" type="button">Remove</button>
-            </div>
-          </div>
-          <div class="note" id="customBg_status" style="margin-top:10px"></div>
-</div>
       </div>
     </div>
 
@@ -813,10 +808,7 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
       </div>
       <div class="hr"></div>
       <div class="desc hidden" id="wp_note">
-        Choose a wallpaper per tab so the user can tell sections apart at a glance instead of getting lost in one repeated background.
-      </div>
-      <div class="desc hidden" id="customBg_note">
-        Custom background is in the 3rd tab. Upload one image and it is auto-fitted for desktop and mobile cover mode.
+        Choose a wallpaper per tab so the user can tell sections apart at a glance. Add your own with the button next to Clear. First 5 custom wallpapers free, rest Pro.
       </div>
       <ul class="clean" id="themes_right_list"></ul>
     </div>
@@ -842,9 +834,6 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
   <button class="tabBtn" id="extTabWall" role="tab" aria-selected="false" aria-controls="extWallPane" type="button">
     <span id="ext_wp_title">Wallpapers</span>
   </button>
-  <button class="tabBtn" id="extTabCustom" role="tab" aria-selected="false" aria-controls="extCustomPane" type="button">
-    <span id="ext_custom_title">Custom background</span>
-  </button>
 </div>
 
 <div class="tabPane" id="extThemePane" role="tabpanel" aria-labelledby="extTabTheme">
@@ -860,41 +849,16 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
       <label id="extWpTarget_label" for="extWpTarget">Apply to</label>
       <select id="extWpTarget" aria-label="extWpTarget"></select>
     </div>
-    <div style="min-width:180px">
+    <div style="min-width:180px;display:flex;gap:8px;flex-wrap:wrap">
       <div class="labelSpacer" aria-hidden="true"></div>
+      <button class="btn ghost" id="extWpAddCustom" type="button"><span id="ext_wp_add_title">Add wallpaper</span></button>
+      <input accept="image/*" id="extWpAddFile" type="file" class="hidden"/>
       <button class="btn secondary" id="extWpClear" type="button">Clear</button>
     </div>
   </div>
   <div class="hr"></div>
   <div class="wpGrid" id="extWpGrid"></div>
   <div class="note" id="extWpStatus" style="margin-top:10px"></div>
-</div>
-
-<div class="tabPane hidden" id="extCustomPane" role="tabpanel" aria-labelledby="extTabCustom">
-  <div class="split" style="gap:12px;flex-wrap:wrap;align-items:flex-end">
-    <div style="min-width:240px;flex:1">
-      <label for="extCustomBgTab" id="extCustomBgTab_label">Apply to</label>
-      <select id="extCustomBgTab"></select>
-    </div>
-    <div style="min-width:180px">
-      <div class="labelSpacer"></div>
-      <button class="btn secondary" type="button" id="extCustomBgClear">Clear</button>
-    </div>
-  </div>
-  <div class="hr"></div>
-  <div class="split" style="gap:12px;flex-wrap:wrap;align-items:center">
-    <div style="min-width:260px;flex:1">
-      <label id="extCustomBg_label" for="extCustomBgPick">Upload image</label>
-      <button class="btn ghost" id="extCustomBgPick" type="button">Choose image</button>
-      <span class="muted" id="extCustomBgName" style="margin-left:10px"></span>
-      <input accept="image/*" id="extCustomBgFile" type="file" class="hidden"/>
-      <div class="muted" id="extCustomBgHint" style="margin-top:6px">3rd tab upload: we auto-fit your image for extension popup ratio and mobile/desktop clarity.</div>
-    </div>
-    <div style="min-width:180px">
-      <button class="btn" type="button" id="extCustomBgRemove">Remove</button>
-    </div>
-  </div>
-  <div class="muted" id="extCustomBgStatus" style="margin-top:10px"></div>
 </div>
 </div>
 <div class="card">
@@ -906,7 +870,7 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
 <ul class="clean" id="extthemes_right_list">
 <li>Skins are applied from the site and synced to the extension.</li>
 <li>Only 1 skin is active at a time.</li>
-<li>Pro also removes the 70-line cap and unlocks all writing styles/preset packs.</li>
+<li>Pro also removes the 50-line cap and unlocks all writing styles/preset packs.</li>
 </ul>
 </div>
 </div>
@@ -978,7 +942,7 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
     Free is enough to build and test. Pro removes saved-line caps, unlocks premium controls, and keeps the copy-only flow honest.
   </div>
 <ul class="clean" id="w_right_list">
-<li><b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines. Copy stays manual and honest.</li>
+<li><b>Free:</b> save up to <b>50</b> GM lines + <b>50</b> GN lines. Copy stays manual and honest.</li>
 <li><b>Free cosmetics:</b> <b>10</b> themes + <b>10</b> wallpapers. More via referrals or Pro.</li>
 <li><b>Referrals:</b> unlock more themes/skins/packs gradually. Full details in <b>Referrals</b> tab.</li>
 <li><b>Pro:</b> unlimited saved lines, stronger Best live flow, unlock everything.</li>
@@ -1121,7 +1085,7 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
       <div style="min-width:220px;flex:1;border:1px solid var(--border);border-radius:14px;padding:10px">
         <div class="muted small" style="margin-bottom:6px">Free</div>
         <ul class="clean small" style="margin:0">
-          <li>Up to 70 saved lines</li>
+          <li>Up to 50 saved lines</li>
           <li>Editable lines</li>
           <li>Limited cosmetics</li>
         </ul>
@@ -1204,7 +1168,7 @@ overflow:hidden;text-overflow:ellipsis;vertical-align:middle"></span>
         </thead>
         <tbody>
           <tr><td>Copy-only extension flow</td><td>Included</td><td>Included</td></tr>
-          <tr><td>GM/GN list size</td><td>Up to 70 lines each</td><td>Unlimited</td></tr>
+          <tr><td>GM/GN list size</td><td>Up to 50 lines each</td><td>Unlimited</td></tr>
           <tr><td>Themes & wallpapers</td><td>Limited + referral unlocks</td><td>All unlocked</td></tr>
           <tr><td>Writing styles & preset packs</td><td>Limited + referral unlocks</td><td>All unlocked</td></tr>
           <tr><td>Extension skins & wallpapers</td><td>Limited + referral unlocks</td><td>All unlocked</td></tr>
