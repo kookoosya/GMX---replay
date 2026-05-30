@@ -79,6 +79,7 @@
   "err_init_failed": "Init failed",
   "err_server_error": "Server error",
   "err_unknown": "Unknown error",
+  "err_custom_wp_save": "Could not save image (too large or blocked).",
   "toast_copied": "कॉपी हो गया।",
   "toast_copy_failed": "कॉपी नहीं हो सका।",
   "toast_removed": "हटा दिया गया।",
@@ -348,8 +349,7 @@
   "w_faq_title": "अक्सर पूछे जाने वाले सवाल",
   "w_faq_list": [
     "<b>क्या Pro मेरे वॉलेट से बंधा है?</b> नहीं — Pro आपके X हैंडल से बंधा है। आप किसी भी वॉलेट से पे कर सकते हैं।",
-    "<b>क्या आप मेरे replies स्टोर करते हैं?</b> लिस्ट्स आपके ब्राउज़र में लोकली स्टोर होती हैं। क्लाउड सिंक केवल Pro में है।",
-    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+    "<b>क्या आप मेरे replies स्टोर करते हैं?</b> लिस्ट्स आपके ब्राउज़र में लोकली स्टोर होती हैं। क्लाउड सिंक केवल Pro में है।"
   ],
   "wp_note": "हर tab के लिए wallpaper (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free preview: पहले 10 wallpapers. Unlock +1 (10 referrals), फिर हर 5 पर +1, या Pro.",
   "themes_k_walls": "अनलॉक्ड वॉलपेपर",
@@ -400,19 +400,5 @@
   "lb_col_eligible": "Eligible",
   "lb_col_active": "Active",
   "lb_7d": "7दिन",
-  "lb_30d": "30दिन",
-  "gm_size_label": "Size",
-  "gm_mode_min": "Fast · short",
-  "gm_mode_mid": "Balanced · default",
-  "gm_mode_max": "Full · richer",
-  "gm_mode_min_hint": "One short line, ready to paste.",
-  "gm_mode_mid_hint": "A bit more color; still a natural reply.",
-  "gm_mode_max_hint": "Warmer tone — not an essay.",
-  "gn_size_label": "Size",
-  "gn_mode_min": "Fast · short",
-  "gn_mode_mid": "Balanced · default",
-  "gn_mode_max": "Full · richer",
-  "gn_mode_min_hint": "One short line, ready to paste.",
-  "gn_mode_mid_hint": "A bit more color; still a natural reply.",
-  "gn_mode_max_hint": "Warmer tone — not an essay."
+  "lb_30d": "30दिन"
 }

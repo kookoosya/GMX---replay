@@ -79,6 +79,7 @@
   "err_init_failed": "Init failed",
   "err_server_error": "Server error",
   "err_unknown": "Unknown error",
+  "err_custom_wp_save": "Could not save image (too large or blocked).",
   "toast_copied": "Kopyalandı.",
   "toast_copy_failed": "Kopyalama başarısız.",
   "toast_removed": "Kaldırıldı.",
@@ -348,8 +349,7 @@
   "w_faq_title": "Sık sorulanlar",
   "w_faq_list": [
     "<b>Pro cüzdanıma mı bağlı?</b> Hayır — Pro senin X handle’ına bağlı. İstediğin cüzdandan ödeme yapabilirsin.",
-    "<b>Cevaplarımı saklıyor musunuz?</b> Listeler tarayıcında lokal olarak tutulur. Bulut senkronizasyonu sadece Pro’da var.",
-    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+    "<b>Cevaplarımı saklıyor musunuz?</b> Listeler tarayıcında lokal olarak tutulur. Bulut senkronizasyonu sadece Pro’da var."
   ],
   "wp_note": "Sekme başına duvar kâğıdı (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free önizleme: ilk 10 duvar kâğıdı. Unlock +1 (10 referans), sonra her 5’te +1 veya Pro.",
   "themes_k_walls": "Kilidi açılmış duvar kâğıtları",
@@ -400,19 +400,5 @@
   "lb_col_eligible": "Eligible",
   "lb_col_active": "Active",
   "lb_7d": "7g",
-  "lb_30d": "30g",
-  "gm_size_label": "Size",
-  "gm_mode_min": "Fast · short",
-  "gm_mode_mid": "Balanced · default",
-  "gm_mode_max": "Full · richer",
-  "gm_mode_min_hint": "One short line, ready to paste.",
-  "gm_mode_mid_hint": "A bit more color; still a natural reply.",
-  "gm_mode_max_hint": "Warmer tone — not an essay.",
-  "gn_size_label": "Size",
-  "gn_mode_min": "Fast · short",
-  "gn_mode_mid": "Balanced · default",
-  "gn_mode_max": "Full · richer",
-  "gn_mode_min_hint": "One short line, ready to paste.",
-  "gn_mode_mid_hint": "A bit more color; still a natural reply.",
-  "gn_mode_max_hint": "Warmer tone — not an essay."
+  "lb_30d": "30g"
 }

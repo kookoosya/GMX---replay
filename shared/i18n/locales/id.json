@@ -79,6 +79,7 @@
   "err_init_failed": "Init failed",
   "err_server_error": "Server error",
   "err_unknown": "Unknown error",
+  "err_custom_wp_save": "Could not save image (too large or blocked).",
   "toast_copied": "Disalin.",
   "toast_copy_failed": "Gagal menyalin.",
   "toast_removed": "Dihapus.",
@@ -348,8 +349,7 @@
   "w_faq_title": "Pertanyaan umum",
   "w_faq_list": [
     "<b>Pro itu nempel ke wallet aku?</b> Tidak — Pro nempel ke handle X kamu. Kamu bisa bayar dari wallet mana saja.",
-    "<b>Kalian menyimpan reply aku?</b> List disimpan lokal di browser kamu. Sinkronisasi cloud hanya ada di Pro.",
-    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+    "<b>Kalian menyimpan reply aku?</b> List disimpan lokal di browser kamu. Sinkronisasi cloud hanya ada di Pro."
   ],
   "wp_note": "Wallpaper per tab (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Preview Free: 10 wallpaper pertama. Unlock +1 di 10 referral, lalu +1 tiap 5, atau Pro.",
   "themes_k_walls": "Wallpaper terbuka",
@@ -400,19 +400,5 @@
   "lb_col_eligible": "Eligible",
   "lb_col_active": "Active",
   "lb_7d": "7h",
-  "lb_30d": "30h",
-  "gm_size_label": "Size",
-  "gm_mode_min": "Fast · short",
-  "gm_mode_mid": "Balanced · default",
-  "gm_mode_max": "Full · richer",
-  "gm_mode_min_hint": "One short line, ready to paste.",
-  "gm_mode_mid_hint": "A bit more color; still a natural reply.",
-  "gm_mode_max_hint": "Warmer tone — not an essay.",
-  "gn_size_label": "Size",
-  "gn_mode_min": "Fast · short",
-  "gn_mode_mid": "Balanced · default",
-  "gn_mode_max": "Full · richer",
-  "gn_mode_min_hint": "One short line, ready to paste.",
-  "gn_mode_mid_hint": "A bit more color; still a natural reply.",
-  "gn_mode_max_hint": "Warmer tone — not an essay."
+  "lb_30d": "30h"
 }

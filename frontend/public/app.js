@@ -757,7 +757,7 @@ function readFileAsDataURL(file){
     if (CUSTOM_WP_RE.test(v)) return v;
     let m = v.match(/^extv3_(\d{1,2})$/i);
     if (m){
-      const n = String(Math.max(1, Math.min(50, Number(m[1]) || 1))).padStart(2, "0");
+      const n = String(Math.max(1, Math.min(58, Number(m[1]) || 1))).padStart(2, "0");
       return `extv3_${n}`;
     }
     m = v.match(/^ext_free_(\d{1,2})$/i);
@@ -767,7 +767,7 @@ function readFileAsDataURL(file){
     }
     m = v.match(/^ext_(\d{1,2})$/i);
     if (m){
-      const num = Math.max(1, Math.min(50, Number(m[1]) || 1));
+      const num = Math.max(1, Math.min(58, Number(m[1]) || 1));
       return `extv3_${String(num).padStart(2, "0")}`;
     }
     if (/^lux_ext_[a-z0-9_]+$/i.test(v)) return v;
@@ -1495,6 +1495,28 @@ function applyTheme(id){
   }
 const LS_EXT_VIEW = "gmx_ext_view"; // theme | wall | custom
 const LS_EXT_WP = "gmx_ext_wp"; // selected extension wallpaper id
+const EXT_LS_V2 = {
+  "gmx_ext_theme": "gmx_ext_theme_v2",
+  "gmx_ext_wp": "gmx_ext_wp_v2",
+  "gmx_ext_view": "gmx_ext_view_v2",
+  "gmx_ext_custom_bg_global": "gmx_ext_custom_bg_global_v2",
+  "gmx_ext_wp_view_popup": "gmx_ext_wp_v2_popup",
+  "gmx_ext_wp_view_quick": "gmx_ext_wp_v2_quick",
+};
+function extLsSet(key, value){
+  try{
+    const v2 = EXT_LS_V2[key];
+    if (value === undefined || value === null || value === ""){
+      localStorage.removeItem(key);
+      if (v2) localStorage.removeItem(v2);
+      return;
+    }
+    const text = String(value);
+    localStorage.setItem(key, text);
+    if (v2) localStorage.setItem(v2, text);
+  }catch(_e){}
+}
+
 
 // Custom background for extension popup (per-tab + global)
 // Note: this is stored on the site and later synced to the extension.
@@ -1544,8 +1566,7 @@ function setExtWallpaperForView(view, id){
     const safeView = normalizeExtWallpaperView(view);
     const key = extWallpaperKeyForView(safeView);
     const safeId = normalizeExtWallpaperIdLocal(id);
-    if (safeId) localStorage.setItem(key, safeId);
-    else localStorage.removeItem(key);
+    extLsSet(key, safeId || "");
   }catch(_e){}
 }
 function syncExtWallpaperTargetUI(sel, preferred){
@@ -1751,13 +1772,14 @@ function renderExtCustomBgUI(){
 
 function normalizeExtViewValue(view){
   const v = String(view || "").trim().toLowerCase();
-  return (v === "wall") ? "wall" : "theme";
+  if (v === "wall" || v === "custom") return v;
+  return "theme";
 }
 
 function setExtView(view, opts){
   const safeView = normalizeExtViewValue(view);
   const prev = normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW) || "theme");
-  localStorage.setItem(LS_EXT_VIEW, safeView);
+  extLsSet(LS_EXT_VIEW, safeView);
   const options = opts || {};
   if (!options.silent && prev !== safeView) extSyncNow("ext_view");
   const btnTheme = $("extTabTheme");
@@ -1830,7 +1852,7 @@ function markExtWallpaperSelection(id){
     const unlocked = unlockedExtThemesCount();
     const idx = EXT_THEMES.findIndex(x=>x.id===id);
     if (!isPro() && (idx<0 || idx >= unlocked)) return;
-    localStorage.setItem("gmx_ext_theme", id);
+    extLsSet("gmx_ext_theme", id);
     markExtThemeSelection(id);
     if (normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW) || "theme") !== "theme") setExtView("theme");
     extSyncNow("ext_theme");
@@ -2131,7 +2153,7 @@ function initExtWallpaperControls(){
         const f = addFile.files && addFile.files[0];
         if (!f) return;
         const data = await compressImageToJpegDataURL(f, { profile: "ext" });
-        localStorage.setItem(LS_EXT_CUSTOM_BG_GLOBAL, data);
+        extLsSet(LS_EXT_CUSTOM_BG_GLOBAL, data);
         const target = ($("extWpTarget")?.value || "all");
         setExtWallpaperForView(normalizeExtWallpaperView(target), CUSTOM_UPLOAD_ID);
         extSyncNow("ext_wallpaper");

@@ -79,6 +79,7 @@
   "err_init_failed": "Init failed",
   "err_server_error": "Server error",
   "err_unknown": "Unknown error",
+  "err_custom_wp_save": "Could not save image (too large or blocked).",
   "toast_copied": "已复制。",
   "toast_copy_failed": "复制失败。",
   "toast_removed": "已移除。",
@@ -348,8 +349,7 @@
   "w_faq_title": "常见问题",
   "w_faq_list": [
     "<b>Pro 绑定到我的钱包吗？</b> 不会 — Pro 绑定的是你的 X 账号。你可以用任意钱包付款。",
-    "<b>你们会保存我的回复吗？</b> 列表只保存在你的浏览器本地。云同步仅 Pro 可用。",
-    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+    "<b>你们会保存我的回复吗？</b> 列表只保存在你的浏览器本地。云同步仅 Pro 可用。"
   ],
   "wp_note": "每个标签页可单独设置 wallpaper（Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro）。Free 预览：前 10 张 wallpapers。10 个 referrals 解锁 +1，之后每 5 个再 +1，或 Pro。",
   "themes_k_walls": "已解锁壁纸",
@@ -400,19 +400,5 @@
   "lb_col_eligible": "Eligible",
   "lb_col_active": "Active",
   "lb_7d": "7天",
-  "lb_30d": "30天",
-  "gm_size_label": "Size",
-  "gm_mode_min": "Fast · short",
-  "gm_mode_mid": "Balanced · default",
-  "gm_mode_max": "Full · richer",
-  "gm_mode_min_hint": "One short line, ready to paste.",
-  "gm_mode_mid_hint": "A bit more color; still a natural reply.",
-  "gm_mode_max_hint": "Warmer tone — not an essay.",
-  "gn_size_label": "Size",
-  "gn_mode_min": "Fast · short",
-  "gn_mode_mid": "Balanced · default",
-  "gn_mode_max": "Full · richer",
-  "gn_mode_min_hint": "One short line, ready to paste.",
-  "gn_mode_mid_hint": "A bit more color; still a natural reply.",
-  "gn_mode_max_hint": "Warmer tone — not an essay."
+  "lb_30d": "30天"
 }

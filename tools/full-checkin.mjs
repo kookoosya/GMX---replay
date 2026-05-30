@@ -10,19 +10,24 @@ import path from "node:path";
 const root = process.cwd();
 const appPath = path.join(root, "public/app.js");
 const app = fs.readFileSync(appPath, "utf8");
+const extPath = path.join(root, "extension/popup.js");
+const ext = fs.readFileSync(extPath, "utf8");
+const syncPath = path.join(root, "extension/site_sync.js");
+const syncJs = fs.readFileSync(syncPath, "utf8");
 
 const must = [
-  ['SITE_WALLPAPER_PACK_COUNT = 58', "site wallpaper catalog"],
-  ['EXT_WALLPAPER_PACK_COUNT = 58', "extension wallpaper catalog"],
-  ['/assets/wallpapers/${norm}.webp', "site pack uses webp files"],
-  ['/assets/extbg/${norm}.webp', "ext pack uses webp files"],
-  ['const antiN = antiWindow(strength);', "anti-repeat window in generate"],
-  ['attempts < 4', "bulk generate retry budget"],
-  ['anti_last_n=${encodeURIComponent(antiN)}', "bulk passes anti_last_n"],
-  ['window.__i18nPause = true', "i18n pause during generate"],
-  ['function syncModePanelCopy', "mode panel i18n sync"],
-  ['CRYPTO_SITE_WALL_SOURCES = []', "no external trading wallpaper URLs"],
-  ['CRYPTO_EXT_WALL_SOURCES = []', "no external ext wallpaper URLs"],
+  ["SITE_WALLPAPER_PACK_COUNT = 58", "site wallpaper catalog"],
+  ["EXT_WALLPAPER_PACK_COUNT = 58", "extension wallpaper catalog"],
+  ["/assets/wallpapers/${norm}.webp", "site pack uses webp files"],
+  ["/assets/extbg/${norm}.webp", "ext pack uses webp files"],
+  ["const antiN = antiWindow(strength);", "anti-repeat window in generate"],
+  ["attempts < 4", "bulk generate retry budget"],
+  ["anti_last_n=${encodeURIComponent(antiN)}", "bulk passes anti_last_n"],
+  ["window.__i18nPause = true", "i18n pause during generate"],
+  ["function syncModePanelCopy", "mode panel i18n sync"],
+  ["function extLsSet(", "extension localStorage v2 mirror"],
+  ["CRYPTO_SITE_WALL_SOURCES = []", "no external trading wallpaper URLs"],
+  ["CRYPTO_EXT_WALL_SOURCES = []", "no external ext wallpaper URLs"],
 ];
 
 const mustNot = [
@@ -30,8 +35,19 @@ const mustNot = [
   ['$("toolSupport")', "support button handler"],
   ['setPh("supportOut"', "support textarea placeholder"],
   ["sitePackWallpaperDataUri(norm, false)", "procedural site wallpapers"],
-  ["extPackWallpaperDataUri(norm, false)", "procedural ext wallpapers"],
   ["const antiN = 0;", "disabled anti-repeat"],
+];
+
+const extMust = [
+  ["async function removeState", "extension removeState helper"],
+  ["gmx_ext_wp_v2_popup", "per-view popup wallpaper sync key"],
+  ["pickSyncedWallpaperId", "per-view wallpaper picker"],
+  ["/assets/extbg/${encodeURIComponent(id)}.webp", "extension loads pack webp from site"],
+  ["for (let i=1; i<=58; i++)", "extension wallpaper catalog count"],
+];
+
+const extMustNot = [
+  ["extPackWallpaperDataUri(id, false)", "procedural ext wallpapers in resolve"],
 ];
 
 let issues = 0;
@@ -49,6 +65,24 @@ for (const [needle, label] of mustNot) {
   }
 }
 if (!issues) console.log("ok");
+
+console.log("\n[extension/popup.js]");
+for (const [needle, label] of extMust) {
+  if (!ext.includes(needle)) {
+    console.log(`FAIL missing: ${label}`);
+    issues++;
+  }
+}
+for (const [needle, label] of extMustNot) {
+  if (ext.includes(needle)) {
+    console.log(`FAIL present: ${label}`);
+    issues++;
+  }
+}
+if (!syncJs.includes("EXT_WP_POPUP_KEY")) {
+  console.log("FAIL missing: site_sync per-view wallpaper keys");
+  issues++;
+}
 
 function run(cmd, args) {
   const r = spawnSync(cmd, args, { cwd: root, stdio: "inherit", encoding: "utf8" });

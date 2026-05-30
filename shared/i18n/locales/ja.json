@@ -79,6 +79,7 @@
   "err_init_failed": "Init failed",
   "err_server_error": "Server error",
   "err_unknown": "Unknown error",
+  "err_custom_wp_save": "Could not save image (too large or blocked).",
   "toast_copied": "コピーしました。",
   "toast_copy_failed": "コピーに失敗しました。",
   "toast_removed": "削除しました。",
@@ -348,8 +349,7 @@
   "w_faq_title": "よくある質問",
   "w_faq_list": [
     "<b>Proはウォレットに紐づきますか？</b> いいえ — ProはXハンドルに紐づきます。どのウォレットからでも支払えます。",
-    "<b>返信を保存しますか？</b> リストはブラウザーにローカル保存。クラウド同期はProのみです。",
-    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+    "<b>返信を保存しますか？</b> リストはブラウザーにローカル保存。クラウド同期はProのみです。"
   ],
   "wp_note": "タブ別 wallpaper（Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro）。Free preview: 最初の 10 wallpapers。Unlock +1（10 referrals）、その後 5 ごとに +1、または Pro。",
   "themes_k_walls": "解除済み壁紙",
@@ -400,19 +400,5 @@
   "lb_col_eligible": "Eligible",
   "lb_col_active": "Active",
   "lb_7d": "7日",
-  "lb_30d": "30日",
-  "gm_size_label": "Size",
-  "gm_mode_min": "Fast · short",
-  "gm_mode_mid": "Balanced · default",
-  "gm_mode_max": "Full · richer",
-  "gm_mode_min_hint": "One short line, ready to paste.",
-  "gm_mode_mid_hint": "A bit more color; still a natural reply.",
-  "gm_mode_max_hint": "Warmer tone — not an essay.",
-  "gn_size_label": "Size",
-  "gn_mode_min": "Fast · short",
-  "gn_mode_mid": "Balanced · default",
-  "gn_mode_max": "Full · richer",
-  "gn_mode_min_hint": "One short line, ready to paste.",
-  "gn_mode_mid_hint": "A bit more color; still a natural reply.",
-  "gn_mode_max_hint": "Warmer tone — not an essay."
+  "lb_30d": "30日"
 }
