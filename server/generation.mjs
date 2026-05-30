@@ -1028,6 +1028,7 @@ function generateUnique(handle, kind, mode, lang, style, antiLastN = 20) {
     shapeFingerprint,
     generateRankedCandidates,
     generateUnique,
+    saveRecent,
     replyQualityScore,
     passesModeProfile,
     bankFor,

@@ -28,7 +28,8 @@
     "sync:site": "node tools/sync-site-public.mjs",
     "audit:all": "npm run audit:logic && npm run audit:runtime",
     "build:server": "node tools/build-server.mjs",
-    "build:all": "npm run build:site && npm run build:server"
+    "build:all": "npm run build:site && npm run build:server",
+    "test:full": "npm run build:all && npm test && npm run audit:all"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.97.0",
