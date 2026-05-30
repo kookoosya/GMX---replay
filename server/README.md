@@ -9,3 +9,5 @@
 | `routes/user.mjs` | `/api/user/init`, `/api/usage`, `/api/me`, entitlements, events |
 
 Monolith source: `server-src/` → `npm run build:server` → `index.js`
+
+| `routes/billing.mjs` | billing, Solana pay, redeem, custom wallpapers, arcade cover |

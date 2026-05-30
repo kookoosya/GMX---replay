@@ -59,7 +59,7 @@ export const SITE_I18N = {
     "gn_limits_note": "Free is enough to try everything. Pro removes caps + unlocks all themes/styles.",
     "themes_unlocked_label": "Themes unlocked",
     "themes_wallpapers_unlocked_label": "Wallpapers unlocked",
-    "themes_free_tip": "Referrals unlock more for Free. Pro unlocks all instantly.",
+    "themes_free_tip": "Referrals unlock more on Free. Pro unlocks the full set.",
     "ref_promoter_details": "Promoter details",
     "w_account_support": "Account & support",
     "w_activity_sync_faq": "Activity, sync, support, FAQ",
@@ -160,22 +160,21 @@ export const SITE_I18N = {
     "customBg_label": "Upload image",
     "customBg_note": "Pro only. Upload an image and we auto-fit it to any screen (desktop/mobile). This will later sync to the extension.",
     "customBg_title": "Custom background",
-    "themes_right_desc": "Use Themes to change the app’s look. Wallpapers and backgrounds set the vibe.",
+    "themes_right_desc": "Themes change colors and glass. Wallpapers set the background photo.",
     "themes_right_list": [
-      "Pick any unlocked theme on the left.",
-      "Wallpapers and backgrounds are applied instantly.",
-      "In Free, some items are locked. Pro unlocks everything and removes the 70-line cap.",
-      "Custom backgrounds (Pro) are auto-fit and will later sync to the extension."
+      "Click a theme card to apply it instantly.",
+      "Use Wallpapers for full-screen photos (not chart art).",
+      "Custom uploads are Pro-only after the free custom slots."
     ],
     "extthemes_right_title": "How unlocks work",
-    "extthemes_right_desc": "Up to 60 extension skins and 60 wallpapers. Free preview: first 10 skins. Unlock +1 at 10 referrals, then +1 every 5. Pro unlocks all cosmetics.",
+    "extthemes_right_desc": "Extension skins and wallpapers sync from here. Free includes a starter set; referrals and Pro open the rest.",
     "extthemes_right_list": [
       "Skins and wallpapers are applied from the site and synced to the extension.",
       "Only 1 skin is active at a time.",
       "Pro removes the 70-line cap and unlocks all writing styles / preset packs."
     ],
     "themes_right": "About Themes",
-    "themes_desc": "Themes change the UI. Wallpapers and backgrounds change the vibe. Some items are locked in Free. Pro unlocks everything.",
+    "themes_desc": "Pick a look you like. Some items stay locked on Free until you refer friends or upgrade to Pro.",
     "r_desc": "Short version:",
     "home_desc": "Home: connect your X handle, activate a Pro code, and check your daily usage.",
     "gm_desc": "",
@@ -567,8 +566,7 @@ export const SITE_I18N = {
     "themes_right_list": [
       "Wähle links ein freigeschaltetes Theme aus.",
       "Wallpapers und Hintergründe werden sofort angewendet.",
-      "In Free sind einige Dinge gesperrt. Pro schaltet alles frei und entfernt das 70‑Zeilen‑Limit.",
-      "Custom Backgrounds (Pro) sind auto‑fit und werden später zur Extension synchronisiert."
+      "In Free sind einige Dinge gesperrt. Pro schaltet alles frei und entfernt das 70‑Zeilen‑Limit."
     ],
     "extthemes_right_title": "So funktionieren Unlocks",
     "extthemes_right_desc": "Bis zu 100 Extension-Skins und 100 Wallpapers. Free‑Vorschau: erste 10 Skins. Unlock +1 bei 10 Referrals, dann +1 alle 5. Pro schaltet alle Cosmetics frei.",
@@ -970,8 +968,7 @@ export const SITE_I18N = {
     "themes_right_list": [
       "Choisis un thème débloqué à gauche.",
       "Wallpapers et arrière‑plans s’appliquent instantanément.",
-      "En Free, certains éléments sont verrouillés. Pro débloque tout et enlève la limite de 70 lignes.",
-      "Les fonds personnalisés (Pro) sont auto‑fit et seront plus tard synchronisés à l’extension."
+      "En Free, certains éléments sont verrouillés. Pro débloque tout et enlève la limite de 70 lignes."
     ],
     "extthemes_right_title": "Comment fonctionnent les unlocks",
     "extthemes_right_desc": "Jusqu’à 100 skins d’extension et 100 fonds d’écran. Aperçu Free : 10 premiers skins. Unlock +1 à 10 parrainages, puis +1 tous les 5. Pro débloque toute la cosmétique.",
@@ -1373,8 +1370,7 @@ export const SITE_I18N = {
     "themes_right_list": [
       "Elige un tema desbloqueado a la izquierda.",
       "Los wallpapers y fondos se aplican al instante.",
-      "En Free, algunas opciones están bloqueadas. Pro lo desbloquea todo y quita el límite de 70 líneas.",
-      "Los fondos personalizados (Pro) se auto‑ajustan y luego se sincronizarán con la extensión."
+      "En Free, algunas opciones están bloqueadas. Pro lo desbloquea todo y quita el límite de 70 líneas."
     ],
     "extthemes_right_title": "Cómo funcionan los unlocks",
     "extthemes_right_desc": "Hasta 100 skins de la extensión y 100 wallpapers. Preview Free: primeros 10 skins. Unlock +1 a 10 referidos, luego +1 cada 5. Pro desbloquea toda la cosmética.",
@@ -1776,8 +1772,7 @@ export const SITE_I18N = {
     "themes_right_list": [
       "Escolha um tema desbloqueado à esquerda.",
       "Wallpapers e fundos aplicam na hora.",
-      "No Free, alguns itens ficam bloqueados. Pro libera tudo e remove o limite de 70 linhas.",
-      "Fundos personalizados (Pro) são auto‑fit e depois serão sincronizados com a extensão."
+      "No Free, alguns itens ficam bloqueados. Pro libera tudo e remove o limite de 70 linhas."
     ],
     "extthemes_right_title": "Como funcionam os unlocks",
     "extthemes_right_desc": "Até 100 skins da extensão e 100 wallpapers. Preview Free: primeiros 10 skins. Unlock +1 com 10 indicações, depois +1 a cada 5. Pro desbloqueia toda a cosmética.",
@@ -2179,8 +2174,7 @@ export const SITE_I18N = {
     "themes_right_list": [
       "Scegli un tema sbloccato a sinistra.",
       "Wallpapers e sfondi si applicano subito.",
-      "In Free alcune cose sono bloccate. Pro sblocca tutto e rimuove il limite di 70 righe.",
-      "Gli sfondi personalizzati (Pro) sono auto‑fit e in futuro si sincronizzeranno con l’estensione."
+      "In Free alcune cose sono bloccate. Pro sblocca tutto e rimuove il limite di 70 righe."
     ],
     "extthemes_right_title": "Come funzionano gli unlock",
     "extthemes_right_desc": "Fino a 100 skin dell’estensione e 100 wallpapers. Anteprima Free: prime 10 skin. Unlock +1 a 10 referral, poi +1 ogni 5. Pro sblocca tutta la cosmetica.",
@@ -2582,8 +2576,7 @@ export const SITE_I18N = {
     "themes_right_list": [
       "Kies links een ontgrendeld thema.",
       "Wallpapers en achtergronden worden direct toegepast.",
-      "In Free zijn sommige items locked. Pro unlockt alles en verwijdert de 70‑regels limiet.",
-      "Custom backgrounds (Pro) zijn auto‑fit en syncen later naar de extensie."
+      "In Free zijn sommige items locked. Pro unlockt alles en verwijdert de 70‑regels limiet."
     ],
     "extthemes_right_title": "Hoe unlocks werken",
     "extthemes_right_desc": "Tot 100 extension skins en 100 wallpapers. Free preview: eerste 10 skins. Unlock +1 bij 10 referrals, daarna +1 elke 5. Pro unlockt alle cosmetics.",
@@ -2985,8 +2978,7 @@ export const SITE_I18N = {
     "themes_right_list": [
       "Solda kilidi açık bir tema seç.",
       "Duvar kâğıtları ve arka planlar anında uygulanır.",
-      "Free’de bazı öğeler kilitli. Pro hepsini açar ve 70 satır limitini kaldırır.",
-      "Özel arka planlar (Pro) auto‑fit ve daha sonra eklentiye senkronlanır."
+      "Free’de bazı öğeler kilitli. Pro hepsini açar ve 70 satır limitini kaldırır."
     ],
     "extthemes_right_title": "Unlock’lar nasıl çalışır",
     "extthemes_right_desc": "100’e kadar extension skin ve 100 duvar kâğıdı. Free önizleme: ilk 10 skin. Unlock +1 (10 referans), sonra her 5’te +1. Pro tüm kozmetiği açar.",
@@ -3388,8 +3380,7 @@ export const SITE_I18N = {
     "themes_right_list": [
       "Wybierz odblokowany motyw po lewej.",
       "Tapety i tła stosują się od razu.",
-      "W Free część opcji jest zablokowana. Pro odblokowuje wszystko i usuwa limit 70 linii.",
-      "Tła własne (Pro) są auto‑fit i później będą synchronizowane do rozszerzenia."
+      "W Free część opcji jest zablokowana. Pro odblokowuje wszystko i usuwa limit 70 linii."
     ],
     "extthemes_right_title": "Jak działają unlocki",
     "extthemes_right_desc": "Do 100 skórek rozszerzenia i 100 tapet. Podgląd Free: pierwsze 10 skórek. Unlock +1 przy 10 referralach, potem +1 co 5. Pro odblokowuje całą kosmetykę.",
@@ -3791,8 +3782,7 @@ export const SITE_I18N = {
     "themes_right_list": [
       "Pilih tema yang sudah terbuka di kiri.",
       "Wallpaper dan background langsung diterapkan.",
-      "Di Free, sebagian item terkunci. Pro membuka semuanya dan menghapus limit 70 baris.",
-      "Custom background (Pro) auto‑fit dan nanti akan sinkron ke extension."
+      "Di Free, sebagian item terkunci. Pro membuka semuanya dan menghapus limit 70 baris."
     ],
     "extthemes_right_title": "Cara unlock bekerja",
     "extthemes_right_desc": "Hingga 100 skin extension dan 100 wallpaper. Preview Free: 10 skin pertama. Unlock +1 di 10 referral, lalu +1 tiap 5. Pro membuka semua kosmetik.",
@@ -4194,8 +4184,7 @@ export const SITE_I18N = {
     "themes_right_list": [
       "Выбери любую открытую тему слева.",
       "Обои и фон применяются сразу.",
-      "В Free часть функций заблокирована. Pro открывает всё и снимает лимит 70 строк.",
-      "Кастомный фон (Pro) auto‑fit и позже будет синхронизирован в расширение."
+      "В Free часть функций заблокирована. Pro открывает всё и снимает лимит 70 строк."
     ],
     "extthemes_right_title": "Как работают анлоки",
     "extthemes_right_desc": "До 100 скинов и 100 обоев для расширения. Free preview: первые 10 скинов. Анлок +1 на 10 рефералов, затем +1 каждые 5. Pro открывает всё.",
@@ -4597,8 +4586,7 @@ export const SITE_I18N = {
     "themes_right_list": [
       "Обери будь‑яку відкриту тему зліва.",
       "Шпалери та фон застосовуються одразу.",
-      "У Free частина функцій заблокована. Pro відкриває все і прибирає ліміт 70 рядків.",
-      "Кастомний фон (Pro) auto‑fit і пізніше буде синхронізований в розширення."
+      "У Free частина функцій заблокована. Pro відкриває все і прибирає ліміт 70 рядків."
     ],
     "extthemes_right_title": "Як працюють анлоки",
     "extthemes_right_desc": "До 100 скінів для extension і 100 шпалер. Free прев’ю: перші 10 скінів. Unlock +1 при 10 рефералах, потім +1 кожні 5. Pro відкриває всю косметику.",
@@ -5000,8 +4988,7 @@ export const SITE_I18N = {
     "themes_right_list": [
       "बाएँ से कोई भी unlocked theme चुनें।",
       "<b>Wallpapers</b> tab‑wise हैं; <b>Custom background</b> केवल Pro में है।",
-      "<b>Writing styles</b> सिर्फ Random generation पर लागू होते हैं (manual edits सुरक्षित रहते हैं)।",
-      "<b>Referrals</b> समय के साथ cosmetics unlock करते हैं; <b>Pro</b> सब unlock करता है।"
+      "<b>Writing styles</b> सिर्फ Random generation पर लागू होते हैं (manual edits सुरक्षित रहते हैं)।"
     ],
     "extthemes_right_title": "Unlocks कैसे काम करते हैं",
     "extthemes_right_desc": "100 तक extension skins और 100 wallpapers. Free preview: पहले 10 skins. Unlock +1 (10 referrals), फिर हर 5 पर +1. Pro सारी cosmetics unlock करता है।",
@@ -5403,8 +5390,7 @@ export const SITE_I18N = {
     "themes_right_list": [
       "左から unlocked theme を選択。",
       "<b>Wallpapers</b> はタブ別。<b>Custom background</b> は Pro のみ。",
-      "<b>Writing styles</b> は Random 生成にのみ影響（手動編集は保持）。",
-      "<b>Referrals</b> で cosmetics を段階解除。<b>Pro</b> は全部解除。"
+      "<b>Writing styles</b> は Random 生成にのみ影響（手動編集は保持）。"
     ],
     "extthemes_right_title": "Unlock の仕組み",
     "extthemes_right_desc": "最大 100 の extension skins と 100 wallpapers。Free preview: 最初の 10 skins。Unlock +1（10 referrals）、その後 5 ごとに +1。Pro は全 cosmetics 解除。",
@@ -5806,8 +5792,7 @@ export const SITE_I18N = {
     "themes_right_list": [
       "在左侧选择任意已解锁的 theme。",
       "<b>Wallpapers</b> 按标签页设置；<b>Custom background</b> 仅 Pro。",
-      "<b>Writing styles</b> 只影响 Random 生成（手动编辑始终保留）。",
-      "<b>Referrals</b> 逐步解锁更多外观；<b>Pro</b> 一次性全解锁。"
+      "<b>Writing styles</b> 只影响 Random 生成（手动编辑始终保留）。"
     ],
     "extthemes_right_title": "解锁规则",
     "extthemes_right_desc": "最多 100 个扩展 skins 和 100 张 wallpapers。Free 预览：前 10 个 skins。10 个 referrals 解锁 +1，之后每 5 个再 +1。Pro 解锁全部外观。",

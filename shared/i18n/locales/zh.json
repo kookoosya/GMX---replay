@@ -162,8 +162,7 @@
   "themes_right_list": [
     "在左侧选择任意已解锁的 theme。",
     "<b>Wallpapers</b> 按标签页设置；<b>Custom background</b> 仅 Pro。",
-    "<b>Writing styles</b> 只影响 Random 生成（手动编辑始终保留）。",
-    "<b>Referrals</b> 逐步解锁更多外观；<b>Pro</b> 一次性全解锁。"
+    "<b>Writing styles</b> 只影响 Random 生成（手动编辑始终保留）。"
   ],
   "extthemes_right_title": "解锁规则",
   "extthemes_right_desc": "最多 100 个扩展 skins 和 100 张 wallpapers。Free 预览：前 10 个 skins。10 个 referrals 解锁 +1，之后每 5 个再 +1。Pro 解锁全部外观。",

@@ -57,7 +57,7 @@
   "gn_limits_note": "Free is enough to try everything. Pro removes caps + unlocks all themes/styles.",
   "themes_unlocked_label": "Themes unlocked",
   "themes_wallpapers_unlocked_label": "Wallpapers unlocked",
-  "themes_free_tip": "Referrals unlock more for Free. Pro unlocks all instantly.",
+  "themes_free_tip": "Referrals unlock more on Free. Pro unlocks the full set.",
   "ref_promoter_details": "Promoter details",
   "w_account_support": "Account & support",
   "w_activity_sync_faq": "Activity, sync, support, FAQ",
@@ -158,22 +158,21 @@
   "customBg_label": "Upload image",
   "customBg_note": "Pro only. Upload an image and we auto-fit it to any screen (desktop/mobile). This will later sync to the extension.",
   "customBg_title": "Custom background",
-  "themes_right_desc": "Use Themes to change the app’s look. Wallpapers and backgrounds set the vibe.",
+  "themes_right_desc": "Themes change colors and glass. Wallpapers set the background photo.",
   "themes_right_list": [
-    "Pick any unlocked theme on the left.",
-    "Wallpapers and backgrounds are applied instantly.",
-    "In Free, some items are locked. Pro unlocks everything and removes the 70-line cap.",
-    "Custom backgrounds (Pro) are auto-fit and will later sync to the extension."
+    "Click a theme card to apply it instantly.",
+    "Use Wallpapers for full-screen photos (not chart art).",
+    "Custom uploads are Pro-only after the free custom slots."
   ],
   "extthemes_right_title": "How unlocks work",
-  "extthemes_right_desc": "Up to 60 extension skins and 60 wallpapers. Free preview: first 10 skins. Unlock +1 at 10 referrals, then +1 every 5. Pro unlocks all cosmetics.",
+  "extthemes_right_desc": "Extension skins and wallpapers sync from here. Free includes a starter set; referrals and Pro open the rest.",
   "extthemes_right_list": [
     "Skins and wallpapers are applied from the site and synced to the extension.",
     "Only 1 skin is active at a time.",
     "Pro removes the 70-line cap and unlocks all writing styles / preset packs."
   ],
   "themes_right": "About Themes",
-  "themes_desc": "Themes change the UI. Wallpapers and backgrounds change the vibe. Some items are locked in Free. Pro unlocks everything.",
+  "themes_desc": "Pick a look you like. Some items stay locked on Free until you refer friends or upgrade to Pro.",
   "r_desc": "Short version:",
   "home_desc": "Home: connect your X handle, activate a Pro code, and check your daily usage.",
   "gm_desc": "",

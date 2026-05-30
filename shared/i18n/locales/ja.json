@@ -162,8 +162,7 @@
   "themes_right_list": [
     "左から unlocked theme を選択。",
     "<b>Wallpapers</b> はタブ別。<b>Custom background</b> は Pro のみ。",
-    "<b>Writing styles</b> は Random 生成にのみ影響（手動編集は保持）。",
-    "<b>Referrals</b> で cosmetics を段階解除。<b>Pro</b> は全部解除。"
+    "<b>Writing styles</b> は Random 生成にのみ影響（手動編集は保持）。"
   ],
   "extthemes_right_title": "Unlock の仕組み",
   "extthemes_right_desc": "最大 100 の extension skins と 100 wallpapers。Free preview: 最初の 10 skins。Unlock +1（10 referrals）、その後 5 ごとに +1。Pro は全 cosmetics 解除。",

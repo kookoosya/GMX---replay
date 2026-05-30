@@ -108,3 +108,35 @@ app.get("/get-extension", (req, res) => {
 </body></html>`);
 });
 
+import { registerBillingRoutes } from "./server/routes/billing.mjs";
+
+registerBillingRoutes({
+  app,
+  requireAuth,
+  sendError,
+  ERROR_CODES,
+  BILLING_PLANS,
+  BILLING_TOKENS,
+  SOL_RECEIVER,
+  isSolanaPubkey,
+  getSolUsd,
+  quoteSolLamportsFromUsd,
+  safeDb,
+  db,
+  nowIso,
+  randHex,
+  userByHandle,
+  subscriptionInfo,
+  logActivity,
+  grantReferralReward,
+  referralCountActive,
+  referralRewardTotal,
+  computeReferralUnlocks,
+  PUBLIC_DIR,
+  ASSETS_DIR,
+  path,
+  fs,
+  crypto,
+  fetch,
+});
+
