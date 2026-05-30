@@ -3849,7 +3849,7 @@ async function generate(kind, count){
     const styleEl = kind==="gm" ? $("gmStyle") : $("gnStyle");
     const packEl  = kind==="gm" ? $("gmPack") : $("gnPack");
 
-    const mode = modeEl ? modeEl.value : "mid";
+    let mode = modeEl ? modeEl.value : "mid";
     const lang = currentLang(kind);
 
     let style = styleEl ? styleEl.value : "classic";
@@ -3866,8 +3866,11 @@ async function generate(kind, count){
 
     if ((kind==="gm" ? gmView : gnView) === "lang") ensureIndexed(kind, lang);
 
-    // Pack influences the effective style for generation (without locking manual style).
-    if (!packLocked && pack && pack.style) style = pack.style;
+    // Pack influences style + length mode for generation.
+    if (!packLocked && pack) {
+      if (pack.style) style = pack.style;
+      if (pack.mode) mode = pack.mode;
+    }
 
     const keyActive = activeKey(kind);
     const keyGlobal = getGlobalKey(kind);
@@ -3977,7 +3980,7 @@ if (effCount <= 0){
           attempts++;
           const missing = effCount - accepted.length;
           const reqCount = Math.min(140, missing + buffer);
-          const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=0&count=${reqCount}`, "GET", null, { signal: ctrl.signal, timeoutMs: 12000 });
+          const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}&count=${reqCount}`, "GET", null, { signal: ctrl.signal, timeoutMs: 12000 });
           takeLines(bulk.list || []);
           if (!Array.isArray(bulk.list) || bulk.list.length === 0) break;
         }
@@ -5443,27 +5446,29 @@ if (src){
     const list = $("w_activity_list");
     const msg = $("w_activity_msg");
     if (msg) msg.textContent = "";
-    if (list) list.innerHTML = '<div class="muted">Loading...</div>';
+    if (list) list.innerHTML = `<div class="muted">${escapeHtml(t("act_loading") || "Loading…")}</div>`;
     try{
       if (!getHandle()){
-        if (list) list.innerHTML = '<div class="muted">Sign in to see activity.</div>';
+        if (list) list.innerHTML = `<div class="muted">${escapeHtml(t("act_sign_in") || "Sign in to see activity.")}</div>`;
         return;
       }
       const j = await api('/api/activity?limit=50');
       const items = Array.isArray(j.items) ? j.items : [];
       if (!items.length){
-        if (list) list.innerHTML = '<div class="muted">No activity yet.</div>';
+        if (list) list.innerHTML = `<div class="muted">${escapeHtml(t("act_empty") || "No activity yet.")}</div>`;
         return;
       }
-      const label = (t)=>{
-        const x = String(t||'');
-        if (x === 'payment_verified') return 'Payment verified';
-        if (x === 'billing_intent_created') return 'Checkout started';
-        if (x === 'referral_confirmed') return 'Referral confirmed';
-        if (x === 'referral_used') return 'Referral used';
-        if (x === 'code_redeemed') return 'Promo code redeemed';
-        if (x === 'feature_flag_set') return 'Feature flag changed';
-        return x.replace(/_/g,' ');
+      const label = (type)=>{
+        const x = String(type||'');
+        const map = {
+          payment_verified: t('act_payment_verified'),
+          billing_intent_created: t('act_billing_intent'),
+          referral_confirmed: t('act_referral_confirmed'),
+          referral_used: t('act_referral_used'),
+          code_redeemed: t('act_code_redeemed'),
+          feature_flag_set: t('act_feature_flag'),
+        };
+        return map[x] || x.replace(/_/g,' ');
       };
       const rows = items.slice(0, 50).map(it=>{
         const meta = it && typeof it.meta === 'object' && it.meta ? it.meta : null;
@@ -6092,15 +6097,15 @@ function getReferralUiCopy(_lang){
     items,
     promoterTitle: t("ref_promoter_details") || fallback.promoterTitle,
     baseDaily: t("ref_daily_limit_title") || fallback.baseDaily,
-    unlocksNow: fallback.unlocksNow,
-    nextUnlock: fallback.nextUnlock,
-    allUnlocked: fallback.allUnlocked,
+    unlocksNow: t('ref_unlocks_now') || fallback.unlocksNow,
+    nextUnlock: t('ref_next_unlock') || fallback.nextUnlock,
+    allUnlocked: t('ref_all_unlocked') || fallback.allUnlocked,
     antiAbuse: t("ref_abuse_note") || fallback.antiAbuse,
     confirmed: t("ref_k_confirmed") || fallback.confirmed,
     active: t("ref_k_active") || fallback.active,
     eligible: t("ref_k_eligible") || fallback.eligible,
     legacy: t("ref_k_legacy") || fallback.legacy,
-    clicks: fallback.clicks,
+    clicks: t('ref_clicks') || fallback.clicks,
     bgSlots: fallback.bgSlots,
     saveCap: fallback.saveCap,
     unlimited: fallback.unlimited,
@@ -6113,7 +6118,7 @@ function getReferralUiCopy(_lang){
     leaderboardLoading: t("r_loading") || fallback.leaderboardLoading,
     leaderboardEmpty: t("lb_empty") || fallback.leaderboardEmpty,
     youLabel: t("lb_you") || fallback.youLabel,
-    rulesLabel: fallback.rulesLabel,
+    rulesLabel: t('ref_rules') || fallback.rulesLabel,
     invitedNote: t("r_invited_note") || fallback.invitedNote
   };
 }
@@ -6809,7 +6814,7 @@ function closeLangMenu(){
       attempts++;
       const missing = desiredTotal - cur.length;
       const reqCount = Math.min(180, missing + 50 + (stalled * 20));
-      const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=0&count=${reqCount}`, "GET", null, { signal: opts?.signal, timeoutMs: 12000 });
+      const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}&count=${reqCount}`, "GET", null, { signal: opts?.signal, timeoutMs: 12000 });
       const list = Array.isArray(bulk?.list) ? bulk.list : [];
       if (!list.length) {
         stalled++;

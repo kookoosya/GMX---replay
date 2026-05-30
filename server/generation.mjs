@@ -1,9 +1,8 @@
 /**
  * GM/GN reply generation engine (extracted from index.js).
- * Factory receives DB helpers from the main app bootstrap.
  */
 export function createGenerator(deps) {
-  const { safeDb, db, nowIso } = deps;
+  const { safeDb, db, nowIso, safeOptionalHistoryDb, sha256 } = deps;
 const LANGS = ["en"];
 
 function normLang(_x) {
@@ -1031,5 +1030,6 @@ function generateUnique(handle, kind, mode, lang, style, antiLastN = 20) {
     generateUnique,
     replyQualityScore,
     passesModeProfile,
+    bankFor,
   };
 }

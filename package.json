@@ -24,7 +24,9 @@
     "audit:i18n:strict": "node tools/i18n_audit.js --strict",
     "wallpapers:generate": "node tools/generate-crypto-wallpapers.mjs",
     "wallpapers:prune": "node tools/prune-asset-mirrors.mjs",
-    "wallpapers:wire": "node tools/wire-wallpaper-webp.mjs"
+    "wallpapers:wire": "node tools/wire-wallpaper-webp.mjs",
+    "i18n:patches": "node tools/i18n_apply_patches.mjs && node tools/i18n_uk_from_ru.mjs && node tools/i18n_fill_eu.mjs",
+    "i18n:full": "npm run i18n:patches && npm run i18n:sync"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.97.0",

@@ -91,6 +91,17 @@ function buildSvg(w, h, idx, portrait) {
         `<ellipse cx="${w * o.cx}" cy="${h * o.cy}" rx="${w * o.r}" ry="${h * o.r * (portrait ? 0.85 : 0.55)}" fill="${o.c}" opacity="${o.o}" filter="url(#glow)"/>`
     )
     .join("");
+  const hexCells = [];
+  const hexR = portrait ? 28 : 36;
+  for (let row = 0; row < (portrait ? 14 : 8); row++) {
+    for (let col = 0; col < (portrait ? 6 : 12); col++) {
+      const cx = col * hexR * 1.8 + ((row % 2) * hexR * 0.9);
+      const cy = row * hexR * 1.55 + h * 0.08;
+      if (cx > w * 0.95 || cy > h * 0.92) continue;
+      const op = 0.03 + ((seed + row + col) % 7) * 0.008;
+      hexCells.push(`<polygon points="${cx},${cy - hexR * 0.55} ${cx + hexR * 0.5},${cy - hexR * 0.25} ${cx + hexR * 0.5},${cy + hexR * 0.35} ${cx},${cy + hexR * 0.65} ${cx - hexR * 0.5},${cy + hexR * 0.35} ${cx - hexR * 0.5},${cy - hexR * 0.25}" fill="${p.b}" opacity="${op.toFixed(3)}"/>`);
+    }
+  }
   const candles = [];
   const baseX = portrait ? w * 0.15 : w * 0.55;
   const baseY = portrait ? h * 0.62 : h * 0.55;
@@ -122,7 +133,7 @@ function buildSvg(w, h, idx, portrait) {
     <filter id="glow"><feGaussianBlur stdDeviation="${portrait ? 90 : 120}" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   </defs>
   <rect width="${w}" height="${h}" fill="url(#bg)"/>
-  ${lines.join("")}
+  ${hexCells.join("")}${lines.join("")}
   ${orbEls}
   <rect width="${w}" height="${h}" fill="url(#topGlow)" opacity="0.85"/>
   ${candles.join("")}
