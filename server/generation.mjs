@@ -1025,6 +1025,7 @@ function generateUnique(handle, kind, mode, lang, style, antiLastN = 20) {
     pick,
     composeReply,
     sanitizeSingle,
+    getRecentSet,
     shapeFingerprint,
     generateRankedCandidates,
     generateUnique,

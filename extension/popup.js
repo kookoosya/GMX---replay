@@ -10,7 +10,7 @@ const ALERT_KEYS = {
   enabled: "gmx_market_alerts_enabled_v1",
   interval: "gmx_market_alerts_interval_v1",
 };
-const ASSET_REV = "20260530b";
+const ASSET_REV = "20260530d";
 const LEGACY_KEYS = {
   base: "apiBase",
   handle: "handle",
