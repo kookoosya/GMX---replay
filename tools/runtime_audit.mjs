@@ -127,7 +127,7 @@ function findFirst(relPrefix, pattern) {
 const staleChecks = [
   ["frontend legacy body labels", "frontend/src/legacy/legacyBody.html", ['id="promo_k_legacy">Legacy<', 'id="r_col_inserts">Inserts<']],
   ["frontend arcade redirect copy", "frontend/src/pages/ArcadePage.tsx", ['approved arcade library']],
-  ["bridge legacy bundle labels", findFirst("public/bridge/assets", /^legacy-shell-.*\.js$/), ['promo_k_legacy">Legacy<', 'r_col_inserts">Inserts<']],
+  ["bridge legacy bundle labels", findFirst("public/bridge/assets", /^app-shell-.*\.js$/), ['promo_k_legacy">Legacy<', 'r_col_inserts">Inserts<']],
   ["bridge arcade bundle copy", findFirst("public/bridge/assets", /^ArcadePage-.*\.js$/), ['approved arcade library']],
 ];
 

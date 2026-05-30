@@ -1391,16 +1391,6 @@ function renderWallpaperUI(){
     ["lux_ext_onchain_spaceport", "Onchain Spaceport"],
     ["lux_ext_solana_temple", "Solana Temple"],
   ];
-  const CRYPTO_EXT_WALL_SOURCES = [
-    "https://source.unsplash.com/1080x1920/?bitcoin,crypto,vertical,neon",
-    "https://source.unsplash.com/1080x1920/?ethereum,blockchain,vertical,dark",
-    "https://source.unsplash.com/1080x1920/?solana,crypto,vertical,gradient",
-    "https://source.unsplash.com/1080x1920/?dogecoin,meme,crypto,vertical",
-    "https://source.unsplash.com/1080x1920/?bonk,crypto,vertical,market",
-    "https://source.unsplash.com/1080x1920/?x,finance,vertical,chart",
-    "https://source.unsplash.com/1080x1920/?trading,terminal,vertical",
-    "https://source.unsplash.com/1080x1920/?blockchain,network,vertical"
-  ];
   function buildExtWallpapers(){
     const out = EXT_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
     for (let i=1; i<=EXT_WALLPAPER_PACK_COUNT; i++){

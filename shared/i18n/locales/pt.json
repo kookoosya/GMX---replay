@@ -78,6 +78,7 @@
   "err_invalid_handle": "Invalid handle",
   "err_init_failed": "Init failed",
   "err_server_error": "Server error",
+  "err_custom_wp_save": "Could not save image (too large or blocked).",
   "err_unknown": "Unknown error",
   "toast_copied": "Copiado.",
   "toast_copy_failed": "Falha ao copiar.",

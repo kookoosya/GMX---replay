@@ -24,5 +24,8 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Smoke (quick)
-        run: node smoke.js 2>/dev/null || true
+      - name: Smoke
+        run: npm test
+
+      - name: Runtime audit
+        run: node tools/runtime_audit.mjs

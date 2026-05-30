@@ -78,6 +78,7 @@
   "err_invalid_handle": "Неверный хэндл",
   "err_init_failed": "Не удалось инициализировать",
   "err_server_error": "Ошибка сервера",
+  "err_custom_wp_save": "Could not save image (too large or blocked).",
   "err_unknown": "Неизвестная ошибка",
   "toast_copied": "Скопировано.",
   "toast_copy_failed": "Не удалось скопировать.",

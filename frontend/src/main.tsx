@@ -1,7 +1,6 @@
 import { type ComponentType, type ReactNode } from "react";
 import ReactDOM from "react-dom/client";
 import "./styles.css";
-import { ARCADE_GAMES } from "./features/arcade/embedRegistry";
 
 type RootModule = {
   default: ComponentType;
@@ -22,10 +21,6 @@ const rootEl = document.getElementById("root");
 if (!rootEl) {
   throw new Error("Root element #root not found");
 }
-
-
-// Arcade games (only verified embeds)
-(window as any).__GMX_ARCADE_GAMES__ = (window as any).__GMX_ARCADE_GAMES__ || ARCADE_GAMES;
 
 const root = ReactDOM.createRoot(rootEl);
 
