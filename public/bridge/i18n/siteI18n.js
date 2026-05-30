@@ -179,39 +179,34 @@
     "themes_desc": "Themes change the UI. Wallpapers and backgrounds change the vibe. Some items are locked in Free. Pro unlocks everything.",
     "r_desc": "Short version:",
     "home_desc": "Home: connect your X handle, activate a Pro code, and check your daily usage.",
-    "gm_desc": "Replies to someone else's morning post on X. Pick size and tone, generate, copy, paste.",
+    "gm_desc": "",
     "gm_lang_tabs_note": "Single saved bank for GM.",
     "gn_lang_tabs_note": "Single saved bank for GN.",
     "gm_right": "How to use GM",
-    "gm_right_desc": "Short morning replies to someone else's post — natural, direct, easy to paste.",
+    "gm_right_desc": "Build short English morning replies to someone else’s post. Keep them natural, direct, and easy to paste.",
     "gm_right_list": [
-      "<b>Size</b>: Fast = one short line. Balanced = default. Full = warmer, still postable.",
-      "<b>Tone</b>: ordinary vs crypto changes vocabulary, not length.",
-      "<b>Quick 1</b> adds one line. <b>Batch 10</b> pulls a small stack (server bulk, then dedupe).",
-      "<b>Best</b> picks the strongest saved line; run <b>Best pass</b> to trim lookalikes.",
-      "<b>Repeat guard</b> blocks near-duplicates in larger runs.",
-      "Click a line to edit. <b>Copy all</b> / <b>Export .txt</b> back up the bank.",
-      "Free cap: <b>50</b> saved GM lines (editing always works)."
+      "<b>This bank</b>: one saved GM bank for this section. No hidden language split.",
+      "<b>Random 1/10/70</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
+      "<b>Repeat guard</b>: filters recent or too-similar lines so bulk generation does not collapse into near-duplicates.",
+      "Use <b>Filter</b> to search inside your saved lines.",
+      "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
+      "Manual input drafts are auto-saved.",
+      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
+      "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "How to use GN",
-    "gn_right_desc": "Short night replies to someone else's post — calm, human, easy to paste.",
+    "gn_right_desc": "Build short English night replies to someone else’s post. Keep them calm, human, and easy to paste.",
     "gn_right_list": [
-      "<b>Size</b>: Fast = one short line. Balanced = default. Full = warmer, still postable.",
-      "<b>Tone</b>: ordinary vs crypto changes vocabulary, not length.",
-      "<b>Quick 1</b> adds one line. <b>Batch 10</b> pulls a small stack (server bulk, then dedupe).",
-      "<b>Best</b> picks the strongest saved line; run <b>Best pass</b> to trim lookalikes.",
-      "<b>Repeat guard</b> blocks near-duplicates in larger runs.",
-      "Click a line to edit. <b>Copy all</b> / <b>Export .txt</b> back up the bank.",
-      "Free cap: <b>50</b> saved GN lines (editing always works)."
+      "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
+      "<b>Random 1/10/70</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
+      "<b>Repeat guard</b> reduces duplicates and near-duplicates during larger generation runs.",
+      "Use <b>Filter</b> to search inside your saved lines.",
+      "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
+      "Manual input drafts are auto-saved.",
+      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
+      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
     ],
-    "gn_desc": "Replies to someone else's night post on X. Same flow — short, human, postable.",
-    "gn_size_label": "Size",
-    "gn_mode_min": "Fast · short",
-    "gn_mode_mid": "Balanced · default",
-    "gn_mode_max": "Full · richer",
-    "gn_mode_min_hint": "One short line, ready to paste.",
-    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
-    "gn_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_desc": "",
     "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
     "wallet_desc": "Upgrade Pro: unlimited daily GM/GN lines + unlock all cosmetics (Themes, Styles, Extension skins & wallpapers). Pay on Solana with SOL / USDC / USDT. Auto-verified on-chain.",
     "w_pay_desc": "Select a plan to enable payment.",
@@ -339,7 +334,7 @@
     "w_right": "How Pro & referrals work",
     "ui_plan": "Plan",
     "ui_sync": "Sync",
-    "w_right_desc": "Free: 50 saved lines per bank, daily extension copy limits. Pro: unlimited generation, all themes, and extension cosmetics.",
+    "w_right_desc": "Free lets you build and edit your GM/GN lists. Pro unlocks everything and removes limits.",
     "w_right_list": [
       "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
       "<b>Free cosmetics:</b> <b>10</b> themes + <b>10</b> wallpapers. More via referrals or Pro.",
@@ -347,16 +342,17 @@
       "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",
       "<b>Pay:</b> select a plan → choose SOL/USDC/USDT → connect wallet → approve transfer → auto-verify."
     ],
-    "w_support_title": "Support",
-    "w_support_desc": "Copy a safe support snapshot (no private keys) only when support asks for it.",
-    "toolSupport": "Copy support bundle",
-    "toolDiag": "Copy support snapshot",
-    "toolLogs": "Copy local logs",
-    "supportOut_ph": "Paste support notes here...",
+    "w_support_title": "",
+    "w_support_desc": "",
+    "toolSupport": "",
+    "toolDiag": "",
+    "toolLogs": "",
+    "supportOut_ph": "",
     "w_faq_title": "FAQ",
     "w_faq_list": [
       "<b>Is Pro tied to my wallet?</b> No — Pro is tied to your X handle. You can pay from any wallet.",
-      "<b>Do you store my replies?</b> Lists are stored locally in your browser. Cloud sync is Pro-only."
+      "<b>Do you store my replies?</b> Lists are stored locally in your browser. Cloud sync is Pro-only.",
+      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
     ],
     "wp_note": "Set a wallpaper per tab (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free preview: first 10 wallpapers. Unlock +1 at 10 referrals, then +1 every 5, or Pro.",
     "themes_k_walls": "Unlocked wallpapers",
@@ -365,7 +361,7 @@
     "ext_k_ref": "Referrals",
     "w_pay_help_list_html": "<li>Select a plan and payment token (SOL / USDC / USDT).</li><li>Connect your wallet and approve the transfer inside your wallet.</li><li>We verify the transaction on Solana and activate Pro for your handle.</li>",
     "w_trust_title": "Trust & safety",
-    "w_trust_list_html": "<li><b>No seed phrase:</b> we never ask for your secret words or private keys.</li><li><b>Standard transfer:</b> you will always see receiver address and amount inside your wallet before approving.</li><li><b>On-chain verification:</b> Pro activates only after we verify your transaction on Solana.</li>",
+    "w_trust_list_html": "<li><b>No seed phrase:</b> we never ask for your secret words or private keys.</li><li><b>Standard transfer:</b> you will always see receiver address and amount inside your wallet before approving.</li><li><b>On-chain verification:</b> Pro activates only after we verify your transaction on Solana.<li><b>Payments are final:</b> verified on-chain payments are not refunded or reversed by us.</li>",
     "ext_rules_list_html": "<li>Extension skin is selected on the site and synced into the extension.</li><li>Only one skin can be active at a time.</li><li>Pro also removes the ${SAVE_CAP_FREE} saved-lines cap and unlocks all styles/packs.</li>",
     "ref_loaded": "Loaded.",
     "ref_load_failed": "Load failed.",
@@ -414,7 +410,14 @@
     "gm_mode_max": "Full · richer",
     "gm_mode_min_hint": "One short line, ready to paste.",
     "gm_mode_mid_hint": "A bit more color; still a natural reply.",
-    "gm_mode_max_hint": "Warmer tone — not an essay."
+    "gm_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_size_label": "Size",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gn_mode_min_hint": "One short line, ready to paste.",
+    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gn_mode_max_hint": "Warmer tone — not an essay."
   },
   "de": {
     "plan_compare_btn": "Vergleichen",
@@ -606,7 +609,8 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
+      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
+      "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "So nutzt du GN",
     "gn_right_desc": "Kurze GN-Nachtantworten auf fremde Posts — ruhig, menschlich, einfach einfügen.",
@@ -617,16 +621,10 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
+      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
+      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "Antworten auf fremde Nacht-Posts auf X. Gleicher Ablauf — kurz, menschlich, postbar.",
-    "gn_size_label": "Größe",
-    "gn_mode_min": "Schnell · kurz",
-    "gn_mode_mid": "Ausgewogen · Standard",
-    "gn_mode_max": "Voll · reicher",
-    "gn_mode_min_hint": "Eine kurze Zeile, sofort postbar.",
-    "gn_mode_mid_hint": "Etwas lebendiger; wirkt noch wie eine echte Antwort.",
-    "gn_mode_max_hint": "Wärmerer Ton — kein Aufsatz.",
     "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
     "wallet_desc": "Pro: Entfernt das 70er-Limit, schaltet alle Themes & Styles frei und gibt unbegrenzte Generation. Voller Wallet-Connect kommt später — bewusst vorsichtig wegen Security. Verify per Signature ist sicherer und zuverlässig.",
     "w_pay_desc": "Empfänger-Wallet erscheint nach Plan-Auswahl.",
@@ -771,7 +769,8 @@
     "w_faq_title": "Häufige Fragen",
     "w_faq_list": [
       "<b>Ist Pro an meine Wallet gebunden?</b> Nein — Pro ist an deinen X‑Handle gebunden. Du kannst mit jeder Wallet bezahlen.",
-      "<b>Speichert ihr meine Replies?</b> Listen werden lokal in deinem Browser gespeichert. Cloud‑Sync gibt es nur in Pro."
+      "<b>Speichert ihr meine Replies?</b> Listen werden lokal in deinem Browser gespeichert. Cloud‑Sync gibt es nur in Pro.",
+      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
     ],
     "wp_note": "Wallpaper pro Tab (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free‑Vorschau: erste 10 Wallpapers. Unlock +1 bei 10 Referrals, dann +1 alle 5, oder Pro.",
     "themes_k_walls": "Freigeschaltete Wallpaper",
@@ -823,13 +822,20 @@
     "lb_col_active": "Aktiv",
     "lb_7d": "7d",
     "lb_30d": "30d",
-    "gm_size_label": "Größe",
-    "gm_mode_min": "Schnell · kurz",
-    "gm_mode_mid": "Ausgewogen · Standard",
-    "gm_mode_max": "Voll · reicher",
-    "gm_mode_min_hint": "Eine kurze Zeile, sofort postbar.",
-    "gm_mode_mid_hint": "Etwas lebendiger; wirkt noch wie eine echte Antwort.",
-    "gm_mode_max_hint": "Wärmerer Ton — kein Aufsatz."
+    "gm_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gm_mode_min_hint": "One short line, ready to paste.",
+    "gm_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gm_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_size_label": "Size",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gn_mode_min_hint": "One short line, ready to paste.",
+    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gn_mode_max_hint": "Warmer tone — not an essay."
   },
   "fr": {
     "plan_compare_btn": "Comparer",
@@ -1021,7 +1027,8 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
+      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
+      "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "Comment utiliser GN",
     "gn_right_desc": "Réponses GN nocturnes courtes — calmes, humaines, faciles à coller.",
@@ -1032,16 +1039,10 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
+      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
+      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "Réponses au post du soir de quelqu’un sur X. Même flux — court, humain, publiable.",
-    "gn_size_label": "Taille",
-    "gn_mode_min": "Rapide · court",
-    "gn_mode_mid": "Équilibré · défaut",
-    "gn_mode_max": "Complet · plus riche",
-    "gn_mode_min_hint": "Une ligne courte, prête à publier.",
-    "gn_mode_mid_hint": "Un peu plus de couleur ; toujours une vraie réponse.",
-    "gn_mode_max_hint": "Ton plus chaleureux — pas un pavé.",
     "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
     "wallet_desc": "Upgrade Pro : supprime la limite 70 et débloque tous les cosmétiques (thèmes, styles, skins & wallpapers d’extension). Paiement sur Solana en SOL / USDC / USDT. Vérification automatique on‑chain.",
     "w_pay_desc": "Le wallet receveur s’affichera après la sélection d’un plan.",
@@ -1186,7 +1187,8 @@
     "w_faq_title": "Questions fréquentes",
     "w_faq_list": [
       "<b>Pro est lié à mon wallet ?</b> Non — Pro est lié à ton handle X. Tu peux payer avec n’importe quel wallet.",
-      "<b>Vous gardez mes réponses ?</b> Les listes sont stockées localement dans ton navigateur. La synchro cloud est réservée à Pro."
+      "<b>Vous gardez mes réponses ?</b> Les listes sont stockées localement dans ton navigateur. La synchro cloud est réservée à Pro.",
+      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
     ],
     "wp_note": "Fond d’écran par onglet (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Aperçu Free : 10 premiers fonds d’écran. Unlock +1 à 10 parrainages, puis +1 tous les 5, ou Pro.",
     "themes_k_walls": "Fonds d’écran débloqués",
@@ -1238,13 +1240,20 @@
     "lb_col_active": "Actifs",
     "lb_7d": "7j",
     "lb_30d": "30j",
-    "gm_size_label": "Taille",
-    "gm_mode_min": "Rapide · court",
-    "gm_mode_mid": "Équilibré · défaut",
-    "gm_mode_max": "Complet · plus riche",
-    "gm_mode_min_hint": "Une ligne courte, prête à publier.",
-    "gm_mode_mid_hint": "Un peu plus de couleur ; toujours une vraie réponse.",
-    "gm_mode_max_hint": "Ton plus chaleureux — pas un pavé."
+    "gm_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gm_mode_min_hint": "One short line, ready to paste.",
+    "gm_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gm_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_size_label": "Size",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gn_mode_min_hint": "One short line, ready to paste.",
+    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gn_mode_max_hint": "Warmer tone — not an essay."
   },
   "es": {
     "plan_compare_btn": "Comparar",
@@ -1436,7 +1445,8 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
+      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
+      "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "Cómo usar GN",
     "gn_right_desc": "Respuestas GN cortas por la noche — calmadas, humanas, fáciles de pegar.",
@@ -1447,16 +1457,10 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
+      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
+      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "Respuestas al post nocturno de otra persona en X. Mismo flujo: corto, humano y publicable.",
-    "gn_size_label": "Tamaño",
-    "gn_mode_min": "Rápido · corto",
-    "gn_mode_mid": "Equilibrado · predeterminado",
-    "gn_mode_max": "Completo · más rico",
-    "gn_mode_min_hint": "Una línea corta, lista para publicar.",
-    "gn_mode_mid_hint": "Un poco más de color; sigue siendo una respuesta natural.",
-    "gn_mode_max_hint": "Tono más cálido — no un ensayo.",
     "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
     "wallet_desc": "Pro: elimina el límite de 70, desbloquea todos los temas y estilos, y obtén generación ilimitada. Wallet-connect completo llegará pronto — lo implementamos con cuidado por seguridad. Verificar por firma es más seguro y fiable.",
     "w_pay_desc": "La wallet receptora aparecerá después de elegir un plan.",
@@ -1601,7 +1605,8 @@
     "w_faq_title": "Preguntas frecuentes",
     "w_faq_list": [
       "<b>¿Pro está ligado a mi wallet?</b> No — Pro está ligado a tu handle de X. Puedes pagar desde cualquier wallet.",
-      "<b>¿Guardan mis respuestas?</b> Las listas se guardan localmente en tu navegador. La sincronización en la nube es solo para Pro."
+      "<b>¿Guardan mis respuestas?</b> Las listas se guardan localmente en tu navegador. La sincronización en la nube es solo para Pro.",
+      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
     ],
     "wp_note": "Wallpaper por pestaña (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Preview Free: primeros 10 wallpapers. Unlock +1 a 10 referidos, luego +1 cada 5, o Pro.",
     "themes_k_walls": "Fondos desbloqueados",
@@ -1653,13 +1658,20 @@
     "lb_col_active": "Activos",
     "lb_7d": "7d",
     "lb_30d": "30d",
-    "gm_size_label": "Tamaño",
-    "gm_mode_min": "Rápido · corto",
-    "gm_mode_mid": "Equilibrado · predeterminado",
-    "gm_mode_max": "Completo · más rico",
-    "gm_mode_min_hint": "Una línea corta, lista para publicar.",
-    "gm_mode_mid_hint": "Un poco más de color; sigue siendo una respuesta natural.",
-    "gm_mode_max_hint": "Tono más cálido — no un ensayo."
+    "gm_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gm_mode_min_hint": "One short line, ready to paste.",
+    "gm_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gm_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_size_label": "Size",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gn_mode_min_hint": "One short line, ready to paste.",
+    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gn_mode_max_hint": "Warmer tone — not an essay."
   },
   "pt": {
     "plan_compare_btn": "Comparar",
@@ -1851,7 +1863,8 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
+      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
+      "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "Como usar GN",
     "gn_right_desc": "Respostas GN curtas à noite — calmas, humanas, fáceis de colar.",
@@ -1862,16 +1875,10 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
+      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
+      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "Respostas ao post da noite de outra pessoa no X. Mesmo fluxo — curto, humano e postável.",
-    "gn_size_label": "Tamanho",
-    "gn_mode_min": "Rápido · curto",
-    "gn_mode_mid": "Equilibrado · padrão",
-    "gn_mode_max": "Completo · mais rico",
-    "gn_mode_min_hint": "Uma linha curta, pronta para publicar.",
-    "gn_mode_mid_hint": "Um pouco mais de cor; ainda parece resposta natural.",
-    "gn_mode_max_hint": "Tom mais quente — não um texto longo.",
     "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
     "wallet_desc": "Pro: remove o limite de 70, desbloqueia todos os temas e estilos e libera geração ilimitada. Wallet-connect completo chega em breve — com foco em segurança. Verificar por assinatura é mais seguro e confiável.",
     "w_pay_desc": "A wallet receptora aparece depois de escolher um plano.",
@@ -2016,7 +2023,8 @@
     "w_faq_title": "Perguntas frequentes",
     "w_faq_list": [
       "<b>O Pro é ligado à minha carteira?</b> Não — o Pro é ligado ao seu handle do X. Você pode pagar com qualquer carteira.",
-      "<b>Vocês guardam minhas respostas?</b> As listas ficam salvas localmente no seu navegador. Sync em nuvem é só no Pro."
+      "<b>Vocês guardam minhas respostas?</b> As listas ficam salvas localmente no seu navegador. Sync em nuvem é só no Pro.",
+      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
     ],
     "wp_note": "Wallpaper por aba (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Preview Free: primeiros 10 wallpapers. Unlock +1 com 10 indicações, depois +1 a cada 5, ou Pro.",
     "themes_k_walls": "Papéis de parede desbloqueados",
@@ -2068,13 +2076,20 @@
     "lb_col_active": "Active",
     "lb_7d": "7d",
     "lb_30d": "30d",
-    "gm_size_label": "Tamanho",
-    "gm_mode_min": "Rápido · curto",
-    "gm_mode_mid": "Equilibrado · padrão",
-    "gm_mode_max": "Completo · mais rico",
-    "gm_mode_min_hint": "Uma linha curta, pronta para publicar.",
-    "gm_mode_mid_hint": "Um pouco mais de cor; ainda parece resposta natural.",
-    "gm_mode_max_hint": "Tom mais quente — não um texto longo."
+    "gm_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gm_mode_min_hint": "One short line, ready to paste.",
+    "gm_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gm_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_size_label": "Size",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gn_mode_min_hint": "One short line, ready to paste.",
+    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gn_mode_max_hint": "Warmer tone — not an essay."
   },
   "it": {
     "plan_compare_btn": "Confronta",
@@ -2266,7 +2281,8 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
+      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
+      "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "Come usare GN",
     "gn_right_desc": "Risposte GN notturne brevi — calme, umane, facili da incollare.",
@@ -2277,16 +2293,10 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
+      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
+      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "Risposte al post della sera di qualcun altro su X. Stesso flusso: breve, umano e pubblicabile.",
-    "gn_size_label": "Dimensione",
-    "gn_mode_min": "Veloce · breve",
-    "gn_mode_mid": "Bilanciato · predefinito",
-    "gn_mode_max": "Completo · più ricco",
-    "gn_mode_min_hint": "Una riga corta, pronta da pubblicare.",
-    "gn_mode_mid_hint": "Un po’ più di colore; resta una risposta naturale.",
-    "gn_mode_max_hint": "Tono più caldo — non un saggio.",
     "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
     "wallet_desc": "Upgrade Pro: rimuove il limite 70 e sblocca tutti i cosmetici (Themes, Styles, skin & wallpaper dell’estensione). Pagamento su Solana con SOL / USDC / USDT. Verifica automatica on‑chain.",
     "w_pay_desc": "Il wallet destinatario apparirà dopo la scelta del piano.",
@@ -2431,7 +2441,8 @@
     "w_faq_title": "Domande frequenti",
     "w_faq_list": [
       "<b>Pro è legato al mio wallet?</b> No — Pro è legato al tuo handle X. Puoi pagare da qualsiasi wallet.",
-      "<b>Conservate le mie risposte?</b> Le liste sono salvate in locale nel browser. La sincronizzazione cloud è solo per Pro."
+      "<b>Conservate le mie risposte?</b> Le liste sono salvate in locale nel browser. La sincronizzazione cloud è solo per Pro.",
+      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
     ],
     "wp_note": "Wallpaper per tab (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Anteprima Free: primi 10 wallpapers. Unlock +1 a 10 referral, poi +1 ogni 5, oppure Pro.",
     "themes_k_walls": "Sfondi sbloccati",
@@ -2483,13 +2494,20 @@
     "lb_col_active": "Active",
     "lb_7d": "7g",
     "lb_30d": "30g",
-    "gm_size_label": "Dimensione",
-    "gm_mode_min": "Veloce · breve",
-    "gm_mode_mid": "Bilanciato · predefinito",
-    "gm_mode_max": "Completo · più ricco",
-    "gm_mode_min_hint": "Una riga corta, pronta da pubblicare.",
-    "gm_mode_mid_hint": "Un po’ più di colore; resta una risposta naturale.",
-    "gm_mode_max_hint": "Tono più caldo — non un saggio."
+    "gm_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gm_mode_min_hint": "One short line, ready to paste.",
+    "gm_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gm_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_size_label": "Size",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gn_mode_min_hint": "One short line, ready to paste.",
+    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gn_mode_max_hint": "Warmer tone — not an essay."
   },
   "nl": {
     "plan_compare_btn": "Vergelijken",
@@ -2681,7 +2699,8 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
+      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
+      "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "GN gebruiken",
     "gn_right_desc": "Korte GN-nachtantwoorden — rustig, menselijk, makkelijk te plakken.",
@@ -2692,16 +2711,10 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
+      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
+      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "Antwoorden op iemands avondpost op X. Zelfde flow — kort, menselijk, postbaar.",
-    "gn_size_label": "Grootte",
-    "gn_mode_min": "Snel · kort",
-    "gn_mode_mid": "Gebalanceerd · standaard",
-    "gn_mode_max": "Vol · rijker",
-    "gn_mode_min_hint": "Eén korte regel, klaar om te posten.",
-    "gn_mode_mid_hint": "Iets levendiger; nog steeds een natuurlijk antwoord.",
-    "gn_mode_max_hint": "Warmere toon — geen essay.",
     "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
     "wallet_desc": "Pro: verwijdert de 70-cap, ontgrendelt alle themes & styles en geeft onbeperkte generatie. Volledige wallet-connect komt later — bewust voorzichtig voor security. Verify via signature is veiliger en betrouwbaar.",
     "w_pay_desc": "Receiver wallet verschijnt na het kiezen van een plan.",
@@ -2846,7 +2859,8 @@
     "w_faq_title": "Veelgestelde vragen",
     "w_faq_list": [
       "<b>Is Pro gekoppeld aan mijn wallet?</b> Nee — Pro is gekoppeld aan je X‑handle. Je kunt met elke wallet betalen.",
-      "<b>Slaan jullie mijn replies op?</b> Lijsten worden lokaal in je browser opgeslagen. Cloud‑sync is alleen voor Pro."
+      "<b>Slaan jullie mijn replies op?</b> Lijsten worden lokaal in je browser opgeslagen. Cloud‑sync is alleen voor Pro.",
+      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
     ],
     "wp_note": "Wallpaper per tab (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free preview: eerste 10 wallpapers. Unlock +1 bij 10 referrals, daarna +1 elke 5, of Pro.",
     "themes_k_walls": "Ontgrendelde achtergronden",
@@ -2898,13 +2912,20 @@
     "lb_col_active": "Active",
     "lb_7d": "7d",
     "lb_30d": "30d",
-    "gm_size_label": "Grootte",
-    "gm_mode_min": "Snel · kort",
-    "gm_mode_mid": "Gebalanceerd · standaard",
-    "gm_mode_max": "Vol · rijker",
-    "gm_mode_min_hint": "Eén korte regel, klaar om te posten.",
-    "gm_mode_mid_hint": "Iets levendiger; nog steeds een natuurlijk antwoord.",
-    "gm_mode_max_hint": "Warmere toon — geen essay."
+    "gm_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gm_mode_min_hint": "One short line, ready to paste.",
+    "gm_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gm_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_size_label": "Size",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gn_mode_min_hint": "One short line, ready to paste.",
+    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gn_mode_max_hint": "Warmer tone — not an essay."
   },
   "tr": {
     "plan_compare_btn": "Karşılaştır",
@@ -3096,7 +3117,8 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
+      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
+      "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "GN nasıl kullanılır",
     "gn_right_desc": "Kısa gece GN yanıtları — sakin, insani, yapıştırmaya hazır.",
@@ -3107,16 +3129,10 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
+      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
+      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "X’te başkasının gece gönderisine yanıt. Aynı akış — kısa, insani, paylaşılabilir.",
-    "gn_size_label": "Boyut",
-    "gn_mode_min": "Hızlı · kısa",
-    "gn_mode_mid": "Dengeli · varsayılan",
-    "gn_mode_max": "Tam · daha zengin",
-    "gn_mode_min_hint": "Tek kısa satır, hemen paylaşılabilir.",
-    "gn_mode_mid_hint": "Biraz daha canlı; yine doğal bir yanıt.",
-    "gn_mode_max_hint": "Daha sıcak ton — makale değil.",
     "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
     "wallet_desc": "Pro: 70 cap’i kaldırır, tüm temaları & stilleri açar ve sınırsız üretim verir. Tam wallet-connect yakında — güvenlik için dikkatli gidiyoruz. Signature ile doğrulama daha güvenli ve stabil.",
     "w_pay_desc": "Alıcı cüzdan plan seçildikten sonra görünür.",
@@ -3261,7 +3277,8 @@
     "w_faq_title": "Sık sorulanlar",
     "w_faq_list": [
       "<b>Pro cüzdanıma mı bağlı?</b> Hayır — Pro senin X handle’ına bağlı. İstediğin cüzdandan ödeme yapabilirsin.",
-      "<b>Cevaplarımı saklıyor musunuz?</b> Listeler tarayıcında lokal olarak tutulur. Bulut senkronizasyonu sadece Pro’da var."
+      "<b>Cevaplarımı saklıyor musunuz?</b> Listeler tarayıcında lokal olarak tutulur. Bulut senkronizasyonu sadece Pro’da var.",
+      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
     ],
     "wp_note": "Sekme başına duvar kâğıdı (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free önizleme: ilk 10 duvar kâğıdı. Unlock +1 (10 referans), sonra her 5’te +1 veya Pro.",
     "themes_k_walls": "Kilidi açılmış duvar kâğıtları",
@@ -3313,13 +3330,20 @@
     "lb_col_active": "Active",
     "lb_7d": "7g",
     "lb_30d": "30g",
-    "gm_size_label": "Boyut",
-    "gm_mode_min": "Hızlı · kısa",
-    "gm_mode_mid": "Dengeli · varsayılan",
-    "gm_mode_max": "Tam · daha zengin",
-    "gm_mode_min_hint": "Tek kısa satır, hemen paylaşılabilir.",
-    "gm_mode_mid_hint": "Biraz daha canlı; yine doğal bir yanıt.",
-    "gm_mode_max_hint": "Daha sıcak ton — makale değil."
+    "gm_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gm_mode_min_hint": "One short line, ready to paste.",
+    "gm_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gm_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_size_label": "Size",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gn_mode_min_hint": "One short line, ready to paste.",
+    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gn_mode_max_hint": "Warmer tone — not an essay."
   },
   "pl": {
     "plan_compare_btn": "Porównaj",
@@ -3511,7 +3535,8 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
+      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
+      "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "Jak używać GN",
     "gn_right_desc": "Krótkie nocne odpowiedzi GN — spokojne, ludzkie, łatwe do wklejenia.",
@@ -3522,16 +3547,10 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
+      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
+      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "Odpowiedzi na czyjś nocny post na X. Ten sam flow — krótko, po ludzku, gotowe do wklejenia.",
-    "gn_size_label": "Rozmiar",
-    "gn_mode_min": "Szybki · krótki",
-    "gn_mode_mid": "Zbalansowany · domyślny",
-    "gn_mode_max": "Pełny · bogatszy",
-    "gn_mode_min_hint": "Jedna krótka linia, gotowa do wklejenia.",
-    "gn_mode_mid_hint": "Trochę więcej życia; nadal naturalna odpowiedź.",
-    "gn_mode_max_hint": "Cieplejszy ton — nie esej.",
     "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
     "wallet_desc": "Pro: usuwa cap 70, odblokowuje wszystkie motywy i style oraz daje nielimitowaną generację. Pełny wallet-connect wkrótce — ostrożnie ze względów bezpieczeństwa. Weryfikacja podpisem jest bezpieczniejsza i stabilna.",
     "w_pay_desc": "Portfel odbiorcy pojawi się po wybraniu planu.",
@@ -3676,7 +3695,8 @@
     "w_faq_title": "Najczęstsze pytania",
     "w_faq_list": [
       "<b>Czy Pro jest powiązane z moim portfelem?</b> Nie — Pro jest powiązane z twoim handle na X. Możesz płacić z dowolnego portfela.",
-      "<b>Czy przechowujecie moje odpowiedzi?</b> Listy są zapisywane lokalnie w twojej przeglądarce. Synchronizacja w chmurze jest tylko w Pro."
+      "<b>Czy przechowujecie moje odpowiedzi?</b> Listy są zapisywane lokalnie w twojej przeglądarce. Synchronizacja w chmurze jest tylko w Pro.",
+      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
     ],
     "wp_note": "Tapeta per zakładka (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Podgląd Free: pierwsze 10 tapet. Unlock +1 przy 10 referralach, potem +1 co 5 albo Pro.",
     "themes_k_walls": "Odblokowane tapety",
@@ -3728,13 +3748,20 @@
     "lb_col_active": "Active",
     "lb_7d": "7d",
     "lb_30d": "30d",
-    "gm_size_label": "Rozmiar",
-    "gm_mode_min": "Szybki · krótki",
-    "gm_mode_mid": "Zbalansowany · domyślny",
-    "gm_mode_max": "Pełny · bogatszy",
-    "gm_mode_min_hint": "Jedna krótka linia, gotowa do wklejenia.",
-    "gm_mode_mid_hint": "Trochę więcej życia; nadal naturalna odpowiedź.",
-    "gm_mode_max_hint": "Cieplejszy ton — nie esej."
+    "gm_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gm_mode_min_hint": "One short line, ready to paste.",
+    "gm_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gm_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_size_label": "Size",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gn_mode_min_hint": "One short line, ready to paste.",
+    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gn_mode_max_hint": "Warmer tone — not an essay."
   },
   "id": {
     "plan_compare_btn": "Bandingkan",
@@ -3926,7 +3953,8 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
+      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
+      "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "Cara pakai GN",
     "gn_right_desc": "Balasan GN malam singkat — tenang, manusiawi, mudah ditempel.",
@@ -3937,16 +3965,10 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
+      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
+      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "Balasan ke posting malam orang lain di X. Alur sama — singkat, natural, siap tempel.",
-    "gn_size_label": "Ukuran",
-    "gn_mode_min": "Cepat · pendek",
-    "gn_mode_mid": "Seimbang · default",
-    "gn_mode_max": "Penuh · lebih kaya",
-    "gn_mode_min_hint": "Satu baris pendek, siap diposting.",
-    "gn_mode_mid_hint": "Sedikit lebih hidup; tetap seperti balasan alami.",
-    "gn_mode_max_hint": "Nada lebih hangat — bukan esai.",
     "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
     "wallet_desc": "Pro: hapus cap 70, unlock semua tema & style, dan unlimited generation. Full wallet-connect segera — kita implement pelan demi keamanan. Verify via signature lebih aman dan stabil.",
     "w_pay_desc": "Wallet penerima muncul setelah memilih plan.",
@@ -4091,7 +4113,8 @@
     "w_faq_title": "Pertanyaan umum",
     "w_faq_list": [
       "<b>Pro itu nempel ke wallet aku?</b> Tidak — Pro nempel ke handle X kamu. Kamu bisa bayar dari wallet mana saja.",
-      "<b>Kalian menyimpan reply aku?</b> List disimpan lokal di browser kamu. Sinkronisasi cloud hanya ada di Pro."
+      "<b>Kalian menyimpan reply aku?</b> List disimpan lokal di browser kamu. Sinkronisasi cloud hanya ada di Pro.",
+      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
     ],
     "wp_note": "Wallpaper per tab (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Preview Free: 10 wallpaper pertama. Unlock +1 di 10 referral, lalu +1 tiap 5, atau Pro.",
     "themes_k_walls": "Wallpaper terbuka",
@@ -4143,13 +4166,20 @@
     "lb_col_active": "Active",
     "lb_7d": "7h",
     "lb_30d": "30h",
-    "gm_size_label": "Ukuran",
-    "gm_mode_min": "Cepat · pendek",
-    "gm_mode_mid": "Seimbang · default",
-    "gm_mode_max": "Penuh · lebih kaya",
-    "gm_mode_min_hint": "Satu baris pendek, siap diposting.",
-    "gm_mode_mid_hint": "Sedikit lebih hidup; tetap seperti balasan alami.",
-    "gm_mode_max_hint": "Nada lebih hangat — bukan esai."
+    "gm_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gm_mode_min_hint": "One short line, ready to paste.",
+    "gm_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gm_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_size_label": "Size",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gn_mode_min_hint": "One short line, ready to paste.",
+    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gn_mode_max_hint": "Warmer tone — not an essay."
   },
   "ru": {
     "plan_compare_btn": "Сравнить",
@@ -4341,7 +4371,8 @@
       "Используй <b>Фильтр</b> для поиска по сохранённым строкам.",
       "<b>Копировать всё</b> / <b>Экспорт .txt</b>: резервная копия банка GM.",
       "Черновики ручного ввода сохраняются автоматически.",
-      "<b>Очистить вид</b> — видимый банк GM. <b>Очистить ВСЁ</b> — все сохранённые GM-строки."
+      "<b>Очистить вид</b> — видимый банк GM. <b>Очистить ВСЁ</b> — все сохранённые GM-строки.",
+      "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "Как использовать GN",
     "gn_right_desc": "Короткие ночные GN-ответы — спокойно, по-человечески, удобно вставлять.",
@@ -4352,16 +4383,10 @@
       "Используй <b>Фильтр</b> для поиска по сохранённым строкам.",
       "<b>Копировать всё</b> / <b>Экспорт .txt</b>: резервная копия банка GN.",
       "Черновики ручного ввода сохраняются автоматически.",
-      "<b>Очистить вид</b> — видимый банк GN. <b>Очистить ВСЁ</b> — все сохранённые GN-строки."
+      "<b>Очистить вид</b> — видимый банк GN. <b>Очистить ВСЁ</b> — все сохранённые GN-строки.",
+      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "Ответы на чужой вечерний пост в X. Тот же поток — коротко, по-человечески, готово к посту.",
-    "gn_size_label": "Размер",
-    "gn_mode_min": "Быстро · коротко",
-    "gn_mode_mid": "Баланс · по умолчанию",
-    "gn_mode_max": "Полно · теплее",
-    "gn_mode_min_hint": "Одна короткая строка, сразу в пост.",
-    "gn_mode_mid_hint": "Чуть живее; всё ещё естественный reply.",
-    "gn_mode_max_hint": "Теплее по тону — не простыня.",
     "ref_desc": "Рефералы: делись ссылкой. Confirmed = подключился, Active = пользовался, Eligible = max(active, carry-over). Бонус: +10/день за 20 eligible.",
     "wallet_desc": "Апгрейд Pro: безлимит на строки GM/GN в день + вся косметика открыта (темы, стили, скины и обои для расширения). Оплата в Solana: SOL / USDC / USDT. Авто‑проверка on‑chain.",
     "w_pay_desc": "Кошелёк получателя появится после выбора плана.",
@@ -4506,7 +4531,8 @@
     "w_faq_title": "FAQ и ответы",
     "w_faq_list": [
       "<b>Pro привязан к кошельку?</b> Нет — Pro привязан к твоему X‑хендлу. Платить можно с любого кошелька.",
-      "<b>Вы храните мои ответы?</b> Списки хранятся локально в браузере. Cloud sync — только в Pro."
+      "<b>Вы храните мои ответы?</b> Списки хранятся локально в браузере. Cloud sync — только в Pro.",
+      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
     ],
     "wp_note": "Обои можно ставить по вкладкам (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free превью: первые 10 обоев. Unlock +1 при 10 рефералах, затем +1 каждые 5, либо Pro.",
     "themes_k_walls": "Открытые обои",
@@ -4558,13 +4584,20 @@
     "lb_col_active": "Активные",
     "lb_7d": "7д",
     "lb_30d": "30д",
-    "gm_size_label": "Размер",
-    "gm_mode_min": "Быстро · коротко",
-    "gm_mode_mid": "Баланс · по умолчанию",
-    "gm_mode_max": "Полно · теплее",
-    "gm_mode_min_hint": "Одна короткая строка, сразу в пост.",
-    "gm_mode_mid_hint": "Чуть живее; всё ещё естественный reply.",
-    "gm_mode_max_hint": "Теплее по тону — не простыня."
+    "gm_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gm_mode_min_hint": "One short line, ready to paste.",
+    "gm_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gm_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_size_label": "Size",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gn_mode_min_hint": "One short line, ready to paste.",
+    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gn_mode_max_hint": "Warmer tone — not an essay."
   },
   "uk": {
     "plan_compare_btn": "Порівняти",
@@ -4756,7 +4789,8 @@
       "Використовуй <b>Фільтр</b> для пошуку в збережених рядках.",
       "<b>Копіювати все</b> / <b>Експорт .txt</b>: резервна копія банку GM.",
       "Чернетки ручного вводу зберігаються автоматично.",
-      "<b>Очистити вид</b> — видимий банк GM. <b>Очистити ВСЕ</b> — усі збережені GM-рядки."
+      "<b>Очистити вид</b> — видимий банк GM. <b>Очистити ВСЕ</b> — усі збережені GM-рядки.",
+      "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "Як використовувати GN",
     "gn_right_desc": "Короткі нічні GN-відповіді — спокійно, по-людськи, зручно вставляти.",
@@ -4767,16 +4801,10 @@
       "Використовуй <b>Фільтр</b> для пошуку в збережених рядках.",
       "<b>Копіювати все</b> / <b>Експорт .txt</b>: резервна копія банку GN.",
       "Чернетки ручного вводу зберігаються автоматично.",
-      "<b>Очистити вид</b> — видимий банк GN. <b>Очистити ВСЕ</b> — усі збережені GN-рядки."
+      "<b>Очистити вид</b> — видимий банк GN. <b>Очистити ВСЕ</b> — усі збережені GN-рядки.",
+      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "Відповіді на чужий вечірній пост у X. Той самий потік — коротко, по-людськи, готово до посту.",
-    "gn_size_label": "Розмір",
-    "gn_mode_min": "Швидко · коротко",
-    "gn_mode_mid": "Баланс · за замовчуванням",
-    "gn_mode_max": "Повно · тепліше",
-    "gn_mode_min_hint": "Один короткий рядок, одразу в пост.",
-    "gn_mode_mid_hint": "Трохи живіше; досі природна відповідь.",
-    "gn_mode_max_hint": "Тепліший тон — не простиня.",
     "ref_desc": "Коротко:",
     "wallet_desc": "Pro: знімає cap 70, відкриває всі теми та стилі і дає безліміт генерації. Повний wallet-connect скоро — робимо обережно заради безпеки. Верифікація по signature безпечніша та стабільніша.",
     "w_pay_desc": "Гаманець отримувача з’явиться після вибору плану.",
@@ -4921,7 +4949,8 @@
     "w_faq_title": "Поширені запитання",
     "w_faq_list": [
       "<b>Pro прив'язаний до гаманця?</b> Ні — Pro прив'язаний до твого X‑хендлу. Платити можна з будь-якого гаманця.",
-      "<b>Ви зберігаєте мої відповіді?</b> Списки зберігаються локально в браузері. Cloud sync — тільки в Pro."
+      "<b>Ви зберігаєте мої відповіді?</b> Списки зберігаються локально в браузері. Cloud sync — тільки в Pro.",
+      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
     ],
     "wp_note": "Шпалери можна ставити по вкладках (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free прев’ю: перші 10 шпалер. Unlock +1 при 10 рефералах, потім +1 кожні 5, або Pro.",
     "themes_k_walls": "Відкриті шпалери",
@@ -4973,13 +5002,20 @@
     "lb_col_active": "Активные",
     "lb_7d": "7д",
     "lb_30d": "30д",
-    "gm_size_label": "Розмір",
-    "gm_mode_min": "Швидко · коротко",
-    "gm_mode_mid": "Баланс · за замовчуванням",
-    "gm_mode_max": "Повно · тепліше",
-    "gm_mode_min_hint": "Один короткий рядок, одразу в пост.",
-    "gm_mode_mid_hint": "Трохи живіше; досі природна відповідь.",
-    "gm_mode_max_hint": "Тепліший тон — не простиня."
+    "gm_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gm_mode_min_hint": "One short line, ready to paste.",
+    "gm_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gm_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_size_label": "Size",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gn_mode_min_hint": "One short line, ready to paste.",
+    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gn_mode_max_hint": "Warmer tone — not an essay."
   },
   "hi": {
     "plan_compare_btn": "कम्पेयर करें",
@@ -5171,7 +5207,8 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
+      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
+      "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "GN कैसे इस्तेमाल करें",
     "gn_right_desc": "छोटे रात के GN जवाब — शांत, मानवीय, पेस्ट करने में आसान।",
@@ -5182,16 +5219,10 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
+      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
+      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "X पर किसी और की रात की पोस्ट का जवाब। वही फ्लो — छोटा, इंसानी, पोस्ट करने लायक।",
-    "gn_size_label": "साइज़",
-    "gn_mode_min": "तेज़ · छोटा",
-    "gn_mode_mid": "संतुलित · डिफ़ॉल्ट",
-    "gn_mode_max": "पूरा · समृद्ध",
-    "gn_mode_min_hint": "एक छोटी लाइन, तुरंत पोस्ट करने योग्य।",
-    "gn_mode_mid_hint": "थोड़ा और रंग; फिर भी प्राकृतिक जवाब।",
-    "gn_mode_max_hint": "गर्म टोन — निबंध नहीं।",
     "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
     "wallet_desc": "Pro अपग्रेड: अनलिमिटेड डेली GM/GN लाइन्स + सभी कॉस्मेटिक्स अनलॉक (थीम्स, स्टाइल्स, एक्सटेंशन स्किन्स और वॉलपेपर)। Solana पर SOL / USDC / USDT से पे करें। ऑन-चेन ऑटो-वेरिफाइड।",
     "w_pay_desc": "पेमेंट सक्षम करने के लिए एक प्लान चुनें।",
@@ -5336,7 +5367,8 @@
     "w_faq_title": "अक्सर पूछे जाने वाले सवाल",
     "w_faq_list": [
       "<b>क्या Pro मेरे वॉलेट से बंधा है?</b> नहीं — Pro आपके X हैंडल से बंधा है। आप किसी भी वॉलेट से पे कर सकते हैं।",
-      "<b>क्या आप मेरे replies स्टोर करते हैं?</b> लिस्ट्स आपके ब्राउज़र में लोकली स्टोर होती हैं। क्लाउड सिंक केवल Pro में है।"
+      "<b>क्या आप मेरे replies स्टोर करते हैं?</b> लिस्ट्स आपके ब्राउज़र में लोकली स्टोर होती हैं। क्लाउड सिंक केवल Pro में है।",
+      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
     ],
     "wp_note": "हर tab के लिए wallpaper (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free preview: पहले 10 wallpapers. Unlock +1 (10 referrals), फिर हर 5 पर +1, या Pro.",
     "themes_k_walls": "अनलॉक्ड वॉलपेपर",
@@ -5388,13 +5420,20 @@
     "lb_col_active": "Active",
     "lb_7d": "7दिन",
     "lb_30d": "30दिन",
-    "gm_size_label": "साइज़",
-    "gm_mode_min": "तेज़ · छोटा",
-    "gm_mode_mid": "संतुलित · डिफ़ॉल्ट",
-    "gm_mode_max": "पूरा · समृद्ध",
-    "gm_mode_min_hint": "एक छोटी लाइन, तुरंत पोस्ट करने योग्य।",
-    "gm_mode_mid_hint": "थोड़ा और रंग; फिर भी प्राकृतिक जवाब।",
-    "gm_mode_max_hint": "गर्म टोन — निबंध नहीं।"
+    "gm_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gm_mode_min_hint": "One short line, ready to paste.",
+    "gm_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gm_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_size_label": "Size",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gn_mode_min_hint": "One short line, ready to paste.",
+    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gn_mode_max_hint": "Warmer tone — not an essay."
   },
   "ja": {
     "plan_compare_btn": "比較",
@@ -5586,7 +5625,8 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
+      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
+      "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "GN の使い方",
     "gn_right_desc": "短い夜のGN返信 — 落ち着いて、人間味があり、貼りやすい。",
@@ -5597,16 +5637,10 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
+      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
+      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "Xの他人の夜ポストへの返信。同じ流れ — 短く、自然で、そのまま投稿できる。",
-    "gn_size_label": "サイズ",
-    "gn_mode_min": "速い · 短め",
-    "gn_mode_mid": "バランス · 既定",
-    "gn_mode_max": "フル · やや厚め",
-    "gn_mode_min_hint": "短い1行、そのまま投稿できる。",
-    "gn_mode_mid_hint": "少しだけ厚み。自然な返信のまま。",
-    "gn_mode_max_hint": "あたたかめのトーン — 長文ではない。",
     "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
     "wallet_desc": "Proアップグレード：GM/GNの1日上限なし + 全コスメ解放（テーマ、スタイル、拡張機能スキン&壁紙）。SolanaでSOL/USDC/USDT支払い。オンチェーン自動検証。",
     "w_pay_desc": "支払いを有効化するにはプランを選択してください。",
@@ -5751,7 +5785,8 @@
     "w_faq_title": "よくある質問",
     "w_faq_list": [
       "<b>Proはウォレットに紐づきますか？</b> いいえ — ProはXハンドルに紐づきます。どのウォレットからでも支払えます。",
-      "<b>返信を保存しますか？</b> リストはブラウザーにローカル保存。クラウド同期はProのみです。"
+      "<b>返信を保存しますか？</b> リストはブラウザーにローカル保存。クラウド同期はProのみです。",
+      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
     ],
     "wp_note": "タブ別 wallpaper（Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro）。Free preview: 最初の 10 wallpapers。Unlock +1（10 referrals）、その後 5 ごとに +1、または Pro。",
     "themes_k_walls": "解除済み壁紙",
@@ -5803,13 +5838,20 @@
     "lb_col_active": "Active",
     "lb_7d": "7日",
     "lb_30d": "30日",
-    "gm_size_label": "サイズ",
-    "gm_mode_min": "速い · 短め",
-    "gm_mode_mid": "バランス · 既定",
-    "gm_mode_max": "フル · やや厚め",
-    "gm_mode_min_hint": "短い1行、そのまま投稿できる。",
-    "gm_mode_mid_hint": "少しだけ厚み。自然な返信のまま。",
-    "gm_mode_max_hint": "あたたかめのトーン — 長文ではない。"
+    "gm_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gm_mode_min_hint": "One short line, ready to paste.",
+    "gm_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gm_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_size_label": "Size",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gn_mode_min_hint": "One short line, ready to paste.",
+    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gn_mode_max_hint": "Warmer tone — not an essay."
   },
   "zh": {
     "plan_compare_btn": "对比",
@@ -6001,7 +6043,8 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
+      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
+      "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "GN 使用方法",
     "gn_right_desc": "简短的夜间 GN 回复 — 平静、人性化、便于粘贴。",
@@ -6012,16 +6055,10 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
+      "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
+      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "回复他人在 X 上的夜间帖子。同样流程 — 简短、自然、可直接发布。",
-    "gn_size_label": "长度",
-    "gn_mode_min": "快速 · 短",
-    "gn_mode_mid": "均衡 · 默认",
-    "gn_mode_max": "完整 · 更丰富",
-    "gn_mode_min_hint": "一行短句，可直接发布。",
-    "gn_mode_mid_hint": "稍更丰富，仍是自然回复。",
-    "gn_mode_max_hint": "语气更暖 — 不是长文。",
     "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
     "wallet_desc": "升级 Pro：每日 GM/GN 不限行数 + 解锁所有外观（主题、风格、扩展皮肤与壁纸）。在 Solana 上用 SOL / USDC / USDT 支付，链上自动验证。",
     "w_pay_desc": "请选择一个套餐以启用付款。",
@@ -6166,7 +6203,8 @@
     "w_faq_title": "常见问题",
     "w_faq_list": [
       "<b>Pro 绑定到我的钱包吗？</b> 不会 — Pro 绑定的是你的 X 账号。你可以用任意钱包付款。",
-      "<b>你们会保存我的回复吗？</b> 列表只保存在你的浏览器本地。云同步仅 Pro 可用。"
+      "<b>你们会保存我的回复吗？</b> 列表只保存在你的浏览器本地。云同步仅 Pro 可用。",
+      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
     ],
     "wp_note": "每个标签页可单独设置 wallpaper（Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro）。Free 预览：前 10 张 wallpapers。10 个 referrals 解锁 +1，之后每 5 个再 +1，或 Pro。",
     "themes_k_walls": "已解锁壁纸",
@@ -6218,13 +6256,20 @@
     "lb_col_active": "Active",
     "lb_7d": "7天",
     "lb_30d": "30天",
-    "gm_size_label": "长度",
-    "gm_mode_min": "快速 · 短",
-    "gm_mode_mid": "均衡 · 默认",
-    "gm_mode_max": "完整 · 更丰富",
-    "gm_mode_min_hint": "一行短句，可直接发布。",
-    "gm_mode_mid_hint": "稍更丰富，仍是自然回复。",
-    "gm_mode_max_hint": "语气更暖 — 不是长文。"
+    "gm_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gm_mode_min_hint": "One short line, ready to paste.",
+    "gm_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gm_mode_max_hint": "Warmer tone — not an essay.",
+    "gn_size_label": "Size",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gn_mode_min_hint": "One short line, ready to paste.",
+    "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+    "gn_mode_max_hint": "Warmer tone — not an essay."
   }
 };
   function clone(value){ return JSON.parse(JSON.stringify(value)); }

@@ -507,7 +507,7 @@ body.hasUserBg input{
 <div class="grid">
 <div class="card">
 <div class="title" id="gn_title" style="display:none"></div>
-<div class="note" id="gn_desc"></div>
+<div class="note" id="gn_desc" style="display:none"></div>
 <div class="note" id="gn_note" style="display:none"></div>
 <div class="split" style="margin-top:12px">
 <div style="min-width:160px;flex:1">
@@ -961,10 +961,8 @@ body.hasUserBg input{
   <li><b>No seed phrase:</b> we never ask for your secret words or private keys.</li>
   <li><b>Standard transfer:</b> you will always see the receiver address and amount inside your wallet before approving.</li>
   <li><b>On-chain verification:</b> Pro activates only after we verify your transaction on Solana.</li>
+  <li><b>Payments are final:</b> verified on-chain payments are not refunded or reversed by us.</li>
 </ul>
-<div class="muted small" id="toolNote" style="margin-top:8px"></div>
-<textarea id="supportOut" placeholder="" style="margin-top:10px;min-height:80px" aria-label="supportOut"></textarea>
-
 <div class="hr"></div>
 <div class="title" id="w_faq_title">FAQ</div>
 <ul class="clean" id="w_faq_list">

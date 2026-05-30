@@ -33,7 +33,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260530a";
+const ASSET_REV = "20260530b";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -1372,7 +1372,7 @@ function renderWallpaperUI(){
     ["ext_free_01", "Free 01"],
     ["ext_free_02", "Free 02"],
   ];
-  const EXT_WALLPAPER_PACK_COUNT = 50;
+  const EXT_WALLPAPER_PACK_COUNT = 58;
   const EXT_WALLPAPER_FREE_PACK_COUNT = 4;
   const EXT_WALLPAPER_LUX = [
     ["lux_ext_anime_neon_alley", "Anime Neon Alley"],
@@ -5907,7 +5907,6 @@ function pruneLegacyAdminPanels(){
     setPh("w_payer","w_payer_ph",merged);
     setPh("adminSecret","adminSecret_ph",merged);
     setPh("adminOut","adminOut_ph",merged);
-    setPh("supportOut","supportOut_ph",merged);
 
     // Referral link placeholder depends on auth state
     try{ const rl=$("refLink"); if(rl) rl.placeholder = merged["connectFirst"] || ""; }catch{}
@@ -6099,6 +6098,26 @@ function renderReferralRightCopy(lang){
   if (list) {
     list.innerHTML = ui.items.map((line, i)=>`<li id="r_li${i + 1}">${line}</li>`).join("");
   }
+  }
+
+  function syncModePanelCopy(){
+    const bind = (kind)=>{
+      const sizeLbl = $(kind === "gm" ? "gm_size" : "gn_size");
+      const sel = $(kind === "gm" ? "gmMode" : "gnMode");
+      if (sizeLbl) sizeLbl.textContent = t(kind === "gm" ? "gm_size_label" : "gn_size_label") || "Size";
+      if (!sel) return;
+      const labels = {
+        min: t(kind === "gm" ? "gm_mode_min" : "gn_mode_min"),
+        mid: t(kind === "gm" ? "gm_mode_mid" : "gn_mode_mid"),
+        max: t(kind === "gm" ? "gm_mode_max" : "gn_mode_max")
+      };
+      for (const opt of sel.options){
+        const v = String(opt.value || "").toLowerCase();
+        if (labels[v]) opt.textContent = labels[v];
+      }
+    };
+    bind("gm");
+    bind("gn");
   }
 
   function patchDynamicCopy(lang, merged){
@@ -6901,32 +6920,6 @@ function cleanupKeyLines(lines){
     }
   }
 
-  function supportBundle(){
-    const bundle = {
-      product: "GMXReply",
-      build: $("ui_build") ? $("ui_build").textContent : "",
-      handle: getHandle(),
-      uiLang: localStorage.getItem(LS_SITE_LANG) || "en",
-      gm: { total: totalSaved("gm"), langs: getLangIndex("gm") },
-      gn: { total: totalSaved("gn"), langs: getLangIndex("gn") },
-      sub: SUB ? { active:true, tier: SUB.tier || SUB.plan || "", until: SUB.until || SUB.expires || "" } : { active:false },
-      theme: localStorage.getItem("gmx_theme") || "classic",
-      hasCustomBg: !!localStorage.getItem(LS_CUSTOM_BG_GLOBAL),
-      ua: navigator.userAgent
-    };
-    return JSON.stringify(bundle, null, 2);
-  }
-
-  function logsBundle(){
-    const out = {
-      ts: new Date().toISOString(),
-      handle: getHandle(),
-      logs: LOGS.slice(-120)
-    };
-    return JSON.stringify(out, null, 2);
-  }
-
-
   function bindProTools(){
     const note = $("pro_tools_note");
     const gate = ()=>{
@@ -6976,26 +6969,6 @@ function cleanupKeyLines(lines){
         }catch(e){
           if (note) note.textContent = "Import failed: " + (e && e.message ? e.message : "error");
         }
-      });
-    }
-    const supBtn = $("toolSupport");
-    if (supBtn){
-      supBtn.addEventListener("click", async ()=>{
-        const data = supportBundle();
-        await copyToClipboard(data);
-        if (note) note.textContent = "Support bundle copied. Send it only if support asks for it.";
-      });
-    }
-
-    const logsBtn = $("toolLogs");
-    if (logsBtn){
-      logsBtn.addEventListener("click", async ()=>{
-        const out = logsBundle();
-        const ta = $("supportOut");
-        if (ta) ta.value = out;
-        await copyToClipboard(out);
-        if (note) note.textContent = "Logs copied. Send them only if support asks for them.";
-        logEvent("support_logs", { size: out.length });
       });
     }
   }

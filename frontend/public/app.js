@@ -33,7 +33,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260318b";
+const ASSET_REV = "20260530b";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -645,8 +645,8 @@ function readFileAsDataURL(file){
     ["free01", "Free — Solana Waves"],
     ["free02", "Free — Solflare Glow"],
   ];
-  const SITE_WALLPAPER_PACK_COUNT = 8;
-  const SITE_WALLPAPER_FREE_PACK_COUNT = 6;
+  const SITE_WALLPAPER_PACK_COUNT = 58;
+  const SITE_WALLPAPER_FREE_PACK_COUNT = 10;
   const SITE_WALLPAPER_LUX = [
     ["lux_anime_neon_alley", "Anime Neon Alley"],
     ["lux_cinematic_heroes", "Cinematic Heroes"],
@@ -657,16 +657,7 @@ function readFileAsDataURL(file){
     ["lux_onchain_spaceport", "Onchain Spaceport"],
     ["lux_solana_temple", "Solana Temple"],
   ];
-  const CRYPTO_SITE_WALL_SOURCES = [
-    "https://source.unsplash.com/1920x1080/?bitcoin,crypto,trading,neon",
-    "https://source.unsplash.com/1920x1080/?ethereum,blockchain,night,city",
-    "https://source.unsplash.com/1920x1080/?solana,crypto,gradient,technology",
-    "https://source.unsplash.com/1920x1080/?dogecoin,meme,crypto,neon",
-    "https://source.unsplash.com/1920x1080/?bonk,crypto,market,screen",
-    "https://source.unsplash.com/1920x1080/?x,finance,charts,neon",
-    "https://source.unsplash.com/1920x1080/?trading,terminal,crypto,desk",
-    "https://source.unsplash.com/1920x1080/?blockchain,network,glow,dark"
-  ];
+  const CRYPTO_SITE_WALL_SOURCES = [];
   function buildSiteWallpapers(){
     const out = SITE_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
     for (let i=1; i<=SITE_WALLPAPER_PACK_COUNT; i++){
@@ -871,7 +862,7 @@ function readFileAsDataURL(file){
       try{ return localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("extv3_")) return extPackWallpaperDataUri(norm, false);
+    if (norm.startsWith("extv3_")) return `/assets/extbg/${norm}.webp?v=${ASSET_REV}`;
     const p = extWallpaperAssetPath(norm);
     return p ? `/assets/extbg/${p}?v=${ASSET_REV}` : "";
   }
@@ -883,7 +874,7 @@ function readFileAsDataURL(file){
       try{ return localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("extv3_")) return extPackWallpaperDataUri(norm, true);
+    if (norm.startsWith("extv3_")) return `/assets/extbg/thumbs/${norm}.webp?v=${ASSET_REV}`;
     return `/assets/extbg/${norm}.svg?v=${ASSET_REV}`;
   }
   try{
@@ -941,7 +932,7 @@ function readFileAsDataURL(file){
       try{ return localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("v2_")) return sitePackWallpaperDataUri(norm, false);
+    if (norm.startsWith("v2_")) return `/assets/wallpapers/${norm}.webp?v=${ASSET_REV}`;
     const p = wallpaperAssetPath(norm);
     return p ? `/assets/wallpapers/${p}?v=${ASSET_REV}` : "";
   }
@@ -953,7 +944,7 @@ function readFileAsDataURL(file){
       try{ return localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("v2_")) return sitePackWallpaperDataUri(norm, true);
+    if (norm.startsWith("v2_")) return `/assets/wallpapers/thumbs/${norm}.webp?v=${ASSET_REV}`;
     return `/assets/wallpapers/${norm}.svg?v=${ASSET_REV}`;
   }
 
@@ -988,7 +979,9 @@ function readFileAsDataURL(file){
 
     const css = (id && ok) ? wallpaperUrl(id) : "none";
     document.documentElement.style.setProperty("--bg_wall", css);
-    document.body.classList.toggle("hasWallBg", css !== "none");
+    const on = css !== "none";
+    document.body.classList.toggle("hasWallBg", on);
+    document.body.classList.toggle("has-wallpaper", on);
   }
 
   
@@ -1379,7 +1372,7 @@ function renderWallpaperUI(){
     ["ext_free_01", "Free 01"],
     ["ext_free_02", "Free 02"],
   ];
-  const EXT_WALLPAPER_PACK_COUNT = 50;
+  const EXT_WALLPAPER_PACK_COUNT = 58;
   const EXT_WALLPAPER_FREE_PACK_COUNT = 4;
   const EXT_WALLPAPER_LUX = [
     ["lux_ext_anime_neon_alley", "Anime Neon Alley"],
@@ -1391,16 +1384,7 @@ function renderWallpaperUI(){
     ["lux_ext_onchain_spaceport", "Onchain Spaceport"],
     ["lux_ext_solana_temple", "Solana Temple"],
   ];
-  const CRYPTO_EXT_WALL_SOURCES = [
-    "https://source.unsplash.com/1080x1920/?bitcoin,crypto,vertical,neon",
-    "https://source.unsplash.com/1080x1920/?ethereum,blockchain,vertical,dark",
-    "https://source.unsplash.com/1080x1920/?solana,crypto,vertical,gradient",
-    "https://source.unsplash.com/1080x1920/?dogecoin,meme,crypto,vertical",
-    "https://source.unsplash.com/1080x1920/?bonk,crypto,vertical,market",
-    "https://source.unsplash.com/1080x1920/?x,finance,vertical,chart",
-    "https://source.unsplash.com/1080x1920/?trading,terminal,vertical",
-    "https://source.unsplash.com/1080x1920/?blockchain,network,vertical"
-  ];
+  const CRYPTO_EXT_WALL_SOURCES = [];
   function buildExtWallpapers(){
     const out = EXT_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
     for (let i=1; i<=EXT_WALLPAPER_PACK_COUNT; i++){
@@ -3751,7 +3735,7 @@ async function generate(kind, count){
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
 
     const strength = getAntiStrength(kind);
-    const antiN = 0;
+    const antiN = antiWindow(strength);
     const autoClean = (count <= 1) ? getCleanFillEnabled(kind) : false;
 
     if ((kind==="gm" ? gmView : gnView) === "lang") ensureIndexed(kind, lang);
@@ -3779,7 +3763,8 @@ if (effCount <= 0){
       return;
     }
     INFLIGHT[kind] = true;
-    setBusy(kind, true);
+    try{ window.__i18nPause = true; }catch{}
+    setBusy(kind, true, count > 1 ? `Adding ${effCount}…` : "Working...");
     try{ if (ABORT[kind]) ABORT[kind].abort(); }catch{}
     const ctrl = new AbortController();
     ABORT[kind] = ctrl;
@@ -3859,15 +3844,16 @@ if (effCount <= 0){
           }
         };
 
-        const buffer = 24;
-        const genDeadline = Date.now() + 45000;
+        const buffer = 12;
+        const genDeadline = Date.now() + 22000;
         let attempts = 0;
-        while (accepted.length < effCount && attempts < 1){
+        while (accepted.length < effCount && attempts < 4){
           if (Date.now() > genDeadline) break;
           attempts++;
           const missing = effCount - accepted.length;
-          const reqCount = Math.min(140, missing + buffer);
-          const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=0&count=${reqCount}`, "GET", null, { signal: ctrl.signal, timeoutMs: 12000 });
+          const reqCount = Math.min(48, missing + buffer);
+          const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}&count=${reqCount}`, "GET", null, { signal: ctrl.signal, timeoutMs: 15000 })
+          await yieldToUiFrame();;
           takeLines(bulk.list || []);
           if (!Array.isArray(bulk.list) || bulk.list.length === 0) break;
         }
@@ -3935,6 +3921,7 @@ if (effCount <= 0){
       logEvent("gen_error", { kind, err: m, friendly });
     } finally {
       INFLIGHT[kind] = false;
+      try{ window.__i18nPause = false; }catch{}
       try{ ABORT[kind] = null; }catch{}
       setBusy(kind, false);
       if (!didRender){
@@ -5920,7 +5907,6 @@ function pruneLegacyAdminPanels(){
     setPh("w_payer","w_payer_ph",merged);
     setPh("adminSecret","adminSecret_ph",merged);
     setPh("adminOut","adminOut_ph",merged);
-    setPh("supportOut","supportOut_ph",merged);
 
     // Referral link placeholder depends on auth state
     try{ const rl=$("refLink"); if(rl) rl.placeholder = merged["connectFirst"] || ""; }catch{}
@@ -6114,6 +6100,26 @@ function renderReferralRightCopy(lang){
   }
   }
 
+  function syncModePanelCopy(){
+    const bind = (kind)=>{
+      const sizeLbl = $(kind === "gm" ? "gm_size" : "gn_size");
+      const sel = $(kind === "gm" ? "gmMode" : "gnMode");
+      if (sizeLbl) sizeLbl.textContent = t(kind === "gm" ? "gm_size_label" : "gn_size_label") || "Size";
+      if (!sel) return;
+      const labels = {
+        min: t(kind === "gm" ? "gm_mode_min" : "gn_mode_min"),
+        mid: t(kind === "gm" ? "gm_mode_mid" : "gn_mode_mid"),
+        max: t(kind === "gm" ? "gm_mode_max" : "gn_mode_max")
+      };
+      for (const opt of sel.options){
+        const v = String(opt.value || "").toLowerCase();
+        if (labels[v]) opt.textContent = labels[v];
+      }
+    };
+    bind("gm");
+    bind("gn");
+  }
+
   function patchDynamicCopy(lang, merged){
     try{
       const msg = $("refMsg");
@@ -6295,8 +6301,9 @@ function closeLangMenu(){
     (function(){
       let t=null;
       function kick(){
+        if (window.__i18nPause) return;
         if(t) clearTimeout(t);
-        t=setTimeout(()=>{ try{ applyLang(); }catch{} try{ syncBestModeUi(); }catch{} try{ syncCleanFillUi(); }catch{} }, 30);
+        t=setTimeout(()=>{ if (window.__i18nPause) return; try{ applyLang(); }catch{} try{ syncBestModeUi(); }catch{} try{ syncCleanFillUi(); }catch{} }, 120);
       }
       try{
         const obs = new MutationObserver(()=>kick());
@@ -6694,7 +6701,7 @@ function closeLangMenu(){
       attempts++;
       const missing = desiredTotal - cur.length;
       const reqCount = Math.min(180, missing + 50 + (stalled * 20));
-      const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=0&count=${reqCount}`, "GET", null, { signal: opts?.signal, timeoutMs: 12000 });
+      const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}&count=${reqCount}`, "GET", null, { signal: opts?.signal, timeoutMs: 12000 });
       const list = Array.isArray(bulk?.list) ? bulk.list : [];
       if (!list.length) {
         stalled++;
@@ -6913,32 +6920,6 @@ function cleanupKeyLines(lines){
     }
   }
 
-  function supportBundle(){
-    const bundle = {
-      product: "GMXReply",
-      build: $("ui_build") ? $("ui_build").textContent : "",
-      handle: getHandle(),
-      uiLang: localStorage.getItem(LS_SITE_LANG) || "en",
-      gm: { total: totalSaved("gm"), langs: getLangIndex("gm") },
-      gn: { total: totalSaved("gn"), langs: getLangIndex("gn") },
-      sub: SUB ? { active:true, tier: SUB.tier || SUB.plan || "", until: SUB.until || SUB.expires || "" } : { active:false },
-      theme: localStorage.getItem("gmx_theme") || "classic",
-      hasCustomBg: !!localStorage.getItem(LS_CUSTOM_BG_GLOBAL),
-      ua: navigator.userAgent
-    };
-    return JSON.stringify(bundle, null, 2);
-  }
-
-  function logsBundle(){
-    const out = {
-      ts: new Date().toISOString(),
-      handle: getHandle(),
-      logs: LOGS.slice(-120)
-    };
-    return JSON.stringify(out, null, 2);
-  }
-
-
   function bindProTools(){
     const note = $("pro_tools_note");
     const gate = ()=>{
@@ -6988,26 +6969,6 @@ function cleanupKeyLines(lines){
         }catch(e){
           if (note) note.textContent = "Import failed: " + (e && e.message ? e.message : "error");
         }
-      });
-    }
-    const supBtn = $("toolSupport");
-    if (supBtn){
-      supBtn.addEventListener("click", async ()=>{
-        const data = supportBundle();
-        await copyToClipboard(data);
-        if (note) note.textContent = "Support bundle copied. Send it only if support asks for it.";
-      });
-    }
-
-    const logsBtn = $("toolLogs");
-    if (logsBtn){
-      logsBtn.addEventListener("click", async ()=>{
-        const out = logsBundle();
-        const ta = $("supportOut");
-        if (ta) ta.value = out;
-        await copyToClipboard(out);
-        if (note) note.textContent = "Logs copied. Send them only if support asks for them.";
-        logEvent("support_logs", { size: out.length });
       });
     }
   }

@@ -33,7 +33,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260530a";
+const ASSET_REV = "20260530b";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -657,16 +657,7 @@ function readFileAsDataURL(file){
     ["lux_onchain_spaceport", "Onchain Spaceport"],
     ["lux_solana_temple", "Solana Temple"],
   ];
-  const CRYPTO_SITE_WALL_SOURCES = [
-    "https://source.unsplash.com/1920x1080/?bitcoin,crypto,trading,neon",
-    "https://source.unsplash.com/1920x1080/?ethereum,blockchain,night,city",
-    "https://source.unsplash.com/1920x1080/?solana,crypto,gradient,technology",
-    "https://source.unsplash.com/1920x1080/?dogecoin,meme,crypto,neon",
-    "https://source.unsplash.com/1920x1080/?bonk,crypto,market,screen",
-    "https://source.unsplash.com/1920x1080/?x,finance,charts,neon",
-    "https://source.unsplash.com/1920x1080/?trading,terminal,crypto,desk",
-    "https://source.unsplash.com/1920x1080/?blockchain,network,glow,dark"
-  ];
+  const CRYPTO_SITE_WALL_SOURCES = [];
   function buildSiteWallpapers(){
     const out = SITE_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
     for (let i=1; i<=SITE_WALLPAPER_PACK_COUNT; i++){
@@ -1381,7 +1372,7 @@ function renderWallpaperUI(){
     ["ext_free_01", "Free 01"],
     ["ext_free_02", "Free 02"],
   ];
-  const EXT_WALLPAPER_PACK_COUNT = 50;
+  const EXT_WALLPAPER_PACK_COUNT = 58;
   const EXT_WALLPAPER_FREE_PACK_COUNT = 4;
   const EXT_WALLPAPER_LUX = [
     ["lux_ext_anime_neon_alley", "Anime Neon Alley"],
@@ -1393,16 +1384,7 @@ function renderWallpaperUI(){
     ["lux_ext_onchain_spaceport", "Onchain Spaceport"],
     ["lux_ext_solana_temple", "Solana Temple"],
   ];
-  const CRYPTO_EXT_WALL_SOURCES = [
-    "https://source.unsplash.com/1080x1920/?bitcoin,crypto,vertical,neon",
-    "https://source.unsplash.com/1080x1920/?ethereum,blockchain,vertical,dark",
-    "https://source.unsplash.com/1080x1920/?solana,crypto,vertical,gradient",
-    "https://source.unsplash.com/1080x1920/?dogecoin,meme,crypto,vertical",
-    "https://source.unsplash.com/1080x1920/?bonk,crypto,vertical,market",
-    "https://source.unsplash.com/1080x1920/?x,finance,vertical,chart",
-    "https://source.unsplash.com/1080x1920/?trading,terminal,vertical",
-    "https://source.unsplash.com/1080x1920/?blockchain,network,vertical"
-  ];
+  const CRYPTO_EXT_WALL_SOURCES = [];
   function buildExtWallpapers(){
     const out = EXT_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
     for (let i=1; i<=EXT_WALLPAPER_PACK_COUNT; i++){
@@ -5925,7 +5907,6 @@ function pruneLegacyAdminPanels(){
     setPh("w_payer","w_payer_ph",merged);
     setPh("adminSecret","adminSecret_ph",merged);
     setPh("adminOut","adminOut_ph",merged);
-    setPh("supportOut","supportOut_ph",merged);
 
     // Referral link placeholder depends on auth state
     try{ const rl=$("refLink"); if(rl) rl.placeholder = merged["connectFirst"] || ""; }catch{}
@@ -6117,6 +6098,26 @@ function renderReferralRightCopy(lang){
   if (list) {
     list.innerHTML = ui.items.map((line, i)=>`<li id="r_li${i + 1}">${line}</li>`).join("");
   }
+  }
+
+  function syncModePanelCopy(){
+    const bind = (kind)=>{
+      const sizeLbl = $(kind === "gm" ? "gm_size" : "gn_size");
+      const sel = $(kind === "gm" ? "gmMode" : "gnMode");
+      if (sizeLbl) sizeLbl.textContent = t(kind === "gm" ? "gm_size_label" : "gn_size_label") || "Size";
+      if (!sel) return;
+      const labels = {
+        min: t(kind === "gm" ? "gm_mode_min" : "gn_mode_min"),
+        mid: t(kind === "gm" ? "gm_mode_mid" : "gn_mode_mid"),
+        max: t(kind === "gm" ? "gm_mode_max" : "gn_mode_max")
+      };
+      for (const opt of sel.options){
+        const v = String(opt.value || "").toLowerCase();
+        if (labels[v]) opt.textContent = labels[v];
+      }
+    };
+    bind("gm");
+    bind("gn");
   }
 
   function patchDynamicCopy(lang, merged){
@@ -6919,32 +6920,6 @@ function cleanupKeyLines(lines){
     }
   }
 
-  function supportBundle(){
-    const bundle = {
-      product: "GMXReply",
-      build: $("ui_build") ? $("ui_build").textContent : "",
-      handle: getHandle(),
-      uiLang: localStorage.getItem(LS_SITE_LANG) || "en",
-      gm: { total: totalSaved("gm"), langs: getLangIndex("gm") },
-      gn: { total: totalSaved("gn"), langs: getLangIndex("gn") },
-      sub: SUB ? { active:true, tier: SUB.tier || SUB.plan || "", until: SUB.until || SUB.expires || "" } : { active:false },
-      theme: localStorage.getItem("gmx_theme") || "classic",
-      hasCustomBg: !!localStorage.getItem(LS_CUSTOM_BG_GLOBAL),
-      ua: navigator.userAgent
-    };
-    return JSON.stringify(bundle, null, 2);
-  }
-
-  function logsBundle(){
-    const out = {
-      ts: new Date().toISOString(),
-      handle: getHandle(),
-      logs: LOGS.slice(-120)
-    };
-    return JSON.stringify(out, null, 2);
-  }
-
-
   function bindProTools(){
     const note = $("pro_tools_note");
     const gate = ()=>{
@@ -6994,26 +6969,6 @@ function cleanupKeyLines(lines){
         }catch(e){
           if (note) note.textContent = "Import failed: " + (e && e.message ? e.message : "error");
         }
-      });
-    }
-    const supBtn = $("toolSupport");
-    if (supBtn){
-      supBtn.addEventListener("click", async ()=>{
-        const data = supportBundle();
-        await copyToClipboard(data);
-        if (note) note.textContent = "Support bundle copied. Send it only if support asks for it.";
-      });
-    }
-
-    const logsBtn = $("toolLogs");
-    if (logsBtn){
-      logsBtn.addEventListener("click", async ()=>{
-        const out = logsBundle();
-        const ta = $("supportOut");
-        if (ta) ta.value = out;
-        await copyToClipboard(out);
-        if (note) note.textContent = "Logs copied. Send them only if support asks for them.";
-        logEvent("support_logs", { size: out.length });
       });
     }
   }

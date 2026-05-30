@@ -188,7 +188,8 @@
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
     "Manual input drafts are auto-saved.",
-    "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
+    "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
+    "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "Come usare GN",
   "gn_right_desc": "Risposte GN notturne brevi — calme, umane, facili da incollare.",
@@ -199,16 +200,10 @@
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
     "Manual input drafts are auto-saved.",
-    "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
+    "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
+    "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
   ],
   "gn_desc": "Risposte al post della sera di qualcun altro su X. Stesso flusso: breve, umano e pubblicabile.",
-  "gn_size_label": "Dimensione",
-  "gn_mode_min": "Veloce · breve",
-  "gn_mode_mid": "Bilanciato · predefinito",
-  "gn_mode_max": "Completo · più ricco",
-  "gn_mode_min_hint": "Una riga corta, pronta da pubblicare.",
-  "gn_mode_mid_hint": "Un po’ più di colore; resta una risposta naturale.",
-  "gn_mode_max_hint": "Tono più caldo — non un saggio.",
   "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
   "wallet_desc": "Upgrade Pro: rimuove il limite 70 e sblocca tutti i cosmetici (Themes, Styles, skin & wallpaper dell’estensione). Pagamento su Solana con SOL / USDC / USDT. Verifica automatica on‑chain.",
   "w_pay_desc": "Il wallet destinatario apparirà dopo la scelta del piano.",
@@ -353,7 +348,8 @@
   "w_faq_title": "Domande frequenti",
   "w_faq_list": [
     "<b>Pro è legato al mio wallet?</b> No — Pro è legato al tuo handle X. Puoi pagare da qualsiasi wallet.",
-    "<b>Conservate le mie risposte?</b> Le liste sono salvate in locale nel browser. La sincronizzazione cloud è solo per Pro."
+    "<b>Conservate le mie risposte?</b> Le liste sono salvate in locale nel browser. La sincronizzazione cloud è solo per Pro.",
+    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
   ],
   "wp_note": "Wallpaper per tab (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Anteprima Free: primi 10 wallpapers. Unlock +1 a 10 referral, poi +1 ogni 5, oppure Pro.",
   "themes_k_walls": "Sfondi sbloccati",
@@ -405,11 +401,18 @@
   "lb_col_active": "Active",
   "lb_7d": "7g",
   "lb_30d": "30g",
-  "gm_size_label": "Dimensione",
-  "gm_mode_min": "Veloce · breve",
-  "gm_mode_mid": "Bilanciato · predefinito",
-  "gm_mode_max": "Completo · più ricco",
-  "gm_mode_min_hint": "Una riga corta, pronta da pubblicare.",
-  "gm_mode_mid_hint": "Un po’ più di colore; resta una risposta naturale.",
-  "gm_mode_max_hint": "Tono più caldo — non un saggio."
+  "gm_size_label": "Size",
+  "gm_mode_min": "Fast · short",
+  "gm_mode_mid": "Balanced · default",
+  "gm_mode_max": "Full · richer",
+  "gm_mode_min_hint": "One short line, ready to paste.",
+  "gm_mode_mid_hint": "A bit more color; still a natural reply.",
+  "gm_mode_max_hint": "Warmer tone — not an essay.",
+  "gn_size_label": "Size",
+  "gn_mode_min": "Fast · short",
+  "gn_mode_mid": "Balanced · default",
+  "gn_mode_max": "Full · richer",
+  "gn_mode_min_hint": "One short line, ready to paste.",
+  "gn_mode_mid_hint": "A bit more color; still a natural reply.",
+  "gn_mode_max_hint": "Warmer tone — not an essay."
 }
