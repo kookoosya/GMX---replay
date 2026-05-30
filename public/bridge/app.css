@@ -1716,18 +1716,6 @@ body.hasWallBg .sideCard{
   backdrop-filter: blur(14px) saturate(1.15);
   border-color: rgba(148,180,255,.22);
 }
-html.mode-light body.has-wallpaper .card,
-html.mode-light body.has-wallpaper .panel,
-html.mode-light body.has-wallpaper .sideCard,
-html.mode-light body.hasWallBg .card,
-html.mode-light body.hasWallBg .panel,
-html.mode-light body.hasWallBg .sideCard{
-  background: rgba(255,255,255,.88) !important;
-  border-color: rgba(0,0,0,.12);
-}
-body.hasWallBg .note,
-body.hasWallBg .desc,
-body.hasWallBg .sideTitle{ text-shadow: 0 1px 12px rgba(0,0,0,.45); }
 
 /* R44: wallet / modal / light-mode polish */
 .modalBack{

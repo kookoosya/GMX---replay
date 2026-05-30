@@ -10,7 +10,7 @@ const ALERT_KEYS = {
   enabled: "gmx_market_alerts_enabled_v1",
   interval: "gmx_market_alerts_interval_v1",
 };
-const ASSET_REV = "20260318b";
+const ASSET_REV = "20260310a";
 const LEGACY_KEYS = {
   base: "apiBase",
   handle: "handle",
@@ -398,7 +398,8 @@ async function resolveWallpaperSource(base, wallpaperId) {
     try{ prefetchWallpaper(localUrl); }catch{}
     return localUrl;
   }
-  const finalUrl = extPackWallpaperDataUri(id, false);
+  const b = normalizeBase(base) || DEFAULT_BASE;
+  const finalUrl = `${b.replace(/\/$/, "")}/assets/extbg/${id}.webp?v=${ASSET_REV}`;
   WALL_CACHE.set(cacheKey, finalUrl);
   try{ prefetchWallpaper(finalUrl); }catch{}
   return finalUrl;
