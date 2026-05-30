@@ -1391,6 +1391,16 @@ function renderWallpaperUI(){
     ["lux_ext_onchain_spaceport", "Onchain Spaceport"],
     ["lux_ext_solana_temple", "Solana Temple"],
   ];
+  const CRYPTO_EXT_WALL_SOURCES = [
+    "https://source.unsplash.com/1080x1920/?bitcoin,crypto,vertical,neon",
+    "https://source.unsplash.com/1080x1920/?ethereum,blockchain,vertical,dark",
+    "https://source.unsplash.com/1080x1920/?solana,crypto,vertical,gradient",
+    "https://source.unsplash.com/1080x1920/?dogecoin,meme,crypto,vertical",
+    "https://source.unsplash.com/1080x1920/?bonk,crypto,vertical,market",
+    "https://source.unsplash.com/1080x1920/?x,finance,vertical,chart",
+    "https://source.unsplash.com/1080x1920/?trading,terminal,vertical",
+    "https://source.unsplash.com/1080x1920/?blockchain,network,vertical"
+  ];
   function buildExtWallpapers(){
     const out = EXT_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
     for (let i=1; i<=EXT_WALLPAPER_PACK_COUNT; i++){
@@ -5007,6 +5017,11 @@ if (src){
   async function loadPlans(){
     try{
       const j = await api("/api/billing/plans");
+      if (j && j.ok === false && j.error === "billing_receiver_not_configured"){
+        const msg = $("w_msg");
+        if (msg) msg.innerHTML = `<span class="warn">${escapeHtml(t("billing_receiver_missing") || "Payments are temporarily unavailable (server wallet not configured).")}</span>`;
+        return;
+      }
       BILLING = j || BILLING;
       const plans = BILLING?.plans || [];
       if (selectedPlanKey && !plans.some(p=>p.key === selectedPlanKey)){
@@ -7018,20 +7033,22 @@ function cleanupKeyLines(lines){
       if (btn){
         btn.addEventListener("click", ()=>{
           const pid = sel ? (sel.value || "classic") : "classic";
-          const p = PACKS.find(x=>x.id===pid) || PACKS[0];
-          const idx = PACKS.findIndex(x=>x.id===pid);
+          const packs = packsForKind(kind);
+          const p = packs.find(x=>x.id===pid) || packs[0];
+          const idx = packs.findIndex(x=>x.id===pid);
           const locked = (!isPro() && idx >= unlockedPacksCount());
           if (locked){
-            if (msgEl) msgEl.innerHTML = `<span class="warn">Pack is locked. Upgrade to Pro or unlock via referrals.</span>`;
+            if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml(t("locked_pack") || "Pack is locked. Upgrade to Pro or unlock via referrals.")}</span>`;
             return;
           }
-          // apply preset defaults
           const styleSel = kind==="gm" ? $("gmStyle") : $("gnStyle");
           const modeSel  = kind==="gm" ? $("gmMode")  : $("gnMode");
           if (styleSel && p.style) styleSel.value = p.style;
           if (modeSel && p.mode) modeSel.value = p.mode;
-
-          if (msgEl) msgEl.innerHTML = `<span class="ok">Applied pack: ${escapeHtml(p.name)}</span>`;
+          if (Number.isFinite(p.anti)) {
+            try{ localStorage.setItem(lsKeyAnti(kind), String(Math.max(0, Math.min(5, p.anti)))); }catch(_e){}
+          }
+          if (msgEl) msgEl.innerHTML = `<span class="ok">${escapeHtml(t("pack_applied") || "Applied pack")}: ${escapeHtml(p.name)}</span>`;
           logEvent("pack_apply", { kind, pack: pid });
         });
       }

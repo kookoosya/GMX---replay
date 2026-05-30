@@ -400,5 +400,8 @@
   "lb_col_eligible": "Eligible",
   "lb_col_active": "Active",
   "lb_7d": "7d",
-  "lb_30d": "30d"
+  "lb_30d": "30d",
+  "locked_pack": "Pack is locked. Upgrade to Pro or unlock via referrals.",
+  "pack_applied": "Applied pack",
+  "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
 }

@@ -5191,7 +5191,19 @@ app.get("/api/billing/plans", async (req, res) => {
     return { ...p, solApprox, currencyBase: "USD" };
   });
 
-  res.json({ ok:true, receiver: SOL_RECEIVER, plans, tokens: BILLING_TOKENS, solUsd, rpcPublic });
+  if (!isSolanaPubkey(SOL_RECEIVER)) {
+    return res.status(503).json({
+      ok: false,
+      error: "billing_receiver_not_configured",
+      message: "Set SOL_RECEIVER in server environment to enable payments.",
+      plans: [],
+      tokens: BILLING_TOKENS,
+      solUsd,
+      rpcPublic,
+    });
+  }
+
+  res.json({ ok: true, receiver: SOL_RECEIVER, plans, tokens: BILLING_TOKENS, solUsd, rpcPublic, receiverOk: true });
 });
 
 

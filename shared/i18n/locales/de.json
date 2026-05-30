@@ -48,11 +48,11 @@
   "gn_safe_1": "Wir fragen nie nach Seed Phrase oder Private Keys.",
   "gn_safe_2": "Du bestätigst Empfänger + Betrag immer in deinem Wallet.",
   "gm_limits_title": "Free-Limits (für immer)",
-  "gm_daily_label": "Daily generation (extension)",
+  "gm_daily_label": "Tägliche GM-Generierung (Extension)",
   "gm_saved_label": "Gespeicherte Zeilen (Site)",
   "gm_limits_note": "Free reicht zum Testen. Pro entfernt Caps und schaltet alle Themes/Stile frei.",
   "gn_limits_title": "Free-Limits (für immer)",
-  "gn_daily_label": "Daily generation (extension)",
+  "gn_daily_label": "Tägliche GN-Generierung (Extension)",
   "gn_saved_label": "Gespeicherte Zeilen (Site)",
   "gn_limits_note": "Free reicht zum Testen. Pro entfernt Caps und schaltet alle Themes/Stile frei.",
   "themes_unlocked_label": "Themes freigeschaltet",
@@ -144,7 +144,7 @@
   "t_ref": "Empfehlungen",
   "t_themes": "Themen",
   "t_extthemes": "Erweiterungs-Themes",
-  "t_prediction": "Prediction Market",
+  "t_prediction": "Prognose-Markt",
   "t_wallet": "Auf Pro upgraden",
   "t_admin": "Verwaltung",
   "r_li1": "Kopiere deinen Link und teile ihn.",
@@ -181,7 +181,7 @@
   "gm_lang_tabs_note": "Single saved bank for GM.",
   "gn_lang_tabs_note": "Single saved bank for GN.",
   "gm_right": "So nutzt du GM",
-  "gm_right_desc": "Build short English morning replies to someone else’s post. Keep them natural, direct, and easy to paste.",
+  "gm_right_desc": "Kurze GM-Morgenantworten auf fremde Posts — natürlich, direkt, einfach einfügen.",
   "gm_right_list": [
     "<b>This bank</b>: one saved GM bank for this section. No hidden language split.",
     "<b>Random 1/10/70</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -193,7 +193,7 @@
     "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "So nutzt du GN",
-  "gn_right_desc": "Build short English night replies to someone else’s post. Keep them calm, human, and easy to paste.",
+  "gn_right_desc": "Kurze GN-Nachtantworten auf fremde Posts — ruhig, menschlich, einfach einfügen.",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
     "<b>Random 1/10/70</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -400,5 +400,8 @@
   "lb_col_eligible": "Eligible",
   "lb_col_active": "Active",
   "lb_7d": "7d",
-  "lb_30d": "30d"
+  "lb_30d": "30d",
+  "locked_pack": "Paket gesperrt. Pro oder Referrals nötig.",
+  "pack_applied": "Paket angewendet",
+  "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
 }

@@ -48,11 +48,11 @@
   "gn_safe_1": "We vragen nooit om seed phrase of private keys.",
   "gn_safe_2": "Je bevestigt altijd ontvanger + bedrag in je wallet.",
   "gm_limits_title": "Free-limieten (altijd)",
-  "gm_daily_label": "Daily generation (extension)",
+  "gm_daily_label": "Dagelijkse GM-generatie (extensie)",
   "gm_saved_label": "Opgeslagen regels (site)",
   "gm_limits_note": "Free is genoeg om alles te proberen. Pro haalt limieten weg en ontgrendelt alle thema’s/stijlen.",
   "gn_limits_title": "Free-limieten (altijd)",
-  "gn_daily_label": "Daily generation (extension)",
+  "gn_daily_label": "Dagelijkse GN-generatie (extensie)",
   "gn_saved_label": "Opgeslagen regels (site)",
   "gn_limits_note": "Free is genoeg om alles te proberen. Pro haalt limieten weg en ontgrendelt alle thema’s/stijlen.",
   "themes_unlocked_label": "Thema’s ontgrendeld",
@@ -144,7 +144,7 @@
   "t_ref": "Verwijzingen",
   "t_themes": "Thema's",
   "t_extthemes": "Extensie-thema’s",
-  "t_prediction": "Prediction Market",
+  "t_prediction": "Voorspellingsmarkt",
   "t_wallet": "Upgrade naar Pro",
   "t_admin": "Beheer",
   "r_li1": "Kopieer je link en deel hem.",
@@ -181,7 +181,7 @@
   "gm_lang_tabs_note": "Single saved bank for GM.",
   "gn_lang_tabs_note": "Single saved bank for GN.",
   "gm_right": "GM gebruiken",
-  "gm_right_desc": "Build short English morning replies to someone else’s post. Keep them natural, direct, and easy to paste.",
+  "gm_right_desc": "Korte GM-ochtendantwoorden — natuurlijk, direct, makkelijk te plakken.",
   "gm_right_list": [
     "<b>This bank</b>: one saved GM bank for this section. No hidden language split.",
     "<b>Random 1/10/70</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -193,7 +193,7 @@
     "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "GN gebruiken",
-  "gn_right_desc": "Build short English night replies to someone else’s post. Keep them calm, human, and easy to paste.",
+  "gn_right_desc": "Korte GN-nachtantwoorden — rustig, menselijk, makkelijk te plakken.",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
     "<b>Random 1/10/70</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -400,5 +400,8 @@
   "lb_col_eligible": "Eligible",
   "lb_col_active": "Active",
   "lb_7d": "7d",
-  "lb_30d": "30d"
+  "lb_30d": "30d",
+  "locked_pack": "Pack vergrendeld. Pro of referrals nodig.",
+  "pack_applied": "Pack toegepast",
+  "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
 }

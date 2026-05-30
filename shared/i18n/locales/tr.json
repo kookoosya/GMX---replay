@@ -48,11 +48,11 @@
   "gn_safe_1": "Seed phrase ya da private key asla istemeyiz.",
   "gn_safe_2": "Alıcı + tutarı her zaman wallet içinde onaylarsın.",
   "gm_limits_title": "Free limitleri (kalıcı)",
-  "gm_daily_label": "Daily generation (extension)",
+  "gm_daily_label": "Günlük GM üretimi (eklenti)",
   "gm_saved_label": "Kaydedilen satırlar (site)",
   "gm_limits_note": "Free her şeyi denemeye yeter. Pro limitleri kaldırır ve tüm tema/stilleri açar.",
   "gn_limits_title": "Free limitleri (kalıcı)",
-  "gn_daily_label": "Daily generation (extension)",
+  "gn_daily_label": "Günlük GN üretimi (eklenti)",
   "gn_saved_label": "Kaydedilen satırlar (site)",
   "gn_limits_note": "Free her şeyi denemeye yeter. Pro limitleri kaldırır ve tüm tema/stilleri açar.",
   "themes_unlocked_label": "Açılan temalar",
@@ -144,7 +144,7 @@
   "t_ref": "Davetler",
   "t_themes": "Temalar",
   "t_extthemes": "Eklenti temaları",
-  "t_prediction": "Prediction Market",
+  "t_prediction": "Tahmin pazarı",
   "t_wallet": "Pro’ya yükselt",
   "t_admin": "Yönetim",
   "r_li1": "Bağlantını kopyala ve paylaş.",
@@ -181,7 +181,7 @@
   "gm_lang_tabs_note": "Single saved bank for GM.",
   "gn_lang_tabs_note": "Single saved bank for GN.",
   "gm_right": "GM nasıl kullanılır",
-  "gm_right_desc": "Build short English morning replies to someone else’s post. Keep them natural, direct, and easy to paste.",
+  "gm_right_desc": "Kısa sabah GM yanıtları — doğal, net, yapıştırmaya hazır.",
   "gm_right_list": [
     "<b>This bank</b>: one saved GM bank for this section. No hidden language split.",
     "<b>Random 1/10/70</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -193,7 +193,7 @@
     "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "GN nasıl kullanılır",
-  "gn_right_desc": "Build short English night replies to someone else’s post. Keep them calm, human, and easy to paste.",
+  "gn_right_desc": "Kısa gece GN yanıtları — sakin, insani, yapıştırmaya hazır.",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
     "<b>Random 1/10/70</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -400,5 +400,8 @@
   "lb_col_eligible": "Eligible",
   "lb_col_active": "Active",
   "lb_7d": "7g",
-  "lb_30d": "30g"
+  "lb_30d": "30g",
+  "locked_pack": "Paket kilitli. Pro veya referans gerekir.",
+  "pack_applied": "Paket uygulandı",
+  "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
 }

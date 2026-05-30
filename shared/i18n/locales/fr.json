@@ -48,11 +48,11 @@
   "gn_safe_1": "On ne demande jamais ta seed phrase ni tes clés privées.",
   "gn_safe_2": "Tu confirmes toujours le destinataire + le montant dans ton wallet.",
   "gm_limits_title": "Limites Free (pour toujours)",
-  "gm_daily_label": "Daily generation (extension)",
+  "gm_daily_label": "Génération GM quotidienne (extension)",
   "gm_saved_label": "Lignes enregistrées (site)",
   "gm_limits_note": "Free suffit pour tout essayer. Pro enlève les limites et débloque tous les thèmes/styles.",
   "gn_limits_title": "Limites Free (pour toujours)",
-  "gn_daily_label": "Daily generation (extension)",
+  "gn_daily_label": "Génération GN quotidienne (extension)",
   "gn_saved_label": "Lignes enregistrées (site)",
   "gn_limits_note": "Free suffit pour tout essayer. Pro enlève les limites et débloque tous les thèmes/styles.",
   "themes_unlocked_label": "Thèmes débloqués",
@@ -144,7 +144,7 @@
   "t_ref": "Parrainage",
   "t_themes": "Thèmes",
   "t_extthemes": "Thèmes extension",
-  "t_prediction": "Prediction Market",
+  "t_prediction": "Marché de prédiction",
   "t_wallet": "Passer en Pro",
   "t_admin": "Administration",
   "r_li1": "Copie ton lien et partage-le.",
@@ -181,7 +181,7 @@
   "gm_lang_tabs_note": "Single saved bank for GM.",
   "gn_lang_tabs_note": "Single saved bank for GN.",
   "gm_right": "Comment utiliser GM",
-  "gm_right_desc": "Build short English morning replies to someone else’s post. Keep them natural, direct, and easy to paste.",
+  "gm_right_desc": "Réponses GM matinales courtes — naturelles, directes, faciles à coller.",
   "gm_right_list": [
     "<b>This bank</b>: one saved GM bank for this section. No hidden language split.",
     "<b>Random 1/10/70</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -193,7 +193,7 @@
     "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "Comment utiliser GN",
-  "gn_right_desc": "Build short English night replies to someone else’s post. Keep them calm, human, and easy to paste.",
+  "gn_right_desc": "Réponses GN nocturnes courtes — calmes, humaines, faciles à coller.",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
     "<b>Random 1/10/70</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -400,5 +400,8 @@
   "lb_col_eligible": "Eligible",
   "lb_col_active": "Active",
   "lb_7d": "7j",
-  "lb_30d": "30j"
+  "lb_30d": "30j",
+  "locked_pack": "Pack verrouillé. Pro ou parrainages requis.",
+  "pack_applied": "Pack appliqué",
+  "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
 }
