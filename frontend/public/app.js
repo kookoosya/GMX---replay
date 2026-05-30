@@ -230,10 +230,22 @@ const LS_GM_RECENT = "gmx_gm_recent";
   const LS_GN_RECENT = "gmx_gn_recent";
 
 
-  // Hidden repeat guard stays off in the normal flow.
-  // Best pass uses its own fixed internal shape pass only when the user turns it on.
+  function packsForKind(kind){
+    return kind === "gn" ? GN_PACKS : GM_PACKS;
+  }
+
   function getAntiStrength(kind){
-    return 0;
+    try{
+      const raw = localStorage.getItem(lsKeyAnti(kind));
+      if (raw !== null && raw !== ""){
+        const n = Math.trunc(Number(raw));
+        if (Number.isFinite(n)) return Math.max(0, Math.min(5, n));
+      }
+    }catch(_e){}
+    const packEl = kind === "gn" ? $("gnPack") : $("gmPack");
+    const pid = packEl ? (packEl.value || "classic") : "classic";
+    const pack = packsForKind(kind).find((p)=>p.id === pid) || packsForKind(kind)[0];
+    return Math.max(0, Math.min(5, Number.isFinite(pack?.anti) ? pack.anti : 2));
   }
 
   // Legacy helper kept for compatibility with old code paths.
@@ -1441,25 +1453,34 @@ function renderWallpaperUI(){
   ];
 
 
-  const PACKS = [
-    { id:"classic", name:"Balanced",         pro:false, style:"classic", mode:null, anti:2, clean:true  },
-    { id:"king",    name:"Market Read",      pro:false, style:"alpha",   mode:"mid", anti:2, clean:true  },
-    { id:"degen",   name:"CT Market",        pro:true,  style:"degen",   mode:"mid", anti:4, clean:true  },
-    { id:"minimal", name:"Tight Minimal",    pro:true,  style:"minimal", mode:"min", anti:4, clean:true  },
-    { id:"builder", name:"Builder Clean",    pro:true,  style:"builder", mode:"mid", anti:4, clean:true  },
-    { id:"kind",    name:"Soft Close",       pro:true,  style:"calm",    mode:"mid", anti:4, clean:true  },
-    { id:"aggro",   name:"Alpha Push",       pro:true,  style:"alpha",   mode:"max", anti:3, clean:true  },
+  const GM_PACKS = [
+    { id:"classic", name:"Morning Balanced", pro:false, style:"classic", mode:null, anti:2, clean:true },
+    { id:"king",    name:"Market Read AM",   pro:false, style:"alpha",   mode:"mid", anti:2, clean:true },
+    { id:"degen",   name:"CT Morning",       pro:true,  style:"degen",   mode:"mid", anti:4, clean:true },
+    { id:"minimal", name:"Tight GM",         pro:true,  style:"minimal", mode:"min", anti:4, clean:true },
+    { id:"builder", name:"Builder AM",       pro:true,  style:"builder", mode:"mid", anti:4, clean:true },
+    { id:"kind",    name:"Warm Morning",     pro:true,  style:"calm",    mode:"mid", anti:4, clean:true },
+    { id:"aggro",   name:"Alpha Push AM",    pro:true,  style:"alpha",   mode:"max", anti:3, clean:true },
+  ];
+  const GN_PACKS = [
+    { id:"classic", name:"Night Balanced",   pro:false, style:"classic", mode:null, anti:2, clean:true },
+    { id:"king",    name:"Market Wind-down", pro:false, style:"alpha",   mode:"mid", anti:2, clean:true },
+    { id:"degen",   name:"CT Night",         pro:true,  style:"degen",   mode:"mid", anti:4, clean:true },
+    { id:"minimal", name:"Tight GN",         pro:true,  style:"minimal", mode:"min", anti:4, clean:true },
+    { id:"builder", name:"Builder Close",    pro:true,  style:"builder", mode:"mid", anti:4, clean:true },
+    { id:"kind",    name:"Soft Close",       pro:true,  style:"calm",    mode:"mid", anti:4, clean:true },
+    { id:"aggro",   name:"Alpha Close",      pro:true,  style:"alpha",   mode:"max", anti:3, clean:true },
   ];
 
-  function unlockedPacksCount(){ return unlockedCountByRefs(PACKS.length, FREE_VISIBLE_PACKS); }
+  function unlockedPacksCount(){ return unlockedCountByRefs(GM_PACKS.length, FREE_VISIBLE_PACKS); }
 
   function fillPacks(){
     const unlocked = unlockedPacksCount();
-    const fill = (sel, lsKey)=>{
+    const fill = (sel, lsKey, packs)=>{
       if (!sel) return;
       const prev = localStorage.getItem(lsKey) || "classic";
       sel.innerHTML = "";
-      PACKS.forEach((p, idx)=>{
+      packs.forEach((p, idx)=>{
         const o = document.createElement("option");
         o.value = p.id;
         const locked = (!isPro() && idx >= unlocked);
@@ -1471,8 +1492,8 @@ function renderWallpaperUI(){
       if ([...sel.options].some(o=>o.value===prev && !o.disabled)) sel.value = prev;
       else sel.value = "classic";
     };
-    fill($("gmPack"), LS_GM_PACK);
-    fill($("gnPack"), LS_GN_PACK);
+    fill($("gmPack"), LS_GM_PACK, GM_PACKS);
+    fill($("gnPack"), LS_GN_PACK, GN_PACKS);
   }
 
   function unlockedThemesCount(){ return unlockedCountByRefs(THEMES.length, FREE_VISIBLE_THEMES); }
@@ -3149,9 +3170,9 @@ async function doBestServer(kind){
   const lang = currentLang(kind);
   let style = styleEl ? styleEl.value : "classic";
   const packId = packEl ? (packEl.value || "classic") : "classic";
-  const packIdx = PACKS.findIndex(p=>p.id===packId);
+  const packIdx = packsForKind(kind).findIndex(p=>p.id===packId);
   const packLocked = (!isPro() && packIdx >= unlockedPacksCount());
-  const pack = PACKS.find(p=>p.id===packId) || PACKS[0];
+  const pack = packsForKind(kind).find(p=>p.id===packId) || packsForKind(kind)[0];
   if (!packLocked && pack && pack.style) style = pack.style;
 
   const strength = getAntiStrength(kind);
@@ -3744,14 +3765,14 @@ async function generate(kind, count){
 
     let style = styleEl ? styleEl.value : "classic";
     const packId = packEl ? (packEl.value || "classic") : "classic";
-    const packIdx = PACKS.findIndex(p=>p.id===packId);
+    const packIdx = packsForKind(kind).findIndex(p=>p.id===packId);
     const packLocked = (!isPro() && packIdx >= unlockedPacksCount());
-    const pack = PACKS.find(p=>p.id===packId) || PACKS[0];
+    const pack = packsForKind(kind).find(p=>p.id===packId) || packsForKind(kind)[0];
 
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
 
     const strength = getAntiStrength(kind);
-    const antiN = 0;
+    const antiN = antiWindow(strength);
     const autoClean = (count <= 1) ? getCleanFillEnabled(kind) : false;
 
     if ((kind==="gm" ? gmView : gnView) === "lang") ensureIndexed(kind, lang);
@@ -6668,9 +6689,9 @@ function closeLangMenu(){
     const lang = currentLang(kind);
     let style = styleEl ? styleEl.value : "classic";
     const packId = packEl ? (packEl.value || "classic") : "classic";
-    const packIdx = PACKS.findIndex(p=>p.id===packId);
+    const packIdx = packsForKind(kind).findIndex(p=>p.id===packId);
     const packLocked = (!isPro() && packIdx >= unlockedPacksCount());
-    const pack = PACKS.find(p=>p.id===packId) || PACKS[0];
+    const pack = packsForKind(kind).find(p=>p.id===packId) || packsForKind(kind)[0];
     if (!packLocked && pack && pack.style) style = pack.style;
 
     const before = readKey(key);

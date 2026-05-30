@@ -405,7 +405,8 @@
     "lb_7d": "7d",
     "lb_30d": "30d",
     "locked_pack": "Pack is locked. Upgrade to Pro or unlock via referrals.",
-    "pack_applied": "Applied pack"
+    "pack_applied": "Applied pack",
+    "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
   },
   "de": {
     "plan_compare_btn": "Vergleichen",
@@ -811,7 +812,8 @@
     "lb_7d": "7d",
     "lb_30d": "30d",
     "locked_pack": "Paket gesperrt. Pro oder Referrals nötig.",
-    "pack_applied": "Paket angewendet"
+    "pack_applied": "Paket angewendet",
+    "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
   },
   "fr": {
     "plan_compare_btn": "Comparer",
@@ -1217,7 +1219,8 @@
     "lb_7d": "7j",
     "lb_30d": "30j",
     "locked_pack": "Pack verrouillé. Pro ou parrainages requis.",
-    "pack_applied": "Pack appliqué"
+    "pack_applied": "Pack appliqué",
+    "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
   },
   "es": {
     "plan_compare_btn": "Comparar",
@@ -1623,7 +1626,8 @@
     "lb_7d": "7d",
     "lb_30d": "30d",
     "locked_pack": "Pack bloqueado. Necesitas Pro o referidos.",
-    "pack_applied": "Pack aplicado"
+    "pack_applied": "Pack aplicado",
+    "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
   },
   "pt": {
     "plan_compare_btn": "Comparar",
@@ -2029,7 +2033,8 @@
     "lb_7d": "7d",
     "lb_30d": "30d",
     "locked_pack": "Pack bloqueado. Pro ou indicações necessários.",
-    "pack_applied": "Pack aplicado"
+    "pack_applied": "Pack aplicado",
+    "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
   },
   "it": {
     "plan_compare_btn": "Confronta",
@@ -2435,7 +2440,8 @@
     "lb_7d": "7g",
     "lb_30d": "30g",
     "locked_pack": "Pack bloccato. Serve Pro o referral.",
-    "pack_applied": "Pack applicato"
+    "pack_applied": "Pack applicato",
+    "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
   },
   "nl": {
     "plan_compare_btn": "Vergelijken",
@@ -2841,7 +2847,8 @@
     "lb_7d": "7d",
     "lb_30d": "30d",
     "locked_pack": "Pack vergrendeld. Pro of referrals nodig.",
-    "pack_applied": "Pack toegepast"
+    "pack_applied": "Pack toegepast",
+    "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
   },
   "tr": {
     "plan_compare_btn": "Karşılaştır",
@@ -3247,7 +3254,8 @@
     "lb_7d": "7g",
     "lb_30d": "30g",
     "locked_pack": "Paket kilitli. Pro veya referans gerekir.",
-    "pack_applied": "Paket uygulandı"
+    "pack_applied": "Paket uygulandı",
+    "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
   },
   "pl": {
     "plan_compare_btn": "Porównaj",
@@ -3653,7 +3661,8 @@
     "lb_7d": "7d",
     "lb_30d": "30d",
     "locked_pack": "Pakiet zablokowany. Potrzebny Pro lub polecenia.",
-    "pack_applied": "Pakiet zastosowany"
+    "pack_applied": "Pakiet zastosowany",
+    "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
   },
   "id": {
     "plan_compare_btn": "Bandingkan",
@@ -4059,7 +4068,8 @@
     "lb_7d": "7h",
     "lb_30d": "30h",
     "locked_pack": "Paket terkunci. Butuh Pro atau referral.",
-    "pack_applied": "Paket diterapkan"
+    "pack_applied": "Paket diterapkan",
+    "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
   },
   "ru": {
     "plan_compare_btn": "Сравнить",
@@ -4465,7 +4475,8 @@
     "lb_7d": "7д",
     "lb_30d": "30д",
     "locked_pack": "Пак заблокирован. Нужен Pro или рефералы.",
-    "pack_applied": "Пак применён"
+    "pack_applied": "Пак применён",
+    "billing_receiver_missing": "Оплата временно недоступна (кошелёк сервера не настроен)."
   },
   "uk": {
     "plan_compare_btn": "Порівняти",
@@ -4871,7 +4882,8 @@
     "lb_7d": "7д",
     "lb_30d": "30д",
     "locked_pack": "Пак заблоковано. Потрібен Pro або реферали.",
-    "pack_applied": "Пак застосовано"
+    "pack_applied": "Пак застосовано",
+    "billing_receiver_missing": "Оплата тимчасово недоступна (гаманець сервера не налаштовано)."
   },
   "hi": {
     "plan_compare_btn": "कम्पेयर करें",
@@ -5277,7 +5289,8 @@
     "lb_7d": "7दिन",
     "lb_30d": "30दिन",
     "locked_pack": "पैक लॉक है। Pro या रेफरल चाहिए।",
-    "pack_applied": "पैक लागू"
+    "pack_applied": "पैक लागू",
+    "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
   },
   "ja": {
     "plan_compare_btn": "比較",
@@ -5683,7 +5696,8 @@
     "lb_7d": "7日",
     "lb_30d": "30日",
     "locked_pack": "パックはロック中。Proまたは紹介が必要です。",
-    "pack_applied": "パックを適用しました"
+    "pack_applied": "パックを適用しました",
+    "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
   },
   "zh": {
     "plan_compare_btn": "对比",
@@ -6089,7 +6103,8 @@
     "lb_7d": "7天",
     "lb_30d": "30天",
     "locked_pack": "包已锁定。需要 Pro 或推荐。",
-    "pack_applied": "已应用包"
+    "pack_applied": "已应用包",
+    "billing_receiver_missing": "Payments are temporarily unavailable (server wallet not configured)."
   }
 };
   function clone(value){ return JSON.parse(JSON.stringify(value)); }

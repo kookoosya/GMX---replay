@@ -4,6 +4,10 @@ const STORAGE_KEYS = {
   handle: "gmx_ext_handle_v2",
   token: "gmx_ext_token_v2",
   mode: "gmx_ext_mode_v2",
+  gmMode: "gmx_ext_gm_mode_v2",
+  gnMode: "gmx_ext_gn_mode_v2",
+  gmStyle: "gmx_ext_gm_style_v2",
+  gnStyle: "gmx_ext_gn_style_v2",
   lastText: "gmx_ext_last_text_v2",
 };
 const ALERT_KEYS = {
@@ -84,6 +88,10 @@ const state = {
   handle: "",
   token: "",
   mode: "mid",
+  gmMode: "mid",
+  gnMode: "mid",
+  gmStyle: "classic",
+  gnStyle: "classic",
   lastText: "",
   extTheme: "classic",
   extView: "theme",
@@ -392,16 +400,17 @@ async function resolveWallpaperSource(base, wallpaperId) {
   const cacheKey = `${normalizeBase(base)}::${id}`;
   if (WALL_CACHE.has(cacheKey)) return WALL_CACHE.get(cacheKey) || "";
 
-  if (!(typeof id === "string" && id.startsWith("extv3_"))) {
-    const localUrl = chrome.runtime.getURL(`extbg/${encodeURIComponent(id)}.svg`);
-    WALL_CACHE.set(cacheKey, localUrl);
-    try{ prefetchWallpaper(localUrl); }catch{}
-    return localUrl;
+  const baseUrl = normalizeBase(base);
+  if (typeof id === "string" && id.startsWith("extv3_")) {
+    const remote = `${baseUrl}/assets/extbg/${encodeURIComponent(id)}.webp?v=${ASSET_REV}`;
+    WALL_CACHE.set(cacheKey, remote);
+    try{ prefetchWallpaper(remote); }catch{}
+    return remote;
   }
-  const finalUrl = extPackWallpaperDataUri(id, false);
-  WALL_CACHE.set(cacheKey, finalUrl);
-  try{ prefetchWallpaper(finalUrl); }catch{}
-  return finalUrl;
+  const localUrl = chrome.runtime.getURL(`extbg/${encodeURIComponent(id)}.svg`);
+  WALL_CACHE.set(cacheKey, localUrl);
+  try{ prefetchWallpaper(localUrl); }catch{}
+  return localUrl;
 }
 
 function friendlyError(result) {
@@ -421,7 +430,7 @@ function friendlyError(result) {
   return raw;
 }
 
-function scoreTemplate(text) {
+function scoreTemplate(text, kind = "gm") {
   const value = String(text || "").trim();
   if (!value) return -9999;
 
@@ -442,7 +451,8 @@ function scoreTemplate(text) {
   if (clauses.length <= 3) score += 4;
   else score -= (clauses.length - 3) * 3;
 
-  if (/^(gm|gn)\b/i.test(value)) score += 6;
+  if (/^(gm|good morning|morning)\b/i.test(value) && kind === "gm") score += 8;
+  if (/^(gn|good night|night)\b/i.test(value) && kind === "gn") score += 8;
   try {
     const emojiHits = (value.match(/[\u{1F300}-\u{1FAFF}]/gu) || []).length;
     if (emojiHits === 1) score += 2;
@@ -527,6 +537,10 @@ async function loadState() {
     await removeState(LEGACY_STORAGE_KEYS);
   }
   state.mode = ["min", "mid", "max"].includes(String(data[STORAGE_KEYS.mode] || "")) ? String(data[STORAGE_KEYS.mode]) : "mid";
+  state.gmMode = ["min", "mid", "max"].includes(String(data[STORAGE_KEYS.gmMode] || "")) ? String(data[STORAGE_KEYS.gmMode]) : state.mode;
+  state.gnMode = ["min", "mid", "max"].includes(String(data[STORAGE_KEYS.gnMode] || "")) ? String(data[STORAGE_KEYS.gnMode]) : state.mode;
+  state.gmStyle = String(data[STORAGE_KEYS.gmStyle] || state.gmStyle || "classic");
+  state.gnStyle = String(data[STORAGE_KEYS.gnStyle] || state.gnStyle || "classic");
   state.lastText = String(data[STORAGE_KEYS.lastText] || "").trim();
   const hadLegacyThemeValues = Boolean(data[LEGACY_THEME_KEYS.extTheme] || data[LEGACY_THEME_KEYS.extView] || data[LEGACY_THEME_KEYS.extWallpaper] || data[LEGACY_THEME_KEYS.extCustomBg]);
   state.extTheme = String(data[THEME_KEYS.extTheme] || data[LEGACY_THEME_KEYS.extTheme] || data[THEME_KEYS.siteTheme] || DEFAULT_THEME.id).trim() || DEFAULT_THEME.id;
@@ -684,7 +698,7 @@ function consumeFromCache(kind, preferBest = false) {
   if (preferBest) {
     let bestScore = -Infinity;
     for (let i = 0; i < queue.length; i++) {
-      const current = scoreTemplate(queue[i]);
+      const current = scoreTemplate(queue[i], kind);
       if (current > bestScore) {
         bestScore = current;
         index = i;
@@ -700,7 +714,7 @@ function fallbackLine(kind, preferBest = false) {
   const baseList = Array.isArray(FALLBACK_LINES[safeKind]) ? [...FALLBACK_LINES[safeKind]] : [];
   if (!baseList.length) return "";
   if (preferBest) {
-    baseList.sort((a, b) => scoreTemplate(b) - scoreTemplate(a));
+    baseList.sort((a, b) => scoreTemplate(b, safeKind) - scoreTemplate(a, safeKind));
     return String(baseList[0] || "").trim();
   }
   const index = state.fallbackIndex[safeKind] % baseList.length;
@@ -708,12 +722,33 @@ function fallbackLine(kind, preferBest = false) {
   return String(baseList[index] || "").trim();
 }
 
+function extModeForKind(kind) {
+  const key = kind === "gn" ? "gnMode" : "gmMode";
+  const raw = state[key] || state.mode || "mid";
+  return ["min", "mid", "max"].includes(raw) ? raw : "mid";
+}
+
+function extStyleForKind(kind) {
+  const key = kind === "gn" ? "gnStyle" : "gmStyle";
+  const raw = String(state[key] || "classic").toLowerCase();
+  const allowed = new Set(["classic","degen","builder","alpha","calm","meme","classy","minimal","noemoji","emoji","focus","cheer"]);
+  return allowed.has(raw) ? raw : "classic";
+}
+
 async function fetchBatch(kind, count = 6) {
   const safeKind = kind === "gn" ? "gn" : "gm";
-  const safeMode = ["min", "mid", "max"].includes(state.mode) ? state.mode : "mid";
+  const safeMode = extModeForKind(safeKind);
+  const safeStyle = extStyleForKind(safeKind);
+  const qs = new URLSearchParams({
+    kind: safeKind,
+    mode: safeMode,
+    style: safeStyle,
+    count: String(Math.max(1, Math.min(10, count))),
+  });
+  if (state.token) qs.set("anti_last_n", "20");
   const path = state.token
-    ? `/api/generate-bulk?kind=${safeKind}&mode=${safeMode}&count=${Math.max(1, Math.min(10, count))}`
-    : `/api/public/random-bulk?kind=${safeKind}&mode=${safeMode}&count=${Math.max(1, Math.min(10, count))}`;
+    ? `/api/generate-bulk?${qs}`
+    : `/api/public/random-bulk?${qs}`;
   const result = await apiRequest(path, { acceptStatuses: [401, 403] });
   if (!result.ok || !result.data) {
     if (result.status === 401 || result.status === 403) {
@@ -953,9 +988,16 @@ async function openQuickPanel() {
 function bindEvents() {
   if (el.modeSelect) {
     el.modeSelect.addEventListener("change", async () => {
-      state.mode = ["min", "mid", "max"].includes(el.modeSelect.value) ? el.modeSelect.value : "mid";
+      const next = ["min", "mid", "max"].includes(el.modeSelect.value) ? el.modeSelect.value : "mid";
+      state.mode = next;
+      state.gmMode = next;
+      state.gnMode = next;
       state.cache = { gm: [], gn: [] };
-      await saveState({ [STORAGE_KEYS.mode]: state.mode });
+      await saveState({
+        [STORAGE_KEYS.mode]: state.mode,
+        [STORAGE_KEYS.gmMode]: state.gmMode,
+        [STORAGE_KEYS.gnMode]: state.gnMode,
+      });
       setCopyStatus(`Mode saved: ${state.mode.toUpperCase()}`);
       void ensureCache("gm", 4);
       void ensureCache("gn", 4);

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "GMXReply",
-  "version": "1.1.1",
-  "description": "Safe copy-only GM/GN companion. No X DOM injection. Stable site session sync + quick panel.",
+  "version": "1.2.0",
+  "description": "Safe copy-only GM/GN companion. Per-mode generation, site sync, real extension wallpapers.",
   "action": {
     "default_title": "GMXReply",
     "default_popup": "popup.html"

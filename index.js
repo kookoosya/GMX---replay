@@ -5303,6 +5303,9 @@ app.post("/api/solana/send-raw", requireAuth, async (req, res) => {
 
 app.post("/api/billing/intent", requireAuth, async (req, res) => {
   try {
+    if (!isSolanaPubkey(SOL_RECEIVER)) {
+      return res.status(503).json({ ok: false, error: "billing_receiver_not_configured" });
+    }
     const handle = req.user?.handle || null;
     const planKey = String(req.body?.planKey || "").trim();
     const currency = String(req.body?.currency || "SOL").trim().toUpperCase();
