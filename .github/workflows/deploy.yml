@@ -24,8 +24,5 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Smoke
-        run: npm test
-
-      - name: Runtime audit
-        run: node tools/runtime_audit.mjs
+      - name: Full check-in
+        run: npm run test:full

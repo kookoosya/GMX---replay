@@ -9,6 +9,10 @@
   "scripts": {
     "start": "node index.js",
     "test": "node smoke.js",
+    "test:full": "node tools/full-checkin.mjs && node tools/logic-audit.mjs",
+    "audit:logic": "node tools/logic-audit.mjs",
+    "audit:runtime": "node tools/runtime_audit.mjs --strict",
+    "audit:all": "node tools/full-checkin.mjs && node tools/logic-audit.mjs && node tools/i18n_audit.js && node tools/arcade-audit.mjs",
     "dev:backend": "node index.js",
     "dev:frontend": "node tools/vite-dev.mjs",
     "dev": "node tools/dev-run.mjs",
@@ -20,8 +24,6 @@
     "pm2:stop": "pm2 delete ecosystem.config.cjs",
     "pm2:logs": "pm2 logs gmxreply-backend",
     "i18n:sync": "node tools/i18n_sync.mjs",
-    "wallpapers:fetch": "node tools/fetch-wallpapers-pexels.mjs",
-    "audit:logic": "node tools/logic-audit.mjs",
     "audit:i18n": "node tools/i18n_audit.js",
     "audit:i18n:strict": "node tools/i18n_audit.js --strict"
   },

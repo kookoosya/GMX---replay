@@ -48,7 +48,7 @@ check(fs.existsSync(path.join(ROOT, 'supabase/01_core.sql')), 'supabase/01_core.
 
 // Extension wallpapers
 const extPopup = read('extension/popup.js');
-check(/\/assets\/extbg\/\$\{id\}\.webp/.test(extPopup), 'extension uses extbg webp URLs', 'extension still on data-uri wallpapers');
+check(/\/assets\/extbg\/\$\{encodeURIComponent\(id\)\}\.webp/.test(extPopup), 'extension uses extbg webp URLs', 'extension still on data-uri wallpapers');
 
 console.log('GMXReply logic audit\n');
 console.log('OK (' + ok.length + ')');
