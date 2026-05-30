@@ -340,10 +340,8 @@
   ],
   "w_support_title": "支持",
   "w_support_desc": "仅在支持要求时复制安全的 support snapshot，不包含私钥。",
-  "toolSupport": "Copy support bundle",
   "toolDiag": "复制 support snapshot",
   "toolLogs": "Copy local logs",
-  "supportOut_ph": "Paste support notes here...",
   "w_faq_title": "常见问题",
   "w_faq_list": [
     "<b>Pro 绑定到我的钱包吗？</b> 不会 — Pro 绑定的是你的 X 账号。你可以用任意钱包付款。",

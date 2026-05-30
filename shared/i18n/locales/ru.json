@@ -340,10 +340,8 @@
   ],
   "w_support_title": "Поддержка",
   "w_support_desc": "Копируй безопасный support snapshot без приватных ключей только когда об этом просит support.",
-  "toolSupport": "Копировать support bundle",
   "toolDiag": "Копировать support snapshot",
   "toolLogs": "Копировать локальные логи",
-  "supportOut_ph": "Вставь сюда заметки/ответ поддержки...",
   "w_faq_title": "FAQ и ответы",
   "w_faq_list": [
     "<b>Pro привязан к кошельку?</b> Нет — Pro привязан к твоему X‑хендлу. Платить можно с любого кошелька.",

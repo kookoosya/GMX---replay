@@ -276,7 +276,6 @@ registerUserRoutes({
   originFromReq,
   isAdminHandle,
   logActivity,
-  toolLimit,
 });
 
 

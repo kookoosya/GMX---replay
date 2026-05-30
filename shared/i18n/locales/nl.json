@@ -340,10 +340,8 @@
   ],
   "w_support_title": "Support",
   "w_support_desc": "Kopieer alleen een veilige support snapshot zonder private keys als support erom vraagt.",
-  "toolSupport": "Copy support bundle",
   "toolDiag": "Support snapshot kopiëren",
   "toolLogs": "Copy local logs",
-  "supportOut_ph": "Paste support notes here...",
   "w_faq_title": "Veelgestelde vragen",
   "w_faq_list": [
     "<b>Is Pro gekoppeld aan mijn wallet?</b> Nee — Pro is gekoppeld aan je X‑handle. Je kunt met elke wallet betalen.",

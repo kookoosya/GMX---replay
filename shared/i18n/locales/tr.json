@@ -340,10 +340,8 @@
   ],
   "w_support_title": "Destek",
   "w_support_desc": "Özel anahtar içermeyen güvenli bir support snapshot sadece destek isterse kopyala.",
-  "toolSupport": "Copy support bundle",
   "toolDiag": "Support snapshot kopyala",
   "toolLogs": "Copy local logs",
-  "supportOut_ph": "Paste support notes here...",
   "w_faq_title": "Sık sorulanlar",
   "w_faq_list": [
     "<b>Pro cüzdanıma mı bağlı?</b> Hayır — Pro senin X handle’ına bağlı. İstediğin cüzdandan ödeme yapabilirsin.",

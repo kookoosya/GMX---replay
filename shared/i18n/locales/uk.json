@@ -340,10 +340,8 @@
   ],
   "w_support_title": "Підтримка",
   "w_support_desc": "Копіюй безпечний support snapshot без приватних ключів лише коли про це просить support.",
-  "toolSupport": "Копіювати support bundle",
   "toolDiag": "Копіювати support snapshot",
   "toolLogs": "Копіювати локальні логи",
-  "supportOut_ph": "Встав сюди нотатки/відповідь підтримки...",
   "w_faq_title": "Поширені запитання",
   "w_faq_list": [
     "<b>Pro прив'язаний до гаманця?</b> Ні — Pro прив'язаний до твого X‑хендлу. Платити можна з будь-якого гаманця.",

@@ -340,10 +340,8 @@
   ],
   "w_support_title": "Support",
   "w_support_desc": "Copiez un support snapshot sûr, sans clés privées, seulement si le support le demande.",
-  "toolSupport": "Copy support bundle",
   "toolDiag": "Copier le support snapshot",
   "toolLogs": "Copy local logs",
-  "supportOut_ph": "Paste support notes here...",
   "w_faq_title": "Questions fréquentes",
   "w_faq_list": [
     "<b>Pro est lié à mon wallet ?</b> Non — Pro est lié à ton handle X. Tu peux payer avec n’importe quel wallet.",

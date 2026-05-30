@@ -340,10 +340,8 @@
   ],
   "w_support_title": "Wsparcie",
   "w_support_desc": "Kopiuj bezpieczny support snapshot bez prywatnych kluczy tylko gdy poprosi o to wsparcie.",
-  "toolSupport": "Copy support bundle",
   "toolDiag": "Kopiuj support snapshot",
   "toolLogs": "Copy local logs",
-  "supportOut_ph": "Paste support notes here...",
   "w_faq_title": "Najczęstsze pytania",
   "w_faq_list": [
     "<b>Czy Pro jest powiązane z moim portfelem?</b> Nie — Pro jest powiązane z twoim handle na X. Możesz płacić z dowolnego portfela.",

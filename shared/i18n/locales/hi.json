@@ -340,10 +340,8 @@
   ],
   "w_support_title": "सपोर्ट",
   "w_support_desc": "प्राइवेट keys के बिना सुरक्षित support snapshot केवल तभी कॉपी करें जब support मांगे।",
-  "toolSupport": "Copy support bundle",
   "toolDiag": "Support snapshot कॉपी करें",
   "toolLogs": "Copy local logs",
-  "supportOut_ph": "Paste support notes here...",
   "w_faq_title": "अक्सर पूछे जाने वाले सवाल",
   "w_faq_list": [
     "<b>क्या Pro मेरे वॉलेट से बंधा है?</b> नहीं — Pro आपके X हैंडल से बंधा है। आप किसी भी वॉलेट से पे कर सकते हैं।",

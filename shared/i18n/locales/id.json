@@ -340,10 +340,8 @@
   ],
   "w_support_title": "Dukungan",
   "w_support_desc": "Salin support snapshot yang aman tanpa private key hanya jika diminta support.",
-  "toolSupport": "Copy support bundle",
   "toolDiag": "Salin support snapshot",
   "toolLogs": "Copy local logs",
-  "supportOut_ph": "Paste support notes here...",
   "w_faq_title": "Pertanyaan umum",
   "w_faq_list": [
     "<b>Pro itu nempel ke wallet aku?</b> Tidak — Pro nempel ke handle X kamu. Kamu bisa bayar dari wallet mana saja.",

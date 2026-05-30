@@ -340,10 +340,8 @@
   ],
   "w_support_title": "Suporte",
   "w_support_desc": "Copia um support snapshot seguro, sem chaves privadas, só quando o suporte pedir.",
-  "toolSupport": "Copy support bundle",
   "toolDiag": "Copiar support snapshot",
   "toolLogs": "Copy local logs",
-  "supportOut_ph": "Paste support notes here...",
   "w_faq_title": "Perguntas frequentes",
   "w_faq_list": [
     "<b>O Pro é ligado à minha carteira?</b> Não — o Pro é ligado ao seu handle do X. Você pode pagar com qualquer carteira.",

@@ -340,10 +340,8 @@
   ],
   "w_support_title": "サポート",
   "w_support_desc": "秘密鍵なしの安全なsupport snapshotは、サポートに求められたときだけコピーしてください。",
-  "toolSupport": "Copy support bundle",
   "toolDiag": "support snapshotをコピー",
   "toolLogs": "Copy local logs",
-  "supportOut_ph": "Paste support notes here...",
   "w_faq_title": "よくある質問",
   "w_faq_list": [
     "<b>Proはウォレットに紐づきますか？</b> いいえ — ProはXハンドルに紐づきます。どのウォレットからでも支払えます。",

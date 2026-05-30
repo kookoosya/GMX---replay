@@ -340,10 +340,8 @@
   ],
   "w_support_title": "Support",
   "w_support_desc": "Copy a safe support snapshot (no private keys) only when support asks for it.",
-  "toolSupport": "Copy support bundle",
   "toolDiag": "Copy support snapshot",
   "toolLogs": "Copy local logs",
-  "supportOut_ph": "Paste support notes here...",
   "w_faq_title": "FAQ",
   "w_faq_list": [
     "<b>Is Pro tied to my wallet?</b> No — Pro is tied to your X handle. You can pay from any wallet.",

@@ -340,10 +340,8 @@
   ],
   "w_support_title": "Support",
   "w_support_desc": "Kopiere einen sicheren Support-Snapshot ohne private Keys nur auf Anfrage des Supports.",
-  "toolSupport": "Copy support bundle",
   "toolDiag": "Support-Snapshot kopieren",
   "toolLogs": "Copy local logs",
-  "supportOut_ph": "Paste support notes here...",
   "w_faq_title": "Häufige Fragen",
   "w_faq_list": [
     "<b>Ist Pro an meine Wallet gebunden?</b> Nein — Pro ist an deinen X‑Handle gebunden. Du kannst mit jeder Wallet bezahlen.",
