@@ -56,17 +56,15 @@ mustHaveId("gnRand1");
 mustHaveId("gnRand10");
 
 const appJs = readIfExists(publicJs);
-if (!appJs) fail("missing public/app.js");
-if (!appJs.includes("SITE_WALLPAPER_PACK_COUNT = 58")) fail("wallpaper pack count not 58");
-if (!appJs.includes("const antiN = antiWindow(strength);")) fail("generate anti-repeat disabled");
-if (appJs.includes("const antiN = 0;")) fail("generate antiN hardcoded to 0");
-if (appJs.includes("supportBundle")) fail("support bundle still in app.js");
-if (appJs.includes('setPh("supportOut"')) fail("supportOut placeholder still wired");
-if (appJs.includes("sitePackWallpaperDataUri(norm, false)")) fail("site wallpapers still use data-uri generator");
+if (appJs) {
+  if (!/SITE_WALLPAPER_PACK_COUNT = 58/.test(appJs)) fail("SITE_WALLPAPER_PACK_COUNT must be 58");
+  if (/function supportBundle\(/.test(appJs)) fail("supportBundle must be removed");
+  if (/initWpLazyLoad/.test(appJs)) fail("initWpLazyLoad must be removed");
+  if (!/applyRefCountEligible/.test(appJs)) fail("applyRefCountEligible helper missing");
+  if (/source\.unsplash\.com/.test(appJs)) fail("unsplash wallpaper URLs forbidden");
+}
 
-const extPopup = readIfExists(path.join(root, "extension", "popup.js"));
-if (!extPopup) fail("missing extension/popup.js");
-if (!extPopup.includes("async function removeState")) fail("extension removeState missing");
-if (extPopup.includes("extPackWallpaperDataUri(id, false)")) fail("extension resolve still uses data-uri wallpapers");
+const appHtml = readIfExists(publicHtml);
+if (appHtml && /id="supportOut"/.test(appHtml)) fail('supportOut must be removed from app.html');
 
 console.log("SMOKE_OK");

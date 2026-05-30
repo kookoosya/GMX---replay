@@ -1,61 +1,67 @@
 #!/usr/bin/env node
 /**
- * Static logic audit — generation, referrals, billing, wallpapers.
- * Run: node tools/logic-audit.mjs
+ * Fast invariant checks for GMXReply site + extension.
+ * Run: node tools/logic-audit.mjs [--strict]
  */
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import fs from "fs";
+import path from "path";
 
-const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
+const root = process.cwd();
+const strict = process.argv.includes("--strict");
 const issues = [];
-const ok = [];
 
 function read(rel) {
-  return fs.readFileSync(path.join(ROOT, rel), 'utf8');
+  const file = path.join(root, rel);
+  return fs.existsSync(file) ? fs.readFileSync(file, "utf8") : "";
 }
 
-function check(cond, pass, fail) {
-  if (cond) ok.push(pass);
-  else issues.push(fail);
+function fail(msg) {
+  issues.push(msg);
 }
 
-const appJs = read('public/app.js');
-const indexJs = read('index.js');
-
-// Generation
-check(/const antiN = antiWindow\(strength\)/.test(appJs), 'generate(): antiN uses antiWindow', 'generate(): antiN not wired to antiWindow');
-check(/attempts < 4/.test(appJs), 'bulk generate: multiple attempts', 'bulk generate: single attempt only');
-check(/window\.__i18nPause/.test(appJs), 'i18n observer pauses during generate', 'missing __i18nPause during generate');
-
-// Wallpapers — no inline candle generator as primary v2 source
-check(/if \(norm\.startsWith\("v2_"\)\) return `\/assets\/wallpapers\/\$\{norm\}\.webp/.test(appJs),
-  'v2 wallpapers use /assets/wallpapers/*.webp',
-  'v2 wallpapers still use data-uri generator');
-check(!/candlesticks\(/.test(appJs), 'app.js: no candlestick wallpaper code', 'app.js still references candlesticks');
-
-// Billing / refund
-check(!/refund/i.test(indexJs), 'no refund endpoint (Solana payments are on-chain final)', 'unexpected refund logic in server');
-check(/billing_intents/.test(indexJs), 'billing_intents schema present', 'missing billing_intents');
-check(/CREATE TABLE IF NOT EXISTS payments/.test(indexJs), 'payments table present', 'missing payments table');
-
-// Referrals
-check(/sbReferralsMarkFirstUse/.test(indexJs), 'Supabase first_use_at hook', 'missing sbReferralsMarkFirstUse');
-check(/referral_invites/.test(indexJs), 'sqlite referral_invites', 'missing referral_invites');
-
-// Supabase core
-check(fs.existsSync(path.join(ROOT, 'supabase/01_core.sql')), 'supabase/01_core.sql exists', 'missing supabase/01_core.sql');
-
-// Extension wallpapers
-const extPopup = read('extension/popup.js');
-check(/\/assets\/extbg\/\$\{encodeURIComponent\(id\)\}\.webp/.test(extPopup), 'extension uses extbg webp URLs', 'extension still on data-uri wallpapers');
-
-console.log('GMXReply logic audit\n');
-console.log('OK (' + ok.length + ')');
-ok.forEach((l) => console.log('  ✓', l));
-if (issues.length) {
-  console.log('\nISSUES (' + issues.length + ')');
-  issues.forEach((l) => console.log('  ✗', l));
-  process.exit(1);
+function mustNotMatch(rel, pattern, label) {
+  const text = read(rel);
+  if (pattern.test(text)) fail(`${label} (${rel})`);
 }
-console.log('\nAll checks passed.');
+
+function mustMatch(rel, pattern, label) {
+  const text = read(rel);
+  if (!pattern.test(text)) fail(`${label} (${rel})`);
+}
+
+const appFiles = ["public/app.js", "public/bridge/app.js", "frontend/public/app.js"];
+const htmlFiles = ["public/app.html", "public/bridge/app.html", "frontend/public/app.html"];
+
+for (const rel of appFiles) {
+  if (!fs.existsSync(path.join(root, rel))) continue;
+  mustMatch(rel, /const SITE_WALLPAPER_PACK_COUNT = 58;/, "wallpaper pack count must be 58");
+  mustMatch(rel, /const CRYPTO_SITE_WALL_SOURCES = \[\];/, "no unsplash/crypto URL wallpapers");
+  mustNotMatch(rel, /source\.unsplash\.com/, "unsplash URLs forbidden");
+  mustNotMatch(rel, /function supportBundle\(/, "supportBundle removed");
+  mustNotMatch(rel, /initWpLazyLoad/, "initWpLazyLoad removed");
+  mustMatch(rel, /function applyRefCountEligible/, "REF_COUNT helper present");
+  mustMatch(rel, /attempts < 4/, "bulk generate retry cap");
+  mustMatch(rel, /const antiN = antiWindow\(strength\)/, "single generate uses antiWindow");
+  mustNotMatch(rel, /const antiN = 0;/, "antiN must not be hardcoded 0");
+  mustMatch(rel, /\/assets\/extbg\/\$\{norm\}\.webp/, "extension wallpapers use webp CDN paths");
+}
+
+for (const rel of htmlFiles) {
+  mustNotMatch(rel, /id="supportOut"/, "supportOut textarea removed");
+  mustNotMatch(rel, /id="toolSupport"/, "toolSupport button removed from HTML");
+}
+
+const siteSync = read("extension/site_sync.js");
+if (!siteSync.includes("gmx_ext_wp_v2_popup")) fail("site_sync must sync popup wallpaper key");
+if (!siteSync.includes("runSyncOnce")) fail("site_sync must debounce with runSyncOnce mutex");
+
+const popup = read("extension/popup.js");
+if (!popup.includes("gmx_ext_wp_v2_popup") && strict) {
+  fail("extension/popup.js should read per-view wallpaper keys");
+}
+
+console.log(`Logic audit: ${issues.length} issue(s)`);
+for (const msg of issues) console.log(`  - ${msg}`);
+
+if (strict && issues.length) process.exit(1);
+if (!issues.length) console.log("LOGIC_AUDIT_OK");

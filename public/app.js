@@ -215,6 +215,7 @@ function isAdminSignedIn(){ return !!getAdminToken(); }
   const LS_GN_REPLY_LANG = "gmx_gn_reply_lang";
   const LS_BEST_ENABLED = "gmx_best_enabled";
   const LS_FORCE_LOGOUT = "gmx_ext_force_logout";
+  const LS_FORCE_LOGOUT_V2 = "gmx_ext_force_logout_v2";
   const LS_TOGGLES_BOOTSTRAP_V2 = "gmx_toggles_bootstrap_v2";
 
 
@@ -5808,6 +5809,7 @@ function pruneLegacyAdminPanels(){
       if (rl) rl.value = j.refLink || "";
       if (cm) cm.innerHTML = '';
       try{ localStorage.removeItem(LS_FORCE_LOGOUT); }catch{}
+      try{ localStorage.removeItem(LS_FORCE_LOGOUT_V2); }catch{}
       try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "site_connect" }, "*"); }catch(_e){}
       AUTH_OK = true;
       try{ ping(); }catch{}
@@ -5841,6 +5843,7 @@ function pruneLegacyAdminPanels(){
     if (cm) cm.innerHTML = '<span class="ok">Session cleared.</span>';
     AUTH_OK = false;
     try{ localStorage.setItem(LS_FORCE_LOGOUT, String(Date.now())); }catch{}
+    try{ localStorage.setItem(LS_FORCE_LOGOUT_V2, String(Date.now())); }catch{}
     try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "site_reset" }, "*"); }catch(_e){}
     try{ ping(); }catch{}
     applyAdminVisibility();

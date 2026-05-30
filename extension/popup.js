@@ -918,6 +918,8 @@ async function syncFromSite(options = {}) {
         if (typeof response.siteTheme === 'string') syncPayload[THEME_KEYS.siteTheme] = String(response.siteTheme || '').trim();
         if (typeof response.extView === 'string') syncPayload[THEME_KEYS.extView] = String(response.extView || '').trim();
         if (typeof response.extWallpaper === 'string') syncPayload[THEME_KEYS.extWallpaper] = normalizeWallpaperOptionId(response.extWallpaper);
+        if (typeof response.extWallpaperPopup === 'string') syncPayload[THEME_KEYS.extWallpaperPopup] = normalizeWallpaperOptionId(response.extWallpaperPopup);
+        if (typeof response.extWallpaperQuick === 'string') syncPayload[THEME_KEYS.extWallpaperQuick] = normalizeWallpaperOptionId(response.extWallpaperQuick);
         if (typeof response.extCustomBg === 'string') syncPayload[THEME_KEYS.extCustomBg] = String(response.extCustomBg || '').trim();
         if (Object.keys(syncPayload).length) await saveState(syncPayload);
       }
