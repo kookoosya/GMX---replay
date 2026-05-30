@@ -39,7 +39,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260530c";
+const ASSET_REV = "20260530d";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -724,7 +724,7 @@ function readFileAsDataURL(file){
     return out;
   }
   const WALLPAPERS = buildSiteWallpapers();
-  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_photo_v1";
+  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_pexels_v2";
   function migrateLegacyWallpaperSelectionOnce(){
     try{
       if (localStorage.getItem(WALLPAPER_REFRESH_MIGRATION_KEY) === "1") return;
@@ -835,8 +835,8 @@ function readFileAsDataURL(file){
       const num = Math.max(1, Math.min(58, Number(m[1]) || 1));
       return `extv3_${String(num).padStart(2, "0")}`;
     }
-    if (/^lux_ext_[a-z0-9_]+$/i.test(v)) return v;
-    return "ext_free_01";
+    if (/^lux_ext_/i.test(v) || /^ext_free_/i.test(v)) return "extv3_01";
+    return "extv3_01";
   }
 
   function svgDataUri(svg){
@@ -1437,7 +1437,7 @@ function renderWallpaperUI(){
   const EXT_WALLPAPERS = buildExtWallpapers();
   function migrateLegacyExtWallpaperSelectionOnce(){
     try{
-      const done = "gmx_ext_wallpaper_photo_v1";
+      const done = "gmx_ext_wallpaper_pexels_v2";
       if (localStorage.getItem(done) === "1") return;
       // keep IDs stable; visual refresh now happens in URL resolver
       localStorage.setItem(done, "1");

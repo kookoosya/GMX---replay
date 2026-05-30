@@ -29,7 +29,9 @@
     "audit:all": "npm run audit:logic && npm run audit:runtime",
     "build:server": "node tools/build-server.mjs",
     "build:all": "npm run build:site && npm run build:server",
-    "test:full": "npm run build:all && npm test && npm run audit:all"
+    "test:full": "npm run build:all && npm test && npm run audit:all",
+    "wallpapers:fetch": "node tools/fetch-wallpapers-pexels.mjs",
+    "wallpapers:ideal": "npm run wallpapers:fetch && npm run build:site"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.97.0",
@@ -41,6 +43,7 @@
     "helmet": "^7.1.0"
   },
   "devDependencies": {
-    "playwright": "^1.58.2"
+    "playwright": "^1.58.2",
+    "sharp": "^0.33.5"
   }
 }

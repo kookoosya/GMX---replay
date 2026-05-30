@@ -190,7 +190,7 @@
   const EXT_WALLPAPERS = buildExtWallpapers();
   function migrateLegacyExtWallpaperSelectionOnce(){
     try{
-      const done = "gmx_ext_wallpaper_photo_v1";
+      const done = "gmx_ext_wallpaper_pexels_v2";
       if (localStorage.getItem(done) === "1") return;
       // keep IDs stable; visual refresh now happens in URL resolver
       localStorage.setItem(done, "1");

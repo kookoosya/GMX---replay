@@ -37,6 +37,11 @@ for (const rel of appFiles) {
   mustMatch(rel, /const SITE_WALLPAPER_PACK_COUNT = 58;/, "wallpaper pack count must be 58");
   mustMatch(rel, /const CRYPTO_SITE_WALL_SOURCES = \[\];/, "no unsplash/crypto URL wallpapers");
   mustNotMatch(rel, /source\.unsplash\.com/, "unsplash URLs forbidden");
+  mustNotMatch(rel, /sitePackWallpaperDataUri/, "chart SVG data-uri wallpapers forbidden");
+  mustNotMatch(rel, /SITE_WALLPAPER_LUX/, "lux SVG wallpaper catalog removed");
+  mustNotMatch(rel, /GM Candle|Degen Order|Bitcoin Terminal/, "crypto chart wallpaper names forbidden");
+  mustMatch(rel, /\/assets\/wallpapers\/thumbs\/\$\{norm\}\.webp/, "wallpaper thumbs must use webp files");
+
   mustNotMatch(rel, /function supportBundle\(/, "supportBundle removed");
   mustNotMatch(rel, /initWpLazyLoad/, "initWpLazyLoad removed");
   mustMatch(rel, /function applyRefCountEligible/, "REF_COUNT helper present");

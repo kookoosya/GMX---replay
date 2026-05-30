@@ -545,7 +545,7 @@ function readFileAsDataURL(file){
     return out;
   }
   const WALLPAPERS = buildSiteWallpapers();
-  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_photo_v1";
+  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_pexels_v2";
   function migrateLegacyWallpaperSelectionOnce(){
     try{
       if (localStorage.getItem(WALLPAPER_REFRESH_MIGRATION_KEY) === "1") return;
@@ -656,8 +656,8 @@ function readFileAsDataURL(file){
       const num = Math.max(1, Math.min(58, Number(m[1]) || 1));
       return `extv3_${String(num).padStart(2, "0")}`;
     }
-    if (/^lux_ext_[a-z0-9_]+$/i.test(v)) return v;
-    return "ext_free_01";
+    if (/^lux_ext_/i.test(v) || /^ext_free_/i.test(v)) return "extv3_01";
+    return "extv3_01";
   }
 
   function svgDataUri(svg){
