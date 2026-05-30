@@ -1,0 +1,19 @@
+GMXReply Chrome extension — copy spec
+
+Purpose: copy English GM/GN replies, then paste manually on X. No auto-posting, no page injection.
+
+UI (keep minimal)
+  - Brand + Open site + Open X
+  - Mode: min / mid / mid (same meaning as site)
+  - GM / GN copy buttons (+ optional Best GM/GN)
+  - Last copied preview
+  - Session: sync from site, connect handle fallback
+  - Small snapshot: plan, daily GM/GN used
+
+Do not show in popup: arcade promos, prediction alerts, extra link rows.
+
+Hints
+  - "Copy here, paste on X yourself."
+  - "Sync session from the site first."
+
+Production API base: https://www.gmxreply.com

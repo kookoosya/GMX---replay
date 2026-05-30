@@ -13,28 +13,20 @@
         <img src="icons/icon48.png" class="logo" alt="GMXReply" />
         <div>
           <div class="title">GMXReply</div>
-          <div class="subtitle">Copy-first extension</div>
+          <div class="subtitle">Copy, then paste on X</div>
         </div>
       </div>
       <div class="topRight">
-        <button id="openQuick" class="linkbtn" type="button">Quick panel</button>
         <button id="openSite" class="linkbtn" type="button">Open site</button>
-        <button id="openArcade" class="linkbtn" type="button">Arcade</button>
         <button id="openX" class="linkbtn" type="button">Open X</button>
       </div>
     </div>
 
-    <div class="card" id="gotdCard" style="padding:10px 14px;background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(244,63,94,.08));border-color:rgba(251,191,36,.2)">
-      <div class="row" style="align-items:center;gap:8px">
-        <span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;opacity:.9">Game of the Day</span>
-        <button id="openArcadeGotd" class="linkbtn" type="button" style="font-size:13px;padding:4px 0">Play now →</button>
-      </div>
-    </div>
     <div class="card">
       <div class="row headRow">
         <div>
           <div class="sectionTitle">Quick copy</div>
-          <div class="hint">English-only reply pull: copy here, then paste manually on X</div>
+          <div class="hint">English replies only. Copy here, paste manually on X.</div>
         </div>
         <select id="modeSelect" class="select" aria-label="Length mode">
           <option value="min">min · short</option>
@@ -63,7 +55,7 @@
       <div class="row headRow">
         <div>
           <div class="sectionTitle">Session</div>
-          <div class="hint" id="sessionHint">Use site sync first. Manual handle connect is only a fallback for new accounts.</div>
+          <div class="hint" id="sessionHint">Sync from the site first. Connect handle only if needed.</div>
         </div>
         <div class="value" id="sessionValue">Guest</div>
       </div>
@@ -81,38 +73,16 @@
     </div>
 
     <div class="card">
-      <div class="sectionTitle">Snapshot</div>
+      <div class="sectionTitle">Today</div>
       <div class="grid">
         <div class="kv"><div class="k">Plan</div><div class="v" id="planValue">Guest</div></div>
-        <div class="kv"><div class="k">API base</div><div class="v" id="baseValue">—</div></div>
         <div class="kv"><div class="k">GM used</div><div class="v" id="gmUsed">—</div></div>
         <div class="kv"><div class="k">GN used</div><div class="v" id="gnUsed">—</div></div>
-        <div class="kv"><div class="k">Eligible</div><div class="v" id="refEligible">—</div></div>
-        <div class="kv"><div class="k">Confirmed</div><div class="v" id="refConfirmed">—</div></div>
       </div>
-      <div class="small" id="statsHint">Manual copy only. No x.com injection, no auto-posting.</div>
-    </div>
-    <div class="card">
-      <div class="sectionTitle">Prediction alerts</div>
-      <div class="hint">Extension sends a notification when a new bot signal card is published (private API feed, 3-5/day). Signals are informational and can be wrong.</div>
-      <div class="row" style="margin-top:10px;gap:10px;align-items:flex-end;flex-wrap:wrap">
-        <label class="label" style="display:flex;gap:8px;align-items:center">
-          <input id="alertsEnabled" type="checkbox" />
-          Alerts enabled
-        </label>
-        <div style="min-width:140px">
-          <label class="label" for="alertsInterval">Check every</label>
-          <select id="alertsInterval" class="select">
-            <option value="5">5 min</option>
-            <option value="10">10 min</option>
-            <option value="15">15 min</option>
-          </select>
-        </div>
-      </div>
-      <div id="alertsStatus" class="small" style="margin-top:8px"></div>
+      <div class="small" id="statsHint">Manual copy only. No auto-posting on X.</div>
     </div>
 
-    <div class="foot" id="shortcutHint">Optional shortcut: assign one yourself in chrome://extensions/shortcuts for "Open GMXReply quick panel"</div>
+    <div class="foot" id="shortcutHint">Optional: set a shortcut in chrome://extensions/shortcuts</div>
   </div>
 
   <script src="popup.js"></script>

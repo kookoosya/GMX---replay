@@ -1,0 +1,15 @@
+GMXReply — generation modes (product spec)
+
+GM/GN = reply to someone else's post on X (not a diary line, not a sign-off monologue).
+
+Banks: GM ordinary, GN ordinary, GM crypto, GN crypto.
+
+Modes
+  min (Fast)
+    One short line, postable immediately, no filler.
+  mid (Balanced)
+    Slightly richer; may add one short extra beat; still reads as a normal X reply.
+  max (Full)
+    Warmer / fuller tone; never essay-length.
+
+Tone families (ordinary vs crypto) must feel distinct. Emoji only when it fits. Avoid repeated WAGMI/moon clichés in crypto; avoid bland diary tone in ordinary.

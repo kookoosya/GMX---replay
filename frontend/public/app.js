@@ -33,7 +33,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260530a";
+const ASSET_REV = "20260310a";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -230,22 +230,10 @@ const LS_GM_RECENT = "gmx_gm_recent";
   const LS_GN_RECENT = "gmx_gn_recent";
 
 
-  function packsForKind(kind){
-    return kind === "gn" ? GN_PACKS : GM_PACKS;
-  }
-
+  // Hidden repeat guard stays off in the normal flow.
+  // Best pass uses its own fixed internal shape pass only when the user turns it on.
   function getAntiStrength(kind){
-    try{
-      const raw = localStorage.getItem(lsKeyAnti(kind));
-      if (raw !== null && raw !== ""){
-        const n = Math.trunc(Number(raw));
-        if (Number.isFinite(n)) return Math.max(0, Math.min(5, n));
-      }
-    }catch(_e){}
-    const packEl = kind === "gn" ? $("gnPack") : $("gmPack");
-    const pid = packEl ? (packEl.value || "classic") : "classic";
-    const pack = packsForKind(kind).find((p)=>p.id === pid) || packsForKind(kind)[0];
-    return Math.max(0, Math.min(5, Number.isFinite(pack?.anti) ? pack.anti : 2));
+    return 0;
   }
 
   // Legacy helper kept for compatibility with old code paths.
@@ -653,132 +641,11 @@ function readFileAsDataURL(file){
   // Wallpapers — per-tab. Honest catalog: 2 free SVG + 50 pack slots + 8 premium lux wallpapers = 60 total.
   const LS_WP_GLOBAL = "gmx_wp_all";
   const LS_WP_TAB_PREFIX = "gmx_wp_tab_"; // + tab name
-  const WALLPAPER_WEBP_WIRED = true;
-  const SITE_PACK_NAMES =   [
-    "Solana GM Sunrise",
-    "Bitcoin Terminal Glow",
-    "Ethereum Midnight Stack",
-    "GM Candle Grid",
-    "GN Moon Validator",
-    "Degen Order Book",
-    "WAGMI Neon Horizon",
-    "Alpha Chart Mist",
-    "Solflare Pulse",
-    "Memecoin Aurora",
-    "Onchain Relay",
-    "Block Explorer Dawn",
-    "Validator Halo",
-    "Liquidity Pool Blue",
-    "Airdrop Signal",
-    "NFT Gallery Night",
-    "CT War Room",
-    "Ledger Noir",
-    "Mint Horizon",
-    "Chainlight GM",
-    "Hyperlane Frost",
-    "Token Drift",
-    "Price Tape",
-    "Wallet Glow",
-    "GM Coffee & Charts",
-    "GN Soft Landing",
-    "Sol Purple Dawn",
-    "Green Candle Rise",
-    "Red Wick Sunset",
-    "Blue Volume Sea",
-    "Orange Degen Sun",
-    "Violet Alpha Lane",
-    "Teal Builder Flow",
-    "Pink Meme Storm",
-    "Gold Market Open",
-    "Silver Close",
-    "GM Squad Energy",
-    "GN Rest Mode",
-    "Pump.fun Haze",
-    "Raydium Glass",
-    "Jupiter Route",
-    "Phantom Wallet Light",
-    "Ledger Shield",
-    "Bridge Tunnel",
-    "L2 Rollup Sky",
-    "MEV Searchlight",
-    "Staking Yield",
-    "Governance Vote",
-    "DAO Assembly",
-    "Hackathon Night",
-    "Conference Hall",
-    "Meetup Rooftop",
-    "GM Global Clock",
-    "GN Timezone Fade",
-    "Bull Run Horizon",
-    "Bear Cave Calm",
-    "Sideways Tape",
-    "Breakout Flash"
-  ];
-  const EXT_PACK_NAMES =   [
-    "GM Laser Grid",
-    "GN Night Drive",
-    "Order Book Neon",
-    "Signal Bloom",
-    "Validator Sky",
-    "Candle Mist",
-    "Relay Tunnel",
-    "Mint Horizon",
-    "Blockwave Rain",
-    "Node Rain GM",
-    "Airdrop Haze",
-    "Hyperlane",
-    "Glass Router",
-    "Vault Glow",
-    "Neon Tape",
-    "Cold Ledger",
-    "Warp Stack",
-    "Luma Chain",
-    "Dawn Engine",
-    "Token Drift",
-    "Blue Volume",
-    "Mirror Pool",
-    "Circuit Cloud",
-    "Mint Static",
-    "Heatmap GM",
-    "Price Halo",
-    "Turbo Dusk",
-    "Late Block GN",
-    "Shard Dream",
-    "Chainlight",
-    "Mercury Lane",
-    "Peak Flow",
-    "Silent Mint",
-    "Fast Route",
-    "Prime Tape",
-    "Node Bloom",
-    "Ghost Volume",
-    "Crystal Wire",
-    "Lunar DEX",
-    "Crossfade",
-    "Vector Frost",
-    "Frame Shift",
-    "Plasma Window",
-    "Afterhours GN",
-    "Spectra Gate",
-    "Glass Depth",
-    "Hash Garden",
-    "Night Relay",
-    "Pulse Harbor",
-    "Ocean Node",
-    "Sky Cache",
-    "Gamma Field",
-    "Quiet Tape",
-    "Zero Slip",
-    "Soft Orbit",
-    "Flash Market",
-    "Aurora Book",
-    "GM Vertical Rise"
-  ];
   const SITE_WALLPAPER_FREE = [
     ["free01", "Free — Solana Waves"],
     ["free02", "Free — Solflare Glow"],
   ];
-  const SITE_WALLPAPER_PACK_COUNT = 58;
+  const SITE_WALLPAPER_PACK_COUNT = 8;
   const SITE_WALLPAPER_FREE_PACK_COUNT = 6;
   const SITE_WALLPAPER_LUX = [
     ["lux_anime_neon_alley", "Anime Neon Alley"],
@@ -790,13 +657,23 @@ function readFileAsDataURL(file){
     ["lux_onchain_spaceport", "Onchain Spaceport"],
     ["lux_solana_temple", "Solana Temple"],
   ];
-    function buildSiteWallpapers(){
+  const CRYPTO_SITE_WALL_SOURCES = [
+    "https://source.unsplash.com/1920x1080/?bitcoin,crypto,trading,neon",
+    "https://source.unsplash.com/1920x1080/?ethereum,blockchain,night,city",
+    "https://source.unsplash.com/1920x1080/?solana,crypto,gradient,technology",
+    "https://source.unsplash.com/1920x1080/?dogecoin,meme,crypto,neon",
+    "https://source.unsplash.com/1920x1080/?bonk,crypto,market,screen",
+    "https://source.unsplash.com/1920x1080/?x,finance,charts,neon",
+    "https://source.unsplash.com/1920x1080/?trading,terminal,crypto,desk",
+    "https://source.unsplash.com/1920x1080/?blockchain,network,glow,dark"
+  ];
+  function buildSiteWallpapers(){
     const out = SITE_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
     for (let i=1; i<=SITE_WALLPAPER_PACK_COUNT; i++){
       const n = String(i).padStart(3, "0");
       out.push({
         id: `v2_${n}`,
-        name: SITE_PACK_NAMES[i - 1] || `Aurora #${n}`,
+        name: `Aurora #${n}`,
         tier: i <= SITE_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
       });
     }
@@ -804,7 +681,7 @@ function readFileAsDataURL(file){
     return out;
   }
   const WALLPAPERS = buildSiteWallpapers();
-  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_refresh_20260530";
+  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_refresh_20260318";
   function migrateLegacyWallpaperSelectionOnce(){
     try{
       if (localStorage.getItem(WALLPAPER_REFRESH_MIGRATION_KEY) === "1") return;
@@ -977,7 +854,13 @@ function readFileAsDataURL(file){
   function extWallpaperAssetPath(id){
     const norm = normalizeExtWallpaperIdLocal(id);
     if (!norm) return "";
-    if (norm.startsWith("extv3_")) return norm + ".webp";
+    if (norm.startsWith("extv3_")) {
+      const lux = EXT_WALLPAPER_LUX.map(([v])=>String(v || "")).filter(Boolean);
+      const num = Math.max(1, Number(norm.slice(6)) || 1);
+      const mapped = lux.length ? lux[(num - 1) % lux.length] : norm;
+      if (mapped.startsWith("lux_ext_")) return mapped + ".svg";
+      return norm + ".webp";
+    }
     return norm + ".svg";
   }
 
@@ -988,7 +871,7 @@ function readFileAsDataURL(file){
       try{ return localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("extv3_")) return `/assets/extbg/${norm}.webp?v=${ASSET_REV}`;
+    if (norm.startsWith("extv3_")) return extPackWallpaperDataUri(norm, false);
     const p = extWallpaperAssetPath(norm);
     return p ? `/assets/extbg/${p}?v=${ASSET_REV}` : "";
   }
@@ -1000,7 +883,7 @@ function readFileAsDataURL(file){
       try{ return localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("extv3_")) return `/assets/extbg/thumbs/${norm}.webp?v=${ASSET_REV}`;
+    if (norm.startsWith("extv3_")) return extPackWallpaperDataUri(norm, true);
     return `/assets/extbg/${norm}.svg?v=${ASSET_REV}`;
   }
   try{
@@ -1041,7 +924,13 @@ function readFileAsDataURL(file){
 
   function wallpaperAssetPath(id){
     if (!id) return "";
-    if (typeof id === "string" && id.startsWith("v2_")) return id + ".webp";
+    if (typeof id === "string" && id.startsWith("v2_")) {
+      const lux = SITE_WALLPAPER_LUX.map(([v])=>String(v || "")).filter(Boolean);
+      const num = Math.max(1, Number(String(id).slice(3)) || 1);
+      const mapped = lux.length ? lux[(num - 1) % lux.length] : id;
+      if (mapped.startsWith("lux_")) return mapped + ".svg";
+      return id + ".webp";
+    }
     return String(id) + ".svg";
   }
 
@@ -1052,7 +941,7 @@ function readFileAsDataURL(file){
       try{ return localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("v2_")) return `/assets/wallpapers/${norm}.webp?v=${ASSET_REV}`;
+    if (norm.startsWith("v2_")) return sitePackWallpaperDataUri(norm, false);
     const p = wallpaperAssetPath(norm);
     return p ? `/assets/wallpapers/${p}?v=${ASSET_REV}` : "";
   }
@@ -1064,7 +953,7 @@ function readFileAsDataURL(file){
       try{ return localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("v2_")) return `/assets/wallpapers/thumbs/${norm}.webp?v=${ASSET_REV}`;
+    if (norm.startsWith("v2_")) return sitePackWallpaperDataUri(norm, true);
     return `/assets/wallpapers/${norm}.svg?v=${ASSET_REV}`;
   }
 
@@ -1490,7 +1379,7 @@ function renderWallpaperUI(){
     ["ext_free_01", "Free 01"],
     ["ext_free_02", "Free 02"],
   ];
-  const EXT_WALLPAPER_PACK_COUNT = 58;
+  const EXT_WALLPAPER_PACK_COUNT = 50;
   const EXT_WALLPAPER_FREE_PACK_COUNT = 4;
   const EXT_WALLPAPER_LUX = [
     ["lux_ext_anime_neon_alley", "Anime Neon Alley"],
@@ -1502,12 +1391,22 @@ function renderWallpaperUI(){
     ["lux_ext_onchain_spaceport", "Onchain Spaceport"],
     ["lux_ext_solana_temple", "Solana Temple"],
   ];
-    function buildExtWallpapers(){
+  const CRYPTO_EXT_WALL_SOURCES = [
+    "https://source.unsplash.com/1080x1920/?bitcoin,crypto,vertical,neon",
+    "https://source.unsplash.com/1080x1920/?ethereum,blockchain,vertical,dark",
+    "https://source.unsplash.com/1080x1920/?solana,crypto,vertical,gradient",
+    "https://source.unsplash.com/1080x1920/?dogecoin,meme,crypto,vertical",
+    "https://source.unsplash.com/1080x1920/?bonk,crypto,vertical,market",
+    "https://source.unsplash.com/1080x1920/?x,finance,vertical,chart",
+    "https://source.unsplash.com/1080x1920/?trading,terminal,vertical",
+    "https://source.unsplash.com/1080x1920/?blockchain,network,vertical"
+  ];
+  function buildExtWallpapers(){
     const out = EXT_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
     for (let i=1; i<=EXT_WALLPAPER_PACK_COUNT; i++){
       out.push({
         id: `extv3_${String(i).padStart(2, "0")}`,
-        name: EXT_PACK_NAMES[i - 1] || `Backdrop ${i}`,
+        name: `Aurora ${i}`,
         tier: i <= EXT_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
       });
     }
@@ -1517,7 +1416,7 @@ function renderWallpaperUI(){
   const EXT_WALLPAPERS = buildExtWallpapers();
   function migrateLegacyExtWallpaperSelectionOnce(){
     try{
-      const done = "gmx_ext_wallpaper_refresh_20260530";
+      const done = "gmx_ext_wallpaper_refresh_20260318";
       if (localStorage.getItem(done) === "1") return;
       // keep IDs stable; visual refresh now happens in URL resolver
       localStorage.setItem(done, "1");
@@ -1542,34 +1441,25 @@ function renderWallpaperUI(){
   ];
 
 
-  const GM_PACKS = [
-    { id:"classic", name:"Morning Balanced", pro:false, style:"classic", mode:null, anti:2, clean:true },
-    { id:"king",    name:"Market Read AM",   pro:false, style:"alpha",   mode:"mid", anti:2, clean:true },
-    { id:"degen",   name:"CT Morning",       pro:true,  style:"degen",   mode:"mid", anti:4, clean:true },
-    { id:"minimal", name:"Tight GM",         pro:true,  style:"minimal", mode:"min", anti:4, clean:true },
-    { id:"builder", name:"Builder AM",       pro:true,  style:"builder", mode:"mid", anti:4, clean:true },
-    { id:"kind",    name:"Warm Morning",     pro:true,  style:"calm",    mode:"mid", anti:4, clean:true },
-    { id:"aggro",   name:"Alpha Push AM",    pro:true,  style:"alpha",   mode:"max", anti:3, clean:true },
-  ];
-  const GN_PACKS = [
-    { id:"classic", name:"Night Balanced",   pro:false, style:"classic", mode:null, anti:2, clean:true },
-    { id:"king",    name:"Market Wind-down", pro:false, style:"alpha",   mode:"mid", anti:2, clean:true },
-    { id:"degen",   name:"CT Night",         pro:true,  style:"degen",   mode:"mid", anti:4, clean:true },
-    { id:"minimal", name:"Tight GN",         pro:true,  style:"minimal", mode:"min", anti:4, clean:true },
-    { id:"builder", name:"Builder Close",    pro:true,  style:"builder", mode:"mid", anti:4, clean:true },
-    { id:"kind",    name:"Soft Close",       pro:true,  style:"calm",    mode:"mid", anti:4, clean:true },
-    { id:"aggro",   name:"Alpha Close",      pro:true,  style:"alpha",   mode:"max", anti:3, clean:true },
+  const PACKS = [
+    { id:"classic", name:"Balanced",         pro:false, style:"classic", mode:null, anti:2, clean:true  },
+    { id:"king",    name:"Market Read",      pro:false, style:"alpha",   mode:"mid", anti:2, clean:true  },
+    { id:"degen",   name:"CT Market",        pro:true,  style:"degen",   mode:"mid", anti:4, clean:true  },
+    { id:"minimal", name:"Tight Minimal",    pro:true,  style:"minimal", mode:"min", anti:4, clean:true  },
+    { id:"builder", name:"Builder Clean",    pro:true,  style:"builder", mode:"mid", anti:4, clean:true  },
+    { id:"kind",    name:"Soft Close",       pro:true,  style:"calm",    mode:"mid", anti:4, clean:true  },
+    { id:"aggro",   name:"Alpha Push",       pro:true,  style:"alpha",   mode:"max", anti:3, clean:true  },
   ];
 
-  function unlockedPacksCount(){ return unlockedCountByRefs(GM_PACKS.length, FREE_VISIBLE_PACKS); }
+  function unlockedPacksCount(){ return unlockedCountByRefs(PACKS.length, FREE_VISIBLE_PACKS); }
 
   function fillPacks(){
     const unlocked = unlockedPacksCount();
-    const fill = (sel, lsKey, packs)=>{
+    const fill = (sel, lsKey)=>{
       if (!sel) return;
       const prev = localStorage.getItem(lsKey) || "classic";
       sel.innerHTML = "";
-      packs.forEach((p, idx)=>{
+      PACKS.forEach((p, idx)=>{
         const o = document.createElement("option");
         o.value = p.id;
         const locked = (!isPro() && idx >= unlocked);
@@ -1581,8 +1471,8 @@ function renderWallpaperUI(){
       if ([...sel.options].some(o=>o.value===prev && !o.disabled)) sel.value = prev;
       else sel.value = "classic";
     };
-    fill($("gmPack"), LS_GM_PACK, GM_PACKS);
-    fill($("gnPack"), LS_GN_PACK, GN_PACKS);
+    fill($("gmPack"), LS_GM_PACK);
+    fill($("gnPack"), LS_GN_PACK);
   }
 
   function unlockedThemesCount(){ return unlockedCountByRefs(THEMES.length, FREE_VISIBLE_THEMES); }
@@ -3259,9 +3149,9 @@ async function doBestServer(kind){
   const lang = currentLang(kind);
   let style = styleEl ? styleEl.value : "classic";
   const packId = packEl ? (packEl.value || "classic") : "classic";
-  const packIdx = packsForKind(kind).findIndex(p=>p.id===packId);
+  const packIdx = PACKS.findIndex(p=>p.id===packId);
   const packLocked = (!isPro() && packIdx >= unlockedPacksCount());
-  const pack = packsForKind(kind).find(p=>p.id===packId) || packsForKind(kind)[0];
+  const pack = PACKS.find(p=>p.id===packId) || PACKS[0];
   if (!packLocked && pack && pack.style) style = pack.style;
 
   const strength = getAntiStrength(kind);
@@ -3849,28 +3739,25 @@ async function generate(kind, count){
     const styleEl = kind==="gm" ? $("gmStyle") : $("gnStyle");
     const packEl  = kind==="gm" ? $("gmPack") : $("gnPack");
 
-    let mode = modeEl ? modeEl.value : "mid";
+    const mode = modeEl ? modeEl.value : "mid";
     const lang = currentLang(kind);
 
     let style = styleEl ? styleEl.value : "classic";
     const packId = packEl ? (packEl.value || "classic") : "classic";
-    const packIdx = packsForKind(kind).findIndex(p=>p.id===packId);
+    const packIdx = PACKS.findIndex(p=>p.id===packId);
     const packLocked = (!isPro() && packIdx >= unlockedPacksCount());
-    const pack = packsForKind(kind).find(p=>p.id===packId) || packsForKind(kind)[0];
+    const pack = PACKS.find(p=>p.id===packId) || PACKS[0];
 
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
 
     const strength = getAntiStrength(kind);
-    const antiN = antiWindow(strength);
+    const antiN = 0;
     const autoClean = (count <= 1) ? getCleanFillEnabled(kind) : false;
 
     if ((kind==="gm" ? gmView : gnView) === "lang") ensureIndexed(kind, lang);
 
-    // Pack influences style + length mode for generation.
-    if (!packLocked && pack) {
-      if (pack.style) style = pack.style;
-      if (pack.mode) mode = pack.mode;
-    }
+    // Pack influences the effective style for generation (without locking manual style).
+    if (!packLocked && pack && pack.style) style = pack.style;
 
     const keyActive = activeKey(kind);
     const keyGlobal = getGlobalKey(kind);
@@ -3980,7 +3867,7 @@ if (effCount <= 0){
           attempts++;
           const missing = effCount - accepted.length;
           const reqCount = Math.min(140, missing + buffer);
-          const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}&count=${reqCount}`, "GET", null, { signal: ctrl.signal, timeoutMs: 12000 });
+          const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=0&count=${reqCount}`, "GET", null, { signal: ctrl.signal, timeoutMs: 12000 });
           takeLines(bulk.list || []);
           if (!Array.isArray(bulk.list) || bulk.list.length === 0) break;
         }
@@ -5130,11 +5017,6 @@ if (src){
   async function loadPlans(){
     try{
       const j = await api("/api/billing/plans");
-      if (j && j.ok === false && j.error === "billing_receiver_not_configured"){
-        const msg = $("w_msg");
-        if (msg) msg.innerHTML = `<span class="warn">${escapeHtml(t("billing_receiver_missing") || "Payments are temporarily unavailable (server wallet not configured).")}</span>`;
-        return;
-      }
       BILLING = j || BILLING;
       const plans = BILLING?.plans || [];
       if (selectedPlanKey && !plans.some(p=>p.key === selectedPlanKey)){
@@ -5446,29 +5328,27 @@ if (src){
     const list = $("w_activity_list");
     const msg = $("w_activity_msg");
     if (msg) msg.textContent = "";
-    if (list) list.innerHTML = `<div class="muted">${escapeHtml(t("act_loading") || "Loading…")}</div>`;
+    if (list) list.innerHTML = '<div class="muted">Loading...</div>';
     try{
       if (!getHandle()){
-        if (list) list.innerHTML = `<div class="muted">${escapeHtml(t("act_sign_in") || "Sign in to see activity.")}</div>`;
+        if (list) list.innerHTML = '<div class="muted">Sign in to see activity.</div>';
         return;
       }
       const j = await api('/api/activity?limit=50');
       const items = Array.isArray(j.items) ? j.items : [];
       if (!items.length){
-        if (list) list.innerHTML = `<div class="muted">${escapeHtml(t("act_empty") || "No activity yet.")}</div>`;
+        if (list) list.innerHTML = '<div class="muted">No activity yet.</div>';
         return;
       }
-      const label = (type)=>{
-        const x = String(type||'');
-        const map = {
-          payment_verified: t('act_payment_verified'),
-          billing_intent_created: t('act_billing_intent'),
-          referral_confirmed: t('act_referral_confirmed'),
-          referral_used: t('act_referral_used'),
-          code_redeemed: t('act_code_redeemed'),
-          feature_flag_set: t('act_feature_flag'),
-        };
-        return map[x] || x.replace(/_/g,' ');
+      const label = (t)=>{
+        const x = String(t||'');
+        if (x === 'payment_verified') return 'Payment verified';
+        if (x === 'billing_intent_created') return 'Checkout started';
+        if (x === 'referral_confirmed') return 'Referral confirmed';
+        if (x === 'referral_used') return 'Referral used';
+        if (x === 'code_redeemed') return 'Promo code redeemed';
+        if (x === 'feature_flag_set') return 'Feature flag changed';
+        return x.replace(/_/g,' ');
       };
       const rows = items.slice(0, 50).map(it=>{
         const meta = it && typeof it.meta === 'object' && it.meta ? it.meta : null;
@@ -6097,15 +5977,15 @@ function getReferralUiCopy(_lang){
     items,
     promoterTitle: t("ref_promoter_details") || fallback.promoterTitle,
     baseDaily: t("ref_daily_limit_title") || fallback.baseDaily,
-    unlocksNow: t('ref_unlocks_now') || fallback.unlocksNow,
-    nextUnlock: t('ref_next_unlock') || fallback.nextUnlock,
-    allUnlocked: t('ref_all_unlocked') || fallback.allUnlocked,
+    unlocksNow: fallback.unlocksNow,
+    nextUnlock: fallback.nextUnlock,
+    allUnlocked: fallback.allUnlocked,
     antiAbuse: t("ref_abuse_note") || fallback.antiAbuse,
     confirmed: t("ref_k_confirmed") || fallback.confirmed,
     active: t("ref_k_active") || fallback.active,
     eligible: t("ref_k_eligible") || fallback.eligible,
     legacy: t("ref_k_legacy") || fallback.legacy,
-    clicks: t('ref_clicks') || fallback.clicks,
+    clicks: fallback.clicks,
     bgSlots: fallback.bgSlots,
     saveCap: fallback.saveCap,
     unlimited: fallback.unlimited,
@@ -6118,7 +5998,7 @@ function getReferralUiCopy(_lang){
     leaderboardLoading: t("r_loading") || fallback.leaderboardLoading,
     leaderboardEmpty: t("lb_empty") || fallback.leaderboardEmpty,
     youLabel: t("lb_you") || fallback.youLabel,
-    rulesLabel: t('ref_rules') || fallback.rulesLabel,
+    rulesLabel: fallback.rulesLabel,
     invitedNote: t("r_invited_note") || fallback.invitedNote
   };
 }
@@ -6407,6 +6287,12 @@ function closeLangMenu(){
   }catch{}
 
   applyLang();
+  try{
+    const gmModeEl = $("gmMode");
+    const gnModeEl = $("gnMode");
+    if (gmModeEl) gmModeEl.addEventListener("change", ()=>{ try{ syncModePanelCopy(); }catch{} });
+    if (gnModeEl) gnModeEl.addEventListener("change", ()=>{ try{ syncModePanelCopy(); }catch{} });
+  }catch{}
   try{ syncBestModeUi(); }catch(_e){}
   try{ syncCleanFillUi(); }catch(_e){}
   pruneLegacyAdminPanels();
@@ -6783,9 +6669,9 @@ function closeLangMenu(){
     const lang = currentLang(kind);
     let style = styleEl ? styleEl.value : "classic";
     const packId = packEl ? (packEl.value || "classic") : "classic";
-    const packIdx = packsForKind(kind).findIndex(p=>p.id===packId);
+    const packIdx = PACKS.findIndex(p=>p.id===packId);
     const packLocked = (!isPro() && packIdx >= unlockedPacksCount());
-    const pack = packsForKind(kind).find(p=>p.id===packId) || packsForKind(kind)[0];
+    const pack = PACKS.find(p=>p.id===packId) || PACKS[0];
     if (!packLocked && pack && pack.style) style = pack.style;
 
     const before = readKey(key);
@@ -6814,7 +6700,7 @@ function closeLangMenu(){
       attempts++;
       const missing = desiredTotal - cur.length;
       const reqCount = Math.min(180, missing + 50 + (stalled * 20));
-      const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}&count=${reqCount}`, "GET", null, { signal: opts?.signal, timeoutMs: 12000 });
+      const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=0&count=${reqCount}`, "GET", null, { signal: opts?.signal, timeoutMs: 12000 });
       const list = Array.isArray(bulk?.list) ? bulk.list : [];
       if (!list.length) {
         stalled++;
@@ -7148,22 +7034,20 @@ function cleanupKeyLines(lines){
       if (btn){
         btn.addEventListener("click", ()=>{
           const pid = sel ? (sel.value || "classic") : "classic";
-          const packs = packsForKind(kind);
-          const p = packs.find(x=>x.id===pid) || packs[0];
-          const idx = packs.findIndex(x=>x.id===pid);
+          const p = PACKS.find(x=>x.id===pid) || PACKS[0];
+          const idx = PACKS.findIndex(x=>x.id===pid);
           const locked = (!isPro() && idx >= unlockedPacksCount());
           if (locked){
-            if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml(t("locked_pack") || "Pack is locked. Upgrade to Pro or unlock via referrals.")}</span>`;
+            if (msgEl) msgEl.innerHTML = `<span class="warn">Pack is locked. Upgrade to Pro or unlock via referrals.</span>`;
             return;
           }
+          // apply preset defaults
           const styleSel = kind==="gm" ? $("gmStyle") : $("gnStyle");
           const modeSel  = kind==="gm" ? $("gmMode")  : $("gnMode");
           if (styleSel && p.style) styleSel.value = p.style;
           if (modeSel && p.mode) modeSel.value = p.mode;
-          if (Number.isFinite(p.anti)) {
-            try{ localStorage.setItem(lsKeyAnti(kind), String(Math.max(0, Math.min(5, p.anti)))); }catch(_e){}
-          }
-          if (msgEl) msgEl.innerHTML = `<span class="ok">${escapeHtml(t("pack_applied") || "Applied pack")}: ${escapeHtml(p.name)}</span>`;
+
+          if (msgEl) msgEl.innerHTML = `<span class="ok">Applied pack: ${escapeHtml(p.name)}</span>`;
           logEvent("pack_apply", { kind, pack: pid });
         });
       }
