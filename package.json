@@ -24,8 +24,9 @@
     "audit:i18n:strict": "node tools/i18n_audit.js --strict",
     "audit:logic": "node tools/logic-audit.mjs --strict",
     "audit:runtime": "node tools/runtime_audit.mjs --strict",
-    "patch:app": "node tools/patch-app-refactor.mjs && node tools/patch-app-round2.mjs",
-    "patch:ext": "node tools/patch-extension-popup.mjs"
+    "build:site": "node tools/build-site-app.mjs && node tools/sync-site-public.mjs",
+    "sync:site": "node tools/sync-site-public.mjs",
+    "audit:all": "npm run audit:logic && npm run audit:runtime"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.97.0",

@@ -127,7 +127,7 @@ function findFirst(relPrefix, pattern) {
 const staleChecks = [
   ["frontend legacy body labels", "frontend/src/legacy/legacyBody.html", ['id="promo_k_legacy">Legacy<', 'id="r_col_inserts">Inserts<']],
   ["frontend arcade redirect copy", "frontend/src/pages/ArcadePage.tsx", ['approved arcade library']],
-  ["bridge legacy bundle labels", findFirst("public/bridge/assets", /^app-shell-.*\.js$/), ['promo_k_legacy">Legacy<', 'r_col_inserts">Inserts<']],
+  ["bridge legacy bundle labels", findFirst("public/bridge/assets", /^legacy-shell-.*\.js$/), ['promo_k_legacy">Legacy<', 'r_col_inserts">Inserts<']],
   ["bridge arcade bundle copy", findFirst("public/bridge/assets", /^ArcadePage-.*\.js$/), ['approved arcade library']],
 ];
 
@@ -146,7 +146,8 @@ for (const [label, rel, patterns] of staleChecks) {
 }
 
 for (const group of [
-  ["app parity", ["public/app.js", "public/bridge/app.js", "frontend/public/app.js"]],
+  ["app source", ["public/app.js"]],
+  ["app mirror", ["frontend/public/app.js"]],
   ["mode parity", ["public/mode.js", "public/bridge/mode.js", "frontend/public/mode.js"]],
   ["arcade parity", ["public/arcade.js", "public/bridge/arcade.js", "frontend/public/arcade.js"]],
   ["site i18n parity", ["public/i18n/siteI18n.js", "public/bridge/i18n/siteI18n.js", "frontend/public/i18n/siteI18n.js"]],

@@ -1260,6 +1260,7 @@ function renderWallpaperUI(){
     if (wrap) wrap.style.display = "none";
     if (box) box.innerHTML = "";
   }
+
   // ----- Themes + Writing Styles (gating) -----
 // Free: first 10 items
 // Referrals: unlock 1 item at 10 refs, then +1 per +5 refs
@@ -4324,6 +4325,7 @@ async function loadPredictionSignals(opts){
     if (status) status.textContent = msg;
   }
 }
+
 // ----- Referrals -----
 
   function escHtml(s){
