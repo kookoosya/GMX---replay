@@ -14,7 +14,7 @@ const ALERT_KEYS = {
   enabled: "gmx_market_alerts_enabled_v1",
   interval: "gmx_market_alerts_interval_v1",
 };
-const ASSET_REV = "20260310a";
+const ASSET_REV = "20260530a";
 const LEGACY_KEYS = {
   base: "apiBase",
   handle: "handle",
@@ -52,7 +52,7 @@ const EXT_WALLPAPER_OPTIONS = (()=>{
   const out = [...EXT_FEATURED_WALLPAPERS];
   for (let i=1; i<=57; i++){
     const n = String(i).padStart(2,'0');
-    out.push({ id: `extv3_${n}`, name: ['Laser Grid', 'Night Drive', 'Order Book', 'Signal Bloom', 'Validator Sky', 'Candle Mist', 'Relay Tunnel', 'Mint Horizon', 'Blockwave', 'Node Rain', 'Airdrop Haze', 'Hyperlane', 'Glass Router', 'Vault Glow', 'Neon Tape', 'Cold Ledger', 'Warp Stack', 'Luma Chain', 'Dawn Engine', 'Token Drift', 'Blue Volume', 'Mirror Pool', 'Circuit Cloud', 'Mint Static', 'Heatmap', 'Price Halo', 'Turbo Dusk', 'Late Block', 'Shard Dream', 'Chainlight', 'Mercury Lane', 'Peak Flow', 'Silent Mint', 'Fast Route', 'Prime Tape', 'Node Bloom', 'Ghost Volume', 'Crystal Wire', 'Lunar DEX', 'Crossfade', 'Vector Frost', 'Frame Shift', 'Plasma Window', 'Afterhours', 'Spectra Gate', 'Glass Depth', 'Hash Garden', 'Night Relay', 'Pulse Harbor', 'Ocean Node', 'Sky Cache', 'Gamma Field', 'Quiet Tape', 'Zero Slip', 'Soft Orbit', 'Flash Market', 'Aurora Book'][i-1] || `Backdrop ${n}` });
+        out.push({ id: `extv3_${n}`, name: ['GM Laser Grid\', \'GN Night Drive\', \'Order Book Neon\', \'Signal Bloom\', \'Validator Sky\', \'Candle Mist\', \'Relay Tunnel\', \'Mint Horizon\', \'Blockwave Rain\', \'Node Rain GM\', \'Airdrop Haze\', \'Hyperlane\', \'Glass Router\', \'Vault Glow\', \'Neon Tape\', \'Cold Ledger\', \'Warp Stack\', \'Luma Chain\', \'Dawn Engine\', \'Token Drift\', \'Blue Volume\', \'Mirror Pool\', \'Circuit Cloud\', \'Mint Static\', \'Heatmap GM\', \'Price Halo\', \'Turbo Dusk\', \'Late Block GN\', \'Shard Dream\', \'Chainlight\', \'Mercury Lane\', \'Peak Flow\', \'Silent Mint\', \'Fast Route\', \'Prime Tape\', \'Node Bloom\', \'Ghost Volume\', \'Crystal Wire\', \'Lunar DEX\', \'Crossfade\', \'Vector Frost\', \'Frame Shift\', \'Plasma Window\', \'Afterhours GN\', \'Spectra Gate\', \'Glass Depth\', \'Hash Garden\', \'Night Relay\', \'Pulse Harbor\', \'Ocean Node\', \'Sky Cache\', \'Gamma Field\', \'Quiet Tape\', \'Zero Slip\', \'Soft Orbit\', \'Flash Market\', \'Aurora Book'][i-1] || `Backdrop ${n}` });
   }
   return out;
 })();

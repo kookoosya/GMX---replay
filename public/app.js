@@ -33,7 +33,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260310a";
+const ASSET_REV = "20260530a";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -653,11 +653,132 @@ function readFileAsDataURL(file){
   // Wallpapers — per-tab. Honest catalog: 2 free SVG + 50 pack slots + 8 premium lux wallpapers = 60 total.
   const LS_WP_GLOBAL = "gmx_wp_all";
   const LS_WP_TAB_PREFIX = "gmx_wp_tab_"; // + tab name
+  const WALLPAPER_WEBP_WIRED = true;
+  const SITE_PACK_NAMES =   [
+    "Solana GM Sunrise",
+    "Bitcoin Terminal Glow",
+    "Ethereum Midnight Stack",
+    "GM Candle Grid",
+    "GN Moon Validator",
+    "Degen Order Book",
+    "WAGMI Neon Horizon",
+    "Alpha Chart Mist",
+    "Solflare Pulse",
+    "Memecoin Aurora",
+    "Onchain Relay",
+    "Block Explorer Dawn",
+    "Validator Halo",
+    "Liquidity Pool Blue",
+    "Airdrop Signal",
+    "NFT Gallery Night",
+    "CT War Room",
+    "Ledger Noir",
+    "Mint Horizon",
+    "Chainlight GM",
+    "Hyperlane Frost",
+    "Token Drift",
+    "Price Tape",
+    "Wallet Glow",
+    "GM Coffee & Charts",
+    "GN Soft Landing",
+    "Sol Purple Dawn",
+    "Green Candle Rise",
+    "Red Wick Sunset",
+    "Blue Volume Sea",
+    "Orange Degen Sun",
+    "Violet Alpha Lane",
+    "Teal Builder Flow",
+    "Pink Meme Storm",
+    "Gold Market Open",
+    "Silver Close",
+    "GM Squad Energy",
+    "GN Rest Mode",
+    "Pump.fun Haze",
+    "Raydium Glass",
+    "Jupiter Route",
+    "Phantom Wallet Light",
+    "Ledger Shield",
+    "Bridge Tunnel",
+    "L2 Rollup Sky",
+    "MEV Searchlight",
+    "Staking Yield",
+    "Governance Vote",
+    "DAO Assembly",
+    "Hackathon Night",
+    "Conference Hall",
+    "Meetup Rooftop",
+    "GM Global Clock",
+    "GN Timezone Fade",
+    "Bull Run Horizon",
+    "Bear Cave Calm",
+    "Sideways Tape",
+    "Breakout Flash"
+  ];
+  const EXT_PACK_NAMES =   [
+    "GM Laser Grid",
+    "GN Night Drive",
+    "Order Book Neon",
+    "Signal Bloom",
+    "Validator Sky",
+    "Candle Mist",
+    "Relay Tunnel",
+    "Mint Horizon",
+    "Blockwave Rain",
+    "Node Rain GM",
+    "Airdrop Haze",
+    "Hyperlane",
+    "Glass Router",
+    "Vault Glow",
+    "Neon Tape",
+    "Cold Ledger",
+    "Warp Stack",
+    "Luma Chain",
+    "Dawn Engine",
+    "Token Drift",
+    "Blue Volume",
+    "Mirror Pool",
+    "Circuit Cloud",
+    "Mint Static",
+    "Heatmap GM",
+    "Price Halo",
+    "Turbo Dusk",
+    "Late Block GN",
+    "Shard Dream",
+    "Chainlight",
+    "Mercury Lane",
+    "Peak Flow",
+    "Silent Mint",
+    "Fast Route",
+    "Prime Tape",
+    "Node Bloom",
+    "Ghost Volume",
+    "Crystal Wire",
+    "Lunar DEX",
+    "Crossfade",
+    "Vector Frost",
+    "Frame Shift",
+    "Plasma Window",
+    "Afterhours GN",
+    "Spectra Gate",
+    "Glass Depth",
+    "Hash Garden",
+    "Night Relay",
+    "Pulse Harbor",
+    "Ocean Node",
+    "Sky Cache",
+    "Gamma Field",
+    "Quiet Tape",
+    "Zero Slip",
+    "Soft Orbit",
+    "Flash Market",
+    "Aurora Book",
+    "GM Vertical Rise"
+  ];
   const SITE_WALLPAPER_FREE = [
     ["free01", "Free — Solana Waves"],
     ["free02", "Free — Solflare Glow"],
   ];
-  const SITE_WALLPAPER_PACK_COUNT = 8;
+  const SITE_WALLPAPER_PACK_COUNT = 58;
   const SITE_WALLPAPER_FREE_PACK_COUNT = 6;
   const SITE_WALLPAPER_LUX = [
     ["lux_anime_neon_alley", "Anime Neon Alley"],
@@ -669,23 +790,13 @@ function readFileAsDataURL(file){
     ["lux_onchain_spaceport", "Onchain Spaceport"],
     ["lux_solana_temple", "Solana Temple"],
   ];
-  const CRYPTO_SITE_WALL_SOURCES = [
-    "https://source.unsplash.com/1920x1080/?bitcoin,crypto,trading,neon",
-    "https://source.unsplash.com/1920x1080/?ethereum,blockchain,night,city",
-    "https://source.unsplash.com/1920x1080/?solana,crypto,gradient,technology",
-    "https://source.unsplash.com/1920x1080/?dogecoin,meme,crypto,neon",
-    "https://source.unsplash.com/1920x1080/?bonk,crypto,market,screen",
-    "https://source.unsplash.com/1920x1080/?x,finance,charts,neon",
-    "https://source.unsplash.com/1920x1080/?trading,terminal,crypto,desk",
-    "https://source.unsplash.com/1920x1080/?blockchain,network,glow,dark"
-  ];
-  function buildSiteWallpapers(){
+    function buildSiteWallpapers(){
     const out = SITE_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
     for (let i=1; i<=SITE_WALLPAPER_PACK_COUNT; i++){
       const n = String(i).padStart(3, "0");
       out.push({
         id: `v2_${n}`,
-        name: `Aurora #${n}`,
+        name: SITE_PACK_NAMES[i - 1] || `Aurora #${n}`,
         tier: i <= SITE_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
       });
     }
@@ -693,7 +804,7 @@ function readFileAsDataURL(file){
     return out;
   }
   const WALLPAPERS = buildSiteWallpapers();
-  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_refresh_20260318";
+  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_refresh_20260530";
   function migrateLegacyWallpaperSelectionOnce(){
     try{
       if (localStorage.getItem(WALLPAPER_REFRESH_MIGRATION_KEY) === "1") return;
@@ -866,13 +977,7 @@ function readFileAsDataURL(file){
   function extWallpaperAssetPath(id){
     const norm = normalizeExtWallpaperIdLocal(id);
     if (!norm) return "";
-    if (norm.startsWith("extv3_")) {
-      const lux = EXT_WALLPAPER_LUX.map(([v])=>String(v || "")).filter(Boolean);
-      const num = Math.max(1, Number(norm.slice(6)) || 1);
-      const mapped = lux.length ? lux[(num - 1) % lux.length] : norm;
-      if (mapped.startsWith("lux_ext_")) return mapped + ".svg";
-      return norm + ".webp";
-    }
+    if (norm.startsWith("extv3_")) return norm + ".webp";
     return norm + ".svg";
   }
 
@@ -883,7 +988,7 @@ function readFileAsDataURL(file){
       try{ return localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("extv3_")) return extPackWallpaperDataUri(norm, false);
+    if (norm.startsWith("extv3_")) return `/assets/extbg/${norm}.webp?v=${ASSET_REV}`;
     const p = extWallpaperAssetPath(norm);
     return p ? `/assets/extbg/${p}?v=${ASSET_REV}` : "";
   }
@@ -895,7 +1000,7 @@ function readFileAsDataURL(file){
       try{ return localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("extv3_")) return extPackWallpaperDataUri(norm, true);
+    if (norm.startsWith("extv3_")) return `/assets/extbg/thumbs/${norm}.webp?v=${ASSET_REV}`;
     return `/assets/extbg/${norm}.svg?v=${ASSET_REV}`;
   }
   try{
@@ -936,13 +1041,7 @@ function readFileAsDataURL(file){
 
   function wallpaperAssetPath(id){
     if (!id) return "";
-    if (typeof id === "string" && id.startsWith("v2_")) {
-      const lux = SITE_WALLPAPER_LUX.map(([v])=>String(v || "")).filter(Boolean);
-      const num = Math.max(1, Number(String(id).slice(3)) || 1);
-      const mapped = lux.length ? lux[(num - 1) % lux.length] : id;
-      if (mapped.startsWith("lux_")) return mapped + ".svg";
-      return id + ".webp";
-    }
+    if (typeof id === "string" && id.startsWith("v2_")) return id + ".webp";
     return String(id) + ".svg";
   }
 
@@ -953,7 +1052,7 @@ function readFileAsDataURL(file){
       try{ return localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("v2_")) return sitePackWallpaperDataUri(norm, false);
+    if (norm.startsWith("v2_")) return `/assets/wallpapers/${norm}.webp?v=${ASSET_REV}`;
     const p = wallpaperAssetPath(norm);
     return p ? `/assets/wallpapers/${p}?v=${ASSET_REV}` : "";
   }
@@ -965,7 +1064,7 @@ function readFileAsDataURL(file){
       try{ return localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("v2_")) return sitePackWallpaperDataUri(norm, true);
+    if (norm.startsWith("v2_")) return `/assets/wallpapers/thumbs/${norm}.webp?v=${ASSET_REV}`;
     return `/assets/wallpapers/${norm}.svg?v=${ASSET_REV}`;
   }
 
@@ -1391,7 +1490,7 @@ function renderWallpaperUI(){
     ["ext_free_01", "Free 01"],
     ["ext_free_02", "Free 02"],
   ];
-  const EXT_WALLPAPER_PACK_COUNT = 50;
+  const EXT_WALLPAPER_PACK_COUNT = 58;
   const EXT_WALLPAPER_FREE_PACK_COUNT = 4;
   const EXT_WALLPAPER_LUX = [
     ["lux_ext_anime_neon_alley", "Anime Neon Alley"],
@@ -1403,22 +1502,12 @@ function renderWallpaperUI(){
     ["lux_ext_onchain_spaceport", "Onchain Spaceport"],
     ["lux_ext_solana_temple", "Solana Temple"],
   ];
-  const CRYPTO_EXT_WALL_SOURCES = [
-    "https://source.unsplash.com/1080x1920/?bitcoin,crypto,vertical,neon",
-    "https://source.unsplash.com/1080x1920/?ethereum,blockchain,vertical,dark",
-    "https://source.unsplash.com/1080x1920/?solana,crypto,vertical,gradient",
-    "https://source.unsplash.com/1080x1920/?dogecoin,meme,crypto,vertical",
-    "https://source.unsplash.com/1080x1920/?bonk,crypto,vertical,market",
-    "https://source.unsplash.com/1080x1920/?x,finance,vertical,chart",
-    "https://source.unsplash.com/1080x1920/?trading,terminal,vertical",
-    "https://source.unsplash.com/1080x1920/?blockchain,network,vertical"
-  ];
-  function buildExtWallpapers(){
+    function buildExtWallpapers(){
     const out = EXT_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
     for (let i=1; i<=EXT_WALLPAPER_PACK_COUNT; i++){
       out.push({
         id: `extv3_${String(i).padStart(2, "0")}`,
-        name: `Aurora ${i}`,
+        name: EXT_PACK_NAMES[i - 1] || `Backdrop ${i}`,
         tier: i <= EXT_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
       });
     }
@@ -1428,7 +1517,7 @@ function renderWallpaperUI(){
   const EXT_WALLPAPERS = buildExtWallpapers();
   function migrateLegacyExtWallpaperSelectionOnce(){
     try{
-      const done = "gmx_ext_wallpaper_refresh_20260318";
+      const done = "gmx_ext_wallpaper_refresh_20260530";
       if (localStorage.getItem(done) === "1") return;
       // keep IDs stable; visual refresh now happens in URL resolver
       localStorage.setItem(done, "1");

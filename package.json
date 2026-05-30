@@ -13,8 +13,7 @@
     "dev:frontend": "node tools/vite-dev.mjs",
     "dev": "node tools/dev-run.mjs",
     "build:frontend": "npm --prefix frontend run build",
-    "build": "node tools/sync-legacy-public.mjs && npm run build:frontend && node tools/sync-frontend-build.mjs",
-    "sync:legacy": "node tools/sync-legacy-public.mjs",
+    "build": "npm run build:frontend && node tools/sync-frontend-build.mjs",
     "install:all": "npm install && npm --prefix frontend install",
     "pm2:start": "pm2 start ecosystem.config.cjs",
     "pm2:restart": "pm2 restart ecosystem.config.cjs",
@@ -22,7 +21,10 @@
     "pm2:logs": "pm2 logs gmxreply-backend",
     "i18n:sync": "node tools/i18n_sync.mjs",
     "audit:i18n": "node tools/i18n_audit.js",
-    "audit:i18n:strict": "node tools/i18n_audit.js --strict"
+    "audit:i18n:strict": "node tools/i18n_audit.js --strict",
+    "wallpapers:generate": "node tools/generate-crypto-wallpapers.mjs",
+    "wallpapers:prune": "node tools/prune-asset-mirrors.mjs",
+    "wallpapers:wire": "node tools/wire-wallpaper-webp.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.97.0",
