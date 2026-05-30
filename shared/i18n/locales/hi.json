@@ -349,7 +349,8 @@
   "w_faq_title": "अक्सर पूछे जाने वाले सवाल",
   "w_faq_list": [
     "<b>क्या Pro मेरे वॉलेट से बंधा है?</b> नहीं — Pro आपके X हैंडल से बंधा है। आप किसी भी वॉलेट से पे कर सकते हैं।",
-    "<b>क्या आप मेरे replies स्टोर करते हैं?</b> लिस्ट्स आपके ब्राउज़र में लोकली स्टोर होती हैं। क्लाउड सिंक केवल Pro में है।"
+    "<b>क्या आप मेरे replies स्टोर करते हैं?</b> लिस्ट्स आपके ब्राउज़र में लोकली स्टोर होती हैं। क्लाउड सिंक केवल Pro में है।",
+    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
   ],
   "wp_note": "हर tab के लिए wallpaper (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free preview: पहले 10 wallpapers. Unlock +1 (10 referrals), फिर हर 5 पर +1, या Pro.",
   "themes_k_walls": "अनलॉक्ड वॉलपेपर",

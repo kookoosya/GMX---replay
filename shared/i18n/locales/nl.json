@@ -349,7 +349,8 @@
   "w_faq_title": "Veelgestelde vragen",
   "w_faq_list": [
     "<b>Is Pro gekoppeld aan mijn wallet?</b> Nee — Pro is gekoppeld aan je X‑handle. Je kunt met elke wallet betalen.",
-    "<b>Slaan jullie mijn replies op?</b> Lijsten worden lokaal in je browser opgeslagen. Cloud‑sync is alleen voor Pro."
+    "<b>Slaan jullie mijn replies op?</b> Lijsten worden lokaal in je browser opgeslagen. Cloud‑sync is alleen voor Pro.",
+    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
   ],
   "wp_note": "Wallpaper per tab (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free preview: eerste 10 wallpapers. Unlock +1 bij 10 referrals, daarna +1 elke 5, of Pro.",
   "themes_k_walls": "Ontgrendelde achtergronden",

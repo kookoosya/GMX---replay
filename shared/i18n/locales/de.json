@@ -349,7 +349,8 @@
   "w_faq_title": "Häufige Fragen",
   "w_faq_list": [
     "<b>Ist Pro an meine Wallet gebunden?</b> Nein — Pro ist an deinen X‑Handle gebunden. Du kannst mit jeder Wallet bezahlen.",
-    "<b>Speichert ihr meine Replies?</b> Listen werden lokal in deinem Browser gespeichert. Cloud‑Sync gibt es nur in Pro."
+    "<b>Speichert ihr meine Replies?</b> Listen werden lokal in deinem Browser gespeichert. Cloud‑Sync gibt es nur in Pro.",
+    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
   ],
   "wp_note": "Wallpaper pro Tab (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free‑Vorschau: erste 10 Wallpapers. Unlock +1 bei 10 Referrals, dann +1 alle 5, oder Pro.",
   "themes_k_walls": "Freigeschaltete Wallpaper",

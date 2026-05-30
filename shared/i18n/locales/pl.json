@@ -349,7 +349,8 @@
   "w_faq_title": "Najczęstsze pytania",
   "w_faq_list": [
     "<b>Czy Pro jest powiązane z moim portfelem?</b> Nie — Pro jest powiązane z twoim handle na X. Możesz płacić z dowolnego portfela.",
-    "<b>Czy przechowujecie moje odpowiedzi?</b> Listy są zapisywane lokalnie w twojej przeglądarce. Synchronizacja w chmurze jest tylko w Pro."
+    "<b>Czy przechowujecie moje odpowiedzi?</b> Listy są zapisywane lokalnie w twojej przeglądarce. Synchronizacja w chmurze jest tylko w Pro.",
+    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
   ],
   "wp_note": "Tapeta per zakładka (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Podgląd Free: pierwsze 10 tapet. Unlock +1 przy 10 referralach, potem +1 co 5 albo Pro.",
   "themes_k_walls": "Odblokowane tapety",

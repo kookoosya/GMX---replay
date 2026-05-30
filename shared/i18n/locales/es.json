@@ -349,7 +349,8 @@
   "w_faq_title": "Preguntas frecuentes",
   "w_faq_list": [
     "<b>¿Pro está ligado a mi wallet?</b> No — Pro está ligado a tu handle de X. Puedes pagar desde cualquier wallet.",
-    "<b>¿Guardan mis respuestas?</b> Las listas se guardan localmente en tu navegador. La sincronización en la nube es solo para Pro."
+    "<b>¿Guardan mis respuestas?</b> Las listas se guardan localmente en tu navegador. La sincronización en la nube es solo para Pro.",
+    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
   ],
   "wp_note": "Wallpaper por pestaña (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Preview Free: primeros 10 wallpapers. Unlock +1 a 10 referidos, luego +1 cada 5, o Pro.",
   "themes_k_walls": "Fondos desbloqueados",

@@ -25,7 +25,8 @@
     "pm2:logs": "pm2 logs gmxreply-backend",
     "i18n:sync": "node tools/i18n_sync.mjs",
     "audit:i18n": "node tools/i18n_audit.js",
-    "audit:i18n:strict": "node tools/i18n_audit.js --strict"
+    "audit:i18n:strict": "node tools/i18n_audit.js --strict",
+    "fix:critical": "node tools/fix-all-critical.mjs && npm run i18n:sync && cp public/i18n/siteI18n.js public/bridge/i18n/siteI18n.js && cp public/i18n/siteI18n.js frontend/public/i18n/siteI18n.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.97.0",

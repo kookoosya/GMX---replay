@@ -63,11 +63,24 @@
     return normalizeText(localStorage.getItem(primary) || localStorage.getItem(legacy) || "");
   }
 
-  function getApiBase() {
+  const ALLOWED_API_HOSTS = new Set(["gmxreply.com", "www.gmxreply.com", "localhost", "127.0.0.1"]);
+
+  function normalizeApiOrigin(raw) {
+    const value = String(raw || "").trim();
+    if (!value) return "";
     try {
-      const hinted = String(window.__GMX_API_ORIGIN || "").trim();
-      if (hinted) return hinted.replace(/\/$/, "");
-    } catch {}
+      const url = new URL(value);
+      const host = String(url.hostname || "").toLowerCase();
+      if (!ALLOWED_API_HOSTS.has(host)) return "";
+      return String(url.origin || "").replace(/\/$/, "");
+    } catch {
+      return "";
+    }
+  }
+
+  function getApiBase() {
+    const hinted = normalizeApiOrigin(window.__GMX_API_ORIGIN);
+    if (hinted) return hinted;
     return String(location.origin || "").trim().replace(/\/$/, "");
   }
 
@@ -129,6 +142,10 @@
     if (forceLogout) {
       try { localStorage.removeItem(LS_FORCE_LOGOUT); } catch {}
       try { localStorage.removeItem(LS_FORCE_LOGOUT_LEGACY); } catch {}
+      nextHandle = "";
+      nextToken = "";
+      await safeSet({ [V2_HANDLE]: "", [V2_TOKEN]: "", sessionUpdatedAt: Date.now() });
+      await safeRemove([LEGACY_BASE, LEGACY_HANDLE, LEGACY_TOKEN]);
     } else if (siteHandle && siteToken) {
       nextHandle = siteHandle;
       nextToken = siteToken;

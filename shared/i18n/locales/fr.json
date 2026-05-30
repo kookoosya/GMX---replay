@@ -349,7 +349,8 @@
   "w_faq_title": "Questions fréquentes",
   "w_faq_list": [
     "<b>Pro est lié à mon wallet ?</b> Non — Pro est lié à ton handle X. Tu peux payer avec n’importe quel wallet.",
-    "<b>Vous gardez mes réponses ?</b> Les listes sont stockées localement dans ton navigateur. La synchro cloud est réservée à Pro."
+    "<b>Vous gardez mes réponses ?</b> Les listes sont stockées localement dans ton navigateur. La synchro cloud est réservée à Pro.",
+    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
   ],
   "wp_note": "Fond d’écran par onglet (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Aperçu Free : 10 premiers fonds d’écran. Unlock +1 à 10 parrainages, puis +1 tous les 5, ou Pro.",
   "themes_k_walls": "Fonds d’écran débloqués",

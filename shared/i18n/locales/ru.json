@@ -349,7 +349,8 @@
   "w_faq_title": "FAQ и ответы",
   "w_faq_list": [
     "<b>Pro привязан к кошельку?</b> Нет — Pro привязан к твоему X‑хендлу. Платить можно с любого кошелька.",
-    "<b>Вы храните мои ответы?</b> Списки хранятся локально в браузере. Cloud sync — только в Pro."
+    "<b>Вы храните мои ответы?</b> Списки хранятся локально в браузере. Cloud sync — только в Pro.",
+    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
   ],
   "wp_note": "Обои можно ставить по вкладкам (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free превью: первые 10 обоев. Unlock +1 при 10 рефералах, затем +1 каждые 5, либо Pro.",
   "themes_k_walls": "Открытые обои",
