@@ -16,6 +16,23 @@ const __dirname = path.dirname(__filename);
 // Load local env file (.env) if present (for stable local dev). Does not override existing process.env.
 dotenv.config({ path: path.join(__dirname, ".env") });
 
+import {
+  CONFIG,
+  PLANS,
+  ERROR_CODES,
+  sendError,
+  BILLING_PLANS,
+  BILLING_TOKENS,
+  REF_MIN_ACTIVE_DAYS,
+  REF_MIN_ACTIVE_USES,
+  USDC_MINT,
+  USDT_MINT,
+  SOL_RECEIVER,
+  SOL_USD_FALLBACK,
+  EXTENSION_STORE_URL,
+} from "./server/config.mjs";
+import { nowIso, todayKeyUTC, nextResetUTC, randHex, sha256 } from "./server/time.mjs";
+
 const app = express();
 app.disable("x-powered-by");
 app.disable("etag");
@@ -193,83 +210,6 @@ const ADMIN_PASSWORD = RAW_ADMIN_PASSWORD || (DEV_MODE
 );
 const ADMIN_SESSION_HOURS = Math.max(1, Math.min(168, Number(process.env.ADMIN_SESSION_HOURS || "24") || 24));
 
-const SOL_RECEIVER =
-  process.env.SOL_RECEIVER ||
-  "2idG5EVab4ATDHSTXUmqEaKzrorNJEMjBhTDgcPT3Bfb";
-
-// Solana stablecoins (mainnet) — override via env if needed.
-// USDC mint is documented by Solana docs and widely used across the ecosystem.
-// USDT mint is documented by Tether for Solana.
-const USDC_MINT = process.env.USDC_MINT || "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
-const USDT_MINT = process.env.USDT_MINT || "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB";
-
-const SOL_USD_FALLBACK = Number(process.env.SOL_USD_FALLBACK || "0") || 0;
-
-const EXTENSION_STORE_URL =
-  process.env.EXTENSION_STORE_URL || ""; // set after publishing to Chrome Web Store
-
-const CONFIG = {
-  // Daily free generation limit (GM and GN each). Override via env GMX_FREE_DAILY.
-  FREE_DAILY_BASE: Math.max(0, Math.min(500, Number(process.env.GMX_FREE_DAILY || '70') || 70)),
-  // Free saved lines cap (GM and GN each). Override via env GMX_SAVE_CAP_FREE.
-  SAVE_CAP_FREE: Math.max(10, Math.min(1000, Number(process.env.GMX_SAVE_CAP_FREE || '50') || 50)),
-  // Backend sentinel for unlimited (kept for backwards-compatible UI parsing).
-  PRO_DAILY_SENTINEL: 999999,
-  // Abuse protection (server-side; UI still shows Unlimited for Pro).
-  GEN_MIN_LATENCY_MS: Math.max(0, Math.min(5000, Number(process.env.GMX_GEN_MIN_LATENCY_MS || '250') || 250)),
-  GEN_COOLDOWN_MS: Math.max(0, Math.min(10000, Number(process.env.GMX_GEN_COOLDOWN_MS || '900') || 900)),
-  BULK_COOLDOWN_MS: Math.max(0, Math.min(20000, Number(process.env.GMX_BULK_COOLDOWN_MS || '2000') || 2000)),
-  IP_COOLDOWN_MS: Math.max(0, Math.min(10000, Number(process.env.GMX_IP_COOLDOWN_MS || '500') || 500)),
-  // Extra route rate limits (per handle; in addition to global /api limiter)
-  GEN_PER_MINUTE: Math.max(10, Math.min(600, Number(process.env.GMX_GEN_PER_MINUTE || '90') || 90)),
-  BULK_CALLS_PER_MINUTE: Math.max(5, Math.min(120, Number(process.env.GMX_BULK_CALLS_PER_MINUTE || '30') || 30)),
-
-  // Referral promoter bonus safety cap (free daily bonus added on top of FREE_DAILY_BASE).
-  // This prevents "infinite" rewards from low-quality mass referrals.
-  REF_BONUS_CAP: Math.max(0, Math.min(1000, Number(process.env.GMX_REF_BONUS_CAP || '120') || 120)),
-};
-
-// Entitlement plans used by both site and extension (no hardcoded limits in UI)
-const REF_MIN_ACTIVE_DAYS = Math.max(1, Math.min(30, Number(process.env.GMX_REF_ACTIVE_MIN_DAYS || '1') || 1));
-const REF_MIN_ACTIVE_USES = Math.max(1, Math.min(1000, Number(process.env.GMX_REF_ACTIVE_MIN_USES || '1') || 1));
-
-const PLANS = {
-  free: {
-    dailyLimit: CONFIG.FREE_DAILY_BASE,
-    saveCap: CONFIG.SAVE_CAP_FREE,
-    unlimited: false,
-    themes: 10,
-    wallpapers: 10,
-    styles: 1,
-    packs: 1,
-  },
-  pro: {
-    dailyLimit: null,
-    saveCap: null,
-    unlimited: true,
-    themes: 100,
-    wallpapers: 100,
-    styles: 'all',
-    packs: 'all',
-  },
-};
-
-const ERROR_CODES = {
-  INVALID_HANDLE: 'invalid_handle',
-  UNAUTHORIZED: 'unauthorized',
-  FORBIDDEN: 'forbidden',
-  RATE_LIMITED: 'rate_limited',
-  BUSY: 'busy_try_again',
-  LIMIT_REACHED: 'limit_reached',
-  UPGRADE_REQUIRED: 'upgrade_required',
-  SERVER_ERROR: 'server_error',
-  INVALID_REQUEST: 'invalid_request',
-};
-
-function sendError(res, status, code, extra = {}) {
-  return res.status(status).json({ ok: false, error_code: code, ...extra });
-}
-
 
 // --- Safety: never crash silently ---
 process.on("unhandledRejection", (err) => {
@@ -286,20 +226,6 @@ process.on("SIGINT", () => {
   writeLog("WARN", "SIGINT_RECEIVED");
   beginShutdown("sigint", null, { level: "WARN", exitCode: 0 });
 });
-
-// Billing plans (base pricing in USD; SOL is quoted at intent creation time).
-const BILLING_PLANS = [
-  { key: "m1", label: "1 month", usd: 10, days: 30 },
-  { key: "m3", label: "3 months", usd: 25, days: 90 },
-  { key: "m6", label: "6 months", usd: 50, days: 180 },
-  { key: "y1", label: "1 year", usd: 80, days: 365 },
-];
-
-const BILLING_TOKENS = [
-  { key: "SOL", label: "SOL", kind: "native", decimals: 9 },
-  { key: "USDC", label: "USDC", kind: "spl", mint: USDC_MINT, decimals: 6 },
-  { key: "USDT", label: "USDT", kind: "spl", mint: USDT_MINT, decimals: 6 },
-];
 
 const ALLOWED_ORIGINS = String(process.env.ALLOWED_ORIGINS || "")
   .split(",")
@@ -676,24 +602,6 @@ db.pragma("journal_mode = WAL");
 db.pragma("synchronous = NORMAL");
 db.pragma("busy_timeout = 5000");
 db.pragma("foreign_keys = ON");
-
-function nowIso() {
-  return new Date().toISOString();
-}
-function todayKeyUTC() {
-  return new Date().toISOString().slice(0, 10);
-}
-function nextResetUTC() {
-  const d = new Date();
-  d.setUTCHours(24, 0, 0, 0);
-  return d.toISOString();
-}
-function randHex(n = 12) {
-  return crypto.randomBytes(n).toString("hex");
-}
-function sha256(s) {
-  return crypto.createHash("sha256").update(String(s)).digest("hex");
-}
 
 
 // ---------- Concurrency guard (protects server during spikes) ----------
@@ -2425,6 +2333,8 @@ app.get("/api/public/random-bulk", (req, res) => {
 });
 
 
+import { registerGenerateRoutes } from "./server/routes/generate.mjs";
+
 // ---------- EXTENSION RECOVERY (public) ----------
 const EXT_SELECTORS = {
   version: 1,
@@ -3046,53 +2956,16 @@ app.get("/api/me", requireAuth, async (req, res) => {
   }
 });
 
-// Site generator (does not consume quota)
-app.get("/api/generate", requireAuth, (req, res) => {
-  try {
-    const handle = req.user?.handle || null;
-    const kind = String(req.query.kind || "").toLowerCase();
-    const mode = String(req.query.mode || "min").toLowerCase();
-    const lang = normLang(req.query.lang);
-    const style = String(req.query.style || "classic").toLowerCase();
-    const antiN = parseAntiLastN(req, 20);
-
-    if (kind !== "gm" && kind !== "gn") return sendError(res, 400, "invalid_kind");
-    if (!["min","mid","max"].includes(mode)) return sendError(res, 400, "invalid_mode");
-
-    const reply = generateUnique(handle, kind, mode, lang, style, antiN);
-    saveRecent(handle, kind, reply, mode, style);
-
-    res.json({ ok: true, handle, kind, mode, lang, reply });
-  } catch (e) {
-    console.error("GENERATE_ERROR", e);
-    sendError(res, 500, ERROR_CODES.SERVER_ERROR);
-  }
-});
-
-app.get("/api/generate-bulk", requireAuth, (req, res) => {
-  try {
-    const handle = req.user?.handle || null;
-    const kind = String(req.query.kind || "").toLowerCase();
-    const mode = String(req.query.mode || "min").toLowerCase();
-    const lang = normLang(req.query.lang);
-    const style = String(req.query.style || "classic").toLowerCase();
-    const antiN = parseAntiLastN(req, 20);
-    let count = Number(req.query.count || 10);
-    if (!Number.isFinite(count)) count = 10;
-    count = Math.max(1, Math.min(200, Math.floor(count)));
-
-    if (kind !== "gm" && kind !== "gn") return sendError(res, 400, "invalid_kind");
-    if (!["min","mid","max"].includes(mode)) return sendError(res, 400, "invalid_mode");
-
-    const list = generateRankedCandidates(handle, kind, mode, lang, style, count, antiN, false);
-
-    for (const r of list) saveRecent(handle, kind, r, mode, style);
-
-    res.json({ ok:true, handle, kind, mode, lang, count:list.length, list });
-  } catch (e) {
-    console.error("BULK_ERROR", e);
-    sendError(res, 500, ERROR_CODES.SERVER_ERROR);
-  }
+registerGenerateRoutes({
+  app,
+  requireAuth,
+  sendError,
+  ERROR_CODES,
+  parseAntiLastN,
+  normLang,
+  generateUnique,
+  generateRankedCandidates,
+  saveRecent,
 });
 
 

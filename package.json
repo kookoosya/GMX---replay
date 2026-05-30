@@ -13,7 +13,7 @@
     "dev:frontend": "node tools/vite-dev.mjs",
     "dev": "node tools/dev-run.mjs",
     "build:frontend": "npm --prefix frontend run build",
-    "build": "npm run build:frontend && node tools/sync-frontend-build.mjs",
+    "build": "npm run build:all && npm run build:frontend && node tools/sync-frontend-build.mjs",
     "install:all": "npm install && npm --prefix frontend install",
     "pm2:start": "pm2 start ecosystem.config.cjs",
     "pm2:restart": "pm2 restart ecosystem.config.cjs",
@@ -26,7 +26,9 @@
     "audit:runtime": "node tools/runtime_audit.mjs --strict",
     "build:site": "node tools/build-site-app.mjs && node tools/sync-site-public.mjs",
     "sync:site": "node tools/sync-site-public.mjs",
-    "audit:all": "npm run audit:logic && npm run audit:runtime"
+    "audit:all": "npm run audit:logic && npm run audit:runtime",
+    "build:server": "node tools/build-server.mjs",
+    "build:all": "npm run build:site && npm run build:server"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.97.0",
