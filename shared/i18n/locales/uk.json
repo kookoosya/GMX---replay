@@ -79,7 +79,6 @@
   "err_init_failed": "Не вдалося ініціалізувати",
   "err_server_error": "Помилка сервера",
   "err_unknown": "Невідома помилка",
-  "err_custom_wp_save": "Could not save image (too large or blocked).",
   "toast_copied": "Скопійовано.",
   "toast_copy_failed": "Не вдалося скопіювати.",
   "toast_removed": "Видалено.",
@@ -349,8 +348,7 @@
   "w_faq_title": "Поширені запитання",
   "w_faq_list": [
     "<b>Pro прив'язаний до гаманця?</b> Ні — Pro прив'язаний до твого X‑хендлу. Платити можна з будь-якого гаманця.",
-    "<b>Ви зберігаєте мої відповіді?</b> Списки зберігаються локально в браузері. Cloud sync — тільки в Pro.",
-    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+    "<b>Ви зберігаєте мої відповіді?</b> Списки зберігаються локально в браузері. Cloud sync — тільки в Pro."
   ],
   "wp_note": "Шпалери можна ставити по вкладках (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free прев’ю: перші 10 шпалер. Unlock +1 при 10 рефералах, потім +1 кожні 5, або Pro.",
   "themes_k_walls": "Відкриті шпалери",

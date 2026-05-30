@@ -79,7 +79,6 @@
   "err_init_failed": "Init failed",
   "err_server_error": "Server error",
   "err_unknown": "Unknown error",
-  "err_custom_wp_save": "Could not save image (too large or blocked).",
   "toast_copied": "Kopyalandı.",
   "toast_copy_failed": "Kopyalama başarısız.",
   "toast_removed": "Kaldırıldı.",
@@ -349,8 +348,7 @@
   "w_faq_title": "Sık sorulanlar",
   "w_faq_list": [
     "<b>Pro cüzdanıma mı bağlı?</b> Hayır — Pro senin X handle’ına bağlı. İstediğin cüzdandan ödeme yapabilirsin.",
-    "<b>Cevaplarımı saklıyor musunuz?</b> Listeler tarayıcında lokal olarak tutulur. Bulut senkronizasyonu sadece Pro’da var.",
-    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+    "<b>Cevaplarımı saklıyor musunuz?</b> Listeler tarayıcında lokal olarak tutulur. Bulut senkronizasyonu sadece Pro’da var."
   ],
   "wp_note": "Sekme başına duvar kâğıdı (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free önizleme: ilk 10 duvar kâğıdı. Unlock +1 (10 referans), sonra her 5’te +1 veya Pro.",
   "themes_k_walls": "Kilidi açılmış duvar kâğıtları",

@@ -82,7 +82,6 @@
     "err_init_failed": "Init failed",
     "err_server_error": "Server error",
     "err_unknown": "Unknown error",
-    "err_custom_wp_save": "Could not save image (too large or blocked).",
     "toast_copied": "Copied.",
     "toast_copy_failed": "Copy failed.",
     "toast_removed": "Removed.",
@@ -347,13 +346,12 @@
     "w_support_desc": "",
     "toolSupport": "",
     "toolDiag": "",
-    "toolLogs": "",
+    "toolLogs": "Copy local logs",
     "supportOut_ph": "",
     "w_faq_title": "FAQ",
     "w_faq_list": [
       "<b>Is Pro tied to my wallet?</b> No — Pro is tied to your X handle. You can pay from any wallet.",
-      "<b>Do you store my replies?</b> Lists are stored locally in your browser. Cloud sync is Pro-only.",
-      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+      "<b>Do you store my replies?</b> Lists are stored locally in your browser. Cloud sync is Pro-only."
     ],
     "wp_note": "Set a wallpaper per tab (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free preview: first 10 wallpapers. Unlock +1 at 10 referrals, then +1 every 5, or Pro.",
     "themes_k_walls": "Unlocked wallpapers",
@@ -362,7 +360,7 @@
     "ext_k_ref": "Referrals",
     "w_pay_help_list_html": "<li>Select a plan and payment token (SOL / USDC / USDT).</li><li>Connect your wallet and approve the transfer inside your wallet.</li><li>We verify the transaction on Solana and activate Pro for your handle.</li>",
     "w_trust_title": "Trust & safety",
-    "w_trust_list_html": "<li><b>No seed phrase:</b> we never ask for your secret words or private keys.</li><li><b>Standard transfer:</b> you will always see receiver address and amount inside your wallet before approving.</li><li><b>On-chain verification:</b> Pro activates only after we verify your transaction on Solana.</li><li><b>Payments are final:</b> verified on-chain payments are not refunded or reversed by us.</li>",
+    "w_trust_list_html": "<li><b>No seed phrase:</b> we never ask for your secret words or private keys.</li><li><b>Standard transfer:</b> you will always see receiver address and amount inside your wallet before approving.</li><li><b>On-chain verification:</b> Pro activates only after we verify your transaction on Solana.</li>",
     "ext_rules_list_html": "<li>Extension skin is selected on the site and synced into the extension.</li><li>Only one skin can be active at a time.</li><li>Pro also removes the ${SAVE_CAP_FREE} saved-lines cap and unlocks all styles/packs.</li>",
     "ref_loaded": "Loaded.",
     "ref_load_failed": "Load failed.",
@@ -487,7 +485,6 @@
     "err_init_failed": "Init failed",
     "err_server_error": "Server error",
     "err_unknown": "Unknown error",
-    "err_custom_wp_save": "Could not save image (too large or blocked).",
     "toast_copied": "Kopiert.",
     "toast_copy_failed": "Kopieren fehlgeschlagen.",
     "toast_removed": "Entfernt.",
@@ -757,8 +754,7 @@
     "w_faq_title": "Häufige Fragen",
     "w_faq_list": [
       "<b>Ist Pro an meine Wallet gebunden?</b> Nein — Pro ist an deinen X‑Handle gebunden. Du kannst mit jeder Wallet bezahlen.",
-      "<b>Speichert ihr meine Replies?</b> Listen werden lokal in deinem Browser gespeichert. Cloud‑Sync gibt es nur in Pro.",
-      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+      "<b>Speichert ihr meine Replies?</b> Listen werden lokal in deinem Browser gespeichert. Cloud‑Sync gibt es nur in Pro."
     ],
     "wp_note": "Wallpaper pro Tab (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free‑Vorschau: erste 10 Wallpapers. Unlock +1 bei 10 Referrals, dann +1 alle 5, oder Pro.",
     "themes_k_walls": "Freigeschaltete Wallpaper",
@@ -892,7 +888,6 @@
     "err_init_failed": "Init failed",
     "err_server_error": "Server error",
     "err_unknown": "Unknown error",
-    "err_custom_wp_save": "Could not save image (too large or blocked).",
     "toast_copied": "Copié.",
     "toast_copy_failed": "Échec de la copie.",
     "toast_removed": "Supprimé.",
@@ -1162,8 +1157,7 @@
     "w_faq_title": "Questions fréquentes",
     "w_faq_list": [
       "<b>Pro est lié à mon wallet ?</b> Non — Pro est lié à ton handle X. Tu peux payer avec n’importe quel wallet.",
-      "<b>Vous gardez mes réponses ?</b> Les listes sont stockées localement dans ton navigateur. La synchro cloud est réservée à Pro.",
-      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+      "<b>Vous gardez mes réponses ?</b> Les listes sont stockées localement dans ton navigateur. La synchro cloud est réservée à Pro."
     ],
     "wp_note": "Fond d’écran par onglet (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Aperçu Free : 10 premiers fonds d’écran. Unlock +1 à 10 parrainages, puis +1 tous les 5, ou Pro.",
     "themes_k_walls": "Fonds d’écran débloqués",
@@ -1297,7 +1291,6 @@
     "err_init_failed": "Init failed",
     "err_server_error": "Server error",
     "err_unknown": "Unknown error",
-    "err_custom_wp_save": "Could not save image (too large or blocked).",
     "toast_copied": "Copiado.",
     "toast_copy_failed": "Error al copiar.",
     "toast_removed": "Eliminado.",
@@ -1567,8 +1560,7 @@
     "w_faq_title": "Preguntas frecuentes",
     "w_faq_list": [
       "<b>¿Pro está ligado a mi wallet?</b> No — Pro está ligado a tu handle de X. Puedes pagar desde cualquier wallet.",
-      "<b>¿Guardan mis respuestas?</b> Las listas se guardan localmente en tu navegador. La sincronización en la nube es solo para Pro.",
-      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+      "<b>¿Guardan mis respuestas?</b> Las listas se guardan localmente en tu navegador. La sincronización en la nube es solo para Pro."
     ],
     "wp_note": "Wallpaper por pestaña (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Preview Free: primeros 10 wallpapers. Unlock +1 a 10 referidos, luego +1 cada 5, o Pro.",
     "themes_k_walls": "Fondos desbloqueados",
@@ -1702,7 +1694,6 @@
     "err_init_failed": "Init failed",
     "err_server_error": "Server error",
     "err_unknown": "Unknown error",
-    "err_custom_wp_save": "Could not save image (too large or blocked).",
     "toast_copied": "Copiado.",
     "toast_copy_failed": "Falha ao copiar.",
     "toast_removed": "Removido.",
@@ -1972,8 +1963,7 @@
     "w_faq_title": "Perguntas frequentes",
     "w_faq_list": [
       "<b>O Pro é ligado à minha carteira?</b> Não — o Pro é ligado ao seu handle do X. Você pode pagar com qualquer carteira.",
-      "<b>Vocês guardam minhas respostas?</b> As listas ficam salvas localmente no seu navegador. Sync em nuvem é só no Pro.",
-      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+      "<b>Vocês guardam minhas respostas?</b> As listas ficam salvas localmente no seu navegador. Sync em nuvem é só no Pro."
     ],
     "wp_note": "Wallpaper por aba (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Preview Free: primeiros 10 wallpapers. Unlock +1 com 10 indicações, depois +1 a cada 5, ou Pro.",
     "themes_k_walls": "Papéis de parede desbloqueados",
@@ -2107,7 +2097,6 @@
     "err_init_failed": "Init failed",
     "err_server_error": "Server error",
     "err_unknown": "Unknown error",
-    "err_custom_wp_save": "Could not save image (too large or blocked).",
     "toast_copied": "Copiato.",
     "toast_copy_failed": "Copia non riuscita.",
     "toast_removed": "Rimosso.",
@@ -2377,8 +2366,7 @@
     "w_faq_title": "Domande frequenti",
     "w_faq_list": [
       "<b>Pro è legato al mio wallet?</b> No — Pro è legato al tuo handle X. Puoi pagare da qualsiasi wallet.",
-      "<b>Conservate le mie risposte?</b> Le liste sono salvate in locale nel browser. La sincronizzazione cloud è solo per Pro.",
-      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+      "<b>Conservate le mie risposte?</b> Le liste sono salvate in locale nel browser. La sincronizzazione cloud è solo per Pro."
     ],
     "wp_note": "Wallpaper per tab (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Anteprima Free: primi 10 wallpapers. Unlock +1 a 10 referral, poi +1 ogni 5, oppure Pro.",
     "themes_k_walls": "Sfondi sbloccati",
@@ -2512,7 +2500,6 @@
     "err_init_failed": "Init failed",
     "err_server_error": "Server error",
     "err_unknown": "Unknown error",
-    "err_custom_wp_save": "Could not save image (too large or blocked).",
     "toast_copied": "Gekopieerd.",
     "toast_copy_failed": "Kopiëren mislukt.",
     "toast_removed": "Verwijderd.",
@@ -2782,8 +2769,7 @@
     "w_faq_title": "Veelgestelde vragen",
     "w_faq_list": [
       "<b>Is Pro gekoppeld aan mijn wallet?</b> Nee — Pro is gekoppeld aan je X‑handle. Je kunt met elke wallet betalen.",
-      "<b>Slaan jullie mijn replies op?</b> Lijsten worden lokaal in je browser opgeslagen. Cloud‑sync is alleen voor Pro.",
-      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+      "<b>Slaan jullie mijn replies op?</b> Lijsten worden lokaal in je browser opgeslagen. Cloud‑sync is alleen voor Pro."
     ],
     "wp_note": "Wallpaper per tab (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free preview: eerste 10 wallpapers. Unlock +1 bij 10 referrals, daarna +1 elke 5, of Pro.",
     "themes_k_walls": "Ontgrendelde achtergronden",
@@ -2917,7 +2903,6 @@
     "err_init_failed": "Init failed",
     "err_server_error": "Server error",
     "err_unknown": "Unknown error",
-    "err_custom_wp_save": "Could not save image (too large or blocked).",
     "toast_copied": "Kopyalandı.",
     "toast_copy_failed": "Kopyalama başarısız.",
     "toast_removed": "Kaldırıldı.",
@@ -3187,8 +3172,7 @@
     "w_faq_title": "Sık sorulanlar",
     "w_faq_list": [
       "<b>Pro cüzdanıma mı bağlı?</b> Hayır — Pro senin X handle’ına bağlı. İstediğin cüzdandan ödeme yapabilirsin.",
-      "<b>Cevaplarımı saklıyor musunuz?</b> Listeler tarayıcında lokal olarak tutulur. Bulut senkronizasyonu sadece Pro’da var.",
-      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+      "<b>Cevaplarımı saklıyor musunuz?</b> Listeler tarayıcında lokal olarak tutulur. Bulut senkronizasyonu sadece Pro’da var."
     ],
     "wp_note": "Sekme başına duvar kâğıdı (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free önizleme: ilk 10 duvar kâğıdı. Unlock +1 (10 referans), sonra her 5’te +1 veya Pro.",
     "themes_k_walls": "Kilidi açılmış duvar kâğıtları",
@@ -3322,7 +3306,6 @@
     "err_init_failed": "Init failed",
     "err_server_error": "Server error",
     "err_unknown": "Unknown error",
-    "err_custom_wp_save": "Could not save image (too large or blocked).",
     "toast_copied": "Skopiowano.",
     "toast_copy_failed": "Nie udało się skopiować.",
     "toast_removed": "Usunięto.",
@@ -3592,8 +3575,7 @@
     "w_faq_title": "Najczęstsze pytania",
     "w_faq_list": [
       "<b>Czy Pro jest powiązane z moim portfelem?</b> Nie — Pro jest powiązane z twoim handle na X. Możesz płacić z dowolnego portfela.",
-      "<b>Czy przechowujecie moje odpowiedzi?</b> Listy są zapisywane lokalnie w twojej przeglądarce. Synchronizacja w chmurze jest tylko w Pro.",
-      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+      "<b>Czy przechowujecie moje odpowiedzi?</b> Listy są zapisywane lokalnie w twojej przeglądarce. Synchronizacja w chmurze jest tylko w Pro."
     ],
     "wp_note": "Tapeta per zakładka (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Podgląd Free: pierwsze 10 tapet. Unlock +1 przy 10 referralach, potem +1 co 5 albo Pro.",
     "themes_k_walls": "Odblokowane tapety",
@@ -3727,7 +3709,6 @@
     "err_init_failed": "Init failed",
     "err_server_error": "Server error",
     "err_unknown": "Unknown error",
-    "err_custom_wp_save": "Could not save image (too large or blocked).",
     "toast_copied": "Disalin.",
     "toast_copy_failed": "Gagal menyalin.",
     "toast_removed": "Dihapus.",
@@ -3997,8 +3978,7 @@
     "w_faq_title": "Pertanyaan umum",
     "w_faq_list": [
       "<b>Pro itu nempel ke wallet aku?</b> Tidak — Pro nempel ke handle X kamu. Kamu bisa bayar dari wallet mana saja.",
-      "<b>Kalian menyimpan reply aku?</b> List disimpan lokal di browser kamu. Sinkronisasi cloud hanya ada di Pro.",
-      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+      "<b>Kalian menyimpan reply aku?</b> List disimpan lokal di browser kamu. Sinkronisasi cloud hanya ada di Pro."
     ],
     "wp_note": "Wallpaper per tab (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Preview Free: 10 wallpaper pertama. Unlock +1 di 10 referral, lalu +1 tiap 5, atau Pro.",
     "themes_k_walls": "Wallpaper terbuka",
@@ -4132,7 +4112,6 @@
     "err_init_failed": "Не удалось инициализировать",
     "err_server_error": "Ошибка сервера",
     "err_unknown": "Неизвестная ошибка",
-    "err_custom_wp_save": "Could not save image (too large or blocked).",
     "toast_copied": "Скопировано.",
     "toast_copy_failed": "Не удалось скопировать.",
     "toast_removed": "Удалено.",
@@ -4402,8 +4381,7 @@
     "w_faq_title": "FAQ и ответы",
     "w_faq_list": [
       "<b>Pro привязан к кошельку?</b> Нет — Pro привязан к твоему X‑хендлу. Платить можно с любого кошелька.",
-      "<b>Вы храните мои ответы?</b> Списки хранятся локально в браузере. Cloud sync — только в Pro.",
-      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+      "<b>Вы храните мои ответы?</b> Списки хранятся локально в браузере. Cloud sync — только в Pro."
     ],
     "wp_note": "Обои можно ставить по вкладкам (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free превью: первые 10 обоев. Unlock +1 при 10 рефералах, затем +1 каждые 5, либо Pro.",
     "themes_k_walls": "Открытые обои",
@@ -4537,7 +4515,6 @@
     "err_init_failed": "Не вдалося ініціалізувати",
     "err_server_error": "Помилка сервера",
     "err_unknown": "Невідома помилка",
-    "err_custom_wp_save": "Could not save image (too large or blocked).",
     "toast_copied": "Скопійовано.",
     "toast_copy_failed": "Не вдалося скопіювати.",
     "toast_removed": "Видалено.",
@@ -4807,8 +4784,7 @@
     "w_faq_title": "Поширені запитання",
     "w_faq_list": [
       "<b>Pro прив'язаний до гаманця?</b> Ні — Pro прив'язаний до твого X‑хендлу. Платити можна з будь-якого гаманця.",
-      "<b>Ви зберігаєте мої відповіді?</b> Списки зберігаються локально в браузері. Cloud sync — тільки в Pro.",
-      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+      "<b>Ви зберігаєте мої відповіді?</b> Списки зберігаються локально в браузері. Cloud sync — тільки в Pro."
     ],
     "wp_note": "Шпалери можна ставити по вкладках (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free прев’ю: перші 10 шпалер. Unlock +1 при 10 рефералах, потім +1 кожні 5, або Pro.",
     "themes_k_walls": "Відкриті шпалери",
@@ -4942,7 +4918,6 @@
     "err_init_failed": "Init failed",
     "err_server_error": "Server error",
     "err_unknown": "Unknown error",
-    "err_custom_wp_save": "Could not save image (too large or blocked).",
     "toast_copied": "कॉपी हो गया।",
     "toast_copy_failed": "कॉपी नहीं हो सका।",
     "toast_removed": "हटा दिया गया।",
@@ -5212,8 +5187,7 @@
     "w_faq_title": "अक्सर पूछे जाने वाले सवाल",
     "w_faq_list": [
       "<b>क्या Pro मेरे वॉलेट से बंधा है?</b> नहीं — Pro आपके X हैंडल से बंधा है। आप किसी भी वॉलेट से पे कर सकते हैं।",
-      "<b>क्या आप मेरे replies स्टोर करते हैं?</b> लिस्ट्स आपके ब्राउज़र में लोकली स्टोर होती हैं। क्लाउड सिंक केवल Pro में है।",
-      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+      "<b>क्या आप मेरे replies स्टोर करते हैं?</b> लिस्ट्स आपके ब्राउज़र में लोकली स्टोर होती हैं। क्लाउड सिंक केवल Pro में है।"
     ],
     "wp_note": "हर tab के लिए wallpaper (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free preview: पहले 10 wallpapers. Unlock +1 (10 referrals), फिर हर 5 पर +1, या Pro.",
     "themes_k_walls": "अनलॉक्ड वॉलपेपर",
@@ -5347,7 +5321,6 @@
     "err_init_failed": "Init failed",
     "err_server_error": "Server error",
     "err_unknown": "Unknown error",
-    "err_custom_wp_save": "Could not save image (too large or blocked).",
     "toast_copied": "コピーしました。",
     "toast_copy_failed": "コピーに失敗しました。",
     "toast_removed": "削除しました。",
@@ -5617,8 +5590,7 @@
     "w_faq_title": "よくある質問",
     "w_faq_list": [
       "<b>Proはウォレットに紐づきますか？</b> いいえ — ProはXハンドルに紐づきます。どのウォレットからでも支払えます。",
-      "<b>返信を保存しますか？</b> リストはブラウザーにローカル保存。クラウド同期はProのみです。",
-      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+      "<b>返信を保存しますか？</b> リストはブラウザーにローカル保存。クラウド同期はProのみです。"
     ],
     "wp_note": "タブ別 wallpaper（Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro）。Free preview: 最初の 10 wallpapers。Unlock +1（10 referrals）、その後 5 ごとに +1、または Pro。",
     "themes_k_walls": "解除済み壁紙",
@@ -5752,7 +5724,6 @@
     "err_init_failed": "Init failed",
     "err_server_error": "Server error",
     "err_unknown": "Unknown error",
-    "err_custom_wp_save": "Could not save image (too large or blocked).",
     "toast_copied": "已复制。",
     "toast_copy_failed": "复制失败。",
     "toast_removed": "已移除。",
@@ -6022,8 +5993,7 @@
     "w_faq_title": "常见问题",
     "w_faq_list": [
       "<b>Pro 绑定到我的钱包吗？</b> 不会 — Pro 绑定的是你的 X 账号。你可以用任意钱包付款。",
-      "<b>你们会保存我的回复吗？</b> 列表只保存在你的浏览器本地。云同步仅 Pro 可用。",
-      "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+      "<b>你们会保存我的回复吗？</b> 列表只保存在你的浏览器本地。云同步仅 Pro 可用。"
     ],
     "wp_note": "每个标签页可单独设置 wallpaper（Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro）。Free 预览：前 10 张 wallpapers。10 个 referrals 解锁 +1，之后每 5 个再 +1，或 Pro。",
     "themes_k_walls": "已解锁壁纸",

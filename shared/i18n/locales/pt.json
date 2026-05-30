@@ -79,7 +79,6 @@
   "err_init_failed": "Init failed",
   "err_server_error": "Server error",
   "err_unknown": "Unknown error",
-  "err_custom_wp_save": "Could not save image (too large or blocked).",
   "toast_copied": "Copiado.",
   "toast_copy_failed": "Falha ao copiar.",
   "toast_removed": "Removido.",
@@ -349,8 +348,7 @@
   "w_faq_title": "Perguntas frequentes",
   "w_faq_list": [
     "<b>O Pro é ligado à minha carteira?</b> Não — o Pro é ligado ao seu handle do X. Você pode pagar com qualquer carteira.",
-    "<b>Vocês guardam minhas respostas?</b> As listas ficam salvas localmente no seu navegador. Sync em nuvem é só no Pro.",
-    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+    "<b>Vocês guardam minhas respostas?</b> As listas ficam salvas localmente no seu navegador. Sync em nuvem é só no Pro."
   ],
   "wp_note": "Wallpaper por aba (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Preview Free: primeiros 10 wallpapers. Unlock +1 com 10 indicações, depois +1 a cada 5, ou Pro.",
   "themes_k_walls": "Papéis de parede desbloqueados",

@@ -79,7 +79,6 @@
   "err_init_failed": "Не удалось инициализировать",
   "err_server_error": "Ошибка сервера",
   "err_unknown": "Неизвестная ошибка",
-  "err_custom_wp_save": "Could not save image (too large or blocked).",
   "toast_copied": "Скопировано.",
   "toast_copy_failed": "Не удалось скопировать.",
   "toast_removed": "Удалено.",
@@ -349,8 +348,7 @@
   "w_faq_title": "FAQ и ответы",
   "w_faq_list": [
     "<b>Pro привязан к кошельку?</b> Нет — Pro привязан к твоему X‑хендлу. Платить можно с любого кошелька.",
-    "<b>Вы храните мои ответы?</b> Списки хранятся локально в браузере. Cloud sync — только в Pro.",
-    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+    "<b>Вы храните мои ответы?</b> Списки хранятся локально в браузере. Cloud sync — только в Pro."
   ],
   "wp_note": "Обои можно ставить по вкладкам (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free превью: первые 10 обоев. Unlock +1 при 10 рефералах, затем +1 каждые 5, либо Pro.",
   "themes_k_walls": "Открытые обои",

@@ -32,13 +32,15 @@
   const EXT_VIEW_KEY = "gmx_ext_view_v2";
   const EXT_CUSTOM_BG_KEY = "gmx_ext_custom_bg_global_v2";
 
-  const SYNC_LS_KEYS = [
+  const STORAGE_WATCH_KEYS = new Set([
     LS_HANDLE, LS_TOKEN, LS_FORCE_LOGOUT, LS_FORCE_LOGOUT_LEGACY,
     LS_EXT_THEME, LS_EXT_THEME_LEGACY, LS_SITE_THEME,
     LS_EXT_WP, LS_EXT_WP_LEGACY, LS_EXT_WP_VIEW_POPUP, LS_EXT_WP_VIEW_QUICK,
     LS_EXT_VIEW, LS_EXT_VIEW_LEGACY, LS_EXT_CUSTOM_BG, LS_EXT_CUSTOM_BG_LEGACY,
-    EXT_WP_POPUP_KEY, EXT_WP_QUICK_KEY,
-  ];
+  ]);
+
+  let syncPromise = null;
+  let syncTimer = null;
 
   function isAllowedOrigin() {
     try {
@@ -59,28 +61,11 @@
     return String(raw || "").trim();
   }
 
-  function readLs(primary, legacy) {
-    return normalizeText(localStorage.getItem(primary) || localStorage.getItem(legacy) || "");
-  }
-
-  const ALLOWED_API_HOSTS = new Set(["gmxreply.com", "www.gmxreply.com", "localhost", "127.0.0.1"]);
-
-  function normalizeApiOrigin(raw) {
-    const value = String(raw || "").trim();
-    if (!value) return "";
-    try {
-      const url = new URL(value);
-      const host = String(url.hostname || "").toLowerCase();
-      if (!ALLOWED_API_HOSTS.has(host)) return "";
-      return String(url.origin || "").replace(/\/$/, "");
-    } catch {
-      return "";
-    }
-  }
-
   function getApiBase() {
-    const hinted = normalizeApiOrigin(window.__GMX_API_ORIGIN);
-    if (hinted) return hinted;
+    try {
+      const hinted = String(window.__GMX_API_ORIGIN || "").trim();
+      if (hinted) return hinted.replace(/\/$/, "");
+    } catch {}
     return String(location.origin || "").trim().replace(/\/$/, "");
   }
 
@@ -114,19 +99,28 @@
     return normalizeText(prev) === normalizeText(next);
   }
 
+  function storageKeyTriggersSync(key) {
+    const k = String(key || "");
+    if (!k) return false;
+    if (STORAGE_WATCH_KEYS.has(k)) return true;
+    if (k.startsWith("gmx_ext_wp_view_")) return true;
+    if (k.startsWith("gmx_ext_custom_bg_tab_")) return true;
+    return false;
+  }
+
   async function syncOnce() {
     if (!isAllowedOrigin()) return { ok: false, reason: "not_allowed" };
 
     const siteHandle = normalizeHandle(localStorage.getItem(LS_HANDLE));
     const siteToken = normalizeText(localStorage.getItem(LS_TOKEN));
     const forceLogout = normalizeText(localStorage.getItem(LS_FORCE_LOGOUT) || localStorage.getItem(LS_FORCE_LOGOUT_LEGACY));
-    const siteExtTheme = readLs(LS_EXT_THEME, LS_EXT_THEME_LEGACY);
+    const siteExtTheme = normalizeText(localStorage.getItem(LS_EXT_THEME) || localStorage.getItem(LS_EXT_THEME_LEGACY));
     const siteTheme = normalizeText(localStorage.getItem(LS_SITE_THEME));
-    const siteExtWallpaper = readLs(LS_EXT_WP, LS_EXT_WP_LEGACY);
-    const siteExtWallpaperPopup = readLs(LS_EXT_WP_VIEW_POPUP, EXT_WP_POPUP_KEY);
-    const siteExtWallpaperQuick = readLs(LS_EXT_WP_VIEW_QUICK, EXT_WP_QUICK_KEY);
-    const siteExtView = readLs(LS_EXT_VIEW, LS_EXT_VIEW_LEGACY);
-    const siteExtCustomBg = readLs(LS_EXT_CUSTOM_BG, LS_EXT_CUSTOM_BG_LEGACY);
+    const siteExtWallpaper = normalizeText(localStorage.getItem(LS_EXT_WP) || localStorage.getItem(LS_EXT_WP_LEGACY));
+    const siteExtWallpaperPopup = normalizeText(localStorage.getItem(LS_EXT_WP_VIEW_POPUP));
+    const siteExtWallpaperQuick = normalizeText(localStorage.getItem(LS_EXT_WP_VIEW_QUICK));
+    const siteExtView = normalizeText(localStorage.getItem(LS_EXT_VIEW) || localStorage.getItem(LS_EXT_VIEW_LEGACY));
+    const siteExtCustomBg = normalizeText(localStorage.getItem(LS_EXT_CUSTOM_BG) || localStorage.getItem(LS_EXT_CUSTOM_BG_LEGACY));
 
     const prev = await safeGet([
       V2_BASE, V2_HANDLE, V2_TOKEN,
@@ -142,10 +136,6 @@
     if (forceLogout) {
       try { localStorage.removeItem(LS_FORCE_LOGOUT); } catch {}
       try { localStorage.removeItem(LS_FORCE_LOGOUT_LEGACY); } catch {}
-      nextHandle = "";
-      nextToken = "";
-      await safeSet({ [V2_HANDLE]: "", [V2_TOKEN]: "", sessionUpdatedAt: Date.now() });
-      await safeRemove([LEGACY_BASE, LEGACY_HANDLE, LEGACY_TOKEN]);
     } else if (siteHandle && siteToken) {
       nextHandle = siteHandle;
       nextToken = siteToken;
@@ -196,8 +186,21 @@
     };
   }
 
+  function runSyncOnce() {
+    if (!syncPromise) {
+      syncPromise = syncOnce().finally(() => {
+        syncPromise = null;
+      });
+    }
+    return syncPromise;
+  }
+
   function scheduleSync() {
-    void syncOnce();
+    try { if (syncTimer) clearTimeout(syncTimer); } catch {}
+    syncTimer = setTimeout(() => {
+      syncTimer = null;
+      void runSyncOnce();
+    }, 120);
   }
 
   window.addEventListener("message", (event) => {
@@ -210,7 +213,7 @@
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (!message || message.type !== "GMX_FORCE_SITE_SYNC") return undefined;
     (async () => {
-      const result = await syncOnce().catch((error) => ({ ok: false, error: String(error && error.message || error || "sync_failed") }));
+      const result = await runSyncOnce().catch((error) => ({ ok: false, error: String(error && error.message || error || "sync_failed") }));
       try {
         sendResponse(result || { ok: false, error: "sync_failed" });
       } catch {}
@@ -218,15 +221,14 @@
     return true;
   });
 
-  void syncOnce();
+  void runSyncOnce();
   window.addEventListener("focus", scheduleSync, { passive: true });
   window.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") scheduleSync();
   }, { passive: true });
   window.addEventListener("storage", (event) => {
     try {
-      const key = String(event && event.key || "");
-      if (!key || SYNC_LS_KEYS.includes(key)) scheduleSync();
+      if (storageKeyTriggersSync(event && event.key)) scheduleSync();
     } catch {
       scheduleSync();
     }

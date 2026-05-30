@@ -79,7 +79,6 @@
   "err_init_failed": "Init failed",
   "err_server_error": "Server error",
   "err_unknown": "Unknown error",
-  "err_custom_wp_save": "Could not save image (too large or blocked).",
   "toast_copied": "コピーしました。",
   "toast_copy_failed": "コピーに失敗しました。",
   "toast_removed": "削除しました。",
@@ -349,8 +348,7 @@
   "w_faq_title": "よくある質問",
   "w_faq_list": [
     "<b>Proはウォレットに紐づきますか？</b> いいえ — ProはXハンドルに紐づきます。どのウォレットからでも支払えます。",
-    "<b>返信を保存しますか？</b> リストはブラウザーにローカル保存。クラウド同期はProのみです。",
-    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+    "<b>返信を保存しますか？</b> リストはブラウザーにローカル保存。クラウド同期はProのみです。"
   ],
   "wp_note": "タブ別 wallpaper（Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro）。Free preview: 最初の 10 wallpapers。Unlock +1（10 referrals）、その後 5 ごとに +1、または Pro。",
   "themes_k_walls": "解除済み壁紙",

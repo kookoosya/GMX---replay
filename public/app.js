@@ -7,7 +7,13 @@
 
   let SUB = null;
   let REF_COUNT = 0;
+  const LS_REF_ELIGIBLE_CACHE = "gmx_ref_eligible_v1";
+  try{
+    const bootEligible = Number(localStorage.getItem(LS_REF_ELIGIBLE_CACHE) || 0) || 0;
+    if (bootEligible > 0) REF_COUNT = bootEligible;
+  }catch(_e){}
   let AUTH_OK = false;
+  let LAST_USAGE_COSMETIC_SIG = "";
   let LAST_USAGE = { gm:{ used:0, limit:0 }, gn:{ used:0, limit:0 }, resetAt:null };
   let LAST_SAVED = { gm:0, gn:0 };
   function isPro(){ return !!(SUB && SUB.active); }
@@ -2811,6 +2817,30 @@ function bindHelpModal(){
   });
 }
 
+function applyRefCountEligible(eligible, { renderUnlockUi = false } = {}){
+    const num = Math.max(0, Number(eligible || 0) || 0);
+    const changed = REF_COUNT !== num;
+    REF_COUNT = num;
+    try{ localStorage.setItem(LS_REF_ELIGIBLE_CACHE, String(num)); }catch(_e){}
+    if ($("refCountPill")) $("refCountPill").textContent = String(num);
+    if ($("refCountRight")) $("refCountRight").textContent = String(num);
+    if ($("refCountInline")) $("refCountInline").textContent = String(num);
+    if ($("refEligibleInline")) $("refEligibleInline").textContent = String(num);
+    if (!renderUnlockUi || !changed) return changed;
+    try{ renderThemes(); }catch(_e){}
+    try{ renderExtThemes(); }catch(_e){}
+    try{ fillStyles(); }catch(_e){}
+    try{ fillPacks(); }catch(_e){}
+    return changed;
+  }
+
+  function usageCosmeticSignature(j){
+    const eligible = Number(j?.limits?.referralUnlocks?.eligible ?? 0) || 0;
+    const tier = String(j?.sub?.tier || j?.sub?.plan || "");
+    const active = j?.sub?.active ? "1" : "0";
+    return `${active}|${tier}|${eligible}|${SAVE_CAP_FREE}`;
+  }
+
 async function refreshUsage(){
     if (!getToken()){ return; }
     const h = getHandle();
@@ -2831,6 +2861,8 @@ async function refreshUsage(){
 
       SUB = j.sub || null;
       renderWalletStatus(j.sub);
+
+      applyRefCountEligible(Number(j?.limits?.referralUnlocks?.eligible ?? 0) || 0, { renderUnlockUi: true });
 
       const gmCapUI = normLimitForUI(gm.limit);
       const gnCapUI = normLimitForUI(gn.limit);
@@ -2862,25 +2894,23 @@ async function refreshUsage(){
       const ra = $("kResetAt");
       if (ra) ra.textContent = j.resetAt || "-";
 
+      const cosmeticSig = usageCosmeticSignature(j);
+      if (cosmeticSig !== LAST_USAGE_COSMETIC_SIG){
+        LAST_USAGE_COSMETIC_SIG = cosmeticSig;
+        fillStyles();
+        fillPacks();
+        try{ window.__syncProControls && window.__syncProControls(); }catch(e){}
+        applyUserBg();
+        initWallpapers();
+        renderThemes();
+        initExtWallpaperControls();
+        normalizeStoredExtWallpaperSelections();
+        renderExtThemes();
+        renderExtWallpapers();
+        renderExtCustomBgUI();
+        setExtView(normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW)||"theme"), { force:true, silent:true });
+      }
 
-      // refresh UI that depends on subscription / limits
-      fillStyles();
-      fillPacks();
-      try{ window.__syncProControls && window.__syncProControls(); }catch(e){}
-
-      applyUserBg();
-      initWallpapers();
-
-      // themes + view
-      renderThemes();
-      initExtWallpaperControls();
-      normalizeStoredExtWallpaperSelections();
-      renderExtThemes();
-      renderExtWallpapers();
-      renderExtCustomBgUI();
-      setExtView(normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW)||"theme"), { force:true, silent:true });
-
-      // also refresh referral count for unlocks
       try{ scheduleRefStatsRefresh(120); }catch(e){}
 
       try{ if (!$("help_modal")?.classList.contains("hidden")) renderHelpModal(); }catch(_e){}
@@ -2942,12 +2972,14 @@ async function refreshUsage(){
     }
 
     const merged = [];
+    const mergeCap = 5000;
     for (const key of allLegacyKeysForKind(kind)){
-      merged.push(...readKey(key));
+      if (merged.length >= mergeCap) break;
+      merged.push(...readKey(key).slice(0, mergeCap - merged.length));
     }
-    merged.push(...bankNow);
+    if (merged.length < mergeCap) merged.push(...bankNow.slice(0, mergeCap - merged.length));
 
-    const finalBank = dedupeLines(merged);
+    const finalBank = dedupeLines(merged).slice(0, mergeCap);
     writeKey(bankKey, finalBank);
 
     for (const key of allLegacyKeysForKind(kind)){
@@ -3996,16 +4028,10 @@ async function refreshRefStats(force=false){
     try{ renderReferralRightCopy(lang); }catch{}
     try{ renderGuideRightCopy(lang); }catch{}
 
-    REF_COUNT = eligible;
-
-    if ($("refCountPill")) $("refCountPill").textContent = String(eligible);
-    if ($("refCountRight")) $("refCountRight").textContent = String(eligible);
-    if ($("refCountInline")) $("refCountInline").textContent = String(eligible);
+    applyRefCountEligible(eligible);
 
     if ($("refConfirmedInline")) $("refConfirmedInline").textContent = String(confirmed);
     if ($("refActiveInline")) $("refActiveInline").textContent = String(active);
-    if ($("refEligibleInline")) $("refEligibleInline").textContent = String(eligible);
-
     const link = $("refLink");
     if (link) link.value = j.refLink || "";
     revealReferralLinkUi();
@@ -4074,7 +4100,6 @@ async function loadLeaderboard(days){
   try{
     LB_DAYS = Number(days||7) || 7;
     const st = $("lb_status");
-    if (st)     try{ initWpLazyLoad(); }catch(_e){}
 
     st.textContent = "";
     const body = $("lb_body");
@@ -4372,12 +4397,9 @@ async function loadRefLeaderboard(days=90){
       const confirmed = Number(j.confirmedRefs ?? 0) || 0;
       const active = Number(j.activeRefs ?? 0) || 0;
       const eligible = Number(j.eligibleRefs ?? j.referrals ?? j.count ?? 0) || 0;
-      REF_COUNT = eligible;
-      if ($("refCountPill")) $("refCountPill").textContent = String(eligible);
-      if ($("refCountRight")) $("refCountRight").textContent = String(eligible);
+      applyRefCountEligible(eligible);
       if ($("refConfirmedInline")) $("refConfirmedInline").textContent = String(confirmed);
       if ($("refActiveInline")) $("refActiveInline").textContent = String(active);
-      if ($("refEligibleInline")) $("refEligibleInline").textContent = String(eligible);
       try{ renderThemes(); }catch(e){}
       try{ renderExtThemes(); }catch(e){}
       try{ initWallpapers(); }catch(e){}
@@ -6915,6 +6937,9 @@ function cleanupKeyLines(lines){
 
     mergeImportedBank("gm", data.gm);
     mergeImportedBank("gn", data.gn);
+    if (!isPro()){
+      try{ trimKindToCap("gm"); trimKindToCap("gn"); }catch(_e){}
+    }
 
     applyTheme(localStorage.getItem("gmx_theme") || "classic");
     applyUserBg();

@@ -79,7 +79,6 @@
   "err_init_failed": "Init failed",
   "err_server_error": "Server error",
   "err_unknown": "Unknown error",
-  "err_custom_wp_save": "Could not save image (too large or blocked).",
   "toast_copied": "Copied.",
   "toast_copy_failed": "Copy failed.",
   "toast_removed": "Removed.",
@@ -344,13 +343,12 @@
   "w_support_desc": "",
   "toolSupport": "",
   "toolDiag": "",
-  "toolLogs": "",
+  "toolLogs": "Copy local logs",
   "supportOut_ph": "",
   "w_faq_title": "FAQ",
   "w_faq_list": [
     "<b>Is Pro tied to my wallet?</b> No — Pro is tied to your X handle. You can pay from any wallet.",
-    "<b>Do you store my replies?</b> Lists are stored locally in your browser. Cloud sync is Pro-only.",
-    "<b>Can I get a refund?</b> No. Once a Solana payment is verified on-chain, it is final."
+    "<b>Do you store my replies?</b> Lists are stored locally in your browser. Cloud sync is Pro-only."
   ],
   "wp_note": "Set a wallpaper per tab (Home / GM / Referrals / Themes / Extension Themes / Upgrade Pro). Free preview: first 10 wallpapers. Unlock +1 at 10 referrals, then +1 every 5, or Pro.",
   "themes_k_walls": "Unlocked wallpapers",
@@ -359,7 +357,7 @@
   "ext_k_ref": "Referrals",
   "w_pay_help_list_html": "<li>Select a plan and payment token (SOL / USDC / USDT).</li><li>Connect your wallet and approve the transfer inside your wallet.</li><li>We verify the transaction on Solana and activate Pro for your handle.</li>",
   "w_trust_title": "Trust & safety",
-  "w_trust_list_html": "<li><b>No seed phrase:</b> we never ask for your secret words or private keys.</li><li><b>Standard transfer:</b> you will always see receiver address and amount inside your wallet before approving.</li><li><b>On-chain verification:</b> Pro activates only after we verify your transaction on Solana.</li><li><b>Payments are final:</b> verified on-chain payments are not refunded or reversed by us.</li>",
+  "w_trust_list_html": "<li><b>No seed phrase:</b> we never ask for your secret words or private keys.</li><li><b>Standard transfer:</b> you will always see receiver address and amount inside your wallet before approving.</li><li><b>On-chain verification:</b> Pro activates only after we verify your transaction on Solana.</li>",
   "ext_rules_list_html": "<li>Extension skin is selected on the site and synced into the extension.</li><li>Only one skin can be active at a time.</li><li>Pro also removes the ${SAVE_CAP_FREE} saved-lines cap and unlocks all styles/packs.</li>",
   "ref_loaded": "Loaded.",
   "ref_load_failed": "Load failed.",
