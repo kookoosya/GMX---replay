@@ -33,7 +33,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260310a";
+const ASSET_REV = "20260318b";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -6287,12 +6287,6 @@ function closeLangMenu(){
   }catch{}
 
   applyLang();
-  try{
-    const gmModeEl = $("gmMode");
-    const gnModeEl = $("gnMode");
-    if (gmModeEl) gmModeEl.addEventListener("change", ()=>{ try{ syncModePanelCopy(); }catch{} });
-    if (gnModeEl) gnModeEl.addEventListener("change", ()=>{ try{ syncModePanelCopy(); }catch{} });
-  }catch{}
   try{ syncBestModeUi(); }catch(_e){}
   try{ syncCleanFillUi(); }catch(_e){}
   pruneLegacyAdminPanels();

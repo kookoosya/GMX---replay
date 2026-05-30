@@ -188,8 +188,7 @@
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
     "Manual input drafts are auto-saved.",
-    "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
-    "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
+    "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
   ],
   "gn_right": "Comment utiliser GN",
   "gn_right_desc": "Réponses GN nocturnes courtes — calmes, humaines, faciles à coller.",
@@ -200,10 +199,16 @@
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
     "Manual input drafts are auto-saved.",
-    "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
-    "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
+    "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
   ],
   "gn_desc": "Réponses au post du soir de quelqu’un sur X. Même flux — court, humain, publiable.",
+  "gn_size_label": "Taille",
+  "gn_mode_min": "Rapide · court",
+  "gn_mode_mid": "Équilibré · défaut",
+  "gn_mode_max": "Complet · plus riche",
+  "gn_mode_min_hint": "Une ligne courte, prête à publier.",
+  "gn_mode_mid_hint": "Un peu plus de couleur ; toujours une vraie réponse.",
+  "gn_mode_max_hint": "Ton plus chaleureux — pas un pavé.",
   "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
   "wallet_desc": "Upgrade Pro : supprime la limite 70 et débloque tous les cosmétiques (thèmes, styles, skins & wallpapers d’extension). Paiement sur Solana en SOL / USDC / USDT. Vérification automatique on‑chain.",
   "w_pay_desc": "Le wallet receveur s’affichera après la sélection d’un plan.",
@@ -401,17 +406,10 @@
   "lb_7d": "7j",
   "lb_30d": "30j",
   "gm_size_label": "Taille",
-  "gn_size_label": "Taille",
   "gm_mode_min": "Rapide · court",
   "gm_mode_mid": "Équilibré · défaut",
   "gm_mode_max": "Complet · plus riche",
   "gm_mode_min_hint": "Une ligne courte, prête à publier.",
   "gm_mode_mid_hint": "Un peu plus de couleur ; toujours une vraie réponse.",
-  "gm_mode_max_hint": "Ton plus chaleureux — pas un pavé.",
-  "gn_mode_min": "Rapide · court",
-  "gn_mode_mid": "Équilibré · défaut",
-  "gn_mode_max": "Complet · plus riche",
-  "gn_mode_min_hint": "Une ligne courte, prête à publier.",
-  "gn_mode_mid_hint": "Un peu plus de couleur ; toujours une vraie réponse.",
-  "gn_mode_max_hint": "Ton plus chaleureux — pas un pavé."
+  "gm_mode_max_hint": "Ton plus chaleureux — pas un pavé."
 }

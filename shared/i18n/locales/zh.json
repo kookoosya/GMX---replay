@@ -188,8 +188,7 @@
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
     "Manual input drafts are auto-saved.",
-    "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
-    "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
+    "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
   ],
   "gn_right": "GN 使用方法",
   "gn_right_desc": "简短的夜间 GN 回复 — 平静、人性化、便于粘贴。",
@@ -200,10 +199,16 @@
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
     "Manual input drafts are auto-saved.",
-    "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
-    "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
+    "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
   ],
   "gn_desc": "回复他人在 X 上的夜间帖子。同样流程 — 简短、自然、可直接发布。",
+  "gn_size_label": "长度",
+  "gn_mode_min": "快速 · 短",
+  "gn_mode_mid": "均衡 · 默认",
+  "gn_mode_max": "完整 · 更丰富",
+  "gn_mode_min_hint": "一行短句，可直接发布。",
+  "gn_mode_mid_hint": "稍更丰富，仍是自然回复。",
+  "gn_mode_max_hint": "语气更暖 — 不是长文。",
   "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
   "wallet_desc": "升级 Pro：每日 GM/GN 不限行数 + 解锁所有外观（主题、风格、扩展皮肤与壁纸）。在 Solana 上用 SOL / USDC / USDT 支付，链上自动验证。",
   "w_pay_desc": "请选择一个套餐以启用付款。",
@@ -401,17 +406,10 @@
   "lb_7d": "7天",
   "lb_30d": "30天",
   "gm_size_label": "长度",
-  "gn_size_label": "长度",
   "gm_mode_min": "快速 · 短",
   "gm_mode_mid": "均衡 · 默认",
   "gm_mode_max": "完整 · 更丰富",
   "gm_mode_min_hint": "一行短句，可直接发布。",
   "gm_mode_mid_hint": "稍更丰富，仍是自然回复。",
-  "gm_mode_max_hint": "语气更暖 — 不是长文。",
-  "gn_mode_min": "快速 · 短",
-  "gn_mode_mid": "均衡 · 默认",
-  "gn_mode_max": "完整 · 更丰富",
-  "gn_mode_min_hint": "一行短句，可直接发布。",
-  "gn_mode_mid_hint": "稍更丰富，仍是自然回复。",
-  "gn_mode_max_hint": "语气更暖 — 不是长文。"
+  "gm_mode_max_hint": "语气更暖 — 不是长文。"
 }

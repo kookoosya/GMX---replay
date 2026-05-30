@@ -188,8 +188,7 @@
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
     "Manual input drafts are auto-saved.",
-    "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
-    "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
+    "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
   ],
   "gn_right": "GN の使い方",
   "gn_right_desc": "短い夜のGN返信 — 落ち着いて、人間味があり、貼りやすい。",
@@ -200,10 +199,16 @@
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
     "Manual input drafts are auto-saved.",
-    "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
-    "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
+    "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
   ],
   "gn_desc": "Xの他人の夜ポストへの返信。同じ流れ — 短く、自然で、そのまま投稿できる。",
+  "gn_size_label": "サイズ",
+  "gn_mode_min": "速い · 短め",
+  "gn_mode_mid": "バランス · 既定",
+  "gn_mode_max": "フル · やや厚め",
+  "gn_mode_min_hint": "短い1行、そのまま投稿できる。",
+  "gn_mode_mid_hint": "少しだけ厚み。自然な返信のまま。",
+  "gn_mode_max_hint": "あたたかめのトーン — 長文ではない。",
   "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
   "wallet_desc": "Proアップグレード：GM/GNの1日上限なし + 全コスメ解放（テーマ、スタイル、拡張機能スキン&壁紙）。SolanaでSOL/USDC/USDT支払い。オンチェーン自動検証。",
   "w_pay_desc": "支払いを有効化するにはプランを選択してください。",
@@ -401,17 +406,10 @@
   "lb_7d": "7日",
   "lb_30d": "30日",
   "gm_size_label": "サイズ",
-  "gn_size_label": "サイズ",
   "gm_mode_min": "速い · 短め",
   "gm_mode_mid": "バランス · 既定",
   "gm_mode_max": "フル · やや厚め",
   "gm_mode_min_hint": "短い1行、そのまま投稿できる。",
   "gm_mode_mid_hint": "少しだけ厚み。自然な返信のまま。",
-  "gm_mode_max_hint": "あたたかめのトーン — 長文ではない。",
-  "gn_mode_min": "速い · 短め",
-  "gn_mode_mid": "バランス · 既定",
-  "gn_mode_max": "フル · やや厚め",
-  "gn_mode_min_hint": "短い1行、そのまま投稿できる。",
-  "gn_mode_mid_hint": "少しだけ厚み。自然な返信のまま。",
-  "gn_mode_max_hint": "あたたかめのトーン — 長文ではない。"
+  "gm_mode_max_hint": "あたたかめのトーン — 長文ではない。"
 }

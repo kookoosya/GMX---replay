@@ -1706,7 +1706,28 @@ html.mode-light .tab.active{ color: rgba(10,13,21,1); }
 
 
 /* R34 readability */
-body.has-wallpaper .card, body.has-wallpaper .panel, body.has-wallpaper .sideCard { background: rgba(8,12,22,.62) !important; backdrop-filter: blur(10px); }
+body.has-wallpaper .card,
+body.has-wallpaper .panel,
+body.has-wallpaper .sideCard,
+body.hasWallBg .card,
+body.hasWallBg .panel,
+body.hasWallBg .sideCard{
+  background: rgba(8,12,22,.78) !important;
+  backdrop-filter: blur(14px) saturate(1.15);
+  border-color: rgba(148,180,255,.22);
+}
+html.mode-light body.has-wallpaper .card,
+html.mode-light body.has-wallpaper .panel,
+html.mode-light body.has-wallpaper .sideCard,
+html.mode-light body.hasWallBg .card,
+html.mode-light body.hasWallBg .panel,
+html.mode-light body.hasWallBg .sideCard{
+  background: rgba(255,255,255,.88) !important;
+  border-color: rgba(0,0,0,.12);
+}
+body.hasWallBg .note,
+body.hasWallBg .desc,
+body.hasWallBg .sideTitle{ text-shadow: 0 1px 12px rgba(0,0,0,.45); }
 
 /* R44: wallet / modal / light-mode polish */
 .modalBack{

@@ -188,8 +188,7 @@
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
     "Manual input drafts are auto-saved.",
-    "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
-    "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
+    "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
   ],
   "gn_right": "So nutzt du GN",
   "gn_right_desc": "Kurze GN-Nachtantworten auf fremde Posts — ruhig, menschlich, einfach einfügen.",
@@ -200,10 +199,16 @@
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
     "Manual input drafts are auto-saved.",
-    "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
-    "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
+    "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
   ],
   "gn_desc": "Antworten auf fremde Nacht-Posts auf X. Gleicher Ablauf — kurz, menschlich, postbar.",
+  "gn_size_label": "Größe",
+  "gn_mode_min": "Schnell · kurz",
+  "gn_mode_mid": "Ausgewogen · Standard",
+  "gn_mode_max": "Voll · reicher",
+  "gn_mode_min_hint": "Eine kurze Zeile, sofort postbar.",
+  "gn_mode_mid_hint": "Etwas lebendiger; wirkt noch wie eine echte Antwort.",
+  "gn_mode_max_hint": "Wärmerer Ton — kein Aufsatz.",
   "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
   "wallet_desc": "Pro: Entfernt das 70er-Limit, schaltet alle Themes & Styles frei und gibt unbegrenzte Generation. Voller Wallet-Connect kommt später — bewusst vorsichtig wegen Security. Verify per Signature ist sicherer und zuverlässig.",
   "w_pay_desc": "Empfänger-Wallet erscheint nach Plan-Auswahl.",
@@ -401,17 +406,10 @@
   "lb_7d": "7d",
   "lb_30d": "30d",
   "gm_size_label": "Größe",
-  "gn_size_label": "Größe",
   "gm_mode_min": "Schnell · kurz",
   "gm_mode_mid": "Ausgewogen · Standard",
   "gm_mode_max": "Voll · reicher",
   "gm_mode_min_hint": "Eine kurze Zeile, sofort postbar.",
   "gm_mode_mid_hint": "Etwas lebendiger; wirkt noch wie eine echte Antwort.",
-  "gm_mode_max_hint": "Wärmerer Ton — kein Aufsatz.",
-  "gn_mode_min": "Schnell · kurz",
-  "gn_mode_mid": "Ausgewogen · Standard",
-  "gn_mode_max": "Voll · reicher",
-  "gn_mode_min_hint": "Eine kurze Zeile, sofort postbar.",
-  "gn_mode_mid_hint": "Etwas lebendiger; wirkt noch wie eine echte Antwort.",
-  "gn_mode_max_hint": "Wärmerer Ton — kein Aufsatz."
+  "gm_mode_max_hint": "Wärmerer Ton — kein Aufsatz."
 }

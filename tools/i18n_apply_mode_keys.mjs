@@ -12,8 +12,8 @@ const LOCALES_DIR = path.join(ROOT, 'shared', 'i18n', 'locales');
 
 const KEYS_BY_LOCALE = {
   en: {
-    gm_desc: 'Replies to someone else’s morning post on X. Pick size and tone, generate, copy, paste.',
-    gn_desc: 'Replies to someone else’s night post on X. Same flow — short, human, postable.',
+    gm_desc: "Replies to someone else's morning post on X. Pick size and tone, generate, copy, paste.",
+    gn_desc: "Replies to someone else's night post on X. Same flow — short, human, postable.",
     gm_size_label: 'Size',
     gn_size_label: 'Size',
     gm_mode_min: 'Fast · short',
@@ -28,6 +28,27 @@ const KEYS_BY_LOCALE = {
     gn_mode_min_hint: 'One short line, ready to paste.',
     gn_mode_mid_hint: 'A bit more color; still a natural reply.',
     gn_mode_max_hint: 'Warmer tone — not an essay.',
+    gm_right_desc: "Short morning replies to someone else's post — natural, direct, easy to paste.",
+    gn_right_desc: "Short night replies to someone else's post — calm, human, easy to paste.",
+    gm_right_list: [
+      '<b>Size</b>: Fast = one short line. Balanced = default. Full = warmer, still postable.',
+      '<b>Tone</b>: ordinary vs crypto changes vocabulary, not length.',
+      '<b>Quick 1</b> adds one line. <b>Batch 10</b> pulls a small stack (server bulk, then dedupe).',
+      '<b>Best</b> picks the strongest saved line; run <b>Best pass</b> to trim lookalikes.',
+      '<b>Repeat guard</b> blocks near-duplicates in larger runs.',
+      'Click a line to edit. <b>Copy all</b> / <b>Export .txt</b> back up the bank.',
+      'Free cap: <b>50</b> saved GM lines (editing always works).',
+    ],
+    gn_right_list: [
+      '<b>Size</b>: Fast = one short line. Balanced = default. Full = warmer, still postable.',
+      '<b>Tone</b>: ordinary vs crypto changes vocabulary, not length.',
+      '<b>Quick 1</b> adds one line. <b>Batch 10</b> pulls a small stack (server bulk, then dedupe).',
+      '<b>Best</b> picks the strongest saved line; run <b>Best pass</b> to trim lookalikes.',
+      '<b>Repeat guard</b> blocks near-duplicates in larger runs.',
+      'Click a line to edit. <b>Copy all</b> / <b>Export .txt</b> back up the bank.',
+      'Free cap: <b>50</b> saved GN lines (editing always works).',
+    ],
+    w_right_desc: 'Free: 50 saved lines per bank, daily extension copy limits. Pro: unlimited generation, all themes, and extension cosmetics.',
   },
   de: {
     gm_desc: 'Antworten auf fremde Morgen-Posts auf X. Größe und Ton wählen, erzeugen, kopieren, einfügen.',

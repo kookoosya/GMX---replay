@@ -188,8 +188,7 @@
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
     "Manual input drafts are auto-saved.",
-    "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
-    "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
+    "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
   ],
   "gn_right": "GN कैसे इस्तेमाल करें",
   "gn_right_desc": "छोटे रात के GN जवाब — शांत, मानवीय, पेस्ट करने में आसान।",
@@ -200,10 +199,16 @@
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
     "Manual input drafts are auto-saved.",
-    "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
-    "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
+    "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
   ],
   "gn_desc": "X पर किसी और की रात की पोस्ट का जवाब। वही फ्लो — छोटा, इंसानी, पोस्ट करने लायक।",
+  "gn_size_label": "साइज़",
+  "gn_mode_min": "तेज़ · छोटा",
+  "gn_mode_mid": "संतुलित · डिफ़ॉल्ट",
+  "gn_mode_max": "पूरा · समृद्ध",
+  "gn_mode_min_hint": "एक छोटी लाइन, तुरंत पोस्ट करने योग्य।",
+  "gn_mode_mid_hint": "थोड़ा और रंग; फिर भी प्राकृतिक जवाब।",
+  "gn_mode_max_hint": "गर्म टोन — निबंध नहीं।",
   "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
   "wallet_desc": "Pro अपग्रेड: अनलिमिटेड डेली GM/GN लाइन्स + सभी कॉस्मेटिक्स अनलॉक (थीम्स, स्टाइल्स, एक्सटेंशन स्किन्स और वॉलपेपर)। Solana पर SOL / USDC / USDT से पे करें। ऑन-चेन ऑटो-वेरिफाइड।",
   "w_pay_desc": "पेमेंट सक्षम करने के लिए एक प्लान चुनें।",
@@ -401,17 +406,10 @@
   "lb_7d": "7दिन",
   "lb_30d": "30दिन",
   "gm_size_label": "साइज़",
-  "gn_size_label": "साइज़",
   "gm_mode_min": "तेज़ · छोटा",
   "gm_mode_mid": "संतुलित · डिफ़ॉल्ट",
   "gm_mode_max": "पूरा · समृद्ध",
   "gm_mode_min_hint": "एक छोटी लाइन, तुरंत पोस्ट करने योग्य।",
   "gm_mode_mid_hint": "थोड़ा और रंग; फिर भी प्राकृतिक जवाब।",
-  "gm_mode_max_hint": "गर्म टोन — निबंध नहीं।",
-  "gn_mode_min": "तेज़ · छोटा",
-  "gn_mode_mid": "संतुलित · डिफ़ॉल्ट",
-  "gn_mode_max": "पूरा · समृद्ध",
-  "gn_mode_min_hint": "एक छोटी लाइन, तुरंत पोस्ट करने योग्य।",
-  "gn_mode_mid_hint": "थोड़ा और रंग; फिर भी प्राकृतिक जवाब।",
-  "gn_mode_max_hint": "गर्म टोन — निबंध नहीं।"
+  "gm_mode_max_hint": "गर्म टोन — निबंध नहीं।"
 }

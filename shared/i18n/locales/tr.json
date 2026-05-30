@@ -188,8 +188,7 @@
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
     "Manual input drafts are auto-saved.",
-    "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
-    "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
+    "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section."
   ],
   "gn_right": "GN nasıl kullanılır",
   "gn_right_desc": "Kısa gece GN yanıtları — sakin, insani, yapıştırmaya hazır.",
@@ -200,10 +199,16 @@
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
     "Manual input drafts are auto-saved.",
-    "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
-    "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
+    "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section."
   ],
   "gn_desc": "X’te başkasının gece gönderisine yanıt. Aynı akış — kısa, insani, paylaşılabilir.",
+  "gn_size_label": "Boyut",
+  "gn_mode_min": "Hızlı · kısa",
+  "gn_mode_mid": "Dengeli · varsayılan",
+  "gn_mode_max": "Tam · daha zengin",
+  "gn_mode_min_hint": "Tek kısa satır, hemen paylaşılabilir.",
+  "gn_mode_mid_hint": "Biraz daha canlı; yine doğal bir yanıt.",
+  "gn_mode_max_hint": "Daha sıcak ton — makale değil.",
   "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
   "wallet_desc": "Pro: 70 cap’i kaldırır, tüm temaları & stilleri açar ve sınırsız üretim verir. Tam wallet-connect yakında — güvenlik için dikkatli gidiyoruz. Signature ile doğrulama daha güvenli ve stabil.",
   "w_pay_desc": "Alıcı cüzdan plan seçildikten sonra görünür.",
@@ -401,17 +406,10 @@
   "lb_7d": "7g",
   "lb_30d": "30g",
   "gm_size_label": "Boyut",
-  "gn_size_label": "Boyut",
   "gm_mode_min": "Hızlı · kısa",
   "gm_mode_mid": "Dengeli · varsayılan",
   "gm_mode_max": "Tam · daha zengin",
   "gm_mode_min_hint": "Tek kısa satır, hemen paylaşılabilir.",
   "gm_mode_mid_hint": "Biraz daha canlı; yine doğal bir yanıt.",
-  "gm_mode_max_hint": "Daha sıcak ton — makale değil.",
-  "gn_mode_min": "Hızlı · kısa",
-  "gn_mode_mid": "Dengeli · varsayılan",
-  "gn_mode_max": "Tam · daha zengin",
-  "gn_mode_min_hint": "Tek kısa satır, hemen paylaşılabilir.",
-  "gn_mode_mid_hint": "Biraz daha canlı; yine doğal bir yanıt.",
-  "gn_mode_max_hint": "Daha sıcak ton — makale değil."
+  "gm_mode_max_hint": "Daha sıcak ton — makale değil."
 }
