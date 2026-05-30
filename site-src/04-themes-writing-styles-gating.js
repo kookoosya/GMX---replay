@@ -113,39 +113,84 @@
   ].slice(0, 60);
 
   const EXT_THEMES = THEMES.map(t=>({ id:t.id, name:t.name, note:t.note, a:t.a, b:t.b }));
-  const EXT_WALLPAPER_FREE = [
-    ["ext_free_01", "Free 01"],
-    ["ext_free_02", "Free 02"],
-  ];
   const EXT_WALLPAPER_PACK_COUNT = 58;
   const EXT_WALLPAPER_FREE_PACK_COUNT = 4;
-  const EXT_WALLPAPER_LUX = [
-    ["lux_ext_anime_neon_alley", "Anime Neon Alley"],
-    ["lux_ext_cinematic_heroes", "Cinematic Heroes"],
-    ["lux_ext_ct_warroom", "CT War Room"],
-    ["lux_ext_degen_terminal", "Degen Terminal"],
-    ["lux_ext_nft_gallery", "NFT Gallery"],
-    ["lux_ext_noir_detective", "Noir Detective"],
-    ["lux_ext_onchain_spaceport", "Onchain Spaceport"],
-    ["lux_ext_solana_temple", "Solana Temple"],
+  const EXT_PACK_NAMES = [
+    "Coastal Dawn",
+    "Forest Mist",
+    "Mountain Lake",
+    "City Sunset",
+    "Desert Dunes",
+    "Ocean Horizon",
+    "Nordic Fjord",
+    "Rainy Street",
+    "Cherry Blossom",
+    "Golden Hour",
+    "Misty Pines",
+    "Alpine Meadow",
+    "River Bend",
+    "Cliff Coast",
+    "Lavender Field",
+    "Autumn Trail",
+    "Snow Peak",
+    "Bamboo Grove",
+    "Harbor Lights",
+    "Vineyard Hills",
+    "Canyon View",
+    "Tropical Cove",
+    "Urban Night",
+    "Meadow Bloom",
+    "Glacier Bay",
+    "Sandstone Arch",
+    "Waterfall Glen",
+    "Prairie Wind",
+    "Island Palm",
+    "Moonlit Bay",
+    "Cedar Forest",
+    "Rose Garden",
+    "Stone Bridge",
+    "Lighthouse Shore",
+    "Wildflower Hill",
+    "Cloud Valley",
+    "Emerald Coast",
+    "Silver Lake",
+    "Amber Woods",
+    "Coral Reef",
+    "Indigo Sky",
+    "Morning Fog",
+    "Twilight Pier",
+    "Bamboo Path",
+    "Rocky Shore",
+    "Savanna Gold",
+    "Maple Lane",
+    "Crystal Cave",
+    "Dunescape",
+    "Orchid Green",
+    "Vineyard Dawn",
+    "Ice Lagoon",
+    "Red Rock",
+    "Moss Garden",
+    "Delta Mirror",
+    "Panorama Ridge",
+    "Silk Clouds",
+    "Cedar Sunset"
   ];
   const CRYPTO_EXT_WALL_SOURCES = [];
   function buildExtWallpapers(){
-    const out = EXT_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
+    const out = [];
     for (let i=1; i<=EXT_WALLPAPER_PACK_COUNT; i++){
       out.push({
         id: `extv3_${String(i).padStart(2, "0")}`,
-        name: `Aurora ${i}`,
+        name: EXT_PACK_NAMES[i - 1] || `Scene ${i}`,
         tier: i <= EXT_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
       });
     }
-    for (const [id, name] of EXT_WALLPAPER_LUX) out.push({ id, name, tier:"premium" });
     return out;
   }
   const EXT_WALLPAPERS = buildExtWallpapers();
   function migrateLegacyExtWallpaperSelectionOnce(){
     try{
-      const done = "gmx_ext_wallpaper_refresh_20260318";
+      const done = "gmx_ext_wallpaper_photo_v1";
       if (localStorage.getItem(done) === "1") return;
       // keep IDs stable; visual refresh now happens in URL resolver
       localStorage.setItem(done, "1");

@@ -35,27 +35,75 @@ const LEGACY_THEME_KEYS = {
   extCustomBg: "gmx_ext_custom_bg_global",
 };
 
-const EXT_FEATURED_WALLPAPERS = [
-  { id: 'ext_free_01', name: 'Mempool Grid' },
-  { id: 'ext_free_02', name: 'Solana Glass' },
-  { id: 'lux_ext_degen_terminal', name: 'Degen Terminal' },
-  { id: 'lux_ext_onchain_spaceport', name: 'Onchain Spaceport' },
-  { id: 'lux_ext_solana_temple', name: 'Solana Temple' },
-  { id: 'lux_ext_ct_warroom', name: 'CT War Room' },
-  { id: 'lux_ext_nft_gallery', name: 'NFT Gallery' },
-  { id: 'lux_ext_noir_detective', name: 'Ledger Noir' },
-  { id: 'lux_ext_anime_neon_alley', name: 'Neon Alley' },
-  { id: 'lux_ext_cinematic_heroes', name: 'Validator Skyline' },
+const EXT_PACK_NAMES = [
+  'Coastal Dawn',
+  'Forest Mist',
+  'Mountain Lake',
+  'City Sunset',
+  'Desert Dunes',
+  'Ocean Horizon',
+  'Nordic Fjord',
+  'Rainy Street',
+  'Cherry Blossom',
+  'Golden Hour',
+  'Misty Pines',
+  'Alpine Meadow',
+  'River Bend',
+  'Cliff Coast',
+  'Lavender Field',
+  'Autumn Trail',
+  'Snow Peak',
+  'Bamboo Grove',
+  'Harbor Lights',
+  'Vineyard Hills',
+  'Canyon View',
+  'Tropical Cove',
+  'Urban Night',
+  'Meadow Bloom',
+  'Glacier Bay',
+  'Sandstone Arch',
+  'Waterfall Glen',
+  'Prairie Wind',
+  'Island Palm',
+  'Moonlit Bay',
+  'Cedar Forest',
+  'Rose Garden',
+  'Stone Bridge',
+  'Lighthouse Shore',
+  'Wildflower Hill',
+  'Cloud Valley',
+  'Emerald Coast',
+  'Silver Lake',
+  'Amber Woods',
+  'Coral Reef',
+  'Indigo Sky',
+  'Morning Fog',
+  'Twilight Pier',
+  'Bamboo Path',
+  'Rocky Shore',
+  'Savanna Gold',
+  'Maple Lane',
+  'Crystal Cave',
+  'Dunescape',
+  'Orchid Green',
+  'Vineyard Dawn',
+  'Ice Lagoon',
+  'Red Rock',
+  'Moss Garden',
+  'Delta Mirror',
+  'Panorama Ridge',
+  'Silk Clouds',
+  'Cedar Sunset'
 ];
-
-const EXT_WALLPAPER_OPTIONS = (()=>{
-  const out = [...EXT_FEATURED_WALLPAPERS];
-  for (let i=1; i<=58; i++){
-    const n = String(i).padStart(2,'0');
-    out.push({ id: `extv3_${n}`, name: ['Laser Grid', 'Night Drive', 'Order Book', 'Signal Bloom', 'Validator Sky', 'Candle Mist', 'Relay Tunnel', 'Mint Horizon', 'Blockwave', 'Node Rain', 'Airdrop Haze', 'Hyperlane', 'Glass Router', 'Vault Glow', 'Neon Tape', 'Cold Ledger', 'Warp Stack', 'Luma Chain', 'Dawn Engine', 'Token Drift', 'Blue Volume', 'Mirror Pool', 'Circuit Cloud', 'Mint Static', 'Heatmap', 'Price Halo', 'Turbo Dusk', 'Late Block', 'Shard Dream', 'Chainlight', 'Mercury Lane', 'Peak Flow', 'Silent Mint', 'Fast Route', 'Prime Tape', 'Node Bloom', 'Ghost Volume', 'Crystal Wire', 'Lunar DEX', 'Crossfade', 'Vector Frost', 'Frame Shift', 'Plasma Window', 'Afterhours', 'Spectra Gate', 'Glass Depth', 'Hash Garden', 'Night Relay', 'Pulse Harbor', 'Ocean Node', 'Sky Cache', 'Gamma Field', 'Quiet Tape', 'Zero Slip', 'Soft Orbit', 'Flash Market', 'Aurora Book'][i-1] || `Backdrop ${n}` });
+const EXT_WALLPAPER_OPTIONS = (() => {
+  const out = [];
+  for (let i = 1; i <= 58; i++) {
+    const n = String(i).padStart(2, "0");
+    out.push({ id: `extv3_${n}`, name: EXT_PACK_NAMES[i - 1] || `Scene ${i}` });
   }
   return out;
 })();
+
 const DEFAULT_THEME = {
   id: "classic",
   a: "rgba(153,69,255,1)",
@@ -106,6 +154,7 @@ function canonicalExtWallpaperId(id){
   if (!v) return '';
   if (v === "custom_upload") return "custom_upload";
   if (EXT_WALLPAPER_OPTIONS.some(x=>String(x.id||'').toLowerCase()===v)) return v;
+  if (/^ext_free_/i.test(v) || /^lux_ext_/i.test(v)) return 'extv3_01';
   let m = v.match(/^extv3_(\d{1,2})$/i);
   if (m) {
     const n = String(Math.max(1, Math.min(58, Number(m[1]) || 1))).padStart(2, '0');
@@ -122,7 +171,7 @@ function canonicalExtWallpaperId(id){
     return `extv3_${String(num).padStart(2, '0')}`;
   }
   if (/^lux_ext_[a-z0-9_]+$/i.test(v)) return v;
-  return 'ext_free_01';
+  return 'extv3_01';
 }
 
 function normalizeWallpaperOptionId(id){

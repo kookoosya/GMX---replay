@@ -39,7 +39,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260530b";
+const ASSET_REV = "20260530c";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -645,45 +645,103 @@ function readFileAsDataURL(file){
   })();
 
 
-  // Wallpapers — per-tab. Honest catalog: 2 free SVG + 50 pack slots + 8 premium lux wallpapers = 60 total.
+  // Wallpapers — per-tab. Photo pack (webp under /assets/wallpapers/v2_*.webp).
   const LS_WP_GLOBAL = "gmx_wp_all";
   const LS_WP_TAB_PREFIX = "gmx_wp_tab_"; // + tab name
-  const SITE_WALLPAPER_FREE = [
-    ["free01", "Free — Solana Waves"],
-    ["free02", "Free — Solflare Glow"],
-  ];
   const SITE_WALLPAPER_PACK_COUNT = 58;
   const SITE_WALLPAPER_FREE_PACK_COUNT = 10;
-  const SITE_WALLPAPER_LUX = [
-    ["lux_anime_neon_alley", "Anime Neon Alley"],
-    ["lux_cinematic_heroes", "Cinematic Heroes"],
-    ["lux_ct_warroom", "CT War Room"],
-    ["lux_degen_terminal", "Degen Terminal"],
-    ["lux_nft_gallery", "NFT Gallery"],
-    ["lux_noir_detective", "Noir Detective"],
-    ["lux_onchain_spaceport", "Onchain Spaceport"],
-    ["lux_solana_temple", "Solana Temple"],
+  const SITE_PACK_NAMES = [
+    "Coastal Dawn",
+    "Forest Mist",
+    "Mountain Lake",
+    "City Sunset",
+    "Desert Dunes",
+    "Ocean Horizon",
+    "Nordic Fjord",
+    "Rainy Street",
+    "Cherry Blossom",
+    "Golden Hour",
+    "Misty Pines",
+    "Alpine Meadow",
+    "River Bend",
+    "Cliff Coast",
+    "Lavender Field",
+    "Autumn Trail",
+    "Snow Peak",
+    "Bamboo Grove",
+    "Harbor Lights",
+    "Vineyard Hills",
+    "Canyon View",
+    "Tropical Cove",
+    "Urban Night",
+    "Meadow Bloom",
+    "Glacier Bay",
+    "Sandstone Arch",
+    "Waterfall Glen",
+    "Prairie Wind",
+    "Island Palm",
+    "Moonlit Bay",
+    "Cedar Forest",
+    "Rose Garden",
+    "Stone Bridge",
+    "Lighthouse Shore",
+    "Wildflower Hill",
+    "Cloud Valley",
+    "Emerald Coast",
+    "Silver Lake",
+    "Amber Woods",
+    "Coral Reef",
+    "Indigo Sky",
+    "Morning Fog",
+    "Twilight Pier",
+    "Bamboo Path",
+    "Rocky Shore",
+    "Savanna Gold",
+    "Maple Lane",
+    "Crystal Cave",
+    "Dunescape",
+    "Orchid Green",
+    "Vineyard Dawn",
+    "Ice Lagoon",
+    "Red Rock",
+    "Moss Garden",
+    "Delta Mirror",
+    "Panorama Ridge",
+    "Silk Clouds",
+    "Cedar Sunset"
   ];
   const CRYPTO_SITE_WALL_SOURCES = [];
   function buildSiteWallpapers(){
-    const out = SITE_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
+    const out = [];
     for (let i=1; i<=SITE_WALLPAPER_PACK_COUNT; i++){
       const n = String(i).padStart(3, "0");
       out.push({
         id: `v2_${n}`,
-        name: `Aurora #${n}`,
+        name: SITE_PACK_NAMES[i - 1] || `Scene ${i}`,
         tier: i <= SITE_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
       });
     }
-    for (const [id, name] of SITE_WALLPAPER_LUX) out.push({ id, name, tier:"premium" });
     return out;
   }
   const WALLPAPERS = buildSiteWallpapers();
-  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_refresh_20260318";
+  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_photo_v1";
   function migrateLegacyWallpaperSelectionOnce(){
     try{
       if (localStorage.getItem(WALLPAPER_REFRESH_MIGRATION_KEY) === "1") return;
-      // keep IDs stable; visual refresh now happens in URL resolver
+      const mapLegacy = (id) => {
+        const v = String(id || "").trim();
+        if (!v) return "";
+        if (/^free0[12]$/i.test(v) || /^w\d+$/i.test(v) || /^v3_\d+$/i.test(v) || /^lux_/i.test(v)) return "v2_001";
+        if (v.startsWith("v2_")) return v;
+        return "v2_001";
+      };
+      const g = mapLegacy(localStorage.getItem(LS_WP_GLOBAL));
+      if (g) localStorage.setItem(LS_WP_GLOBAL, g); else localStorage.removeItem(LS_WP_GLOBAL);
+      for (const [tab] of WALLPAPER_TABS){
+        const k = wallpaperKeyForTab(tab);
+        const norm = mapLegacy(localStorage.getItem(k));
+        if (norm) localStorage.setItem(k, norm); else localStorage.removeItem(k);
+      }
       localStorage.setItem(WALLPAPER_REFRESH_MIGRATION_KEY, "1");
     }catch{}
   }
@@ -734,8 +792,8 @@ function readFileAsDataURL(file){
     if (v === CUSTOM_UPLOAD_ID) return v;
     if (CUSTOM_WP_RE.test(v)) return v;
     // migrate legacy svg ids (w01..w99) or removed v3 ids to a safe default
-    if (/^w\d+$/i.test(v) || /^v3_\d+$/i.test(v)) return (WALLPAPERS.find(x=>x.id==="v2_001")?"v2_001":"free01");
-    return (WALLPAPERS.find(x=>x.id==="v2_001")?"v2_001":"free01");
+    if (/^w\d+$/i.test(v) || /^v3_\d+$/i.test(v) || /^free\d+$/i.test(v) || /^lux_/i.test(v)) return "v2_001";
+    return "v2_001";
   }
 
   function normalizeAllWallpapers(){
@@ -785,80 +843,12 @@ function readFileAsDataURL(file){
     return `data:image/svg+xml;utf8,${encodeURIComponent(String(svg || ""))}`;
   }
 
-  const SITE_PACK_PALETTES = [
-    { coin: "BTC", c1: "#f7931a", c2: "#ffb347", vibe: "Bitcoin orange" },
-    { coin: "ETH", c1: "#627eea", c2: "#c2d9ff", vibe: "Ethereum blue" },
-    { coin: "SOL", c1: "#9945ff", c2: "#14f195", vibe: "Solana gradient" },
-    { coin: "AVAX", c1: "#e84142", c2: "#ff6b6b", vibe: "Avalanche red" },
-    { coin: "ARB", c1: "#28a0f0", c2: "#00d4ff", vibe: "Arbitrum cyan" },
-    { coin: "OP", c1: "#ff0420", c2: "#ff6b7a", vibe: "Optimism red" },
-    { coin: "SUI", c1: "#6fbcf0", c2: "#00b4d8", vibe: "Sui blue" },
-    { coin: "BNB", c1: "#f3ba2f", c2: "#fcd535", vibe: "BNB gold" },
-    { coin: "DOGE", c1: "#c2a633", c2: "#e8d44d", vibe: "Dogecoin" },
-    { coin: "XRP", c1: "#23292f", c2: "#00aae4", vibe: "XRP ripple" },
-    { coin: "LINK", c1: "#2a5ada", c2: "#375bd2", vibe: "Chainlink" },
-    { coin: "APT", c1: "#12b3a8", c2: "#00ffdd", vibe: "Aptos teal" }
-  ];
 
-  function sitePackWallpaperDataUri(id, thumb){
-    const n = Math.max(1, Number(String(id || "").slice(3)) || 1);
-    const p = SITE_PACK_PALETTES[(n - 1) % SITE_PACK_PALETTES.length];
-    const w = thumb ? 480 : 1920;
-    const h = thumb ? 270 : 1080;
-    const blur = thumb ? 60 : 180;
-    const orbs = [
-      { cx: 0.15 + (n % 7) * 0.1, cy: 0.2, r: 0.4, c: p.c1, op: 0.22 },
-      { cx: 0.85 - (n % 5) * 0.08, cy: 0.75, r: 0.35, c: p.c2, op: 0.18 },
-      { cx: 0.5 + (n % 3) * 0.15, cy: 0.5, r: 0.3, c: p.c1, op: 0.08 },
-      { cx: 0.3, cy: 0.9, r: 0.25, c: p.c2, op: 0.12 },
-      { cx: 0.7, cy: 0.1, r: 0.2, c: p.c1, op: 0.1 }
-    ];
-    const orbEls = orbs.map((o,i)=>`<ellipse cx="${w*o.cx}" cy="${h*o.cy}" rx="${w*o.r}" ry="${h*o.r*0.6}" fill="${o.c}" opacity="${o.op}" filter="url(#blur)"/>`).join("");
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#070a12"/><stop offset="50%" stop-color="#0a0e18"/><stop offset="100%" stop-color="#050810"/></linearGradient><radialGradient id="top" cx="0.5" cy="0" r="1"><stop offset="0%" stop-color="${p.c1}" stop-opacity="0.15"/><stop offset="100%" stop-color="transparent"/></radialGradient><filter id="blur"><feGaussianBlur stdDeviation="${blur}"/></filter></defs><rect width="${w}" height="${h}" fill="url(#bg)"/>${orbEls}<rect width="${w}" height="${h}" fill="url(#top)" opacity="0.6"/></svg>`;
-    return svgDataUri(svg);
-  }
-
-  const EXT_PACK_PALETTES = [
-    { tag: "GM", c1: "#9945ff", c2: "#14f195" },
-    { tag: "DEGEN", c1: "#ff6b35", c2: "#f7931a" },
-    { tag: "ALPHA", c1: "#00d4ff", c2: "#7c3aed" },
-    { tag: "WAGMI", c1: "#22c55e", c2: "#10b981" },
-    { tag: "NGMI", c1: "#ef4444", c2: "#f97316" },
-    { tag: "LFG", c1: "#8b5cf6", c2: "#ec4899" },
-    { tag: "SER", c1: "#06b6d4", c2: "#3b82f6" },
-    { tag: "APE", c1: "#eab308", c2: "#f59e0b" },
-    { tag: "MOON", c1: "#a855f7", c2: "#6366f1" },
-    { tag: "CHAD", c1: "#14b8a6", c2: "#0d9488" },
-    { tag: "SIZE", c1: "#f43f5e", c2: "#ec4899" },
-    { tag: "CT", c1: "#64748b", c2: "#94a3b8" }
-  ];
-
-  function extPackWallpaperDataUri(id, thumb){
-    const n = Math.max(1, Number(String(id || "").slice(6)) || 1);
-    const p = EXT_PACK_PALETTES[(n - 1) % EXT_PACK_PALETTES.length];
-    const w = thumb ? 360 : 1080;
-    const h = thumb ? 640 : 1920;
-    const blur = thumb ? 40 : 120;
-    const orbs = [
-      { cx: 0.2 + (n % 5) * 0.1, cy: 0.25, r: 0.5, c: p.c1, op: 0.2 },
-      { cx: 0.8 - (n % 4) * 0.1, cy: 0.7, r: 0.4, c: p.c2, op: 0.18 },
-      { cx: 0.5, cy: 0.5, r: 0.35, c: p.c1, op: 0.06 }
-    ];
-    const orbEls = orbs.map(o=>`<ellipse cx="${w*o.cx}" cy="${h*o.cy}" rx="${w*o.r}" ry="${h*o.r*0.8}" fill="${o.c}" opacity="${o.op}" filter="url(#blur)"/>`).join("");
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="bg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#070a12"/><stop offset="100%" stop-color="#050810"/></linearGradient><filter id="blur"><feGaussianBlur stdDeviation="${blur}"/></filter></defs><rect width="${w}" height="${h}" fill="url(#bg)"/>${orbEls}</svg>`;
-    return svgDataUri(svg);
-  }
 
   function extWallpaperAssetPath(id){
     const norm = normalizeExtWallpaperIdLocal(id);
     if (!norm) return "";
-    if (norm.startsWith("extv3_")) {
-      const lux = EXT_WALLPAPER_LUX.map(([v])=>String(v || "")).filter(Boolean);
-      const num = Math.max(1, Number(norm.slice(6)) || 1);
-      const mapped = lux.length ? lux[(num - 1) % lux.length] : norm;
-      if (mapped.startsWith("lux_ext_")) return mapped + ".svg";
-      return norm + ".webp";
-    }
+    if (norm.startsWith("extv3_")) return norm + ".webp";
     return norm + ".svg";
   }
 
@@ -922,13 +912,7 @@ function readFileAsDataURL(file){
 
   function wallpaperAssetPath(id){
     if (!id) return "";
-    if (typeof id === "string" && id.startsWith("v2_")) {
-      const lux = SITE_WALLPAPER_LUX.map(([v])=>String(v || "")).filter(Boolean);
-      const num = Math.max(1, Number(String(id).slice(3)) || 1);
-      const mapped = lux.length ? lux[(num - 1) % lux.length] : id;
-      if (mapped.startsWith("lux_")) return mapped + ".svg";
-      return id + ".webp";
-    }
+    if (String(id).startsWith("v2_")) return String(id) + ".webp";
     return String(id) + ".svg";
   }
 
@@ -1376,39 +1360,84 @@ function renderWallpaperUI(){
   ].slice(0, 60);
 
   const EXT_THEMES = THEMES.map(t=>({ id:t.id, name:t.name, note:t.note, a:t.a, b:t.b }));
-  const EXT_WALLPAPER_FREE = [
-    ["ext_free_01", "Free 01"],
-    ["ext_free_02", "Free 02"],
-  ];
   const EXT_WALLPAPER_PACK_COUNT = 58;
   const EXT_WALLPAPER_FREE_PACK_COUNT = 4;
-  const EXT_WALLPAPER_LUX = [
-    ["lux_ext_anime_neon_alley", "Anime Neon Alley"],
-    ["lux_ext_cinematic_heroes", "Cinematic Heroes"],
-    ["lux_ext_ct_warroom", "CT War Room"],
-    ["lux_ext_degen_terminal", "Degen Terminal"],
-    ["lux_ext_nft_gallery", "NFT Gallery"],
-    ["lux_ext_noir_detective", "Noir Detective"],
-    ["lux_ext_onchain_spaceport", "Onchain Spaceport"],
-    ["lux_ext_solana_temple", "Solana Temple"],
+  const EXT_PACK_NAMES = [
+    "Coastal Dawn",
+    "Forest Mist",
+    "Mountain Lake",
+    "City Sunset",
+    "Desert Dunes",
+    "Ocean Horizon",
+    "Nordic Fjord",
+    "Rainy Street",
+    "Cherry Blossom",
+    "Golden Hour",
+    "Misty Pines",
+    "Alpine Meadow",
+    "River Bend",
+    "Cliff Coast",
+    "Lavender Field",
+    "Autumn Trail",
+    "Snow Peak",
+    "Bamboo Grove",
+    "Harbor Lights",
+    "Vineyard Hills",
+    "Canyon View",
+    "Tropical Cove",
+    "Urban Night",
+    "Meadow Bloom",
+    "Glacier Bay",
+    "Sandstone Arch",
+    "Waterfall Glen",
+    "Prairie Wind",
+    "Island Palm",
+    "Moonlit Bay",
+    "Cedar Forest",
+    "Rose Garden",
+    "Stone Bridge",
+    "Lighthouse Shore",
+    "Wildflower Hill",
+    "Cloud Valley",
+    "Emerald Coast",
+    "Silver Lake",
+    "Amber Woods",
+    "Coral Reef",
+    "Indigo Sky",
+    "Morning Fog",
+    "Twilight Pier",
+    "Bamboo Path",
+    "Rocky Shore",
+    "Savanna Gold",
+    "Maple Lane",
+    "Crystal Cave",
+    "Dunescape",
+    "Orchid Green",
+    "Vineyard Dawn",
+    "Ice Lagoon",
+    "Red Rock",
+    "Moss Garden",
+    "Delta Mirror",
+    "Panorama Ridge",
+    "Silk Clouds",
+    "Cedar Sunset"
   ];
   const CRYPTO_EXT_WALL_SOURCES = [];
   function buildExtWallpapers(){
-    const out = EXT_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
+    const out = [];
     for (let i=1; i<=EXT_WALLPAPER_PACK_COUNT; i++){
       out.push({
         id: `extv3_${String(i).padStart(2, "0")}`,
-        name: `Aurora ${i}`,
+        name: EXT_PACK_NAMES[i - 1] || `Scene ${i}`,
         tier: i <= EXT_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
       });
     }
-    for (const [id, name] of EXT_WALLPAPER_LUX) out.push({ id, name, tier:"premium" });
     return out;
   }
   const EXT_WALLPAPERS = buildExtWallpapers();
   function migrateLegacyExtWallpaperSelectionOnce(){
     try{
-      const done = "gmx_ext_wallpaper_refresh_20260318";
+      const done = "gmx_ext_wallpaper_photo_v1";
       if (localStorage.getItem(done) === "1") return;
       // keep IDs stable; visual refresh now happens in URL resolver
       localStorage.setItem(done, "1");
