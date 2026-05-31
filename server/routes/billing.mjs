@@ -124,15 +124,32 @@ export function registerBillingRoutes({
     }
   });
 
-  app.get("/api/solana/latest-blockhash", requireAuth, async (_req, res) => {
+  function toTxContext(result) {
+    if (!result) return null;
+    const v = result.value != null ? result.value : result;
+    const blockhash = String(v.blockhash || "");
+    if (!blockhash) return null;
+    return {
+      ok: true,
+      blockhash,
+      lastValidBlockHeight: Number(v.lastValidBlockHeight || 0) || undefined,
+    };
+  }
+
+  async function latestBlockhashHandler(_req, res) {
     try {
       const result = await solanaRpcRequest("getLatestBlockhash", [{ commitment: "finalized" }]);
-      res.json({ ok:true, ...result });
+      const ctx = toTxContext(result);
+      if (!ctx) return res.status(503).json({ ok: false, error: "solana_rpc_unavailable" });
+      res.json(ctx);
     } catch (e) {
       console.error("SOLANA_BLOCKHASH_ERROR", e);
-      res.status(503).json({ ok:false, error:"solana_rpc_unavailable" });
+      res.status(503).json({ ok: false, error: "solana_rpc_unavailable" });
     }
-  });
+  }
+
+  app.get("/api/solana/latest-blockhash", requireAuth, latestBlockhashHandler);
+  app.get("/api/billing/tx-context", requireAuth, latestBlockhashHandler);
 
   app.post("/api/solana/send-raw", requireAuth, async (req, res) => {
     try {

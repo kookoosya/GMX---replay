@@ -71,6 +71,13 @@ if (!popup.includes("gmx_ext_wp_v2_popup") && strict) {
   fail("extension/popup.js should read per-view wallpaper keys");
 }
 
+if (/`\/api\/generate-bulk\?/.test(popup)) {
+  fail("extension/popup.js must use /api/random-bulk when authed (quota)");
+}
+if (!read("server/routes/billing.mjs").includes("/api/billing/tx-context")) {
+  fail("billing route must expose /api/billing/tx-context");
+}
+
 console.log(`Logic audit: ${issues.length} issue(s)`);
 for (const msg of issues) console.log(`  - ${msg}`);
 

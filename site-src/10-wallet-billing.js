@@ -479,6 +479,16 @@ if (src){
     try{
       const j = await api("/api/billing/tx-context");
       if (j?.ok && j?.blockhash) return j;
+      const alt = await api("/api/solana/latest-blockhash");
+      if (alt?.ok && alt?.blockhash) return alt;
+      const v = alt?.value;
+      if (alt?.ok && v?.blockhash) {
+        return {
+          ok: true,
+          blockhash: String(v.blockhash),
+          lastValidBlockHeight: Number(v.lastValidBlockHeight || 0) || undefined,
+        };
+      }
     }catch(_e){}
     return null;
   }

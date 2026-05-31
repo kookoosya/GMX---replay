@@ -9,6 +9,7 @@
   "scripts": {
     "start": "node index.js",
     "test": "node smoke.js",
+    "test:suite": "node tools/run-tests.mjs",
     "dev:backend": "node index.js",
     "dev:frontend": "node tools/vite-dev.mjs",
     "dev": "node tools/dev-run.mjs",
@@ -29,7 +30,7 @@
     "audit:all": "npm run audit:logic && npm run audit:runtime",
     "build:server": "node tools/build-server.mjs",
     "build:all": "npm run build:site && npm run build:server",
-    "test:full": "npm run build:all && npm run verify:site && npm run verify:wallpapers && npm test && node tools/smoke-api.mjs && npm run audit:all",
+    "test:full": "npm run build:all && npm run verify:site && npm run verify:wallpapers && npm test && npm run test:suite && npm run audit:all",
     "wallpapers:fetch": "node tools/fetch-wallpapers-pexels.mjs",
     "wallpapers:ideal": "npm run wallpapers:fetch && npm run build:site",
     "verify:site": "node tools/verify-site-build.mjs",

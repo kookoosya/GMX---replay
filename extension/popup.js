@@ -10,7 +10,7 @@ const ALERT_KEYS = {
   enabled: "gmx_market_alerts_enabled_v1",
   interval: "gmx_market_alerts_interval_v1",
 };
-const ASSET_REV = "20260531a";
+const ASSET_REV = "20260310a";
 const LEGACY_KEYS = {
   base: "apiBase",
   handle: "handle",
@@ -23,91 +23,40 @@ const THEME_KEYS = {
   extView: "gmx_ext_view_v2",
   extWallpaper: "gmx_ext_wp_v2",
   extWallpaperPopup: "gmx_ext_wp_v2_popup",
-  extWallpaperQuick: "gmx_ext_wp_v2_quick",
   extCustomBg: "gmx_ext_custom_bg_global_v2",
 };
 const LEGACY_THEME_KEYS = {
   extTheme: "gmx_ext_theme",
   extView: "gmx_ext_view",
   extWallpaper: "gmx_ext_wp",
-  extWallpaperPopup: "gmx_ext_wp_view_popup",
-  extWallpaperQuick: "gmx_ext_wp_view_quick",
   extCustomBg: "gmx_ext_custom_bg_global",
 };
 
-const EXT_PACK_NAMES = [
-  "Coastal Dawn",
-  "Forest Mist",
-  "Mountain Lake",
-  "City Sunset",
-  "Desert Dunes",
-  "Ocean Horizon",
-  "Nordic Fjord",
-  "Rainy Street",
-  "Cherry Blossom",
-  "Golden Hour",
-  "Misty Pines",
-  "Alpine Meadow",
-  "River Bend",
-  "Cliff Coast",
-  "Lavender Field",
-  "Autumn Trail",
-  "Snow Peak",
-  "Bamboo Grove",
-  "Harbor Lights",
-  "Vineyard Hills",
-  "Canyon View",
-  "Tropical Cove",
-  "Urban Night",
-  "Meadow Bloom",
-  "Glacier Bay",
-  "Sandstone Arch",
-  "Waterfall Glen",
-  "Prairie Wind",
-  "Island Palm",
-  "Moonlit Bay",
-  "Cedar Forest",
-  "Rose Garden",
-  "Stone Bridge",
-  "Lighthouse Shore",
-  "Wildflower Hill",
-  "Cloud Valley",
-  "Emerald Coast",
-  "Silver Lake",
-  "Amber Woods",
-  "Coral Reef",
-  "Indigo Sky",
-  "Morning Fog",
-  "Twilight Pier",
-  "Bamboo Path",
-  "Rocky Shore",
-  "Savanna Gold",
-  "Maple Lane",
-  "Crystal Cave",
-  "Dunescape",
-  "Orchid Green",
-  "Vineyard Dawn",
-  "Ice Lagoon",
-  "Red Rock",
-  "Moss Garden",
-  "Delta Mirror",
-  "Panorama Ridge",
-  "Silk Clouds",
-  "Cedar Sunset"
+const EXT_FEATURED_WALLPAPERS = [
+  { id: 'ext_free_01', name: 'Mempool Grid' },
+  { id: 'ext_free_02', name: 'Solana Glass' },
+  { id: 'lux_ext_degen_terminal', name: 'Degen Terminal' },
+  { id: 'lux_ext_onchain_spaceport', name: 'Onchain Spaceport' },
+  { id: 'lux_ext_solana_temple', name: 'Solana Temple' },
+  { id: 'lux_ext_ct_warroom', name: 'CT War Room' },
+  { id: 'lux_ext_nft_gallery', name: 'NFT Gallery' },
+  { id: 'lux_ext_noir_detective', name: 'Ledger Noir' },
+  { id: 'lux_ext_anime_neon_alley', name: 'Neon Alley' },
+  { id: 'lux_ext_cinematic_heroes', name: 'Validator Skyline' },
 ];
-const EXT_WALLPAPER_OPTIONS = (() => {
-  const out = [];
-  for (let i = 1; i <= 58; i++) {
-    const n = String(i).padStart(2, "0");
-    out.push({ id: `extv3_${n}`, name: EXT_PACK_NAMES[i - 1] || `Scene ${i}` });
+
+const EXT_WALLPAPER_OPTIONS = (()=>{
+  const out = [...EXT_FEATURED_WALLPAPERS];
+  for (let i=1; i<=57; i++){
+    const n = String(i).padStart(2,'0');
+    out.push({ id: `extv3_${n}`, name: ['Laser Grid', 'Night Drive', 'Order Book', 'Signal Bloom', 'Validator Sky', 'Candle Mist', 'Relay Tunnel', 'Mint Horizon', 'Blockwave', 'Node Rain', 'Airdrop Haze', 'Hyperlane', 'Glass Router', 'Vault Glow', 'Neon Tape', 'Cold Ledger', 'Warp Stack', 'Luma Chain', 'Dawn Engine', 'Token Drift', 'Blue Volume', 'Mirror Pool', 'Circuit Cloud', 'Mint Static', 'Heatmap', 'Price Halo', 'Turbo Dusk', 'Late Block', 'Shard Dream', 'Chainlight', 'Mercury Lane', 'Peak Flow', 'Silent Mint', 'Fast Route', 'Prime Tape', 'Node Bloom', 'Ghost Volume', 'Crystal Wire', 'Lunar DEX', 'Crossfade', 'Vector Frost', 'Frame Shift', 'Plasma Window', 'Afterhours', 'Spectra Gate', 'Glass Depth', 'Hash Garden', 'Night Relay', 'Pulse Harbor', 'Ocean Node', 'Sky Cache', 'Gamma Field', 'Quiet Tape', 'Zero Slip', 'Soft Orbit', 'Flash Market', 'Aurora Book'][i-1] || `Backdrop ${n}` });
   }
   return out;
 })();
-
 const DEFAULT_THEME = {
   id: "classic",
-  a: "rgba(153,69,255,1)",
-  b: "rgba(20,241,149,1)",
+  a: "rgba(110,231,255,1)",
+  b: "rgba(79,70,229,1)",
 };
 
 const FALLBACK_LINES = {
@@ -154,10 +103,9 @@ function canonicalExtWallpaperId(id){
   if (!v) return '';
   if (v === "custom_upload") return "custom_upload";
   if (EXT_WALLPAPER_OPTIONS.some(x=>String(x.id||'').toLowerCase()===v)) return v;
-  if (/^ext_free_/i.test(v) || /^lux_ext_/i.test(v)) return 'extv3_01';
   let m = v.match(/^extv3_(\d{1,2})$/i);
   if (m) {
-    const n = String(Math.max(1, Math.min(58, Number(m[1]) || 1))).padStart(2, '0');
+    const n = String(Math.max(1, Math.min(57, Number(m[1]) || 1))).padStart(2, '0');
     return `extv3_${n}`;
   }
   m = v.match(/^ext_free_(\d{1,2})$/i);
@@ -167,33 +115,15 @@ function canonicalExtWallpaperId(id){
   }
   m = v.match(/^ext_(\d{1,2})$/i);
   if (m) {
-    const num = Math.max(1, Math.min(58, Number(m[1]) || 1));
+    const num = Math.max(1, Math.min(57, Number(m[1]) || 1));
     return `extv3_${String(num).padStart(2, '0')}`;
   }
   if (/^lux_ext_[a-z0-9_]+$/i.test(v)) return v;
-  return 'extv3_01';
+  return 'ext_free_01';
 }
 
 function normalizeWallpaperOptionId(id){
   return canonicalExtWallpaperId(id);
-}
-
-function getExtensionSurface() {
-  try {
-    const view = String(document.body && document.body.getAttribute("data-view") || "").trim().toLowerCase();
-    return view === "quick" ? "quick" : "popup";
-  } catch {
-    return "popup";
-  }
-}
-
-function pickSyncedWallpaperId(data) {
-  const surface = getExtensionSurface();
-  const viewKey = surface === "quick" ? THEME_KEYS.extWallpaperQuick : THEME_KEYS.extWallpaperPopup;
-  const legacyViewKey = surface === "quick" ? LEGACY_THEME_KEYS.extWallpaperQuick : LEGACY_THEME_KEYS.extWallpaperPopup;
-  const perView = normalizeWallpaperOptionId(String(data[viewKey] || data[legacyViewKey] || ""));
-  const global = normalizeWallpaperOptionId(String(data[THEME_KEYS.extWallpaper] || data[LEGACY_THEME_KEYS.extWallpaper] || ""));
-  return perView || global;
 }
 
 function normalizeExtView(raw) {
@@ -321,17 +251,6 @@ function withAlpha(raw, alpha, fallback = [110, 231, 255]) {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-async function loadBundledThemeCatalog() {
-  try {
-    const response = await fetch(chrome.runtime.getURL("themes.json"), { cache: "no-store" });
-    const data = await response.json().catch(() => null);
-    const bundled = Array.isArray(data && data.themes) ? data.themes : [];
-    return bundled.length ? bundled : [];
-  } catch {
-    return [];
-  }
-}
-
 async function getThemeCatalog() {
   if (Array.isArray(state.themeCatalog)) return state.themeCatalog;
   let list = [];
@@ -343,10 +262,6 @@ async function getThemeCatalog() {
     // Thin client: site catalog is the source of truth.
     if (remote.length) list = remote;
   } catch {}
-
-  if (!list.length) {
-    try { list = await loadBundledThemeCatalog(); } catch {}
-  }
 
   state.themeCatalog = list.length ? list : [DEFAULT_THEME];
   return state.themeCatalog;
@@ -478,23 +393,16 @@ async function resolveWallpaperSource(base, wallpaperId) {
   const cacheKey = `${normalizeBase(base)}::${id}`;
   if (WALL_CACHE.has(cacheKey)) return WALL_CACHE.get(cacheKey) || "";
 
-  const origin = normalizeBase(base);
-  if (id.startsWith("custom_")) {
-    const remote = `${origin}/assets/extbg/custom/${encodeURIComponent(id.slice(7))}?v=${ASSET_REV}`;
-    WALL_CACHE.set(cacheKey, remote);
-    try{ prefetchWallpaper(remote); }catch{}
-    return remote;
+  if (!(typeof id === "string" && id.startsWith("extv3_"))) {
+    const localUrl = chrome.runtime.getURL(`extbg/${encodeURIComponent(id)}.svg`);
+    WALL_CACHE.set(cacheKey, localUrl);
+    try{ prefetchWallpaper(localUrl); }catch{}
+    return localUrl;
   }
-  if (id.startsWith("extv3_")) {
-    const remote = `${origin}/assets/extbg/${encodeURIComponent(id)}.webp?v=${ASSET_REV}`;
-    WALL_CACHE.set(cacheKey, remote);
-    try{ prefetchWallpaper(remote); }catch{}
-    return remote;
-  }
-  const localUrl = chrome.runtime.getURL(`extbg/${encodeURIComponent(id)}.svg`);
-  WALL_CACHE.set(cacheKey, localUrl);
-  try{ prefetchWallpaper(localUrl); }catch{}
-  return localUrl;
+  const finalUrl = extPackWallpaperDataUri(id, false);
+  WALL_CACHE.set(cacheKey, finalUrl);
+  try{ prefetchWallpaper(finalUrl); }catch{}
+  return finalUrl;
 }
 
 function friendlyError(result) {
@@ -575,12 +483,6 @@ function baseCandidates(preferred) {
   ]);
 }
 
-async function removeState(keys) {
-  const list = Array.isArray(keys) ? keys.filter(Boolean) : [keys].filter(Boolean);
-  if (!list.length) return;
-  try { await chrome.storage.local.remove(list); } catch {}
-}
-
 async function saveState(partial) {
   try {
     await chrome.storage.local.set(partial);
@@ -630,7 +532,7 @@ async function loadState() {
   const hadLegacyThemeValues = Boolean(data[LEGACY_THEME_KEYS.extTheme] || data[LEGACY_THEME_KEYS.extView] || data[LEGACY_THEME_KEYS.extWallpaper] || data[LEGACY_THEME_KEYS.extCustomBg]);
   state.extTheme = String(data[THEME_KEYS.extTheme] || data[LEGACY_THEME_KEYS.extTheme] || data[THEME_KEYS.siteTheme] || DEFAULT_THEME.id).trim() || DEFAULT_THEME.id;
   state.extView = normalizeExtView(data[THEME_KEYS.extView] || data[LEGACY_THEME_KEYS.extView] || "theme");
-  state.extWallpaper = pickSyncedWallpaperId(data);
+  state.extWallpaper = normalizeWallpaperOptionId(String(data[THEME_KEYS.extWallpaper] || data[LEGACY_THEME_KEYS.extWallpaper] || "").trim());
   state.extCustomBg = String(data[THEME_KEYS.extCustomBg] || data[LEGACY_THEME_KEYS.extCustomBg] || "").trim();
   if (state.extView === "wall" && !state.extWallpaper) state.extView = "theme";
   if (state.extView === "custom" && !state.extCustomBg) state.extView = "theme";
@@ -811,7 +713,7 @@ async function fetchBatch(kind, count = 6) {
   const safeKind = kind === "gn" ? "gn" : "gm";
   const safeMode = ["min", "mid", "max"].includes(state.mode) ? state.mode : "mid";
   const path = state.token
-    ? `/api/generate-bulk?kind=${safeKind}&mode=${safeMode}&count=${Math.max(1, Math.min(10, count))}`
+    ? `/api/random-bulk?kind=${safeKind}&mode=${safeMode}&count=${Math.max(1, Math.min(10, count))}`
     : `/api/public/random-bulk?kind=${safeKind}&mode=${safeMode}&count=${Math.max(1, Math.min(10, count))}`;
   const result = await apiRequest(path, { acceptStatuses: [401, 403] });
   if (!result.ok || !result.data) {
@@ -967,8 +869,6 @@ async function syncFromSite(options = {}) {
         if (typeof response.siteTheme === 'string') syncPayload[THEME_KEYS.siteTheme] = String(response.siteTheme || '').trim();
         if (typeof response.extView === 'string') syncPayload[THEME_KEYS.extView] = String(response.extView || '').trim();
         if (typeof response.extWallpaper === 'string') syncPayload[THEME_KEYS.extWallpaper] = normalizeWallpaperOptionId(response.extWallpaper);
-        if (typeof response.extWallpaperPopup === 'string') syncPayload[THEME_KEYS.extWallpaperPopup] = normalizeWallpaperOptionId(response.extWallpaperPopup);
-        if (typeof response.extWallpaperQuick === 'string') syncPayload[THEME_KEYS.extWallpaperQuick] = normalizeWallpaperOptionId(response.extWallpaperQuick);
         if (typeof response.extCustomBg === 'string') syncPayload[THEME_KEYS.extCustomBg] = String(response.extCustomBg || '').trim();
         if (Object.keys(syncPayload).length) await saveState(syncPayload);
       }
@@ -1100,10 +1000,7 @@ function bindEvents() {
       LEGACY_KEYS.handle,
       LEGACY_KEYS.token,
     ]);
-    const themeKeys = new Set([
-      ...Object.values(THEME_KEYS),
-      ...Object.values(LEGACY_THEME_KEYS),
-    ]);
+    const themeKeys = new Set(Object.values(THEME_KEYS));
     let needsAuthRefresh = false;
     let needsThemeRefresh = false;
     let needsPreviewRefresh = false;
