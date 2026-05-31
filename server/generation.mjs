@@ -810,7 +810,7 @@ const GLOBAL_RECENT = {
 };
 
 function getRecentRows(handle, kind, limit = 20) {
-  return safeOptionalHistoryDb(
+  const rows = safeOptionalHistoryDb(
     () => db
       .prepare(
         "SELECT reply FROM recent_replies WHERE handle=? AND kind=? ORDER BY created_at DESC LIMIT ?"
@@ -819,11 +819,13 @@ function getRecentRows(handle, kind, limit = 20) {
     [],
     "recent_rows"
   );
+  return Array.isArray(rows) ? rows : [];
 }
 
 function getRecentSet(handle, kind, limit = 20) {
   const rows = getRecentRows(handle, kind, limit);
-  return new Set(rows.map((r) => String(r.reply || "").trim()).filter(Boolean));
+  const list = Array.isArray(rows) ? rows : [];
+  return new Set(list.map((r) => String(r.reply || "").trim()).filter(Boolean));
 }
 
 function rememberGlobal(kind, reply) {

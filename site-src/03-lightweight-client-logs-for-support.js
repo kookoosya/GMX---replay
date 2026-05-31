@@ -58,31 +58,6 @@ const LS_GM_RECENT = "gmx_gm_recent";
   const LS_GN_RECENT = "gmx_gn_recent";
 
 
-  function packsForKind(kind){
-    try{
-      if (typeof GM_PACKS !== "undefined" && typeof GN_PACKS !== "undefined"){
-        return kind === "gn" ? GN_PACKS : GM_PACKS;
-      }
-    }catch(_e){}
-    return (typeof PACKS !== "undefined" && Array.isArray(PACKS)) ? PACKS : [];
-  }
-
-  function getAntiStrength(kind){
-    try{
-      const raw = localStorage.getItem(lsKeyAnti(kind));
-      if (raw !== null && raw !== ""){
-        const n = Math.trunc(Number(raw));
-        if (Number.isFinite(n)) return Math.max(0, Math.min(5, n));
-      }
-    }catch(_e){}
-    const packEl = kind === "gn" ? $("gnPack") : $("gmPack");
-    const pid = packEl ? (packEl.value || "classic") : "classic";
-    const packs = packsForKind(kind);
-    const pack = packs.find((p)=>p.id === pid) || packs[0];
-    const anti = pack && Number.isFinite(pack.anti) ? pack.anti : 2;
-    return Math.max(0, Math.min(5, anti));
-  }
-
   // Legacy helper kept for compatibility with old code paths.
   if (typeof window.antiWindow !== "function"){
     window.antiWindow = function(strength){

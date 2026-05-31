@@ -49,6 +49,12 @@ for (const rel of appFiles) {
   mustMatch(rel, /const antiN = antiWindow\(strength\)/, "single generate uses antiWindow");
   mustNotMatch(rel, /const antiN = 0;/, "antiN must not be hardcoded 0");
   mustMatch(rel, /\/assets\/extbg\/\$\{norm\}\.webp/, "extension wallpapers use webp CDN paths");
+  const packFn = (read(rel).match(/function packsForKind\(/g) || []).length;
+  if (packFn !== 1) fail(`packsForKind must be defined once (found ${packFn}) in ${rel}`);
+  mustMatch(rel, /function readGenParams\(/, "readGenParams helper");
+  mustMatch(rel, /function setWallpaperLayerImage\(/, "wallpaper img layer");
+  mustMatch(rel, /unlockedPacksCountFor\(/, "per-kind pack unlock count");
+  mustNotMatch(rel, /if \(!packLocked && pack && pack\.style\) style = pack\.style/, "generate must not override style from pack");
 }
 
 for (const rel of htmlFiles) {

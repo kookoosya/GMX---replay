@@ -239,6 +239,22 @@
     return kind === "gn" ? GN_PACKS : GM_PACKS;
   }
 
+  function getAntiStrength(kind){
+    try{
+      const raw = localStorage.getItem(lsKeyAnti(kind));
+      if (raw !== null && raw !== ""){
+        const n = Math.trunc(Number(raw));
+        if (Number.isFinite(n)) return Math.max(0, Math.min(5, n));
+      }
+    }catch(_e){}
+    const packEl = kind === "gn" ? $("gnPack") : $("gmPack");
+    const pid = packEl ? (packEl.value || "classic") : "classic";
+    const packs = packsForKind(kind);
+    const pack = packs.find((p)=>p.id === pid) || packs[0];
+    const anti = pack && Number.isFinite(pack.anti) ? pack.anti : 2;
+    return Math.max(0, Math.min(5, anti));
+  }
+
 
   function readGenParams(kind){
     const modeEl = kind === "gm" ? $("gmMode") : $("gnMode");

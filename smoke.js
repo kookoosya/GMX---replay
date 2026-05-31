@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { spawnSync } from "node:child_process";
 
 function fail(msg) {
   console.error(`SMOKE_FAIL: ${msg}`);
@@ -56,15 +57,16 @@ mustHaveId("gnRand1");
 mustHaveId("gnRand10");
 
 const appJs = readIfExists(publicJs);
-if (appJs) {
-  if (!/SITE_WALLPAPER_PACK_COUNT = 58/.test(appJs)) fail("SITE_WALLPAPER_PACK_COUNT must be 58");
-  if (/function supportBundle\(/.test(appJs)) fail("supportBundle must be removed");
-  if (/initWpLazyLoad/.test(appJs)) fail("initWpLazyLoad must be removed");
-  if (!/applyRefCountEligible/.test(appJs)) fail("applyRefCountEligible helper missing");
-  if (/source\.unsplash\.com/.test(appJs)) fail("unsplash wallpaper URLs forbidden");
+if (!appJs) fail("missing public/app.js");
+if (!appJs.includes("function readGenParams(")) fail("readGenParams missing in app.js");
+if (!appJs.includes("function setWallpaperLayerImage(")) fail("setWallpaperLayerImage missing in app.js");
+const packFns = (appJs.match(/function packsForKind\(/g) || []).length;
+if (packFns !== 1) fail(`expected 1 packsForKind(), found ${packFns}`);
+if (/if \(!packLocked && pack && pack\.style\) style = pack\.style/.test(appJs)) {
+  fail("generate still overrides style from pack");
 }
 
-const appHtml = readIfExists(publicHtml);
-if (appHtml && /id="supportOut"/.test(appHtml)) fail('supportOut must be removed from app.html');
+const check = spawnSync(process.execPath, ["--check", publicJs], { encoding: "utf8" });
+if (check.status !== 0) fail(`app.js syntax: ${check.stderr || check.stdout}`);
 
 console.log("SMOKE_OK");

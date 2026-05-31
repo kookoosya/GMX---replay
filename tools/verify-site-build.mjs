@@ -48,8 +48,12 @@ for (const rx of forbidden) {
   }
 }
 
-if (!/const ASSET_REV = "20260531a"/.test(onDisk)) {
-  console.warn("verify-site-build WARN: expected ASSET_REV 20260531a");
+const bootstrap = fs.readFileSync(path.join(root, "site-src", "00-bootstrap.js"), "utf8");
+const revMatch = bootstrap.match(/const ASSET_REV = "([^"]+)"/);
+const expectedRev = revMatch ? revMatch[1] : "";
+if (expectedRev && !onDisk.includes(`const ASSET_REV = "${expectedRev}"`)) {
+  console.error(`verify-site-build FAIL: ASSET_REV mismatch (expected ${expectedRev})`);
+  process.exit(1);
 }
 
 const check = spawnSync(process.execPath, ["--check", outPath], { encoding: "utf8" });

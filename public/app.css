@@ -107,9 +107,6 @@ body.hasWallBg .bg{
   background: var(--bg);
   background-size: cover;
 }
-body.hasWallBg .bg{
-  --bg_user-effective: none;
-}
 .gmxWallLayer{
   position:fixed;
   inset:0;
