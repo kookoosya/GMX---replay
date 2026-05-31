@@ -109,6 +109,38 @@ app.get("/get-extension", (req, res) => {
 });
 
 
+
+import { registerAdminRoutes } from "./server/routes/admin/index.mjs";
+
+registerAdminRoutes({
+  app,
+  requireAdmin,
+  safeDb,
+  db,
+  nowIso,
+  todayKeyUTC,
+  BUILD_ID,
+  randHex,
+  normalizeSelectorsPayload,
+  setExtSelectorsRolloutMeta,
+  getExtSelectorsRollout,
+  setExtSelectorsOverride,
+  resetExtSelectorsOverride,
+  getExtSelectorsOverride,
+  recordExtSelectorsHistory,
+  adminSelectorsPayload,
+  logActivity,
+  setFeatureFlag,
+  isAdminHandle,
+  getAdminHandle,
+  setSetting,
+  grantReferralReward,
+  referralCountActive,
+  computeReferralUnlocks,
+  userByHandle,
+  subscriptionInfo,
+});
+
 import { registerAdminAuthRoutes } from "./server/routes/admin-auth.mjs";
 
 registerAdminAuthRoutes({

@@ -1530,6 +1530,7 @@ function renderWallpaperUI(){
     return (lum > 0.62) ? "#0A0D15" : "#FFFFFF";
   }
 
+
 function applyTheme(id){
     const t = THEMES.find(x=>x.id===id) || THEMES[0];
     // persist selected site theme
@@ -2246,6 +2247,7 @@ function initExtWallpaperControls(){
     });
   }
 }
+
 
 
 
@@ -2984,6 +2986,7 @@ async function refreshUsage(){
     if (ta) ta.classList.toggle("hidden", !isAdmin);
     if (!isAdmin) document.getElementById("tab-admin")?.classList.add("hidden");
   }
+
 
 
   // ----- Lists (single saved bank per kind; legacy global/lang banks migrate once) -----
