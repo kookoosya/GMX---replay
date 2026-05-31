@@ -79,7 +79,15 @@
     ? globalThis.GMX_SITE_I18N.createSiteI18nCatalog()
     : { en: {} };
 
-
+  function siteTr(key, fallback = ""){
+    const lang = localStorage.getItem(LS_SITE_LANG) || "en";
+    const base = I18N.en || {};
+    const dict = I18N[lang] || {};
+    const v = sanitizeI18nValue(lang, dict[key], base[key]);
+    const resolved = v ?? base[key];
+    if (resolved !== undefined && resolved !== null && String(resolved).trim() && String(resolved) !== key) return String(resolved);
+    return fallback || String(key);
+  }
 
   function setPh(id, key, merged){
     try{
@@ -151,6 +159,9 @@
       if (safe === "" || safe === null || safe === undefined) continue;
       merged[k] = safe;
     }
+
+    if (merged.gm_size_label) merged.gm_size = merged.gm_size_label;
+    if (merged.gn_size_label) merged.gn_size = merged.gn_size_label;
 
     for (const k of Object.keys(merged)){
       const v = (lang !== "en" && FORCE_EN_KEYS.has(k)) ? (base[k] ?? merged[k]) : merged[k];
@@ -368,22 +379,25 @@ function renderReferralRightCopy(lang){
     const bind = (kind)=>{
       const sizeLbl = $(kind === "gm" ? "gm_size" : "gn_size");
       const sel = $(kind === "gm" ? "gmMode" : "gnMode");
-      if (sizeLbl) { const k = kind === "gm" ? "gm_size_label" : "gn_size_label"; const v = t(k); sizeLbl.textContent = (v && v !== k) ? v : "Size"; }
-      if (!sel) return;
       const fallbacks = {
         min: "Fast · short",
         mid: "Balanced · default",
         max: "Full · richer",
       };
+      if (sizeLbl) {
+        const k = kind === "gm" ? "gm_size_label" : "gn_size_label";
+        sizeLbl.textContent = siteTr(k, "Size");
+      }
+      if (!sel) return;
       const labels = {
-        min: t(kind === "gm" ? "gm_mode_min" : "gn_mode_min") || fallbacks.min,
-        mid: t(kind === "gm" ? "gm_mode_mid" : "gn_mode_mid") || fallbacks.mid,
-        max: t(kind === "gm" ? "gm_mode_max" : "gn_mode_max") || fallbacks.max,
+        min: siteTr(kind === "gm" ? "gm_mode_min" : "gn_mode_min", fallbacks.min),
+        mid: siteTr(kind === "gm" ? "gm_mode_mid" : "gn_mode_mid", fallbacks.mid),
+        max: siteTr(kind === "gm" ? "gm_mode_max" : "gn_mode_max", fallbacks.max),
       };
       for (const opt of sel.options){
         const v = String(opt.value || "").toLowerCase();
         const label = labels[v];
-        if (label && !String(label).startsWith("gm_") && !String(label).startsWith("gn_")) opt.textContent = label;
+        if (label) opt.textContent = label;
       }
     };
     bind("gm");

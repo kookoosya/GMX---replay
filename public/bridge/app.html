@@ -21,32 +21,14 @@
 <script async src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.8/lib/index.iife.min.js"></script>
 <style id="gmx-wallpaper-recovery-v1">
 :root{
-  --site_wall_opacity: .66;
-  --site_wall_blur: 1px;
+  --site_wall_opacity: 1;
+  --site_wall_blur: 0px;
   --site_wall_scale: 1;
 }
+/* Wallpaper renders in .bg .gmxWallLayer — avoid duplicate stretched body::before */
 body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  z-index:-3;
-  pointer-events:none;
-  background-image: var(--bg_user, none), var(--bg_wall, none);
-  background-size: cover, cover;
-  background-position: center center, center center;
-  background-repeat: no-repeat, no-repeat;
-  opacity: 0;
-  transform: scale(var(--site_wall_scale));
-  filter: saturate(1.10) contrast(1.08) brightness(.90) blur(var(--site_wall_blur));
-  will-change: transform, filter, opacity;
-}
-body.hasWallBg::before{
-  opacity: var(--site_wall_opacity);
-}
-body.hasUserBg::before{
-  opacity: .50;
-  transform: scale(1.07);
-  filter: saturate(1.06) contrast(1.04) brightness(.72) blur(14px);
+  content:none !important;
+  display:none !important;
 }
 body::after{
   content:"";
@@ -54,40 +36,30 @@ body::after{
   inset:0;
   z-index:-2;
   pointer-events:none;
-  background:
-    radial-gradient(1100px 680px at 18% 12%, rgba(106, 74, 255, .18), transparent 62%),
-    radial-gradient(960px 620px at 84% 16%, rgba(0, 214, 255, .14), transparent 60%),
-    linear-gradient(180deg, rgba(7,10,18,.18), rgba(8,10,16,.42) 45%, rgba(5,8,14,.62));
+  background: linear-gradient(180deg, rgba(5,7,15,.08) 0%, rgba(5,7,15,.28) 55%, rgba(5,7,15,.42) 100%);
+  opacity: 1;
+}
+body.hasWallBg::after{
+  opacity: 1;
 }
 body.hasWallBg .card,
 body.hasUserBg .card,
 body.hasWallBg .panel,
 body.hasUserBg .panel,
 body.hasWallBg .sheet,
-body.hasUserBg .sheet,
-body.hasWallBg .modal,
-body.hasUserBg .modal,
-body.hasWallBg .hero,
-body.hasUserBg .hero,
-body.hasWallBg .drawer,
-body.hasUserBg .drawer{
-  background: rgba(10,14,24,.44) !important;
-  border-color: rgba(138,165,255,.16) !important;
-  backdrop-filter: blur(7px) saturate(1.14);
-  -webkit-backdrop-filter: blur(7px) saturate(1.14);
-  box-shadow: 0 20px 60px rgba(0,0,0,.30);
+body.hasUserBg .sheet{
+  background: rgba(10,14,24,.34) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  backdrop-filter: blur(6px) saturate(1.08);
+  -webkit-backdrop-filter: blur(6px) saturate(1.08);
+  box-shadow: 0 12px 40px rgba(0,0,0,.22);
 }
-body.hasWallBg button,
-body.hasUserBg button,
-body.hasWallBg .btn,
-body.hasUserBg .btn,
-body.hasWallBg select,
-body.hasUserBg select,
-body.hasWallBg textarea,
-body.hasUserBg textarea,
-body.hasWallBg input,
-body.hasUserBg input{
-  box-shadow: 0 10px 28px rgba(24, 40, 92, .18);
+html.mode-light body.hasWallBg .card,
+html.mode-light body.hasUserBg .card,
+html.mode-light body.hasWallBg .panel,
+html.mode-light body.hasUserBg .panel{
+  background: rgba(255,255,255,.52) !important;
+  border-color: rgba(0,0,0,.08) !important;
 }
 </style>
 </head>
