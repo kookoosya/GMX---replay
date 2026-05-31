@@ -48,8 +48,8 @@ for (const rx of forbidden) {
   }
 }
 
-if (!/const ASSET_REV = "20260530e"/.test(onDisk)) {
-  console.warn("verify-site-build WARN: expected ASSET_REV 20260530e");
+if (!/const ASSET_REV = "20260530f"/.test(onDisk)) {
+  console.warn("verify-site-build WARN: expected ASSET_REV 20260530f");
 }
 
 const check = spawnSync(process.execPath, ["--check", outPath], { encoding: "utf8" });

@@ -39,7 +39,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260530e";
+const ASSET_REV = "20260530f";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -1536,9 +1536,25 @@ function applyTheme(id){
     // persist selected site theme
     try { localStorage.setItem("gmx_theme", String(t.id || id)); } catch(e) {}
     // CSS uses both --accentA and --accentB across gradients.
-    document.documentElement.style.setProperty("--accentA", t.a);
-    document.documentElement.style.setProperty("--accentB", t.b);
-    document.documentElement.style.setProperty("--accentOn", pickAccentOn(t.a, t.b));
+    const a = t.a || "rgba(124,92,255,1)";
+    const b = t.b || "rgba(0,229,255,1)";
+    const root = document.documentElement;
+    root.style.setProperty("--accentA", a);
+    root.style.setProperty("--accentB", b);
+    root.style.setProperty("--accentOn", pickAccentOn(a, b));
+    root.classList.add("theme-applied");
+    root.dataset.themeId = String(t.id || id);
+    const isLight = root.classList.contains("mode-light");
+    const glassBase = isLight ? "rgba(255,255,255,.88)" : "rgba(10,14,24,.72)";
+    const glass2Base = isLight ? "rgba(255,255,255,.94)" : "rgba(8,12,22,.82)";
+    root.style.setProperty("--glass", `color-mix(in srgb, ${glassBase} 84%, ${a} 16%)`);
+    root.style.setProperty("--glass2", `color-mix(in srgb, ${glass2Base} 82%, ${b} 18%)`);
+    root.style.setProperty("--stroke", `color-mix(in srgb, ${a} 30%, ${isLight ? "rgba(0,0,0,.10)" : "rgba(148,180,255,.14)"})`);
+    root.style.setProperty("--stroke2", `color-mix(in srgb, ${b} 34%, ${isLight ? "rgba(0,0,0,.14)" : "rgba(148,180,255,.22)"})`);
+    try{
+      const tab = (typeof CURRENT_TAB === "string" && CURRENT_TAB) ? CURRENT_TAB : "home";
+      if (typeof setBg === "function") setBg(tab);
+    }catch(_e){}
   }
 const LS_EXT_VIEW = "gmx_ext_view"; // theme | wall | custom
 const LS_EXT_WP = "gmx_ext_wp"; // selected extension wallpaper id
@@ -3829,6 +3845,14 @@ countEl.textContent = lines.length;
   }
 async function generate(kind, count){
     if (!requireConnected(kind==="gm"?"GM":"GN")) return;
+    const msgElEarly = kind==="gm" ? $("gmMsg") : $("gnMsg");
+    if (!getToken() && getHandle()){
+      try{ await initSession(true); }catch(_e){}
+    }
+    if (!getToken()){
+      if (msgElEarly) msgElEarly.innerHTML = `<span class="warn">${escapeHtml(t("gen_session_expired") || "Session expired — reconnect your @handle, then retry.")}</span>`;
+      return;
+    }
     const h = getHandle();
 
     const modeEl  = kind==="gm" ? $("gmMode") : $("gnMode");
@@ -3901,6 +3925,11 @@ if (effCount <= 0){
           // fallback: take one even if it repeats
           const j = await api(`/api/generate?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}`, "GET", null, { signal: ctrl.signal, timeoutMs: 20000 });
           reply = j.reply || "";
+        }
+
+        if (!String(reply || "").trim()){
+          if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml(t("gen_empty_reply") || "Server returned an empty line. Try another tone or preset.")}</span>`;
+          return;
         }
 
         const cur = readKey(keyActive);
@@ -6209,16 +6238,22 @@ function renderReferralRightCopy(lang){
     const bind = (kind)=>{
       const sizeLbl = $(kind === "gm" ? "gm_size" : "gn_size");
       const sel = $(kind === "gm" ? "gmMode" : "gnMode");
-      if (sizeLbl) sizeLbl.textContent = t(kind === "gm" ? "gm_size_label" : "gn_size_label") || "Size";
+      if (sizeLbl) { const k = kind === "gm" ? "gm_size_label" : "gn_size_label"; const v = t(k); sizeLbl.textContent = (v && v !== k) ? v : "Size"; }
       if (!sel) return;
+      const fallbacks = {
+        min: "Fast · short",
+        mid: "Balanced · default",
+        max: "Full · richer",
+      };
       const labels = {
-        min: t(kind === "gm" ? "gm_mode_min" : "gn_mode_min"),
-        mid: t(kind === "gm" ? "gm_mode_mid" : "gn_mode_mid"),
-        max: t(kind === "gm" ? "gm_mode_max" : "gn_mode_max")
+        min: t(kind === "gm" ? "gm_mode_min" : "gn_mode_min") || fallbacks.min,
+        mid: t(kind === "gm" ? "gm_mode_mid" : "gn_mode_mid") || fallbacks.mid,
+        max: t(kind === "gm" ? "gm_mode_max" : "gn_mode_max") || fallbacks.max,
       };
       for (const opt of sel.options){
         const v = String(opt.value || "").toLowerCase();
-        if (labels[v]) opt.textContent = labels[v];
+        const label = labels[v];
+        if (label && !String(label).startsWith("gm_") && !String(label).startsWith("gn_")) opt.textContent = label;
       }
     };
     bind("gm");

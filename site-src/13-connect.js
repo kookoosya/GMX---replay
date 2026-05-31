@@ -368,16 +368,22 @@ function renderReferralRightCopy(lang){
     const bind = (kind)=>{
       const sizeLbl = $(kind === "gm" ? "gm_size" : "gn_size");
       const sel = $(kind === "gm" ? "gmMode" : "gnMode");
-      if (sizeLbl) sizeLbl.textContent = t(kind === "gm" ? "gm_size_label" : "gn_size_label") || "Size";
+      if (sizeLbl) { const k = kind === "gm" ? "gm_size_label" : "gn_size_label"; const v = t(k); sizeLbl.textContent = (v && v !== k) ? v : "Size"; }
       if (!sel) return;
+      const fallbacks = {
+        min: "Fast · short",
+        mid: "Balanced · default",
+        max: "Full · richer",
+      };
       const labels = {
-        min: t(kind === "gm" ? "gm_mode_min" : "gn_mode_min"),
-        mid: t(kind === "gm" ? "gm_mode_mid" : "gn_mode_mid"),
-        max: t(kind === "gm" ? "gm_mode_max" : "gn_mode_max")
+        min: t(kind === "gm" ? "gm_mode_min" : "gn_mode_min") || fallbacks.min,
+        mid: t(kind === "gm" ? "gm_mode_mid" : "gn_mode_mid") || fallbacks.mid,
+        max: t(kind === "gm" ? "gm_mode_max" : "gn_mode_max") || fallbacks.max,
       };
       for (const opt of sel.options){
         const v = String(opt.value || "").toLowerCase();
-        if (labels[v]) opt.textContent = labels[v];
+        const label = labels[v];
+        if (label && !String(label).startsWith("gm_") && !String(label).startsWith("gn_")) opt.textContent = label;
       }
     };
     bind("gm");

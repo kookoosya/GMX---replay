@@ -3,9 +3,25 @@ function applyTheme(id){
     // persist selected site theme
     try { localStorage.setItem("gmx_theme", String(t.id || id)); } catch(e) {}
     // CSS uses both --accentA and --accentB across gradients.
-    document.documentElement.style.setProperty("--accentA", t.a);
-    document.documentElement.style.setProperty("--accentB", t.b);
-    document.documentElement.style.setProperty("--accentOn", pickAccentOn(t.a, t.b));
+    const a = t.a || "rgba(124,92,255,1)";
+    const b = t.b || "rgba(0,229,255,1)";
+    const root = document.documentElement;
+    root.style.setProperty("--accentA", a);
+    root.style.setProperty("--accentB", b);
+    root.style.setProperty("--accentOn", pickAccentOn(a, b));
+    root.classList.add("theme-applied");
+    root.dataset.themeId = String(t.id || id);
+    const isLight = root.classList.contains("mode-light");
+    const glassBase = isLight ? "rgba(255,255,255,.88)" : "rgba(10,14,24,.72)";
+    const glass2Base = isLight ? "rgba(255,255,255,.94)" : "rgba(8,12,22,.82)";
+    root.style.setProperty("--glass", `color-mix(in srgb, ${glassBase} 84%, ${a} 16%)`);
+    root.style.setProperty("--glass2", `color-mix(in srgb, ${glass2Base} 82%, ${b} 18%)`);
+    root.style.setProperty("--stroke", `color-mix(in srgb, ${a} 30%, ${isLight ? "rgba(0,0,0,.10)" : "rgba(148,180,255,.14)"})`);
+    root.style.setProperty("--stroke2", `color-mix(in srgb, ${b} 34%, ${isLight ? "rgba(0,0,0,.14)" : "rgba(148,180,255,.22)"})`);
+    try{
+      const tab = (typeof CURRENT_TAB === "string" && CURRENT_TAB) ? CURRENT_TAB : "home";
+      if (typeof setBg === "function") setBg(tab);
+    }catch(_e){}
   }
 const LS_EXT_VIEW = "gmx_ext_view"; // theme | wall | custom
 const LS_EXT_WP = "gmx_ext_wp"; // selected extension wallpaper id

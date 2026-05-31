@@ -777,6 +777,14 @@ countEl.textContent = lines.length;
   }
 async function generate(kind, count){
     if (!requireConnected(kind==="gm"?"GM":"GN")) return;
+    const msgElEarly = kind==="gm" ? $("gmMsg") : $("gnMsg");
+    if (!getToken() && getHandle()){
+      try{ await initSession(true); }catch(_e){}
+    }
+    if (!getToken()){
+      if (msgElEarly) msgElEarly.innerHTML = `<span class="warn">${escapeHtml(t("gen_session_expired") || "Session expired — reconnect your @handle, then retry.")}</span>`;
+      return;
+    }
     const h = getHandle();
 
     const modeEl  = kind==="gm" ? $("gmMode") : $("gnMode");
@@ -849,6 +857,11 @@ if (effCount <= 0){
           // fallback: take one even if it repeats
           const j = await api(`/api/generate?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}`, "GET", null, { signal: ctrl.signal, timeoutMs: 20000 });
           reply = j.reply || "";
+        }
+
+        if (!String(reply || "").trim()){
+          if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml(t("gen_empty_reply") || "Server returned an empty line. Try another tone or preset.")}</span>`;
+          return;
         }
 
         const cur = readKey(keyActive);

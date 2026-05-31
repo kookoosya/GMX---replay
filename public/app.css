@@ -1865,3 +1865,47 @@ html.mode-light #walletActions .pill{
   background:rgba(255,255,255,.72);
   border:1px solid rgba(0,0,0,.10);
 }
+
+/* Theme-adaptive surfaces: accents visible, text stays readable */
+html.theme-applied .card,
+html.theme-applied .sideCard,
+html.theme-applied .panel {
+  border-color: color-mix(in srgb, var(--accentA) 34%, var(--stroke));
+  box-shadow: var(--shadow2), 0 0 28px color-mix(in srgb, var(--accentA) 10%, transparent);
+}
+html.theme-applied .tabs .tab.active {
+  border-color: color-mix(in srgb, var(--accentA) 52%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accentA) 22%, transparent), 0 8px 24px color-mix(in srgb, var(--accentA) 14%, transparent);
+}
+html.theme-applied .btn:not(.ghost):not(.secondary) {
+  color: var(--accentOn);
+}
+html.theme-applied label,
+html.theme-applied .title,
+html.theme-applied .desc,
+html.theme-applied .note {
+  color: var(--text);
+}
+html.theme-applied .muted,
+html.theme-applied .muted.small {
+  color: var(--muted);
+}
+/* Let theme gradient show through wallpaper overlay */
+html.theme-applied body.hasWallBg .bg::before {
+  opacity: 0.10;
+}
+html.mode-light.theme-applied body.hasWallBg .bg::before {
+  opacity: 0.16;
+}
+html.theme-applied body.hasUserBg .bg::before {
+  opacity: 0.82;
+}
+html.mode-light.theme-applied body.hasUserBg .bg::before {
+  opacity: 0.50;
+}
+html.theme-applied body.has-wallpaper .card,
+html.theme-applied body.has-wallpaper .panel,
+html.theme-applied body.has-wallpaper .sideCard {
+  background: color-mix(in srgb, var(--glass) 92%, var(--accentA) 8%) !important;
+  backdrop-filter: blur(12px);
+}

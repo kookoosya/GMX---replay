@@ -399,7 +399,18 @@ export const SITE_I18N = {
     "lb_col_active": "Active",
     "lb_7d": "7d",
     "lb_30d": "30d",
-    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
+    "gm_size_label": "Size",
+    "gn_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gen_connect_first": "Connect your @handle to generate lines.",
+    "gen_session_expired": "Session expired — click Connect again, then retry.",
+    "gen_empty_reply": "Server returned an empty line. Try another tone or preset."
   },
   "de": {
     "plan_compare_btn": "Vergleichen",
@@ -800,7 +811,18 @@ export const SITE_I18N = {
     "lb_col_active": "Aktiv",
     "lb_7d": "7d",
     "lb_30d": "30d",
-    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
+    "gm_size_label": "Size",
+    "gn_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gen_connect_first": "Connect your @handle to generate lines.",
+    "gen_session_expired": "Session expired — click Connect again, then retry.",
+    "gen_empty_reply": "Server returned an empty line. Try another tone or preset."
   },
   "fr": {
     "plan_compare_btn": "Comparer",
@@ -1201,7 +1223,18 @@ export const SITE_I18N = {
     "lb_col_active": "Actifs",
     "lb_7d": "7j",
     "lb_30d": "30j",
-    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
+    "gm_size_label": "Size",
+    "gn_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gen_connect_first": "Connect your @handle to generate lines.",
+    "gen_session_expired": "Session expired — click Connect again, then retry.",
+    "gen_empty_reply": "Server returned an empty line. Try another tone or preset."
   },
   "es": {
     "plan_compare_btn": "Comparar",
@@ -1602,7 +1635,18 @@ export const SITE_I18N = {
     "lb_col_active": "Activos",
     "lb_7d": "7d",
     "lb_30d": "30d",
-    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
+    "gm_size_label": "Size",
+    "gn_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gen_connect_first": "Connect your @handle to generate lines.",
+    "gen_session_expired": "Session expired — click Connect again, then retry.",
+    "gen_empty_reply": "Server returned an empty line. Try another tone or preset."
   },
   "pt": {
     "plan_compare_btn": "Comparar",
@@ -2003,7 +2047,18 @@ export const SITE_I18N = {
     "lb_col_active": "Active",
     "lb_7d": "7d",
     "lb_30d": "30d",
-    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
+    "gm_size_label": "Size",
+    "gn_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gen_connect_first": "Connect your @handle to generate lines.",
+    "gen_session_expired": "Session expired — click Connect again, then retry.",
+    "gen_empty_reply": "Server returned an empty line. Try another tone or preset."
   },
   "it": {
     "plan_compare_btn": "Confronta",
@@ -2404,7 +2459,18 @@ export const SITE_I18N = {
     "lb_col_active": "Active",
     "lb_7d": "7g",
     "lb_30d": "30g",
-    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
+    "gm_size_label": "Size",
+    "gn_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gen_connect_first": "Connect your @handle to generate lines.",
+    "gen_session_expired": "Session expired — click Connect again, then retry.",
+    "gen_empty_reply": "Server returned an empty line. Try another tone or preset."
   },
   "nl": {
     "plan_compare_btn": "Vergelijken",
@@ -2805,7 +2871,18 @@ export const SITE_I18N = {
     "lb_col_active": "Active",
     "lb_7d": "7d",
     "lb_30d": "30d",
-    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
+    "gm_size_label": "Size",
+    "gn_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gen_connect_first": "Connect your @handle to generate lines.",
+    "gen_session_expired": "Session expired — click Connect again, then retry.",
+    "gen_empty_reply": "Server returned an empty line. Try another tone or preset."
   },
   "tr": {
     "plan_compare_btn": "Karşılaştır",
@@ -3206,7 +3283,18 @@ export const SITE_I18N = {
     "lb_col_active": "Active",
     "lb_7d": "7g",
     "lb_30d": "30g",
-    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
+    "gm_size_label": "Size",
+    "gn_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gen_connect_first": "Connect your @handle to generate lines.",
+    "gen_session_expired": "Session expired — click Connect again, then retry.",
+    "gen_empty_reply": "Server returned an empty line. Try another tone or preset."
   },
   "pl": {
     "plan_compare_btn": "Porównaj",
@@ -3607,7 +3695,18 @@ export const SITE_I18N = {
     "lb_col_active": "Active",
     "lb_7d": "7d",
     "lb_30d": "30d",
-    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
+    "gm_size_label": "Size",
+    "gn_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gen_connect_first": "Connect your @handle to generate lines.",
+    "gen_session_expired": "Session expired — click Connect again, then retry.",
+    "gen_empty_reply": "Server returned an empty line. Try another tone or preset."
   },
   "id": {
     "plan_compare_btn": "Bandingkan",
@@ -4008,7 +4107,18 @@ export const SITE_I18N = {
     "lb_col_active": "Active",
     "lb_7d": "7h",
     "lb_30d": "30h",
-    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
+    "gm_size_label": "Size",
+    "gn_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gen_connect_first": "Connect your @handle to generate lines.",
+    "gen_session_expired": "Session expired — click Connect again, then retry.",
+    "gen_empty_reply": "Server returned an empty line. Try another tone or preset."
   },
   "ru": {
     "plan_compare_btn": "Сравнить",
@@ -4409,7 +4519,18 @@ export const SITE_I18N = {
     "lb_col_active": "Активные",
     "lb_7d": "7д",
     "lb_30d": "30д",
-    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
+    "gm_size_label": "Size",
+    "gn_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gen_connect_first": "Connect your @handle to generate lines.",
+    "gen_session_expired": "Session expired — click Connect again, then retry.",
+    "gen_empty_reply": "Server returned an empty line. Try another tone or preset."
   },
   "uk": {
     "plan_compare_btn": "Порівняти",
@@ -4810,7 +4931,18 @@ export const SITE_I18N = {
     "lb_col_active": "Активные",
     "lb_7d": "7д",
     "lb_30d": "30д",
-    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
+    "gm_size_label": "Size",
+    "gn_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gen_connect_first": "Connect your @handle to generate lines.",
+    "gen_session_expired": "Session expired — click Connect again, then retry.",
+    "gen_empty_reply": "Server returned an empty line. Try another tone or preset."
   },
   "hi": {
     "plan_compare_btn": "कम्पेयर करें",
@@ -5211,7 +5343,18 @@ export const SITE_I18N = {
     "lb_col_active": "Active",
     "lb_7d": "7दिन",
     "lb_30d": "30दिन",
-    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
+    "gm_size_label": "Size",
+    "gn_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gen_connect_first": "Connect your @handle to generate lines.",
+    "gen_session_expired": "Session expired — click Connect again, then retry.",
+    "gen_empty_reply": "Server returned an empty line. Try another tone or preset."
   },
   "ja": {
     "plan_compare_btn": "比較",
@@ -5612,7 +5755,18 @@ export const SITE_I18N = {
     "lb_col_active": "Active",
     "lb_7d": "7日",
     "lb_30d": "30日",
-    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
+    "gm_size_label": "Size",
+    "gn_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gen_connect_first": "Connect your @handle to generate lines.",
+    "gen_session_expired": "Session expired — click Connect again, then retry.",
+    "gen_empty_reply": "Server returned an empty line. Try another tone or preset."
   },
   "zh": {
     "plan_compare_btn": "对比",
@@ -6013,7 +6167,18 @@ export const SITE_I18N = {
     "lb_col_active": "Active",
     "lb_7d": "7天",
     "lb_30d": "30天",
-    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
+    "gm_size_label": "Size",
+    "gn_size_label": "Size",
+    "gm_mode_min": "Fast · short",
+    "gm_mode_mid": "Balanced · default",
+    "gm_mode_max": "Full · richer",
+    "gn_mode_min": "Fast · short",
+    "gn_mode_mid": "Balanced · default",
+    "gn_mode_max": "Full · richer",
+    "gen_connect_first": "Connect your @handle to generate lines.",
+    "gen_session_expired": "Session expired — click Connect again, then retry.",
+    "gen_empty_reply": "Server returned an empty line. Try another tone or preset."
   }
 } as const;
 
