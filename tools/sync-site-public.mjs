@@ -17,6 +17,24 @@ for (const dest of targets) {
   }
 }
 
+
+const authSrc = path.join(root, "public/app.auth.js");
+const authTargets = [
+  path.join(root, "frontend/public/app.auth.js"),
+  path.join(root, "public/bridge/app.auth.js"),
+];
+if (fs.existsSync(authSrc)) {
+  const authBody = fs.readFileSync(authSrc, "utf8");
+  for (const dest of authTargets) {
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    const prev = fs.existsSync(dest) ? fs.readFileSync(dest, "utf8") : "";
+    if (prev !== authBody) {
+      fs.writeFileSync(dest, authBody);
+      console.log(`synced → ${path.relative(root, dest)}`);
+    }
+  }
+}
+
 // bridge loads /app.js from site root — no bridge/app.js copy needed
 const bridgeCopy = path.join(root, "public/bridge/app.js");
 if (fs.existsSync(bridgeCopy)) {

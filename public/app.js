@@ -39,7 +39,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260531a";
+const ASSET_REV = "20260531c";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -3495,6 +3495,10 @@ function replaceRandomSavedLine(kind, newLine){
       return "Request failed. Check the backend/runtime and try again.";
     }
     if (m === "not_connected") return "Connect first.";
+    if (m === "not_found" || m.includes("not_found")) {
+      if (scope === "generate") return "Generation API is unavailable. Hard-refresh the page; if it persists, the server needs redeploying.";
+      return "API route not found. Hard-refresh and try again.";
+    }
     if (m === "rpc_unavailable") return "Solana RPC is unavailable right now. Try again in a moment.";
     if (m === "wallet_bind_required") return "Wallet binding is required before verify. Sign the wallet message and try again.";
     if (isNetworkishErrorMessage(m)) return "Network/API error. Try again.";
@@ -3864,6 +3868,7 @@ countEl.textContent = lines.length;
   }
   // Keep existing order, append only truly-new unique lines.
   // Important: duplicates MUST NOT be moved to the top.
+
   function mergeAppendUnique(existing, newLines){
     const out = (existing||[]).map(s=>String(s||"").trim()).filter(Boolean);
     const seen = new Set(out.map(s=>s.toLowerCase()));
@@ -3884,7 +3889,7 @@ async function generate(kind, count){
       try{ await initSession(true); }catch(_e){}
     }
     if (!getToken()){
-      if (msgElEarly) msgElEarly.innerHTML = `<span class="warn">${escapeHtml(t("gen_session_expired") || "Session expired — reconnect your @handle, then retry.")}</span>`;
+      if (msgElEarly) msgElEarly.innerHTML = `<span class="warn">${escapeHtml(siteTr("gen_session_expired", "Session expired — reconnect your @handle, then retry."))}</span>`;
       return;
     }
     const h = getHandle();
@@ -5903,79 +5908,6 @@ function pruneLegacyAdminPanels(){
     }
   };
 
-  // ----- Connect -----
-  const connectBtn = $("btnConnect");
-  if (connectBtn) connectBtn.onclick = async ()=>{
-    const cm = $("connectMsg");
-    if (cm) cm.textContent = "";
-    const xh = $("xHandle");
-    const handle = normalizeHandle(xh?.value);
-    if (!handle){
-      if (cm) cm.innerHTML = '<span class="bad">Enter a valid @handle</span>';
-      return;
-    }
-
-    const params = new URLSearchParams(location.search);
-    const ref = params.get("ref") || "";
-
-    try{
-      const j = await api("/api/user/init", "POST", { handle, ref });
-      localStorage.setItem(LS_HANDLE, j.handle);
-      localStorage.setItem(LS_TOKEN, j.token);
-      try{ localStorage.setItem(LS_IS_ADMIN, j.isAdmin ? "1" : "0"); }catch{}
-      try{ localStorage.setItem(LS_ADMIN_CLAIMABLE, j.adminClaimable ? "1" : "0"); }catch{}
-
-      const hp = $("handlePill");
-      if (hp) hp.textContent = j.handle;
-      const rl = $("refLink");
-      if (rl) rl.value = j.refLink || "";
-      if (cm) cm.innerHTML = '';
-      try{ localStorage.removeItem(LS_FORCE_LOGOUT); }catch{}
-      try{ localStorage.removeItem(LS_FORCE_LOGOUT_V2); }catch{}
-      try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "site_connect" }, "*"); }catch(_e){}
-      AUTH_OK = true;
-      try{ ping(); }catch{}
-
-      applyAdminVisibility();
-      await refreshUsage();
-      await loadPlans();
-
-      const code = params.get("code");
-      if (code){
-        const rc = $("redeemCode");
-        if (rc) rc.value = code;
-      }
-    }catch(e){
-      if (cm) cm.innerHTML = '<span class="bad">Connect error: ' + escapeHtml(friendlyUiErrorMessage(e.message || "request_failed", { scope:"connect" })) + '</span>';
-    }
-  };
-
-  const resetBtn = $("btnReset");
-  if (resetBtn) resetBtn.onclick = async ()=>{
-    const xh = $("xHandle");
-    try{ localStorage.removeItem(LS_HANDLE); }catch{}
-    try{ localStorage.removeItem(LS_TOKEN); }catch{}
-    try{ localStorage.removeItem(LS_IS_ADMIN); }catch{}
-    try{ localStorage.removeItem(LS_ADMIN_CLAIMABLE); }catch{}
-    try{ localStorage.removeItem("gmx_ui_tmp"); }catch{}
-
-    const hp = $("handlePill");
-    if (hp) hp.textContent = "not set";
-    const cm = $("connectMsg");
-    if (cm) cm.innerHTML = '<span class="ok">Session cleared.</span>';
-    AUTH_OK = false;
-    try{ localStorage.setItem(LS_FORCE_LOGOUT, String(Date.now())); }catch{}
-    try{ localStorage.setItem(LS_FORCE_LOGOUT_V2, String(Date.now())); }catch{}
-    try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "site_reset" }, "*"); }catch(_e){}
-    try{ ping(); }catch{}
-    applyAdminVisibility();
-    try{ refreshUsage(); }catch{}
-    try{ loadPlans(); }catch{}
-    if (xh){
-      try{ xh.focus(); }catch{}
-    }
-  };
-
   // ---- UI Translation (site language) ----
   // Important: Always apply the base catalog first, then override with the selected locale (fallback for all UI languages).
     // ---- UI Translation (site language) ----
@@ -7366,5 +7298,77 @@ INIT_DONE = true;
   });
 })();
 
+  // ----- Connect -----
+  const connectBtn = $("btnConnect");
+  if (connectBtn) connectBtn.onclick = async ()=>{
+    const cm = $("connectMsg");
+    if (cm) cm.textContent = "";
+    const xh = $("xHandle");
+    const handle = normalizeHandle(xh?.value);
+    if (!handle){
+      if (cm) cm.innerHTML = '<span class="bad">Enter a valid @handle</span>';
+      return;
+    }
+
+    const params = new URLSearchParams(location.search);
+    const ref = params.get("ref") || "";
+
+    try{
+      const j = await api("/api/user/init", "POST", { handle, ref });
+      localStorage.setItem(LS_HANDLE, j.handle);
+      localStorage.setItem(LS_TOKEN, j.token);
+      try{ localStorage.setItem(LS_IS_ADMIN, j.isAdmin ? "1" : "0"); }catch{}
+      try{ localStorage.setItem(LS_ADMIN_CLAIMABLE, j.adminClaimable ? "1" : "0"); }catch{}
+
+      const hp = $("handlePill");
+      if (hp) hp.textContent = j.handle;
+      const rl = $("refLink");
+      if (rl) rl.value = j.refLink || "";
+      if (cm) cm.innerHTML = '';
+      try{ localStorage.removeItem(LS_FORCE_LOGOUT); }catch{}
+      try{ localStorage.removeItem(LS_FORCE_LOGOUT_V2); }catch{}
+      try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "site_connect" }, "*"); }catch(_e){}
+      AUTH_OK = true;
+      try{ ping(); }catch{}
+
+      applyAdminVisibility();
+      await refreshUsage();
+      await loadPlans();
+
+      const code = params.get("code");
+      if (code){
+        const rc = $("redeemCode");
+        if (rc) rc.value = code;
+      }
+    }catch(e){
+      if (cm) cm.innerHTML = '<span class="bad">Connect error: ' + escapeHtml(friendlyUiErrorMessage(e.message || "request_failed", { scope:"connect" })) + '</span>';
+    }
+  };
+
+  const resetBtn = $("btnReset");
+  if (resetBtn) resetBtn.onclick = async ()=>{
+    const xh = $("xHandle");
+    try{ localStorage.removeItem(LS_HANDLE); }catch{}
+    try{ localStorage.removeItem(LS_TOKEN); }catch{}
+    try{ localStorage.removeItem(LS_IS_ADMIN); }catch{}
+    try{ localStorage.removeItem(LS_ADMIN_CLAIMABLE); }catch{}
+    try{ localStorage.removeItem("gmx_ui_tmp"); }catch{}
+
+    const hp = $("handlePill");
+    if (hp) hp.textContent = "not set";
+    const cm = $("connectMsg");
+    if (cm) cm.innerHTML = '<span class="ok">Session cleared.</span>';
+    AUTH_OK = false;
+    try{ localStorage.setItem(LS_FORCE_LOGOUT, String(Date.now())); }catch{}
+    try{ localStorage.setItem(LS_FORCE_LOGOUT_V2, String(Date.now())); }catch{}
+    try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "site_reset" }, "*"); }catch(_e){}
+    try{ ping(); }catch{}
+    applyAdminVisibility();
+    try{ refreshUsage(); }catch{}
+    try{ loadPlans(); }catch{}
+    if (xh){
+      try{ xh.focus(); }catch{}
+    }
+  };
 
 })();
