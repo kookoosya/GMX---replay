@@ -2778,131 +2778,24 @@ app.post("/api/cloud/lists", requireAuth, requirePro, async (req, res) => {
 });
 
 
-
 // ---------- PRO TOOLS (see server/routes/pro-tools.mjs; registered in initGenerator) ----------
+// ---------- ADMIN AUTH (see server/routes/admin-auth.mjs; registered in static-site) ----------
 
 // Billing
 
 
-// Bootstrap admin (one-time). If no admin is configured yet, the current authenticated user becomes admin.
-// SECURITY (P0): requires X-Admin-Key (ADMIN_SECRET) to avoid public claiming.
-app.post("/api/admin/bootstrap", requireAuth, (req, res) => {
-  try{
-    const key = getAdminKey(req);
-    if (!key) return res.status(401).json({ ok:false, error:"unauthorized", hint:"missing_admin_key" });
-    if (!ADMIN_SECRET || ADMIN_SECRET === "CHANGE_ME_ADMIN_SECRET") {
-      return res.status(500).json({ ok:false, error:"server_error", hint:"admin_secret_not_configured" });
-    }
-    if (key !== ADMIN_SECRET) return res.status(401).json({ ok:false, error:"unauthorized" });
+import { createAdminSessionHelpers } from "./server/admin/session.mjs";
 
-    const handle = req.user?.handle || null;
-    const cur = getAdminHandle();
-    if (cur){
-      if (isAdminHandle(handle)) return res.json({ ok:true, handle, isAdmin:true, adminHandle: cur });
-      return res.status(409).json({ ok:false, error:"admin_already_claimed" });
-    }
-    setSetting("admin_handle", handle);
-    return res.json({ ok:true, handle, isAdmin:true, adminHandle: handle });
-  }catch(e){
-    console.error("ADMIN_BOOTSTRAP_ERROR", e);
-    return res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-// Admin login (password) -> issues admin session token.
-// Note: Admin APIs require BOTH bearer token and either X-Admin-Token (preferred) or X-Admin-Key (legacy).
-const adminLoginLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 10,
-  standardHeaders: true,
-  legacyHeaders: false,
-  keyGenerator: (req)=> String(req.ip || "ip"),
-});
-
-app.post("/api/admin/login", adminLoginLimiter, requireAuth, (req, res) => {
-  try{
-    if (!ADMIN_PASSWORD){
-      return res.status(500).json({ ok:false, error:"server_error", hint:"admin_password_not_configured" });
-    }
-    const handle = req.user?.handle || null;
-    if (!handle || !isAdminHandle(handle)) {
-      return res.status(403).json({ ok:false, error:"forbidden" });
-    }
-
-    const pw = String(req.body?.password || "").trim();
-    if (!pw) return res.status(400).json({ ok:false, error:"invalid_request", hint:"missing_password" });
-
-    if (!safeEq(pw, ADMIN_PASSWORD)) return res.status(401).json({ ok:false, error:"unauthorized" });
-
-    const s = adminSessionCreate(handle);
-    return res.json({ ok:true, handle, adminToken: s.token, expiresAt: s.expires_at });
-  }catch(e){
-    console.error("ADMIN_LOGIN_ERROR", e);
-    return res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-app.post("/api/admin/logout", requireAuth, (req, res) => {
-  try{
-    const handle = req.user?.handle || null;
-        const at = getAdminToken(req);
-    if (at) adminSessionDelete(at);
-    return res.json({ ok:true });
-  }catch(e){
-    console.error("ADMIN_LOGOUT_ERROR", e);
-    return res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-// ---------- ADMIN ----------
-function getAdminKey(req){
-  return String(req.headers["x-admin-key"] || req.headers["X-Admin-Key"] || "").trim();
-}
-
-function getAdminToken(req){
-  return String(req.headers["x-admin-token"] || req.headers["X-Admin-Token"] || "").trim();
-}
-
-function safeEq(a,b){
-  try{
-    const aa = Buffer.from(String(a||""), "utf8");
-    const bb = Buffer.from(String(b||""), "utf8");
-    if (aa.length !== bb.length) return false;
-    return crypto.timingSafeEqual(aa, bb);
-  }catch{ return false; }
-}
-
-function adminSessionCleanup(){
-  try{
-    const now = new Date().toISOString();
-    db.prepare("DELETE FROM admin_sessions WHERE expires_at < ?").run(now);
-  }catch{}
-}
-
-function adminSessionCreate(handle){
-  adminSessionCleanup();
-  const token = crypto.randomBytes(24).toString("hex");
-  const created_at = new Date().toISOString();
-  const expires_at = new Date(Date.now() + ADMIN_SESSION_HOURS*60*60*1000).toISOString();
-  db.prepare("INSERT INTO admin_sessions(token, handle, created_at, expires_at) VALUES(?,?,?,?)").run(token, handle, created_at, expires_at);
-  return { token, created_at, expires_at };
-}
-
-function adminSessionGet(token){
-  adminSessionCleanup();
-  if (!token) return null;
-  try{
-    const row = db.prepare("SELECT token, handle, created_at, expires_at FROM admin_sessions WHERE token=?").get(token);
-    if (!row) return null;
-    if (String(row.expires_at) < new Date().toISOString()) return null;
-    return row;
-  }catch{ return null; }
-}
-
-function adminSessionDelete(token){
-  if (!token) return;
-  try{ db.prepare("DELETE FROM admin_sessions WHERE token=?").run(token); }catch{}
-}
+// ---------- ADMIN (session helpers; auth routes in server/routes/admin-auth.mjs) ----------
+const {
+  getAdminKey,
+  getAdminToken,
+  safeEq,
+  adminSessionCleanup,
+  adminSessionCreate,
+  adminSessionGet,
+  adminSessionDelete,
+} = createAdminSessionHelpers({ db, crypto, adminSessionHours: ADMIN_SESSION_HOURS });
 
 // ---------- ADMIN ----------
 function requireAdmin(req, res, next) {
@@ -3911,6 +3804,25 @@ app.get("/get-extension", (req, res) => {
   <p>Once published, this page will redirect to the Chrome Web Store automatically.</p>
   <p>Go back to <a href="/app">/app</a>.</p>
 </body></html>`);
+});
+
+
+import { registerAdminAuthRoutes } from "./server/routes/admin-auth.mjs";
+
+registerAdminAuthRoutes({
+  app,
+  requireAuth,
+  rateLimit,
+  getAdminKey,
+  getAdminToken,
+  safeEq,
+  adminSessionCreate,
+  adminSessionDelete,
+  ADMIN_SECRET,
+  ADMIN_PASSWORD,
+  getAdminHandle,
+  setSetting,
+  isAdminHandle,
 });
 
 import { registerBillingRoutes } from "./server/routes/billing.mjs";

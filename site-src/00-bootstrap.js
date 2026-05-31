@@ -39,7 +39,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260530d";
+const ASSET_REV = "20260530e";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -47,6 +47,15 @@ function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (k <= 8) return k * 3;
   return 24 + (k - 8) * 4;
 }
+
+function formatUnlockMeter(cur, total){
+  const c = Math.max(0, Number(cur) || 0);
+  const t = Math.max(0, Number(total) || 0);
+  if (isPro() || (t > 0 && c >= t)) return "All";
+  if (!t) return "0";
+  return `${Math.min(c, t)}/${t}`;
+}
+
 function unlockedCountByRefs(total, freeCount=FREE_VISIBLE_THEMES){
   if (isPro()) return total;
   const r = Number(REF_COUNT||0);

@@ -399,7 +399,8 @@
     "lb_col_eligible": "Eligible",
     "lb_col_active": "Active",
     "lb_7d": "7d",
-    "lb_30d": "30d"
+    "lb_30d": "30d",
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
   },
   "de": {
     "plan_compare_btn": "Vergleichen",
@@ -799,7 +800,8 @@
     "lb_col_eligible": "Zählt",
     "lb_col_active": "Aktiv",
     "lb_7d": "7d",
-    "lb_30d": "30d"
+    "lb_30d": "30d",
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
   },
   "fr": {
     "plan_compare_btn": "Comparer",
@@ -1199,7 +1201,8 @@
     "lb_col_eligible": "Éligible",
     "lb_col_active": "Actifs",
     "lb_7d": "7j",
-    "lb_30d": "30j"
+    "lb_30d": "30j",
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
   },
   "es": {
     "plan_compare_btn": "Comparar",
@@ -1599,7 +1602,8 @@
     "lb_col_eligible": "Elegible",
     "lb_col_active": "Activos",
     "lb_7d": "7d",
-    "lb_30d": "30d"
+    "lb_30d": "30d",
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
   },
   "pt": {
     "plan_compare_btn": "Comparar",
@@ -1999,7 +2003,8 @@
     "lb_col_eligible": "Eligible",
     "lb_col_active": "Active",
     "lb_7d": "7d",
-    "lb_30d": "30d"
+    "lb_30d": "30d",
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
   },
   "it": {
     "plan_compare_btn": "Confronta",
@@ -2399,7 +2404,8 @@
     "lb_col_eligible": "Eligible",
     "lb_col_active": "Active",
     "lb_7d": "7g",
-    "lb_30d": "30g"
+    "lb_30d": "30g",
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
   },
   "nl": {
     "plan_compare_btn": "Vergelijken",
@@ -2799,7 +2805,8 @@
     "lb_col_eligible": "Eligible",
     "lb_col_active": "Active",
     "lb_7d": "7d",
-    "lb_30d": "30d"
+    "lb_30d": "30d",
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
   },
   "tr": {
     "plan_compare_btn": "Karşılaştır",
@@ -3199,7 +3206,8 @@
     "lb_col_eligible": "Eligible",
     "lb_col_active": "Active",
     "lb_7d": "7g",
-    "lb_30d": "30g"
+    "lb_30d": "30g",
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
   },
   "pl": {
     "plan_compare_btn": "Porównaj",
@@ -3599,7 +3607,8 @@
     "lb_col_eligible": "Eligible",
     "lb_col_active": "Active",
     "lb_7d": "7d",
-    "lb_30d": "30d"
+    "lb_30d": "30d",
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
   },
   "id": {
     "plan_compare_btn": "Bandingkan",
@@ -3999,7 +4008,8 @@
     "lb_col_eligible": "Eligible",
     "lb_col_active": "Active",
     "lb_7d": "7h",
-    "lb_30d": "30h"
+    "lb_30d": "30h",
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
   },
   "ru": {
     "plan_compare_btn": "Сравнить",
@@ -4399,7 +4409,8 @@
     "lb_col_eligible": "Засчитано",
     "lb_col_active": "Активные",
     "lb_7d": "7д",
-    "lb_30d": "30д"
+    "lb_30d": "30д",
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
   },
   "uk": {
     "plan_compare_btn": "Порівняти",
@@ -4799,7 +4810,8 @@
     "lb_col_eligible": "Засчитано",
     "lb_col_active": "Активные",
     "lb_7d": "7д",
-    "lb_30d": "30д"
+    "lb_30d": "30д",
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
   },
   "hi": {
     "plan_compare_btn": "कम्पेयर करें",
@@ -5199,7 +5211,8 @@
     "lb_col_eligible": "Eligible",
     "lb_col_active": "Active",
     "lb_7d": "7दिन",
-    "lb_30d": "30दिन"
+    "lb_30d": "30दिन",
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
   },
   "ja": {
     "plan_compare_btn": "比較",
@@ -5599,7 +5612,8 @@
     "lb_col_eligible": "Eligible",
     "lb_col_active": "Active",
     "lb_7d": "7日",
-    "lb_30d": "30日"
+    "lb_30d": "30日",
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
   },
   "zh": {
     "plan_compare_btn": "对比",
@@ -5999,7 +6013,8 @@
     "lb_col_eligible": "Eligible",
     "lb_col_active": "Active",
     "lb_7d": "7天",
-    "lb_30d": "30天"
+    "lb_30d": "30天",
+    "themes_pro_tip": "Pro unlocks the full theme and wallpaper library."
   }
 };
   function clone(value){ return JSON.parse(JSON.stringify(value)); }

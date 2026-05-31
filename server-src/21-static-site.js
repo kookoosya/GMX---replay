@@ -108,6 +108,25 @@ app.get("/get-extension", (req, res) => {
 </body></html>`);
 });
 
+
+import { registerAdminAuthRoutes } from "./server/routes/admin-auth.mjs";
+
+registerAdminAuthRoutes({
+  app,
+  requireAuth,
+  rateLimit,
+  getAdminKey,
+  getAdminToken,
+  safeEq,
+  adminSessionCreate,
+  adminSessionDelete,
+  ADMIN_SECRET,
+  ADMIN_PASSWORD,
+  getAdminHandle,
+  setSetting,
+  isAdminHandle,
+});
+
 import { registerBillingRoutes } from "./server/routes/billing.mjs";
 
 registerBillingRoutes({

@@ -672,6 +672,30 @@ function themePreviewBg(th){
   return `linear-gradient(135deg, ${a}, ${b})`;
 }
 
+
+function syncThemesUnlockMeters(curThemes, totalThemes, curWps, totalWps){
+  const label = formatUnlockMeter(curThemes, totalThemes);
+  const wpLabel = formatUnlockMeter(curWps, totalWps);
+  for (const id of ["themesUnlocked", "themesUnlockedVal"]) {
+    const el = $(id);
+    if (el) el.textContent = label;
+  }
+  for (const id of ["wpUnlocked", "wpUnlockedVal"]) {
+    const el = $(id);
+    if (el) el.textContent = wpLabel;
+  }
+  try{ setMeter("themesUnlockedVal", "themesUnlockedFill", curThemes, totalThemes); }catch{}
+  try{ setMeter("wpUnlockedVal", "wpUnlockedFill", curWps, totalWps); }catch{}
+  const refKpi = $("themes_k_ref")?.closest?.(".kpi");
+  if (refKpi) refKpi.style.display = isPro() ? "none" : "";
+  const freeTip = $("themes_free_tip");
+  if (freeTip) {
+    freeTip.textContent = isPro()
+      ? (t("themes_pro_tip") || "Pro unlocks the full theme and wallpaper library.")
+      : (t("themes_free_tip") || "On Free, referrals increase your cosmetic room. On Pro, the full set is already open.");
+  }
+}
+
 function unlockTagText(idx, unlocked, freeCount){
   if (idx < freeCount) return "FREE";
   if (unlocked) return "UNLOCKED";
@@ -690,16 +714,7 @@ function renderThemes(){
   const curThemes = Math.min(unlocked, total);
   const curWps = Math.min(unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS), WALLPAPERS.length);
 
-  const thEl = $("themesUnlocked");
-  if (thEl) thEl.textContent = `${curThemes}/${total}`;
-  const thVal = $("themesUnlockedVal");
-  if (thVal) thVal.textContent = `${curThemes}/${total}`;
-  try{ setMeter("themesUnlockedVal", "themesUnlockedFill", curThemes, total); }catch{}
-  const wpEl = $("wpUnlocked");
-  if (wpEl) wpEl.textContent = `${curWps}/${WALLPAPERS.length}`;
-  const wpVal = $("wpUnlockedVal");
-  if (wpVal) wpVal.textContent = `${curWps}/${WALLPAPERS.length}`;
-  try{ setMeter("wpUnlockedVal", "wpUnlockedFill", curWps, WALLPAPERS.length); }catch{}
+  syncThemesUnlockMeters(curThemes, total, curWps, WALLPAPERS.length);
 
   const items = THEMES.map((th, idx)=>({ th, idx }));
   chunkedRender(grid, items, ({ th, idx })=>{
@@ -762,9 +777,9 @@ function renderExtThemes(){
   const chosen = localStorage.getItem("gmx_ext_theme") || "classic";
 
   const el = $("extThemesUnlocked");
-  if (el) el.textContent = `${Math.min(unlocked,total)}/${total}`;
+  if (el) el.textContent = formatUnlockMeter(Math.min(unlocked, total), total);
   const wEl = $("extWpUnlocked");
-  if (wEl) wEl.textContent = `${Math.min(unlockedCountByRefs(EXT_WALLPAPERS.length, FREE_VISIBLE_EXT_WALLPAPERS), EXT_WALLPAPERS.length)}/${EXT_WALLPAPERS.length}`;
+  if (wEl) wEl.textContent = formatUnlockMeter(Math.min(unlockedCountByRefs(EXT_WALLPAPERS.length, FREE_VISIBLE_EXT_WALLPAPERS), EXT_WALLPAPERS.length), EXT_WALLPAPERS.length);
 
   const items = EXT_THEMES.map((th, idx)=>({ th, idx }));
   chunkedRender(grid, items, ({ th, idx })=>{
@@ -843,7 +858,7 @@ function renderExtWallpapers(){
   const fallbackGlobal = selectedTarget === "all" ? "" : getExtWallpaperForView("all");
   const chosen = chosenDirect || fallbackGlobal || "";
   const wEl = $("extWpUnlocked");
-  if (wEl) wEl.textContent = `${Math.min(unlocked,total)}/${total}`;
+  if (wEl) wEl.textContent = formatUnlockMeter(Math.min(unlocked, total), total);
 
   const items = allExtWps.map((wp, idx)=>({ wp, idx }));
   chunkedRender(grid, items, ({ wp, idx })=>{

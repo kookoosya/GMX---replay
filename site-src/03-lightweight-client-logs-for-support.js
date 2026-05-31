@@ -693,7 +693,7 @@ function readFileAsDataURL(file){
     }
     if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
     if (norm.startsWith("extv3_")) return `/assets/extbg/thumbs/${norm}.webp?v=${ASSET_REV}`;
-    return `/assets/extbg/${norm}.svg?v=${ASSET_REV}`;
+    return `/assets/extbg/thumbs/extv3_01.webp?v=${ASSET_REV}`;
   }
   try{
     const cur = localStorage.getItem(LS_EXT_WP);
@@ -757,7 +757,7 @@ function readFileAsDataURL(file){
     }
     if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
     if (norm.startsWith("v2_")) return `/assets/wallpapers/thumbs/${norm}.webp?v=${ASSET_REV}`;
-    return `/assets/wallpapers/${norm}.svg?v=${ASSET_REV}`;
+    return `/assets/wallpapers/thumbs/v2_001.webp?v=${ASSET_REV}`;
   }
 
   function wallpaperUrl(id){
