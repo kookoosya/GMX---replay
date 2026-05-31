@@ -189,17 +189,7 @@ async function doBestServer(kind){
   const packEl  = kind==="gm" ? $("gmPack") : $("gnPack");
   const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
 
-  const mode = modeEl ? modeEl.value : "mid";
-  const lang = currentLang(kind);
-  let style = styleEl ? styleEl.value : "classic";
-  const packId = packEl ? (packEl.value || "classic") : "classic";
-  const packIdx = PACKS.findIndex(p=>p.id===packId);
-  const packLocked = (!isPro() && packIdx >= unlockedPacksCount());
-  const pack = PACKS.find(p=>p.id===packId) || PACKS[0];
-  if (!packLocked && pack && pack.style) style = pack.style;
-
-  const strength = getAntiStrength(kind);
-  const antiN = antiWindow(strength);
+  const { mode, lang, style, antiN } = readGenParams(kind);
   const keyActive = activeKey(kind);
 
   setBusy(kind, true, "Picking the best reply...");

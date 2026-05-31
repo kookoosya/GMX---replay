@@ -1,5 +1,9 @@
 /** GM/GN generation HTTP routes (site + shared auth). */
 
+const VALID_STYLES = new Set([
+  "classic","classy","emoji","noemoji","minimal","meme","degen","alpha","cheer","calm","builder","focus"
+]);
+
 export function registerGenerateRoutes(deps) {
   const {
     app,
@@ -19,7 +23,8 @@ export function registerGenerateRoutes(deps) {
       const kind = String(req.query.kind || "").toLowerCase();
       const mode = String(req.query.mode || "min").toLowerCase();
       const lang = normLang(req.query.lang);
-      const style = String(req.query.style || "classic").toLowerCase();
+      let style = String(req.query.style || "classic").toLowerCase();
+      if (!VALID_STYLES.has(style)) style = "classic";
       const antiN = parseAntiLastN(req, 20);
 
       if (kind !== "gm" && kind !== "gn") return sendError(res, 400, "invalid_kind");
@@ -41,7 +46,8 @@ export function registerGenerateRoutes(deps) {
       const kind = String(req.query.kind || "").toLowerCase();
       const mode = String(req.query.mode || "min").toLowerCase();
       const lang = normLang(req.query.lang);
-      const style = String(req.query.style || "classic").toLowerCase();
+      let style = String(req.query.style || "classic").toLowerCase();
+      if (!VALID_STYLES.has(style)) style = "classic";
       const antiN = parseAntiLastN(req, 20);
       let count = Number(req.query.count || 10);
       if (!Number.isFinite(count)) count = 10;

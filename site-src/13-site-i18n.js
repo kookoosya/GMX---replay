@@ -874,17 +874,7 @@ function closeLangMenu(){
 
   async function refillCleanFill(kind, targetCount, opts){
     const key = activeKey(kind);
-    const modeEl  = kind==="gm" ? $("gmMode") : $("gnMode");
-    const styleEl = kind==="gm" ? $("gmStyle") : $("gnStyle");
-    const packEl  = kind==="gm" ? $("gmPack") : $("gnPack");
-    const mode = modeEl ? modeEl.value : "mid";
-    const lang = currentLang(kind);
-    let style = styleEl ? styleEl.value : "classic";
-    const packId = packEl ? (packEl.value || "classic") : "classic";
-    const packIdx = PACKS.findIndex(p=>p.id===packId);
-    const packLocked = (!isPro() && packIdx >= unlockedPacksCount());
-    const pack = PACKS.find(p=>p.id===packId) || PACKS[0];
-    if (!packLocked && pack && pack.style) style = pack.style;
+    const { mode, lang, style, antiN } = readGenParams(kind);
 
     const before = readKey(key);
     const cleaned = await dedupeLinesByShapeAsync(before, CLEAN_FILL_STRENGTH, 200);
@@ -1196,25 +1186,30 @@ function cleanupKeyLines(lines){
       const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
       if (sel){
         sel.addEventListener("change", ()=>{
-          localStorage.setItem(lsKeyPack(kind), sel.value);
-          logEvent("pack_change", { kind, pack: sel.value });
+          const pid = sel.value || "classic";
+          localStorage.setItem(lsKeyPack(kind), pid);
+          logEvent("pack_change", { kind, pack: pid });
+          const packs = packsForKind(kind);
+          const idx = packs.findIndex(x=>x.id===pid);
+          const locked = (!isPro() && idx >= unlockedPacksCountFor(kind));
+          if (!locked){
+            const packRow = packs.find(x=>x.id===pid) || packs[0];
+            applyPackDefaultsToUi(kind, packRow);
+          }
         });
       }
       if (btn){
         btn.addEventListener("click", ()=>{
           const pid = sel ? (sel.value || "classic") : "classic";
-          const p = PACKS.find(x=>x.id===pid) || PACKS[0];
-          const idx = PACKS.findIndex(x=>x.id===pid);
-          const locked = (!isPro() && idx >= unlockedPacksCount());
+          const packs = packsForKind(kind);
+          const p = packs.find(x=>x.id===pid) || packs[0];
+          const idx = packs.findIndex(x=>x.id===pid);
+          const locked = (!isPro() && idx >= unlockedPacksCountFor(kind));
           if (locked){
             if (msgEl) msgEl.innerHTML = `<span class="warn">Pack is locked. Upgrade to Pro or unlock via referrals.</span>`;
             return;
           }
-          // apply preset defaults
-          const styleSel = kind==="gm" ? $("gmStyle") : $("gnStyle");
-          const modeSel  = kind==="gm" ? $("gmMode")  : $("gnMode");
-          if (styleSel && p.style) styleSel.value = p.style;
-          if (modeSel && p.mode) modeSel.value = p.mode;
+          applyPackDefaultsToUi(kind, p);
 
           if (msgEl) msgEl.innerHTML = `<span class="ok">Applied pack: ${escapeHtml(p.name)}</span>`;
           logEvent("pack_apply", { kind, pack: pid });

@@ -95,6 +95,7 @@ b{ font-weight:700; }
 .bg{
   position:fixed;
   inset:0;
+  z-index:0;
   background: var(--bg_user), var(--bg);
   background-size: cover, cover;
   background-position: center, center;
@@ -102,15 +103,30 @@ b{ font-weight:700; }
   transform: translateZ(0);
   pointer-events:none;
 }
+body.hasWallBg .bg{
+  background: var(--bg);
+  background-size: cover;
+}
+body.hasWallBg .bg{
+  --bg_user-effective: none;
+}
 .gmxWallLayer{
-  position:absolute;
-  inset:-2px;
-  background-position:center center;
-  background-repeat:no-repeat;
-  background-size:cover;
-  transform:translateZ(0);
-  will-change:opacity;
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  overflow:hidden;
+  pointer-events:none;
   display:none;
+}
+.gmxWallLayer .gmxWallImg{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  display:block;
+  user-select:none;
+  -webkit-user-drag:none;
+  transform:translateZ(0);
 }
 .bg::before{
   content:"";

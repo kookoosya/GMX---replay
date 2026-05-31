@@ -215,25 +215,63 @@
   ];
 
 
-  const PACKS = [
-    { id:"classic", name:"Balanced",         pro:false, style:"classic", mode:null, anti:2, clean:true  },
-    { id:"king",    name:"Market Read",      pro:false, style:"alpha",   mode:"mid", anti:2, clean:true  },
-    { id:"degen",   name:"CT Market",        pro:true,  style:"degen",   mode:"mid", anti:4, clean:true  },
-    { id:"minimal", name:"Tight Minimal",    pro:true,  style:"minimal", mode:"min", anti:4, clean:true  },
-    { id:"builder", name:"Builder Clean",    pro:true,  style:"builder", mode:"mid", anti:4, clean:true  },
-    { id:"kind",    name:"Soft Close",       pro:true,  style:"calm",    mode:"mid", anti:4, clean:true  },
-    { id:"aggro",   name:"Alpha Push",       pro:true,  style:"alpha",   mode:"max", anti:3, clean:true  },
+  const GM_PACKS = [
+    { id:"classic", name:"Morning Balanced", pro:false, style:"classic", mode:null, anti:2, clean:true },
+    { id:"king",    name:"Market Read AM",   pro:false, style:"alpha",   mode:"mid", anti:2, clean:true },
+    { id:"degen",   name:"CT Morning",       pro:true,  style:"degen",   mode:"mid", anti:4, clean:true },
+    { id:"minimal", name:"Tight GM",         pro:true,  style:"minimal", mode:"min", anti:4, clean:true },
+    { id:"builder", name:"Builder AM",       pro:true,  style:"builder", mode:"mid", anti:4, clean:true },
+    { id:"kind",    name:"Warm Morning",     pro:true,  style:"calm",    mode:"mid", anti:4, clean:true },
+    { id:"aggro",   name:"Alpha Push AM",    pro:true,  style:"alpha",   mode:"max", anti:3, clean:true },
   ];
+  const GN_PACKS = [
+    { id:"classic", name:"Night Balanced",   pro:false, style:"classic", mode:null, anti:2, clean:true },
+    { id:"king",    name:"Market Read PM",   pro:false, style:"alpha",   mode:"mid", anti:2, clean:true },
+    { id:"degen",   name:"CT Night",         pro:true,  style:"degen",   mode:"mid", anti:4, clean:true },
+    { id:"minimal", name:"Tight GN",         pro:true,  style:"minimal", mode:"min", anti:4, clean:true },
+    { id:"builder", name:"Builder PM",       pro:true,  style:"builder", mode:"mid", anti:4, clean:true },
+    { id:"kind",    name:"Soft Close",       pro:true,  style:"calm",    mode:"mid", anti:4, clean:true },
+    { id:"aggro",   name:"Alpha Push PM",    pro:true,  style:"alpha",   mode:"max", anti:3, clean:true },
+  ];
+  const PACKS = GM_PACKS;
 
-  function unlockedPacksCount(){ return unlockedCountByRefs(PACKS.length, FREE_VISIBLE_PACKS); }
+  function packsForKind(kind){
+    return kind === "gn" ? GN_PACKS : GM_PACKS;
+  }
+
+
+  function readGenParams(kind){
+    const modeEl = kind === "gm" ? $("gmMode") : $("gnMode");
+    const styleEl = kind === "gm" ? $("gmStyle") : $("gnStyle");
+    const mode = modeEl ? modeEl.value : "mid";
+    const lang = currentLang(kind);
+    const style = styleEl ? styleEl.value : "classic";
+    const strength = getAntiStrength(kind);
+    const antiN = antiWindow(strength);
+    return { mode, lang, style, antiN };
+  }
+
+  function applyPackDefaultsToUi(kind, pack){
+    if (!pack) return;
+    const styleSel = kind === "gm" ? $("gmStyle") : $("gnStyle");
+    const modeSel  = kind === "gm" ? $("gmMode")  : $("gnMode");
+    if (styleSel && pack.style) styleSel.value = pack.style;
+    if (modeSel && pack.mode) modeSel.value = pack.mode;
+    try{ syncModePanelCopy(); }catch(_e){}
+  }
+
+  function unlockedPacksCountFor(kind){
+    return unlockedCountByRefs(packsForKind(kind).length, FREE_VISIBLE_PACKS);
+  }
 
   function fillPacks(){
-    const unlocked = unlockedPacksCount();
-    const fill = (sel, lsKey)=>{
+    const fill = (kind, sel, lsKey)=>{
       if (!sel) return;
+      const packs = packsForKind(kind);
+      const unlocked = unlockedPacksCountFor(kind);
       const prev = localStorage.getItem(lsKey) || "classic";
       sel.innerHTML = "";
-      PACKS.forEach((p, idx)=>{
+      packs.forEach((p, idx)=>{
         const o = document.createElement("option");
         o.value = p.id;
         const locked = (!isPro() && idx >= unlocked);
@@ -245,8 +283,8 @@
       if ([...sel.options].some(o=>o.value===prev && !o.disabled)) sel.value = prev;
       else sel.value = "classic";
     };
-    fill($("gmPack"), LS_GM_PACK);
-    fill($("gnPack"), LS_GN_PACK);
+    fill("gm", $("gmPack"), LS_GM_PACK);
+    fill("gn", $("gnPack"), LS_GN_PACK);
   }
 
   function unlockedThemesCount(){ return unlockedCountByRefs(THEMES.length, FREE_VISIBLE_THEMES); }

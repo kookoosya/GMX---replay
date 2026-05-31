@@ -31,10 +31,11 @@ async function generate(kind, count){
     const lang = currentLang(kind);
 
     let style = styleEl ? styleEl.value : "classic";
+    const packs = (typeof packsForKind === "function") ? packsForKind(kind) : (PACKS || []);
     const packId = packEl ? (packEl.value || "classic") : "classic";
-    const packIdx = PACKS.findIndex(p=>p.id===packId);
-    const packLocked = (!isPro() && packIdx >= unlockedPacksCount());
-    const pack = PACKS.find(p=>p.id===packId) || PACKS[0];
+    const packIdx = packs.findIndex(p=>p.id===packId);
+    const packLocked = (!isPro() && packIdx >= unlockedPacksCountFor(kind));
+    const pack = packs.find(p=>p.id===packId) || packs[0] || null;
 
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
 
@@ -44,8 +45,9 @@ async function generate(kind, count){
 
     if ((kind==="gm" ? gmView : gnView) === "lang") ensureIndexed(kind, lang);
 
-    // Pack influences the effective style for generation (without locking manual style).
-    if (!packLocked && pack && pack.style) style = pack.style;
+    // Reply tone + Size use the live dropdowns (pack preset applies via UI / pack change).
+    if (!styleEl) style = pack && pack.style ? pack.style : style;
+    if (!modeEl && pack && pack.mode) mode = pack.mode;
 
     const keyActive = activeKey(kind);
     const keyGlobal = getGlobalKey(kind);

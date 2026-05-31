@@ -314,17 +314,41 @@
   }
 
   function ensureWallpaperLayer(){
-    const bgRoot = document.querySelector(".bg");
-    if (!bgRoot) return null;
     let layer = document.getElementById("gmxWallLayer");
     if (!layer){
       layer = document.createElement("div");
       layer.id = "gmxWallLayer";
       layer.className = "gmxWallLayer";
       layer.setAttribute("aria-hidden", "true");
-      bgRoot.prepend(layer);
+      document.body.prepend(layer);
     }
     return layer;
+  }
+
+  function setWallpaperLayerImage(layer, url){
+    if (!layer) return;
+    if (!url){
+      layer.replaceChildren();
+      layer.style.display = "none";
+      layer.removeAttribute("data-wall-url");
+      return;
+    }
+    const safe = String(url).replace(/"/g, "%22");
+    if (layer.getAttribute("data-wall-url") === url && layer.querySelector("img")){
+      layer.style.display = "block";
+      return;
+    }
+    layer.setAttribute("data-wall-url", url);
+    layer.replaceChildren();
+    const img = document.createElement("img");
+    img.className = "gmxWallImg";
+    img.alt = "";
+    img.decoding = "async";
+    img.loading = "eager";
+    img.draggable = false;
+    img.src = url;
+    layer.appendChild(img);
+    layer.style.display = "block";
   }
 
   function applyWallpaper(tab){
@@ -341,17 +365,8 @@
     const full = (id && ok) ? wallpaperFullUrl(id) : "";
     const on = !!(id && ok && full);
 
-    if (layer){
-      if (on){
-        layer.style.backgroundImage = `url("${full.replace(/"/g, "%22")}")`;
-        layer.style.display = "block";
-      } else {
-        layer.style.backgroundImage = "none";
-        layer.style.display = "none";
-      }
-    }
-
-    document.documentElement.style.setProperty("--bg_wall", on ? `url("${full.replace(/"/g, "%22")}")` : "none");
+    setWallpaperLayerImage(layer, on ? full : "");
+    document.documentElement.style.setProperty("--bg_wall", "none");
     document.body.classList.toggle("hasWallBg", on);
     document.body.classList.toggle("has-wallpaper", on);
   }

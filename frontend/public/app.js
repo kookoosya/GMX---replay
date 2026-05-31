@@ -39,7 +39,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260531c";
+const ASSET_REV = "20260531d";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -246,10 +246,29 @@ const LS_GM_RECENT = "gmx_gm_recent";
   const LS_GN_RECENT = "gmx_gn_recent";
 
 
-  // Hidden repeat guard stays off in the normal flow.
-  // Best pass uses its own fixed internal shape pass only when the user turns it on.
+  function packsForKind(kind){
+    try{
+      if (typeof GM_PACKS !== "undefined" && typeof GN_PACKS !== "undefined"){
+        return kind === "gn" ? GN_PACKS : GM_PACKS;
+      }
+    }catch(_e){}
+    return (typeof PACKS !== "undefined" && Array.isArray(PACKS)) ? PACKS : [];
+  }
+
   function getAntiStrength(kind){
-    return 0;
+    try{
+      const raw = localStorage.getItem(lsKeyAnti(kind));
+      if (raw !== null && raw !== ""){
+        const n = Math.trunc(Number(raw));
+        if (Number.isFinite(n)) return Math.max(0, Math.min(5, n));
+      }
+    }catch(_e){}
+    const packEl = kind === "gn" ? $("gnPack") : $("gmPack");
+    const pid = packEl ? (packEl.value || "classic") : "classic";
+    const packs = packsForKind(kind);
+    const pack = packs.find((p)=>p.id === pid) || packs[0];
+    const anti = pack && Number.isFinite(pack.anti) ? pack.anti : 2;
+    return Math.max(0, Math.min(5, anti));
   }
 
   // Legacy helper kept for compatibility with old code paths.
@@ -467,6 +486,12 @@ function listCustomBgUsedTabs(){
 
   function applyUserBg(tab){
     const target = tab || currentTabName();
+
+    if (document.body.classList.contains("hasWallBg")){
+      document.documentElement.style.setProperty("--bg_user", "none");
+      document.body.classList.remove("hasUserBg");
+      return;
+    }
 
     // Priority: per-tab custom background.
     let data = "";
@@ -970,17 +995,41 @@ function readFileAsDataURL(file){
   }
 
   function ensureWallpaperLayer(){
-    const bgRoot = document.querySelector(".bg");
-    if (!bgRoot) return null;
     let layer = document.getElementById("gmxWallLayer");
     if (!layer){
       layer = document.createElement("div");
       layer.id = "gmxWallLayer";
       layer.className = "gmxWallLayer";
       layer.setAttribute("aria-hidden", "true");
-      bgRoot.prepend(layer);
+      document.body.prepend(layer);
     }
     return layer;
+  }
+
+  function setWallpaperLayerImage(layer, url){
+    if (!layer) return;
+    if (!url){
+      layer.replaceChildren();
+      layer.style.display = "none";
+      layer.removeAttribute("data-wall-url");
+      return;
+    }
+    const safe = String(url).replace(/"/g, "%22");
+    if (layer.getAttribute("data-wall-url") === url && layer.querySelector("img")){
+      layer.style.display = "block";
+      return;
+    }
+    layer.setAttribute("data-wall-url", url);
+    layer.replaceChildren();
+    const img = document.createElement("img");
+    img.className = "gmxWallImg";
+    img.alt = "";
+    img.decoding = "async";
+    img.loading = "eager";
+    img.draggable = false;
+    img.src = url;
+    layer.appendChild(img);
+    layer.style.display = "block";
   }
 
   function applyWallpaper(tab){
@@ -997,17 +1046,8 @@ function readFileAsDataURL(file){
     const full = (id && ok) ? wallpaperFullUrl(id) : "";
     const on = !!(id && ok && full);
 
-    if (layer){
-      if (on){
-        layer.style.backgroundImage = `url("${full.replace(/"/g, "%22")}")`;
-        layer.style.display = "block";
-      } else {
-        layer.style.backgroundImage = "none";
-        layer.style.display = "none";
-      }
-    }
-
-    document.documentElement.style.setProperty("--bg_wall", on ? `url("${full.replace(/"/g, "%22")}")` : "none");
+    setWallpaperLayerImage(layer, on ? full : "");
+    document.documentElement.style.setProperty("--bg_wall", "none");
     document.body.classList.toggle("hasWallBg", on);
     document.body.classList.toggle("has-wallpaper", on);
   }
@@ -1499,25 +1539,63 @@ function renderWallpaperUI(){
   ];
 
 
-  const PACKS = [
-    { id:"classic", name:"Balanced",         pro:false, style:"classic", mode:null, anti:2, clean:true  },
-    { id:"king",    name:"Market Read",      pro:false, style:"alpha",   mode:"mid", anti:2, clean:true  },
-    { id:"degen",   name:"CT Market",        pro:true,  style:"degen",   mode:"mid", anti:4, clean:true  },
-    { id:"minimal", name:"Tight Minimal",    pro:true,  style:"minimal", mode:"min", anti:4, clean:true  },
-    { id:"builder", name:"Builder Clean",    pro:true,  style:"builder", mode:"mid", anti:4, clean:true  },
-    { id:"kind",    name:"Soft Close",       pro:true,  style:"calm",    mode:"mid", anti:4, clean:true  },
-    { id:"aggro",   name:"Alpha Push",       pro:true,  style:"alpha",   mode:"max", anti:3, clean:true  },
+  const GM_PACKS = [
+    { id:"classic", name:"Morning Balanced", pro:false, style:"classic", mode:null, anti:2, clean:true },
+    { id:"king",    name:"Market Read AM",   pro:false, style:"alpha",   mode:"mid", anti:2, clean:true },
+    { id:"degen",   name:"CT Morning",       pro:true,  style:"degen",   mode:"mid", anti:4, clean:true },
+    { id:"minimal", name:"Tight GM",         pro:true,  style:"minimal", mode:"min", anti:4, clean:true },
+    { id:"builder", name:"Builder AM",       pro:true,  style:"builder", mode:"mid", anti:4, clean:true },
+    { id:"kind",    name:"Warm Morning",     pro:true,  style:"calm",    mode:"mid", anti:4, clean:true },
+    { id:"aggro",   name:"Alpha Push AM",    pro:true,  style:"alpha",   mode:"max", anti:3, clean:true },
   ];
+  const GN_PACKS = [
+    { id:"classic", name:"Night Balanced",   pro:false, style:"classic", mode:null, anti:2, clean:true },
+    { id:"king",    name:"Market Read PM",   pro:false, style:"alpha",   mode:"mid", anti:2, clean:true },
+    { id:"degen",   name:"CT Night",         pro:true,  style:"degen",   mode:"mid", anti:4, clean:true },
+    { id:"minimal", name:"Tight GN",         pro:true,  style:"minimal", mode:"min", anti:4, clean:true },
+    { id:"builder", name:"Builder PM",       pro:true,  style:"builder", mode:"mid", anti:4, clean:true },
+    { id:"kind",    name:"Soft Close",       pro:true,  style:"calm",    mode:"mid", anti:4, clean:true },
+    { id:"aggro",   name:"Alpha Push PM",    pro:true,  style:"alpha",   mode:"max", anti:3, clean:true },
+  ];
+  const PACKS = GM_PACKS;
 
-  function unlockedPacksCount(){ return unlockedCountByRefs(PACKS.length, FREE_VISIBLE_PACKS); }
+  function packsForKind(kind){
+    return kind === "gn" ? GN_PACKS : GM_PACKS;
+  }
+
+
+  function readGenParams(kind){
+    const modeEl = kind === "gm" ? $("gmMode") : $("gnMode");
+    const styleEl = kind === "gm" ? $("gmStyle") : $("gnStyle");
+    const mode = modeEl ? modeEl.value : "mid";
+    const lang = currentLang(kind);
+    const style = styleEl ? styleEl.value : "classic";
+    const strength = getAntiStrength(kind);
+    const antiN = antiWindow(strength);
+    return { mode, lang, style, antiN };
+  }
+
+  function applyPackDefaultsToUi(kind, pack){
+    if (!pack) return;
+    const styleSel = kind === "gm" ? $("gmStyle") : $("gnStyle");
+    const modeSel  = kind === "gm" ? $("gmMode")  : $("gnMode");
+    if (styleSel && pack.style) styleSel.value = pack.style;
+    if (modeSel && pack.mode) modeSel.value = pack.mode;
+    try{ syncModePanelCopy(); }catch(_e){}
+  }
+
+  function unlockedPacksCountFor(kind){
+    return unlockedCountByRefs(packsForKind(kind).length, FREE_VISIBLE_PACKS);
+  }
 
   function fillPacks(){
-    const unlocked = unlockedPacksCount();
-    const fill = (sel, lsKey)=>{
+    const fill = (kind, sel, lsKey)=>{
       if (!sel) return;
+      const packs = packsForKind(kind);
+      const unlocked = unlockedPacksCountFor(kind);
       const prev = localStorage.getItem(lsKey) || "classic";
       sel.innerHTML = "";
-      PACKS.forEach((p, idx)=>{
+      packs.forEach((p, idx)=>{
         const o = document.createElement("option");
         o.value = p.id;
         const locked = (!isPro() && idx >= unlocked);
@@ -1529,8 +1607,8 @@ function renderWallpaperUI(){
       if ([...sel.options].some(o=>o.value===prev && !o.disabled)) sel.value = prev;
       else sel.value = "classic";
     };
-    fill($("gmPack"), LS_GM_PACK);
-    fill($("gnPack"), LS_GN_PACK);
+    fill("gm", $("gmPack"), LS_GM_PACK);
+    fill("gn", $("gnPack"), LS_GN_PACK);
   }
 
   function unlockedThemesCount(){ return unlockedCountByRefs(THEMES.length, FREE_VISIBLE_THEMES); }
@@ -3291,17 +3369,7 @@ async function doBestServer(kind){
   const packEl  = kind==="gm" ? $("gmPack") : $("gnPack");
   const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
 
-  const mode = modeEl ? modeEl.value : "mid";
-  const lang = currentLang(kind);
-  let style = styleEl ? styleEl.value : "classic";
-  const packId = packEl ? (packEl.value || "classic") : "classic";
-  const packIdx = PACKS.findIndex(p=>p.id===packId);
-  const packLocked = (!isPro() && packIdx >= unlockedPacksCount());
-  const pack = PACKS.find(p=>p.id===packId) || PACKS[0];
-  if (!packLocked && pack && pack.style) style = pack.style;
-
-  const strength = getAntiStrength(kind);
-  const antiN = antiWindow(strength);
+  const { mode, lang, style, antiN } = readGenParams(kind);
   const keyActive = activeKey(kind);
 
   setBusy(kind, true, "Picking the best reply...");
@@ -3902,10 +3970,11 @@ async function generate(kind, count){
     const lang = currentLang(kind);
 
     let style = styleEl ? styleEl.value : "classic";
+    const packs = (typeof packsForKind === "function") ? packsForKind(kind) : (PACKS || []);
     const packId = packEl ? (packEl.value || "classic") : "classic";
-    const packIdx = PACKS.findIndex(p=>p.id===packId);
-    const packLocked = (!isPro() && packIdx >= unlockedPacksCount());
-    const pack = PACKS.find(p=>p.id===packId) || PACKS[0];
+    const packIdx = packs.findIndex(p=>p.id===packId);
+    const packLocked = (!isPro() && packIdx >= unlockedPacksCountFor(kind));
+    const pack = packs.find(p=>p.id===packId) || packs[0] || null;
 
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
 
@@ -3915,8 +3984,9 @@ async function generate(kind, count){
 
     if ((kind==="gm" ? gmView : gnView) === "lang") ensureIndexed(kind, lang);
 
-    // Pack influences the effective style for generation (without locking manual style).
-    if (!packLocked && pack && pack.style) style = pack.style;
+    // Reply tone + Size use the live dropdowns (pack preset applies via UI / pack change).
+    if (!styleEl) style = pack && pack.style ? pack.style : style;
+    if (!modeEl && pack && pack.mode) mode = pack.mode;
 
     const keyActive = activeKey(kind);
     const keyGlobal = getGlobalKey(kind);
@@ -6784,17 +6854,7 @@ function closeLangMenu(){
 
   async function refillCleanFill(kind, targetCount, opts){
     const key = activeKey(kind);
-    const modeEl  = kind==="gm" ? $("gmMode") : $("gnMode");
-    const styleEl = kind==="gm" ? $("gmStyle") : $("gnStyle");
-    const packEl  = kind==="gm" ? $("gmPack") : $("gnPack");
-    const mode = modeEl ? modeEl.value : "mid";
-    const lang = currentLang(kind);
-    let style = styleEl ? styleEl.value : "classic";
-    const packId = packEl ? (packEl.value || "classic") : "classic";
-    const packIdx = PACKS.findIndex(p=>p.id===packId);
-    const packLocked = (!isPro() && packIdx >= unlockedPacksCount());
-    const pack = PACKS.find(p=>p.id===packId) || PACKS[0];
-    if (!packLocked && pack && pack.style) style = pack.style;
+    const { mode, lang, style, antiN } = readGenParams(kind);
 
     const before = readKey(key);
     const cleaned = await dedupeLinesByShapeAsync(before, CLEAN_FILL_STRENGTH, 200);
@@ -7106,25 +7166,30 @@ function cleanupKeyLines(lines){
       const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
       if (sel){
         sel.addEventListener("change", ()=>{
-          localStorage.setItem(lsKeyPack(kind), sel.value);
-          logEvent("pack_change", { kind, pack: sel.value });
+          const pid = sel.value || "classic";
+          localStorage.setItem(lsKeyPack(kind), pid);
+          logEvent("pack_change", { kind, pack: pid });
+          const packs = packsForKind(kind);
+          const idx = packs.findIndex(x=>x.id===pid);
+          const locked = (!isPro() && idx >= unlockedPacksCountFor(kind));
+          if (!locked){
+            const packRow = packs.find(x=>x.id===pid) || packs[0];
+            applyPackDefaultsToUi(kind, packRow);
+          }
         });
       }
       if (btn){
         btn.addEventListener("click", ()=>{
           const pid = sel ? (sel.value || "classic") : "classic";
-          const p = PACKS.find(x=>x.id===pid) || PACKS[0];
-          const idx = PACKS.findIndex(x=>x.id===pid);
-          const locked = (!isPro() && idx >= unlockedPacksCount());
+          const packs = packsForKind(kind);
+          const p = packs.find(x=>x.id===pid) || packs[0];
+          const idx = packs.findIndex(x=>x.id===pid);
+          const locked = (!isPro() && idx >= unlockedPacksCountFor(kind));
           if (locked){
             if (msgEl) msgEl.innerHTML = `<span class="warn">Pack is locked. Upgrade to Pro or unlock via referrals.</span>`;
             return;
           }
-          // apply preset defaults
-          const styleSel = kind==="gm" ? $("gmStyle") : $("gnStyle");
-          const modeSel  = kind==="gm" ? $("gmMode")  : $("gnMode");
-          if (styleSel && p.style) styleSel.value = p.style;
-          if (modeSel && p.mode) modeSel.value = p.mode;
+          applyPackDefaultsToUi(kind, p);
 
           if (msgEl) msgEl.innerHTML = `<span class="ok">Applied pack: ${escapeHtml(p.name)}</span>`;
           logEvent("pack_apply", { kind, pack: pid });
