@@ -14,6 +14,11 @@ const steps = [
   ["api-contract", "node", ["tools/tests/api-contract.mjs"]],
 ];
 
+if (!process.env.SKIP_E2E) {
+  steps.push(["e2e-app", "node", ["tools/tests/e2e-app.mjs"]]);
+}
+
+
 let failed = 0;
 for (const [name, cmd, args] of steps) {
   console.log(`\n== ${name} ==`);
