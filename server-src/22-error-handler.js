@@ -18,7 +18,6 @@ app.use("/api", (req, res) => {
   sendError(res, 404, "not_found", { path: req.originalUrl });
 });
 
-initGenerator();
 
 HTTP_SERVER = app.listen(PORT, "0.0.0.0", () => {
   try {

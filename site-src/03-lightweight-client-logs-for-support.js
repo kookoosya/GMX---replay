@@ -780,18 +780,46 @@ function readFileAsDataURL(file){
     try{ if (localStorage.getItem(LS_CUSTOM_BG_GLOBAL)) out.push({ id: CUSTOM_UPLOAD_ID, name: "My upload", tier: "custom" }); }catch{}
     return out;
   }
+
+  function ensureWallpaperLayer(){
+    const bgRoot = document.querySelector(".bg");
+    if (!bgRoot) return null;
+    let layer = document.getElementById("gmxWallLayer");
+    if (!layer){
+      layer = document.createElement("div");
+      layer.id = "gmxWallLayer";
+      layer.className = "gmxWallLayer";
+      layer.setAttribute("aria-hidden", "true");
+      bgRoot.prepend(layer);
+    }
+    return layer;
+  }
+
   function applyWallpaper(tab){
-    const id = getWallpaperForTab(tab);
+    const safeTab = String(tab || currentTabName() || "home");
+    const id = getWallpaperForTab(safeTab);
     const effectiveCustom = effectiveCustomWallpapersSite();
     const allWps = [...effectiveCustom, ...WALLPAPERS];
     const wp = effectiveCustom.find(x=>x.id===id) || WALLPAPERS.find(x=>x.id===id) || null;
     let idx = -1;
     try{ idx = wp ? allWps.findIndex(x=>x.id===id) : -1; }catch{}
-    const ok = wp ? wallpaperUnlocked(wp, idx, effectiveCustom.length) : true;
+    const ok = !id || !wp || wallpaperUnlocked(wp, idx, effectiveCustom.length);
 
-    const css = (id && ok) ? wallpaperUrl(id) : "none";
-    document.documentElement.style.setProperty("--bg_wall", css);
-    const on = css !== "none";
+    const layer = ensureWallpaperLayer();
+    const full = (id && ok) ? wallpaperFullUrl(id) : "";
+    const on = !!(id && ok && full);
+
+    if (layer){
+      if (on){
+        layer.style.backgroundImage = `url("${full.replace(/"/g, "%22")}")`;
+        layer.style.display = "block";
+      } else {
+        layer.style.backgroundImage = "none";
+        layer.style.display = "none";
+      }
+    }
+
+    document.documentElement.style.setProperty("--bg_wall", on ? `url("${full.replace(/"/g, "%22")}")` : "none");
     document.body.classList.toggle("hasWallBg", on);
     document.body.classList.toggle("has-wallpaper", on);
   }

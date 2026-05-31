@@ -140,11 +140,17 @@ const $ = (id) => document.getElementById(id);
 
 
     function setBg(tab){
-    const theme = TAB_THEME[tab] || TAB_THEME.home;
-    const bg = (typeof theme === "function") ? theme() : theme;
-    document.documentElement.style.setProperty("--bg", bg);
-    applyWallpaper(tab);
-    applyUserBg(tab);
+    const safeTab = String(tab || "home");
+    const hasWall = document.body.classList.contains("hasWallBg");
+    if (hasWall){
+      document.documentElement.style.setProperty("--bg", "linear-gradient(180deg, rgba(5,7,15,.12) 0%, rgba(5,7,15,.32) 100%)");
+    } else {
+      const theme = TAB_THEME[safeTab] || TAB_THEME.home;
+      const bg = (typeof theme === "function") ? theme() : theme;
+      document.documentElement.style.setProperty("--bg", bg);
+    }
+    applyWallpaper(safeTab);
+    applyUserBg(safeTab);
   }
 
   function ensurePredictionTabVisible(){

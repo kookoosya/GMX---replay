@@ -39,7 +39,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260530f";
+const ASSET_REV = "20260531a";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -968,18 +968,46 @@ function readFileAsDataURL(file){
     try{ if (localStorage.getItem(LS_CUSTOM_BG_GLOBAL)) out.push({ id: CUSTOM_UPLOAD_ID, name: "My upload", tier: "custom" }); }catch{}
     return out;
   }
+
+  function ensureWallpaperLayer(){
+    const bgRoot = document.querySelector(".bg");
+    if (!bgRoot) return null;
+    let layer = document.getElementById("gmxWallLayer");
+    if (!layer){
+      layer = document.createElement("div");
+      layer.id = "gmxWallLayer";
+      layer.className = "gmxWallLayer";
+      layer.setAttribute("aria-hidden", "true");
+      bgRoot.prepend(layer);
+    }
+    return layer;
+  }
+
   function applyWallpaper(tab){
-    const id = getWallpaperForTab(tab);
+    const safeTab = String(tab || currentTabName() || "home");
+    const id = getWallpaperForTab(safeTab);
     const effectiveCustom = effectiveCustomWallpapersSite();
     const allWps = [...effectiveCustom, ...WALLPAPERS];
     const wp = effectiveCustom.find(x=>x.id===id) || WALLPAPERS.find(x=>x.id===id) || null;
     let idx = -1;
     try{ idx = wp ? allWps.findIndex(x=>x.id===id) : -1; }catch{}
-    const ok = wp ? wallpaperUnlocked(wp, idx, effectiveCustom.length) : true;
+    const ok = !id || !wp || wallpaperUnlocked(wp, idx, effectiveCustom.length);
 
-    const css = (id && ok) ? wallpaperUrl(id) : "none";
-    document.documentElement.style.setProperty("--bg_wall", css);
-    const on = css !== "none";
+    const layer = ensureWallpaperLayer();
+    const full = (id && ok) ? wallpaperFullUrl(id) : "";
+    const on = !!(id && ok && full);
+
+    if (layer){
+      if (on){
+        layer.style.backgroundImage = `url("${full.replace(/"/g, "%22")}")`;
+        layer.style.display = "block";
+      } else {
+        layer.style.backgroundImage = "none";
+        layer.style.display = "none";
+      }
+    }
+
+    document.documentElement.style.setProperty("--bg_wall", on ? `url("${full.replace(/"/g, "%22")}")` : "none");
     document.body.classList.toggle("hasWallBg", on);
     document.body.classList.toggle("has-wallpaper", on);
   }
@@ -2411,11 +2439,17 @@ const $ = (id) => document.getElementById(id);
 
 
     function setBg(tab){
-    const theme = TAB_THEME[tab] || TAB_THEME.home;
-    const bg = (typeof theme === "function") ? theme() : theme;
-    document.documentElement.style.setProperty("--bg", bg);
-    applyWallpaper(tab);
-    applyUserBg(tab);
+    const safeTab = String(tab || "home");
+    const hasWall = document.body.classList.contains("hasWallBg");
+    if (hasWall){
+      document.documentElement.style.setProperty("--bg", "linear-gradient(180deg, rgba(5,7,15,.12) 0%, rgba(5,7,15,.32) 100%)");
+    } else {
+      const theme = TAB_THEME[safeTab] || TAB_THEME.home;
+      const bg = (typeof theme === "function") ? theme() : theme;
+      document.documentElement.style.setProperty("--bg", bg);
+    }
+    applyWallpaper(safeTab);
+    applyUserBg(safeTab);
   }
 
   function ensurePredictionTabVisible(){
@@ -4058,7 +4092,8 @@ if (effCount <= 0){
     } catch(e){
       const m = (e && e.message) ? e.message : "failed";
       const friendly = friendlyUiErrorMessage(m, { scope:"generate" });
-      msgEl.innerHTML = `<span class="bad">${escapeHtml(friendly)}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="bad">${escapeHtml(friendly)}</span>`;
+      try{ toast("bad", `<b>Generate failed:</b> ${escapeHtml(friendly)}`); }catch(_e){}
       logEvent("gen_error", { kind, err: m, friendly });
     } finally {
       INFLIGHT[kind] = false;

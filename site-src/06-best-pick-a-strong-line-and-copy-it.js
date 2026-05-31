@@ -990,7 +990,8 @@ if (effCount <= 0){
     } catch(e){
       const m = (e && e.message) ? e.message : "failed";
       const friendly = friendlyUiErrorMessage(m, { scope:"generate" });
-      msgEl.innerHTML = `<span class="bad">${escapeHtml(friendly)}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="bad">${escapeHtml(friendly)}</span>`;
+      try{ toast("bad", `<b>Generate failed:</b> ${escapeHtml(friendly)}`); }catch(_e){}
       logEvent("gen_error", { kind, err: m, friendly });
     } finally {
       INFLIGHT[kind] = false;
