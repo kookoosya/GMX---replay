@@ -1,5 +1,4 @@
 import express from 'express';
-import { readFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { TradingEngine } from './core/engine.mjs';
@@ -19,33 +18,24 @@ const engine = createDemoEngine();
 engine.stepOnce();
 writeStatus(engine);
 
-let statusInterval = setInterval(() => {
+setInterval(() => {
   engine.whaleFeedScore = Math.max(0.1, Math.min(0.95,
     engine.whaleFeedScore + (Math.random() - 0.48) * 0.05
   ));
-  engine.scoreHistory.push({
-    timestamp: Date.now(),
-    score: engine.whaleFeedScore
-  });
-  if (engine.scoreHistory.length > 500) {
-    engine.scoreHistory = engine.scoreHistory.slice(-400);
-  }
+  engine.scoreHistory.push({ timestamp: Date.now(), score: engine.whaleFeedScore });
+  if (engine.scoreHistory.length > 500) engine.scoreHistory = engine.scoreHistory.slice(-400);
   engine.stepOnce();
   writeStatus(engine);
 }, 5000);
 
-app.get('/api/status', (req, res) => {
-  const status = engine.toStatusJson();
-  res.json(status);
-});
+app.get('/api/status', (_req, res) => res.json(engine.toStatusJson()));
 
-app.get('/api/whale-feed', (req, res) => {
+app.get('/api/whale-feed', (_req, res) => {
   const whales = getActiveWhales();
-  const ranked = rankWhales(whales);
   res.json({
     score: engine.whaleFeedScore,
     status: engine.getStatus().whale_feed.status,
-    whales: ranked,
+    whales: rankWhales(whales),
     history: engine.scoreHistory.slice(-200)
   });
 });
@@ -53,55 +43,39 @@ app.get('/api/whale-feed', (req, res) => {
 app.get('/api/whale-feed/history', (req, res) => {
   const hours = parseInt(req.query.hours) || 24;
   const cutoff = Date.now() - hours * 60 * 60 * 1000;
-  const filtered = engine.scoreHistory.filter(p => p.timestamp >= cutoff);
-  res.json({ hours, points: filtered });
+  res.json({ hours, points: engine.scoreHistory.filter(p => p.timestamp >= cutoff) });
 });
 
-app.get('/api/whales', (req, res) => {
+app.get('/api/whales', (_req, res) => {
   const whales = getActiveWhales();
   const ranked = rankWhales(whales);
-  const pruned = pruneInactiveWhales(ranked);
-  res.json({
-    active: pruned.length,
-    total: whales.length,
-    whales: ranked
-  });
+  res.json({ active: pruneInactiveWhales(ranked).length, total: whales.length, whales: ranked });
 });
 
-app.get('/api/modes', (req, res) => {
-  const tiers = getProgressiveTiers();
+app.get('/api/modes', (_req, res) => {
   const status = engine.getStatus();
-  res.json({
-    current: status.mode,
-    tiers,
-    equity: status.equity.total
-  });
+  res.json({ current: status.mode, tiers: getProgressiveTiers(), equity: status.equity.total });
 });
 
-app.get('/api/risk', (req, res) => {
+app.get('/api/risk', (_req, res) => {
   const status = engine.getStatus();
+  res.json({ exposure: status.risk.exposure, level: status.risk.level, stake: status.risk.stake, positions: status.positions });
+});
+
+app.get('/api/analytics', (_req, res) => {
+  const trades = generateDemoTrades();
   res.json({
-    exposure: status.risk.exposure,
-    level: status.risk.level,
-    stake: status.risk.stake,
-    positions: status.positions
+    equityCurve: computeEquityCurve(trades),
+    winRate: computeWinRate(trades),
+    winRateByMode: computeWinRateByMode(trades),
+    pnlStats: computePnLStats(trades),
+    whaleFeedCorrelation: computeWhaleFeedCorrelation(trades),
+    riskHeatmap: generateRiskHeatmap(trades),
+    totalTrades: trades.length
   });
 });
 
-app.get('/api/analytics', (req, res) => {
-  const demoTrades = generateDemoTrades();
-  res.json({
-    equityCurve: computeEquityCurve(demoTrades),
-    winRate: computeWinRate(demoTrades),
-    winRateByMode: computeWinRateByMode(demoTrades),
-    pnlStats: computePnLStats(demoTrades),
-    whaleFeedCorrelation: computeWhaleFeedCorrelation(demoTrades),
-    riskHeatmap: generateRiskHeatmap(demoTrades),
-    totalTrades: demoTrades.length
-  });
-});
-
-app.get('/api/entry-blocks', (req, res) => {
+app.get('/api/entry-blocks', (_req, res) => {
   const status = engine.getStatus();
   res.json({
     allowed: status.entry.allowed,
@@ -111,7 +85,16 @@ app.get('/api/entry-blocks', (req, res) => {
   });
 });
 
-app.get('/api/health', (req, res) => {
+app.get('/api/ensemble', (_req, res) => {
+  res.json(engine.ensembleFilter.getFilterStats());
+});
+
+app.post('/api/ensemble/signal', (req, res) => {
+  const result = engine.processSignal(req.body);
+  res.json(result);
+});
+
+app.get('/api/health', (_req, res) => {
   res.json({
     ok: true,
     status: 'running',

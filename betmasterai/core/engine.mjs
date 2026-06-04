@@ -1,8 +1,22 @@
 import { getEffectiveConfig, getModeForEquity, getDegradationLevel, getModeDisplayInfo, shouldAutoUpgrade } from './modes.mjs';
-import { computeWhaleFeedScore, getWhaleFeedStatus, getWhaleCount, getActiveWhales, generateScoreHistory } from './whale_feed.mjs';
-import { validateTradeEntry, getCurrentRiskExposure, getRiskLevel, getStakeInfo, calculatePositionSize } from './risk_manager.mjs';
+import { computeWhaleFeedScore, getWhaleFeedStatus, getWhaleCount, generateScoreHistory } from './whale_feed.mjs';
+import { validateTradeEntry, getCurrentRiskExposure, getRiskLevel, getStakeInfo } from './risk_manager.mjs';
 import { translateBlockReasons } from './reason_translator.mjs';
+import { createEnsembleFilter } from './ensemble.mjs';
 
+/**
+ * Main trading engine. Holds account state and produces a status snapshot
+ * on each `stepOnce()` call. The snapshot is the single source of truth
+ * for the dashboard (written to status.json by status_writer).
+ *
+ * Simplified flow of stepOnce:
+ *   1. Auto-upgrade mode based on equity tier
+ *   2. Resolve effective config (micro overrides if applicable)
+ *   3. Compute whale feed score & degradation
+ *   4. Validate whether a new entry is allowed
+ *   5. Compute risk exposure snapshot
+ *   6. Build & return the full status object
+ */
 export class TradingEngine {
   constructor(options = {}) {
     this.equity = options.equity || 100;
@@ -14,174 +28,169 @@ export class TradingEngine {
     this.whaleFeedScore = options.whaleFeedScore || 0.5;
     this.whaleSignals = options.whaleSignals || [];
     this.lastStepResult = null;
-    this.history = [];
     this.blockLog = [];
     this.scoreHistory = generateScoreHistory(this.whaleFeedScore);
+    this.ensembleFilter = createEnsembleFilter(
+      getEffectiveConfig(this.mode, this.equity)
+    );
   }
 
+  /**
+   * Core loop iteration. Called on each tick (typically every 5s).
+   * Returns a complete status snapshot consumed by the dashboard.
+   */
   stepOnce() {
-    const { tier, mode: recommendedMode } = getModeForEquity(this.equity);
+    // --- Step 1: auto-upgrade mode if equity crossed a tier boundary ---
     const upgrade = shouldAutoUpgrade(this.mode, this.equity);
-    if (upgrade) {
-      this.mode = upgrade.mode;
-    }
+    if (upgrade) this.mode = upgrade.mode;
 
-    const effectiveConfig = getEffectiveConfig(this.mode, this.equity);
-    const whaleFeedScore = this.whaleSignals.length > 0
+    // --- Step 2: resolve config (applies micro overrides for small accounts) ---
+    const config = getEffectiveConfig(this.mode, this.equity);
+    const { tier } = getModeForEquity(this.equity);
+
+    // --- Step 3: whale feed & degradation ---
+    const wfScore = this.whaleSignals.length > 0
       ? computeWhaleFeedScore(this.whaleSignals)
       : this.whaleFeedScore;
+    this.whaleFeedScore = wfScore;
 
-    this.whaleFeedScore = whaleFeedScore;
-    const whaleFeedStatus = getWhaleFeedStatus(whaleFeedScore);
-    const degradation = getDegradationLevel(whaleFeedScore, this._getAverageConfidence());
+    const wfStatus = getWhaleFeedStatus(wfScore);
+    const avgConfidence = this._avgConfidence();
+    const degradation = getDegradationLevel(wfScore, avgConfidence);
     const modeDisplay = getModeDisplayInfo(this.mode, degradation);
 
-    const validation = validateTradeEntry(
-      this.equity,
-      effectiveConfig,
-      this.positions,
-      whaleFeedScore
-    );
+    // --- Step 4: entry validation ---
+    const validation = this._validateEntry(config, wfScore);
 
-    if (this.tradesToday >= effectiveConfig.max_trades_per_day) {
-      validation.allowed = false;
-      validation.reasons.push({
-        code: 'daily_limit',
-        technical: `trades_today=${this.tradesToday} >= max=${effectiveConfig.max_trades_per_day}`,
-        human: `Daily trade limit reached (${this.tradesToday}/${effectiveConfig.max_trades_per_day} trades used today)`
-      });
-    }
-
-    if (effectiveConfig.debate_strictness === 'strict' && whaleFeedScore < 0.6) {
-      if (!validation.reasons.find(r => r.code === 'debate_block')) {
-        validation.allowed = false;
-        validation.reasons.push({
-          code: 'debate_block',
-          technical: 'debate_strictness=strict, consensus_low',
-          human: 'Signal debate system requires stronger consensus before entry'
-        });
-      }
-    }
-
-    if (effectiveConfig.debate_strictness !== 'relaxed' &&
-        effectiveConfig.overseer_strictness !== 'relaxed' &&
-        this.equity < (effectiveConfig.skip_overseer_below_equity || 0)) {
-      // pass through for micro accounts
-    }
-
+    // --- Step 5: risk snapshot ---
     const riskExposure = getCurrentRiskExposure(this.positions, this.equity);
     const riskLevel = getRiskLevel(riskExposure.pct);
-    const stakeInfo = getStakeInfo(this.equity, effectiveConfig);
+    const stakeInfo = getStakeInfo(this.equity, config);
     const whaleCount = getWhaleCount();
 
-    const humanReasons = validation.reasons.map(r => r.human);
-    const blockReasons = translateBlockReasons(validation.reasons);
-
+    // --- Step 6: assemble result ---
     this.lastStepResult = {
       timestamp: new Date().toISOString(),
-      mode: {
-        current: this.mode,
-        tier,
-        degradation,
-        display: modeDisplay,
-        config: effectiveConfig
-      },
-      equity: {
-        total: Math.round((this.collateral + this.positionsValue) * 100) / 100,
-        collateral: this.collateral,
-        positions_value: this.positionsValue,
-        breakdown: {
-          collateral_pct: this.collateral > 0 ? Math.round((this.collateral / (this.collateral + this.positionsValue)) * 100) : 100,
-          positions_pct: this.positionsValue > 0 ? Math.round((this.positionsValue / (this.collateral + this.positionsValue)) * 100) : 0
-        }
-      },
+      mode: { current: this.mode, tier, degradation, display: modeDisplay, config },
+      equity: this._equitySnapshot(),
       whale_feed: {
-        score: Math.round(whaleFeedScore * 1000) / 1000,
-        status: whaleFeedStatus,
+        score: round3(wfScore),
+        status: wfStatus,
         active_whales: whaleCount.active,
         total_whales: whaleCount.total,
         history: this.scoreHistory
       },
-      risk: {
-        exposure: riskExposure,
-        level: riskLevel,
-        stake: stakeInfo
-      },
-      positions: {
-        open: this.positions.length,
-        max: effectiveConfig.max_concurrent_positions,
-        list: this.positions
-      },
-      trades_today: {
-        count: this.tradesToday,
-        max: effectiveConfig.max_trades_per_day
-      },
+      risk: { exposure: riskExposure, level: riskLevel, stake: stakeInfo },
+      positions: { open: this.positions.length, max: config.max_concurrent_positions, list: this.positions },
+      trades_today: { count: this.tradesToday, max: config.max_trades_per_day },
       entry: {
         allowed: validation.allowed,
-        block_reasons: blockReasons,
-        block_reasons_human: humanReasons,
+        block_reasons: translateBlockReasons(validation.reasons),
+        block_reasons_human: validation.reasons.map(r => r.human),
         block_reasons_technical: validation.reasons.map(r => r.technical)
       },
+      ensemble: this.ensembleFilter.getFilterStats(),
       health: {
         engine_running: true,
         last_update: new Date().toISOString(),
-        uptime_hours: Math.round(Math.random() * 48 * 10) / 10,
+        uptime_hours: round1(process.uptime() / 3600),
         errors_24h: 0
       }
     };
 
     if (!validation.allowed) {
-      this.blockLog.push({
-        timestamp: new Date().toISOString(),
-        reasons: validation.reasons.map(r => r.code)
-      });
+      this.blockLog.push({ timestamp: new Date().toISOString(), reasons: validation.reasons.map(r => r.code) });
     }
 
     return this.lastStepResult;
   }
+
+  // ---------- entry validation (extracted for clarity) ----------
+
+  _validateEntry(config, wfScore) {
+    const validation = validateTradeEntry(this.equity, config, this.positions, wfScore);
+
+    if (this.tradesToday >= config.max_trades_per_day) {
+      validation.allowed = false;
+      validation.reasons.push({
+        code: 'daily_limit',
+        technical: `trades_today=${this.tradesToday} >= max=${config.max_trades_per_day}`,
+        human: `Daily trade limit reached (${this.tradesToday}/${config.max_trades_per_day} trades used today)`
+      });
+    }
+
+    if (config.debate_strictness === 'strict' && wfScore < 0.6) {
+      validation.allowed = false;
+      validation.reasons.push({
+        code: 'debate_block',
+        technical: 'debate_strictness=strict, consensus_low',
+        human: 'Signal debate system requires stronger consensus before entry'
+      });
+    }
+
+    return validation;
+  }
+
+  // ---------- equity helpers ----------
+
+  _equitySnapshot() {
+    const total = round2(this.collateral + this.positionsValue);
+    const collPct = total > 0 ? Math.round((this.collateral / total) * 100) : 100;
+    return {
+      total,
+      collateral: this.collateral,
+      positions_value: this.positionsValue,
+      breakdown: { collateral_pct: collPct, positions_pct: 100 - collPct }
+    };
+  }
+
+  _avgConfidence() {
+    if (this.whaleSignals.length === 0) return this.whaleFeedScore;
+    return this.whaleSignals.reduce((s, x) => s + (x.confidence || 0.5), 0) / this.whaleSignals.length;
+  }
+
+  // ---------- public accessors ----------
 
   getStatus() {
     if (!this.lastStepResult) this.stepOnce();
     return this.lastStepResult;
   }
 
+  /** Flat key-value object written to status.json for the dashboard. */
   toStatusJson() {
-    const status = this.getStatus();
+    const s = this.getStatus();
     return {
-      live_total_equity_usdc: status.equity.total,
-      live_collateral_usdc: status.equity.collateral,
-      live_positions_value_usdc: status.equity.positions_value,
-      live_equity_breakdown: status.equity.breakdown,
-      current_mode: status.mode.current,
-      current_tier: status.mode.tier,
-      mode_degradation: status.mode.degradation,
-      mode_display: status.mode.display,
-      whale_feed_score: status.whale_feed.score,
-      whale_feed_status: status.whale_feed.status,
-      whale_feed_active: status.whale_feed.active_whales,
-      whale_feed_total: status.whale_feed.total_whales,
-      whale_feed_history: status.whale_feed.history,
-      risk_exposure_pct: status.risk.exposure.pct,
-      risk_level: status.risk.level,
-      risk_stake: status.risk.stake,
-      positions_open: status.positions.open,
-      positions_max: status.positions.max,
-      positions_list: status.positions.list,
-      trades_today: status.trades_today.count,
-      trades_max: status.trades_today.max,
-      entry_allowed: status.entry.allowed,
-      entry_block_reasons: status.entry.block_reasons,
-      entry_block_reasons_human: status.entry.block_reasons_human,
-      health: status.health,
+      live_total_equity_usdc: s.equity.total,
+      live_collateral_usdc: s.equity.collateral,
+      live_positions_value_usdc: s.equity.positions_value,
+      live_equity_breakdown: s.equity.breakdown,
+      current_mode: s.mode.current,
+      current_tier: s.mode.tier,
+      mode_degradation: s.mode.degradation,
+      mode_display: s.mode.display,
+      whale_feed_score: s.whale_feed.score,
+      whale_feed_status: s.whale_feed.status,
+      whale_feed_active: s.whale_feed.active_whales,
+      whale_feed_total: s.whale_feed.total_whales,
+      whale_feed_history: s.whale_feed.history,
+      risk_exposure_pct: s.risk.exposure.pct,
+      risk_level: s.risk.level,
+      risk_stake: s.risk.stake,
+      positions_open: s.positions.open,
+      positions_max: s.positions.max,
+      positions_list: s.positions.list,
+      trades_today: s.trades_today.count,
+      trades_max: s.trades_today.max,
+      entry_allowed: s.entry.allowed,
+      entry_block_reasons: s.entry.block_reasons,
+      entry_block_reasons_human: s.entry.block_reasons_human,
+      ensemble_stats: s.ensemble,
+      health: s.health,
       updated_at: new Date().toISOString()
     };
   }
 
-  _getAverageConfidence() {
-    if (this.whaleSignals.length === 0) return this.whaleFeedScore;
-    const sum = this.whaleSignals.reduce((a, s) => a + (s.confidence || 0.5), 0);
-    return sum / this.whaleSignals.length;
-  }
+  // ---------- mutators (called by external controllers) ----------
 
   updateEquity(collateral, positionsValue = 0) {
     this.collateral = collateral;
@@ -192,28 +201,26 @@ export class TradingEngine {
   updateWhaleSignals(signals) {
     this.whaleSignals = signals;
     this.whaleFeedScore = computeWhaleFeedScore(signals);
-    this.scoreHistory.push({
-      timestamp: Date.now(),
-      score: this.whaleFeedScore
-    });
-    if (this.scoreHistory.length > 500) {
-      this.scoreHistory = this.scoreHistory.slice(-400);
+    this.scoreHistory.push({ timestamp: Date.now(), score: this.whaleFeedScore });
+    if (this.scoreHistory.length > 500) this.scoreHistory = this.scoreHistory.slice(-400);
+  }
+
+  addPosition(position) { this.positions.push(position); }
+  removePosition(id) { this.positions = this.positions.filter(p => p.id !== id); }
+  incrementTrades() { this.tradesToday++; }
+  resetDailyTrades() { this.tradesToday = 0; }
+
+  /** Feed a raw signal through the ensemble filter and optionally record it. */
+  processSignal(signal) {
+    const filtered = this.ensembleFilter.filterSignals([signal]);
+    if (filtered.length > 0) {
+      this.ensembleFilter.addToHistory(filtered[0]);
+      return { accepted: true, signal: filtered[0] };
     }
-  }
-
-  addPosition(position) {
-    this.positions.push(position);
-  }
-
-  removePosition(id) {
-    this.positions = this.positions.filter(p => p.id !== id);
-  }
-
-  incrementTrades() {
-    this.tradesToday++;
-  }
-
-  resetDailyTrades() {
-    this.tradesToday = 0;
+    return { accepted: false, reason: 'filtered_by_ensemble' };
   }
 }
+
+function round2(n) { return Math.round(n * 100) / 100; }
+function round3(n) { return Math.round(n * 1000) / 1000; }
+function round1(n) { return Math.round(n * 10) / 10; }

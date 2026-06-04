@@ -3,7 +3,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const tests = ['modes.test.mjs', 'whale_feed.test.mjs', 'risk.test.mjs', 'engine.test.mjs'];
+const tests = ['modes.test.mjs', 'whale_feed.test.mjs', 'risk.test.mjs', 'ensemble.test.mjs', 'engine.test.mjs'];
 
 let allPassed = true;
 
