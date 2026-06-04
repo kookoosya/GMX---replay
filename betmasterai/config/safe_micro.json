@@ -1,0 +1,30 @@
+{
+  "description": "Optimized Safe Mode for micro accounts ($80-$150). Relaxed debate/overseer thresholds to avoid excessive blocking on small balances.",
+  "overrides": {
+    "risk_per_trade_pct": 0.8,
+    "max_risk_pct": 1.2,
+    "max_trades_per_day": 6,
+    "max_concurrent_positions": 2,
+    "copy_ratio_pct": 2.5,
+    "debate_strictness": "relaxed",
+    "overseer_strictness": "relaxed",
+    "antistall_enabled": false,
+    "whale_feed_threshold": 0.50,
+    "min_confidence": 0.55,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 2.0,
+    "min_position_usdc": 2.0,
+    "max_position_usdc": 8.0,
+    "cooldown_between_trades_ms": 180000,
+    "skip_debate_below_equity": 150,
+    "skip_overseer_below_equity": 120,
+    "relaxed_antistall_threshold": 0.3
+  },
+  "blocking_overrides": {
+    "max_consecutive_blocks": 3,
+    "block_cooldown_reset_ms": 600000,
+    "allow_force_entry_after_blocks": 5,
+    "reduce_confidence_threshold_after_blocks": 2,
+    "reduced_confidence": 0.45
+  }
+}

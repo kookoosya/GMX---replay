@@ -1,0 +1,145 @@
+{
+  "description": "Curated whale addresses for copy trading. Audited and tiered by performance.",
+  "last_audit": "2026-06-04T00:00:00Z",
+  "auto_prune_inactive_days": 7,
+  "whales": [
+    {
+      "address": "0xA1b2C3d4E5f6789012345678901234567890abcd",
+      "label": "Alpha Whale #1",
+      "tier": "S",
+      "win_rate_30d": 0.72,
+      "avg_pnl_pct": 4.2,
+      "trades_30d": 89,
+      "active": true,
+      "last_trade": "2026-06-03T18:30:00Z",
+      "notes": "Consistent performer, BTC/ETH focus"
+    },
+    {
+      "address": "0xB2c3D4e5F6789012345678901234567890ABCDEF",
+      "label": "Alpha Whale #2",
+      "tier": "S",
+      "win_rate_30d": 0.68,
+      "avg_pnl_pct": 3.8,
+      "trades_30d": 112,
+      "active": true,
+      "last_trade": "2026-06-04T02:15:00Z",
+      "notes": "High frequency, multi-asset"
+    },
+    {
+      "address": "0xC3d4E5f6789012345678901234567890ABCDEF01",
+      "label": "Trend Whale #3",
+      "tier": "A",
+      "win_rate_30d": 0.65,
+      "avg_pnl_pct": 3.1,
+      "trades_30d": 67,
+      "active": true,
+      "last_trade": "2026-06-03T22:45:00Z",
+      "notes": "Trend follower, SOL/ETH"
+    },
+    {
+      "address": "0xD4e5F6789012345678901234567890ABCDEF0123",
+      "label": "Scalp Whale #4",
+      "tier": "A",
+      "win_rate_30d": 0.71,
+      "avg_pnl_pct": 1.9,
+      "trades_30d": 203,
+      "active": true,
+      "last_trade": "2026-06-04T05:20:00Z",
+      "notes": "Fast scalper, high frequency"
+    },
+    {
+      "address": "0xE5f6789012345678901234567890ABCDEF012345",
+      "label": "Swing Whale #5",
+      "tier": "A",
+      "win_rate_30d": 0.63,
+      "avg_pnl_pct": 5.7,
+      "trades_30d": 34,
+      "active": true,
+      "last_trade": "2026-06-02T14:00:00Z",
+      "notes": "Low frequency, high conviction"
+    },
+    {
+      "address": "0xF6789012345678901234567890ABCDEF01234567",
+      "label": "DeFi Whale #6",
+      "tier": "A",
+      "win_rate_30d": 0.60,
+      "avg_pnl_pct": 2.8,
+      "trades_30d": 78,
+      "active": true,
+      "last_trade": "2026-06-03T20:10:00Z",
+      "notes": "DeFi token specialist"
+    },
+    {
+      "address": "0x789012345678901234567890ABCDEF0123456789",
+      "label": "Momentum Whale #7",
+      "tier": "B",
+      "win_rate_30d": 0.58,
+      "avg_pnl_pct": 2.4,
+      "trades_30d": 91,
+      "active": true,
+      "last_trade": "2026-06-03T16:30:00Z",
+      "notes": "Momentum plays, mixed results"
+    },
+    {
+      "address": "0x89012345678901234567890ABCDEF01234567890a",
+      "label": "BTC Whale #8",
+      "tier": "B",
+      "win_rate_30d": 0.62,
+      "avg_pnl_pct": 2.1,
+      "trades_30d": 45,
+      "active": true,
+      "last_trade": "2026-06-04T01:00:00Z",
+      "notes": "BTC-only, medium frequency"
+    },
+    {
+      "address": "0x9012345678901234567890ABCDEF01234567890ab",
+      "label": "ETH Whale #9",
+      "tier": "B",
+      "win_rate_30d": 0.56,
+      "avg_pnl_pct": 1.8,
+      "trades_30d": 66,
+      "active": true,
+      "last_trade": "2026-06-03T12:45:00Z",
+      "notes": "ETH ecosystem focus"
+    },
+    {
+      "address": "0x012345678901234567890ABCDEF01234567890abc",
+      "label": "Alt Whale #10",
+      "tier": "B",
+      "win_rate_30d": 0.54,
+      "avg_pnl_pct": 3.3,
+      "trades_30d": 52,
+      "active": true,
+      "last_trade": "2026-06-02T08:20:00Z",
+      "notes": "Altcoin rotation"
+    },
+    {
+      "address": "0x12345678901234567890ABCDEF01234567890abcd",
+      "label": "Quant Whale #11",
+      "tier": "B",
+      "win_rate_30d": 0.59,
+      "avg_pnl_pct": 1.5,
+      "trades_30d": 134,
+      "active": true,
+      "last_trade": "2026-06-04T03:30:00Z",
+      "notes": "Algorithmic, high frequency"
+    },
+    {
+      "address": "0x2345678901234567890ABCDEF01234567890abcde",
+      "label": "Macro Whale #12",
+      "tier": "C",
+      "win_rate_30d": 0.51,
+      "avg_pnl_pct": 1.2,
+      "trades_30d": 28,
+      "active": true,
+      "last_trade": "2026-06-01T19:00:00Z",
+      "notes": "Macro plays, slow"
+    }
+  ],
+  "tier_weights": {
+    "S": 1.0,
+    "A": 0.75,
+    "B": 0.5,
+    "C": 0.25
+  }
+}

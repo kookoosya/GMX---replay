@@ -1,0 +1,93 @@
+{
+  "version": "1.0.0",
+  "exchange": "bybit",
+  "account": {
+    "initial_balance_usdc": 100,
+    "leverage_max": 5,
+    "margin_mode": "cross"
+  },
+  "modes": {
+    "safe": {
+      "label": "Safe",
+      "risk_per_trade_pct": 0.8,
+      "max_risk_pct": 1.2,
+      "max_trades_per_day": 5,
+      "max_concurrent_positions": 2,
+      "copy_ratio_pct": 2.0,
+      "whale_feed_threshold": 0.55,
+      "debate_strictness": "relaxed",
+      "overseer_strictness": "relaxed",
+      "antistall_enabled": false,
+      "min_confidence": 0.6,
+      "stop_loss_pct": 1.5,
+      "take_profit_pct": 2.5
+    },
+    "core": {
+      "label": "Core",
+      "risk_per_trade_pct": 1.5,
+      "max_risk_pct": 3.0,
+      "max_trades_per_day": 8,
+      "max_concurrent_positions": 3,
+      "copy_ratio_pct": 3.0,
+      "whale_feed_threshold": 0.50,
+      "debate_strictness": "normal",
+      "overseer_strictness": "normal",
+      "antistall_enabled": true,
+      "min_confidence": 0.55,
+      "stop_loss_pct": 2.0,
+      "take_profit_pct": 3.5
+    },
+    "smart": {
+      "label": "Smart",
+      "risk_per_trade_pct": 2.5,
+      "max_risk_pct": 5.0,
+      "max_trades_per_day": 12,
+      "max_concurrent_positions": 5,
+      "copy_ratio_pct": 4.0,
+      "whale_feed_threshold": 0.45,
+      "debate_strictness": "normal",
+      "overseer_strictness": "normal",
+      "antistall_enabled": true,
+      "min_confidence": 0.50,
+      "stop_loss_pct": 2.5,
+      "take_profit_pct": 4.5
+    },
+    "ensemble": {
+      "label": "Ensemble",
+      "risk_per_trade_pct": 3.0,
+      "max_risk_pct": 6.0,
+      "max_trades_per_day": 15,
+      "max_concurrent_positions": 6,
+      "copy_ratio_pct": 5.0,
+      "whale_feed_threshold": 0.40,
+      "debate_strictness": "strict",
+      "overseer_strictness": "strict",
+      "antistall_enabled": true,
+      "min_confidence": 0.45,
+      "stop_loss_pct": 3.0,
+      "take_profit_pct": 5.0
+    }
+  },
+  "progressive_tiers": {
+    "micro": { "label": "Micro", "min_equity": 80, "max_equity": 150, "default_mode": "safe" },
+    "small": { "label": "Small", "min_equity": 150, "max_equity": 300, "default_mode": "core" },
+    "medium": { "label": "Medium", "min_equity": 300, "max_equity": 600, "default_mode": "smart" },
+    "full": { "label": "Full", "min_equity": 600, "max_equity": null, "default_mode": "ensemble" }
+  },
+  "whale_feed": {
+    "poll_interval_ms": 30000,
+    "score_decay_minutes": 60,
+    "thresholds": {
+      "full": 0.65,
+      "cautious": 0.45,
+      "degraded": 0.0
+    },
+    "max_active_whales": 15,
+    "auto_prune_inactive_days": 7
+  },
+  "dashboard": {
+    "refresh_interval_ms": 5000,
+    "status_file": "data/status.json",
+    "history_retention_hours": 24
+  }
+}

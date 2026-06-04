@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BetMasterAI — Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="header-left">
+        <h1 class="logo">BetMaster<span class="logo-ai">AI</span></h1>
+        <span class="version">v1.0</span>
+      </div>
+      <div class="header-right">
+        <div class="health-dot" id="healthDot" title="Engine status"></div>
+        <span class="health-label" id="healthLabel">Connecting…</span>
+        <span class="last-update" id="lastUpdate">—</span>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="overview">Overview</button>
+      <button class="tab" data-tab="whale-feed">Whale Feed</button>
+      <button class="tab" data-tab="risk">Risk & Sizing</button>
+      <button class="tab" data-tab="analytics">Analytics</button>
+      <button class="tab" data-tab="whales">Whales</button>
+    </nav>
+
+    <!-- ===== OVERVIEW TAB ===== -->
+    <section class="tab-content active" id="tab-overview">
+
+      <!-- Current Mode Card -->
+      <div class="mode-card" id="modeCard">
+        <div class="mode-card-icon" id="modeIcon">🛡️</div>
+        <div class="mode-card-body">
+          <div class="mode-card-label">Current Mode</div>
+          <div class="mode-card-name" id="modeName">Safe Mode</div>
+          <div class="mode-card-degradation" id="modeDegradation">Full</div>
+          <div class="mode-card-desc" id="modeDesc">Conservative trading with strict risk limits</div>
+        </div>
+        <div class="mode-card-tier" id="modeTier">MICRO</div>
+      </div>
+
+      <!-- Equity Card -->
+      <div class="card equity-card">
+        <div class="card-header">
+          <h2>Total Equity</h2>
+        </div>
+        <div class="equity-main">
+          <span class="equity-amount" id="totalEquity">$—</span>
+          <span class="equity-currency">USDC</span>
+        </div>
+        <div class="equity-breakdown">
+          <div class="equity-part">
+            <div class="equity-part-label">Collateral</div>
+            <div class="equity-part-value" id="collateralValue">$—</div>
+            <div class="equity-part-bar">
+              <div class="equity-part-fill collateral-fill" id="collateralBar" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="equity-part">
+            <div class="equity-part-label">Positions Value</div>
+            <div class="equity-part-value" id="positionsValue">$—</div>
+            <div class="equity-part-bar">
+              <div class="equity-part-fill positions-fill" id="positionsBar" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Whale Feed Score -->
+      <div class="card whale-card">
+        <div class="card-header">
+          <h2>Whale Feed</h2>
+          <span class="whale-status-badge" id="whaleBadge">—</span>
+        </div>
+        <div class="whale-score-row">
+          <span class="whale-score-number" id="whaleScoreNumber">—</span>
+          <span class="whale-score-label">/ 100</span>
+        </div>
+        <div class="whale-score-bar">
+          <div class="whale-score-fill" id="whaleScoreFill" style="width: 0%"></div>
+        </div>
+        <div class="whale-info">
+          <span id="whaleActiveCount">—</span> active whales of <span id="whaleTotalCount">—</span>
+        </div>
+      </div>
+
+      <!-- Why Bot Is Not Entering -->
+      <div class="card entry-card" id="entryCard">
+        <div class="card-header">
+          <h2 id="entryTitle">Entry Status</h2>
+          <span class="entry-status-badge" id="entryBadge">—</span>
+        </div>
+        <div class="entry-reasons" id="entryReasons">
+          <div class="entry-loading">Loading…</div>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-label">Trades Today</div>
+          <div class="stat-value" id="tradesToday">—</div>
+          <div class="stat-sub" id="tradesMax">/ —</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Open Positions</div>
+          <div class="stat-value" id="positionsOpen">—</div>
+          <div class="stat-sub" id="positionsMax">/ —</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Risk Exposure</div>
+          <div class="stat-value" id="riskExposure">—</div>
+          <div class="stat-sub" id="riskLevel">—</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Per-Trade Stake</div>
+          <div class="stat-value" id="perTradeStake">—</div>
+          <div class="stat-sub">USDC</div>
+        </div>
+      </div>
+
+      <!-- Positions List -->
+      <div class="card">
+        <div class="card-header"><h2>Open Positions</h2></div>
+        <div class="positions-list" id="positionsList">
+          <div class="positions-empty">No open positions</div>
+        </div>
+      </div>
+
+      <!-- Progressive Tier -->
+      <div class="card tier-card">
+        <div class="card-header"><h2>Progressive Tier System</h2></div>
+        <div class="tier-track" id="tierTrack"></div>
+      </div>
+    </section>
+
+    <!-- ===== WHALE FEED TAB ===== -->
+    <section class="tab-content" id="tab-whale-feed">
+      <div class="card">
+        <div class="card-header">
+          <h2>Whale Feed Score — Last 24h</h2>
+        </div>
+        <div class="chart-container">
+          <canvas id="whaleFeedChart" width="800" height="300"></canvas>
+        </div>
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span> Full (&ge;65)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#eab308"></span> Cautious (45–64)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span> Degraded (&lt;45)</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h2>Whale Feed Details</h2></div>
+        <div class="whale-details" id="whaleDetails">Loading...</div>
+      </div>
+    </section>
+
+    <!-- ===== RISK TAB ===== -->
+    <section class="tab-content" id="tab-risk">
+      <div class="card">
+        <div class="card-header"><h2>Risk & Sizing</h2></div>
+        <div class="risk-meters" id="riskMeters"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h2>Position Sizing</h2></div>
+        <div class="sizing-info" id="sizingInfo"></div>
+      </div>
+    </section>
+
+    <!-- ===== ANALYTICS TAB ===== -->
+    <section class="tab-content" id="tab-analytics">
+      <div class="card">
+        <div class="card-header"><h2>Equity Curve</h2></div>
+        <div class="chart-container">
+          <canvas id="equityCurveChart" width="800" height="300"></canvas>
+        </div>
+      </div>
+      <div class="analytics-grid">
+        <div class="card">
+          <div class="card-header"><h2>Win Rate by Mode</h2></div>
+          <div id="winRateByMode"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h2>PnL Statistics</h2></div>
+          <div id="pnlStats"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h2>Whale Feed Correlation</h2></div>
+          <div id="whaleFeedCorrelation"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h2>Risk Heatmap (UTC Hours)</h2></div>
+        <div class="heatmap-container" id="riskHeatmap"></div>
+      </div>
+    </section>
+
+    <!-- ===== WHALES TAB ===== -->
+    <section class="tab-content" id="tab-whales">
+      <div class="card">
+        <div class="card-header">
+          <h2>Whale Directory</h2>
+          <span class="whale-count-badge" id="whaleDirectoryCount">—</span>
+        </div>
+        <div class="whale-table" id="whaleTable"></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="charts.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>
