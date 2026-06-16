@@ -82,11 +82,64 @@ test("ui: factory exports perf helpers", () => {
   assert.equal(typeof ui.postEvent, "function");
 });
 
-test("chrome: showInfoModal factory export", () => {
-  const chrome = loadFactory("app.chrome.js", "__GMXChromeFactory")({
-    escapeHtml: (s) => String(s || ""),
+test("modals: open close stack and info", () => {
+  const els = {};
+  const bodyClasses = new Set();
+  globalThis.document = {
+    body: {
+      classList: {
+        add(c) { bodyClasses.add(c); },
+        remove(c) { bodyClasses.delete(c); },
+      },
+    },
+    getElementById(id) { return els[id] || null; },
+    querySelectorAll(sel) {
+      if (sel === "#gmx-modals .modalBack") {
+        return Object.values(els).filter((e) => e._isModalBack);
+      }
+      return [];
+    },
+  };
+  function makeModal(id) {
+    const el = {
+      id,
+      _isModalBack: true,
+      className: "modalBack hidden",
+      classList: {
+        contains(c) { return el.className.split(/\s+/).includes(c); },
+        add(c) { if (!el.classList.contains(c)) el.className += (el.className ? " " : "") + c; },
+        remove(c) { el.className = el.className.split(/\s+/).filter((x) => x !== c).join(" "); },
+      },
+      setAttribute() {},
+      querySelector() {
+        return { focus() {}, setAttribute() {}, hasAttribute: () => false };
+      },
+      _gmxModalBound: false,
+      addEventListener() {},
+    };
+    els[id] = el;
+    return el;
+  }
+  makeModal("limit_modal");
+  makeModal("gmx_info_modal");
+  els.gmx_info_title = { textContent: "" };
+  els.gmx_info_body = { innerHTML: "" };
+  els.gmx_info_close = { _gmxBound: false, onclick: null };
+  const code = readFileSync(path.join(root, "public", "app.modals.js"), "utf8");
+  const win = { addEventListener() {} };
+  const factory = new Function("window", `${code}; return window.__GMXModalsFactory;`)(win);
+  const modals = factory({
+    $: (id) => els[id] || null,
   });
-  assert.equal(typeof chrome.showInfoModal, "function");
+  modals.initModalsShell();
+  modals.openModal("limit_modal");
+  assert.ok(!els.limit_modal.classList.contains("hidden"));
+  assert.ok(bodyClasses.has("gmx-modal-open"));
+  modals.closeModal("limit_modal");
+  assert.ok(els.limit_modal.classList.contains("hidden"));
+  modals.showInfoModal("Title", "<b>ok</b>");
+  assert.equal(els.gmx_info_title.textContent, "Title");
+  assert.ok(!els.gmx_info_modal.classList.contains("hidden"));
 });
 
 test("i18nui: tr and prettyError", () => {

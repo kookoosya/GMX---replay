@@ -880,6 +880,9 @@ ul.clean li{ margin: 6px 0; }
   padding: 8px;
   z-index: 9999;
 }
+body.gmx-modal-open .langMenu{
+  z-index: 1;
+}
 .langItem{
   width:100%;
   display:flex; align-items:center; gap:10px;
@@ -1233,6 +1236,14 @@ select option{background:#0b0e1a;color:#e9ecff}
   background: rgba(18,22,34,.82);
   box-shadow: var(--shadow);
   padding: var(--pad2);
+  outline: none;
+}
+body.gmx-modal-open{
+  overflow: hidden;
+}
+#gmx-modals{
+  position: relative;
+  z-index: 99998;
 }
 .link{
   color: rgba(255,255,255,.92);

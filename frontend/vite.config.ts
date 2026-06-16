@@ -152,6 +152,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.sitei18nui.js": { target: BACKEND, changeOrigin: true },
         "/app.sitei18ndynamic.js": { target: BACKEND, changeOrigin: true },
         "/app.chrome.js": { target: BACKEND, changeOrigin: true },
+        "/app.modals.js": { target: BACKEND, changeOrigin: true },
         "/app.shellerrors.js": { target: BACKEND, changeOrigin: true },
         "/app.langui.js": { target: BACKEND, changeOrigin: true },
         "/app.sitelangmenu.js": { target: BACKEND, changeOrigin: true },

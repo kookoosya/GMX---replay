@@ -72,6 +72,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.sitei18nui\.js/, "app.sitei18nui.js script tag");
   mustMatch(rel, /app\.sitei18ndynamic\.js/, "app.sitei18ndynamic.js script tag");
   mustMatch(rel, /app\.chrome\.js/, "app.chrome.js script tag");
+  mustMatch(rel, /app\.modals\.js/, "app.modals.js script tag");
   mustMatch(rel, /app\.shellerrors\.js/, "app.shellerrors.js script tag");
   mustMatch(rel, /app\.langui\.js/, "app.langui.js script tag");
   mustMatch(rel, /app\.sitelangmenu\.js/, "app.sitelangmenu.js script tag");

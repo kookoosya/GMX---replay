@@ -20,6 +20,17 @@
     escapeHtml: (s) => __gmxFmt.escapeHtml(s),
   });
 
+if (!window.__GMXModalsFactory) throw new Error("GMX modals factory missing");
+const __gmxModalsHooks = { closeLangMenu: () => {} };
+const __gmxModals = window.__GMXModalsFactory({
+  $: __gmxChrome.$,
+  escapeHtml: (s) => __gmxFmt.escapeHtml(s),
+  onBeforeOpen: () => {
+    try { __gmxModalsHooks.closeLangMenu(); } catch {}
+  },
+});
+__gmxModals.initModalsShell();
+
 if (!window.__GMXI18nUiFactory) throw new Error("GMX i18nui factory missing");
 const __gmxI18nUi = window.__GMXI18nUiFactory({
   getSiteLang: () => __gmxSt.lsGet(K.SITE_LANG, "en"),
@@ -101,6 +112,7 @@ const __gmxSiteLangMenu = window.__GMXSiteLangMenuFactory({
     try { syncCleanFillUi(); } catch {}
   },
 });
+__gmxModalsHooks.closeLangMenu = () => __gmxSiteLangMenu.closeLangMenu();
 
 if (!window.__GMXLangUiFactory) throw new Error("GMX langui factory missing");
 const __gmxLangUi = window.__GMXLangUiFactory({
@@ -135,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260617b";
+const ASSET_REV = "20260617c";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -315,6 +327,7 @@ const __gmxLogs = window.__GMXLogsFactory();
 if (!window.__GMXPaywallFactory) throw new Error("GMX paywall factory missing");
 const __gmxPaywall = window.__GMXPaywallFactory({
   $: __gmxChrome.$,
+  modals: __gmxModals,
   storage: __gmxSt,
   getHandle: () => getHandle(),
   trackEvent: (type, meta) => trackEvent(type, meta),
@@ -363,6 +376,7 @@ const __gmxUsage = window.__GMXUsageFactory({
 if (!window.__GMXHelpFactory) throw new Error("GMX help factory missing");
 __gmxHelp = window.__GMXHelpFactory({
   $: __gmxChrome.$,
+  modals: __gmxModals,
   isPro,
   getSaveCapFree: () => SAVE_CAP_FREE,
   getLastUsage: () => LAST_USAGE,
@@ -917,9 +931,9 @@ const $ = __gmxChrome.$;
 
   function showTab(name){ return __gmxNav.showTab(name); }
 
-// Simple info modal (no dependencies)
+// Simple info modal (shared shell layer)
   function showInfoModal(title, html){
-    return __gmxChrome.showInfoModal(title, html);
+    return __gmxModals.showInfoModal(title, html);
   }
 
   if (!window.__GMXTabWireFactory) throw new Error("GMX tabwire factory missing");
@@ -2548,31 +2562,25 @@ function defaultWalletIcon(name){
 
   
   function openPlanModal(){
-    const m = $("plan_modal");
-    if (!m) return;
-    m.classList.remove("hidden");
+    __gmxModals.openModal("plan_modal");
   }
   function closePlanModal(){
-    const m = $("plan_modal");
-    if (!m) return;
-    m.classList.add("hidden");
+    __gmxModals.closeModal("plan_modal");
   }
 
 function openWalletModal(){
-    const m = $("sf_modal");
-    if (!m) return;
-    m.classList.remove("hidden");
-    renderWalletList();
-    // receiver hint
-    const r = $("sf_modal_receiver");
-    if (r) r.textContent = BILLING?.receiver ? shortPk(BILLING.receiver) : "—";
-    const hm = $("sf_modal_msg");
-    if (hm) hm.textContent = "";
+    __gmxModals.openModal("sf_modal", {
+      onOpen: () => {
+        renderWalletList();
+        const r = $("sf_modal_receiver");
+        if (r) r.textContent = BILLING?.receiver ? shortPk(BILLING.receiver) : "—";
+        const hm = $("sf_modal_msg");
+        if (hm) hm.textContent = "";
+      },
+    });
   }
   function closeWalletModal(){
-    const m = $("sf_modal");
-    if (!m) return;
-    m.classList.add("hidden");
+    __gmxModals.closeModal("sf_modal");
   }
 
   function renderWalletList(){
@@ -3367,20 +3375,16 @@ async function payNow(){
     if (bUsdt) bUsdt.onclick = ()=>setCurrency("USDT");
 
     // modal
-    const modal = $("sf_modal");
+    __gmxModals.bindBackdrop("sf_modal", closeWalletModal);
     const close = $("sf_modal_close");
-    if (modal){
-      modal.addEventListener("click", (e)=>{ if (e.target === modal) closeWalletModal(); });
-    }
     if (close) close.onclick = ()=>closeWalletModal();
 
 
     // plan compare modal
     const pc = $("plan_compare_btn");
-    const pm = $("plan_modal");
     const pmClose = $("plan_modal_close");
     if (pc) pc.onclick = ()=>openPlanModal();
-    if (pm) pm.addEventListener("click", (e)=>{ if (e.target === pm) closePlanModal(); });
+    __gmxModals.bindBackdrop("plan_modal", closePlanModal);
     if (pmClose) pmClose.onclick = ()=>closePlanModal();
 
     // connect/disconnect

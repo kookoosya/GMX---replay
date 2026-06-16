@@ -1041,11 +1041,11 @@ html.mode-light body.hasUserBg .panel{
 </div>
 </div>
 </div>
-</div>
 
+<div id="gmx-modals">
 <!-- Soft paywall modal -->
-<div class="modalBack hidden" id="limit_modal" role="dialog" aria-modal="true" aria-labelledby="limit_modal_title">
-  <div class="modalCard">
+<div class="modalBack hidden" id="limit_modal" role="dialog" aria-modal="true" aria-labelledby="limit_modal_title" aria-hidden="true">
+  <div class="modalCard" tabindex="-1">
     <div class="title" id="limit_modal_title">Free cap reached</div>
     <div class="desc" id="limit_modal_desc" style="margin-top:6px">You reached the free saved-line cap. Upgrade to Pro if you want unlimited saved lines and the full cosmetics catalog.</div>
 
@@ -1081,8 +1081,8 @@ html.mode-light body.hasUserBg .panel{
 </div>
 
 <!-- Payment success modal -->
-<div class="modalBack hidden" id="pay_success_modal" role="dialog" aria-modal="true" aria-labelledby="pay_success_title">
-  <div class="modalCard">
+<div class="modalBack hidden" id="pay_success_modal" role="dialog" aria-modal="true" aria-labelledby="pay_success_title" aria-hidden="true">
+  <div class="modalCard" tabindex="-1">
     <div class="title" id="pay_success_title">PRO Activated</div>
     <div class="desc" id="pay_success_desc" style="margin-top:6px">Unlimited access is now active for your handle</div>
     <div class="hr"></div>
@@ -1093,8 +1093,8 @@ html.mode-light body.hasUserBg .panel{
 </div>
 
 <!-- Wallet connect modal -->
-<div class="modalBack hidden" id="sf_modal" role="dialog" aria-modal="true" aria-labelledby="sf_modal_title">
-  <div class="modalCard">
+<div class="modalBack hidden" id="sf_modal" role="dialog" aria-modal="true" aria-labelledby="sf_modal_title" aria-hidden="true">
+  <div class="modalCard" tabindex="-1">
     <div class="title" id="sf_modal_title">Connect wallet</div>
     <div class="desc" id="sf_modal_desc">Choose a wallet to pay with. We never ask for seed phrases or private keys.</div>
 
@@ -1119,8 +1119,8 @@ html.mode-light body.hasUserBg .panel{
 </div>
 
 <!-- Plan comparison modal -->
-<div class="modalBack hidden" id="plan_modal" role="dialog" aria-modal="true" aria-labelledby="plan_modal_title">
-  <div class="modalCard" style="max-width:860px">
+<div class="modalBack hidden" id="plan_modal" role="dialog" aria-modal="true" aria-labelledby="plan_modal_title" aria-hidden="true">
+  <div class="modalCard" style="max-width:860px" tabindex="-1">
     <div class="split" style="align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
       <div class="title" id="plan_modal_title">Plan comparison</div>
       <button class="btn secondary" id="plan_modal_close" type="button">Close</button>
@@ -1151,8 +1151,8 @@ html.mode-light body.hasUserBg .panel{
 </div>
 
 <!-- Free / Pro help modal -->
-<div class="modalBack hidden" id="help_modal" role="dialog" aria-modal="true" aria-labelledby="help_title">
-  <div class="modalCard">
+<div class="modalBack hidden" id="help_modal" role="dialog" aria-modal="true" aria-labelledby="help_title" aria-hidden="true">
+  <div class="modalCard" tabindex="-1">
     <div class="title" id="help_title">How Free &amp; Pro work</div>
     <div class="desc" id="help_desc">Free is always available. Pro removes caps and unlocks everything after on-chain verification.</div>
     <div class="hr"></div>
@@ -1193,6 +1193,18 @@ html.mode-light body.hasUserBg .panel{
   </div>
 </div>
 
+<!-- Generic info modal -->
+<div class="modalBack hidden" id="gmx_info_modal" role="dialog" aria-modal="true" aria-labelledby="gmx_info_title" aria-hidden="true">
+  <div class="modalCard" tabindex="-1" style="max-width:520px">
+    <div class="split modalHead" style="align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px">
+      <div class="title" id="gmx_info_title" style="margin:0">Info</div>
+      <button class="btn secondary" id="gmx_info_close" type="button">OK</button>
+    </div>
+    <div class="desc" id="gmx_info_body"></div>
+  </div>
+</div>
+</div>
+
 <script defer src="/i18n/siteI18n.js"></script>
 <script defer src="/app.storage.js?v=SAFE16"></script>
 <script defer src="/app.format.js?v=SAFE16"></script>
@@ -1200,6 +1212,7 @@ html.mode-light body.hasUserBg .panel{
 <script defer src="/app.sitei18nui.js?v=SAFE16"></script>
 <script defer src="/app.sitei18ndynamic.js?v=SAFE16"></script>
 <script defer src="/app.chrome.js?v=SAFE16"></script>
+<script defer src="/app.modals.js?v=SAFE16"></script>
 <script defer src="/app.shellerrors.js?v=SAFE16"></script>
 <script defer src="/app.langui.js?v=SAFE16"></script>
 <script defer src="/app.sitelangmenu.js?v=SAFE16"></script>
@@ -1241,6 +1254,6 @@ html.mode-light body.hasUserBg .panel{
 <script defer src="/app.accountui.js?v=SAFE16"></script>
 <script defer src="/app.authwire.js?v=SAFE16"></script>
 <script defer src="/app.auth.js?v=SAFE16"></script>
-<script defer src="/app.js?v=20260617b"></script>
+<script defer src="/app.js?v=20260617c"></script>
 </body>
 </html>

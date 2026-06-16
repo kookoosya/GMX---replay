@@ -29,9 +29,9 @@ const $ = __gmxChrome.$;
 
   function showTab(name){ return __gmxNav.showTab(name); }
 
-// Simple info modal (no dependencies)
+// Simple info modal (shared shell layer)
   function showInfoModal(title, html){
-    return __gmxChrome.showInfoModal(title, html);
+    return __gmxModals.showInfoModal(title, html);
   }
 
   if (!window.__GMXTabWireFactory) throw new Error("GMX tabwire factory missing");

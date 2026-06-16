@@ -20,6 +20,17 @@
     escapeHtml: (s) => __gmxFmt.escapeHtml(s),
   });
 
+if (!window.__GMXModalsFactory) throw new Error("GMX modals factory missing");
+const __gmxModalsHooks = { closeLangMenu: () => {} };
+const __gmxModals = window.__GMXModalsFactory({
+  $: __gmxChrome.$,
+  escapeHtml: (s) => __gmxFmt.escapeHtml(s),
+  onBeforeOpen: () => {
+    try { __gmxModalsHooks.closeLangMenu(); } catch {}
+  },
+});
+__gmxModals.initModalsShell();
+
 if (!window.__GMXI18nUiFactory) throw new Error("GMX i18nui factory missing");
 const __gmxI18nUi = window.__GMXI18nUiFactory({
   getSiteLang: () => __gmxSt.lsGet(K.SITE_LANG, "en"),
@@ -101,6 +112,7 @@ const __gmxSiteLangMenu = window.__GMXSiteLangMenuFactory({
     try { syncCleanFillUi(); } catch {}
   },
 });
+__gmxModalsHooks.closeLangMenu = () => __gmxSiteLangMenu.closeLangMenu();
 
 if (!window.__GMXLangUiFactory) throw new Error("GMX langui factory missing");
 const __gmxLangUi = window.__GMXLangUiFactory({
@@ -135,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260617b";
+const ASSET_REV = "20260617c";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -315,6 +327,7 @@ const __gmxLogs = window.__GMXLogsFactory();
 if (!window.__GMXPaywallFactory) throw new Error("GMX paywall factory missing");
 const __gmxPaywall = window.__GMXPaywallFactory({
   $: __gmxChrome.$,
+  modals: __gmxModals,
   storage: __gmxSt,
   getHandle: () => getHandle(),
   trackEvent: (type, meta) => trackEvent(type, meta),
@@ -363,6 +376,7 @@ const __gmxUsage = window.__GMXUsageFactory({
 if (!window.__GMXHelpFactory) throw new Error("GMX help factory missing");
 __gmxHelp = window.__GMXHelpFactory({
   $: __gmxChrome.$,
+  modals: __gmxModals,
   isPro,
   getSaveCapFree: () => SAVE_CAP_FREE,
   getLastUsage: () => LAST_USAGE,

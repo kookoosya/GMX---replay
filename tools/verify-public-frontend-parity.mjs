@@ -24,6 +24,7 @@ const APP_FILES = [
   "app.sitei18nui.js",
   "app.sitei18ndynamic.js",
   "app.chrome.js",
+  "app.modals.js",
   "app.shellerrors.js",
   "app.langui.js",
   "app.sitelangmenu.js",

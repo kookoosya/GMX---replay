@@ -3,6 +3,7 @@
 
   window.__GMXHelpFactory = function createGMXHelp(ctx) {
     const $ = typeof ctx.$ === "function" ? ctx.$ : () => null;
+    const modals = ctx && ctx.modals ? ctx.modals : null;
     const isPro = typeof ctx.isPro === "function" ? ctx.isPro : () => false;
     const getSaveCapFree = typeof ctx.getSaveCapFree === "function" ? ctx.getSaveCapFree : () => 50;
     const getLastUsage = typeof ctx.getLastUsage === "function" ? ctx.getLastUsage : () => ({});
@@ -11,6 +12,7 @@
     const onNavigateWallet = typeof ctx.onNavigateWallet === "function" ? ctx.onNavigateWallet : () => {};
 
     function isOpen() {
+      if (modals && typeof modals.isOpen === "function") return modals.isOpen("help_modal");
       const m = $("help_modal");
       return !!(m && !m.classList.contains("hidden"));
     }
@@ -67,22 +69,30 @@
       if (!m) return;
       try {
         renderHelpModal();
-      } catch {}
-      m.classList.remove("hidden");
+      } catch (_e) {}
+      if (modals && typeof modals.openModal === "function") modals.openModal("help_modal");
+      else m.classList.remove("hidden");
     }
 
     function closeHelpModal() {
-      const m = $("help_modal");
-      if (!m) return;
-      m.classList.add("hidden");
+      if (modals && typeof modals.closeModal === "function") modals.closeModal("help_modal");
+      else {
+        const m = $("help_modal");
+        if (m) m.classList.add("hidden");
+      }
     }
 
     function bindHelpModal() {
-      const m = $("help_modal");
-      if (!m) return;
-      m.addEventListener("click", (e) => {
-        if (e.target === m) closeHelpModal();
-      });
+      if (modals && typeof modals.bindBackdrop === "function") {
+        modals.bindBackdrop("help_modal", closeHelpModal);
+      } else {
+        const m = $("help_modal");
+        if (m) {
+          m.addEventListener("click", (e) => {
+            if (e.target === m) closeHelpModal();
+          });
+        }
+      }
 
       const closeBtn = $("help_close");
       if (closeBtn) closeBtn.onclick = () => closeHelpModal();
@@ -99,8 +109,7 @@
       if (openBtn) openBtn.onclick = () => openHelpModal();
 
       window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && isOpen()) closeHelpModal();
-        if (e.key === "?" && isOpen() === false) openHelpModal();
+        if (e.key === "?" && !isOpen()) openHelpModal();
       });
     }
 
@@ -108,7 +117,7 @@
       if (!isOpen()) return;
       try {
         renderHelpModal();
-      } catch {}
+      } catch (_e) {}
     }
 
     return {

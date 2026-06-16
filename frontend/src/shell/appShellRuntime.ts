@@ -67,6 +67,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.sitei18nui.js", "gmx-legacy-sitei18nui");
     await injectAppShellRuntime("/app.sitei18ndynamic.js", "gmx-legacy-sitei18ndynamic");
     await injectAppShellRuntime("/app.chrome.js", "gmx-legacy-chrome");
+    await injectAppShellRuntime("/app.modals.js", "gmx-legacy-modals");
     await injectAppShellRuntime("/app.shellerrors.js", "gmx-legacy-shellerrors");
     await injectAppShellRuntime("/app.langui.js", "gmx-legacy-langui");
     await injectAppShellRuntime("/app.sitelangmenu.js", "gmx-legacy-sitelangmenu");

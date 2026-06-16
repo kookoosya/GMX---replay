@@ -247,31 +247,25 @@ function defaultWalletIcon(name){
 
   
   function openPlanModal(){
-    const m = $("plan_modal");
-    if (!m) return;
-    m.classList.remove("hidden");
+    __gmxModals.openModal("plan_modal");
   }
   function closePlanModal(){
-    const m = $("plan_modal");
-    if (!m) return;
-    m.classList.add("hidden");
+    __gmxModals.closeModal("plan_modal");
   }
 
 function openWalletModal(){
-    const m = $("sf_modal");
-    if (!m) return;
-    m.classList.remove("hidden");
-    renderWalletList();
-    // receiver hint
-    const r = $("sf_modal_receiver");
-    if (r) r.textContent = BILLING?.receiver ? shortPk(BILLING.receiver) : "—";
-    const hm = $("sf_modal_msg");
-    if (hm) hm.textContent = "";
+    __gmxModals.openModal("sf_modal", {
+      onOpen: () => {
+        renderWalletList();
+        const r = $("sf_modal_receiver");
+        if (r) r.textContent = BILLING?.receiver ? shortPk(BILLING.receiver) : "—";
+        const hm = $("sf_modal_msg");
+        if (hm) hm.textContent = "";
+      },
+    });
   }
   function closeWalletModal(){
-    const m = $("sf_modal");
-    if (!m) return;
-    m.classList.add("hidden");
+    __gmxModals.closeModal("sf_modal");
   }
 
   function renderWalletList(){
@@ -1066,20 +1060,16 @@ async function payNow(){
     if (bUsdt) bUsdt.onclick = ()=>setCurrency("USDT");
 
     // modal
-    const modal = $("sf_modal");
+    __gmxModals.bindBackdrop("sf_modal", closeWalletModal);
     const close = $("sf_modal_close");
-    if (modal){
-      modal.addEventListener("click", (e)=>{ if (e.target === modal) closeWalletModal(); });
-    }
     if (close) close.onclick = ()=>closeWalletModal();
 
 
     // plan compare modal
     const pc = $("plan_compare_btn");
-    const pm = $("plan_modal");
     const pmClose = $("plan_modal_close");
     if (pc) pc.onclick = ()=>openPlanModal();
-    if (pm) pm.addEventListener("click", (e)=>{ if (e.target === pm) closePlanModal(); });
+    __gmxModals.bindBackdrop("plan_modal", closePlanModal);
     if (pmClose) pmClose.onclick = ()=>closePlanModal();
 
     // connect/disconnect
