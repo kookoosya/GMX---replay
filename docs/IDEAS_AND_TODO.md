@@ -23,11 +23,17 @@
 
 ### 5. Техдолг (по R69)
 - Ревизия index.js generation helpers
-- Parity public/app.js vs frontend/public/app.js
+- ~~Parity public/app.js vs frontend/public/app.js~~ — enforced: `npm run verify:parity` (входит в `npm run build`)
 - Arcade source list + cover fetch chain
+
+### 6. Документация рабочих потоков
+- См. `ARCHITECTURE.md` (кто грузит `/app`, порты, sync)
+- См. `docs/REPORTS_README.txt` (текстовые отчёты)
 
 ## Что уже сделано
 - Custom wallpapers: API, import script, assets
 - Arcade local covers для 7 игр (SVG)
 - Разные стили кнопок обоев (free/premium/custom)
 - Custom background: cover для любого экрана
+- Проверка паритета `public/` ↔ `frontend/public/` (`verify:parity`), CI: smoke без заглушки
+- `ARCHITECTURE.md`, `docs/REPORTS_README.txt`, `PLAN.md` (рабочий план аудита)

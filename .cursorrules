@@ -1,0 +1,31 @@
+# GMXReply / GMX Replay — Backend + site + extension
+
+You are a senior engineer on this repo. Follow user instructions precisely. Prefer facts from the codebase over assumptions.
+
+## Who edits the repo (non-negotiable)
+
+- **The user does not edit code.** They describe what they want; **you** change files, run sync/smoke/parity/build as needed, and log in `docs/GMX_CANON_AND_LOG.md`.
+- **Deploy only on their side:** they may publish/deploy the app; **you** still do all repo edits, generators, `i18n:sync`, smoke/parity, and anything else needed so they do not have to run local tooling or touch source.
+- Do not tell the user to open files and fix things by hand unless they **explicitly** say they will edit themselves.
+
+## Canon (do not contradict)
+
+- **Layout / dev parity:** Canonical UI is what the **backend** serves from disk: `http://127.0.0.1:10000/app` (`public/app.html` + `public/` + `assets/`). **Vite** `http://127.0.0.1:5173` must show the same shell for document routes `/`, `/app`, `/app/*`, `/arcade*` via `frontend/vite.config.ts` middleware (see `docs/DEV_KNOWN_ISSUES.md`). Use **127.0.0.1**, not `localhost`, on Windows dev to avoid IPv6 connection issues.
+- **Single source for app shell:** Edit `public/app.html`, `public/app.js`, `public/app.css`, `mode.js`, etc.; run `node tools/sync-app-and-assets.mjs` (or `npm run dev` / `npm run build`, which run sync). `frontend/public/` is a mirror for Vite fallback.
+- **Wallpapers:** Source of truth is `assets/wallpapers/` (served at `/assets/wallpapers/`). Presets: `free01`, `free02`, `w01`–`w158`; manifest `preset-manifest.json`; built-in path fallback lives in `public/app.js` (`BUILTIN_PRESET_WP_MANIFEST`). Fast paint: `public/mode.js` must match real extensions (e.g. `free01.png`).
+- **i18n:** All locales are equal; strings live in `shared/i18n/locales/*.json`; sync with `npm run i18n:sync`. No special “curated” pipeline for individual languages.
+- **GM/GN text generation:** Implemented in `index.js` (`composeReply`, `sanitizeSingle`, `replyQualityScore`, `generateRankedCandidates`, `/api/random`). Banned tokens and scoring are authoritative. Product docs under `docs/` must match the engine; if a doc lists example lines that include banned words (e.g. WAGMI, frens, sunshine), mark them as **outdated** or replace — see `docs/GENERATION_TARGET_R48_RU.txt` and `docs/GMX_CANON_AND_LOG.md`.
+
+## Engineering rules
+
+- Do not invent npm packages; verify with `package.json` / `npm ls` before importing.
+- Keep changes minimal and scoped; do not refactor unrelated code.
+- After backend or `public/app.js` / `public/mode.js` changes: run `node smoke.js`; after frontend TS: `npm run build:frontend` when relevant.
+- Log non-trivial decisions and file touch lists in `docs/GMX_CANON_AND_LOG.md` so the team can revert or restore.
+
+## Workflow
+
+- Read existing code and this canon before editing.
+- **Default:** the agent applies code changes, runs `node smoke.js` / `npm run verify:parity` when shell files change, and syncs `node tools/sync-app-and-assets.mjs` as needed. The user does not need to hand-edit the repo unless they explicitly want to.
+- If the user asks for an **opinion only**, do not change files unless they explicitly ask to implement.
+- When implementing, note what changed and what was intentionally **not** changed in `docs/GMX_CANON_AND_LOG.md`.

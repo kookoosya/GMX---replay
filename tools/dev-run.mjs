@@ -300,7 +300,7 @@ function spawnFrontend(port = chosenFrontendPort) {
     return;
   }
 
-  const args = [viteBin, "--host", HOST, "--port", String(port), "--strictPort"];
+  const args = [viteBin, "--host", HOST, "--port", String(port)];
   frontend = spawn(process.execPath, args, {
     cwd: frontendDir,
     stdio: "inherit",

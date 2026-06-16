@@ -34,10 +34,12 @@ html, body{
   overflow-y: auto;
 }
 body{
+  background-color: #050810;
   background-image: var(--wall, none);
   background-size: cover;
-  background-position: center;
+  background-position: center center;
   background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 body::before{
   content: "";
@@ -51,10 +53,7 @@ body::before{
   backdrop-filter: blur(2px) saturate(1.14);
 }
 body.has-wallpaper::before{
-  background:
-    radial-gradient(circle at 14% 0%, var(--overlayA), transparent 38%),
-    radial-gradient(circle at 100% 0%, var(--overlayB), transparent 30%),
-    linear-gradient(180deg, rgba(4,8,14,0.04), rgba(5,9,16,0.28));
+  background: transparent;
 }
 body::after{
   content: "";
@@ -300,7 +299,7 @@ button, input, select{ font: inherit; }
 }
 
 body.has-wallpaper{ --wall-fit: cover; }
-body.has-wallpaper .panel, body.has-wallpaper .card, body.has-wallpaper .surface { backdrop-filter: blur(16px) saturate(1.12); background: linear-gradient(180deg, rgba(7,10,20,0.50), rgba(7,10,20,0.70)); border-color: rgba(255,255,255,0.14); }
+body.has-wallpaper .panel, body.has-wallpaper .card, body.has-wallpaper .surface { backdrop-filter: none; background: transparent; border-color: rgba(255,255,255,.12); text-shadow: 0 1px 2px rgba(0,0,0,.6), 0 0 8px rgba(0,0,0,.4); }
 
 .wrap::before{
   content:"";
@@ -316,7 +315,7 @@ body.has-wallpaper .panel, body.has-wallpaper .card, body.has-wallpaper .surface
 
 body.has-wallpaper .primary{ box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 16px 36px rgba(0,0,0,0.26), 0 0 22px color-mix(in srgb, var(--accent) 24%, transparent); }
 body.has-wallpaper .previewCard,
-body.has-wallpaper .kv{ background: rgba(7,10,20,0.56); border-color: rgba(255,255,255,0.10); }
+body.has-wallpaper .kv{ background: transparent; border-color: rgba(255,255,255,.1); text-shadow: 0 1px 2px rgba(0,0,0,.5); }
 
 /* gmx-popup-crypto-recovery-v1 */
 :root{
@@ -335,16 +334,16 @@ body::before{
   inset:0;
   z-index:-2;
   pointer-events:none;
+  background-color: #050810;
   background-image: var(--wall, none);
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  opacity:.34;
-  transform: scale(1.06);
-  filter: saturate(1.08) contrast(1.08) brightness(.72) blur(10px);
+  opacity:.82;
+  filter: saturate(1.06) contrast(1.04) brightness(.92);
 }
 body.has-wallpaper::before{
-  opacity:.42;
+  opacity:.88;
 }
 body::after{
   content:"";

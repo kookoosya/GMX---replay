@@ -1,25 +1,48 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="660" viewBox="0 0 1040 660">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
-    <filter id="blur"><feGaussianBlur stdDeviation="48"/></filter>
-    <pattern id="grid" width="72" height="72" patternUnits="userSpaceOnUse"><path d="M72 0H0V72" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"/></pattern>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#040912"/>
+      <stop offset="0.55" stop-color="#0B1A2B"/>
+      <stop offset="1" stop-color="#13210E"/>
+    </linearGradient>
+    <radialGradient id="orbA" cx="16%" cy="22%" r="65%">
+      <stop offset="0" stop-color="#14F195" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#14F195" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orbB" cx="86%" cy="18%" r="58%">
+      <stop offset="0" stop-color="#9945FF" stop-opacity="0.36"/>
+      <stop offset="1" stop-color="#9945FF" stop-opacity="0"/>
+    </radialGradient>
   </defs>
-  <rect width="100%" height="100%" fill="#070b14"/>
-  <rect width="100%" height="100%" fill="url(#grid)"/>
-  <circle cx="220" cy="140" r="220" fill="#10b981" opacity=".34" filter="url(#blur)"/>
-  <circle cx="1300" cy="760" r="260" fill="#22d3ee" opacity=".26" filter="url(#blur)"/>
-  <rect x="38" y="38" width="1524" height="824" rx="34" fill="rgba(5,9,18,.52)" stroke="rgba(255,255,255,.10)"/>
-  <rect x="72" y="72" width="320" height="48" rx="24" fill="rgba(255,255,255,.08)"/>
-  <text x="98" y="104" fill="#f8fbff" font-size="24" font-family="Segoe UI,Arial,sans-serif" font-weight="700">Degen Terminal</text>
-  <g>
-    <rect x="96" y="170" width="728" height="470" rx="30" fill="rgba(4,14,18,.72)" stroke="rgba(52,255,174,.20)"/>
-    <circle cx="138" cy="210" r="8" fill="#ef4444"/><circle cx="166" cy="210" r="8" fill="#f59e0b"/><circle cx="194" cy="210" r="8" fill="#22c55e"/>
-    <g fill="rgba(255,255,255,.12)"><rect x="140" y="266" width="120" height="20" rx="10"/><rect x="274" y="266" width="160" height="20" rx="10"/></g>
-    <g stroke="rgba(20,241,149,.50)" stroke-width="8" stroke-linecap="round">
-      <path d="M150 574H250"/><path d="M150 526H342"/><path d="M150 478H284"/>
-      <path d="M420 574H620"/><path d="M420 526H560"/><path d="M420 478H690"/>
-    </g>
-    <g fill="url(#bg)"><rect x="900" y="252" width="46" height="208" rx="18"/><rect x="978" y="212" width="46" height="248" rx="18"/><rect x="1056" y="286" width="46" height="174" rx="18"/><rect x="1134" y="176" width="46" height="284" rx="18"/><rect x="1212" y="232" width="46" height="228" rx="18"/></g>
-    <path d="M892 560C944 494 986 464 1048 450C1114 436 1182 460 1254 406" fill="none" stroke="#e8fff8" stroke-width="12" stroke-linecap="round"/>
+  <rect width="1040" height="660" fill="url(#bg)"/>
+  <rect width="1040" height="660" fill="url(#orbA)"/>
+  <rect width="1040" height="660" fill="url(#orbB)"/>
+  <g opacity="0.33">
+    <path d="M0 560 L160 500 L330 520 L500 460 L680 485 L850 430 L1040 450 V660 H0 Z" fill="#102341"/>
+    <path d="M0 610 L170 575 L340 595 L520 555 L700 570 L880 530 L1040 550 V660 H0 Z" fill="#0A152E"/>
   </g>
+  <g opacity="0.22" stroke="#9DFFDA" stroke-width="1">
+    <path d="M0 0V660M52 0V660M104 0V660M156 0V660M208 0V660M260 0V660M312 0V660M364 0V660M416 0V660M468 0V660M520 0V660M572 0V660M624 0V660M676 0V660M728 0V660M780 0V660M832 0V660M884 0V660M936 0V660M988 0V660"/>
+    <path d="M0 0H1040M0 52H1040M0 104H1040M0 156H1040M0 208H1040M0 260H1040M0 312H1040M0 364H1040M0 416H1040M0 468H1040M0 520H1040M0 572H1040M0 624H1040"/>
+  </g>
+  <rect x="170" y="120" width="700" height="420" rx="24" fill="rgba(10,17,36,0.48)" stroke="rgba(130,238,255,0.36)"/>
+  <g opacity="0.92">
+    <path d="M220 440 L285 402 L348 418 L418 380 L486 402 L555 360 L625 378 L695 340 L764 354 L832 322" fill="none" stroke="#9DFFDA" stroke-width="4"/>
+    <path d="M220 470 L290 458 L356 472 L426 450 L496 462 L565 440 L635 452 L705 430 L774 442 L842 422" fill="none" stroke="#A78BFA" stroke-width="3" opacity="0.7"/>
+  </g>
+  <g opacity="0.9">
+    <rect x="240" y="350" width="12" height="96" rx="4" fill="#88F7D0"/>
+    <rect x="285" y="326" width="12" height="118" rx="4" fill="#88F7D0"/>
+    <rect x="330" y="372" width="12" height="84" rx="4" fill="#FF8AB8"/>
+    <rect x="375" y="340" width="12" height="104" rx="4" fill="#88F7D0"/>
+    <rect x="420" y="312" width="12" height="132" rx="4" fill="#88F7D0"/>
+    <rect x="465" y="380" width="12" height="72" rx="4" fill="#FF8AB8"/>
+    <rect x="510" y="352" width="12" height="96" rx="4" fill="#88F7D0"/>
+    <rect x="555" y="390" width="12" height="66" rx="4" fill="#FF8AB8"/>
+    <rect x="600" y="334" width="12" height="122" rx="4" fill="#88F7D0"/>
+    <rect x="645" y="308" width="12" height="140" rx="4" fill="#88F7D0"/>
+    <rect x="690" y="362" width="12" height="88" rx="4" fill="#FF8AB8"/>
+    <rect x="735" y="338" width="12" height="110" rx="4" fill="#88F7D0"/>
+  </g>
+  <rect width="1040" height="660" fill="rgba(0,0,0,0.20)"/>
 </svg>

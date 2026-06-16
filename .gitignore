@@ -6,6 +6,8 @@ backend/node_modules/
 # Env
 .env
 .env.*
+!.env.example
+!**/.env.example
 
 # Databases / local state
 data.sqlite

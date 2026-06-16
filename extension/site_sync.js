@@ -15,6 +15,8 @@
   const LS_EXT_VIEW_LEGACY = "gmx_ext_view";
   const LS_EXT_CUSTOM_BG = "gmx_ext_custom_bg_global_v2";
   const LS_EXT_CUSTOM_BG_LEGACY = "gmx_ext_custom_bg_global";
+  const LS_SITE_LANG = "gmx_site_lang";
+  const V2_SITE_LANG = "gmx_site_lang_v1";
 
   const V2_BASE = "gmx_ext_api_base_v2";
   const V2_HANDLE = "gmx_ext_handle_v2";
@@ -96,12 +98,21 @@
     const siteExtWallpaper = normalizeText(localStorage.getItem(LS_EXT_WP) || localStorage.getItem(LS_EXT_WP_LEGACY));
     const siteExtView = normalizeText(localStorage.getItem(LS_EXT_VIEW) || localStorage.getItem(LS_EXT_VIEW_LEGACY));
     const siteExtCustomBg = normalizeText(localStorage.getItem(LS_EXT_CUSTOM_BG) || localStorage.getItem(LS_EXT_CUSTOM_BG_LEGACY));
+    const siteLang = (() => {
+      try {
+        const v = String(localStorage.getItem(LS_SITE_LANG) || "en").trim().toLowerCase();
+        return /^[a-z]{2}$/.test(v) ? v : "en";
+      } catch {
+        return "en";
+      }
+    })();
 
     const prev = await safeGet([
       V2_BASE, V2_HANDLE, V2_TOKEN,
       LEGACY_BASE, LEGACY_HANDLE, LEGACY_TOKEN,
       EXT_THEME_KEY, SITE_THEME_KEY, EXT_WP_KEY, EXT_VIEW_KEY, EXT_CUSTOM_BG_KEY,
       LS_EXT_THEME_LEGACY, LS_EXT_WP_LEGACY, LS_EXT_VIEW_LEGACY, LS_EXT_CUSTOM_BG_LEGACY,
+      V2_SITE_LANG,
     ]);
 
     let nextHandle = "";
@@ -129,6 +140,7 @@
     if (!isSame(prev[EXT_WP_KEY], siteExtWallpaper)) payload[EXT_WP_KEY] = siteExtWallpaper;
     if (!isSame(prev[EXT_VIEW_KEY], siteExtView)) payload[EXT_VIEW_KEY] = siteExtView;
     if (!isSame(prev[EXT_CUSTOM_BG_KEY], siteExtCustomBg)) payload[EXT_CUSTOM_BG_KEY] = siteExtCustomBg;
+    if (!isSame(prev[V2_SITE_LANG], siteLang)) payload[V2_SITE_LANG] = siteLang;
 
     const hadLegacyKeys = [LEGACY_BASE, LEGACY_HANDLE, LEGACY_TOKEN, LS_EXT_THEME_LEGACY, LS_EXT_WP_LEGACY, LS_EXT_VIEW_LEGACY, LS_EXT_CUSTOM_BG_LEGACY].some((key) => normalizeText(prev[key]));
     const changed = Object.keys(payload).length > 0;
@@ -178,6 +190,60 @@
     return true;
   });
 
+  function pushExtToSite(changes) {
+    if (!isAllowedOrigin()) return;
+    try {
+      let updated = false;
+      if (changes[EXT_THEME_KEY]) {
+        const v = String(changes[EXT_THEME_KEY].newValue || "").trim();
+        if (v) {
+          localStorage.setItem(LS_EXT_THEME, v);
+          localStorage.setItem(LS_EXT_THEME_LEGACY, v);
+          localStorage.setItem(LS_SITE_THEME, v);
+          updated = true;
+        }
+      }
+      if (changes[SITE_THEME_KEY]) {
+        const v = String(changes[SITE_THEME_KEY].newValue || "").trim();
+        if (v) {
+          localStorage.setItem(LS_SITE_THEME, v);
+          localStorage.setItem(LS_EXT_THEME, v);
+          localStorage.setItem(LS_EXT_THEME_LEGACY, v);
+          updated = true;
+        }
+      }
+      if (changes[EXT_WP_KEY]) {
+        const v = String(changes[EXT_WP_KEY].newValue || "").trim();
+        localStorage.setItem(LS_EXT_WP, v);
+        localStorage.setItem(LS_EXT_WP_LEGACY, v);
+        updated = true;
+      }
+      if (changes[EXT_VIEW_KEY]) {
+        const v = String(changes[EXT_VIEW_KEY].newValue || "").trim();
+        if (v) localStorage.setItem(LS_EXT_VIEW, v);
+        localStorage.setItem(LS_EXT_VIEW_LEGACY, v);
+        updated = true;
+      }
+      if (changes[EXT_CUSTOM_BG_KEY]) {
+        const v = String(changes[EXT_CUSTOM_BG_KEY].newValue || "").trim();
+        localStorage.setItem(LS_EXT_CUSTOM_BG, v);
+        localStorage.setItem(LS_EXT_CUSTOM_BG_LEGACY, v);
+        updated = true;
+      }
+      if (updated) {
+        window.postMessage({ type: "GMX_APPLY_THEME_FROM_EXTENSION" }, "*");
+      }
+    } catch (_e) {}
+  }
+
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    try {
+      if (areaName !== "local") return;
+      const keys = [EXT_THEME_KEY, SITE_THEME_KEY, EXT_WP_KEY, EXT_VIEW_KEY, EXT_CUSTOM_BG_KEY];
+      if (keys.some((k) => changes[k])) pushExtToSite(changes);
+    } catch (_e) {}
+  });
+
   void syncOnce();
   window.addEventListener("focus", scheduleSync, { passive: true });
   window.addEventListener("visibilitychange", () => {
@@ -186,7 +252,7 @@
   window.addEventListener("storage", (event) => {
     try {
       const key = String(event && event.key || "");
-      if (!key || [LS_HANDLE, LS_TOKEN, LS_FORCE_LOGOUT, LS_FORCE_LOGOUT_LEGACY, LS_EXT_THEME, LS_EXT_THEME_LEGACY, LS_SITE_THEME, LS_EXT_WP, LS_EXT_WP_LEGACY, LS_EXT_VIEW, LS_EXT_VIEW_LEGACY, LS_EXT_CUSTOM_BG, LS_EXT_CUSTOM_BG_LEGACY].includes(key)) {
+      if (!key || [LS_HANDLE, LS_TOKEN, LS_FORCE_LOGOUT, LS_FORCE_LOGOUT_LEGACY, LS_EXT_THEME, LS_EXT_THEME_LEGACY, LS_SITE_THEME, LS_EXT_WP, LS_EXT_WP_LEGACY, LS_EXT_VIEW, LS_EXT_VIEW_LEGACY, LS_EXT_CUSTOM_BG, LS_EXT_CUSTOM_BG_LEGACY, LS_SITE_LANG].includes(key)) {
         scheduleSync();
       }
     } catch {

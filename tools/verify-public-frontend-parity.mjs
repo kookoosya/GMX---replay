@@ -1,0 +1,60 @@
+#!/usr/bin/env node
+/**
+ * Ensures public/ and frontend/public/ stay byte-identical for synced app shell files.
+ * Run after sync-app-and-assets.mjs (npm run dev / npm run build already run sync first).
+ */
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import crypto from "node:crypto";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT = path.resolve(__dirname, "..");
+const PUBLIC = path.join(ROOT, "public");
+const FRONTEND_PUBLIC = path.join(ROOT, "frontend", "public");
+
+const APP_FILES = [
+  "app.html",
+  "app.js",
+  "app.css",
+  "app.auth.js",
+  "app.storage.js",
+  "arcade.html",
+  "arcade.js",
+  "entitlements.js",
+  "mode.js",
+  "themes.json",
+];
+
+function sha256(buf) {
+  return crypto.createHash("sha256").update(buf).digest("hex");
+}
+
+let failed = false;
+for (const f of APP_FILES) {
+  const a = path.join(PUBLIC, f);
+  const b = path.join(FRONTEND_PUBLIC, f);
+  if (!fs.existsSync(a)) {
+    console.error(`[parity] missing: ${f} in public/`);
+    failed = true;
+    continue;
+  }
+  if (!fs.existsSync(b)) {
+    console.error(`[parity] missing: ${f} in frontend/public/ — run: node tools/sync-app-and-assets.mjs`);
+    failed = true;
+    continue;
+  }
+  const ba = fs.readFileSync(a);
+  const bb = fs.readFileSync(b);
+  if (!ba.equals(bb)) {
+    console.error(
+      `[parity] mismatch: ${f}\n  public:          ${sha256(ba).slice(0, 16)}…\n  frontend/public: ${sha256(bb).slice(0, 16)}…\n  Fix: node tools/sync-app-and-assets.mjs`
+    );
+    failed = true;
+  }
+}
+
+if (failed) {
+  process.exit(1);
+}
+console.log(`[parity] OK — ${APP_FILES.length} app shell files match public/ ↔ frontend/public/`);

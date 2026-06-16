@@ -14,7 +14,7 @@
 <meta property="og:type" content="website"/>
 <title>GMXReply · GM &amp; GN that sound like you</title>
 <script src="/mode.js?v=SAFE12"></script>
-<link href="/app.css?v=SAFE16" rel="stylesheet"/>
+<link href="/app.css?v=20260412inlinefix" rel="stylesheet"/>
 
 <script defer src="/entitlements.js?v=SAFE12"></script>
 <!-- Solana web3 (IIFE) fallback: used if ESM dynamic import is blocked by CSP/network).
@@ -22,74 +22,46 @@
 <script async src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.8/lib/index.iife.min.js"></script>
 <style id="gmx-wallpaper-recovery-v1">
 :root{
-  --site_wall_opacity: .66;
-  --site_wall_blur: 1px;
+  --site_wall_opacity: 1;
+  --site_wall_blur: 0px;
   --site_wall_scale: 1;
 }
 body::before{
   content:"";
   position:fixed;
   inset:0;
+  min-height: 100dvh;
   z-index:-3;
   pointer-events:none;
+  background-color: #050810;
   background-image: var(--bg_user, none), var(--bg_wall, none);
   background-size: cover, cover;
   background-position: center center, center center;
+  background-attachment: fixed, fixed;
   background-repeat: no-repeat, no-repeat;
   opacity: 0;
   transform: scale(var(--site_wall_scale));
-  filter: saturate(1.10) contrast(1.08) brightness(.90) blur(var(--site_wall_blur));
+  filter: saturate(1.06) contrast(1.03) brightness(1) blur(var(--site_wall_blur));
   will-change: transform, filter, opacity;
 }
 body.hasWallBg::before{
   opacity: var(--site_wall_opacity);
 }
 body.hasUserBg::before{
-  opacity: .50;
+  opacity: .55;
   transform: scale(1.07);
-  filter: saturate(1.06) contrast(1.04) brightness(.72) blur(14px);
+  filter: saturate(1.06) contrast(1.04) brightness(.75) blur(14px);
 }
 body::after{
   content:"";
   position:fixed;
   inset:0;
+  min-height: 100dvh;
   z-index:-2;
   pointer-events:none;
-  background:
-    radial-gradient(1100px 680px at 18% 12%, rgba(106, 74, 255, .18), transparent 62%),
-    radial-gradient(960px 620px at 84% 16%, rgba(0, 214, 255, .14), transparent 60%),
-    linear-gradient(180deg, rgba(7,10,18,.18), rgba(8,10,16,.42) 45%, rgba(5,8,14,.62));
+  background: transparent;
 }
-body.hasWallBg .card,
-body.hasUserBg .card,
-body.hasWallBg .panel,
-body.hasUserBg .panel,
-body.hasWallBg .sheet,
-body.hasUserBg .sheet,
-body.hasWallBg .modal,
-body.hasUserBg .modal,
-body.hasWallBg .hero,
-body.hasUserBg .hero,
-body.hasWallBg .drawer,
-body.hasUserBg .drawer{
-  background: rgba(10,14,24,.44) !important;
-  border-color: rgba(138,165,255,.16) !important;
-  backdrop-filter: blur(7px) saturate(1.14);
-  -webkit-backdrop-filter: blur(7px) saturate(1.14);
-  box-shadow: 0 20px 60px rgba(0,0,0,.30);
-}
-body.hasWallBg button,
-body.hasUserBg button,
-body.hasWallBg .btn,
-body.hasUserBg .btn,
-body.hasWallBg select,
-body.hasUserBg select,
-body.hasWallBg textarea,
-body.hasUserBg textarea,
-body.hasWallBg input,
-body.hasUserBg input{
-  box-shadow: 0 10px 28px rgba(24, 40, 92, .18);
-}
+/* Panel colors + pills: single source of truth in /app.css (do not duplicate here — inline styles load after the stylesheet and override it). */
 </style>
 </head>
 <body>
@@ -158,18 +130,18 @@ body.hasUserBg input{
     <div class="muted small" style="margin-top:10px">Tip: if you use many Chrome extensions (wallets, security tools), try Incognito with extensions off to confirm it's not an injected script.</div>
   </div>
 </div>
-<div class="tabs">
-<button class="tab active" data-tab="home" id="t_home">Home</button>
-<button class="tab" data-tab="gm" id="t_gm">GM</button>
-<button class="tab" data-tab="gn" id="t_gn">GN</button>
-<button class="tab" data-tab="prediction" id="t_prediction">Prediction Market</button>
-<button class="tab" data-tab="wallet" id="t_wallet">Upgrade Pro</button>
-<button class="tab" data-tab="referrals" id="t_ref">Referrals</button>
-<button class="tab" data-tab="leaderboard" id="t_lb">Leaderboard</button>
-<button class="tab" data-tab="themes" id="t_themes">Themes</button>
-<button class="tab" data-tab="extthemes" id="t_extthemes">Extension</button>
-<a class="tab" href="/arcade.html" id="t_arcade">Arcade</a>
-<button class="tab hidden" data-tab="admin" id="t_admin">Admin</button>
+<div class="tabs" role="tablist" aria-label="Main">
+<button class="tab active" data-tab="home" id="t_home" type="button" role="tab">Home</button>
+<button class="tab" data-tab="gm" id="t_gm" type="button" role="tab">GM</button>
+<button class="tab" data-tab="gn" id="t_gn" type="button" role="tab">GN</button>
+<button class="tab" data-tab="referrals" id="t_ref" type="button" role="tab">Referrals</button>
+<button class="tab" data-tab="leaderboard" id="t_lb" type="button" role="tab">Leaderboard</button>
+<button class="tab" data-tab="themes" id="t_themes" type="button" role="tab">Themes</button>
+<button class="tab" data-tab="extthemes" id="t_extthemes" type="button" role="tab">Extension</button>
+<a class="tab" href="/arcade.html" id="t_arcade" role="tab">Arcade</a>
+<button class="tab" data-tab="prediction" id="t_prediction" type="button" role="tab">Prediction Market</button>
+<button class="tab" data-tab="wallet" id="t_wallet" type="button" role="tab">Upgrade Pro</button>
+<button class="tab hidden" data-tab="admin" id="t_admin" type="button" role="tab">Admin</button>
 </div>
 <!-- HOME -->
 <div id="tab-home">
@@ -338,7 +310,7 @@ body.hasUserBg input{
     <div class="card sideCard">
       <div class="title" id="pm_risk_title">Risk disclosure</div>
       <div class="desc" id="pm_risk_desc">Signals are generated by an automated bot model and can fail in any market regime. Always validate entries independently and use strict risk management.</div>
-      <ul class="clean small">
+      <ul class="clean">
         <li id="pm_notice_loss">When live, extension will push a notification so you do not miss a signal.</li>
         <li id="pm_notice_gain">Signal cadence target: 3-5 updates per day with Polymarket-based direction context.</li>
       </ul>
@@ -743,33 +715,20 @@ body.hasUserBg input{
       <div class="card">
         <div class="title" id="themes_title">Themes</div>
         <div class="note" id="themes_desc">
-          Themes change the look of the site. Wallpapers and custom uploads change the mood. First 5 custom wallpapers free, rest Pro. Locked items show clearly before you try.
+          Themes change the look of the site. Wallpapers change the mood. Custom wallpaper upload requires Pro subscription. Locked items show clearly before you try.
         </div>
         <div class="hr"></div>
         <div class="kpiRow">
-          <div class="kpi"><div class="k" id="themes_k_themes">Unlocked themes</div><div class="v" id="themesUnlocked">0/100</div></div>
           <div class="kpi"><div class="k" id="themes_k_walls">Unlocked wallpapers</div><div class="v" id="wpUnlocked">0/100</div></div>
           <div class="kpi"><div class="k" id="themes_k_ref">Referrals</div><div class="v" id="refCountPill">0</div></div>
         </div>
       </div>
 
       <div class="card" id="themeWallCard">
-        <div class="tabsHead" role="tablist" aria-label="themes-wallpapers">
-          <button class="tabBtn active" id="tabTheme" role="tab" aria-selected="true" aria-controls="themePane" type="button">
-            <span id="themes_pick_title">Pick a theme</span>
-          </button>
-          <button class="tabBtn" id="tabWall" role="tab" aria-selected="false" aria-controls="wallPane" type="button">
-            <span id="wp_title">Wallpapers</span>
-          </button>
-        </div>
+        <div class="title" id="themes_wp_section_title" style="font-size:16px;margin-bottom:6px">Site wallpapers</div>
+        <div class="note muted small" id="themes_wp_hint" style="margin-bottom:10px">Backgrounds for the main site. Accent colors still follow your saved theme preset (or defaults).</div>
 
-        <div class="tabPane" id="themePane" role="tabpanel" aria-labelledby="tabTheme">
-          <div class="note" id="themes_pick_note">Click any unlocked theme to apply it instantly.</div>
-          <div class="hr"></div>
-          <div class="themeGrid" id="themeGrid"></div>
-        </div>
-
-        <div class="tabPane hidden" id="wallPane" role="tabpanel" aria-labelledby="tabWall">
+        <div class="tabPane" id="wallPane" role="region" aria-labelledby="themes_wp_section_title">
           <div class="split" style="flex-wrap:wrap;gap:12px">
             <div style="min-width:240px;flex:1">
               <label id="wpTab_label" for="wpTab">Apply to</label>
@@ -781,6 +740,14 @@ body.hasUserBg input{
               <input accept="image/*" aria-label="wpAddFile" id="wpAddFile" type="file" class="hidden"/>
               <button class="btn secondary" id="wpClear" type="button">Clear</button>
             </div>
+          </div>
+          <div class="split" style="margin-top:10px;align-items:center;flex-wrap:wrap;gap:10px">
+            <label class="chkRow" style="margin:0;cursor:pointer;opacity:1">
+              <input type="checkbox" id="wpLightChk" aria-describedby="wpLightHint wpLightStatus" title=""/>
+              <span id="wp_light_label">Auto contrast</span>
+            </label>
+            <span class="muted small" id="wpLightHint">Better readability on light backgrounds (coffee, sky, etc.)</span>
+            <span class="muted small" id="wpLightStatus" aria-live="polite"></span>
           </div>
           <div class="hr"></div>
           <div class="wpGrid" id="wpGrid"></div>
@@ -795,20 +762,15 @@ body.hasUserBg input{
         Use this tab to style the main site. Free shows a clean preview set first; referrals and Pro open more over time.
       </div>
       <div class="hr"></div>
-      <div class="desc" id="themes_rules">
-        Free preview starts with 10 themes and 10 wallpapers. Referrals expand that set step by step. Pro unlocks everything immediately.</div>
-      <div class="hr"></div>
       <div class="pill" style="width:fit-content"><strong id="themes_free_title">Free limits (forever)</strong><span class="muted" id="themes_free_note">clear &amp; predictable</span></div>
       <div class="meterBlock" style="margin-top:10px">
-        <div class="meterRow"><div class="muted" id="themes_unlocked_label">Themes unlocked</div><div class="spacer"></div><div class="pill" id="themesUnlockedVal">0/10</div></div>
-        <div class="meter"><span id="themesUnlockedFill"></span></div>
         <div class="meterRow"><div class="muted" id="themes_wallpapers_unlocked_label">Wallpapers unlocked</div><div class="spacer"></div><div class="pill" id="wpUnlockedVal">0/10</div></div>
         <div class="meter"><span id="wpUnlockedFill"></span></div>
         <div class="muted" style="margin-top:6px" id="themes_free_tip">On Free, referrals increase your cosmetic room. On Pro, the full set is already open.</div>
       </div>
       <div class="hr"></div>
       <div class="desc hidden" id="wp_note">
-        Choose a wallpaper per tab so the user can tell sections apart at a glance. Add your own with the button next to Clear. First 5 custom wallpapers free, rest Pro.
+        Choose a wallpaper per tab so sections are easy to tell apart. Custom images: recommended 1920×1080 or 2560×1440, min 1280×720. Pro unlocks custom uploads.
       </div>
       <ul class="clean" id="themes_right_list"></ul>
     </div>
@@ -844,19 +806,8 @@ body.hasUserBg input{
 </div>
 
 <div class="tabPane hidden" id="extWallPane" role="tabpanel" aria-labelledby="extTabWall">
-  <div class="split" style="flex-wrap:wrap;gap:12px">
-    <div style="min-width:240px;flex:1">
-      <label id="extWpTarget_label" for="extWpTarget">Apply to</label>
-      <select id="extWpTarget" aria-label="extWpTarget"></select>
-    </div>
-    <div style="min-width:180px;display:flex;gap:8px;flex-wrap:wrap">
-      <div class="labelSpacer" aria-hidden="true"></div>
-      <button class="btn ghost" id="extWpAddCustom" type="button"><span id="ext_wp_add_title">Add wallpaper</span></button>
-      <input accept="image/*" id="extWpAddFile" type="file" class="hidden"/>
-      <button class="btn secondary" id="extWpClear" type="button">Clear</button>
-    </div>
-  </div>
-  <div class="hr"></div>
+  <input type="hidden" id="extWpTarget" value="all" aria-hidden="true"/>
+  <div class="note muted small" id="ext_wp_simple_note" style="margin-bottom:10px">One set for the extension UI. Pick a wallpaper below (custom uploads: use the site Themes tab or Pro flows elsewhere).</div>
   <div class="wpGrid" id="extWpGrid"></div>
   <div class="note" id="extWpStatus" style="margin-top:10px"></div>
 </div>
@@ -959,7 +910,8 @@ body.hasUserBg input{
 <div class="title" id="w_trust_title">Trust &amp; safety</div>
 <ul class="clean" id="w_trust_list">
   <li><b>No seed phrase:</b> we never ask for your secret words or private keys.</li>
-  <li><b>Standard transfer:</b> you will always see the receiver address and amount inside your wallet before approving.</li>
+  <li><b>Funds cannot be stolen here:</b> non-custodial — you only approve a normal transfer to a published address for the exact amount shown.</li>
+  <li><b>Standard transfer:</b> you always see the receiver address and amount in your wallet before you approve.</li>
   <li><b>On-chain verification:</b> Pro activates only after we verify your transaction on Solana.</li>
 </ul>
 <div class="muted small" id="toolNote" style="margin-top:8px"></div>
@@ -980,7 +932,7 @@ body.hasUserBg input{
 <div class="grid">
 <div class="card">
 <div class="title" id="admin_access_title">Admin access</div>
-<div class="note" id="admin_access_note">Sign in once, then use access, code, and leaderboard tools only. Old diagnostics are removed from this workspace.</div>
+<div class="note" id="admin_access_note">Sign in once, then use access, code, and leaderboard tools. Rules: Admin handle must match your connected @handle. Leaderboard rewards: only eligible referrals (≥5 inserts, ≥3 active days) count. Fraud-flagged invites excluded.</div>
 
 <div class="split" style="gap:12px;flex-wrap:wrap;align-items:flex-end">
   <div style="flex:1;min-width:220px">
@@ -1226,6 +1178,6 @@ body.hasUserBg input{
 <script defer src="/i18n/siteI18n.js"></script>
 <script defer src="/app.auth.js?v=SAFE13"></script>
 <script defer src="/app.storage.js?v=SAFE13"></script>
-<script defer src="/app.js?v=SAFE15"></script>
+<script defer src="/app.js?v=20260324w4"></script>
 </body>
 </html>

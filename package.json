@@ -2,26 +2,49 @@
   "name": "gmxreply-backend",
   "version": "3.2.4",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kookoosya/GMX---replay.git"
+  },
   "type": "module",
   "engines": {
     "node": "22.x"
   },
   "scripts": {
     "start": "node index.js",
-    "test": "node smoke.js",
+    "kill-port": "node tools/kill-port.mjs 10000",
+    "restart": "node tools/kill-port.mjs 10000 && node index.js",
+    "test": "node --test tests/i18n-locales.test.mjs tests/public-frontend-parity.test.mjs tests/i18n-strict-progress.test.mjs tests/i18n-strict.test.mjs tests/extension-manifest.test.mjs tests/extension-i18n-bundle.test.mjs && node smoke.js",
+    "test:unit": "node --test tests/i18n-locales.test.mjs tests/public-frontend-parity.test.mjs tests/i18n-strict-progress.test.mjs tests/i18n-strict.test.mjs tests/extension-manifest.test.mjs tests/extension-i18n-bundle.test.mjs",
+    "test:i18n:strict": "node --test tests/i18n-strict.test.mjs",
+    "test:smoke": "node smoke.js",
+    "verify:parity": "node tools/verify-public-frontend-parity.mjs",
     "dev:backend": "node index.js",
     "dev:frontend": "node tools/vite-dev.mjs",
-    "dev": "node tools/dev-run.mjs",
+    "dev": "node tools/i18n_sync.mjs && node tools/sync-app-and-assets.mjs && node tools/dev-run.mjs",
     "build:frontend": "npm --prefix frontend run build",
-    "build": "npm run build:frontend && node tools/sync-frontend-build.mjs",
+    "build": "node tools/i18n_sync.mjs && node tools/sync-app-and-assets.mjs && npm run build:frontend && node tools/sync-frontend-build.mjs && npm run verify:parity",
     "install:all": "npm install && npm --prefix frontend install",
     "pm2:start": "pm2 start ecosystem.config.cjs",
     "pm2:restart": "pm2 restart ecosystem.config.cjs",
     "pm2:stop": "pm2 delete ecosystem.config.cjs",
     "pm2:logs": "pm2 logs gmxreply-backend",
     "i18n:sync": "node tools/i18n_sync.mjs",
+    "wallpapers:audit": "node tools/audit-wallpapers.mjs",
+    "wallpapers:import": "node tools/import-preset-wallpapers.mjs",
+    "wallpapers:import:best": "node tools/audit-wallpapers.mjs && node tools/import-preset-wallpapers.mjs --from-selection",
+    "wallpapers:thumbs": "node tools/generate-wallpaper-thumbs.mjs",
+    "wallpapers:generate-extra": "node tools/generate-extra-wallpapers.mjs",
+    "wallpapers:rebuild-manifest": "node tools/rebuild-preset-manifest-from-disk.mjs",
+    "wallpapers:refresh-pack": "node tools/generate-extra-wallpapers.mjs && node tools/rebuild-preset-manifest-from-disk.mjs && node tools/generate-wallpaper-thumbs.mjs && node tools/sync-ext-wallpapers.mjs && node tools/sync-app-and-assets.mjs",
+    "wallpapers:use-existing": "node tools/copy-existing-wallpapers.mjs",
     "audit:i18n": "node tools/i18n_audit.js",
-    "audit:i18n:strict": "node tools/i18n_audit.js --strict"
+    "audit:i18n:strict": "node tools/i18n_audit.js --strict",
+    "i18n:backfill": "node tools/i18n_lingva_backfill.mjs",
+    "i18n:backfill:strict": "node tools/i18n_backfill_strict.mjs",
+    "i18n:apply-critical": "node tools/i18n_apply_critical_fixes.mjs",
+    "i18n:apply-batch2b": "node tools/apply-batch2b-i18n-fixes.mjs",
+    "i18n:apply-batch2c": "node tools/apply-batch2c-i18n-fixes.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.97.0",
@@ -33,6 +56,8 @@
     "helmet": "^7.1.0"
   },
   "devDependencies": {
-    "playwright": "^1.58.2"
+    "image-size": "^2.0.2",
+    "playwright": "^1.58.2",
+    "sharp": "^0.34.5"
   }
 }

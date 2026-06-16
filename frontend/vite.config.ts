@@ -1,85 +1,161 @@
-import { defineConfig } from "vite";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // IMPORTANT:
 // We do NOT proxy "all" traffic, only backend-owned paths.
 // This avoids proxying Vite assets (like /vite.svg) and prevents IPv6 ECONNREFUSED surprises.
-// Allow dev-run.mjs to override the backend target (useful if a port is busy).
-const BACKEND = process.env.GMX_BACKEND_URL || "http://127.0.0.1:10000";
+// Backend URL: GMX_BACKEND_URL (from tools/dev-run.mjs / shell) wins, then VITE_API_ORIGIN from .env.local
+// so the HTML injection middleware and `fetch()` in the React app target the same host.
+function resolveBackendUrl(mode: string): string {
+  const fileEnv = loadEnv(mode, __dirname, "");
+  const merged =
+    String(process.env.GMX_BACKEND_URL || "").trim() ||
+    String(fileEnv.VITE_API_ORIGIN || "").trim();
+  return merged || "http://127.0.0.1:10000";
+}
 
-export default defineConfig(({ command }) => ({
-  base: command === "build" ? "/bridge/" : "/",
-  plugins: [react()],
-  esbuild: {
-    logOverride: {
-      "duplicate-object-key": "silent"
-    }
-  },
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          const normalized = String(id || "").replace(/\\/g, "/");
+export default defineConfig(({ command, mode }) => {
+  const BACKEND = resolveBackendUrl(mode);
 
-          if (normalized.includes("/node_modules/")) {
-            if (normalized.includes("/react/") || normalized.includes("/react-dom/")) {
-              return "react-vendor";
+  return {
+    base: command === "build" ? "/bridge/" : "/",
+    plugins: [react()],
+    esbuild: {
+      logOverride: {
+        "duplicate-object-key": "silent"
+      }
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            const normalized = String(id || "").replace(/\\/g, "/");
+
+            if (normalized.includes("/node_modules/")) {
+              if (normalized.includes("/react/") || normalized.includes("/react-dom/")) {
+                return "react-vendor";
+              }
+              return "vendor";
             }
-            return "vendor";
-          }
 
-          if (normalized.includes("/src/AppShell.tsx") || normalized.includes("/src/legacy/") || normalized.includes("/src/shell/")) {
-            return "app-shell";
-          }
+            if (normalized.includes("/legacy/siteI18nCatalog")) {
+              return "i18n-catalog";
+            }
 
-          if (normalized.includes("/src/pages/AccessPage")) {
-            return "page-access";
-          }
+            if (normalized.includes("/src/AppShell.tsx") || normalized.includes("/src/legacy/") || normalized.includes("/src/shell/")) {
+              return "app-shell";
+            }
 
-          if (normalized.includes("/src/pages/ReferralsPage")) {
-            return "page-referrals";
-          }
+            if (normalized.includes("/src/pages/AccessPage")) {
+              return "page-access";
+            }
 
-          if (normalized.includes("/src/pages/AdminPage")) {
-            return "page-admin";
-          }
+            if (normalized.includes("/src/pages/ReferralsPage")) {
+              return "page-referrals";
+            }
 
-          return undefined;
+            if (normalized.includes("/src/pages/AdminPage")) {
+              return "page-admin";
+            }
+
+            return undefined;
+          }
         }
       }
-    }
-  },
-  server: {
-    configureServer(server) {
-      server.middlewares.use((req, res, next) => {
-        const url = String(req.url || "");
-        if (url === "/app" || url.startsWith("/app?")) {
-          res.statusCode = 302;
-          res.setHeader("Location", "/");
-          res.end();
-          return;
-        }
-        next();
-      });
     },
-    port: Number(process.env.GMX_FRONTEND_PORT || "5173"),
-    strictPort: true,
-    host: "127.0.0.1",
-    proxy: {
-      "/api": { target: BACKEND, changeOrigin: true },
-      "/assets": { target: BACKEND, changeOrigin: true },
-      "/static": { target: BACKEND, changeOrigin: true },
-      "/fonts": { target: BACKEND, changeOrigin: true },
-      "/contents": { target: BACKEND, changeOrigin: true },
-      "/app.js": { target: BACKEND, changeOrigin: true },
-      "/app.css": { target: BACKEND, changeOrigin: true },
-      "/app.auth.js": { target: BACKEND, changeOrigin: true },
-      "/mode.js": { target: BACKEND, changeOrigin: true },
-      "/entitlements.js": { target: BACKEND, changeOrigin: true },
-      "/themes.json": { target: BACKEND, changeOrigin: true },
-      "/extension-config.json": { target: BACKEND, changeOrigin: true },
-      "/i18n": { target: BACKEND, changeOrigin: true },
-      "/favicon.ico": { target: BACKEND, changeOrigin: true }
+    server: {
+      configureServer(server) {
+        // Proxy / and /app to backend so Vite dev shows the same UI as local (backend-only)
+        server.middlewares.use(async (req, res, next) => {
+          const rawUrl = String(req.url || "");
+          const url = rawUrl.split("?")[0];
+          const accept = String(req.headers.accept || "");
+          const secFetchDest = String(req.headers["sec-fetch-dest"] || "");
+          // Navigation must never fall through to Vite's index.html (React AppShell ≠ public/app.html).
+          // Some clients send Accept: */* without "text/html" — that used to skip this middleware.
+          const wantsHtml =
+            req.method === "GET" &&
+            (secFetchDest === "document" ||
+              accept.includes("text/html") ||
+              !accept.trim() ||
+              accept.trim() === "*/*");
+          const isAppRoute =
+            url === "/" || url === "/app" || url === "/app.html" || url.startsWith("/app/");
+          // Match backend: /arcade → arcade.html (not Vite's React ArcadePage — same canon as :10000).
+          const isArcadeRoute =
+            url === "/arcade" || url === "/arcade.html" || url.startsWith("/arcade/");
+          if (wantsHtml && (isAppRoute || isArcadeRoute)) {
+            try {
+              // Backend GET / redirects to /app — follow one hop so we always inject the real app.html body.
+              let pathAndQuery = rawUrl;
+              if (url === "/" || url === "") {
+                const q = rawUrl.includes("?") ? rawUrl.slice(rawUrl.indexOf("?")) : "";
+                pathAndQuery = `/app${q}`;
+              }
+              const target = `${BACKEND}${pathAndQuery}`;
+              const r = await fetch(target, { redirect: "follow" });
+              const text = await r.text();
+              res.statusCode = r.status;
+              const skipHeader = new Set([
+                "transfer-encoding",
+                "content-encoding",
+                "content-length",
+                "connection"
+              ]);
+              r.headers.forEach((v, k) => {
+                const lk = k.toLowerCase();
+                if (skipHeader.has(lk)) return;
+                res.setHeader(k, v);
+              });
+              res.end(text);
+            } catch (e) {
+              try {
+                res.statusCode = 502;
+                res.setHeader("Content-Type", "text/html; charset=utf-8");
+                res.end(
+                  `<!doctype html><html><head><meta charset="utf-8"><title>Backend unavailable</title></head><body style="font:15px system-ui;padding:24px">
+                <p><b>Dev backend not reachable</b> at <code>${BACKEND}</code>.</p>
+                <p>Start it from the repo root: <code>npm run dev:backend</code> (or <code>npm start</code> on port 10000), then reload.</p>
+                </body></html>`
+                );
+              } catch {
+                next();
+              }
+            }
+            return;
+          }
+          next();
+        });
+      },
+      port: Number(process.env.GMX_FRONTEND_PORT || "5173"),
+      // If 5173 is taken, try the next free port (still 127.0.0.1). Canon URL is 5173 when free.
+      strictPort: false,
+      host: "127.0.0.1",
+      proxy: {
+        "/app": { target: BACKEND, changeOrigin: true },
+        "/api": { target: BACKEND, changeOrigin: true },
+        "/assets": { target: BACKEND, changeOrigin: true },
+        "/static": { target: BACKEND, changeOrigin: true },
+        "/fonts": { target: BACKEND, changeOrigin: true },
+        "/contents": { target: BACKEND, changeOrigin: true },
+        "/app.js": { target: BACKEND, changeOrigin: true },
+        "/app.css": { target: BACKEND, changeOrigin: true },
+        "/app.auth.js": { target: BACKEND, changeOrigin: true },
+        "/mode.js": { target: BACKEND, changeOrigin: true },
+        "/entitlements.js": { target: BACKEND, changeOrigin: true },
+        "/themes.json": { target: BACKEND, changeOrigin: true },
+        "/extension-config.json": { target: BACKEND, changeOrigin: true },
+        "/i18n": { target: BACKEND, changeOrigin: true },
+        "/favicon.ico": { target: BACKEND, changeOrigin: true },
+        "/arcade": { target: BACKEND, changeOrigin: true },
+        "/arcade.html": { target: BACKEND, changeOrigin: true },
+        "/arcade.js": { target: BACKEND, changeOrigin: true },
+        "/app.html": { target: BACKEND, changeOrigin: true }
+      }
     }
-  }
-}));
+  };
+});

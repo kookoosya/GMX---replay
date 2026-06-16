@@ -1,5 +1,12 @@
 GMXReply — GENERATION TARGET R48 (RU)
 
+ВАЖНО — согласование с кодом (index.js, 2026)
+Актуальный движок генерации штрафует «крипто-хайп» и ряд социальных клише: см. RE_BANNED_WORDS,
+RE_BANNED_CRYPTO_HYPE, replyQualityScore(), generateRankedCandidates(). Примеры ниже в разделах
+«Примеры стиля» ОБНОВЛЕНЫ так, чтобы не противоречить банам. Старые строки с WAGMI / frens / sunshine /
+soldier / babe и т.п. НЕ являятся целевыми для текущего скорера — они оставались в старой версии
+дока как иллюстрация тона, но движок их отсекает или сильно штрафует.
+
 Кратко
 GM/GN в этом проекте = reply к чужому посту в X.
 Не личный пост о себе.
@@ -34,38 +41,38 @@ GM/GN в этом проекте = reply к чужому посту в X.
 - crypto-ответы не должны везде повторять одни и те же WAGMI / moon / diamond hands
 - ordinary-ответы не должны быть пресными или дневниковыми
 
-Примеры правильного направления
+Примеры стиля, совместимого с текущим скорером (без бан-слов / хайпа)
 GM ordinary short:
 - Gm! ☀️
 - Gm legend 🔥
-- Morning king 👑
-- Gm frens ✨
+- Morning ser 👑
+- Gm mate ✨
 - Rise and grind! ☕
-- Morning sunshine ☀️
+- Easy morning ☀️
 
 GN ordinary short:
 - Gn! 🌙
 - Gn legend ✨
-- Sleep well soldier 🫡
-- Sweet dreams king 👑
-- Gn babe 😴
+- Rest easy tonight 🫡
+- Sweet dreams ser 👑
+- Gn mate 😴
 - Gn! See you in the AM
 
-GM crypto short:
-- Gm frens! WAGMI ☀️
-- Gm degens LFG 🔥
-- Morning ser, diamond hands 💎
-- Gm! Bull run loading ☀️
-- Good morning frens, to the moon 🚀
-- Gm! New ATH soon 🌕
+GM crypto short (без WAGMI/LFG/moon/diamond hands в формулировках):
+- Gm ser, clean chart read ☀️
+- Gm builder, solid post 🔥
+- Morning mate — good energy ☀️
+- Gm, this is a strong setup ☀️
+- Good morning ser, sharp take ✨
+- Gm! Nice conviction on this one ☀️
 
 GN crypto short:
-- Gn frens! WAGMI tomorrow 🌙
-- Gn degens, sweet dreams 💤
-- Night ser, diamond hands 💎
-- Gn! Rest before the pump 🌕
-- Good night frens, moon soon 🚀
-- Gn! HODL through the night 💎
+- Gn ser, clean day behind you 🌙
+- Gn builder, rest up 💤
+- Night mate — tomorrow we build 🌙
+- Gn! Log off and reset 🌙
+- Good night ser, see you tomorrow ✨
+- Gn! Calm close tonight 🌙
 
 Неправильное направление
 - gm, keeping the open light today

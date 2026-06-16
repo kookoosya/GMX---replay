@@ -17,7 +17,7 @@ try { fs.accessSync(viteBin); } catch {
 
 const PORT = process.env.GMX_FRONTEND_PORT || "5173";
 
-const child = spawn(process.execPath, [viteBin, "--host", "127.0.0.1", "--port", String(PORT), "--strictPort"], {
+const child = spawn(process.execPath, [viteBin, "--host", "127.0.0.1", "--port", String(PORT)], {
   cwd: frontendDir,
   stdio: "inherit",
   env: {

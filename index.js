@@ -271,10 +271,15 @@ function sendError(res, status, code, extra = {}) {
 }
 
 
-// --- Safety: never crash silently ---
-process.on("unhandledRejection", (err) => {
-  beginShutdown("unhandledRejection", err);
+// --- Process errors ---
+// Unhandled async rejections: log loudly but keep the HTTP server alive. Exiting here took the whole site
+// down on a single bad promise path (common under load). Fix the underlying route instead.
+process.on("unhandledRejection", (reason) => {
+  writeLog("ERROR", "UNHANDLED_REJECTION", {
+    error: reason?.stack || reason?.message || String(reason),
+  });
 });
+// Uncaught synchronous throws: unsafe to continue; graceful shutdown.
 process.on("uncaughtException", (err) => {
   beginShutdown("uncaughtException", err);
 });
@@ -313,6 +318,7 @@ const ALWAYS_ALLOW_ORIGINS = new Set([
   "https://mobile.twitter.com",
   "http://localhost:3000",
   "http://localhost:5173",
+  "http://127.0.0.1:5173",
   "http://localhost:8080",
   "http://localhost:10000",
   "http://127.0.0.1:10000",
@@ -368,7 +374,8 @@ app.use(
     allowedHeaders: ["Content-Type","Authorization","X-Admin-Key","X-Admin-Token","X-GMX-Client","X-GMX-Ext-Version"],
   })
 );
-app.use(express.json({ limit: "256kb" }));
+// Large enough for base64 wallpaper uploads on /api/wallpapers/custom (was 256kb → PayloadTooLarge before route-level 4mb ran).
+app.use(express.json({ limit: "4mb" }));
 
 app.use((req, res, next) => {
   const incoming = String(req.headers["x-request-id"] || "").trim();
@@ -5234,6 +5241,30 @@ app.get("/api/wallpapers/custom", (req, res) => {
   }
 });
 
+app.post("/api/wallpapers/custom", requireAuth, (req, res) => {
+  try {
+    const image = req.body?.image;
+    const target = String(req.body?.target || "site").toLowerCase();
+    if (!image || typeof image !== "string") return res.status(400).json({ ok: false, error: "image_required" });
+    const m = image.match(/^data:image\/(png|jpeg|jpg|webp);base64,(.+)$/);
+    if (!m) return res.status(400).json({ ok: false, error: "invalid_image_format" });
+    const ext = m[1] === "jpeg" || m[1] === "jpg" ? "jpg" : m[1];
+    const buf = Buffer.from(m[2], "base64");
+    if (buf.length > 3 * 1024 * 1024) return res.status(400).json({ ok: false, error: "image_too_large" });
+    const dir = target === "ext" ? CUSTOM_WALLPAPERS_EXT : CUSTOM_WALLPAPERS_SITE;
+    fs.mkdirSync(dir, { recursive: true });
+    const base = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const filename = `${base}.${ext}`;
+    const filepath = path.join(dir, filename);
+    fs.writeFileSync(filepath, buf);
+    const id = `custom_${filename}`;
+    res.json({ ok: true, id, file: filename });
+  } catch (e) {
+    console.error("WALLPAPERS_CUSTOM_UPLOAD_ERROR", e);
+    res.status(500).json({ ok: false, error: "upload_failed" });
+  }
+});
+
 app.get("/api/arcade/cover", async (req, res) => {
   try {
     const src = String(req.query?.src || "").trim();
@@ -6058,10 +6089,14 @@ app.post("/api/admin/login", adminLoginLimiter, requireAuth, (req, res) => {
       return res.status(403).json({ ok:false, error:"forbidden" });
     }
 
-    const pw = String(req.body?.password || "").trim();
+    const pwRaw = String(req.body?.password || "");
+    const pw = normalizePasswordInput(pwRaw);
     if (!pw) return res.status(400).json({ ok:false, error:"invalid_request", hint:"missing_password" });
 
-    if (!safeEq(pw, ADMIN_PASSWORD)) return res.status(401).json({ ok:false, error:"unauthorized" });
+    const expected = normalizePasswordInput(ADMIN_PASSWORD);
+    if (!safeEq(pw, expected)){
+      return res.status(401).json({ ok:false, error:"unauthorized", hint:"bad_password" });
+    }
 
     const s = adminSessionCreate(handle);
     return res.json({ ok:true, handle, adminToken: s.token, expiresAt: s.expires_at });
@@ -6099,6 +6134,15 @@ function safeEq(a,b){
     if (aa.length !== bb.length) return false;
     return crypto.timingSafeEqual(aa, bb);
   }catch{ return false; }
+}
+
+/** Trim, strip zero-width/BOM, Unicode NFC — avoids failed login from invisible copy/paste chars */
+function normalizePasswordInput(s){
+  return String(s || "")
+    .replace(/^\uFEFF/, "")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .normalize("NFC")
+    .trim();
 }
 
 function adminSessionCleanup(){
@@ -7032,6 +7076,43 @@ app.get("/api/admin/diag", requireAdmin, (req, res) => {
   });
 });
 
+// Admin: users connected via @handle
+app.get("/api/admin/users", requireAdmin, (req, res) => {
+  try {
+    const limit = Math.max(20, Math.min(500, Number(req.query?.limit || 100) || 100));
+    const q = String(req.query?.q || "").trim().toLowerCase();
+    let sql = "SELECT handle, created_at, last_seen, tier, paid_until FROM users WHERE 1=1";
+    const args = [];
+    if (q) {
+      sql += " AND LOWER(handle) LIKE ?";
+      args.push(`%${q}%`);
+    }
+    sql += " ORDER BY last_seen DESC LIMIT ?";
+    args.push(limit);
+    const rows = safeDb(() => db.prepare(sql).all(...args)) || [];
+    res.json({ ok: true, rows });
+  } catch (e) {
+    console.error("ADMIN_USERS_ERROR", e);
+    res.status(500).json({ ok: false, error: "server_error" });
+  }
+});
+
+// Admin: payments (who paid)
+app.get("/api/admin/payments", requireAdmin, (req, res) => {
+  try {
+    const limit = Math.max(20, Math.min(200, Number(req.query?.limit || 50) || 50));
+    const rows = safeDb(() =>
+      db.prepare(
+        "SELECT handle, plan, currency, amount, payer, created_at FROM payments ORDER BY created_at DESC LIMIT ?"
+      ).all(limit)
+    ) || [];
+    res.json({ ok: true, rows });
+  } catch (e) {
+    console.error("ADMIN_PAYMENTS_ERROR", e);
+    res.status(500).json({ ok: false, error: "server_error" });
+  }
+});
+
 // ---------- STATIC SITE ----------
 const PUBLIC_DIR = path.join(__dirname, "public");
 const APP_HTML = path.join(PUBLIC_DIR, "app.html");
@@ -7061,6 +7142,17 @@ app.get("/bridge", (req, res) => {
 app.get("/arcade", (req, res) => {
   noStore(res);
   return res.redirect(302, "/arcade.html");
+});
+
+// /app and /app.html MUST serve the exact same file (no cache divergence)
+app.get(["/app", "/app.html"], (req, res) => {
+  try {
+    noStore(res);
+    if (fs.existsSync(APP_HTML)) return res.sendFile(APP_HTML);
+    res.status(404).send("app.html not found");
+  } catch {
+    res.status(500).send("error");
+  }
 });
 
 app.use(
@@ -7098,16 +7190,6 @@ app.use((req, res, next) => {
     }
   } catch {}
   return next();
-});
-
-app.get("/app", (req, res) => {
-  try {
-    noStore(res);
-    if (fs.existsSync(APP_HTML)) return res.sendFile(APP_HTML);
-    res.status(404).send("app.html not found");
-  } catch {
-    res.status(500).send("error");
-  }
 });
 
 app.get("/bridge/*", (req, res) => {
@@ -7163,14 +7245,33 @@ app.use("/api", (req, res) => {
   sendError(res, 404, "not_found", { path: req.originalUrl });
 });
 
-HTTP_SERVER = app.listen(PORT, "0.0.0.0", () => {
-  try {
-    HTTP_SERVER.headersTimeout = 65_000;
-    HTTP_SERVER.requestTimeout = 60_000;
-    HTTP_SERVER.keepAliveTimeout = 5_000;
-  } catch {}
+function tryListen(port, maxAttempts = 6) {
+  return new Promise((resolve, reject) => {
+    const server = app.listen(port, "0.0.0.0", () => {
+      try {
+        server.headersTimeout = 65_000;
+        server.requestTimeout = 60_000;
+        server.keepAliveTimeout = 5_000;
+      } catch {}
+      resolve(server);
+    });
+    server.on("error", (err) => {
+      if (err.code === "EADDRINUSE" && port < PORT + maxAttempts) {
+        try { server.close(); } catch {}
+        tryListen(port + 1, maxAttempts - 1).then(resolve).catch(reject);
+      } else {
+        reject(err);
+      }
+    });
+  });
+}
+
+tryListen(PORT).then((server) => {
+  HTTP_SERVER = server;
+  const actualPort = server.address()?.port || PORT;
+  if (actualPort !== PORT) writeLog("WARN", "PORT_FALLBACK", { wanted: PORT, using: actualPort });
   writeLog("INFO", "SERVER_LISTENING", {
-    port: PORT,
+    port: actualPort,
     dbMode: DB_MODE,
     dbPath: DB_PATH,
     supabaseConfigured: SUPABASE_CONFIGURED,
@@ -7181,4 +7282,20 @@ HTTP_SERVER = app.listen(PORT, "0.0.0.0", () => {
   try { startAutoAwardsLoop(); } catch (_e) {
     writeLog("ERROR", "AUTO_AWARDS_LOOP_FAILED", { error: _e?.message || String(_e) });
   }
+}).catch((err) => {
+  const code = err && err.code;
+  const hint =
+    code === "EADDRINUSE"
+      ? `Port ${PORT}–${PORT + 5} in use. Stop the other process or run: npm run kill-port (then npm start).`
+      : null;
+  writeLog("ERROR", "PROCESS_SHUTDOWN", {
+    reason: "listen_failed",
+    code: code || null,
+    error: err?.message || String(err),
+    hint,
+  });
+  try {
+    console.error(hint || err?.message || err);
+  } catch {}
+  process.exit(1);
 });

@@ -16,12 +16,18 @@ document.documentElement.classList.remove("mode-light");
       try{ return localStorage.getItem(k) || ""; }catch(_e){ return ""; }
     }
 
-    // Wallpaper: tab-specific -> global
+    // Wallpaper: tab-specific -> global (app.js overrides with manifest-based path)
     var wp = getLS("gmx_wp_tab_" + TAB) || getLS("gmx_wp_all");
     var wallOn = !!wp;
     if (wp){
-      var css = 'url("/assets/wallpapers/' + String(wp).replace(/[^a-z0-9_\-]/gi, "") + '.svg") center/cover no-repeat fixed';
-      document.documentElement.style.setProperty("--bg_wall", css);
+      var file, base = "/assets/wallpapers/";
+      var wid = String(wp).replace(/[^a-z0-9_\-]/gi, "");
+      if (/^custom_.*\.(png|jpg|jpeg|webp)$/i.test(String(wp))) file = "custom/" + String(wp).replace(/[^a-z0-9_.\-]/gi, "");
+      else if (wid === "free01") file = "free01.png";
+      else if (wid === "free02") file = "free02.jpg";
+      else if (/^w\d{1,3}$/.test(wid)) file = wid + ".jpg";
+      else file = wid + ".svg";
+      document.documentElement.style.setProperty("--bg_wall", 'url("' + base + file + '")');
     } else {
       document.documentElement.style.setProperty("--bg_wall", "none");
     }

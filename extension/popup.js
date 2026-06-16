@@ -1,81 +1,23 @@
-const DEFAULT_BASE = "https://www.gmxreply.com";
-const STORAGE_KEYS = {
-  base: "gmx_ext_api_base_v2",
-  handle: "gmx_ext_handle_v2",
-  token: "gmx_ext_token_v2",
-  mode: "gmx_ext_mode_v2",
-  lastText: "gmx_ext_last_text_v2",
-};
-const ALERT_KEYS = {
-  enabled: "gmx_market_alerts_enabled_v1",
-  interval: "gmx_market_alerts_interval_v1",
-};
-const ASSET_REV = "20260310a";
-const LEGACY_KEYS = {
-  base: "apiBase",
-  handle: "handle",
-  token: "token",
-};
+const cfg = globalThis.GMXExtConfig;
+const i18n = globalThis.GMXExtI18n;
+if (!cfg || !i18n) throw new Error("GMX extension libs missing (ext-config.js / ext-i18n.js)");
+
+const {
+  DEFAULT_BASE,
+  STORAGE_KEYS,
+  ALERT_KEYS,
+  ASSET_REV,
+  WALLPAPER_REFRESH_KEY,
+  LEGACY_KEYS,
+  THEME_KEYS,
+  LEGACY_THEME_KEYS,
+  EXT_WALLPAPER_OPTIONS,
+  DEFAULT_THEME,
+  FALLBACK_LINES,
+} = cfg;
+
 const LEGACY_STORAGE_KEYS = Object.values(LEGACY_KEYS);
-const THEME_KEYS = {
-  extTheme: "gmx_ext_theme_v2",
-  siteTheme: "gmx_theme",
-  extView: "gmx_ext_view_v2",
-  extWallpaper: "gmx_ext_wp_v2",
-  extCustomBg: "gmx_ext_custom_bg_global_v2",
-};
-const LEGACY_THEME_KEYS = {
-  extTheme: "gmx_ext_theme",
-  extView: "gmx_ext_view",
-  extWallpaper: "gmx_ext_wp",
-  extCustomBg: "gmx_ext_custom_bg_global",
-};
-
-const EXT_FEATURED_WALLPAPERS = [
-  { id: 'ext_free_01', name: 'Mempool Grid' },
-  { id: 'ext_free_02', name: 'Solana Glass' },
-  { id: 'lux_ext_degen_terminal', name: 'Degen Terminal' },
-  { id: 'lux_ext_onchain_spaceport', name: 'Onchain Spaceport' },
-  { id: 'lux_ext_solana_temple', name: 'Solana Temple' },
-  { id: 'lux_ext_ct_warroom', name: 'CT War Room' },
-  { id: 'lux_ext_nft_gallery', name: 'NFT Gallery' },
-  { id: 'lux_ext_noir_detective', name: 'Ledger Noir' },
-  { id: 'lux_ext_anime_neon_alley', name: 'Neon Alley' },
-  { id: 'lux_ext_cinematic_heroes', name: 'Validator Skyline' },
-];
-
-const EXT_WALLPAPER_OPTIONS = (()=>{
-  const out = [...EXT_FEATURED_WALLPAPERS];
-  for (let i=1; i<=57; i++){
-    const n = String(i).padStart(2,'0');
-    out.push({ id: `extv3_${n}`, name: ['Laser Grid', 'Night Drive', 'Order Book', 'Signal Bloom', 'Validator Sky', 'Candle Mist', 'Relay Tunnel', 'Mint Horizon', 'Blockwave', 'Node Rain', 'Airdrop Haze', 'Hyperlane', 'Glass Router', 'Vault Glow', 'Neon Tape', 'Cold Ledger', 'Warp Stack', 'Luma Chain', 'Dawn Engine', 'Token Drift', 'Blue Volume', 'Mirror Pool', 'Circuit Cloud', 'Mint Static', 'Heatmap', 'Price Halo', 'Turbo Dusk', 'Late Block', 'Shard Dream', 'Chainlight', 'Mercury Lane', 'Peak Flow', 'Silent Mint', 'Fast Route', 'Prime Tape', 'Node Bloom', 'Ghost Volume', 'Crystal Wire', 'Lunar DEX', 'Crossfade', 'Vector Frost', 'Frame Shift', 'Plasma Window', 'Afterhours', 'Spectra Gate', 'Glass Depth', 'Hash Garden', 'Night Relay', 'Pulse Harbor', 'Ocean Node', 'Sky Cache', 'Gamma Field', 'Quiet Tape', 'Zero Slip', 'Soft Orbit', 'Flash Market', 'Aurora Book'][i-1] || `Backdrop ${n}` });
-  }
-  return out;
-})();
-const DEFAULT_THEME = {
-  id: "classic",
-  a: "rgba(110,231,255,1)",
-  b: "rgba(79,70,229,1)",
-};
-
-const FALLBACK_LINES = {
-  gm: [
-    "gm, hope your day starts easy",
-    "good morning, nice read here",
-    "gm, strong post and a clean start",
-    "gm, hope the morning treats you well",
-    "good morning, this was a solid read",
-    "gm, wishing you a smooth day ahead",
-  ],
-  gn: [
-    "gn, hope you get a calm reset tonight",
-    "good night, soft close here",
-    "gn, rest well after this one",
-    "good night, hope you get an easy reset",
-    "gn, calm post to end the day on",
-    "good night, sleep well tonight",
-  ],
-};
+const { EXT_UI_LANG_KEY, extT, refreshUiLangFromStorage, applyStaticExtI18n } = i18n;
 
 let lastThemeSignature = "";
 
@@ -102,22 +44,15 @@ function canonicalExtWallpaperId(id){
   if (!v) return '';
   if (v === "custom_upload") return "custom_upload";
   if (EXT_WALLPAPER_OPTIONS.some(x=>String(x.id||'').toLowerCase()===v)) return v;
-  let m = v.match(/^extv3_(\d{1,2})$/i);
+  const m = v.match(/^(?:extv3_|w)(\d{1,2})$/i) || v.match(/^ext_(\d{1,2})$/i);
   if (m) {
-    const n = String(Math.max(1, Math.min(57, Number(m[1]) || 1))).padStart(2, '0');
-    return `extv3_${n}`;
+    const num = Math.max(1, Math.min(58, Number(m[1]) || 1));
+    return 'w' + String(num).padStart(2, '0');
   }
-  m = v.match(/^ext_free_(\d{1,2})$/i);
-  if (m) {
-    const n = String(Math.max(1, Math.min(2, Number(m[1]) || 1))).padStart(2, '0');
+  if (v.match(/^ext_free_(\d{1,2})$/i)) {
+    const n = String(Math.max(1, Math.min(2, Number((v.match(/\d+/)||["1"])[0]) || 1))).padStart(2, '0');
     return `ext_free_${n}`;
   }
-  m = v.match(/^ext_(\d{1,2})$/i);
-  if (m) {
-    const num = Math.max(1, Math.min(57, Number(m[1]) || 1));
-    return `extv3_${String(num).padStart(2, '0')}`;
-  }
-  if (/^lux_ext_[a-z0-9_]+$/i.test(v)) return v;
   return 'ext_free_01';
 }
 
@@ -385,6 +320,17 @@ function normalizeExtWallpaperId(raw) {
   return canonicalExtWallpaperId(raw);
 }
 
+let EXT_WP_EXT_MAP = null;
+async function loadExtWpMap() {
+  if (EXT_WP_EXT_MAP) return EXT_WP_EXT_MAP;
+  try {
+    const url = chrome.runtime.getURL("extbg/ext-map.json");
+    const r = await fetch(url);
+    if (r.ok) EXT_WP_EXT_MAP = await r.json();
+  } catch {}
+  return EXT_WP_EXT_MAP || {};
+}
+
 async function resolveWallpaperSource(base, wallpaperId) {
   const id = normalizeExtWallpaperId(wallpaperId);
   if (!id) return "";
@@ -392,16 +338,14 @@ async function resolveWallpaperSource(base, wallpaperId) {
   const cacheKey = `${normalizeBase(base)}::${id}`;
   if (WALL_CACHE.has(cacheKey)) return WALL_CACHE.get(cacheKey) || "";
 
-  if (!(typeof id === "string" && id.startsWith("extv3_"))) {
-    const localUrl = chrome.runtime.getURL(`extbg/${encodeURIComponent(id)}.svg`);
-    WALL_CACHE.set(cacheKey, localUrl);
-    try{ prefetchWallpaper(localUrl); }catch{}
-    return localUrl;
-  }
-  const finalUrl = extPackWallpaperDataUri(id, false);
-  WALL_CACHE.set(cacheKey, finalUrl);
-  try{ prefetchWallpaper(finalUrl); }catch{}
-  return finalUrl;
+  const bust = `?v=${ASSET_REV}`;
+  let extId = /^w\d{2}$/.test(id) ? `ext_${id}` : id;
+  const map = await loadExtWpMap();
+  const ext = map[extId] || "svg";
+  const localUrl = chrome.runtime.getURL(`extbg/${encodeURIComponent(extId)}.${ext}`) + bust;
+  WALL_CACHE.set(cacheKey, localUrl);
+  try { prefetchWallpaper(localUrl.split("?")[0]); } catch {}
+  return localUrl;
 }
 
 function friendlyError(result) {
@@ -512,6 +456,7 @@ async function loadState() {
       ...Object.values(LEGACY_KEYS),
       ...Object.values(THEME_KEYS),
       ...Object.values(LEGACY_THEME_KEYS),
+      WALLPAPER_REFRESH_KEY,
     ]);
   } catch {}
   const hadLegacyValues = Boolean(data[LEGACY_KEYS.base] || data[LEGACY_KEYS.handle] || data[LEGACY_KEYS.token]);
@@ -535,6 +480,10 @@ async function loadState() {
   state.extCustomBg = String(data[THEME_KEYS.extCustomBg] || data[LEGACY_THEME_KEYS.extCustomBg] || "").trim();
   if (state.extView === "wall" && !state.extWallpaper) state.extView = "theme";
   if (state.extView === "custom" && !state.extCustomBg) state.extView = "theme";
+  if (data[WALLPAPER_REFRESH_KEY] !== "1") {
+    WALL_CACHE.clear();
+    chrome.storage.local.set({ [WALLPAPER_REFRESH_KEY]: "1" }).catch(() => {});
+  }
   if (hadLegacyThemeValues) {
     await saveState({
       [THEME_KEYS.extTheme]: state.extTheme,
@@ -546,7 +495,7 @@ async function loadState() {
   }
   if (el.handleInput) el.handleInput.value = state.handle ? `@${state.handle}` : "";
   if (el.modeSelect) el.modeSelect.value = state.mode;
-  if (el.previewText) el.previewText.textContent = state.lastText || "Nothing copied yet";
+  if (el.previewText) el.previewText.textContent = state.lastText || extT("ext_nothing_copied");
   state.alertsEnabled = data[ALERT_KEYS.enabled] !== false;
   const interval = Number(data[ALERT_KEYS.interval] || 5);
   state.alertsInterval = [5, 10, 15].includes(interval) ? interval : 5;
@@ -554,8 +503,8 @@ async function loadState() {
   if (el.alertsInterval) el.alertsInterval.value = String(state.alertsInterval);
   if (el.alertsStatus) {
     el.alertsStatus.textContent = state.alertsEnabled
-      ? `Active. Poll every ${state.alertsInterval} min.`
-      : "Disabled.";
+      ? extT("ext_alerts_active", { n: state.alertsInterval })
+      : extT("ext_alerts_disabled");
   }
 }
 
@@ -570,8 +519,8 @@ async function saveAlertSettings() {
   });
   if (el.alertsStatus) {
     el.alertsStatus.textContent = state.alertsEnabled
-      ? `Active. Poll every ${state.alertsInterval} min.`
-      : "Disabled.";
+      ? extT("ext_alerts_active", { n: state.alertsInterval })
+      : extT("ext_alerts_disabled");
   }
   try {
     chrome.runtime.sendMessage({
@@ -631,11 +580,11 @@ async function apiRequest(path, options = {}) {
 
 function applySessionUi() {
   const connected = Boolean(state.token && state.handle);
-  if (el.sessionValue) el.sessionValue.textContent = connected ? `@${state.handle}` : "Guest";
+  if (el.sessionValue) el.sessionValue.textContent = connected ? `@${state.handle}` : extT("ext_session_guest");
   if (el.sessionHint) {
     el.sessionHint.textContent = connected
-      ? "Connected through your site session. Copy stays manual and safe on X."
-      : "Use site sync first for the clean setup. Manual handle connect is only a fallback for new accounts.";
+      ? extT("ext_session_hint_connected")
+      : extT("ext_session_hint_disconnected");
   }
   if (el.baseValue) el.baseValue.textContent = state.base.replace(/^https?:\/\//, "");
 }
@@ -643,12 +592,12 @@ function applySessionUi() {
 function renderStats(usage, refStats) {
   const sub = usage && usage.sub || null;
   const plan = sub && (sub.isUnlimited || sub.tier === "unlimited")
-    ? "Unlimited"
+    ? extT("ext_plan_unlimited")
     : sub && sub.active
-      ? "Paid"
+      ? extT("ext_plan_paid")
       : state.token
-        ? "Free"
-        : "Guest";
+        ? extT("ext_plan_free")
+        : extT("ext_plan_guest_label");
 
   if (el.planValue) el.planValue.textContent = plan;
   if (el.gmUsed) el.gmUsed.textContent = usage && usage.gm ? `${usage.gm.used}/${usage.gm.limit}` : "—";
@@ -657,8 +606,8 @@ function renderStats(usage, refStats) {
   if (el.refConfirmed) el.refConfirmed.textContent = refStats && Number.isFinite(Number(refStats.confirmedRefs)) ? String(refStats.confirmedRefs) : "—";
   if (el.statsHint) {
     el.statsHint.textContent = state.token
-      ? "Connected snapshot from your backend. Buttons still only copy text."
-      : "Offline fallback is ready. Buttons still only copy text.";
+      ? extT("ext_stats_hint_with_token")
+      : extT("ext_stats_hint_no_token");
   }
 }
 
@@ -1015,7 +964,7 @@ function bindEvents() {
     void (async () => {
       await loadState();
       if (needsPreviewRefresh && el.previewText) {
-        el.previewText.textContent = state.lastText || "Nothing copied yet";
+        el.previewText.textContent = state.lastText || extT("ext_nothing_copied");
       }
       if (needsThemeRefresh || needsAuthRefresh) {
         await applyThemeUi();
@@ -1029,13 +978,21 @@ function bindEvents() {
 }
 
 (async function init() {
+  await refreshUiLangFromStorage();
   bindEvents();
+  applyStaticExtI18n();
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area !== "local" || !changes[EXT_UI_LANG_KEY]) return;
+    void (async () => {
+      await refreshUiLangFromStorage();
+      applyStaticExtI18n();
+      applySessionUi();
+      await refreshSnapshot();
+    })();
+  });
   await loadState();
   await applyThemeUi();
   applySessionUi();
-  if (el.shortcutHint) {
-    el.shortcutHint.textContent = "Optional shortcut: assign one yourself in chrome://extensions/shortcuts for \"Open GMXReply quick panel\"";
-  }
   await syncFromSite({ openIfMissing: false, silent: true });
   await refreshSnapshot();
 })();

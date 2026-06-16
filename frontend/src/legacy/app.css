@@ -110,11 +110,11 @@ b{ font-weight:700; }
   transition: opacity .25s ease;
 }
 body.hasUserBg .bg::before{ opacity:.92; }
-body.hasWallBg .bg::before{ opacity:.16; }
-body.hasWallBg .bg::after{ opacity:.42; }
-html.mode-light body.hasWallBg .bg::before{ opacity:.14 !important; }
-html.mode-light body.hasUserBg .bg::before{ opacity:.55; }
-html.mode-light body.hasWallBg .bg::before{ opacity:.14 !important; }
+body.hasWallBg .bg::before{ opacity:0; }
+body.hasWallBg .bg::after{ opacity:0; }
+html.mode-light body.hasWallBg .bg::before{ opacity:0 !important; }
+html.mode-light body.hasUserBg .bg::before{ opacity:.35; }
+html.mode-light body.hasWallBg .bg::after{ opacity:0 !important; }
 
 .bg::after{
   content:"";
@@ -1567,8 +1567,231 @@ html.mode-light .tab.active{ color: rgba(10,13,21,1); }
 /* R34 readability + responsive theme cards */
 :root{ --wall-overlay-strength: .22; }
 .appShell, .page, .layout, .twoCol { max-width: min(1600px, calc(100vw - 24px)); }
-.wallpaper .card, .has-wallpaper .card, .has-wallpaper .panel, .has-wallpaper .sideCard { background: rgba(8,12,22,.62) !important; backdrop-filter: blur(10px); }
+.wallpaper .card, .has-wallpaper .card, .has-wallpaper .panel, .has-wallpaper .sideCard,
+body.hasWallBg .card, body.hasUserBg .card, body.hasWallBg .panel, body.hasUserBg .panel,
+body.hasWallBg .pill, body.hasUserBg .pill,
+body.hasWallBg .tabs, body.hasUserBg .tabs,
+body.hasWallBg .kpi, body.hasUserBg .kpi,
+body.hasWallBg .meter, body.hasUserBg .meter,
+body.hasWallBg select, body.hasUserBg select,
+body.hasWallBg input, body.hasUserBg input,
+body.hasWallBg textarea, body.hasUserBg textarea,
+body.hasWallBg .tab:not(.active), body.hasUserBg .tab:not(.active),
+body.hasWallBg .tabBtn:not(.active), body.hasUserBg .tabBtn:not(.active),
+body.hasWallBg .btn.secondary, body.hasUserBg .btn.secondary,
+body.hasWallBg .btn.ghost, body.hasUserBg .btn.ghost,
+body.hasWallBg .pasteBox, body.hasUserBg .pasteBox,
+body.hasWallBg .langBtn, body.hasUserBg .langBtn,
+body.hasWallBg .seg, body.hasUserBg .seg,
+body.hasWallBg .seg button:not(.active), body.hasUserBg .seg button:not(.active),
+body.hasWallBg .toolgroup, body.hasUserBg .toolgroup,
+body.hasWallBg .lineRow, body.hasUserBg .lineRow,
+body.hasWallBg .lineInput, body.hasUserBg .lineInput,
+body.hasWallBg .listWrap, body.hasUserBg .listWrap,
+body.hasWallBg .listTop, body.hasUserBg .listTop,
+body.hasWallBg .listBody, body.hasUserBg .listBody,
+body.hasWallBg .tableWrap, body.hasUserBg .tableWrap,
+body.hasWallBg .table, body.hasUserBg .table,
+body.hasWallBg .table th, body.hasUserBg .table th,
+body.hasWallBg .table td, body.hasUserBg .table td,
+body.hasWallBg .plan, body.hasUserBg .plan,
+body.hasWallBg .selectWithFlag, body.hasUserBg .selectWithFlag,
+body.hasWallBg .flag, body.hasUserBg .flag,
+.wallpaper .pill, .has-wallpaper .pill,
+.wallpaper .tabs, .has-wallpaper .tabs,
+.wallpaper .kpi, .has-wallpaper .kpi,
+.wallpaper .meter, .has-wallpaper .meter,
+.wallpaper select, .has-wallpaper select,
+.wallpaper input, .has-wallpaper input,
+.wallpaper textarea, .has-wallpaper textarea,
+.wallpaper .tabBtn:not(.active), .has-wallpaper .tabBtn:not(.active),
+.wallpaper .btn.secondary, .has-wallpaper .btn.secondary,
+.wallpaper .btn.ghost, .has-wallpaper .btn.ghost,
+.wallpaper .pasteBox, .has-wallpaper .pasteBox {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border-color: rgba(255,255,255,.2) !important;
+}
+body.hasWallBg .card *, body.hasUserBg .card *, body.hasWallBg .panel *, body.hasUserBg .panel *,
+body.hasWallBg .pill *, body.hasUserBg .pill *,
+body.hasWallBg .tabs *, body.hasUserBg .tabs *,
+body.hasWallBg .kpi *, body.hasUserBg .kpi *,
+.wallpaper .card *, .has-wallpaper .card *, .has-wallpaper .panel *,
+.wallpaper .pill *, .has-wallpaper .pill *,
+.wallpaper .tabs *, .has-wallpaper .tabs *,
+.wallpaper .kpi *, .has-wallpaper .kpi * {
+  text-shadow: 0 1px 3px rgba(0,0,0,.7), 0 0 12px rgba(0,0,0,.5);
+}
+body.hasWallBg select, body.hasUserBg select,
+body.hasWallBg input, body.hasUserBg input,
+body.hasWallBg textarea, body.hasUserBg textarea,
+.wallpaper select, .has-wallpaper select,
+.wallpaper input, .has-wallpaper input,
+.wallpaper textarea, .has-wallpaper textarea {
+  text-shadow: 0 1px 2px rgba(0,0,0,.8), 0 0 8px rgba(0,0,0,.5);
+  color: rgba(255,255,255,.98) !important;
+}
+body.hasWallBg .tab.active, body.hasUserBg .tab.active,
+.wallpaper .tab.active, .has-wallpaper .tab.active {
+  text-shadow: 0 1px 2px rgba(0,0,0,.6);
+}
 .extWpGrid .wpThumb, #extWpGrid .wpThumb, .wpThumb.extThumb { background-size: contain !important; background-position: center; background-repeat: no-repeat; }
+
+/* Wallpaper is light: readable dark text + light panels — covers everything */
+body.hasWallBg.wallLight,
+body.hasUserBg.wallLight {
+  color: #0B1020 !important;
+}
+body.hasWallBg.wallLight .wrap,
+body.hasUserBg.wallLight .wrap {
+  color: #0B1020;
+}
+body.hasWallBg.wallLight .wrap *,
+body.hasUserBg.wallLight .wrap * {
+  text-shadow: none !important;
+}
+body.hasWallBg.wallLight header,
+body.hasWallBg.wallLight .brand,
+body.hasWallBg.wallLight .brand h1,
+body.hasWallBg.wallLight .sub,
+body.hasUserBg.wallLight header,
+body.hasUserBg.wallLight .brand,
+body.hasUserBg.wallLight .brand h1,
+body.hasUserBg.wallLight .sub {
+  color: #0B1020 !important;
+}
+body.hasWallBg.wallLight .card,
+body.hasWallBg.wallLight .panel,
+body.hasWallBg.wallLight .sideCard,
+body.hasUserBg.wallLight .card,
+body.hasUserBg.wallLight .panel,
+body.hasUserBg.wallLight .sideCard,
+body.hasWallBg.wallLight .pill,
+body.hasUserBg.wallLight .pill,
+body.hasWallBg.wallLight .tab:not(.active),
+body.hasUserBg.wallLight .tab:not(.active),
+body.hasWallBg.wallLight .tabBtn:not(.active),
+body.hasUserBg.wallLight .tabBtn:not(.active),
+body.hasWallBg.wallLight .tabsHead,
+body.hasUserBg.wallLight .tabsHead,
+body.hasWallBg.wallLight .kpi,
+body.hasUserBg.wallLight .kpi,
+body.hasWallBg.wallLight .meter,
+body.hasUserBg.wallLight .meter,
+body.hasWallBg.wallLight select,
+body.hasUserBg.wallLight select,
+body.hasWallBg.wallLight input,
+body.hasUserBg.wallLight input,
+body.hasWallBg.wallLight textarea,
+body.hasUserBg.wallLight textarea,
+body.hasWallBg.wallLight .pasteBox,
+body.hasUserBg.wallLight .pasteBox,
+body.hasWallBg.wallLight .seg,
+body.hasUserBg.wallLight .seg,
+body.hasWallBg.wallLight .toolgroup,
+body.hasUserBg.wallLight .toolgroup,
+body.hasWallBg.wallLight .lineInput,
+body.hasUserBg.wallLight .lineInput,
+body.hasWallBg.wallLight .listWrap,
+body.hasUserBg.wallLight .listWrap,
+body.hasWallBg.wallLight .tableWrap,
+body.hasUserBg.wallLight .tableWrap,
+body.hasWallBg.wallLight .btn.secondary,
+body.hasUserBg.wallLight .btn.secondary,
+body.hasWallBg.wallLight .btn.ghost,
+body.hasUserBg.wallLight .btn.ghost,
+body.hasWallBg.wallLight .langBtn,
+body.hasUserBg.wallLight .langBtn,
+body.hasWallBg.wallLight .flag,
+body.hasUserBg.wallLight .flag,
+body.hasWallBg.wallLight .selectWithFlag,
+body.hasUserBg.wallLight .selectWithFlag,
+body.hasWallBg.wallLight .themeGrid .wpThumb,
+body.hasUserBg.wallLight .themeGrid .wpThumb,
+body.hasWallBg.wallLight .wpGrid .wpThumb,
+body.hasUserBg.wallLight .wpGrid .wpThumb,
+body.hasWallBg.wallLight .colStack,
+body.hasUserBg.wallLight .colStack {
+  background: rgba(255,255,255,.9) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-color: rgba(0,0,0,.14) !important;
+  color: #0B1020 !important;
+}
+body.hasWallBg.wallLight .card *,
+body.hasWallBg.wallLight .panel *,
+body.hasWallBg.wallLight .sideCard *,
+body.hasUserBg.wallLight .card *,
+body.hasUserBg.wallLight .panel *,
+body.hasUserBg.wallLight .sideCard *,
+body.hasWallBg.wallLight .pill *,
+body.hasUserBg.wallLight .pill *,
+body.hasWallBg.wallLight .colStack *,
+body.hasUserBg.wallLight .colStack * {
+  color: inherit;
+}
+body.hasWallBg.wallLight .pill strong,
+body.hasUserBg.wallLight .pill strong,
+body.hasWallBg.wallLight .title,
+body.hasUserBg.wallLight .title {
+  color: #0B1020 !important;
+}
+body.hasWallBg.wallLight select,
+body.hasWallBg.wallLight input,
+body.hasWallBg.wallLight textarea,
+body.hasUserBg.wallLight select,
+body.hasUserBg.wallLight input,
+body.hasUserBg.wallLight textarea {
+  color: #0B1020 !important;
+}
+body.hasWallBg.wallLight select option,
+body.hasUserBg.wallLight select option {
+  background: #ffffff !important;
+  color: #0B1020 !important;
+}
+body.hasWallBg.wallLight .muted,
+body.hasUserBg.wallLight .muted,
+body.hasWallBg.wallLight .desc,
+body.hasUserBg.wallLight .desc,
+body.hasWallBg.wallLight .note,
+body.hasUserBg.wallLight .note,
+body.hasWallBg.wallLight .pill .muted,
+body.hasUserBg.wallLight .pill .muted {
+  color: rgba(11,16,32,.8) !important;
+}
+body.hasWallBg.wallLight .tab,
+body.hasUserBg.wallLight .tab,
+body.hasWallBg.wallLight .tabBtn {
+  color: rgba(11,16,32,.9) !important;
+}
+body.hasWallBg.wallLight .tab:hover,
+body.hasUserBg.wallLight .tab:hover,
+body.hasWallBg.wallLight .tabBtn:hover {
+  background: rgba(0,0,0,.06) !important;
+  color: #0B1020 !important;
+}
+body.hasWallBg.wallLight .seg button.active,
+body.hasUserBg.wallLight .seg button.active {
+  background: linear-gradient(135deg, var(--accentA) 0%, var(--accentB) 100%) !important;
+  color: var(--accentOn) !important;
+}
+
+/* GM/GN dropdowns: light option list (works when wallLight) + fallback for dark mode */
+body.hasWallBg select option,
+body.hasUserBg select option,
+.wallpaper select option,
+.has-wallpaper select option {
+  background: rgba(45,50,70,.98) !important;
+  color: rgba(233,237,245,.98) !important;
+}
+body.hasWallBg select,
+body.hasUserBg select {
+  background: rgba(30,35,50,.6) !important;
+  color: rgba(255,255,255,.98) !important;
+}
+
 @media (max-width: 1400px){ .twoCol, .split2, .grid2 { grid-template-columns: 1fr !important; } }
 
 /* R44: wallet / modal / light-mode polish */

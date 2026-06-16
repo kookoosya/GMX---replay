@@ -43,7 +43,31 @@ const STRICT_IGNORE_KEYS = new Set([
 
   // Extension-only label (can remain EN until extension locale set is fully curated)
   'ext_custom_slots_label',
+
+  // Product / tab tokens often unchanged across locales
+  't_gm',
+  't_gn',
+  'arcade_doc_title',
+  'arcade_page_title',
+
+  // Compact badges / nav tokens (often Latin in all locales)
+  'ui_tag_free',
+  'ui_tag_unlocked',
+  'ui_tag_refs',
+  'ui_prediction_title',
+  'ui_coming_soon',
+  't_prediction',
+  'ref_reward_pro_trial',
 ]);
+
+function isStrictIgnoredKey(key) {
+  if (STRICT_IGNORE_KEYS.has(key)) return true;
+  // Error / degraded toasts: often kept in English for support + searchability
+  if (/^ui_err_/.test(key)) return true;
+  if (/^ui_degraded_/.test(key)) return true;
+  if (/^ui_offline_/.test(key)) return true;
+  return false;
+}
 
 // Keep this intentionally conservative: these are the most user-visible UI strings.
 const CRITICAL_PATTERNS = [
@@ -195,7 +219,7 @@ function main() {
       const offenders = [];
       for (const key of Object.keys(en)) {
         if (!isCriticalKey(key)) continue;
-        if (STRICT_IGNORE_KEYS.has(key)) continue;
+        if (isStrictIgnoredKey(key)) continue;
         if (!(key in locale)) continue; // missing already handled above
         if (en[key] === '' || en[key] == null) continue; // ignore intentionally empty EN
         if (sameValue(locale[key], en[key])) offenders.push(key);

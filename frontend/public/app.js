@@ -33,7 +33,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260310a";
+const ASSET_REV = "20260324d";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -126,7 +126,7 @@ function unlockedCountByRefs(total, freeCount=FREE_VISIBLE_THEMES){
             }
             try{ __LAZY_OBSERVER.unobserve(node); }catch{}
           }
-        }, { rootMargin: "240px" });
+        }, { rootMargin: "600px" });
       }
       __LAZY_OBSERVER.observe(el);
     }catch{}
@@ -480,6 +480,29 @@ function listCustomBgUsedTabs(){
       document.documentElement.style.setProperty("--bg_user", "none");
     }
     document.body.classList.toggle("hasUserBg", on);
+    if (on && data) {
+      document.body.classList.remove("wallLight");
+      maybeResetWallLightManual(target);
+      let manual = false;
+      try{ manual = localStorage.getItem(LS_WALL_LIGHT_MANUAL) === "1"; }catch{}
+      const sample = siteBackgroundSampleForLightness(target) || data;
+      if (!manual){
+        detectWallpaperLightness(sample).then(isLight=>{
+          try{
+            localStorage.setItem(LS_WALL_LIGHT, isLight ? "1" : "0");
+            syncWallLight();
+          }catch(_e){}
+        }).catch(()=>{
+          try{
+            localStorage.setItem(LS_WALL_LIGHT, "1");
+            syncWallLight();
+          }catch(_e){}
+        });
+      } else {
+        try{ if (typeof syncWallLight === "function") syncWallLight(); }catch(_e){}
+      }
+    }
+    try{ if (typeof syncWallLight === "function") syncWallLight(); }catch(_e){}
   }
 
   async function fitImageToCoverDataUrl(file, maxW=2560, maxH=1440, quality=0.88){
@@ -521,10 +544,7 @@ function listCustomBgUsedTabs(){
   }
 
 
-  function renderCustomBgUI(){ /* merged into wallpapers tab */ }
-  function syncCustomBgUI(){ /* merged into wallpapers tab */ }
-
-function readFileAsDataURL(file){
+  function readFileAsDataURL(file){
     return new Promise((resolve, reject)=>{
       const r = new FileReader();
       r.onload = ()=>resolve(String(r.result||""));
@@ -638,54 +658,34 @@ function readFileAsDataURL(file){
   })();
 
 
-  // Wallpapers — per-tab. Honest catalog: 2 free SVG + 50 pack slots + 8 premium lux wallpapers = 60 total.
+  // Wallpapers — 2 free + w01–w158 (160 presets). Paths from preset-manifest.json; built-in fallback if fetch lags.
   const LS_WP_GLOBAL = "gmx_wp_all";
   const LS_WP_TAB_PREFIX = "gmx_wp_tab_"; // + tab name
+  const LS_WALL_LIGHT = "gmx_wall_light"; // "1" = wallpaper is light (readable text)
+  const LS_WALL_LIGHT_MANUAL = "gmx_wall_light_manual"; // "1" = user toggled checkbox; cleared when wallpaper/custom bg changes
+  const LS_WALL_LIGHT_CTX = "gmx_wall_light_ctx"; // last visual context key (invalidates manual when it changes)
   const SITE_WALLPAPER_FREE = [
-    ["free01", "Free — Solana Waves"],
-    ["free02", "Free — Solflare Glow"],
+    ["free01", "Free 1"],
+    ["free02", "Free 2"],
   ];
-  const SITE_WALLPAPER_PACK_COUNT = 8;
+  const SITE_WALLPAPER_PACK_COUNT = 158;
   const SITE_WALLPAPER_FREE_PACK_COUNT = 6;
-  const SITE_WALLPAPER_LUX = [
-    ["lux_anime_neon_alley", "Anime Neon Alley"],
-    ["lux_cinematic_heroes", "Cinematic Heroes"],
-    ["lux_ct_warroom", "CT War Room"],
-    ["lux_degen_terminal", "Degen Terminal"],
-    ["lux_nft_gallery", "NFT Gallery"],
-    ["lux_noir_detective", "Noir Detective"],
-    ["lux_onchain_spaceport", "Onchain Spaceport"],
-    ["lux_solana_temple", "Solana Temple"],
-  ];
-  const CRYPTO_SITE_WALL_SOURCES = [
-    "https://source.unsplash.com/1920x1080/?bitcoin,crypto,trading,neon",
-    "https://source.unsplash.com/1920x1080/?ethereum,blockchain,night,city",
-    "https://source.unsplash.com/1920x1080/?solana,crypto,gradient,technology",
-    "https://source.unsplash.com/1920x1080/?dogecoin,meme,crypto,neon",
-    "https://source.unsplash.com/1920x1080/?bonk,crypto,market,screen",
-    "https://source.unsplash.com/1920x1080/?x,finance,charts,neon",
-    "https://source.unsplash.com/1920x1080/?trading,terminal,crypto,desk",
-    "https://source.unsplash.com/1920x1080/?blockchain,network,glow,dark"
-  ];
+  const SITE_WALLPAPER_NAMES = ["Grid", "Mist", "Pulse", "Flow", "Bloom", "Drift", "Nebula", "Shift", "Haze", "Glow", "Prism", "Vapor", "Crystal", "Aura", "Frost", "Ember", "Storm", "Dawn", "Dusk", "Luna", "Cosmos", "Signal", "Node", "Chain", "Peak", "Valley", "Ridge", "Wave", "Spark", "Flux", "Beam", "Ray", "Core", "Edge", "Lens", "Phase", "Echo", "Trace", "Silk", "Mesh", "Weave", "Braid", "Knot", "Rift", "Void", "Scope", "Lane", "Path", "Route", "Arch", "Gate", "Port", "Hub", "Zone", "Field", "Realm", "Span"];
   function buildSiteWallpapers(){
     const out = SITE_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
     for (let i=1; i<=SITE_WALLPAPER_PACK_COUNT; i++){
-      const n = String(i).padStart(3, "0");
-      out.push({
-        id: `v2_${n}`,
-        name: `Aurora #${n}`,
-        tier: i <= SITE_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
-      });
+      const n = String(i).padStart(2, "0");
+      const wid = `w${n}`;
+      const name = SITE_WALLPAPER_NAMES[(i-1) % SITE_WALLPAPER_NAMES.length] || `Wall ${i}`;
+      out.push({ id: wid, name, tier: i <= SITE_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium" });
     }
-    for (const [id, name] of SITE_WALLPAPER_LUX) out.push({ id, name, tier:"premium" });
     return out;
   }
   const WALLPAPERS = buildSiteWallpapers();
-  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_refresh_20260318";
+  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_refresh_20260323";
   function migrateLegacyWallpaperSelectionOnce(){
     try{
       if (localStorage.getItem(WALLPAPER_REFRESH_MIGRATION_KEY) === "1") return;
-      // keep IDs stable; visual refresh now happens in URL resolver
       localStorage.setItem(WALLPAPER_REFRESH_MIGRATION_KEY, "1");
     }catch{}
   }
@@ -695,24 +695,45 @@ function readFileAsDataURL(file){
     ["home","wp_apply_home"],
     ["gm","wp_apply_gm"],
     ["gn","wp_apply_gn"],
-    ["prediction","wp_apply_prediction"],
-    ["studio","wp_apply_studio"],
-    ["packs","wp_apply_packs"],
-    ["bulk","wp_apply_bulk"],
-    ["history","wp_apply_history"],
-    ["favorites","wp_apply_favorites"],
-    ["referrals","wp_apply_referrals"],
     ["themes","wp_apply_themes"],
     ["extthemes","wp_apply_extthemes"],
     ["wallet","wp_apply_wallet"]
   ];
 
   const CUSTOM_WP_RE = /^custom_[a-zA-Z0-9_.-]+\.(png|jpg|jpeg|webp)$/i;
-  const CUSTOM_WP_FREE_COUNT = 5;
+  const CUSTOM_WP_FREE_COUNT = 0;
   const CUSTOM_UPLOAD_ID = "custom_upload";
   let CUSTOM_WALLPAPERS_SITE = [];
   let CUSTOM_WALLPAPERS_EXT = [];
   let CUSTOM_WALLPAPERS_LOADED = false;
+  function buildBuiltinPresetWallpaperManifest(){
+    const o = Object.create(null);
+    o.free01 = "free01.png";
+    o.free02 = "free02.jpg";
+    for (let i = 1; i <= 158; i++) {
+      const id = "w" + String(i).padStart(2, "0");
+      o[id] = id + ".jpg";
+    }
+    return o;
+  }
+  const BUILTIN_PRESET_WP_MANIFEST = buildBuiltinPresetWallpaperManifest();
+  let PRESET_WP_MANIFEST = { ...BUILTIN_PRESET_WP_MANIFEST };
+  let PRESET_WP_NAMES = {};
+  let _presetManifestPromise = null;
+  function ensurePresetManifest(){ if (!_presetManifestPromise) _presetManifestPromise = loadPresetManifest(); return _presetManifestPromise; }
+  async function loadPresetManifest(){
+    try{
+      const r = await fetch(`/assets/wallpapers/preset-manifest.json?v=${ASSET_REV}`, { cache:"no-store" });
+      if (r.ok){
+        const j = await r.json();
+        if (j && typeof j === "object") PRESET_WP_MANIFEST = { ...BUILTIN_PRESET_WP_MANIFEST, ...j };
+      }
+    }catch{}
+    try{
+      const r2 = await fetch(`/assets/wallpapers/preset-names.json?v=${ASSET_REV}`, { cache:"no-store" });
+      if (r2.ok){ const j = await r2.json(); if (j && typeof j==="object") PRESET_WP_NAMES = j; }
+    }catch{}
+  }
   async function loadCustomWallpapers(){
     if (CUSTOM_WALLPAPERS_LOADED) return false;
     try{
@@ -729,15 +750,19 @@ function readFileAsDataURL(file){
   }
 
   // ---- Wallpaper migration / validation (keeps old saved ids from breaking the UI)
+  // Local: old custom_* presets removed; reset to free01.
   function normalizeWallpaperId(id){
     const v = String(id||"").trim();
     if (!v) return "";
     if (WALLPAPERS.some(x=>x.id===v)) return v;
     if (v === CUSTOM_UPLOAD_ID) return v;
-    if (CUSTOM_WP_RE.test(v)) return v;
-    // migrate legacy svg ids (w01..w99) or removed v3 ids to a safe default
-    if (/^w\d+$/i.test(v) || /^v3_\d+$/i.test(v)) return (WALLPAPERS.find(x=>x.id==="v2_001")?"v2_001":"free01");
-    return (WALLPAPERS.find(x=>x.id==="v2_001")?"v2_001":"free01");
+    if (CUSTOM_WP_RE.test(v)) return "free01";
+    if (/^w\d+$/i.test(v) || /^v3_\d+$/i.test(v) || /^v2_\d+$/i.test(v)) {
+      const num = parseInt((v.match(/\d+/)||["1"])[0], 10);
+      const wid = "w" + String(Math.min(158, Math.max(1, num))).padStart(2, "0");
+      return WALLPAPERS.some(x=>x.id===wid) ? wid : "w01";
+    }
+    return "free01";
   }
 
   function normalizeAllWallpapers(){
@@ -764,22 +789,15 @@ function readFileAsDataURL(file){
     if (EXT_WALLPAPERS.some(x=>String(x.id||"").toLowerCase()===v.toLowerCase())) return v;
     if (v === CUSTOM_UPLOAD_ID) return v;
     if (CUSTOM_WP_RE.test(v)) return v;
-    let m = v.match(/^extv3_(\d{1,2})$/i);
+    const m = v.match(/^(?:extv3_|w)(\d{1,2})$/i) || v.match(/^ext_(\d{1,2})$/i);
     if (m){
-      const n = String(Math.max(1, Math.min(50, Number(m[1]) || 1))).padStart(2, "0");
-      return `extv3_${n}`;
+      const num = Math.max(1, Math.min(58, Number(m[1]) || 1));
+      return "w" + String(num).padStart(2, "0");
     }
-    m = v.match(/^ext_free_(\d{1,2})$/i);
-    if (m){
-      const n = String(Math.max(1, Math.min(2, Number(m[1]) || 1))).padStart(2, "0");
+    if (v.match(/^ext_free_(\d{1,2})$/i)){
+      const n = String(Math.max(1, Math.min(2, Number((v.match(/\d+/)||["1"])[0]) || 1))).padStart(2, "0");
       return `ext_free_${n}`;
     }
-    m = v.match(/^ext_(\d{1,2})$/i);
-    if (m){
-      const num = Math.max(1, Math.min(50, Number(m[1]) || 1));
-      return `extv3_${String(num).padStart(2, "0")}`;
-    }
-    if (/^lux_ext_[a-z0-9_]+$/i.test(v)) return v;
     return "ext_free_01";
   }
 
@@ -854,12 +872,16 @@ function readFileAsDataURL(file){
   function extWallpaperAssetPath(id){
     const norm = normalizeExtWallpaperIdLocal(id);
     if (!norm) return "";
-    if (norm.startsWith("extv3_")) {
-      const lux = EXT_WALLPAPER_LUX.map(([v])=>String(v || "")).filter(Boolean);
-      const num = Math.max(1, Number(norm.slice(6)) || 1);
-      const mapped = lux.length ? lux[(num - 1) % lux.length] : norm;
-      if (mapped.startsWith("lux_ext_")) return mapped + ".svg";
-      return norm + ".webp";
+    if (/^w\d{2}$/.test(norm)){
+      const siteFile = PRESET_WP_MANIFEST[norm];
+      if (siteFile) return "ext_" + norm + siteFile.slice(norm.length);
+      return `ext_${norm}.svg`;
+    }
+    if (/^ext_free_0[12]$/.test(norm)){
+      const freeId = "free0" + norm.slice(-1);
+      const siteFile = PRESET_WP_MANIFEST[freeId];
+      if (siteFile){ const ext = siteFile.slice(siteFile.lastIndexOf(".")); return norm + ext; }
+      return norm + ".svg";
     }
     return norm + ".svg";
   }
@@ -871,7 +893,7 @@ function readFileAsDataURL(file){
       try{ return localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("extv3_")) return extPackWallpaperDataUri(norm, false);
+    if (norm.startsWith("ext_free_") || norm.startsWith("lux_ext_")) return `/assets/extbg/${norm}.svg?v=${ASSET_REV}`;
     const p = extWallpaperAssetPath(norm);
     return p ? `/assets/extbg/${p}?v=${ASSET_REV}` : "";
   }
@@ -883,8 +905,11 @@ function readFileAsDataURL(file){
       try{ return localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("extv3_")) return extPackWallpaperDataUri(norm, true);
-    return `/assets/extbg/${norm}.svg?v=${ASSET_REV}`;
+    if (/^ext_free_0[12]$/.test(norm) && PRESET_WP_MANIFEST["free0" + norm.slice(-1)]) return `/assets/extbg/thumbs/${norm}.jpg?v=${ASSET_REV}`;
+    if (/^w\d{2}$/.test(norm) && PRESET_WP_MANIFEST[norm]) return `/assets/extbg/thumbs/ext_${norm}.jpg?v=${ASSET_REV}`;
+    if (norm.startsWith("ext_free_") || norm.startsWith("lux_ext_")) return `/assets/extbg/${norm}.svg?v=${ASSET_REV}`;
+    const p = extWallpaperAssetPath(norm);
+    return p ? `/assets/extbg/${p}?v=${ASSET_REV}` : "";
   }
   try{
     const cur = localStorage.getItem(LS_EXT_WP);
@@ -893,7 +918,7 @@ function readFileAsDataURL(file){
     else localStorage.removeItem(LS_EXT_WP);
   }catch{}
 
-  const TOP_LEVEL_TABS = ["home","gm","gn","prediction","referrals","leaderboard","themes","extthemes","wallet","admin"];
+  const TOP_LEVEL_TABS = ["home","gm","gn","referrals","leaderboard","themes","extthemes","prediction","wallet","admin"];
   function normalizeTopLevelTab(raw){
     const name = String(raw || "").trim().toLowerCase();
     if (name === "upgrade") return "wallet";
@@ -922,16 +947,31 @@ function readFileAsDataURL(file){
     else localStorage.setItem(k, id);
   }
 
+  function wallLightContext(tab){
+    const t = tab || currentTabName() || "home";
+    let wid = "";
+    try{ wid = getWallpaperForTab(t) || ""; }catch{}
+    let cust = "";
+    try{ cust = localStorage.getItem(customBgKeyForTab(t)) || ""; }catch{}
+    if (!cust) try{ cust = localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{}
+    return String(wid) + "\x1f" + String(cust ? cust.length : 0) + "\x1f" + String(cust ? cust.slice(0, 48) : "");
+  }
+  function maybeResetWallLightManual(tab){
+    try{
+      const ctx = wallLightContext(tab);
+      const prev = localStorage.getItem(LS_WALL_LIGHT_CTX) || "";
+      if (ctx !== prev){
+        localStorage.setItem(LS_WALL_LIGHT_CTX, ctx);
+        localStorage.removeItem(LS_WALL_LIGHT_MANUAL);
+      }
+    }catch(_e){}
+  }
+
   function wallpaperAssetPath(id){
     if (!id) return "";
-    if (typeof id === "string" && id.startsWith("v2_")) {
-      const lux = SITE_WALLPAPER_LUX.map(([v])=>String(v || "")).filter(Boolean);
-      const num = Math.max(1, Number(String(id).slice(3)) || 1);
-      const mapped = lux.length ? lux[(num - 1) % lux.length] : id;
-      if (mapped.startsWith("lux_")) return mapped + ".svg";
-      return id + ".webp";
-    }
-    return String(id) + ".svg";
+    const s = String(id);
+    if (PRESET_WP_MANIFEST[s]) return PRESET_WP_MANIFEST[s];
+    return s + ".svg";
   }
 
   function wallpaperFullUrl(id){
@@ -941,20 +981,33 @@ function readFileAsDataURL(file){
       try{ return localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("v2_")) return sitePackWallpaperDataUri(norm, false);
     const p = wallpaperAssetPath(norm);
     return p ? `/assets/wallpapers/${p}?v=${ASSET_REV}` : "";
   }
 
-  function wallpaperThumbUrl(id){
-    const norm = normalizeWallpaperId(id);
-    if (!norm) return "";
-    if (norm === CUSTOM_UPLOAD_ID){
-      try{ return localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
+  /** Image URL/data URL to sample for auto-contrast (matches visible stack: custom overlay wins over preset wallpaper). */
+  function siteBackgroundSampleForLightness(tab){
+    const target = tab || currentTabName();
+    let data = "";
+    try{ data = localStorage.getItem(customBgKeyForTab(target)) || ""; }catch{}
+    if (!data){
+      let wallOk = false;
+      try{
+        const wid = getWallpaperForTab(target);
+        if (wid){
+          const wp = WALLPAPERS.find(x=>x.id===wid) || null;
+          let idx = -1;
+          try{ idx = wp ? WALLPAPERS.findIndex(x=>x.id===wid) : -1; }catch{}
+          wallOk = wp ? wallpaperUnlocked(wp, idx) : false;
+        }
+      }catch{}
+      if (!wallOk){
+        try{ data = localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{}
+      }
     }
-    if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("v2_")) return sitePackWallpaperDataUri(norm, true);
-    return `/assets/wallpapers/${norm}.svg?v=${ASSET_REV}`;
+    if (data) return data;
+    const id = getWallpaperForTab(target);
+    return id ? wallpaperFullUrl(id) : "";
   }
 
   function wallpaperUrl(id){
@@ -989,11 +1042,125 @@ function readFileAsDataURL(file){
     const css = (id && ok) ? wallpaperUrl(id) : "none";
     document.documentElement.style.setProperty("--bg_wall", css);
     document.body.classList.toggle("hasWallBg", css !== "none");
+    maybeResetWallLightManual(tab);
+    let manual = false;
+    try{ manual = localStorage.getItem(LS_WALL_LIGHT_MANUAL) === "1"; }catch{}
+    const sample = siteBackgroundSampleForLightness(tab);
+    if (css !== "none" && id && sample) {
+      document.body.classList.remove("wallLight");
+      if (!manual){
+        detectWallpaperLightness(sample).then(isLight=>{
+          try{
+            localStorage.setItem(LS_WALL_LIGHT, isLight ? "1" : "0");
+            syncWallLight();
+          }catch(_e){}
+        }).catch(()=>{
+          try{
+            localStorage.setItem(LS_WALL_LIGHT, "1");
+            syncWallLight();
+          }catch(_e){}
+        });
+      } else {
+        syncWallLight();
+      }
+    } else {
+      try{
+        const s = siteBackgroundSampleForLightness(tab);
+        if (!s) localStorage.setItem(LS_WALL_LIGHT, "0");
+      }catch(_e){}
+      syncWallLight();
+    }
+  }
+
+  function avgLuminanceFromImageData(d){
+    let sum = 0;
+    const n = d.data.length / 4;
+    for (let i = 0; i < d.data.length; i += 4) {
+      const L = 0.2126 * d.data[i] + 0.7152 * d.data[i + 1] + 0.0722 * d.data[i + 2];
+      sum += L;
+    }
+    return n > 0 ? sum / n : 0;
+  }
+
+  function detectWallpaperLightness(imgUrl){
+    return new Promise((resolve)=>{
+      try{
+        const url = (imgUrl || "").trim();
+        if (!url) { resolve(false); return; }
+        const img = new Image();
+        const finish = ()=>{
+          try{
+            const nw = Math.max(1, img.naturalWidth || img.width || 1);
+            const nh = Math.max(1, img.naturalHeight || img.height || 1);
+            const c = document.createElement("canvas");
+            const sample = 96;
+            c.width = sample;
+            c.height = sample;
+            const ctx = c.getContext("2d", { willReadFrequently: true });
+            if (!ctx) { resolve(false); return; }
+            const sx = nw * 0.2;
+            const sy = nh * 0.2;
+            const sw = nw * 0.6;
+            const sh = nh * 0.6;
+            ctx.drawImage(img, sx, sy, sw, sh, 0, 0, sample, sample);
+            const d1 = ctx.getImageData(0, 0, sample, sample);
+            const centerL = avgLuminanceFromImageData(d1);
+            const c2 = document.createElement("canvas");
+            c2.width = 48;
+            c2.height = 48;
+            const x2 = c2.getContext("2d", { willReadFrequently: true });
+            let globalL = centerL;
+            if (x2){
+              x2.drawImage(img, 0, 0, nw, nh, 0, 0, 48, 48);
+              const d2 = x2.getImageData(0, 0, 48, 48);
+              globalL = avgLuminanceFromImageData(d2);
+            }
+            const mix = 0.62 * centerL + 0.38 * globalL;
+            resolve(mix > 132);
+          }catch{
+            resolve(false);
+          }
+        };
+        if (url.startsWith("data:image")){
+          img.onload = finish;
+          img.onerror = ()=> resolve(false);
+          img.src = url;
+          return;
+        }
+        const fullUrl = url.startsWith("/") ? (location.origin + url) : url;
+        img.onload = finish;
+        img.onerror = ()=> resolve(false);
+        img.src = fullUrl;
+      }catch{
+        resolve(false);
+      }
+    });
+  }
+
+  function syncWallLight(){
+    try{
+      const on = localStorage.getItem(LS_WALL_LIGHT) === "1";
+      document.body.classList.toggle("wallLight", on);
+      const chk = $("wpLightChk");
+      if (chk){
+        chk.checked = !!on;
+        chk.title = String(t("wpLightHint") || "").trim();
+        chk.removeAttribute("disabled");
+      }
+      const st = $("wpLightStatus");
+      if (st){
+        const manual = localStorage.getItem(LS_WALL_LIGHT_MANUAL) === "1";
+        st.textContent = manual
+          ? String(t("wp_light_manual_status") || "").trim()
+          : (on ? String(t("wp_light_detected_light") || "").trim() : String(t("wp_light_detected_dark") || "").trim());
+      }
+    }catch(_e){}
   }
 
   
   function sanitizeI18nValue(lang, value, fallback){
     const allowCyr = (lang === "ru" || lang === "uk");
+    const allowDeva = (lang === "hi");
     if (Array.isArray(value)){
       const fb = Array.isArray(fallback) ? fallback : [];
       const out = value.map((item, idx)=>sanitizeI18nValue(lang, item, fb[idx])).filter(v=>v !== undefined && v !== null && v !== "");
@@ -1004,24 +1171,73 @@ function readFileAsDataURL(file){
       const txt = value.trim();
       if (!txt) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
       if (!allowCyr && /[\u0400-\u04FF]/.test(value)) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
+      if (!allowDeva && /[\u0900-\u097F]/.test(value)) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
       return value;
     }
     if (value === undefined || value === null) return fallback;
     return value;
   }
 
+  /** Prefer visible #siteLang value (synced with UI), then localStorage; validate against SITE_LANGS when available. */
+  function getResolvedSiteLang(){
+    try{
+      const sel = typeof $ === "function" ? $("siteLang") : null;
+      if (sel && sel.value) {
+        const v = String(sel.value).trim().toLowerCase();
+        if (typeof SITE_LANGS !== "undefined" && Array.isArray(SITE_LANGS) && SITE_LANGS.some(([c])=>c===v)) return v;
+        if (typeof SITE_LANGS === "undefined" || !Array.isArray(SITE_LANGS)) return v;
+      }
+    }catch(_e){}
+    try{
+      let v = String(localStorage.getItem(LS_SITE_LANG) || "en").trim().toLowerCase();
+      if (typeof SITE_LANGS !== "undefined" && Array.isArray(SITE_LANGS) && SITE_LANGS.length){
+        if (SITE_LANGS.some(([c])=>c===v)) return v;
+        return "en";
+      }
+      return v;
+    }catch(_e){
+      return "en";
+    }
+  }
+
   function trWp(k){
-    let lang = "en";
-    try{ lang = localStorage.getItem(LS_SITE_LANG) || "en"; }catch{}
-    let base = {}, dict = {};
-    try{ base = I18N.en || {}; dict = I18N[lang] || {}; }catch{}
-    const v = sanitizeI18nValue(lang, dict[k], base[k]);
-    return (v ?? base[k] ?? k);
+    try{
+      if (typeof I18N === "undefined" || !I18N || !I18N.en) return k;
+      const lang = getResolvedSiteLang();
+      const base = I18N.en || {};
+      const dict = I18N[lang] || {};
+      const v = sanitizeI18nValue(lang, dict[k], base[k]);
+      return (v ?? base[k] ?? k);
+    }catch(_e){
+      return k;
+    }
   }
 
   // i18n helper (global)
   function t(k){
     return trWp(k);
+  }
+
+  /** Rebuild #wpTab option labels (fixes stale language + uses merged catalog when provided). */
+  function fillWallpaperTabOptions(merged){
+    const tabSel = $("wpTab");
+    if (!tabSel) return;
+    const prev = tabSel.value || "all";
+    tabSel.innerHTML = "";
+    const pick = (key)=>{
+      if (merged && merged[key] != null && String(merged[key]).trim() !== "") return String(merged[key]);
+      return String(t(key));
+    };
+    for (const [v, lk] of WALLPAPER_TABS){
+      const o = document.createElement("option");
+      o.value = v;
+      o.textContent = pick(lk);
+      tabSel.appendChild(o);
+    }
+    try{
+      const ok = Array.from(tabSel.options).some(x=>x.value===prev);
+      tabSel.value = ok ? prev : "all";
+    }catch{}
   }
 
   function prettyError(code){
@@ -1050,77 +1266,63 @@ function renderWallpaperUI(){
     const st = $("wpStatus");
     if (!tabSel || !grid || !st) return;
 
-    // fill select (keep value across re-render; re-renders on UI language changes)
-    const prev = tabSel.value || "all";
-    tabSel.innerHTML = "";
-    for (const [v,l] of WALLPAPER_TABS){
-      const o = document.createElement("option");
-      o.value = v;
-      o.textContent = trWp(l);
-      tabSel.appendChild(o);
+    if (Object.keys(PRESET_WP_MANIFEST).length === 0){
+      grid.innerHTML = '<div class="wpLoading">' + escapeHtml(t("wp_loading") || "Loading wallpapers…") + '</div>';
+      ensurePresetManifest().then(()=>{ if (grid && document.contains(grid)) renderWallpaperUI(); });
+      return;
     }
-    // restore previous selection if still present
-    try{
-      const ok = Array.from(tabSel.options).some(o=>o.value===prev);
-      tabSel.value = ok ? prev : "all";
-    }catch{}
+
+    fillWallpaperTabOptions(null);
 
     const targetTab = tabSel.value || "all";
     const activeId = (targetTab === "all")
       ? (localStorage.getItem(LS_WP_GLOBAL) || "")
       : (localStorage.getItem(wallpaperKeyForTab(targetTab)) || "");
 
-    const effectiveCustom = effectiveCustomWallpapersSite();
-    const allWps = [...effectiveCustom, ...WALLPAPERS];
+    // Local: only 60 presets, no old custom wallpapers.
+    const effectiveCustom = [];
+    const allWps = [...WALLPAPERS];
     const mainUnlocked = unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS);
-    const customUnlocked = Math.min(effectiveCustom.length, isPro() ? effectiveCustom.length : CUSTOM_WP_FREE_COUNT);
+    const customUnlocked = 0;
     const unlocked = mainUnlocked + customUnlocked;
     const unlockedAll = isPro() || unlocked >= allWps.length;
     const nextReq = reqRefsForUnlockIndex(unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS), FREE_VISIBLE_WALLPAPERS);
     st.innerHTML = unlockedAll
-      ? `<span class="ok">Unlocked.</span> All wallpapers available. First ${CUSTOM_WP_FREE_COUNT} custom free, rest Pro.`
-      : `<span class="warn">Locked.</span> First ${FREE_VISIBLE_WALLPAPERS} main + ${CUSTOM_WP_FREE_COUNT} custom free. Next unlock at <b>${nextReq} ref</b>.`;
+      ? (t("wp_status_unlocked_html") || `<span class="ok">Unlocked.</span> All wallpapers available.`)
+      : (t("wp_status_locked_html") || `<span class="warn">Locked.</span> First {n} free. Next at <b>{r} ref</b>.`)
+          .replace("{n}", String(FREE_VISIBLE_WALLPAPERS))
+          .replace("{r}", String(nextReq));
 
-    loadCustomWallpapers().then((loaded)=>{
-      if (loaded && document.contains(grid)) renderWallpaperUI();
-    });
-
-    const items = allWps.map((wp, idx)=>({ wp, idx }));
-    chunkedRender(grid, items, ({ wp, idx })=>{
+    grid.innerHTML = "";
+    const frag = document.createDocumentFragment();
+    allWps.forEach((wp, idx)=>{
       const isUnlocked = wallpaperUnlocked(wp, idx, effectiveCustom.length);
-      const card = document.createElement("button");
-      card.type = "button";
+      const card = document.createElement("div");
+      card.role = "button";
       card.dataset.wpId = wp.id;
-      const mainIdx = wp.tier === "custom" ? -1 : (idx - effectiveCustom.length);
-      card.dataset.tier = wp.tier || (mainIdx >= 0 && mainIdx < FREE_VISIBLE_WALLPAPERS ? "free" : "premium");
+      const mainIdx = idx;
+      card.role = "button";
+      card.tabIndex = -1;
+      card.dataset.tier = mainIdx < FREE_VISIBLE_WALLPAPERS ? "free" : "premium";
       card.className = "wpCard" + (isUnlocked ? "" : " mystery") + (wp.id===activeId ? " active" : "");
 
+      const fullUrl = wallpaperFullUrl(wp.id);
       const thumb = document.createElement("div");
       thumb.className = "wpThumb";
-      const thumbUrl = wallpaperThumbUrl(wp.id);
-      const fullUrl = wallpaperFullUrl(wp.id);
-      if (thumbUrl) thumb.setAttribute('data-bg', thumbUrl);
-      observeLazyBg(thumb);
-      // Warm cache for instant apply.
-      if (isUnlocked && fullUrl){
-        card.addEventListener('pointerenter', ()=>{ try{ prefetchImage(fullUrl); }catch{} }, { passive:true });
+      if (fullUrl){
+        const im = document.createElement("img");
+        im.alt = "";
+        im.loading = "lazy";
+        im.decoding = "async";
+        im.src = fullUrl;
+        thumb.appendChild(im);
       }
-
-      const name = document.createElement("div");
-      name.className = "wpName";
-      name.textContent = wp.name;
-
-      const meta = document.createElement("div");
-      meta.className = "wpMeta";
-      meta.textContent = (wp.tier === "custom") ? "Custom" : ((mainIdx >= 0 && mainIdx < FREE_VISIBLE_WALLPAPERS) ? "Free" : (isPro() ? "Pro" : "Locked"));
 
       const tag = document.createElement("div");
       tag.className = "wpTag";
-      tag.textContent = (wp.tier === "custom") ? "CUSTOM" : ((mainIdx >= 0 && mainIdx < FREE_VISIBLE_WALLPAPERS) ? "FREE" : (isUnlocked ? "UNLOCKED" : (reqRefsForUnlockIndex(mainIdx, FREE_VISIBLE_WALLPAPERS) + " ref")));
+      tag.textContent = unlockTagText(mainIdx, isUnlocked, FREE_VISIBLE_WALLPAPERS);
 
       card.appendChild(thumb);
-      card.appendChild(name);
-      card.appendChild(meta);
       card.appendChild(tag);
 
       if (!isUnlocked){
@@ -1130,84 +1332,53 @@ function renderWallpaperUI(){
         card.appendChild(ov);
       }
 
-      card.addEventListener("click", ()=>{
+      card.addEventListener("mousedown", (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        const scrollY = window.scrollY;
+        const scrollTops = [];
+        let el = grid.parentElement;
+        while (el && el !== document.body){
+          if (el.scrollHeight > el.clientHeight) scrollTops.push({ el, top: el.scrollTop });
+          el = el.parentElement;
+        }
         if (!isUnlocked){
-          const reqIdx = wp.tier === "custom" ? idx : (idx - effectiveCustom.length);
-          toast("warn", (t("locked_unlock_at") || "Locked. Unlock at {n} referrals (+1 every 3 refs at first, then +1 every 4) or Pro.").replace("{n}", String(reqRefsForUnlockIndex(reqIdx, FREE_VISIBLE_WALLPAPERS))));
+          toast("warn", (t("locked_unlock_at") || "Locked.").replace("{n}", String(reqRefsForUnlockIndex(idx, FREE_VISIBLE_WALLPAPERS))));
           return;
         }
-
-        if (targetTab === "all"){
-          localStorage.setItem(LS_WP_GLOBAL, wp.id);
-        } else {
-          setWallpaperForTab(targetTab, wp.id);
-        }
-
-        // Avoid full grid re-render (prevents UI freeze).
-        const newActive = (targetTab === 'all')
-          ? (localStorage.getItem(LS_WP_GLOBAL) || '')
-          : (localStorage.getItem(wallpaperKeyForTab(targetTab)) || '');
+        if (targetTab === "all"){ localStorage.setItem(LS_WP_GLOBAL, wp.id); }
+        else { setWallpaperForTab(targetTab, wp.id); }
+        const newActive = (targetTab === 'all') ? (localStorage.getItem(LS_WP_GLOBAL) || '') : (localStorage.getItem(wallpaperKeyForTab(targetTab)) || '');
         markWallpaperSelection(newActive);
-
-        // Preview: apply to selected tab (not to the Themes tab).
         const previewTab = (targetTab === "all") ? currentTabName() : targetTab;
-        // Preload before applying (smooth, avoids jank on first paint).
-        const _full = wallpaperFullUrl(wp.id);
-        if (_full){
-          prefetchImage(_full).finally(()=>{
-            applyUserBg(previewTab);
-            applyWallpaper(previewTab);
-          });
-        } else {
-          applyUserBg(previewTab);
-          applyWallpaper(previewTab);
-        }
+        applyUserBg(previewTab);
+        applyWallpaper(previewTab);
+        requestAnimationFrame(()=>{
+          window.scrollTo(0, scrollY);
+          scrollTops.forEach(({ el: x, top })=>{ try{ x.scrollTop = top; }catch{} });
+        });
       });
+      card.addEventListener("click", (e)=>{ e.preventDefault(); e.stopPropagation(); });
 
-      return card;
-    }, { key: "wpGrid", chunk: 12 });
+      frag.appendChild(card);
+    });
+    grid.appendChild(frag);
   }
 // Theme / Wallpaper toggle inside Themes tab
   const LS_THEMEWALL_VIEW = "gmx_themewall_view"; // "theme" | "wall" | "custom"
 
-  function setThemeWallView(view){
-    const themeBtn  = $("tabTheme");
-    const wallBtn   = $("tabWall");
-    const themePane  = $("themePane");
-    const wallPane   = $("wallPane");
+  /** Site Themes tab: only the wallpaper pane (no separate “Pick a theme” sub-tab). */
+  function setThemeWallView(_view){
+    try{ localStorage.setItem(LS_THEMEWALL_VIEW, "wall"); }catch(_e){}
+    const wallPane = $("wallPane");
     const wpNote = $("wp_note");
-    if (!themeBtn || !wallBtn || !themePane || !wallPane) return;
-
-    const v = (view === "wall") ? "wall" : "theme";
-    localStorage.setItem(LS_THEMEWALL_VIEW, v);
-
-    const themeOn  = (v === "theme");
-    const wallOn   = (v === "wall");
-
-    themeBtn.classList.toggle("active", themeOn);
-    wallBtn.classList.toggle("active", wallOn);
-
-    themeBtn.setAttribute("aria-selected", themeOn ? "true" : "false");
-    wallBtn.setAttribute("aria-selected", wallOn ? "true" : "false");
-
-    themePane.classList.toggle("hidden", !themeOn);
-    wallPane.classList.toggle("hidden", !wallOn);
-
-    if (wpNote) wpNote.classList.toggle("hidden", !wallOn);
-
-    if (wallOn){
-      try{ renderWallpaperUI(); }catch{}
-    }
+    if (wallPane) wallPane.classList.remove("hidden");
+    if (wpNote) wpNote.classList.remove("hidden");
+    try{ renderWallpaperUI(); }catch(_e){}
   }
 
   function initThemeWallTabs(){
-    const themeBtn  = $("tabTheme");
-    const wallBtn   = $("tabWall");
-    if (themeBtn)  themeBtn.addEventListener("click", ()=>setThemeWallView("theme"));
-    if (wallBtn)   wallBtn.addEventListener("click",  ()=>setThemeWallView("wall"));
-
-    const saved = localStorage.getItem(LS_THEMEWALL_VIEW) || "theme";
-    setThemeWallView(saved === "custom" ? "wall" : saved);
+    setThemeWallView("wall");
   }
 
 
@@ -1233,6 +1404,7 @@ function renderWallpaperUI(){
         toast("ok", (t("toast_wallpaper_cleared")||"Wallpaper cleared."));
       });
     }
+    syncWallLight();
     renderWallpaperUI();
   }
   let SITE_LANGS = [["en","English"]];
@@ -1376,21 +1548,12 @@ function renderWallpaperUI(){
 
   const EXT_THEMES = THEMES.map(t=>({ id:t.id, name:t.name, note:t.note, a:t.a, b:t.b }));
   const EXT_WALLPAPER_FREE = [
-    ["ext_free_01", "Free 01"],
-    ["ext_free_02", "Free 02"],
+    ["ext_free_01", "Mempool Grid"],
+    ["ext_free_02", "Solana Glass"],
   ];
-  const EXT_WALLPAPER_PACK_COUNT = 50;
+  const EXT_WALLPAPER_PACK_COUNT = 58;
   const EXT_WALLPAPER_FREE_PACK_COUNT = 4;
-  const EXT_WALLPAPER_LUX = [
-    ["lux_ext_anime_neon_alley", "Anime Neon Alley"],
-    ["lux_ext_cinematic_heroes", "Cinematic Heroes"],
-    ["lux_ext_ct_warroom", "CT War Room"],
-    ["lux_ext_degen_terminal", "Degen Terminal"],
-    ["lux_ext_nft_gallery", "NFT Gallery"],
-    ["lux_ext_noir_detective", "Noir Detective"],
-    ["lux_ext_onchain_spaceport", "Onchain Spaceport"],
-    ["lux_ext_solana_temple", "Solana Temple"],
-  ];
+  const EXT_WALLPAPER_NAMES = ["Grid", "Mist", "Pulse", "Flow", "Bloom", "Drift", "Nebula", "Shift", "Haze", "Glow", "Prism", "Vapor", "Crystal", "Aura", "Frost", "Ember", "Storm", "Dawn", "Dusk", "Luna", "Cosmos", "Signal", "Node", "Chain", "Peak", "Valley", "Ridge", "Wave", "Spark", "Flux", "Beam", "Ray", "Core", "Edge", "Lens", "Phase", "Echo", "Trace", "Silk", "Mesh", "Weave", "Braid", "Knot", "Rift", "Void", "Scope", "Lane", "Path", "Route", "Arch", "Gate", "Port", "Hub", "Zone", "Field", "Realm", "Span"];
   const CRYPTO_EXT_WALL_SOURCES = [
     "https://source.unsplash.com/1080x1920/?bitcoin,crypto,vertical,neon",
     "https://source.unsplash.com/1080x1920/?ethereum,blockchain,vertical,dark",
@@ -1404,13 +1567,11 @@ function renderWallpaperUI(){
   function buildExtWallpapers(){
     const out = EXT_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
     for (let i=1; i<=EXT_WALLPAPER_PACK_COUNT; i++){
-      out.push({
-        id: `extv3_${String(i).padStart(2, "0")}`,
-        name: `Aurora ${i}`,
-        tier: i <= EXT_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
-      });
+      const n = String(i).padStart(2, "0");
+      const wid = `w${n}`;
+      const name = EXT_WALLPAPER_NAMES[(i-1) % EXT_WALLPAPER_NAMES.length] || `Wall ${i}`;
+      out.push({ id: wid, name, tier: i <= EXT_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium" });
     }
-    for (const [id, name] of EXT_WALLPAPER_LUX) out.push({ id, name, tier:"premium" });
     return out;
   }
   const EXT_WALLPAPERS = buildExtWallpapers();
@@ -1565,17 +1726,21 @@ function setExtWallpaperForView(view, id){
   }catch(_e){}
 }
 function syncExtWallpaperTargetUI(sel, preferred){
-  if (!sel) return "all";
-  const current = normalizeExtWallpaperView(preferred || sel.value || localStorage.getItem(LS_EXT_WP_TARGET) || "all");
-  sel.innerHTML = "";
-  for (const [value, label] of EXT_WALLPAPER_VIEWS){
-    const opt = document.createElement("option");
-    opt.value = value;
-    opt.textContent = label;
-    sel.appendChild(opt);
-  }
-  sel.value = current;
+  const current = normalizeExtWallpaperView(preferred || (sel && sel.value) || localStorage.getItem(LS_EXT_WP_TARGET) || "all");
   try{ localStorage.setItem(LS_EXT_WP_TARGET, current); }catch(_e){}
+  if (!sel) return current;
+  if (sel.tagName === "SELECT"){
+    sel.innerHTML = "";
+    for (const [value, label] of EXT_WALLPAPER_VIEWS){
+      const opt = document.createElement("option");
+      opt.value = value;
+      opt.textContent = label;
+      sel.appendChild(opt);
+    }
+    sel.value = current;
+  } else {
+    sel.value = current;
+  }
   return current;
 }
 function currentExtWallpaperTarget(){
@@ -1686,17 +1851,18 @@ function renderExtCustomBgUI(){
   const isAllowed = canSetExtCustomBgOnTab(target);
   const needRefs = requiredRefsForExtCustomBgTab(target);
 
-  if (nm) nm.textContent = cur ? "saved" : "";
+  if (nm) nm.textContent = cur ? (t("ext_custom_saved_badge") || "saved") : "";
 
+  const tabLabel = escapeHtml(t(EXT_POPUP_TABS.find(x=>x[0]===target)?.[1]||"wp_apply_all"));
   let msg = cur
-    ? `<span class="ok">Active.</span> Custom background is set for <b>${escapeHtml(t(EXT_POPUP_TABS.find(x=>x[0]===target)?.[1]||"wp_apply_all"))}</b>.`
-    : `<span class="muted">None.</span> Upload an image to set a custom background.`;
+    ? (t("ext_custom_active_html") || `<span class="ok">Active.</span> Custom background is set for <b>{target}</b>.`).replace("{target}", tabLabel)
+    : (t("ext_custom_none_html") || `<span class="muted">None.</span> Upload an image to set a custom background.`);
 
   if (!isPro()){
-    msg += ` <span class="muted">Slots:</span> ${Math.min(usedCount, slots)}/${slots}.`;
+    msg += ` <span class="muted">${escapeHtml(t("ext_custom_slots_label") || "Slots:")}</span> ${Math.min(usedCount, slots)}/${slots}.`;
   }
   if (!isAllowed){
-    msg += ` <span class="warn">Locked:</span> need ${needRefs} referrals for this tab (or upgrade to Pro).`;
+    msg += ` <span class="warn">${escapeHtml(t("ext_custom_locked_label") || "Locked:")}</span> ${escapeHtml((t("ext_custom_need_refs") || "need {refs} referrals for this tab (or upgrade to Pro).").replace("{refs}", String(needRefs)))}`;
   }
   st.innerHTML = msg;
 
@@ -1745,10 +1911,10 @@ function renderExtCustomBgUI(){
         extSyncNow();
 
         renderExtCustomBgUI();
-        if (st) st.innerHTML = `<span class="ok">Saved.</span> Auto-fitted for extension popup ratio.`;
+        if (st) st.innerHTML = (t("ext_custom_saved_inline_html") || `<span class="ok">Saved.</span> Auto-fitted for extension popup ratio.`);
         toast("ok", (t("toast_custom_bg_saved")||"Custom background saved."));
       }catch(e){
-        st.innerHTML = `<span class="bad">Error.</span> Could not save background.`;
+        st.innerHTML = (t("ext_custom_error_inline_html") || `<span class="bad">Error.</span> Could not save background.`);
       }finally{
         inp.value = "";
       }
@@ -1846,12 +2012,13 @@ function markExtWallpaperSelection(id){
     const unlocked = unlockedExtThemesCount();
     const idx = EXT_THEMES.findIndex(x=>x.id===id);
     if (!isPro() && (idx<0 || idx >= unlocked)) return;
-    localStorage.setItem("gmx_ext_theme", id);
+    try { localStorage.setItem("gmx_ext_theme_v2", id); } catch(e){}
+    try { localStorage.setItem("gmx_ext_theme", id); } catch(e){}
     markExtThemeSelection(id);
     if (normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW) || "theme") !== "theme") setExtView("theme");
     extSyncNow("ext_theme");
     const st = $("extThemeStatus");
-    if (st) st.innerHTML = '<span class="ok">Selected.</span>';
+    if (st) st.innerHTML = (t("ext_theme_status_selected_html") || '<span class="ok">Selected.</span>');
   }
 
   function applyExtWallpaper(id, targetView){
@@ -1877,15 +2044,15 @@ function themePreviewBg(th){
 }
 
 function unlockTagText(idx, unlocked, freeCount){
-  if (idx < freeCount) return "FREE";
-  if (unlocked) return "UNLOCKED";
+  if (idx < freeCount) return (typeof t === "function" ? (t("ui_tag_free") || "FREE") : "FREE");
+  if (unlocked) return (typeof t === "function" ? (t("ui_tag_unlocked") || "UNLOCKED") : "UNLOCKED");
   const need = reqRefsForUnlockIndex(idx, freeCount);
-  return `${need} ref`;
+  const pat = typeof t === "function" ? (t("ui_tag_refs") || "{n} ref") : "{n} ref";
+  return pat.replace(/\{n\}/g, String(need));
 }
 
 function renderThemes(){
   const grid = $("themeGrid");
-  if (!grid) return;
 
   const total = THEMES.length;
   const unlocked = unlockedThemesCount();
@@ -1894,16 +2061,13 @@ function renderThemes(){
   const curThemes = Math.min(unlocked, total);
   const curWps = Math.min(unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS), WALLPAPERS.length);
 
-  const thEl = $("themesUnlocked");
-  if (thEl) thEl.textContent = `${curThemes}/${total}`;
-  const thVal = $("themesUnlockedVal");
-  if (thVal) thVal.textContent = `${curThemes}/${total}`;
-  try{ setMeter("themesUnlockedVal", "themesUnlockedFill", curThemes, total); }catch{}
   const wpEl = $("wpUnlocked");
   if (wpEl) wpEl.textContent = `${curWps}/${WALLPAPERS.length}`;
   const wpVal = $("wpUnlockedVal");
   if (wpVal) wpVal.textContent = `${curWps}/${WALLPAPERS.length}`;
   try{ setMeter("wpUnlockedVal", "wpUnlockedFill", curWps, WALLPAPERS.length); }catch{}
+
+  if (!grid) return;
 
   const items = THEMES.map((th, idx)=>({ th, idx }));
   chunkedRender(grid, items, ({ th, idx })=>{
@@ -1963,7 +2127,7 @@ function renderExtThemes(){
 
   const total = EXT_THEMES.length;
   const unlocked = unlockedCountByRefs(total, FREE_VISIBLE_EXT_THEMES);
-  const chosen = localStorage.getItem("gmx_ext_theme") || "classic";
+  const chosen = localStorage.getItem("gmx_ext_theme_v2") || localStorage.getItem("gmx_ext_theme") || "classic";
 
   const el = $("extThemesUnlocked");
   if (el) el.textContent = `${Math.min(unlocked,total)}/${total}`;
@@ -2019,7 +2183,7 @@ function renderExtThemes(){
   }, { key: "extThemeGrid", chunk: 12 });
 
   const chosenName = EXT_THEMES.find(x=>x.id===chosen)?.name || chosen;
-  st.innerHTML = `<span class="ok">Selected.</span> ${escapeHtml(chosenName)}.`;
+  st.innerHTML = (t("ext_theme_status_selected_name_html") || `<span class="ok">Selected.</span> {name}.`).replace("{name}", escapeHtml(chosenName));
 }
 
 function renderExtWallpapers(){
@@ -2047,7 +2211,7 @@ function renderExtWallpapers(){
   const fallbackGlobal = selectedTarget === "all" ? "" : getExtWallpaperForView("all");
   const chosen = chosenDirect || fallbackGlobal || "";
   const wEl = $("extWpUnlocked");
-  if (wEl) wEl.textContent = `${Math.min(unlocked,total)}/${total}`;
+  if (wEl) wEl.textContent = `${Math.min(unlocked, EXT_WALLPAPERS.length)}/${EXT_WALLPAPERS.length}`;
 
   const items = allExtWps.map((wp, idx)=>({ wp, idx }));
   chunkedRender(grid, items, ({ wp, idx })=>{
@@ -2058,33 +2222,26 @@ function renderExtWallpapers(){
     card.dataset.tier = wp.tier || (idx < FREE_VISIBLE_EXT_WALLPAPERS ? "free" : "premium");
     card.className = "wpCard" + (wp.id === chosen ? " active" : "") + (!isUnlocked ? " mystery" : "");
 
+    const fullUrl = extWallpaperFullUrl(wp.id);
     const thumb = document.createElement("div");
     thumb.className = "wpThumb";
-    const thumbUrl = extWallpaperThumbUrl(wp.id);
-    const fullUrl = extWallpaperFullUrl(wp.id);
-    if (thumbUrl){
-      thumb.setAttribute('data-bg', thumbUrl);
-      observeLazyBg(thumb);
+    if (fullUrl){
+      const im = document.createElement("img");
+      im.alt = "";
+      im.loading = "lazy";
+      im.decoding = "async";
+      im.src = fullUrl;
+      thumb.appendChild(im);
     }
     if (isUnlocked && fullUrl){
       card.addEventListener('pointerenter', ()=>{ try{ prefetchImage(fullUrl); }catch{} }, { passive:true });
     }
-
-    const name = document.createElement("div");
-    name.className = "wpName";
-    name.textContent = wp.name || wp.id;
-
-    const meta = document.createElement("div");
-    meta.className = "wpMeta";
-    meta.textContent = (wp.tier === "custom") ? "Custom" : (wp.tier || "");
 
     const tag = document.createElement("div");
     tag.className = "wpTag";
     tag.textContent = (wp.tier === "custom") ? "CUSTOM" : unlockTagText(idx, isUnlocked, FREE_VISIBLE_EXT_WALLPAPERS);
 
     card.appendChild(thumb);
-    card.appendChild(name);
-    card.appendChild(meta);
     card.appendChild(tag);
 
     if (!isUnlocked){
@@ -2108,14 +2265,20 @@ function renderExtWallpapers(){
   }, { key: "extWpGrid", chunk: 12 });
 
   if (!chosen){
-    st.innerHTML = `<span class="muted">None.</span> Pick a wallpaper for <b>${escapeHtml(extWallpaperLabel(selectedTarget))}</b>.`;
+    st.innerHTML = (t("ext_wp_status_none_html") || `<span class="muted">None.</span> Pick a wallpaper for <b>{target}</b>.`)
+      .replace("{target}", escapeHtml(extWallpaperLabel(selectedTarget)));
     return;
   }
   const chosenName = EXT_WALLPAPERS.find(x=>x.id===chosen)?.name || effectiveExtCustom.find(x=>x.id===chosen)?.name || chosen;
   if (chosenDirect){
-    st.innerHTML = `<span class="ok">Selected.</span> ${escapeHtml(chosenName)} for <b>${escapeHtml(extWallpaperLabel(selectedTarget))}</b>.`;
+    st.innerHTML = (t("ext_wp_status_selected_html") || `<span class="ok">Selected.</span> {name} for <b>{target}</b>.`)
+      .replace("{name}", escapeHtml(chosenName))
+      .replace("{target}", escapeHtml(extWallpaperLabel(selectedTarget)));
   } else {
-    st.innerHTML = `<span class="ok">Using global.</span> ${escapeHtml(chosenName)} from <b>${escapeHtml(extWallpaperLabel("all"))}</b> is currently filling <b>${escapeHtml(extWallpaperLabel(selectedTarget))}</b>.`;
+    st.innerHTML = (t("ext_wp_status_global_html") || `<span class="ok">Using global.</span> {name} from <b>{global}</b> is currently filling <b>{target}</b>.`)
+      .replace("{name}", escapeHtml(chosenName))
+      .replace("{global}", escapeHtml(extWallpaperLabel("all")))
+      .replace("{target}", escapeHtml(extWallpaperLabel(selectedTarget)));
   }
 }
 
@@ -2137,8 +2300,21 @@ function initExtWallpaperControls(){
   const clearBtn = $("extWpClear");
   const addBtn = $("extWpAddCustom");
   const addFile = $("extWpAddFile");
+  if (sel){
+    syncExtWallpaperTargetUI(sel, "all");
+    if (sel.tagName === "SELECT"){
+      sel.addEventListener("change", ()=>{
+        const target = syncExtWallpaperTargetUI(sel, sel.value || "all");
+        try{ localStorage.setItem(LS_EXT_WP_TARGET, target); }catch(_e){}
+        renderExtWallpapers();
+      });
+    }
+  }
   if (addBtn && addFile){
-    addBtn.onclick = ()=>{ if (requireConnected("Extension themes")) addFile.click(); };
+    addBtn.onclick = ()=>{
+      if (!isPro()){ toast("warn", (t("custom_upload_pro_only")||"Custom wallpaper upload requires Pro subscription.")); return; }
+      if (requireConnected("Extension themes")) addFile.click();
+    };
   }
   if (addFile){
     addFile.addEventListener("change", async ()=>{
@@ -2147,25 +2323,40 @@ function initExtWallpaperControls(){
         const f = addFile.files && addFile.files[0];
         if (!f) return;
         const data = await compressImageToJpegDataURL(f, { profile: "ext" });
-        localStorage.setItem(LS_EXT_CUSTOM_BG_GLOBAL, data);
-        const target = ($("extWpTarget")?.value || "all");
-        setExtWallpaperForView(normalizeExtWallpaperView(target), CUSTOM_UPLOAD_ID);
-        extSyncNow("ext_wallpaper");
-        try{ renderExtWallpapers(); }catch{}
-        toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved."));
+        const tok = String(localStorage.getItem(LS_TOKEN) || "").trim();
+        let uploadedId = null;
+        if (tok) {
+          try {
+            const r = await fetch("/api/wallpapers/custom", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "Authorization": "Bearer " + tok },
+              body: JSON.stringify({ image: data, target: "ext" })
+            });
+            const j = await r.json();
+            if (j?.ok && j?.id) { uploadedId = j.id; }
+          } catch (_e) {}
+        }
+        if (uploadedId) {
+          CUSTOM_WALLPAPERS_LOADED = false;
+          await loadCustomWallpapers();
+          const target = ($("extWpTarget")?.value || "all");
+          setExtWallpaperForView(normalizeExtWallpaperView(target), uploadedId);
+          extSyncNow("ext_wallpaper");
+          try{ renderExtWallpapers(); }catch{}
+          toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved and synced."));
+        } else {
+          localStorage.setItem(LS_EXT_CUSTOM_BG_GLOBAL, data);
+          const target = ($("extWpTarget")?.value || "all");
+          setExtWallpaperForView(normalizeExtWallpaperView(target), CUSTOM_UPLOAD_ID);
+          extSyncNow("ext_wallpaper");
+          try{ renderExtWallpapers(); }catch{}
+          toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved (local)."));
+        }
       }catch(e){
         toast("warn", (t("err_custom_wp_save")||"Could not save image."));
       }finally{
         addFile.value = "";
       }
-    });
-  }
-  if (sel){
-    syncExtWallpaperTargetUI(sel);
-    sel.addEventListener("change", ()=>{
-      const target = syncExtWallpaperTargetUI(sel, sel.value || "all");
-      try{ localStorage.setItem(LS_EXT_WP_TARGET, target); }catch(_e){}
-      renderExtWallpapers();
     });
   }
   if (clearBtn){
@@ -2254,7 +2445,7 @@ const $ = (id) => document.getElementById(id);
   const dHide = $("degradedHide");
   if (dHide) dHide.onclick = ()=>{ DEGRADED_HIDDEN = true; $("degradedBar")?.classList.add("hidden"); };
 
-  window.addEventListener("offline", ()=>setDegraded(true, "Browser reports offline. Check your connection."));
+  window.addEventListener("offline", ()=>setDegraded(true, (t("ui_offline_browser") || "Browser reports offline. Check your connection.")));
 
   
   let INIT_DONE = false;
@@ -2285,7 +2476,7 @@ const $ = (id) => document.getElementById(id);
     try{
       const msg = (e?.message || "Unexpected error");
       const net = String(msg).includes("Failed to fetch") || String(msg).includes("NetworkError") || String(msg).includes("request_failed") || String(msg).includes("timeout");
-      if (net){ setDegraded(true, "Network/API error. You can still edit lists locally."); return; }
+      if (net){ setDegraded(true, (t("ui_degraded_network") || "Network/API error. You can still edit lists locally.")); return; }
       toast("bad", `<b>Error:</b> ${esc(msg)} <span class="muted small">(try Reload)</span>`);
       if (!INIT_DONE) showFatal(msg);
     }catch{}
@@ -2295,7 +2486,7 @@ const $ = (id) => document.getElementById(id);
     try{
       const msg = (e?.reason && (e.reason.message || String(e.reason))) || "Unhandled promise rejection";
       const net = String(msg).includes("Failed to fetch") || String(msg).includes("NetworkError") || String(msg).includes("request_failed") || String(msg).includes("timeout") || String(msg).includes("not_connected");
-      if (net){ setDegraded(true, "Network/API error. You can still edit lists locally."); return; }
+      if (net){ setDegraded(true, (t("ui_degraded_network") || "Network/API error. You can still edit lists locally.")); return; }
       toast("bad", `<b>Error:</b> ${esc(msg)} <span class="muted small">(try Reload)</span>`);
       if (!INIT_DONE) showFatal(msg);
     }catch{}
@@ -2317,7 +2508,7 @@ const $ = (id) => document.getElementById(id);
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
     if (msgEl){
       if (on){
-        msgEl.innerHTML = `<span class="spinner"></span> <span class="muted">${escapeHtml(label||"Working...")}</span>`;
+        msgEl.innerHTML = `<span class="spinner"></span> <span class="muted">${escapeHtml(label||(t("ui_working")||"Working..."))}</span>`;
       } else {
         // keep whatever message was set by the action; do not overwrite
       }
@@ -2343,8 +2534,8 @@ const $ = (id) => document.getElementById(id);
         btn.className = "tab";
         btn.id = "t_prediction";
         btn.dataset.tab = "prediction";
-        btn.textContent = "Prediction Market";
-        const before = document.getElementById("t_wallet");
+        btn.textContent = (t("ui_prediction_title") || "Prediction Market");
+        const before = document.getElementById("t_admin");
         if (before && before.parentNode === tabs) tabs.insertBefore(btn, before);
         else tabs.appendChild(btn);
       }
@@ -2354,7 +2545,7 @@ const $ = (id) => document.getElementById(id);
         pane = document.createElement("div");
         pane.id = "tab-prediction";
         pane.className = "hidden";
-        pane.innerHTML = `<div class="card"><div class="title">Prediction Market</div><div class="note">Coming soon.</div></div>`;
+        pane.innerHTML = `<div class="card"><div class="title">${escapeHtml(t("ui_prediction_title") || "Prediction Market")}</div><div class="note">${escapeHtml(t("ui_coming_soon") || "Coming soon.")}</div></div>`;
         tabs.insertAdjacentElement("afterend", pane);
       }
       pane.classList.add("hidden");
@@ -2394,6 +2585,7 @@ const $ = (id) => document.getElementById(id);
     }
     if (name === "admin"){
       try{ syncAdminUi(); }catch(e){}
+      try{ if (isAdminSignedIn()) adminLoadStats(); }catch(e){}
     }
     if (name === "wallet"){
       try{ loadPlans(); }catch(e){}
@@ -3158,18 +3350,18 @@ async function doBestServer(kind){
   const antiN = antiWindow(strength);
   const keyActive = activeKey(kind);
 
-  setBusy(kind, true, "Picking the best reply...");
+  setBusy(kind, true, (t("gen_picking_best") || "Picking the best reply..."));
   try{
     const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}&count=5`, "GET", null, { timeoutMs: 30000 });
     const candidates = dedupeLines((bulk && bulk.list) ? bulk.list : []).map(x=>String(x||"").trim()).filter(Boolean);
     if (!candidates.length){
-      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml("No fresh candidates returned")}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml(t("gen_no_fresh_candidates") || "No fresh candidates returned")}</span>`;
       return;
     }
 
     const best = String(pickBestLine(kind, candidates) || "").trim();
     if (!best){
-      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml("Could not choose the best reply")}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml(t("gen_best_pick_failed") || "Could not choose the best reply")}</span>`;
       return;
     }
 
@@ -3197,8 +3389,8 @@ async function doBestServer(kind){
     renderList(kind);
     if (msgEl){
       const head = already
-        ? "Best already saved"
-        : (saved ? "Best saved" : "Best copied");
+        ? (t("gen_best_head_already") || "Best already saved")
+        : (saved ? (t("gen_best_head_saved") || "Best saved") : (t("gen_best_head_copied") || "Best copied"));
       msgEl.innerHTML = `<span class="ok">${escapeHtml(head)}</span> <span class="muted small">${escapeHtml(best)}</span>`;
     }
     try{ await refreshUsage(); }catch(_e){}
@@ -3263,7 +3455,7 @@ function replaceRandomSavedLine(kind, newLine){
     if (capEl) capEl.textContent = isPro() ? 'unlimited' : String(SAVE_CAP_FREE);
     const brEl = kind==='gm' ? $('gmSavedBreakdown') : $('gnSavedBreakdown');
     if (brEl){
-      brEl.textContent = 'Saved bank: ' + totalSaved(kind);
+      brEl.textContent = (t("bank_saved_breakdown") || "Saved bank: {n}").replace("{n}", String(totalSaved(kind)));
     }
 
     try{
@@ -3274,7 +3466,7 @@ function replaceRandomSavedLine(kind, newLine){
       const fillId = (kind==="gm") ? "gmSavedFill" : "gnSavedFill";
       const v = $(valId);
       const f = $(fillId);
-      if (v) v.textContent = isPro() ? `${used}/unlimited` : `${used}/${cap}`;
+      if (v) v.textContent = isPro() ? `${used}/${t("ui_saved_unlimited") || "unlimited"}` : `${used}/${cap}`;
       if (f) f.style.width = isPro() ? "100%" : (Math.min(100, Math.round((used/cap)*100)) + "%");
 
       if (!$("help_modal")?.classList.contains("hidden")) renderHelpModal();
@@ -3340,18 +3532,18 @@ function replaceRandomSavedLine(kind, newLine){
   function friendlyUiErrorMessage(msg, opts){
     const m = String(msg || "").trim();
     const scope = String(opts && opts.scope || "").trim();
-    if (!m) return scope === "connect" ? "Connection failed. Try again." : "Request failed. Try again.";
-    if (m === "timeout") return scope === "generate" ? "Generation timed out. Try again." : "Network timeout. Try again.";
-    if (m === "unauthorized") return "Unauthorized. Re-connect your handle.";
+    if (!m) return scope === "connect" ? (t("ui_err_connect_failed") || "Connection failed. Try again.") : (t("ui_err_request_failed") || "Request failed. Try again.");
+    if (m === "timeout") return scope === "generate" ? (t("ui_err_gen_timeout") || "Generation timed out. Try again.") : (t("ui_err_network_timeout") || "Network timeout. Try again.");
+    if (m === "unauthorized") return t("ui_err_unauthorized_reconnect") || "Unauthorized. Re-connect your handle.";
     if (m === "request_failed"){
-      if (scope === "generate") return "Generation request failed. Check the backend and try again.";
-      if (scope === "connect") return "Connection failed. Check the backend/runtime and try again.";
-      return "Request failed. Check the backend/runtime and try again.";
+      if (scope === "generate") return t("ui_err_gen_failed") || "Generation request failed. Check the backend and try again.";
+      if (scope === "connect") return t("ui_err_connect_backend") || "Connection failed. Check the backend/runtime and try again.";
+      return t("ui_err_request_backend") || "Request failed. Check the backend/runtime and try again.";
     }
-    if (m === "not_connected") return "Connect first.";
-    if (m === "rpc_unavailable") return "Solana RPC is unavailable right now. Try again in a moment.";
-    if (m === "wallet_bind_required") return "Wallet binding is required before verify. Sign the wallet message and try again.";
-    if (isNetworkishErrorMessage(m)) return "Network/API error. Try again.";
+    if (m === "not_connected") return t("connectFirst") || "Connect first.";
+    if (m === "rpc_unavailable") return t("ui_err_rpc_unavailable") || "Solana RPC is unavailable right now. Try again in a moment.";
+    if (m === "wallet_bind_required") return t("ui_err_wallet_bind") || "Wallet binding is required before verify. Sign the wallet message and try again.";
+    if (isNetworkishErrorMessage(m)) return t("ui_err_network_api") || "Network/API error. Try again.";
     return m;
   }
 
@@ -3372,7 +3564,7 @@ countEl.textContent = lines.length;
     container.innerHTML = "";
 
     if (!getHandle()){
-      if (msgEl) msgEl.innerHTML = '<span class="warn">Connect first.</span>';
+      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml(t("connectFirst") || "Connect first.")}</span>`;
       return;
     }
 
@@ -3383,19 +3575,20 @@ countEl.textContent = lines.length;
       : lines.map((val, idx)=>({ idx, val }));
 
     if (!lines.length){
-      if (msgEl) msgEl.textContent = "Saved bank is empty.";
+      if (msgEl) msgEl.textContent = (t("bank_empty") || "Saved bank is empty.");
       return;
     }
 
     if (q && msgEl){
-      msgEl.innerHTML = `<span class="muted">Filtered: showing <b>${items.length}</b> / ${lines.length}</span>`;
+      const bf = (t("bank_filtered") || "Filtered: showing {cur} / {total}");
+      msgEl.innerHTML = `<span class="muted">${bf.replace("{cur}", String(items.length)).replace("{total}", String(lines.length))}</span>`;
     }
 
     if (q && items.length === 0){
       const row = document.createElement("div");
       row.className = "muted";
       row.style.padding = "8px 2px";
-      row.textContent = "No matches.";
+      row.textContent = (t("bank_no_matches") || "No matches.");
       container.appendChild(row);
       return;
     }
@@ -3502,7 +3695,7 @@ countEl.textContent = lines.length;
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
     const rem = remainingSlots(kind);
     if (rem <= 0){
-      msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()} lines). You can still edit existing lines. Upgrade for more.</span>`;
+      msgEl.innerHTML = `<span class="warn">${escapeHtml((t("bank_save_limit_edit") || "Free save limit reached ({cap} lines). You can still edit existing lines. Upgrade for more.").replace("{cap}", String(saveCap())))}</span>`;
       try{ openLimitModal({ reason:"save_cap", kind }); }catch{}
       trackEvent("limit_hit", { kind, reason:"save_cap" });
       return;
@@ -3512,7 +3705,7 @@ countEl.textContent = lines.length;
       input.focus();
       try{ input.scrollIntoView({ block:"center", behavior:"smooth" }); }catch{}
     }
-    msgEl.innerHTML = `<span class="muted">Type your line below and click Add.</span>`;
+    msgEl.innerHTML = `<span class="muted">${escapeHtml(t("bank_hint_type_add") || "Type your line below and click Add.")}</span>`;
   }
 
 
@@ -3521,18 +3714,18 @@ countEl.textContent = lines.length;
     try{ if (ABORT[kind]) ABORT[kind].abort(); }catch{}
     const key = activeKey(kind);
     const cur = readKey(key);
-    if (cur.length && !confirm("Clear this saved bank? This cannot be undone.")) return;
+    if (cur.length && !confirm(t("bank_confirm_clear") || "Clear this saved bank? This cannot be undone.")) return;
     writeKey(key, []);
     renderList(kind);
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
-    if (msgEl) msgEl.innerHTML = `<span class="ok">Saved bank cleared.</span>`;
+    if (msgEl) msgEl.innerHTML = `<span class="ok">${escapeHtml(t("bank_cleared_ok") || "Saved bank cleared.")}</span>`;
   }
 
   function clearAll(kind){
     if (!requireConnected(kind==="gm"?"GM":"GN")) return;
     try{ if (ABORT[kind]) ABORT[kind].abort(); }catch{}
     const total = totalSaved(kind);
-    if (total && !confirm("Clear all saved lines in this bank? This cannot be undone.")) return;
+    if (total && !confirm(t("bank_confirm_clear_all") || "Clear all saved lines in this bank? This cannot be undone.")) return;
     for (const k of Array.from(new Set([...allLegacyKeysForKind(kind), getBankKey(kind)]))) localStorage.removeItem(k);
     setLangIndex(kind, []);
     writeKey(getBankKey(kind), []);
@@ -3642,7 +3835,7 @@ countEl.textContent = lines.length;
 
     const v = input.value.trim();
     if (!v){
-      if (msgEl) msgEl.innerHTML = `<span class="muted">Type something first.</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="muted">${escapeHtml(t("bank_type_first") || "Type something first.")}</span>`;
       return;
     }
 
@@ -3652,7 +3845,7 @@ countEl.textContent = lines.length;
 
     const rem = remainingSlots(kind);
     if (rem <= 0){
-      if (msgEl) msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()} lines). You can still edit existing lines. Upgrade for more.</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((t("bank_save_limit_edit") || "Free save limit reached ({cap} lines). You can still edit existing lines. Upgrade for more.").replace("{cap}", String(saveCap())))}</span>`;
       return;
     }
 
@@ -3660,7 +3853,7 @@ countEl.textContent = lines.length;
     const cur = readKey(key);
     const exists = cur.some(s => String(s||"").trim().toLowerCase() === v.toLowerCase());
     if (exists){
-      if (msgEl) msgEl.innerHTML = `<span class="muted">Already saved (duplicate ignored).</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="muted">${escapeHtml(t("bank_dup_ignore") || "Already saved (duplicate ignored).")}</span>`;
       return;
     }
     cur.push(v);
@@ -3670,7 +3863,7 @@ countEl.textContent = lines.length;
     clearDraft(kind);
     renderList(kind);
 
-    if (msgEl) msgEl.innerHTML = `<span class="ok">Added 1</span>`;
+    if (msgEl) msgEl.innerHTML = `<span class="ok">${escapeHtml(t("bank_added_one") || "Added 1")}</span>`;
   }
 
 
@@ -3687,7 +3880,7 @@ countEl.textContent = lines.length;
 
     const rem = remainingSlots(kind);
     if (rem <= 0){
-      if (msgEl) msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()}). You can still edit existing lines. Upgrade for more.</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((t("bank_save_limit_edit") || "Free save limit reached ({cap} lines). You can still edit existing lines. Upgrade for more.").replace("{cap}", String(saveCap())))}</span>`;
       return;
     }
 
@@ -3708,11 +3901,12 @@ countEl.textContent = lines.length;
 
     if (msgEl){
       if (pasted.length < pastedAll.length){
-        msgEl.innerHTML = `<span class="warn">Added ${added}/${pastedAll.length} (cap reached)</span>`;
+        msgEl.innerHTML = `<span class="warn">${escapeHtml((t("bank_added_partial") || "Added {added}/{total} (cap reached)").replace("{added}", String(added)).replace("{total}", String(pastedAll.length)))}</span>`;
       } else if (skippedDup > 0){
-        msgEl.innerHTML = `<span class="ok">Added ${added}</span> <span class="muted small">(skipped ${skippedDup} duplicates)</span>`;
+        const sk = (t("bank_skipped_dups") || "(skipped {n} duplicates)").replace("{n}", String(skippedDup));
+        msgEl.innerHTML = `<span class="ok">${escapeHtml((t("bank_added_count") || "Added {n}").replace("{n}", String(added)))}</span> <span class="muted small">${escapeHtml(sk)}</span>`;
       } else {
-        msgEl.innerHTML = `<span class="ok">Added ${added}</span>`;
+        msgEl.innerHTML = `<span class="ok">${escapeHtml((t("bank_added_count") || "Added {n}").replace("{n}", String(added)))}</span>`;
       }
     }
   }
@@ -3768,14 +3962,14 @@ async function generate(kind, count){
     const effCount = (remSlots === Infinity) ? count : Math.max(0, Math.min(count, remSlots));
     
 if (effCount <= 0){
-  if (msgEl) msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()}). You can still copy lines, but no saved line will be replaced automatically.</span>`;
+  if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((t("bank_save_limit_replace") || "Free save limit reached ({cap}). You can still copy lines, but no saved line will be replaced automatically.").replace("{cap}", String(saveCap())))}</span>`;
   postEvent('limit_hit', { where:'save_cap', kind });
   renderList(kind);
   return;
 }
 
       if (INFLIGHT[kind]){
-      if (msgEl) msgEl.innerHTML = '<span class="muted">Working...</span>';
+      if (msgEl) msgEl.innerHTML = `<span class="muted">${escapeHtml(t("ui_working") || "Working...")}</span>`;
       return;
     }
     INFLIGHT[kind] = true;
@@ -3820,11 +4014,11 @@ if (effCount <= 0){
         if (already){
           renderList(kind);
           didRender = true;
-          if (msgEl) msgEl.innerHTML = `<span class="muted">Duplicate ignored.</span>`;
+          if (msgEl) msgEl.innerHTML = `<span class="muted">${escapeHtml(t("bank_dup_ignored_short") || "Duplicate ignored.")}</span>`;
           return;
         }
         if (remainingSlots(kind) <= 0){
-  if (msgEl) msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()} lines). You can still copy lines, but no saved line will be replaced automatically.</span>`;
+  if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((t("bank_save_limit_replace") || "Free save limit reached ({cap}). You can still copy lines, but no saved line will be replaced automatically.").replace("{cap}", String(saveCap())))}</span>`;
   postEvent('limit_hit', { where:'save_cap', kind });
   renderList(kind);
   return;
@@ -3837,7 +4031,7 @@ if (effCount <= 0){
           renderList(kind);
           didRender = true;
         }
-        msgEl.innerHTML = `<span class="ok">Added 1</span>`;
+        msgEl.innerHTML = `<span class="ok">${escapeHtml(t("bank_added_one") || "Added 1")}</span>`;
         logEvent("gen_one", { kind, lang, style, pack: packId, view: (kind==="gm"?gmView:gnView) });
         try{ await refreshUsage(); }catch{}
       } else {
@@ -3916,14 +4110,25 @@ if (effCount <= 0){
 
         if (autoClean && cleanRes){
           if (cleanRes.finalCount >= cleanRes.targetCount){
-            msgEl.innerHTML = `<span class="ok">Added ${added}</span> <span class="muted small">(Best pass removed ${cleanRes.removed}, refilled ${cleanRes.refilled})</span>`;
+            const note = (t("bank_best_cleanup_note") || "(Best pass removed {removed}, refilled {refilled})")
+              .replace("{removed}", String(cleanRes.removed)).replace("{refilled}", String(cleanRes.refilled));
+            msgEl.innerHTML = `<span class="ok">${escapeHtml((t("bank_added_count") || "Added {n}").replace("{n}", String(added)))}</span> <span class="muted small">${escapeHtml(note)}</span>`;
           } else {
-            msgEl.innerHTML = `<span class="warn">Added ${added}. Best pass removed ${cleanRes.removed}, refilled ${cleanRes.refilled}, final ${cleanRes.finalCount}/${cleanRes.targetCount}. Try another tone or preset for a wider pool.</span>`;
+            const w = (t("bank_best_cleanup_warn") || "Added {added}. Best pass removed {removed}, refilled {refilled}, final {final}/{target}. Try another tone or preset for a wider pool.")
+              .replace("{added}", String(added))
+              .replace("{removed}", String(cleanRes.removed))
+              .replace("{refilled}", String(cleanRes.refilled))
+              .replace("{final}", String(cleanRes.finalCount))
+              .replace("{target}", String(cleanRes.targetCount));
+            msgEl.innerHTML = `<span class="warn">${escapeHtml(w)}</span>`;
           }
         } else if (added < effCount){
-          msgEl.innerHTML = `<span class="warn">Added ${added}/${effCount}. Random fill stopped early because the pool got too narrow. Change tone or preset for a wider pull.</span>`;
+          const nw = (t("bank_pool_narrow") || "Added {added}/{total}. Random fill stopped early because the pool got too narrow. Change tone or preset for a wider pull.")
+            .replace("{added}", String(added)).replace("{total}", String(effCount));
+          msgEl.innerHTML = `<span class="warn">${escapeHtml(nw)}</span>`;
         } else {
-          msgEl.innerHTML = `<span class="ok">Added ${added}</span> <span class="muted small">Run Best pass manually if you want cleanup/refill.</span>`;
+          const hint = t("bank_run_best_hint") || "Run Best pass manually if you want cleanup/refill.";
+          msgEl.innerHTML = `<span class="ok">${escapeHtml((t("bank_added_count") || "Added {n}").replace("{n}", String(added)))}</span> <span class="muted small">${escapeHtml(hint)}</span>`;
         }
         logEvent("gen_bulk", { kind, lang, style, pack: packId, count: effCount, view: (kind==="gm"?gmView:gnView), cleanFill: autoClean });
         try{ await refreshUsage(); }catch{}
@@ -4249,12 +4454,12 @@ async function loadPredictionSignals(opts){
       title: "Polymarket Direction Signal",
       source: "Polymarket",
       confidencePct: 90,
-      cadence: "3-5 signals per day",
-      thesis: "Coming soon for public feed. Signals are generated by a bot and can be wrong."
+      cadence: t("pm_headline_cadence") || "Planned: a few cards per day after launch",
+      thesis: t("pm_headline_thesis") || "Preview only: live bot feed and external market data are not connected yet."
     };
     fillPredictionAssetFilter([]);
     renderPredictionSignals([]);
-    if (status) status.textContent = "Coming soon for everyone. Live private API feed runs 3-5 bot cards/day.";
+    if (status) status.textContent = t("pm_status_preview") || "No live feed yet — external signal source is not connected. Refresh only checks the server.";
     if (locked) locked.textContent = t("pm_locked_note") || "Bot signals are informational only. They may be inaccurate and are not guaranteed outcomes.";
     return;
   }
@@ -4650,10 +4855,10 @@ function defaultWalletIcon(name){
     const hint = $("sf_hint");
 
     if (addr){
-      addr.textContent = (!WALLET.connected || !WALLET.publicKey) ? "not connected" : shortPk(WALLET.publicKey);
+      addr.textContent = (!WALLET.connected || !WALLET.publicKey) ? (t("wallet_ui_not_connected") || "not connected") : shortPk(WALLET.publicKey);
     }
     if (label){
-      label.textContent = WALLET.connected ? (WALLET.name || "Wallet") : "Wallet";
+      label.textContent = WALLET.connected ? (WALLET.name || (t("wallet_label_default") || "Wallet")) : (t("wallet_label_default") || "Wallet");
     }
 
     if (btnConnect) btnConnect.classList.toggle("hidden", !!WALLET.connected);
@@ -4663,9 +4868,9 @@ function defaultWalletIcon(name){
     if (payBtn) payBtn.disabled = !canPay;
 
     if (hint){
-      if (!selectedPlan) hint.innerHTML = `<span class="muted">Select a plan above to continue.</span>`;
-      else if (!WALLET.connected) hint.innerHTML = `<span class="muted">Now connect a wallet to pay in ${escapeHtml(selectedCurrency)}.</span>`;
-      else hint.innerHTML = `<span class="ok">Ready.</span>`;
+      if (!selectedPlan) hint.innerHTML = `<span class="muted">${escapeHtml(t("wallet_hint_pick_plan") || "Select a plan above to continue.")}</span>`;
+      else if (!WALLET.connected) hint.innerHTML = `<span class="muted">${escapeHtml((t("wallet_hint_connect_pay") || "Now connect a wallet to pay in {currency}.").replace("{currency}", String(selectedCurrency || "")))}</span>`;
+      else hint.innerHTML = `<span class="ok">${escapeHtml(t("wallet_hint_ready") || "Ready.")}</span>`;
     }
   }
 
@@ -4708,12 +4913,12 @@ function openWalletModal(){
     listEl.innerHTML = "";
 
     if (!choices.length){
-      if (hintEl) hintEl.innerHTML = `<span class="muted">No wallet detected. Install Solflare / Phantom / Backpack.</span>`;
+      if (hintEl) hintEl.innerHTML = `<span class="muted">${escapeHtml(t("wallet_hint_install") || "No wallet detected. Install Solflare / Phantom / Backpack.")}</span>`;
       if (connectBtn) connectBtn.disabled = true;
       return;
     }
 
-    if (hintEl) hintEl.innerHTML = `<span class="muted">Choose a wallet and click Connect.</span>`;
+    if (hintEl) hintEl.innerHTML = `<span class="muted">${escapeHtml(t("wallet_hint_choose") || "Choose a wallet and click Connect.")}</span>`;
 
     const saved = readWalletChoice();
     let picked = choices.find(x => walletNameKey(x.name) === walletNameKey(saved)) || choices[0];
@@ -4769,11 +4974,11 @@ if (src){
         const msg = $("sf_modal_msg");
         try{
           connectBtn.disabled = true;
-          if (msg) msg.textContent = "Opening wallet...";
+          if (msg) msg.textContent = (t("wallet_opening") || "Opening wallet...");
           await connectWalletByChoice(picked);
           closeWalletModal();
           const out = $("w_msg");
-          if (out) out.innerHTML = `<span class="ok">Wallet connected.</span>`;
+          if (out) out.innerHTML = `<span class="ok">${escapeHtml(t("wallet_connected_ok") || "Wallet connected.")}</span>`;
         }catch(e){
           if (msg) msg.innerHTML = `<span class="bad">${escapeHtml(String(e?.message || "wallet_connect_failed"))}</span>`;
         }finally{
@@ -4822,7 +5027,7 @@ if (src){
         if (typeof ev === "function"){
           ev("disconnect", ()=>{
             disconnectWallet();
-            toast("warn", "Wallet disconnected.");
+            toast("warn", (t("wallet_toast_disconnected") || "Wallet disconnected."));
           });
           ev("change", ({ accounts })=>{
             try{
@@ -5042,11 +5247,11 @@ if (src){
       const items = j?.recent || [];
       list.innerHTML = "";
       if (!items.length){
-        list.innerHTML = `<div class="muted">No receipts yet.</div>`;
+        list.innerHTML = `<div class="muted">${escapeHtml(t("billing_no_receipts") || "No receipts yet.")}</div>`;
         stats.textContent = "—";
         return;
       }
-      stats.textContent = `${items.length} receipt${items.length===1?"":"s"}`;
+      stats.textContent = (t("billing_receipt_stats") || "{n} receipt(s)").replace("{n}", String(items.length));
       for (const it of items){
         const row = document.createElement("div");
         row.className = "proofItem";
@@ -5064,7 +5269,7 @@ if (src){
         list.appendChild(row);
       }
     }catch(e){
-      list.innerHTML = `<div class="muted">Receipts unavailable.</div>`;
+      list.innerHTML = `<div class="muted">${escapeHtml(t("billing_receipts_unavailable") || "Receipts unavailable.")}</div>`;
       stats.textContent = "—";
     }
   }
@@ -5392,13 +5597,13 @@ function billingErrMsg(code){
 
 async function payNow(){
     const msg = $("w_msg");
-    if (!selectedPlan){
-      if (msg) msg.innerHTML = `<span class="warn">Select a plan first.</span>`;
+      if (!selectedPlan){
+      if (msg) msg.innerHTML = `<span class="warn">${escapeHtml(t("pay_select_plan_first") || "Select a plan first.")}</span>`;
       return;
     }
     if (!WALLET.connected){
       openWalletModal();
-      if (msg) msg.innerHTML = `<span class="warn">Connect a wallet to continue.</span>`;
+      if (msg) msg.innerHTML = `<span class="warn">${escapeHtml(t("pay_connect_wallet_continue") || "Connect a wallet to continue.")}</span>`;
       return;
     }
 
@@ -5434,7 +5639,7 @@ async function payNow(){
       const j = await verifyIntentWithRetry(intent.id, sig, payer);
 
       setPayState("verified", "Verified. Pro activated.");
-      if (msg) msg.innerHTML = `<span class="ok">Paid & verified.</span>`;
+      if (msg) msg.innerHTML = `<span class="ok">${escapeHtml(t("pay_paid_verified") || "Paid & verified.")}</span>`;
       trackEvent("pay_success", { v, plan: selectedPlan.key, cur });
 
       try{ await refreshUsage(); }catch{}
@@ -5459,14 +5664,14 @@ async function payNow(){
     const el = $("w_status_desc");
     if (!el) return;
     if (!sub){
-      el.innerHTML = `<span class="muted">Status unknown.</span>`;
+      el.innerHTML = `<span class="muted">${escapeHtml(t("wallet_status_unknown") || "Status unknown.")}</span>`;
       return;
     }
     if (sub.active){
       const until = sub.paidUntil ? ` (until ${escapeHtml(String(sub.paidUntil))})` : "";
-      el.innerHTML = `<span class="ok">Pro active</span>${until}`;
+      el.innerHTML = `<span class="ok">${escapeHtml(t("wallet_pro_active") || "Pro active")}</span>${until}`;
     } else {
-      el.innerHTML = `<span class="muted">Free</span>`;
+      el.innerHTML = `<span class="muted">${escapeHtml(t("wallet_plan_free") || "Free")}</span>`;
     }
   }
 
@@ -5523,7 +5728,7 @@ async function payNow(){
           const stillThere = choices.some(x => walletNameKey(x.name) === walletNameKey(WALLET.name));
           if (!stillThere){
             disconnectWallet();
-            toast("warn", "Wallet was updated/restarted. Please reconnect.");
+            toast("warn", (t("wallet_reconnect_toast") || "Wallet was updated/restarted. Please reconnect."));
           }
         }
       };
@@ -5586,7 +5791,11 @@ if (adminLoginBtn) adminLoginBtn.onclick = async ()=>{
       $("adminMsg").innerHTML = '<span class="bad">Login failed.</span>';
     }
   }catch(e){
-    $("adminMsg").innerHTML = '<span class="bad">' + escapeHtml(e?.message||"Login failed") + '</span>';
+    const m = String(e?.message || e || "Login failed");
+    const hint = (m === "unauthorized")
+      ? (t("admin_login_bad_password") || "Wrong password. Set ADMIN_PASSWORD on the server (e.g. Render env) to match what you type.")
+      : m;
+    $("adminMsg").innerHTML = '<span class="bad">' + escapeHtml(hint) + '</span>';
   }
 };
 
@@ -5625,11 +5834,63 @@ if (adminLogoutBtn) adminLogoutBtn.onclick = async ()=>{
     if (!requireAdminSignedIn()) return;
     try{
       const j =      await api("/api/admin/codes");
-      $("adminOut").value = (j.rows || []).map(r => `${r.code} (${r.days || 0}d) ${(r.note||"").trim()} ${r.created_at||""}`.trim()).join("\\n");
+      $("adminOut").value = (j.rows || []).map(r => `${r.code} (${r.days || 0}d) ${(r.note||"").trim()} ${r.created_at||""}`.trim()).join("\n");
     }catch(e){
       $("adminOut").value = "Error: " + (e.message||"failed");
     }
-  };// --- Admin: leaderboard rewards ---
+  };
+
+  async function adminLoadStats(){
+    if (!requireAdminSignedIn()) return;
+    try{
+      const j = await api("/api/admin/stats");
+      const u = $("adminStatUsers"); if (u) u.textContent = j.totalUsers ?? "-";
+      const o = $("adminStatOnline"); if (o) o.textContent = j.onlineUsers10m ?? "-";
+      const i = $("adminStatInserts"); if (i) i.textContent = j.totalInsertsToday ?? "-";
+    }catch(e){}
+  }
+  const adminStatsRefresh = $("adminStatsRefresh");
+  if (adminStatsRefresh) adminStatsRefresh.onclick = adminLoadStats;
+
+  async function adminLoadUsers(){
+    if (!requireAdminSignedIn()) return;
+    const q = ($("adminUsersFilter")?.value || "").trim();
+    try{
+      const j = await api("/api/admin/users?limit=100" + (q ? "&q=" + encodeURIComponent(q) : ""));
+      const tb = $("adminUsersTable")?.querySelector("tbody");
+      if (!tb) return;
+      tb.innerHTML = (j.rows || []).map(r => `<tr><td><span class="kbd">@${escapeHtml(r.handle||"")}</span></td><td>${escapeHtml((r.created_at||"").slice(0,19))}</td><td>${escapeHtml((r.last_seen||"").slice(0,19))}</td><td>${escapeHtml(r.tier||"free")}</td></tr>`).join("") || "<tr><td colspan=\"4\" class=\"muted\">No users</td></tr>";
+    }catch(e){ const tb = $("adminUsersTable")?.querySelector("tbody"); if (tb) tb.innerHTML = "<tr><td colspan=\"4\" class=\"bad\">Error</td></tr>"; }
+  }
+  const adminUsersLoad = $("adminUsersLoad");
+  if (adminUsersLoad) adminUsersLoad.onclick = adminLoadUsers;
+
+  async function adminLoadPayments(){
+    if (!requireAdminSignedIn()) return;
+    try{
+      const j = await api("/api/admin/payments");
+      const tb = $("adminPaymentsTable")?.querySelector("tbody");
+      if (!tb) return;
+      tb.innerHTML = (j.rows || []).map(r => `<tr><td><span class="kbd">@${escapeHtml(r.handle||"")}</span></td><td>${escapeHtml(r.plan||"")}</td><td>${escapeHtml(String(r.amount||""))}</td><td>${escapeHtml(r.currency||"")}</td><td>${escapeHtml((r.created_at||"").slice(0,19))}</td></tr>`).join("") || "<tr><td colspan=\"5\" class=\"muted\">No payments</td></tr>";
+    }catch(e){ const tb = $("adminPaymentsTable")?.querySelector("tbody"); if (tb) tb.innerHTML = "<tr><td colspan=\"5\" class=\"bad\">Error</td></tr>"; }
+  }
+  const adminPaymentsLoad = $("adminPaymentsLoad");
+  if (adminPaymentsLoad) adminPaymentsLoad.onclick = adminLoadPayments;
+
+  async function adminLoadRedemptions(){
+    if (!requireAdminSignedIn()) return;
+    const q = ($("adminRedeemFilter")?.value || "").trim();
+    try{
+      const j = await api("/api/admin/redemptions?limit=100" + (q ? "&q=" + encodeURIComponent(q) : ""));
+      const tb = $("adminRedemptionsTable")?.querySelector("tbody");
+      if (!tb) return;
+      tb.innerHTML = (j.rows || []).map(r => `<tr><td><span class="kbd">${escapeHtml((r.code||"").slice(0,12))}…</span></td><td>@${escapeHtml(r.handle||"")}</td><td>${escapeHtml(r.tier||"")}</td><td>${escapeHtml(String(r.days||""))}</td><td>${escapeHtml((r.created_at||"").slice(0,19))}</td></tr>`).join("") || "<tr><td colspan=\"5\" class=\"muted\">No redemptions</td></tr>";
+    }catch(e){ const tb = $("adminRedemptionsTable")?.querySelector("tbody"); if (tb) tb.innerHTML = "<tr><td colspan=\"5\" class=\"bad\">Error</td></tr>"; }
+  }
+  const adminRedemptionsLoad = $("adminRedemptionsLoad");
+  if (adminRedemptionsLoad) adminRedemptionsLoad.onclick = adminLoadRedemptions;
+
+  // --- Admin: leaderboard rewards ---
 async function adminLoadLb(days){
   if (!requireConnected("Admin")) return;
   if (!requireAdminSignedIn()) return;
@@ -5712,7 +5973,7 @@ function pruneLegacyAdminPanels(){
 
     const firstNote = adminRoot.querySelector(".card .note");
     if (firstNote){
-      firstNote.textContent = "Sign in once, then use access, code, and leaderboard tools only. Retired admin experiments are removed from this admin workspace.";
+      firstNote.textContent = "Sign in once, then use access, code, and leaderboard tools. Rules: Admin handle must match your connected @handle. Leaderboard rewards: only eligible referrals (≥5 inserts, ≥3 active days) count. Fraud-flagged invites excluded.";
     }
 
     adminRoot.querySelectorAll(".card .title").forEach((node)=>{
@@ -5736,12 +5997,12 @@ function pruneLegacyAdminPanels(){
     if (!h){ tab("home"); return; }
     const code = $("redeemCode").value.trim();
     if (!code){
-      $("connectMsg").innerHTML = `<span class="warn">Paste a code first.</span>`;
+      $("connectMsg").innerHTML = `<span class="warn">${escapeHtml(t("redeem_paste_first") || "Paste a code first.")}</span>`;
       return;
     }
     try{
       const j = await api("/api/billing/redeem", "POST", { handle: h, code });
-      $("connectMsg").innerHTML = `<span class="ok">Activated.</span>`;
+      $("connectMsg").innerHTML = `<span class="ok">${escapeHtml(t("redeem_activated") || "Activated.")}</span>`;
       renderWalletStatus(j.sub);
       await refreshUsage();
     }catch(e){
@@ -5757,7 +6018,7 @@ function pruneLegacyAdminPanels(){
     const xh = $("xHandle");
     const handle = normalizeHandle(xh?.value);
     if (!handle){
-      if (cm) cm.innerHTML = '<span class="bad">Enter a valid @handle</span>';
+      if (cm) cm.innerHTML = `<span class="bad">${escapeHtml(t("connect_invalid_handle_html") || "Enter a valid @handle")}</span>`;
       return;
     }
 
@@ -5765,7 +6026,8 @@ function pruneLegacyAdminPanels(){
     const ref = params.get("ref") || "";
 
     try{
-      const j = await api("/api/user/init", "POST", { handle, ref });
+      const devReset = (typeof isLocalDevHost === "function" && isLocalDevHost()) ? 1 : 0;
+      const j = await api("/api/user/init", "POST", { handle, ref, devReset });
       localStorage.setItem(LS_HANDLE, j.handle);
       localStorage.setItem(LS_TOKEN, j.token);
       try{ localStorage.setItem(LS_IS_ADMIN, j.isAdmin ? "1" : "0"); }catch{}
@@ -5890,7 +6152,8 @@ function pruneLegacyAdminPanels(){
   const FORCE_EN_KEYS = new Set([]);
 
   function applyLang(){
-    const lang = localStorage.getItem(LS_SITE_LANG) || "en";
+    const lang = getResolvedSiteLang();
+    try{ localStorage.setItem(LS_SITE_LANG, lang); }catch(_e){}
     const base = I18N.en || {};
     const d = I18N[lang] || {};
 
@@ -5925,6 +6188,8 @@ function pruneLegacyAdminPanels(){
     // Referral link placeholder depends on auth state
     try{ const rl=$("refLink"); if(rl) rl.placeholder = merged["connectFirst"] || ""; }catch{}
     try{ patchDynamicCopy(lang, merged); }catch(e){}
+    try{ fillWallpaperTabOptions(merged); }catch(_e){}
+    try{ syncWallLight(); }catch(_e){}
   }
 
 function getReferralUiCopy(_lang){
@@ -5977,28 +6242,28 @@ function getReferralUiCopy(_lang){
     items,
     promoterTitle: t("ref_promoter_details") || fallback.promoterTitle,
     baseDaily: t("ref_daily_limit_title") || fallback.baseDaily,
-    unlocksNow: fallback.unlocksNow,
-    nextUnlock: fallback.nextUnlock,
-    allUnlocked: fallback.allUnlocked,
+    unlocksNow: t("ref_unlocks_now") || fallback.unlocksNow,
+    nextUnlock: t("ref_next_unlock") || fallback.nextUnlock,
+    allUnlocked: t("ref_all_unlocked") || fallback.allUnlocked,
     antiAbuse: t("ref_abuse_note") || fallback.antiAbuse,
     confirmed: t("ref_k_confirmed") || fallback.confirmed,
     active: t("ref_k_active") || fallback.active,
     eligible: t("ref_k_eligible") || fallback.eligible,
     legacy: t("ref_k_legacy") || fallback.legacy,
-    clicks: fallback.clicks,
-    bgSlots: fallback.bgSlots,
-    saveCap: fallback.saveCap,
-    unlimited: fallback.unlimited,
-    onePack: fallback.onePack,
-    allPacks: fallback.allPacks,
-    proTrial: fallback.proTrial,
-    discount: fallback.discount,
-    toolkit: fallback.toolkit,
+    clicks: t("ref_metric_clicks") || fallback.clicks,
+    bgSlots: t("ref_metric_bg_slots") || fallback.bgSlots,
+    saveCap: t("ref_metric_save_cap") || fallback.saveCap,
+    unlimited: t("ui_saved_unlimited") || fallback.unlimited,
+    onePack: t("ref_reward_one_pack") || fallback.onePack,
+    allPacks: t("ref_reward_all_packs") || fallback.allPacks,
+    proTrial: t("ref_reward_pro_trial") || fallback.proTrial,
+    discount: t("ref_reward_discount") || fallback.discount,
+    toolkit: t("ref_reward_toolkit") || fallback.toolkit,
     copied: t("toast_copied") || fallback.copied,
     leaderboardLoading: t("r_loading") || fallback.leaderboardLoading,
     leaderboardEmpty: t("lb_empty") || fallback.leaderboardEmpty,
     youLabel: t("lb_you") || fallback.youLabel,
-    rulesLabel: fallback.rulesLabel,
+    rulesLabel: t("ref_rules_word") || fallback.rulesLabel,
     invitedNote: t("r_invited_note") || fallback.invitedNote
   };
 }
@@ -6325,6 +6590,16 @@ function closeLangMenu(){
       if (e.data.type === "GMX_CLEAN_FILL_SYNC"){
         if (e.data.kind === "gm" || e.data.kind === "gn") setCleanFillEnabled(e.data.kind, e.data.value === true, true);
       }
+      if (e.data.type === "GMX_APPLY_THEME_FROM_EXTENSION"){
+        try{
+          const siteTheme = localStorage.getItem("gmx_theme") || "classic";
+          applyTheme(siteTheme);
+          if (typeof renderThemes === "function") renderThemes();
+          if (typeof renderExtThemes === "function") renderExtThemes();
+          if (typeof renderExtWallpapers === "function") renderExtWallpapers();
+          if (typeof renderWallpaperUI === "function") renderWallpaperUI();
+        }catch(_err){}
+      }
     }catch(_e){}
   });
 
@@ -6501,7 +6776,10 @@ function closeLangMenu(){
   const wpAddCustom = $("wpAddCustom");
   const wpAddFile = $("wpAddFile");
   if (wpAddCustom && wpAddFile){
-    wpAddCustom.onclick = ()=>{ if (requireConnected("Themes")) wpAddFile.click(); };
+    wpAddCustom.onclick = ()=>{
+      if (!isPro()){ toast("warn", (t("custom_upload_pro_only")||"Custom wallpaper upload requires Pro subscription.")); return; }
+      if (requireConnected("Themes")) wpAddFile.click();
+    };
   }
   if (wpAddFile){
     wpAddFile.addEventListener("change", async ()=>{
@@ -6510,20 +6788,57 @@ function closeLangMenu(){
         const f = wpAddFile.files && wpAddFile.files[0];
         if (!f) return;
         const data = await compressImageToJpegDataURL(f, { profile: "site" });
-        localStorage.setItem(LS_CUSTOM_BG_GLOBAL, data);
-        const targetTab = ($("wpTab")?.value || "all");
-        if (targetTab === "all") localStorage.setItem(LS_WP_GLOBAL, CUSTOM_UPLOAD_ID);
-        else setWallpaperForTab(targetTab, CUSTOM_UPLOAD_ID);
-        try{ renderWallpaperUI(); }catch{}
-        const previewTab = (targetTab === "all") ? currentTabName() : targetTab;
-        applyWallpaper(previewTab);
-        applyUserBg(previewTab);
-        toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved."));
+        const tok = String(localStorage.getItem(LS_TOKEN) || "").trim();
+        let uploadedId = null;
+        if (tok) {
+          try {
+            const r = await fetch("/api/wallpapers/custom", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "Authorization": "Bearer " + tok },
+              body: JSON.stringify({ image: data, target: "site" })
+            });
+            const j = await r.json();
+            if (j?.ok && j?.id) { uploadedId = j.id; }
+          } catch (_e) {}
+        }
+        if (uploadedId) {
+          CUSTOM_WALLPAPERS_LOADED = false;
+          await loadCustomWallpapers();
+          const targetTab = ($("wpTab")?.value || "all");
+          if (targetTab === "all") localStorage.setItem(LS_WP_GLOBAL, uploadedId);
+          else setWallpaperForTab(targetTab, uploadedId);
+          try{ renderWallpaperUI(); }catch{}
+          const previewTab = (targetTab === "all") ? currentTabName() : targetTab;
+          applyWallpaper(previewTab);
+          applyUserBg(previewTab);
+          toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved and synced."));
+        } else {
+          localStorage.setItem(LS_CUSTOM_BG_GLOBAL, data);
+          const targetTab = ($("wpTab")?.value || "all");
+          if (targetTab === "all") localStorage.setItem(LS_WP_GLOBAL, CUSTOM_UPLOAD_ID);
+          else setWallpaperForTab(targetTab, CUSTOM_UPLOAD_ID);
+          try{ renderWallpaperUI(); }catch{}
+          const previewTab = (targetTab === "all") ? currentTabName() : targetTab;
+          applyWallpaper(previewTab);
+          applyUserBg(previewTab);
+          toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved (local)."));
+        }
       }catch(e){
         toast("warn", (t("err_custom_wp_save")||"Could not save image (too large or blocked)."));
       }finally{
         wpAddFile.value = "";
       }
+    });
+  }
+  const wpLightChk = $("wpLightChk");
+  if (wpLightChk){
+    wpLightChk.addEventListener("change", ()=>{
+      try{
+        localStorage.setItem(LS_WALL_LIGHT, wpLightChk.checked ? "1" : "0");
+        localStorage.setItem(LS_WALL_LIGHT_MANUAL, "1");
+        syncWallLight();
+        toast("ok", (t("toast_wall_light") || "Readability updated."));
+      }catch(_e){}
     });
   }
   function pushRecent(kind, keys){
@@ -6746,20 +7061,26 @@ function closeLangMenu(){
     const cur = readKey(key);
     const targetCount = Number.isFinite(opts?.targetCount) ? Math.max(0, Math.trunc(opts.targetCount)) : cur.length;
     if (!cur.length && targetCount <= 0){
-      if (msgEl && !opts?.silent) msgEl.innerHTML = `<span class="muted">Nothing saved yet.</span>`;
+      if (msgEl && !opts?.silent) msgEl.innerHTML = `<span class="muted">${escapeHtml(t("bank_nothing_saved") || "Nothing saved yet.")}</span>`;
       return { removed:0, refilled:0, finalCount:0, targetCount:0 };
     }
 
     CLEAN_FILL_INFLIGHT[kind] = true;
     try{
-      if (msgEl && !opts?.silent) msgEl.innerHTML = `<span class="muted">Best pass...</span>`;
+      if (msgEl && !opts?.silent) msgEl.innerHTML = `<span class="muted">${escapeHtml(t("bank_best_pass_running") || "Best pass...")}</span>`;
       const res = await refillCleanFill(kind, targetCount, opts || {});
       renderList(kind);
       if (msgEl && !opts?.keepMessage){
         if (res.finalCount >= res.targetCount){
-          msgEl.innerHTML = `<span class="ok">Best pass removed ${res.removed} and refilled ${res.refilled}. Bank now has ${res.finalCount}/${res.targetCount}.</span>`;
+          const okMsg = (t("bank_best_done_ok") || "Best pass removed {removed} and refilled {refilled}. Bank now has {final}/{target}.")
+            .replace("{removed}", String(res.removed)).replace("{refilled}", String(res.refilled))
+            .replace("{final}", String(res.finalCount)).replace("{target}", String(res.targetCount));
+          msgEl.innerHTML = `<span class="ok">${escapeHtml(okMsg)}</span>`;
         } else {
-          msgEl.innerHTML = `<span class="warn">Best pass removed ${res.removed} and refilled ${res.refilled}. Bank finished at ${res.finalCount}/${res.targetCount}. Try another tone or preset for a wider pool.</span>`;
+          const wMsg = (t("bank_best_done_warn") || "Best pass removed {removed} and refilled {refilled}. Bank finished at {final}/{target}. Try another tone or preset for a wider pool.")
+            .replace("{removed}", String(res.removed)).replace("{refilled}", String(res.refilled))
+            .replace("{final}", String(res.finalCount)).replace("{target}", String(res.targetCount));
+          msgEl.innerHTML = `<span class="warn">${escapeHtml(wMsg)}</span>`;
         }
       }
       return res;
@@ -7006,7 +7327,7 @@ function cleanupKeyLines(lines){
         const ta = $("supportOut");
         if (ta) ta.value = out;
         await copyToClipboard(out);
-        if (note) note.textContent = "Logs copied. Send them only if support asks for them.";
+        if (note) note.textContent = (t("support_logs_copied_note") || "Logs copied. Send them only if support asks for them.");
         logEvent("support_logs", { size: out.length });
       });
     }
@@ -7032,7 +7353,7 @@ function cleanupKeyLines(lines){
           const idx = PACKS.findIndex(x=>x.id===pid);
           const locked = (!isPro() && idx >= unlockedPacksCount());
           if (locked){
-            if (msgEl) msgEl.innerHTML = `<span class="warn">Pack is locked. Upgrade to Pro or unlock via referrals.</span>`;
+            if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml(t("pack_locked_msg") || "Pack is locked. Upgrade to Pro or unlock via referrals.")}</span>`;
             return;
           }
           // apply preset defaults
@@ -7041,7 +7362,7 @@ function cleanupKeyLines(lines){
           if (styleSel && p.style) styleSel.value = p.style;
           if (modeSel && p.mode) modeSel.value = p.mode;
 
-          if (msgEl) msgEl.innerHTML = `<span class="ok">Applied pack: ${escapeHtml(p.name)}</span>`;
+          if (msgEl) msgEl.innerHTML = `<span class="ok">${escapeHtml((t("pack_applied") || "Applied pack: {name}").replace("{name}", String(p.name || "")))}</span>`;
           logEvent("pack_apply", { kind, pack: pid });
         });
       }
@@ -7131,7 +7452,10 @@ function cleanupKeyLines(lines){
   }catch{}
   tab(bootTab);
   CURRENT_TAB = bootTab;
-  setBg(bootTab);
+  (async ()=>{
+    await loadPresetManifest();
+    setBg(bootTab);
+  })();
 
   ping();
   loadBuild();
@@ -7197,7 +7521,7 @@ INIT_DONE = true;
     if (msg.includes("ResizeObserver") || msg.includes("Non-Error promise rejection")) return;
     // Never auto-reload on expected network/API errors (we show degraded mode instead)
     if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("request_failed") || msg.includes("timeout")){
-      try{ if (typeof setDegraded === "function") setDegraded(true, "API/network issue. You can still edit lists locally."); }catch{}
+      try{ if (typeof setDegraded === "function") setDegraded(true, (t("ui_degraded_api") || "API/network issue. You can still edit lists locally.")); }catch{}
       return;
     }
     scheduleReload();
@@ -7206,7 +7530,7 @@ INIT_DONE = true;
     const msg = String(e?.reason?.message || e?.reason || "");
     if (msg.includes("ResizeObserver")) return;
     if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("request_failed") || msg.includes("timeout") || msg.includes("not_connected")){
-      try{ if (typeof setDegraded === "function") setDegraded(true, "API/network issue. You can still edit lists locally."); }catch{}
+      try{ if (typeof setDegraded === "function") setDegraded(true, (t("ui_degraded_api") || "API/network issue. You can still edit lists locally.")); }catch{}
       return;
     }
     scheduleReload();

@@ -3,9 +3,9 @@
   {
     "id": "kour-io",
     "name": "Kour.io",
-    "icon": "рџ”«",
+    "icon": "🎮",
     "access": "pro",
-    "imageUrl": "https://images.crazygames.com/games/kour-io/cover-1709565575515.png?auto=format,compress&q=75&cs=strip",
+    "imageUrl": "https://imgs.crazygames.com/kour-io_16x9/20241107024955/kour-io_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/kour-io",
     "launchUrl": "https://www.crazygames.com/embed/kour-io",
     "sourceLabel": "CrazyGames",
@@ -17,9 +17,9 @@
   {
     "id": "hazmob-fps",
     "name": "Hazmob FPS",
-    "icon": "рџ”«",
+    "icon": "🎮",
     "access": "pro",
-    "imageUrl": "https://images.crazygames.com/games/hazmob-fps-online-shooter/cover-1698224520779.png?auto=format,compress&q=75&cs=strip",
+    "imageUrl": "https://imgs.crazygames.com/shellshockersio_16x9/20260203211252/shellshockersio_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/hazmob-fps-online-shooter",
     "launchUrl": "https://www.crazygames.com/embed/hazmob-fps-online-shooter",
     "sourceLabel": "CrazyGames",
@@ -31,9 +31,9 @@
   {
     "id": "sniper-fury",
     "name": "Sniper Fury",
-    "icon": "рџ”«",
+    "icon": "🎮",
     "access": "pro",
-    "imageUrl": "https://images.crazygames.com/sniper-fury_16x9/20231110091811/sniper-fury_16x9-cover?auto=format,compress&q=75&cs=strip",
+    "imageUrl": "https://imgs.crazygames.com/sniper-fury_16x9/20260317093152/sniper-fury_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/sniper-fury",
     "launchUrl": "https://www.crazygames.com/embed/sniper-fury",
     "sourceLabel": "CrazyGames",
@@ -45,9 +45,9 @@
   {
     "id": "zombie-derby-pixel",
     "name": "Zombie Derby Pixel",
-    "icon": "вљЎ",
+    "icon": "🎯",
     "access": "free",
-    "imageUrl": "https://images.crazygames.com/games/zombie-derby-pixel-survival/cover-1616491795797.png?auto=format,compress&q=75&cs=strip",
+    "imageUrl": "https://imgs.crazygames.com/trial-mania_16x9/20250121045401/trial-mania_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/zombie-derby-pixel-survival",
     "launchUrl": "https://www.crazygames.com/embed/zombie-derby-pixel-survival",
     "sourceLabel": "CrazyGames",
@@ -59,9 +59,9 @@
   {
     "id": "path-of-survivor",
     "name": "Path of Survivor",
-    "icon": "вљЎ",
+    "icon": "🎯",
     "access": "free",
-    "imageUrl": "https://images.crazygames.com/games/path-of-survivor/cover-1688640103681.png?auto=format,compress&q=75&cs=strip",
+    "imageUrl": "https://imgs.crazygames.com/path-of-survivor_16x9/20260121061826/path-of-survivor_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/path-of-survivor",
     "launchUrl": "https://www.crazygames.com/embed/path-of-survivor",
     "sourceLabel": "CrazyGames",
@@ -73,9 +73,9 @@
   {
     "id": "trial-mania",
     "name": "Trial Mania",
-    "icon": "рџЏЋпёЏ",
+    "icon": "🏎️",
     "access": "free",
-    "imageUrl": "https://images.crazygames.com/games/trial-mania/cover-1681289191024.png?auto=format,compress&q=75&cs=strip",
+    "imageUrl": "https://imgs.crazygames.com/trial-mania_16x9/20250121045401/trial-mania_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/trial-mania",
     "launchUrl": "https://www.crazygames.com/embed/trial-mania",
     "sourceLabel": "CrazyGames",
@@ -87,9 +87,9 @@
   {
     "id": "mx-offroad-master",
     "name": "MX Offroad Master",
-    "icon": "рџЏЋпёЏ",
+    "icon": "🏎️",
     "access": "pro",
-    "imageUrl": "https://images.crazygames.com/games/mx-offroad-master/cover-1640081308369.png?auto=format,compress&q=75&cs=strip",
+    "imageUrl": "https://imgs.crazygames.com/mx-offroad-master_16x9/20260220035406/mx-offroad-master_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/mx-offroad-master",
     "launchUrl": "https://www.crazygames.com/embed/mx-offroad-master",
     "sourceLabel": "CrazyGames",
@@ -101,9 +101,9 @@
   {
     "id": "rally-racer-dirt",
     "name": "Rally Racer Dirt",
-    "icon": "рџЏЋпёЏ",
+    "icon": "🏎️",
     "access": "free",
-    "imageUrl": "https://images.crazygames.com/games/rally-racer-dirt/cover-1634653554425.png?auto=format,compress&q=75&cs=strip",
+    "imageUrl": "https://imgs.crazygames.com/rally-racer-dirt_16x9/20260220034629/rally-racer-dirt_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/rally-racer-dirt",
     "launchUrl": "https://www.crazygames.com/embed/rally-racer-dirt",
     "sourceLabel": "CrazyGames",
@@ -115,9 +115,9 @@
   {
     "id": "super-bowling",
     "name": "Super Bowling",
-    "icon": "рџЋі",
+    "icon": "⚽",
     "access": "free",
-    "imageUrl": "https://images.crazygames.com/games/super-bowling-mania/cover-1698658826435.png?auto=format,compress&q=75&cs=strip",
+    "imageUrl": "https://imgs.crazygames.com/basketball-legends-2020_16x9/20231122050621/basketball-legends-2020_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/super-bowling-mania",
     "launchUrl": "https://www.crazygames.com/embed/super-bowling-mania",
     "sourceLabel": "CrazyGames",
@@ -129,9 +129,9 @@
   {
     "id": "firestone-idle-rpg",
     "name": "Firestone Idle RPG",
-    "icon": "вљ”пёЏ",
+    "icon": "🎲",
     "access": "pro",
-    "imageUrl": "https://images.crazygames.com/games/firestone-idle-rpg/cover-1628151811566.png?auto=format,compress&q=75&cs=strip",
+    "imageUrl": "https://imgs.crazygames.com/firestone-idle-rpg_16x9/20251001041305/firestone-idle-rpg_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/firestone-idle-rpg",
     "launchUrl": "https://www.crazygames.com/embed/firestone-idle-rpg",
     "sourceLabel": "CrazyGames",
@@ -143,9 +143,9 @@
   {
     "id": "solitaire-home",
     "name": "Solitaire Home",
-    "icon": "рџ§©",
+    "icon": "💹",
     "access": "free",
-    "imageUrl": "https://images.crazygames.com/games/solitaire-home-story/cover-1678280650993.png?auto=format,compress&q=75&cs=strip",
+    "imageUrl": "https://imgs.crazygames.com/words-of-wonders_16x9/20231019163757/words-of-wonders_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/solitaire-home-story",
     "launchUrl": "https://www.crazygames.com/embed/solitaire-home-story",
     "sourceLabel": "CrazyGames",
@@ -157,9 +157,9 @@
   {
     "id": "zumba-quest",
     "name": "Zumba Quest",
-    "icon": "рџ•№пёЏ",
+    "icon": "🎪",
     "access": "free",
-    "imageUrl": "https://images.crazygames.com/games/zumba-quest/cover-1698236774640.png?auto=format,compress&q=75&cs=strip",
+    "imageUrl": "https://imgs.crazygames.com/zumba-quest_16x9/20251006091932/zumba-quest_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/zumba-quest",
     "launchUrl": "https://www.crazygames.com/embed/zumba-quest",
     "sourceLabel": "CrazyGames",
@@ -171,9 +171,9 @@
   {
     "id": "goat-escape",
     "name": "Goat Escape",
-    "icon": "рџ•№пёЏ",
+    "icon": "🎪",
     "access": "free",
-    "imageUrl": "https://images.crazygames.com/games/goat-escape/cover-1699539328570.png?auto=format,compress&q=75&cs=strip",
+    "imageUrl": "https://imgs.crazygames.com/goat-escape_16x9/20260224082517/goat-escape_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/goat-escape",
     "launchUrl": "https://www.crazygames.com/embed/goat-escape",
     "sourceLabel": "CrazyGames",
@@ -185,7 +185,7 @@
   {
     "id": "1v1-lol",
     "name": "1v1.LOL",
-    "icon": "рџ”«",
+    "icon": "🎮",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/games/1v1-lol/cover-1585728351086.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/1v1-lol",
@@ -199,7 +199,7 @@
   {
     "id": "shell-shockers",
     "name": "Shell Shockers",
-    "icon": "рџ”«",
+    "icon": "🎮",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/shellshockersio_16x9/20260203211252/shellshockersio_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/shellshockersio",
@@ -213,9 +213,9 @@
   {
     "id": "smash-karts",
     "name": "Smash Karts",
-    "icon": "рџЏЋпёЏ",
+    "icon": "🏎️",
     "access": "free",
-    "imageUrl": "https://images.crazygames.com/games/smash-karts/cover-1583232508892.png?auto=format,compress&q=75&cs=strip",
+    "imageUrl": "https://imgs.crazygames.com/smash-karts_16x9/20260210123937/smash-karts_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/smash-karts",
     "launchUrl": "https://www.crazygames.com/embed/smash-karts",
     "sourceLabel": "CrazyGames",
@@ -227,7 +227,7 @@
   {
     "id": "drift-hunters",
     "name": "Drift Hunters",
-    "icon": "рџЏЋпёЏ",
+    "icon": "🏎️",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/games/drift-hunters/cover-1656950639575.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/drift-hunters",
@@ -241,7 +241,7 @@
   {
     "id": "bloxd-io",
     "name": "Bloxd.io",
-    "icon": "рџ•№пёЏ",
+    "icon": "🎪",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/bloxdhop-io_16x9/20250829023851/bloxdhop-io_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/bloxdhop-io",
@@ -255,7 +255,7 @@
 {
     "id": "crazy-roll-3d",
     "name": "Crazy Roll 3D",
-    "icon": "рџ•№пёЏ",
+    "icon": "🎪",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/games/crazy-roll-3d/cover_16x9-1709124312204.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/crazy-roll-3d",
@@ -269,7 +269,7 @@
   {
     "id": "slither-io",
     "name": "Slither.io",
-    "icon": "рџЋ®",
+    "icon": "🎮",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/games/slitherio/cover-1587331280441.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/slitherio",
@@ -283,7 +283,7 @@
   {
     "id": "paper-io-2",
     "name": "Paper.io 2",
-    "icon": "рџЋ®",
+    "icon": "🎮",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/paper-io-2_16x9/20250214024143/paper-io-2_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/paper-io-2",
@@ -297,9 +297,9 @@
   {
     "id": "hole-io",
     "name": "Hole.io",
-    "icon": "рџЋ®",
+    "icon": "🎮",
     "access": "pro",
-    "imageUrl": "https://imgs.crazygames.com/holey-io-battle-royale_16x9/20230809150431/holey-io-battle-royale_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "imageUrl": "https://imgs.crazygames.com/paper-io-2_16x9/20250214024143/paper-io-2_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/hole-io",
     "launchUrl": "https://www.crazygames.com/embed/hole-io",
     "sourceLabel": "CrazyGames",
@@ -311,7 +311,7 @@
   {
     "id": "worms-zone",
     "name": "Worms Zone",
-    "icon": "рџ•№пёЏ",
+    "icon": "🎪",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/worms-zone_16x9/20241128100948/worms-zone_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/worms-zone",
@@ -325,7 +325,7 @@
   {
     "id": "moto-x3m",
     "name": "Moto X3M",
-    "icon": "рџЏЋпёЏ",
+    "icon": "🏎️",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/games/moto-x3m/cover_16x9-1700625476572.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/moto-x3m",
@@ -339,7 +339,7 @@
   {
     "id": "basketball-stars",
     "name": "Basketball Stars",
-    "icon": "рџЋі",
+    "icon": "⚽",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/games/basketball-stars-2019/cover-1583231506155.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/basketball-stars-2019",
@@ -353,7 +353,7 @@
   {
     "id": "tennis-masters",
     "name": "Tennis Masters",
-    "icon": "рџЋі",
+    "icon": "⚽",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/tennis-masters/20201207104629/tennis-masters-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/tennis-masters",
@@ -367,7 +367,7 @@
   {
     "id": "soccer-legends",
     "name": "Soccer Legends",
-    "icon": "рџЋі",
+    "icon": "⚽",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/games/soccer-legends-2021/cover_16x9-1732724179287.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/soccer-legends-2021",
@@ -381,7 +381,7 @@
   {
     "id": "madalin-stunt-cars",
     "name": "Madalin Stunt Cars",
-    "icon": "рџЏЋпёЏ",
+    "icon": "🏎️",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/games/madalin-stunt-cars-2/cover_16x9-1695113654654.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/madalin-stunt-cars-2",
@@ -395,7 +395,7 @@
   {
     "id": "night-city-racing",
     "name": "Night City Racing",
-    "icon": "рџЏЋпёЏ",
+    "icon": "🏎️",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/night-city-racing_16x9/20260220035423/night-city-racing_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/night-city-racing",
@@ -409,7 +409,7 @@
   {
     "id": "evoworld-io",
     "name": "EvoWorld.io",
-    "icon": "рџЋ®",
+    "icon": "🎮",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/flyordieio/20210614144226/flyordieio-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/flyordieio",
@@ -423,7 +423,7 @@
   {
     "id": "skribbl-io",
     "name": "Skribbl.io",
-    "icon": "рџ§©",
+    "icon": "💹",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/skribblio.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/skribblio",
@@ -437,7 +437,7 @@
   {
     "id": "mahjongg",
     "name": "Mahjongg",
-    "icon": "рџ•№пёЏ",
+    "icon": "🎪",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/games/mahjongg-solitaire/cover_16x9-1707829450935.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/mahjongg-solitaire",
@@ -451,7 +451,7 @@
   {
     "id": "words-of-wonders",
     "name": "Words of Wonders",
-    "icon": "рџ•№пёЏ",
+    "icon": "🎪",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/words-of-wonders_16x9/20231019163757/words-of-wonders_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/words-of-wonders",
@@ -465,7 +465,7 @@
 {
     "id": "dead-zed",
     "name": "Dead Zed",
-    "icon": "рџ”«",
+    "icon": "🎮",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/dead-zed_16x9/20260220044407/dead-zed_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/dead-zed",
@@ -479,7 +479,7 @@
   {
     "id": "buildnow-gg",
     "name": "BuildNow GG",
-    "icon": "вљЎ",
+    "icon": "🎯",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/buildnow-gg_16x9/20251229084241/buildnow-gg_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/buildnow-gg",
@@ -509,57 +509,46 @@
   {"id":"drift-boss","name":"Drift Boss","icon":"🏎️","access":"free","imageUrl":"https://imgs.crazygames.com/drift-boss_16x9/20260209092420/drift-boss_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/drift-boss","launchUrl":"https://www.crazygames.com/embed/drift-boss","sourceLabel":"CrazyGames","shortNote":"","category":"Racing","provider":"crazygames","badge":null},
   {"id":"friday-night-funkin","name":"Friday Night Funkin","icon":"🎵","access":"free","imageUrl":"https://imgs.crazygames.com/games/friday-night-funkin/cover-1614085803807.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/friday-night-funkin","launchUrl":"https://www.crazygames.com/embed/friday-night-funkin","sourceLabel":"CrazyGames","shortNote":"","category":"Arcade","provider":"crazygames","badge":null},
   {"id":"kirka-io","name":"Kirka.io","icon":"🔫","access":"free","imageUrl":"https://imgs.crazygames.com/kirka-io_16x9/20260116015838/kirka-io_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/kirka-io","launchUrl":"https://www.crazygames.com/embed/kirka-io","sourceLabel":"CrazyGames","shortNote":"","category":"Shooter","provider":"crazygames","badge":null},
-  {"id":"marble-shooter","name":"Marble Shooter","icon":"🎯","access":"free","imageUrl":"https://imgs.crazygames.com/games/marble-shooter/cover-1616449636651.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/marble-shooter","launchUrl":"https://www.crazygames.com/embed/marble-shooter","sourceLabel":"CrazyGames","shortNote":"","category":"Puzzle","provider":"crazygames","badge":null},
-  {"id":"bullet-force","name":"Bullet Force","icon":"🔫","access":"free","imageUrl":"https://imgs.crazygames.com/games/bullet-force/cover-1583232537561.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/bullet-force","launchUrl":"https://www.crazygames.com/embed/bullet-force","sourceLabel":"CrazyGames","shortNote":"","category":"Shooter","provider":"crazygames","badge":null},
-  {"id":"minecraft-classic","name":"Minecraft Classic","icon":"🎮","access":"free","imageUrl":"https://imgs.crazygames.com/games/minecraft-classic/cover-1583232518913.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/minecraft-classic","launchUrl":"https://www.crazygames.com/embed/minecraft-classic","sourceLabel":"CrazyGames","shortNote":"","category":"Arcade","provider":"crazygames","badge":null},
-  {"id":"subway-surfers","name":"Subway Surfers","icon":"🏃","access":"free","imageUrl":"https://imgs.crazygames.com/games/subway-surfers-seoul/cover_16x9-1732724247485.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/subway-surfers-seoul","launchUrl":"https://www.crazygames.com/embed/subway-surfers-seoul","sourceLabel":"CrazyGames","shortNote":"","category":"Arcade","provider":"crazygames","badge":null}
+  {"id":"marble-shooter","name":"Marble Shooter","icon":"🎯","access":"free","imageUrl":"https://imgs.crazygames.com/cut-the-rope-ebx_16x9/20240530085010/cut-the-rope-ebx_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/marble-shooter","launchUrl":"https://www.crazygames.com/embed/marble-shooter","sourceLabel":"CrazyGames","shortNote":"","category":"Puzzle","provider":"crazygames","badge":null},
+  {"id":"bullet-force","name":"Bullet Force","icon":"🔫","access":"free","imageUrl":"https://imgs.crazygames.com/kirka-io_16x9/20260116015838/kirka-io_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/bullet-force","launchUrl":"https://www.crazygames.com/embed/bullet-force","sourceLabel":"CrazyGames","shortNote":"","category":"Shooter","provider":"crazygames","badge":null},
+  {"id":"minecraft-classic","name":"Minecraft Classic","icon":"🎮","access":"free","imageUrl":"https://imgs.crazygames.com/worms-zone_16x9/20241128100948/worms-zone_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/minecraft-classic","launchUrl":"https://www.crazygames.com/embed/minecraft-classic","sourceLabel":"CrazyGames","shortNote":"","category":"Arcade","provider":"crazygames","badge":null},
+  {"id":"subway-surfers","name":"Subway Surfers","icon":"🏃","access":"free","imageUrl":"https://imgs.crazygames.com/run3b.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/subway-surfers-seoul","launchUrl":"https://www.crazygames.com/embed/subway-surfers-seoul","sourceLabel":"CrazyGames","shortNote":"","category":"Arcade","provider":"crazygames","badge":null}
 ];
-  const CATEGORY_LABELS = {
-    action: "Action",
-    arcade: "Arcade",
-    casual: "Casual",
-    io: "IO",
-    platformer: "Platformer",
-    puzzle: "Puzzle",
-    racing: "Racing",
-    rpg: "RPG",
-    shooter: "Shooter",
-    simulation: "Simulation",
-    sports: "Sports",
-    strategy: "Strategy",
-    survivor: "Survivor"
-  };
-  const CATEGORY_NOTES = {
-    action: "Fast action pick with quick browser launch.",
-    arcade: "Arcade pick for easy drop in runs.",
-    casual: "Light casual pick for slower sessions.",
-    io: "Public IO match with instant join flow.",
-    platformer: "Platformer slot with clean short runs.",
-    puzzle: "Puzzle pick for slower problem solving.",
-    racing: "Racing pick built for short runs.",
-    rpg: "RPG slot with slower progression loops.",
-    shooter: "Shooter pick with fast browser entry.",
-    simulation: "Simulation slot for longer sandbox runs.",
-    sports: "Sports pick with easy one run flow.",
-    strategy: "Strategy slot with slower decision loops.",
-    survivor: "Survivor run with pressure that ramps quickly."
-  };
-  function normalizeArcadeCategory(value) {
-    const raw = String(value || "").trim().toLowerCase();
-    if (raw === "io") return "IO";
-    if (raw === "rpg") return "RPG";
-    // Legacy import aliases from older non-English catalogs.
-    if (raw === "\u0441\u0438\u043c\u0443\u043b\u044f\u0442\u043e\u0440") return "Simulation";
-    if (raw === "\u0433\u043e\u043b\u043e\u0432\u043e\u043b\u043e\u043c\u043a\u0430") return "Puzzle";
-    if (raw === "\u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u0435\u0440") return "Platformer";
-    if (raw === "\u0441\u0442\u0440\u0430\u0442\u0435\u0433\u0438\u044f") return "Strategy";
-    if (raw === "\u0432\u044b\u0436\u0438\u0432\u0430\u043d\u0438\u0435") return "Survivor";
-    const key = raw.replace(/[^a-z]+/g, "");
-    return CATEGORY_LABELS[key] || "Arcade";
+  const LS_SITE_LANG = "gmx_site_lang";
+  function arcadeT(key, vars) {
+    try {
+      const lang = String(localStorage.getItem(LS_SITE_LANG) || "en").toLowerCase();
+      const B = typeof globalThis !== "undefined" && globalThis.GMX_SITE_I18N && globalThis.GMX_SITE_I18N.SITE_I18N ? globalThis.GMX_SITE_I18N.SITE_I18N : null;
+      if (!B) return key;
+      const base = B.en || {};
+      const row = B[lang] || {};
+      let s = row[key];
+      if (s === undefined || s === null || String(s).trim() === "") s = base[key];
+      if (s === undefined || s === null) return key;
+      let out = String(s);
+      if (vars && typeof vars === "object") {
+        for (const [vk, vv] of Object.entries(vars)) {
+          out = out.split(`{${vk}}`).join(String(vv));
+        }
+      }
+      return out;
+    } catch {
+      return key;
+    }
   }
-  function normalizedArcadeNote(game, category) {
-    const key = String(category || "").trim().toLowerCase().replace(/[^a-z]+/g, "");
-    return CATEGORY_NOTES[key] || "Browser game slot with direct launch.";
+  function canonicalCategoryKey(value) {
+    const raw = String(value || "").trim().toLowerCase();
+    if (raw === "io") return "io";
+    if (raw === "rpg") return "rpg";
+    if (raw === "\u0441\u0438\u043c\u0443\u043b\u044f\u0442\u043e\u0440") return "simulation";
+    if (raw === "\u0433\u043e\u043b\u043e\u0432\u043e\u043b\u043e\u043c\u043a\u0430") return "puzzle";
+    if (raw === "\u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u0435\u0440") return "platformer";
+    if (raw === "\u0441\u0442\u0440\u0430\u0442\u0435\u0433\u0438\u044f") return "strategy";
+    if (raw === "\u0432\u044b\u0436\u0438\u0432\u0430\u043d\u0438\u0435") return "survivor";
+    const key = raw.replace(/[^a-z]+/g, "");
+    const known = new Set(["action","arcade","casual","io","platformer","puzzle","racing","rpg","shooter","simulation","sports","strategy","survivor"]);
+    if (known.has(key)) return key === "io" ? "io" : key === "rpg" ? "rpg" : key;
+    return key || "arcade";
   }
   function categoryIconTag(category){
     const key = String(category || "").trim().toLowerCase();
@@ -581,12 +570,14 @@
     return map[key] || "GAME";
   }
   const GAMES = RAW_GAMES.filter((g) => g && g.id && !String(g.id).startsWith("_REMOVE_") && !String(g.id).startsWith("_DEL_")).map((game) => {
-    const category = normalizeArcadeCategory(game && game.category);
+    const categoryKey = canonicalCategoryKey(game && game.category);
+    const categoryLabel = arcadeT(`arcade_cat_${categoryKey}`) || categoryKey;
     return {
       ...game,
-      category,
-      icon: categoryIconTag(category),
-      shortNote: normalizedArcadeNote(game, category)
+      categoryKey,
+      category: categoryLabel,
+      icon: categoryIconTag(categoryKey),
+      shortNote: arcadeT(`arcade_typ_${categoryKey}`) || arcadeT("arcade_note_generic"),
     };
   });
   const PAGE_SIZE = 15;
@@ -611,10 +602,10 @@
     return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
   }
   function categoryCover(game) {
-    const raw = String(game && game.category || "").toLowerCase().trim();
-    const key = raw.replace(/[^a-z]+/g, "");
+    const key = String(game && game.categoryKey || "").toLowerCase().trim().replace(/[^a-z]+/g, "");
     const colors = CATEGORY_COVER_COLORS[key] || CATEGORY_COVER_COLORS.generic;
-    return categoryCoverSvgDataUri(game && game.category || "Game", colors[0], colors[1]);
+    const label = (game && game.categoryKey ? String(game.categoryKey) : arcadeT("arcade_cover_fallback")).toUpperCase().slice(0, 12);
+    return categoryCoverSvgDataUri(label, colors[0], colors[1]);
   }
   const LOCAL_GAME_COVERS = new Set([]);
   function localGameCover(game) {
@@ -695,19 +686,19 @@
   const handle = () => {
     try { return String(localStorage.getItem("gmx_handle") || ""); } catch { return ""; }
   };
-  const planLabel = () => state.plan === "pro" ? "PRO unlocked" : (state.plan === "loading" ? "Checking access" : "FREE plan");
-  const categories = () => ["all", ...Array.from(new Set(GAMES.map((g) => g.category))).sort()];
+  const planLabel = () => state.plan === "pro" ? arcadeT("arcade_plan_pro_unlocked") : (state.plan === "loading" ? arcadeT("arcade_plan_checking") : arcadeT("arcade_plan_free"));
+  const categories = () => ["all", ...Array.from(new Set(GAMES.map((g) => g.categoryKey))).sort()];
   const filtered = () => {
     const q = state.search.trim().toLowerCase();
     return GAMES.filter((game) => {
       if (state.access !== "all" && game.access !== state.access) return false;
-      if (state.category !== "all" && game.category !== state.category) return false;
+      if (state.category !== "all" && game.categoryKey !== state.category) return false;
       if (!q) return true;
-      return [game.name, game.shortNote, game.category, game.sourceLabel, game.provider].join(" ").toLowerCase().includes(q);
+      return [game.name, game.shortNote, game.category, game.categoryKey, game.sourceLabel, game.provider].join(" ").toLowerCase().includes(q);
     });
   };
   const visibleGames = () => filtered().slice(0, state.visible);
-  const badge = (game) => game.badge === "showcase" ? "SHOWCASE" : (game.badge === "top_pro" ? "TOP PRO" : game.access.toUpperCase());
+  const badge = (game) => game.badge === "showcase" ? arcadeT("arcade_badge_showcase") : (game.badge === "top_pro" ? arcadeT("arcade_badge_top_pro") : (game.access === "pro" ? arcadeT("arcade_badge_pro_upper") : arcadeT("arcade_badge_free")));
 
   function setStatus(text) {
     const el = $("arcadeStatus");
@@ -717,7 +708,7 @@
   async function loadPlan() {
     state.handle = handle();
     const handleEl = $("planHandle");
-    if (handleEl) handleEl.textContent = state.handle || "Guest slot";
+    if (handleEl) handleEl.textContent = state.handle || arcadeT("arcade_guest_slot");
     try {
       const res = await fetch("/api/usage", {
         headers: token() ? { Authorization: `Bearer ${token()}` } : {},
@@ -758,13 +749,13 @@
       <section class="panel playerPanel">
         <div class="playerHead">
           <div>
-            <div class="eyebrow">Live game slot</div>
+            <div class="eyebrow">${esc(arcadeT("arcade_player_eyebrow"))}</div>
             <h2>${esc(game.name)}</h2>
             <div class="sub">${esc(game.sourceLabel)} · ${esc(game.category)}</div>
           </div>
           <div class="playerActions">
-            <button class="ghostBtn" id="backToLibrary">Back to library</button>
-            <a class="primaryBtn" href="${esc(game.launchUrl)}" target="_blank" rel="noreferrer">Open original</a>
+            <button class="ghostBtn" id="backToLibrary">${esc(arcadeT("arcade_back_library"))}</button>
+            <a class="primaryBtn" href="${esc(game.launchUrl)}" target="_blank" rel="noreferrer">${esc(arcadeT("arcade_open_original"))}</a>
           </div>
         </div>
         <div class="playerWrap">
@@ -775,7 +766,7 @@
             allowfullscreen
           ></iframe>
         </div>
-        <div class="playerNote">If a publisher blocks iframe launch in your browser, use <b>Open original</b>.</div>
+        <div class="playerNote">${esc(arcadeT("arcade_player_iframe_note"))}</div>
       </section>
     `;
   }
@@ -784,12 +775,12 @@
     if (!game) return "";
     return `
       <section class="panel lockedPanel">
-        <div class="eyebrow warn">Locked Pro slot</div>
+        <div class="eyebrow warn">${esc(arcadeT("arcade_locked_eyebrow"))}</div>
         <h2>${esc(game.name)}</h2>
         <div class="sub">${esc(game.shortNote)}</div>
         <div class="lockedActions">
-          <a class="primaryBtn warm" href="${esc(game.launchUrl)}" target="_blank" rel="noreferrer">Open original now</a>
-          <div class="muted">This title stays visibly premium until PRO is active.</div>
+          <a class="primaryBtn warm" href="${esc(game.launchUrl)}" target="_blank" rel="noreferrer">${esc(arcadeT("arcade_locked_open_original"))}</a>
+          <div class="muted">${esc(arcadeT("arcade_locked_premium_note"))}</div>
         </div>
       </section>
     `;
@@ -820,51 +811,56 @@
             <img src="${esc(preferredCover(g))}" data-fallback-cover="${esc(fallbackCover(g))}" alt="${esc(g.name)}" loading="eager" referrerpolicy="no-referrer"/>
             <div class="tileOverlay"></div>
             <div class="tileTop">
-              <div class="tileBadge" style="background:linear-gradient(135deg,rgba(251,191,36,.4),rgba(244,63,94,.4))">GAME OF THE DAY</div>
-              ${g.access === "pro" ? '<span class="tileBadge tileBadgePro">PRO</span>' : ""}
-              ${locked ? '<span class="tileBadge tileBadgeLock">LOCKED</span>' : ""}
+              <div class="tileBadge" style="background:linear-gradient(135deg,rgba(251,191,36,.4),rgba(244,63,94,.4))">${esc(arcadeT("arcade_gotd_badge"))}</div>
+              ${g.access === "pro" ? `<span class="tileBadge tileBadgePro">${esc(arcadeT("arcade_badge_pro_upper"))}</span>` : ""}
+              ${locked ? `<span class="tileBadge tileBadgeLock">${esc(arcadeT("arcade_badge_locked"))}</span>` : ""}
             </div>
             <div class="tileBottom">
               <div class="tileTitle">${esc(g.name)}</div>
-              <div class="tileMeta">${esc(g.category)} · Try it now</div>
+              <div class="tileMeta">${esc(g.category)} · ${esc(arcadeT("arcade_try_now"))}</div>
             </div>
           </div>
           <div class="tileBody">
-            <div class="tileNote">Today's featured pick. One click to launch.</div>
-            <div class="tileFoot"><span>${esc(g.sourceLabel)}</span><span>${locked ? "Upgrade to unlock" : "Launch now"}</span></div>
+            <div class="tileNote">${esc(arcadeT("arcade_gotd_blurb"))}</div>
+            <div class="tileFoot"><span>${esc(g.sourceLabel)}</span><span>${locked ? esc(arcadeT("arcade_upgrade_cta")) : esc(arcadeT("arcade_launch_cta"))}</span></div>
           </div>
         </article>`;
     })() : "";
+
+    try {
+      document.title = arcadeT("arcade_doc_title");
+      document.documentElement.lang = String(localStorage.getItem(LS_SITE_LANG) || "en").toLowerCase();
+    } catch {}
 
     root.innerHTML = `
       <section class="panel heroPanel">
         <div class="heroRow">
           <div>
-            <div class="eyebrow">Live arcade shelf</div>
-            <h1>Arcade</h1>
-            <div class="heroText">${GAMES.length} browser games with real covers. Launch instantly. Free games always available.</div>
-            <a href="/app.html" class="ghostBtn" style="margin-top:12px;display:inline-block">← Back to GMXReply</a>
+            <div class="eyebrow">${esc(arcadeT("arcade_hero_eyebrow"))}</div>
+            <h1>${esc(arcadeT("arcade_page_title"))}</h1>
+            <div class="heroText">${esc(arcadeT("arcade_hero_text", { n: GAMES.length }))}</div>
+            <a href="/app" class="ghostBtn" style="margin-top:12px;display:inline-block">${esc(arcadeT("arcade_back_link"))}</a>
           </div>
           <div class="planCard">
             <div id="planLabel" class="planMain">${esc(planLabel())}</div>
-            <div id="planHandle" class="planSub">${esc(state.handle || "Guest slot")}</div>
+            <div id="planHandle" class="planSub">${esc(state.handle || arcadeT("arcade_guest_slot"))}</div>
           </div>
         </div>
       </section>
-      ${gotd ? `<section class="panel"><h2 style="margin-bottom:14px">Game of the Day</h2><div class="grid gridGotd" id="gotdGrid">${gotdTile}</div></section>` : ""}
+      ${gotd ? `<section class="panel"><h2 style="margin-bottom:14px">${esc(arcadeT("arcade_section_gotd"))}</h2><div class="grid gridGotd" id="gotdGrid">${gotdTile}</div></section>` : ""}
       ${active ? renderPlayer(active) : renderLocked(locked)}
       <section class="panel">
         <div class="libraryHead">
           <div>
-            <h2>Game library</h2>
-            <div class="sub">Showing ${visible.length} of ${list.length} filtered games · total catalog ${GAMES.length}</div>
+            <h2>${esc(arcadeT("arcade_section_library"))}</h2>
+            <div class="sub">${esc(arcadeT("arcade_library_counts", { visible: visible.length, filtered: list.length, total: GAMES.length }))}</div>
           </div>
           <div class="filtersRow" id="accessFilters"></div>
         </div>
         <div class="searchRow">
-          <input id="searchInput" class="field" placeholder="Search games" value="${esc(state.search)}" />
+          <input id="searchInput" class="field" placeholder="${esc(arcadeT("arcade_search_placeholder"))}" value="${esc(state.search)}" />
           <select id="categorySelect" class="field selectField"></select>
-          <button id="resetFilters" class="ghostBtn">Reset filters</button>
+          <button id="resetFilters" class="ghostBtn">${esc(arcadeT("arcade_reset_filters"))}</button>
         </div>
         <div class="grid" id="gameGrid"></div>
         <div class="loadMoreWrap" id="loadMoreWrap"></div>
@@ -873,9 +869,12 @@
 
     const accessWrap = $("accessFilters");
     if (accessWrap) {
-      accessWrap.innerHTML = ["all","free","pro"].map((value) => `
-        <button class="pill ${state.access === value ? "pillActive" : ""}" data-access="${value}">${value}</button>
-      `).join("");
+      accessWrap.innerHTML = ["all","free","pro"].map((value) => {
+        const label = value === "all" ? arcadeT("arcade_filter_all") : value === "free" ? arcadeT("arcade_filter_free") : arcadeT("arcade_filter_pro");
+        return `
+        <button class="pill ${state.access === value ? "pillActive" : ""}" data-access="${value}">${esc(label)}</button>
+      `;
+      }).join("");
       accessWrap.querySelectorAll("[data-access]").forEach((btn) => {
         btn.addEventListener("click", () => {
           state.access = String(btn.getAttribute("data-access") || "all");
@@ -887,7 +886,7 @@
 
     const catSel = $("categorySelect");
     if (catSel) {
-      catSel.innerHTML = categories().map((value) => `<option value="${esc(value)}">${value === "all" ? "All categories" : esc(value)}</option>`).join("");
+      catSel.innerHTML = categories().map((value) => `<option value="${esc(value)}">${value === "all" ? esc(arcadeT("arcade_cat_option_all")) : esc(arcadeT(`arcade_cat_${value}`))}</option>`).join("");
       catSel.value = state.category;
       catSel.addEventListener("change", (event) => {
         state.category = String(event.target.value || "all");
@@ -919,7 +918,7 @@
     const grid = $("gameGrid");
     if (grid) {
       if (!visible.length) {
-        grid.innerHTML = '<div class="empty">No games match the current filters.</div>';
+        grid.innerHTML = `<div class="empty">${esc(arcadeT("arcade_empty_filters"))}</div>`;
       } else {
         grid.innerHTML = visible.map((game) => {
           const locked = game.access === "pro" && state.plan !== "pro";
@@ -932,7 +931,7 @@
                   <div class="tileIcon">${esc(game.icon)}</div>
                   <div class="tileBadges">
                     <span class="tileBadge ${game.access === "pro" ? "tileBadgePro" : "tileBadgeFree"}">${badge(game)}</span>
-                    ${locked ? '<span class="tileBadge tileBadgeLock">LOCKED</span>' : ""}
+                    ${locked ? `<span class="tileBadge tileBadgeLock">${esc(arcadeT("arcade_badge_locked"))}</span>` : ""}
                   </div>
                 </div>
                 <div class="tileBottom">
@@ -942,7 +941,7 @@
               </div>
               <div class="tileBody">
                 <div class="tileNote">${esc(game.shortNote)}</div>
-                <div class="tileFoot"><span>${esc(game.sourceLabel || game.provider || "external")}</span><span>${locked ? "Upgrade to unlock" : "Launch now"}</span></div>
+                <div class="tileFoot"><span>${esc(game.sourceLabel || game.provider || "external")}</span><span>${locked ? esc(arcadeT("arcade_upgrade_cta")) : esc(arcadeT("arcade_launch_cta"))}</span></div>
               </div>
             </article>
           `;
@@ -971,7 +970,7 @@
     const loadMoreWrap = $("loadMoreWrap");
     if (loadMoreWrap) {
       if (state.visible < list.length) {
-        loadMoreWrap.innerHTML = '<button id="loadMoreBtn" class="primaryBtn">Load 15 more</button>';
+        loadMoreWrap.innerHTML = `<button id="loadMoreBtn" class="primaryBtn">${esc(arcadeT("arcade_load_more", { n: PAGE_SIZE }))}</button>`;
         $("loadMoreBtn")?.addEventListener("click", () => {
           state.visible = Math.min(state.visible + PAGE_SIZE, list.length);
           render();
@@ -991,14 +990,20 @@
     renderLibrary();
   }
 
-  window.addEventListener("storage", () => {
+  window.addEventListener("storage", (event) => {
+    try {
+      if (event && event.key === LS_SITE_LANG) {
+        render();
+        return;
+      }
+    } catch {}
     state.handle = handle();
     const handleEl = $("planHandle");
-    if (handleEl) handleEl.textContent = state.handle || "Guest slot";
+    if (handleEl) handleEl.textContent = state.handle || arcadeT("arcade_guest_slot");
     loadPlan();
   });
 
   render();
   loadPlan();
-  setStatus(`Arcade shelf loaded: ${GAMES.length} games`);
+  setStatus(arcadeT("arcade_status_ready", { n: GAMES.length }));
 })();
