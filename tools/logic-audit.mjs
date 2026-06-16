@@ -54,8 +54,19 @@ for (const rel of appFiles) {
   mustNotMatch(rel, /function supportBundle\(/, "supportBundle removed");
   mustNotMatch(rel, /initWpLazyLoad/, "initWpLazyLoad removed");
   mustMatch(rel, /function applyRefCountEligible/, "REF_COUNT helper present");
-  mustMatch(rel, /attempts < 4/, "bulk generate retry cap");
-  mustMatch(rel, /\{ mode, lang, style, antiN \} = readGenParams\(kind\)/, "generate uses readGenParams for style/mode");
+  const genFlowRel = rel.replace(/app\.js$/, "app.generateflow.js");
+  const genFlowText = fs.existsSync(path.join(root, genFlowRel))
+    ? fs.readFileSync(path.join(root, genFlowRel), "utf8")
+    : "";
+  const bulkCap = /attempts < 4/;
+  const readGenPat = /\{ mode, lang, style, antiN \} = readGenParams\(kind\)/;
+  const appText = fs.readFileSync(path.join(root, rel), "utf8");
+  if (!bulkCap.test(appText) && !bulkCap.test(genFlowText)) {
+    fail(`${rel}: bulk generate retry cap`);
+  }
+  if (!readGenPat.test(appText) && !readGenPat.test(genFlowText)) {
+    fail(`${rel}: generate uses readGenParams for style/mode`);
+  }
   mustNotMatch(rel, /const antiN = 0;/, "antiN must not be hardcoded 0");
   mustMatch(rel, /function packsForKind\(/, "packsForKind helper");
   mustMatch(rel, /__GMXThemesFactory/, "themes module factory wired");
@@ -88,6 +99,9 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.themeapply\.js/, "app.themeapply.js script tag");
   mustMatch(rel, /app\.ui\.js/, "app.ui.js script tag");
   mustMatch(rel, /app\.generate\.js/, "app.generate.js script tag");
+  mustMatch(rel, /app\.bestpick\.js/, "app.bestpick.js script tag");
+  mustMatch(rel, /app\.refstats\.js/, "app.refstats.js script tag");
+  mustMatch(rel, /app\.generateflow\.js/, "app.generateflow.js script tag");
   mustMatch(rel, /app\.banks\.js/, "app.banks.js script tag");
   mustMatch(rel, /app\.antirepeat\.js/, "app.antirepeat.js script tag");
   mustMatch(rel, /app\.genparams\.js/, "app.genparams.js script tag");
@@ -125,6 +139,9 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.wallethelpers\.js/, "app.wallethelpers.js script tag");
   mustMatch(rel, /app\.walletpay\.js/, "app.walletpay.js script tag");
   mustMatch(rel, /app\.walletui\.js/, "app.walletui.js script tag");
+  mustMatch(rel, /app\.bestpick\.js/, "app.bestpick.js script tag");
+  mustMatch(rel, /app\.refstats\.js/, "app.refstats.js script tag");
+  mustMatch(rel, /app\.generateflow\.js/, "app.generateflow.js script tag");
   mustMatch(rel, /app\.auth\.js/, "app.auth.js script tag");
   mustNotMatch(rel, /id="supportOut"/, "supportOut textarea removed");
   mustNotMatch(rel, /id="toolSupport"/, "toolSupport button removed from HTML");

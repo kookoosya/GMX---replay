@@ -1137,3 +1137,30 @@ test("walletpay: buildPaymentTx rejects missing wallet", async () => {
     /wallet_not_connected/
   );
 });
+
+test("refstats: revealReferralLinkUi unhides link row", () => {
+  const els = {
+    refTopRow: { classList: { remove: (c) => { els.refTopRow._removed = c; } }, _removed: "" },
+    refLinkCol: { classList: { remove: (c) => { els.refLinkCol._removed = c; } }, _removed: "" },
+  };
+  const stats = loadFactory("app.refstats.js", "__GMXRefStatsFactory")({
+    $: (id) => els[id] || null,
+    getHandle: () => "",
+  });
+  stats.revealReferralLinkUi();
+  assert.equal(els.refTopRow._removed, "link-hidden");
+  assert.equal(els.refLinkCol._removed, "is-hidden");
+});
+
+test("generateflow: blocks generate without session token", async () => {
+  const msg = { innerHTML: "" };
+  const flow = loadFactory("app.generateflow.js", "__GMXGenerateFlowFactory")({
+    $: (id) => (id === "gmMsg" ? msg : null),
+    getToken: () => "",
+    getHandle: () => "@demo",
+    siteTr: (_k, fb) => fb,
+    escapeHtml: (s) => s,
+  });
+  await flow.generate("gm", 1);
+  assert.match(msg.innerHTML, /Session expired/);
+});

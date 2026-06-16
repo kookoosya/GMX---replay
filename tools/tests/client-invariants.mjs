@@ -12,7 +12,10 @@ for (const rel of appPaths) {
   if (packFn !== 1) fail(`${rel}: expected 1 packsForKind(), found ${packFn}`);
   if (!text.includes("function readGenParams(")) fail(`${rel}: missing readGenParams`);
   if (!text.includes("function setWallpaperLayerImage(")) fail(`${rel}: missing setWallpaperLayerImage`);
-  if (!/\{ mode, lang, style, antiN \} = readGenParams\(kind\)/.test(text)) {
+  const genFlowPath = rel.replace(/app\.js$/, "app.generateflow.js");
+  const genFlowText = fs.existsSync(genFlowPath) ? fs.readFileSync(genFlowPath, "utf8") : "";
+  const readGenParamsPat = /\{ mode, lang, style, antiN \} = readGenParams\(kind\)/;
+  if (!readGenParamsPat.test(text) && !readGenParamsPat.test(genFlowText)) {
     fail(`${rel}: generate() must read mode/lang/style/antiN via readGenParams`);
   }
   if (/if \(!packLocked && pack && pack\.style\) style = pack\.style/.test(text)) {

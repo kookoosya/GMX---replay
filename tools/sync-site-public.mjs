@@ -79,6 +79,9 @@ const shellModules = [
   "app.wallethelpers.js",
   "app.walletpay.js",
   "app.walletui.js",
+  "app.bestpick.js",
+  "app.refstats.js",
+  "app.generateflow.js",
 ];
 for (const name of shellModules) {
   const modSrc = path.join(root, "public", name);
