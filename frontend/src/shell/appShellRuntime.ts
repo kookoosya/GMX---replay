@@ -67,7 +67,9 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.sitei18nui.js", "gmx-legacy-sitei18nui");
     await injectAppShellRuntime("/app.sitei18ndynamic.js", "gmx-legacy-sitei18ndynamic");
     await injectAppShellRuntime("/app.chrome.js", "gmx-legacy-chrome");
+    await injectAppShellRuntime("/app.shellerrors.js", "gmx-legacy-shellerrors");
     await injectAppShellRuntime("/app.langui.js", "gmx-legacy-langui");
+    await injectAppShellRuntime("/app.sitelangmenu.js", "gmx-legacy-sitelangmenu");
     await injectAppShellRuntime("/app.tabstate.js", "gmx-legacy-tabstate");
     await injectAppShellRuntime("/app.unlock.js", "gmx-legacy-unlock");
     await injectAppShellRuntime("/app.wallpapers.js", "gmx-legacy-wallpapers");
@@ -101,6 +103,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.extthemesui.js", "gmx-legacy-extthemesui");
     await injectAppShellRuntime("/app.extcustombgui.js", "gmx-legacy-extcustombgui");
     await injectAppShellRuntime("/app.nav.js", "gmx-legacy-nav");
+    await injectAppShellRuntime("/app.tabwire.js", "gmx-legacy-tabwire");
     await injectAppShellRuntime("/app.extwallpaperui.js", "gmx-legacy-extwallpaperui");
     await injectAppShellRuntime("/app.accountui.js", "gmx-legacy-accountui");
     await injectAppShellRuntime("/app.auth.js", "gmx-legacy-auth");

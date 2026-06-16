@@ -13,31 +13,17 @@ const $ = __gmxChrome.$;
   let INIT_DONE = false;
   const esc = (s)=>__gmxFmt.escapeHtml(s);
 
-  __gmxChrome.wireFatalBar({
-    onGoHome: () => { try { hideFatal(); tab("home"); } catch { location.href = "/"; } },
+  if (!window.__GMXShellErrorsFactory) throw new Error("GMX shellerrors factory missing");
+  const __gmxShellErrors = window.__GMXShellErrorsFactory({
+    toast,
+    setDegraded,
+    showFatal,
+    escapeHtml: esc,
+    isInitDone: () => INIT_DONE,
   });
+  __gmxShellErrors.wireGlobalErrors();
 
-  window.addEventListener("error", (e)=>{
-    try{
-      const msg = (e?.message || "Unexpected error");
-      const net = String(msg).includes("Failed to fetch") || String(msg).includes("NetworkError") || String(msg).includes("request_failed") || String(msg).includes("timeout");
-      if (net){ setDegraded(true, "Network/API error. You can still edit lists locally."); return; }
-      toast("bad", `<b>Error:</b> ${esc(msg)} <span class="muted small">(try Reload)</span>`);
-      if (!INIT_DONE) showFatal(msg);
-    }catch{}
-  });
-
-  window.addEventListener("unhandledrejection", (e)=>{
-    try{
-      const msg = (e?.reason && (e.reason.message || String(e.reason))) || "Unhandled promise rejection";
-      const net = String(msg).includes("Failed to fetch") || String(msg).includes("NetworkError") || String(msg).includes("request_failed") || String(msg).includes("timeout") || String(msg).includes("not_connected");
-      if (net){ setDegraded(true, "Network/API error. You can still edit lists locally."); return; }
-      toast("bad", `<b>Error:</b> ${esc(msg)} <span class="muted small">(try Reload)</span>`);
-      if (!INIT_DONE) showFatal(msg);
-    }catch{}
-  });
-
-    function setBg(tab){ return __gmxSetBg.setBg(tab); }
+  function setBg(tab){ return __gmxSetBg.setBg(tab); }
 
   function ensurePredictionTabVisible(){ return __gmxNav.ensurePredictionTabVisible(); }
 
@@ -48,17 +34,19 @@ const $ = __gmxChrome.$;
     return __gmxChrome.showInfoModal(title, html);
   }
 
+  if (!window.__GMXTabWireFactory) throw new Error("GMX tabwire factory missing");
+  const __gmxTabWire = window.__GMXTabWireFactory({
+    normalizeTopLevelTab: (n) => normalizeTopLevelTab(n),
+    showTab: (n) => showTab(n),
+    trackEvent: (type, meta) => { try { trackEvent(type, meta); } catch {} },
+    ensurePredictionTabVisible: () => ensurePredictionTabVisible(),
+  });
+  function tab(name){ return __gmxTabWire.tab(name); }
+  __gmxTabWire.wireTabButtons();
 
-  function tab(name){
-    const nextTab = (name === "_force_home") ? "home" : normalizeTopLevelTab(name);
-    // Browsing is always allowed. Actions are gated via requireConnected().
-    showTab(nextTab);
-    try{ trackEvent("tab_open", { tab: String(nextTab||"") }); }catch(_e){}
-  }
-  try{ globalThis.__gmxShowTab = tab; }catch(_e){}
-  try{ globalThis.switchTab = tab; }catch(_e){}
-  ensurePredictionTabVisible();
-  document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click", ()=>tab(b.dataset.tab)));
+  __gmxChrome.wireFatalBar({
+    onGoHome: () => { try { hideFatal(); tab("home"); } catch { location.href = "/"; } },
+  });
 
   function normalizeHandle(input){ return __getGMXAuth().normalizeHandle(input); }
 

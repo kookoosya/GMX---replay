@@ -26,7 +26,9 @@ const shellModules = [
   "app.sitei18nui.js",
   "app.sitei18ndynamic.js",
   "app.chrome.js",
+  "app.shellerrors.js",
   "app.langui.js",
+  "app.sitelangmenu.js",
   "app.tabstate.js",
   "app.unlock.js",
   "app.wallpapers.js",
@@ -59,6 +61,7 @@ const shellModules = [
   "app.extthemesui.js",
   "app.extcustombgui.js",
   "app.nav.js",
+  "app.tabwire.js",
   "app.extwallpaperui.js",
   "app.accountui.js",
 ];

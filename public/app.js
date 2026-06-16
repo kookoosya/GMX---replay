@@ -77,6 +77,31 @@ const __gmxSiteI18nDynamic = window.__GMXSiteI18nDynamicFactory({
   scheduleRefStatsRefresh: (ms) => { try { scheduleRefStatsRefresh(ms); } catch {} },
 });
 
+if (!window.__GMXSiteLangMenuFactory) throw new Error("GMX sitelangmenu factory missing");
+const __gmxSiteLangMenu = window.__GMXSiteLangMenuFactory({
+  $: __gmxChrome.$,
+  escapeHtml: (s) => __gmxFmt.escapeHtml(s),
+  getSiteLang: () => __gmxSt.lsGet(K.SITE_LANG, "en"),
+  setSiteLang: (v) => { try { __gmxSt.lsSet(K.SITE_LANG, v); } catch {} },
+  getSiteLangs: () => SITE_LANGS,
+  setSiteLangs: (arr) => { SITE_LANGS = arr; },
+  getReplyLangs: () => REPLY_LANGS,
+  setReplyLangs: (arr) => { REPLY_LANGS = arr; },
+  applyLang: () => { try { applyLang(); } catch {} },
+  onSiteLangChanged: () => {
+    try { syncBestModeUi(); } catch {}
+    try { syncCleanFillUi(); } catch {}
+    try { window.postMessage({ type: "GMX_SYNC_NOW", reason: "site_lang_change" }, "*"); } catch {}
+    try { updateLangFlags(); } catch {}
+    try { renderWallpaperUI(); } catch {}
+  },
+  onI18nKick: () => {
+    try { applyLang(); } catch {}
+    try { syncBestModeUi(); } catch {}
+    try { syncCleanFillUi(); } catch {}
+  },
+});
+
 if (!window.__GMXLangUiFactory) throw new Error("GMX langui factory missing");
 const __gmxLangUi = window.__GMXLangUiFactory({
   $: __gmxChrome.$,
@@ -110,7 +135,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616z";
+const ASSET_REV = "20260617a";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -876,31 +901,17 @@ const $ = __gmxChrome.$;
   let INIT_DONE = false;
   const esc = (s)=>__gmxFmt.escapeHtml(s);
 
-  __gmxChrome.wireFatalBar({
-    onGoHome: () => { try { hideFatal(); tab("home"); } catch { location.href = "/"; } },
+  if (!window.__GMXShellErrorsFactory) throw new Error("GMX shellerrors factory missing");
+  const __gmxShellErrors = window.__GMXShellErrorsFactory({
+    toast,
+    setDegraded,
+    showFatal,
+    escapeHtml: esc,
+    isInitDone: () => INIT_DONE,
   });
+  __gmxShellErrors.wireGlobalErrors();
 
-  window.addEventListener("error", (e)=>{
-    try{
-      const msg = (e?.message || "Unexpected error");
-      const net = String(msg).includes("Failed to fetch") || String(msg).includes("NetworkError") || String(msg).includes("request_failed") || String(msg).includes("timeout");
-      if (net){ setDegraded(true, "Network/API error. You can still edit lists locally."); return; }
-      toast("bad", `<b>Error:</b> ${esc(msg)} <span class="muted small">(try Reload)</span>`);
-      if (!INIT_DONE) showFatal(msg);
-    }catch{}
-  });
-
-  window.addEventListener("unhandledrejection", (e)=>{
-    try{
-      const msg = (e?.reason && (e.reason.message || String(e.reason))) || "Unhandled promise rejection";
-      const net = String(msg).includes("Failed to fetch") || String(msg).includes("NetworkError") || String(msg).includes("request_failed") || String(msg).includes("timeout") || String(msg).includes("not_connected");
-      if (net){ setDegraded(true, "Network/API error. You can still edit lists locally."); return; }
-      toast("bad", `<b>Error:</b> ${esc(msg)} <span class="muted small">(try Reload)</span>`);
-      if (!INIT_DONE) showFatal(msg);
-    }catch{}
-  });
-
-    function setBg(tab){ return __gmxSetBg.setBg(tab); }
+  function setBg(tab){ return __gmxSetBg.setBg(tab); }
 
   function ensurePredictionTabVisible(){ return __gmxNav.ensurePredictionTabVisible(); }
 
@@ -911,17 +922,19 @@ const $ = __gmxChrome.$;
     return __gmxChrome.showInfoModal(title, html);
   }
 
+  if (!window.__GMXTabWireFactory) throw new Error("GMX tabwire factory missing");
+  const __gmxTabWire = window.__GMXTabWireFactory({
+    normalizeTopLevelTab: (n) => normalizeTopLevelTab(n),
+    showTab: (n) => showTab(n),
+    trackEvent: (type, meta) => { try { trackEvent(type, meta); } catch {} },
+    ensurePredictionTabVisible: () => ensurePredictionTabVisible(),
+  });
+  function tab(name){ return __gmxTabWire.tab(name); }
+  __gmxTabWire.wireTabButtons();
 
-  function tab(name){
-    const nextTab = (name === "_force_home") ? "home" : normalizeTopLevelTab(name);
-    // Browsing is always allowed. Actions are gated via requireConnected().
-    showTab(nextTab);
-    try{ trackEvent("tab_open", { tab: String(nextTab||"") }); }catch(_e){}
-  }
-  try{ globalThis.__gmxShowTab = tab; }catch(_e){}
-  try{ globalThis.switchTab = tab; }catch(_e){}
-  ensurePredictionTabVisible();
-  document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click", ()=>tab(b.dataset.tab)));
+  __gmxChrome.wireFatalBar({
+    onGoHome: () => { try { hideFatal(); tab("home"); } catch { location.href = "/"; } },
+  });
 
   function normalizeHandle(input){ return __getGMXAuth().normalizeHandle(input); }
 
@@ -3661,173 +3674,17 @@ function pruneLegacyAdminPanels(){
   function patchDynamicCopy(lang, merged){ return __gmxSiteI18nDynamic.patchDynamicCopy(lang, merged); }
 
 
-  function fillSelect(sel, arr){
-    sel.innerHTML = "";
-    for (const [v, label] of arr){
-      const o = document.createElement("option");
-      o.value = v;
-      o.textContent = label;
-      sel.appendChild(o);
-    }
-  }
-
-async function loadLocalConfig(){
-  try{
-    const r = await fetch("/extension-config.json", { cache: "no-store" });
-    if (!r.ok) return;
-    const cfg = await r.json().catch(()=>null);
-    if (!cfg || typeof cfg !== "object") return;
-    if (cfg.languages && Array.isArray(cfg.languages.site)) SITE_LANGS = cfg.languages.site;
-    if (cfg.languages && Array.isArray(cfg.languages.reply)) {
-      const onlyEnglish = cfg.languages.reply.filter((item)=>Array.isArray(item) && String(item[0]||"").toLowerCase() === "en");
-      REPLY_LANGS = onlyEnglish.length ? onlyEnglish : [["en","English"]];
-    } else {
-      REPLY_LANGS = [["en","English"]];
-    }
-  }catch{}
-}
-
+  function fillSelect(sel, arr){ return __gmxSiteLangMenu.fillSelect(sel, arr); }
 
   // --- init ---
-  await loadLocalConfig();
-
-  // site language (UI translation)
-  const siteLangSel = $("siteLang");
-  if (siteLangSel) fillSelect(siteLangSel, SITE_LANGS);
-
-  function langFlagSrc(code){
-    const c = String(code||"").trim().toLowerCase();
-    return "/assets/flags/" + c + ".svg";
-  }
-
-
-  function renderSiteLangMenu(){
-    const btn = $("siteLangBtn");
-    const menu = $("siteLangMenu");
-    const flag = $("siteLangFlag");
-    const label = $("siteLangLabel");
-    if (!btn || !menu || !flag || !label) return;
-
-    const cur = localStorage.getItem(LS_SITE_LANG) || "en";
-    const curRow = SITE_LANGS.find(x=>x[0]===cur) || SITE_LANGS[0] || ["en","English"];
-    flag.src = langFlagSrc(curRow[0]); flag.alt = curRow[1];
-    label.textContent = curRow[1];
-
-    menu.innerHTML = "";
-    for (const [v, lab] of SITE_LANGS){
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "langItem" + (v===cur ? " active" : "");
-      b.setAttribute("role","option");
-      b.setAttribute("aria-selected", v===cur ? "true" : "false");
-      b.innerHTML = `<img class="flagImg" src="${langFlagSrc(v)}" alt="" /><span>${escapeHtml(lab)}</span>`;
-      b.addEventListener("click", ()=>{
-        try{ localStorage.setItem(LS_SITE_LANG, v); }catch{}
-        if (siteLangSel) siteLangSel.value = v;
-        try{ applyLang(); }catch{}
-        renderSiteLangMenu();
-        closeLangMenu();
-      });
-      menu.appendChild(b);
-    }
-  }
-
-  function ensureLangMenuPortal(){
-  const pick = $("siteLangPick");
-  const menu = $("siteLangMenu");
-  const btn = $("siteLangBtn");
-  if (!pick || !menu || !btn) return;
-  if (menu._portal) return;
-  // Move menu to body to avoid clipping by overflow/stacking contexts.
-  try{
-    document.body.appendChild(menu);
-    menu._portal = true;
-    menu.style.right = "auto";
-    menu.style.top = "0px";
-    menu.style.left = "0px";
-  }catch{}
-}
-
-function positionLangMenu(){
-  const btn = $("siteLangBtn");
-  const menu = $("siteLangMenu");
-  if (!btn || !menu) return;
-  const r = btn.getBoundingClientRect();
-  const w = Math.max(240, Math.min(340, r.width + 140));
-  const left = Math.min(window.innerWidth - w - 12, Math.max(12, r.right - w));
-  const top = Math.min(window.innerHeight - 12, r.bottom + 8);
-  menu.style.width = w + "px";
-  menu.style.left = left + "px";
-  menu.style.top = top + "px";
-}
-
-function openLangMenu(){
-  const btn = $("siteLangBtn");
-  const menu = $("siteLangMenu");
-  if (!btn || !menu) return;
-  ensureLangMenuPortal();
-  positionLangMenu();
-  menu.classList.remove("hidden");
-  btn.setAttribute("aria-expanded","true");
-}
-function closeLangMenu(){
-  const btn = $("siteLangBtn");
-  const menu = $("siteLangMenu");
-  if (!btn || !menu) return;
-  menu.classList.add("hidden");
-  btn.setAttribute("aria-expanded","false");
-}
-
-  // Default UI language must be English on first visit,
-  // but user-selected language should persist after that.
-  const storedUiLang = localStorage.getItem(LS_SITE_LANG);
-  const validUiLang = SITE_LANGS.some(([v]) => v === storedUiLang) ? storedUiLang : "en";
-  localStorage.setItem(LS_SITE_LANG, validUiLang);
-  if (siteLangSel) siteLangSel.value = validUiLang;
-
-  // Wire dropdown UI
-  try{
-    renderSiteLangMenu();
-    const btn = $("siteLangBtn");
-    if (btn && !btn._bound){
-      btn._bound = true;
-      btn.addEventListener("click", (e)=>{
-        e.preventDefault();
-        const menu = $("siteLangMenu");
-        if (!menu) return;
-        const open = !menu.classList.contains("hidden");
-        if (open) closeLangMenu(); else openLangMenu();
-      });
-      document.addEventListener("click", (e)=>{
-        const pick = $("siteLangPick");
-        const menu = $("siteLangMenu");
-        if (!pick || !menu) return;
-        if (menu.classList.contains("hidden")) return;
-        if (!pick.contains(e.target) && !menu.contains(e.target)) closeLangMenu();
-      });
-      document.addEventListener("keydown", (e)=>{ if (e.key === "Escape") closeLangMenu(); });
-    }
-  }catch{}
+  const { siteLangSel } = await __gmxSiteLangMenu.bootstrapSiteLangUi();
 
   applyLang();
   try{ syncBestModeUi(); }catch(_e){}
   try{ syncCleanFillUi(); }catch(_e){}
   pruneLegacyAdminPanels();
 
-    // Keep translations consistent even when UI re-renders content dynamically.
-    (function(){
-      let t=null;
-      function kick(){
-        if (window.__i18nPause) return;
-        if(t) clearTimeout(t);
-        t=setTimeout(()=>{ if (window.__i18nPause) return; try{ applyLang(); }catch{} try{ syncBestModeUi(); }catch{} try{ syncCleanFillUi(); }catch{} }, 120);
-      }
-      try{
-        const obs = new MutationObserver(()=>kick());
-        obs.observe(document.body, {subtree:true, childList:true, characterData:true});
-        window.__i18nObserver = obs;
-      }catch{}
-    })();
+  __gmxSiteLangMenu.wireI18nObserver();
 
   updateLangFlags();
 
@@ -3852,22 +3709,9 @@ function closeLangMenu(){
     }catch(_e){}
   });
 
-  if (siteLangSel) siteLangSel.addEventListener("change", ()=>{
-    localStorage.setItem(LS_SITE_LANG, siteLangSel.value);
-    applyLang();
-    try{ syncBestModeUi(); }catch(_e){}
-    try{ syncCleanFillUi(); }catch(_e){}
-    try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "site_lang_change" }, "*"); }catch(_e){}
-    updateLangFlags();
-    // ensure per-tab wallpaper controls refresh labels/state
-    try{ renderWallpaperUI(); }catch{}
-  });
+  __gmxSiteLangMenu.wireSiteLangSelectChange(siteLangSel);
 
-  // reply language selects
-  const gmLangSel = $("gmLang");
-  const gnLangSel = $("gnLang");
-  if (gmLangSel) fillSelect(gmLangSel, REPLY_LANGS);
-  if (gnLangSel) fillSelect(gnLangSel, REPLY_LANGS);
+  const { gmLangSel, gnLangSel } = __gmxSiteLangMenu.fillReplyLangSelects();
 
   // styles + theme (depend on SUB/REF_COUNT, but must exist before refreshUsage)
   fillStyles();

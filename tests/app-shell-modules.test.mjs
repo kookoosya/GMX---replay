@@ -169,6 +169,42 @@ test("sitei18ndynamic: nextReferralUnlockAt steps", () => {
   assert.equal(copy.title, "r_how");
 });
 
+test("sitelangmenu: fillSelect builds options", () => {
+  globalThis.document = {
+    createElement() {
+      return { value: "", textContent: "" };
+    },
+  };
+  const sel = { innerHTML: "", options: [], appendChild(o) { this.options.push(o); } };
+  const menu = loadFactory("app.sitelangmenu.js", "__GMXSiteLangMenuFactory")({
+    getSiteLangs: () => [["en", "English"]],
+    getReplyLangs: () => [["en", "English"]],
+    getSiteLang: () => "en",
+    setSiteLang: () => {},
+  });
+  menu.fillSelect(sel, [["en", "English"], ["de", "German"]]);
+  assert.equal(sel.options.length, 2);
+  assert.equal(sel.options[0].value, "en");
+});
+
+test("shellerrors: isNetworkMessage detects fetch failures", () => {
+  const err = loadFactory("app.shellerrors.js", "__GMXShellErrorsFactory")({});
+  assert.equal(err.isNetworkMessage("Failed to fetch"), true);
+  assert.equal(err.isNetworkMessage("Syntax error"), false);
+});
+
+test("tabwire: normalizeTopLevelTab via tab helper", () => {
+  let shown = "";
+  const wire = loadFactory("app.tabwire.js", "__GMXTabWireFactory")({
+    normalizeTopLevelTab: (n) => (n === "upgrade" ? "wallet" : n),
+    showTab: (n) => { shown = n; },
+    trackEvent: () => {},
+    ensurePredictionTabVisible: () => {},
+  });
+  wire.tab("upgrade");
+  assert.equal(shown, "wallet");
+});
+
 test("extview: normalizeExtViewValue and bindExtTabs", () => {
   const extview = loadFactory("app.extview.js", "__GMXExtViewFactory")({
     $: () => null,

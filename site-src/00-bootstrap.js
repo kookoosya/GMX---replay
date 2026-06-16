@@ -77,6 +77,31 @@ const __gmxSiteI18nDynamic = window.__GMXSiteI18nDynamicFactory({
   scheduleRefStatsRefresh: (ms) => { try { scheduleRefStatsRefresh(ms); } catch {} },
 });
 
+if (!window.__GMXSiteLangMenuFactory) throw new Error("GMX sitelangmenu factory missing");
+const __gmxSiteLangMenu = window.__GMXSiteLangMenuFactory({
+  $: __gmxChrome.$,
+  escapeHtml: (s) => __gmxFmt.escapeHtml(s),
+  getSiteLang: () => __gmxSt.lsGet(K.SITE_LANG, "en"),
+  setSiteLang: (v) => { try { __gmxSt.lsSet(K.SITE_LANG, v); } catch {} },
+  getSiteLangs: () => SITE_LANGS,
+  setSiteLangs: (arr) => { SITE_LANGS = arr; },
+  getReplyLangs: () => REPLY_LANGS,
+  setReplyLangs: (arr) => { REPLY_LANGS = arr; },
+  applyLang: () => { try { applyLang(); } catch {} },
+  onSiteLangChanged: () => {
+    try { syncBestModeUi(); } catch {}
+    try { syncCleanFillUi(); } catch {}
+    try { window.postMessage({ type: "GMX_SYNC_NOW", reason: "site_lang_change" }, "*"); } catch {}
+    try { updateLangFlags(); } catch {}
+    try { renderWallpaperUI(); } catch {}
+  },
+  onI18nKick: () => {
+    try { applyLang(); } catch {}
+    try { syncBestModeUi(); } catch {}
+    try { syncCleanFillUi(); } catch {}
+  },
+});
+
 if (!window.__GMXLangUiFactory) throw new Error("GMX langui factory missing");
 const __gmxLangUi = window.__GMXLangUiFactory({
   $: __gmxChrome.$,
@@ -110,7 +135,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616z";
+const ASSET_REV = "20260617a";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });

@@ -72,7 +72,9 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.sitei18nui\.js/, "app.sitei18nui.js script tag");
   mustMatch(rel, /app\.sitei18ndynamic\.js/, "app.sitei18ndynamic.js script tag");
   mustMatch(rel, /app\.chrome\.js/, "app.chrome.js script tag");
+  mustMatch(rel, /app\.shellerrors\.js/, "app.shellerrors.js script tag");
   mustMatch(rel, /app\.langui\.js/, "app.langui.js script tag");
+  mustMatch(rel, /app\.sitelangmenu\.js/, "app.sitelangmenu.js script tag");
   mustMatch(rel, /app\.tabstate\.js/, "app.tabstate.js script tag");
   mustMatch(rel, /app\.unlock\.js/, "app.unlock.js script tag");
   mustMatch(rel, /app\.wallpapers\.js/, "app.wallpapers.js script tag");
@@ -106,6 +108,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.extthemesui\.js/, "app.extthemesui.js script tag");
   mustMatch(rel, /app\.extcustombgui\.js/, "app.extcustombgui.js script tag");
   mustMatch(rel, /app\.nav\.js/, "app.nav.js script tag");
+  mustMatch(rel, /app\.tabwire\.js/, "app.tabwire.js script tag");
   mustMatch(rel, /app\.extwallpaperui\.js/, "app.extwallpaperui.js script tag");
   mustMatch(rel, /app\.accountui\.js/, "app.accountui.js script tag");
   mustMatch(rel, /app\.auth\.js/, "app.auth.js script tag");
