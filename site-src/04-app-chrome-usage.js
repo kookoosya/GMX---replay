@@ -1,30 +1,4 @@
-function fillStyles(){
-    const unlocked = unlockedStylesCount();
-    const fill = (sel)=>{
-      if (!sel) return;
-      const prev = (sel.value || "classic");
-      sel.innerHTML = "";
-      STYLES.forEach(([v,label], idx)=>{
-        const o = document.createElement("option");
-        o.value = v;
-        const locked = (!isPro() && idx >= unlocked);
-        const need = reqRefsForUnlockIndex(idx, FREE_VISIBLE_STYLES);
-        o.textContent = locked ? `${t("locked")||"LOCKED"} (${need} ref)` : label;
-        o.disabled = locked;
-        sel.appendChild(o);
-      });
-      // restore previous selection if possible (do NOT reset on every refresh)
-      const prevIdx = STYLES.findIndex(x=>x[0]===prev);
-      if (prevIdx !== -1 && (isPro() || prevIdx < unlocked)){
-        sel.value = prev;
-      } else {
-        sel.value = STYLES[0][0];
-      }
-    };
-    fill($("gmStyle"));
-    fill($("gnStyle"));
-    if ($("stylesUnlocked")) $("stylesUnlocked").textContent = `${unlocked}/${STYLES.length}`;
-  }
+function fillStyles(){ return __gmxStyles.fillStyles(); }
 
 const $ = __gmxChrome.$;
 
@@ -189,49 +163,9 @@ const $ = __gmxChrome.$;
   function siteLang(){
     try{ return String(localStorage.getItem(LS_SITE_LANG) || "en").toLowerCase(); }catch(_e){ return "en"; }
   }
-  function getBestMode(){
-    try{ return localStorage.getItem(LS_BEST_ENABLED) === "1"; }catch(_e){ return false; }
-  }
-  function setBestMode(next, silent){
-    const on = !!next;
-    try{ localStorage.setItem(LS_BEST_ENABLED, on ? "1" : "0"); }catch(_e){}
-    try{ syncBestModeUi(); }catch(_e){}
-    if (!silent){
-      try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "best_mode_change" }, "*"); }catch(_e){}
-    }
-    return on;
-  }
-  function ensureFreshToggleDefaults(){
-    try{
-      if (localStorage.getItem(LS_TOGGLES_BOOTSTRAP_V2) === "1") return;
-      localStorage.setItem(LS_BEST_ENABLED, "0");
-      localStorage.setItem(LS_GM_CLEAN_FILL, "0");
-      localStorage.setItem(LS_GN_CLEAN_FILL, "0");
-      localStorage.setItem(LS_TOGGLES_BOOTSTRAP_V2, "1");
-    }catch(_e){}
-  }
-
-  function bestCopyText(){
-    return getBestMode()
-      ? {
-          btn: "Best: live",
-          hint: "Best live pulls fresh options, keeps the strongest one, and saves it."
-        }
-      : {
-          btn: "Best: saved",
-          hint: "Best uses the strongest line from your saved list."
-        };
-  }
-  function syncBestModeUi(){
-    const copy = bestCopyText();
-    ["gmBestModeToggle","gnBestModeToggle"].forEach((id)=>{ const el = $(id); if (el) el.textContent = copy.btn; });
-    ["gmBestModeHint","gnBestModeHint"].forEach((id)=>{ const el = $(id); if (el) el.textContent = copy.hint; });
-    ["gmBestBtn","gnBestBtn"].forEach((id)=>{ const el = $(id); if (el) el.textContent = getBestMode() ? "Best live" : "Best"; });
-  }
-
-  ensureFreshToggleDefaults();
-  try{ syncBestModeUi(); }catch(_e){}
-  try{ syncCleanFillUi(); }catch(_e){}
+  function getBestMode(){ return __gmxToggles.getBestMode(); }
+  function setBestMode(next, silent){ return __gmxToggles.setBestMode(next, silent); }
+  function syncBestModeUi(){ return __gmxToggles.syncBestModeUi(); }
 
   // --- Lightweight analytics (no content) ---
   function abVariant(){

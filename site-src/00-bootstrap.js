@@ -8,17 +8,17 @@
   if (!window.__GMXFormatFactory) throw new Error("GMX format factory missing");
   const __gmxFmt = window.__GMXFormatFactory();
 
-if (!window.__GMXChromeFactory) throw new Error("GMX chrome factory missing");
-const __gmxChrome = window.__GMXChromeFactory({
-  inflight: INFLIGHT,
-  escapeHtml: (s) => __gmxFmt.escapeHtml(s),
-});
-
   const ADMIN_HANDLE = "@Kristofer_Sol_";
   let SAVE_CAP_FREE = 50;
   const EMPTY = "__EMPTY__";
   const INFLIGHT = { gm: false, gn: false };
   const ABORT = { gm: null, gn: null };
+
+  if (!window.__GMXChromeFactory) throw new Error("GMX chrome factory missing");
+  const __gmxChrome = window.__GMXChromeFactory({
+    inflight: INFLIGHT,
+    escapeHtml: (s) => __gmxFmt.escapeHtml(s),
+  });
 
   let SUB = null;
   let REF_COUNT = 0;
@@ -48,7 +48,7 @@ const __gmxChrome = window.__GMXChromeFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616n";
+const ASSET_REV = "20260616o";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -121,6 +121,34 @@ const __gmxCf = window.__GMXCleanFillFactory({
   siteLang: () => siteLang(),
 });
 __gmxCf.bootstrap();
+
+if (!window.__GMXStylesFactory) throw new Error("GMX styles factory missing");
+const __gmxStyles = window.__GMXStylesFactory({
+  $: __gmxChrome.$,
+  getStyles: () => __gmxThemes.STYLES,
+  isPro,
+  reqRefsForUnlockIndex,
+  unlockedCountByRefs,
+  freeVisibleStyles: FREE_VISIBLE_STYLES,
+  t: (key) => t(key),
+});
+
+if (!window.__GMXTogglesFactory) throw new Error("GMX toggles factory missing");
+const __gmxToggles = window.__GMXTogglesFactory({
+  storage: __gmxSt,
+  $: __gmxChrome.$,
+  onAfterBestChange: () => { try { syncCleanFillUi(); } catch {} },
+});
+
+if (!window.__GMXCustomBgFactory) throw new Error("GMX custombg factory missing");
+const __gmxCbg = window.__GMXCustomBgFactory({
+  storage: __gmxSt,
+  isPro,
+  unlockedCountByRefs,
+  reqRefsForUnlockIndex,
+});
+__gmxCbg.migrateLegacy();
+__gmxToggles.bootstrap();
 
 
 

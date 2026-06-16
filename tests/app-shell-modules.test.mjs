@@ -215,3 +215,62 @@ test("genparams: anti strength and readGenParams", () => {
   assert.equal(params.lang, "en");
   assert.equal(params.antiN, 40);
 });
+
+test("toggles: best mode storage", () => {
+  const mem = new Map();
+  const storage = {
+    keys: {
+      BEST_ENABLED: "gmx_best_enabled",
+      TOGGLES_BOOTSTRAP_V2: "gmx_toggles_bootstrap_v2",
+      GM_CLEAN_FILL: "gmx_gm_clean_fill",
+      GN_CLEAN_FILL: "gmx_gn_clean_fill",
+    },
+    lsGet(k, fb = "") { return mem.has(k) ? mem.get(k) : fb; },
+    lsSet(k, v) { mem.set(k, String(v)); },
+  };
+  const toggles = loadFactory("app.toggles.js", "__GMXTogglesFactory")({
+    storage,
+    $: () => null,
+  });
+  toggles.bootstrap();
+  assert.equal(toggles.getBestMode(), false);
+  toggles.setBestMode(true, true);
+  assert.equal(toggles.getBestMode(), true);
+});
+
+test("custombg: tab unlock helpers", () => {
+  const mem = new Map();
+  const storage = {
+    keys: {
+      CUSTOM_BG: "gmx_custom_bg",
+      CUSTOM_BG_GLOBAL: "gmx_custom_bg_global",
+      CUSTOM_BG_TAB_PREFIX: "gmx_custom_bg_tab_",
+    },
+    lsGet(k, fb = "") { return mem.has(k) ? mem.get(k) : fb; },
+    lsSet(k, v) { mem.set(k, String(v)); },
+    lsRemove(k) { mem.delete(k); },
+  };
+  const cbg = loadFactory("app.custombg.js", "__GMXCustomBgFactory")({
+    storage,
+    isPro: () => false,
+    unlockedCountByRefs: (total) => total,
+    reqRefsForUnlockIndex: () => 0,
+  });
+  assert.equal(cbg.TABS.length, 10);
+  assert.equal(cbg.canSetCustomBgOnTab("all"), true);
+  assert.equal(cbg.requiredRefsForCustomBgTab("gm"), 0);
+});
+
+test("styles: unlocked count", () => {
+  const styles = loadFactory("app.themes.js", "__GMXThemesFactory")();
+  const ui = loadFactory("app.styles.js", "__GMXStylesFactory")({
+    $: () => null,
+    getStyles: () => styles.STYLES,
+    isPro: () => false,
+    reqRefsForUnlockIndex: () => 3,
+    unlockedCountByRefs: (total, free) => Math.min(total, free),
+    freeVisibleStyles: 8,
+    t: (k) => k,
+  });
+  assert.equal(ui.unlockedStylesCount(), 8);
+});

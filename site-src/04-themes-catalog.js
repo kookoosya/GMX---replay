@@ -28,7 +28,7 @@
   function fillPacks(){ return __gmxGp.fillPacks(); }
 
   function unlockedThemesCount(){ return unlockedCountByRefs(THEMES.length, FREE_VISIBLE_THEMES); }
-  function unlockedStylesCount(){ return unlockedCountByRefs(STYLES.length, FREE_VISIBLE_STYLES); }
+  function unlockedStylesCount(){ return __gmxStyles.unlockedStylesCount(); }
 
   function rgbaToRgbTuple(s){ return __gmxThemes.rgbaToRgbTuple(s); }
   function relLum(rgb){ return __gmxThemes.relLum(rgb); }

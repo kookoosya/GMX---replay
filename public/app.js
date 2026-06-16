@@ -8,17 +8,17 @@
   if (!window.__GMXFormatFactory) throw new Error("GMX format factory missing");
   const __gmxFmt = window.__GMXFormatFactory();
 
-if (!window.__GMXChromeFactory) throw new Error("GMX chrome factory missing");
-const __gmxChrome = window.__GMXChromeFactory({
-  inflight: INFLIGHT,
-  escapeHtml: (s) => __gmxFmt.escapeHtml(s),
-});
-
   const ADMIN_HANDLE = "@Kristofer_Sol_";
   let SAVE_CAP_FREE = 50;
   const EMPTY = "__EMPTY__";
   const INFLIGHT = { gm: false, gn: false };
   const ABORT = { gm: null, gn: null };
+
+  if (!window.__GMXChromeFactory) throw new Error("GMX chrome factory missing");
+  const __gmxChrome = window.__GMXChromeFactory({
+    inflight: INFLIGHT,
+    escapeHtml: (s) => __gmxFmt.escapeHtml(s),
+  });
 
   let SUB = null;
   let REF_COUNT = 0;
@@ -48,7 +48,7 @@ const __gmxChrome = window.__GMXChromeFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616n";
+const ASSET_REV = "20260616o";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -121,6 +121,34 @@ const __gmxCf = window.__GMXCleanFillFactory({
   siteLang: () => siteLang(),
 });
 __gmxCf.bootstrap();
+
+if (!window.__GMXStylesFactory) throw new Error("GMX styles factory missing");
+const __gmxStyles = window.__GMXStylesFactory({
+  $: __gmxChrome.$,
+  getStyles: () => __gmxThemes.STYLES,
+  isPro,
+  reqRefsForUnlockIndex,
+  unlockedCountByRefs,
+  freeVisibleStyles: FREE_VISIBLE_STYLES,
+  t: (key) => t(key),
+});
+
+if (!window.__GMXTogglesFactory) throw new Error("GMX toggles factory missing");
+const __gmxToggles = window.__GMXTogglesFactory({
+  storage: __gmxSt,
+  $: __gmxChrome.$,
+  onAfterBestChange: () => { try { syncCleanFillUi(); } catch {} },
+});
+
+if (!window.__GMXCustomBgFactory) throw new Error("GMX custombg factory missing");
+const __gmxCbg = window.__GMXCustomBgFactory({
+  storage: __gmxSt,
+  isPro,
+  unlockedCountByRefs,
+  reqRefsForUnlockIndex,
+});
+__gmxCbg.migrateLegacy();
+__gmxToggles.bootstrap();
 
 
 
@@ -213,6 +241,7 @@ async function postEvent(type, meta){
   const GN_LANGS  = K.GN_LANGS;
 
   const LS_CUSTOM_BG = K.CUSTOM_BG;
+  const LS_CUSTOM_BG_GLOBAL = K.CUSTOM_BG_GLOBAL;
 
   const LS_GM_PACK = K.GM_PACK;
   const LS_GN_PACK = K.GN_PACK;
@@ -244,116 +273,20 @@ async function postEvent(type, meta){
 
 
   
-  // ---- Custom background per tab (Themes) ----
-  // Migration from old single-key storage:
-  const LS_CUSTOM_BG_GLOBAL = K.CUSTOM_BG_GLOBAL;
-  const LS_CUSTOM_BG_TAB_PREFIX = K.CUSTOM_BG_TAB_PREFIX;
-
-  (function migrateCustomBg(){
-    try{
-      const legacy = localStorage.getItem(LS_CUSTOM_BG);
-      if (legacy && !localStorage.getItem(LS_CUSTOM_BG_GLOBAL)){
-        localStorage.setItem(LS_CUSTOM_BG_GLOBAL, legacy);
-      }
-      if (legacy) localStorage.removeItem(LS_CUSTOM_BG);
-    }catch{}
-  })();
-
-  function customBgKeyForTab(tab){
-    if (!tab || tab === "all") return LS_CUSTOM_BG_GLOBAL;
-    return LS_CUSTOM_BG_TAB_PREFIX + tab;
-  }
-  function getCustomBgForTab(tab){
-    const direct = localStorage.getItem(customBgKeyForTab(tab)) || "";
-    if (direct) return direct;
-    const global = localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || "";
-    return global;
-  }
-  
-function clearCustomBgForTab(tab){
-  if (!tab) return;
-  if (tab === "all"){
-    try{ localStorage.removeItem(LS_CUSTOM_BG_GLOBAL); }catch{}
-    return;
-  }
-  try{ localStorage.removeItem(customBgKeyForTab(tab)); }catch{}
-}
-
-function setCustomBgForTab(tab, dataUrl){
-    const k = customBgKeyForTab(tab);
-    if (!dataUrl){
-      localStorage.removeItem(k);
-    } else {
-      localStorage.setItem(k, String(dataUrl));
-    }
-  }
-
-  
-  // Tabs used by Wallpapers / Custom background "Apply to" selectors.
-// Must match main nav data-tab values.
-const TABS = [
-  ["all","wp_apply_all"],
-  ["home","wp_apply_home"],
-  ["gm","wp_apply_gm"],
-  ["gn","wp_apply_gn"],
-  ["prediction","wp_apply_prediction"],
-  ["referrals","wp_apply_referrals"],
-  ["leaderboard","wp_apply_leaderboard"],
-  ["themes","wp_apply_themes"],
-  ["extthemes","wp_apply_extthemes"],
-  ["wallet","wp_apply_wallet"]
-];
-
-// Tabs for apply-to selectors visible to all users (no Admin)
-const TABS_PUBLIC = TABS;
-function listCustomBgUsedTabs(){
-    const used = [];
-    try{
-      // tabs excluding "all"
-      TABS.forEach(([k], idx)=>{
-        if (k === "all") return;
-        const v = localStorage.getItem(customBgKeyForTab(k)) || "";
-        if (v) used.push(k);
-      });
-    }catch{}
-    return used;
-  }
-
-  function customBgUnlockedTabCount(){
-    // How many per-tab targets are eligible (excluding "all") for NEW backgrounds.
-    // Free: 3 tabs of choice, then unlock by refs: 10 / 15 / 20 / ... (+5)
-    const tabsOnly = TABS.filter(t=>t[0]!=="all");
-    if (isPro()) return tabsOnly.length;
-    // reuse generic unlock logic with freeCount=3
-    return unlockedCountByRefs(tabsOnly.length, 3);
-  }
-
-  function canSetCustomBgOnTab(tab){
-    if (tab === "all") return true;
-    if (isPro()) return true;
-
-    const used = listCustomBgUsedTabs();
-    if (used.includes(tab)) return true; // existing slot can always be edited/cleared
-
-    // free: up to 3 tabs of choice
-    if (used.length < 3) return true;
-
-    // beyond 3: only if unlocked by refs (Variant A)
-    const tabsOnly = TABS.filter(t=>t[0]!=="all").map(t=>t[0]);
-    const idx = tabsOnly.indexOf(tab);
-    if (idx < 0) return false;
-    const unlocked = customBgUnlockedTabCount(); // count of unlocked tabs in ordered list
-    return idx < unlocked;
-  }
-
-  function requiredRefsForCustomBgTab(tab){
-    if (tab === "all") return 0;
-    const tabsOnly = TABS.filter(t=>t[0]!=="all").map(t=>t[0]);
-    const idx = tabsOnly.indexOf(tab);
-    if (idx < 0) return 0;
-    // freeCount=3
-    return reqRefsForUnlockIndex(idx, 3);
-  }
+  const TABS = __gmxCbg.TABS;
+  const TABS_PUBLIC = __gmxCbg.TABS_PUBLIC;
+  function customBgKeyForTab(tab){ return __gmxCbg.customBgKeyForTab(tab); }
+  function getCustomBgForTab(tab){ return __gmxCbg.getCustomBgForTab(tab); }
+  function clearCustomBgForTab(tab){ return __gmxCbg.clearCustomBgForTab(tab); }
+  function setCustomBgForTab(tab, dataUrl){ return __gmxCbg.setCustomBgForTab(tab, dataUrl); }
+  function listCustomBgUsedTabs(){ return __gmxCbg.listCustomBgUsedTabs(); }
+  function customBgUnlockedTabCount(){ return __gmxCbg.customBgUnlockedTabCount(); }
+  function canSetCustomBgOnTab(tab){ return __gmxCbg.canSetCustomBgOnTab(tab); }
+  function requiredRefsForCustomBgTab(tab){ return __gmxCbg.requiredRefsForCustomBgTab(tab); }
+  function readFileAsDataURL(file){ return __gmxCbg.readFileAsDataURL(file); }
+  function loadImage(src){ return __gmxCbg.loadImage(src); }
+  async function compressImageToJpegDataURL(file, options){ return __gmxCbg.compressImageToJpegDataURL(file, options); }
+  async function fitImageToCoverDataUrl(file, maxW, maxH, quality){ return __gmxCbg.fitImageToCoverDataUrl(file, maxW, maxH, quality); }
 
   function applyUserBg(tab){
     const target = tab || currentTabName();
@@ -394,100 +327,8 @@ function listCustomBgUsedTabs(){
     document.body.classList.toggle("hasUserBg", on);
   }
 
-  async function fitImageToCoverDataUrl(file, maxW=2560, maxH=1440, quality=0.88){
-    // Downscale + crop-to-cover to keep localStorage small and ensure it fits the page.
-    // Output: JPEG data URL.
-    return new Promise((resolve, reject)=>{
-      try{
-        const fr = new FileReader();
-        fr.onerror = ()=>reject(new Error("read_failed"));
-        fr.onload = ()=>{
-          const img = new Image();
-          img.onerror = ()=>reject(new Error("image_decode_failed"));
-          img.onload = ()=>{
-            try{
-              const iw = img.naturalWidth || img.width || 1;
-              const ih = img.naturalHeight || img.height || 1;
-              const targetW = Math.min(maxW, iw);
-              const targetH = Math.min(maxH, ih);
-              const canvas = document.createElement("canvas");
-              canvas.width = targetW;
-              canvas.height = targetH;
-              const ctx = canvas.getContext("2d", { alpha:false });
-              // cover crop
-              const scale = Math.max(targetW/iw, targetH/ih);
-              const sw = targetW/scale;
-              const sh = targetH/scale;
-              const sx = (iw - sw)/2;
-              const sy = (ih - sh)/2;
-              ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH);
-              const out = canvas.toDataURL("image/jpeg", quality);
-              resolve(out);
-            }catch(e){ reject(e); }
-          };
-          img.src = String(fr.result||"");
-        };
-        fr.readAsDataURL(file);
-      }catch(e){ reject(e); }
-    });
-  }
-
-
   function renderCustomBgUI(){ /* merged into wallpapers tab */ }
   function syncCustomBgUI(){ /* merged into wallpapers tab */ }
-
-function readFileAsDataURL(file){
-    return new Promise((resolve, reject)=>{
-      const r = new FileReader();
-      r.onload = ()=>resolve(String(r.result||""));
-      r.onerror = ()=>reject(r.error||new Error("read failed"));
-      r.readAsDataURL(file);
-    });
-  }
-
-  function loadImage(src){
-    return new Promise((resolve, reject)=>{
-      const img = new Image();
-      img.onload = ()=>resolve(img);
-      img.onerror = ()=>reject(new Error("image load failed"));
-      img.src = src;
-    });
-  }
-
-  async function compressImageToJpegDataURL(file, options){
-    const src = await readFileAsDataURL(file);
-    const img = await loadImage(src);
-    const opts = options || {};
-    const profile = String(opts.profile || "generic").toLowerCase();
-    const MAX = profile === "site" ? 2560 : (profile === "ext" ? 1600 : 2200);
-    const targetRatio = profile === "site" ? (16 / 9) : (profile === "ext" ? (9 / 16) : 0);
-    let w = img.naturalWidth || img.width;
-    let h = img.naturalHeight || img.height;
-    if (!w || !h) return src;
-    let sx = 0;
-    let sy = 0;
-    let sw = w;
-    let sh = h;
-    if (targetRatio > 0){
-      const srcRatio = w / h;
-      if (srcRatio > targetRatio){
-        sw = Math.max(1, Math.round(h * targetRatio));
-        sx = Math.max(0, Math.round((w - sw) / 2));
-      } else if (srcRatio < targetRatio){
-        sh = Math.max(1, Math.round(w / targetRatio));
-        sy = Math.max(0, Math.round((h - sh) / 2));
-      }
-    }
-    const scale = Math.min(1, MAX / Math.max(sw, sh));
-    const tw = Math.max(1, Math.round(sw * scale));
-    const th = Math.max(1, Math.round(sh * scale));
-    const canvas = document.createElement("canvas");
-    canvas.width = tw;
-    canvas.height = th;
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, tw, th);
-    return canvas.toDataURL("image/jpeg", 0.88);
-  }
 
   // Background themes per tab (CSS-only, no assets)
   const TAB_THEME = (function(){
@@ -1080,7 +921,7 @@ function renderWallpaperUI(){
   function fillPacks(){ return __gmxGp.fillPacks(); }
 
   function unlockedThemesCount(){ return unlockedCountByRefs(THEMES.length, FREE_VISIBLE_THEMES); }
-  function unlockedStylesCount(){ return unlockedCountByRefs(STYLES.length, FREE_VISIBLE_STYLES); }
+  function unlockedStylesCount(){ return __gmxStyles.unlockedStylesCount(); }
 
   function rgbaToRgbTuple(s){ return __gmxThemes.rgbaToRgbTuple(s); }
   function relLum(rgb){ return __gmxThemes.relLum(rgb); }
@@ -1804,33 +1645,7 @@ function initExtWallpaperControls(){
 
 
 
-function fillStyles(){
-    const unlocked = unlockedStylesCount();
-    const fill = (sel)=>{
-      if (!sel) return;
-      const prev = (sel.value || "classic");
-      sel.innerHTML = "";
-      STYLES.forEach(([v,label], idx)=>{
-        const o = document.createElement("option");
-        o.value = v;
-        const locked = (!isPro() && idx >= unlocked);
-        const need = reqRefsForUnlockIndex(idx, FREE_VISIBLE_STYLES);
-        o.textContent = locked ? `${t("locked")||"LOCKED"} (${need} ref)` : label;
-        o.disabled = locked;
-        sel.appendChild(o);
-      });
-      // restore previous selection if possible (do NOT reset on every refresh)
-      const prevIdx = STYLES.findIndex(x=>x[0]===prev);
-      if (prevIdx !== -1 && (isPro() || prevIdx < unlocked)){
-        sel.value = prev;
-      } else {
-        sel.value = STYLES[0][0];
-      }
-    };
-    fill($("gmStyle"));
-    fill($("gnStyle"));
-    if ($("stylesUnlocked")) $("stylesUnlocked").textContent = `${unlocked}/${STYLES.length}`;
-  }
+function fillStyles(){ return __gmxStyles.fillStyles(); }
 
 const $ = __gmxChrome.$;
 
@@ -1995,49 +1810,9 @@ const $ = __gmxChrome.$;
   function siteLang(){
     try{ return String(localStorage.getItem(LS_SITE_LANG) || "en").toLowerCase(); }catch(_e){ return "en"; }
   }
-  function getBestMode(){
-    try{ return localStorage.getItem(LS_BEST_ENABLED) === "1"; }catch(_e){ return false; }
-  }
-  function setBestMode(next, silent){
-    const on = !!next;
-    try{ localStorage.setItem(LS_BEST_ENABLED, on ? "1" : "0"); }catch(_e){}
-    try{ syncBestModeUi(); }catch(_e){}
-    if (!silent){
-      try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "best_mode_change" }, "*"); }catch(_e){}
-    }
-    return on;
-  }
-  function ensureFreshToggleDefaults(){
-    try{
-      if (localStorage.getItem(LS_TOGGLES_BOOTSTRAP_V2) === "1") return;
-      localStorage.setItem(LS_BEST_ENABLED, "0");
-      localStorage.setItem(LS_GM_CLEAN_FILL, "0");
-      localStorage.setItem(LS_GN_CLEAN_FILL, "0");
-      localStorage.setItem(LS_TOGGLES_BOOTSTRAP_V2, "1");
-    }catch(_e){}
-  }
-
-  function bestCopyText(){
-    return getBestMode()
-      ? {
-          btn: "Best: live",
-          hint: "Best live pulls fresh options, keeps the strongest one, and saves it."
-        }
-      : {
-          btn: "Best: saved",
-          hint: "Best uses the strongest line from your saved list."
-        };
-  }
-  function syncBestModeUi(){
-    const copy = bestCopyText();
-    ["gmBestModeToggle","gnBestModeToggle"].forEach((id)=>{ const el = $(id); if (el) el.textContent = copy.btn; });
-    ["gmBestModeHint","gnBestModeHint"].forEach((id)=>{ const el = $(id); if (el) el.textContent = copy.hint; });
-    ["gmBestBtn","gnBestBtn"].forEach((id)=>{ const el = $(id); if (el) el.textContent = getBestMode() ? "Best live" : "Best"; });
-  }
-
-  ensureFreshToggleDefaults();
-  try{ syncBestModeUi(); }catch(_e){}
-  try{ syncCleanFillUi(); }catch(_e){}
+  function getBestMode(){ return __gmxToggles.getBestMode(); }
+  function setBestMode(next, silent){ return __gmxToggles.setBestMode(next, silent); }
+  function syncBestModeUi(){ return __gmxToggles.syncBestModeUi(); }
 
   // --- Lightweight analytics (no content) ---
   function abVariant(){

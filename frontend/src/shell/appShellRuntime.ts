@@ -73,6 +73,9 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.antirepeat.js", "gmx-legacy-antirepeat");
     await injectAppShellRuntime("/app.genparams.js", "gmx-legacy-genparams");
     await injectAppShellRuntime("/app.cleanfill.js", "gmx-legacy-cleanfill");
+    await injectAppShellRuntime("/app.styles.js", "gmx-legacy-styles");
+    await injectAppShellRuntime("/app.toggles.js", "gmx-legacy-toggles");
+    await injectAppShellRuntime("/app.custombg.js", "gmx-legacy-custombg");
     await injectAppShellRuntime("/app.auth.js", "gmx-legacy-auth");
     await injectAppShellRuntime("/app.js", "gmx-app-shell-runtime");
     await waitForAppShellReady();

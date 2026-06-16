@@ -32,6 +32,7 @@
   const GN_LANGS  = K.GN_LANGS;
 
   const LS_CUSTOM_BG = K.CUSTOM_BG;
+  const LS_CUSTOM_BG_GLOBAL = K.CUSTOM_BG_GLOBAL;
 
   const LS_GM_PACK = K.GM_PACK;
   const LS_GN_PACK = K.GN_PACK;
@@ -63,116 +64,20 @@
 
 
   
-  // ---- Custom background per tab (Themes) ----
-  // Migration from old single-key storage:
-  const LS_CUSTOM_BG_GLOBAL = K.CUSTOM_BG_GLOBAL;
-  const LS_CUSTOM_BG_TAB_PREFIX = K.CUSTOM_BG_TAB_PREFIX;
-
-  (function migrateCustomBg(){
-    try{
-      const legacy = localStorage.getItem(LS_CUSTOM_BG);
-      if (legacy && !localStorage.getItem(LS_CUSTOM_BG_GLOBAL)){
-        localStorage.setItem(LS_CUSTOM_BG_GLOBAL, legacy);
-      }
-      if (legacy) localStorage.removeItem(LS_CUSTOM_BG);
-    }catch{}
-  })();
-
-  function customBgKeyForTab(tab){
-    if (!tab || tab === "all") return LS_CUSTOM_BG_GLOBAL;
-    return LS_CUSTOM_BG_TAB_PREFIX + tab;
-  }
-  function getCustomBgForTab(tab){
-    const direct = localStorage.getItem(customBgKeyForTab(tab)) || "";
-    if (direct) return direct;
-    const global = localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || "";
-    return global;
-  }
-  
-function clearCustomBgForTab(tab){
-  if (!tab) return;
-  if (tab === "all"){
-    try{ localStorage.removeItem(LS_CUSTOM_BG_GLOBAL); }catch{}
-    return;
-  }
-  try{ localStorage.removeItem(customBgKeyForTab(tab)); }catch{}
-}
-
-function setCustomBgForTab(tab, dataUrl){
-    const k = customBgKeyForTab(tab);
-    if (!dataUrl){
-      localStorage.removeItem(k);
-    } else {
-      localStorage.setItem(k, String(dataUrl));
-    }
-  }
-
-  
-  // Tabs used by Wallpapers / Custom background "Apply to" selectors.
-// Must match main nav data-tab values.
-const TABS = [
-  ["all","wp_apply_all"],
-  ["home","wp_apply_home"],
-  ["gm","wp_apply_gm"],
-  ["gn","wp_apply_gn"],
-  ["prediction","wp_apply_prediction"],
-  ["referrals","wp_apply_referrals"],
-  ["leaderboard","wp_apply_leaderboard"],
-  ["themes","wp_apply_themes"],
-  ["extthemes","wp_apply_extthemes"],
-  ["wallet","wp_apply_wallet"]
-];
-
-// Tabs for apply-to selectors visible to all users (no Admin)
-const TABS_PUBLIC = TABS;
-function listCustomBgUsedTabs(){
-    const used = [];
-    try{
-      // tabs excluding "all"
-      TABS.forEach(([k], idx)=>{
-        if (k === "all") return;
-        const v = localStorage.getItem(customBgKeyForTab(k)) || "";
-        if (v) used.push(k);
-      });
-    }catch{}
-    return used;
-  }
-
-  function customBgUnlockedTabCount(){
-    // How many per-tab targets are eligible (excluding "all") for NEW backgrounds.
-    // Free: 3 tabs of choice, then unlock by refs: 10 / 15 / 20 / ... (+5)
-    const tabsOnly = TABS.filter(t=>t[0]!=="all");
-    if (isPro()) return tabsOnly.length;
-    // reuse generic unlock logic with freeCount=3
-    return unlockedCountByRefs(tabsOnly.length, 3);
-  }
-
-  function canSetCustomBgOnTab(tab){
-    if (tab === "all") return true;
-    if (isPro()) return true;
-
-    const used = listCustomBgUsedTabs();
-    if (used.includes(tab)) return true; // existing slot can always be edited/cleared
-
-    // free: up to 3 tabs of choice
-    if (used.length < 3) return true;
-
-    // beyond 3: only if unlocked by refs (Variant A)
-    const tabsOnly = TABS.filter(t=>t[0]!=="all").map(t=>t[0]);
-    const idx = tabsOnly.indexOf(tab);
-    if (idx < 0) return false;
-    const unlocked = customBgUnlockedTabCount(); // count of unlocked tabs in ordered list
-    return idx < unlocked;
-  }
-
-  function requiredRefsForCustomBgTab(tab){
-    if (tab === "all") return 0;
-    const tabsOnly = TABS.filter(t=>t[0]!=="all").map(t=>t[0]);
-    const idx = tabsOnly.indexOf(tab);
-    if (idx < 0) return 0;
-    // freeCount=3
-    return reqRefsForUnlockIndex(idx, 3);
-  }
+  const TABS = __gmxCbg.TABS;
+  const TABS_PUBLIC = __gmxCbg.TABS_PUBLIC;
+  function customBgKeyForTab(tab){ return __gmxCbg.customBgKeyForTab(tab); }
+  function getCustomBgForTab(tab){ return __gmxCbg.getCustomBgForTab(tab); }
+  function clearCustomBgForTab(tab){ return __gmxCbg.clearCustomBgForTab(tab); }
+  function setCustomBgForTab(tab, dataUrl){ return __gmxCbg.setCustomBgForTab(tab, dataUrl); }
+  function listCustomBgUsedTabs(){ return __gmxCbg.listCustomBgUsedTabs(); }
+  function customBgUnlockedTabCount(){ return __gmxCbg.customBgUnlockedTabCount(); }
+  function canSetCustomBgOnTab(tab){ return __gmxCbg.canSetCustomBgOnTab(tab); }
+  function requiredRefsForCustomBgTab(tab){ return __gmxCbg.requiredRefsForCustomBgTab(tab); }
+  function readFileAsDataURL(file){ return __gmxCbg.readFileAsDataURL(file); }
+  function loadImage(src){ return __gmxCbg.loadImage(src); }
+  async function compressImageToJpegDataURL(file, options){ return __gmxCbg.compressImageToJpegDataURL(file, options); }
+  async function fitImageToCoverDataUrl(file, maxW, maxH, quality){ return __gmxCbg.fitImageToCoverDataUrl(file, maxW, maxH, quality); }
 
   function applyUserBg(tab){
     const target = tab || currentTabName();
@@ -213,100 +118,8 @@ function listCustomBgUsedTabs(){
     document.body.classList.toggle("hasUserBg", on);
   }
 
-  async function fitImageToCoverDataUrl(file, maxW=2560, maxH=1440, quality=0.88){
-    // Downscale + crop-to-cover to keep localStorage small and ensure it fits the page.
-    // Output: JPEG data URL.
-    return new Promise((resolve, reject)=>{
-      try{
-        const fr = new FileReader();
-        fr.onerror = ()=>reject(new Error("read_failed"));
-        fr.onload = ()=>{
-          const img = new Image();
-          img.onerror = ()=>reject(new Error("image_decode_failed"));
-          img.onload = ()=>{
-            try{
-              const iw = img.naturalWidth || img.width || 1;
-              const ih = img.naturalHeight || img.height || 1;
-              const targetW = Math.min(maxW, iw);
-              const targetH = Math.min(maxH, ih);
-              const canvas = document.createElement("canvas");
-              canvas.width = targetW;
-              canvas.height = targetH;
-              const ctx = canvas.getContext("2d", { alpha:false });
-              // cover crop
-              const scale = Math.max(targetW/iw, targetH/ih);
-              const sw = targetW/scale;
-              const sh = targetH/scale;
-              const sx = (iw - sw)/2;
-              const sy = (ih - sh)/2;
-              ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH);
-              const out = canvas.toDataURL("image/jpeg", quality);
-              resolve(out);
-            }catch(e){ reject(e); }
-          };
-          img.src = String(fr.result||"");
-        };
-        fr.readAsDataURL(file);
-      }catch(e){ reject(e); }
-    });
-  }
-
-
   function renderCustomBgUI(){ /* merged into wallpapers tab */ }
   function syncCustomBgUI(){ /* merged into wallpapers tab */ }
-
-function readFileAsDataURL(file){
-    return new Promise((resolve, reject)=>{
-      const r = new FileReader();
-      r.onload = ()=>resolve(String(r.result||""));
-      r.onerror = ()=>reject(r.error||new Error("read failed"));
-      r.readAsDataURL(file);
-    });
-  }
-
-  function loadImage(src){
-    return new Promise((resolve, reject)=>{
-      const img = new Image();
-      img.onload = ()=>resolve(img);
-      img.onerror = ()=>reject(new Error("image load failed"));
-      img.src = src;
-    });
-  }
-
-  async function compressImageToJpegDataURL(file, options){
-    const src = await readFileAsDataURL(file);
-    const img = await loadImage(src);
-    const opts = options || {};
-    const profile = String(opts.profile || "generic").toLowerCase();
-    const MAX = profile === "site" ? 2560 : (profile === "ext" ? 1600 : 2200);
-    const targetRatio = profile === "site" ? (16 / 9) : (profile === "ext" ? (9 / 16) : 0);
-    let w = img.naturalWidth || img.width;
-    let h = img.naturalHeight || img.height;
-    if (!w || !h) return src;
-    let sx = 0;
-    let sy = 0;
-    let sw = w;
-    let sh = h;
-    if (targetRatio > 0){
-      const srcRatio = w / h;
-      if (srcRatio > targetRatio){
-        sw = Math.max(1, Math.round(h * targetRatio));
-        sx = Math.max(0, Math.round((w - sw) / 2));
-      } else if (srcRatio < targetRatio){
-        sh = Math.max(1, Math.round(w / targetRatio));
-        sy = Math.max(0, Math.round((h - sh) / 2));
-      }
-    }
-    const scale = Math.min(1, MAX / Math.max(sw, sh));
-    const tw = Math.max(1, Math.round(sw * scale));
-    const th = Math.max(1, Math.round(sh * scale));
-    const canvas = document.createElement("canvas");
-    canvas.width = tw;
-    canvas.height = th;
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, tw, th);
-    return canvas.toDataURL("image/jpeg", 0.88);
-  }
 
   // Background themes per tab (CSS-only, no assets)
   const TAB_THEME = (function(){
