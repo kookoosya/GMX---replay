@@ -22,6 +22,7 @@ const shellModules = [
   "app.auth.js",
   "app.storage.js",
   "app.format.js",
+  "app.chrome.js",
   "app.unlock.js",
   "app.wallpapers.js",
   "app.themes.js",
@@ -29,6 +30,7 @@ const shellModules = [
   "app.generate.js",
   "app.banks.js",
   "app.antirepeat.js",
+  "app.genparams.js",
 ];
 for (const name of shellModules) {
   const modSrc = path.join(root, "public", name);

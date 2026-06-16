@@ -21,68 +21,11 @@
     return __gmxThemes.packsForKind(kind);
   }
 
-  function getAntiStrength(kind){
-    try{
-      const raw = localStorage.getItem(lsKeyAnti(kind));
-      if (raw !== null && raw !== ""){
-        const n = Math.trunc(Number(raw));
-        if (Number.isFinite(n)) return Math.max(0, Math.min(5, n));
-      }
-    }catch(_e){}
-    const packEl = kind === "gn" ? $("gnPack") : $("gmPack");
-    const pid = packEl ? (packEl.value || "classic") : "classic";
-    const packs = packsForKind(kind);
-    const pack = packs.find((p)=>p.id === pid) || packs[0];
-    const anti = pack && Number.isFinite(pack.anti) ? pack.anti : 2;
-    return Math.max(0, Math.min(5, anti));
-  }
-
-  function readGenParams(kind){
-    const modeEl = kind === "gm" ? $("gmMode") : $("gnMode");
-    const styleEl = kind === "gm" ? $("gmStyle") : $("gnStyle");
-    const mode = modeEl ? modeEl.value : "mid";
-    const lang = currentLang(kind);
-    const style = styleEl ? styleEl.value : "classic";
-    const strength = getAntiStrength(kind);
-    const antiN = antiWindow(strength);
-    return { mode, lang, style, antiN };
-  }
-
-  function applyPackDefaultsToUi(kind, pack){
-    if (!pack) return;
-    const styleSel = kind === "gm" ? $("gmStyle") : $("gnStyle");
-    const modeSel  = kind === "gm" ? $("gmMode")  : $("gnMode");
-    if (styleSel && pack.style) styleSel.value = pack.style;
-    if (modeSel && pack.mode) modeSel.value = pack.mode;
-    try{ syncModePanelCopy(); }catch(_e){}
-  }
-
-  function unlockedPacksCountFor(kind){
-    return unlockedCountByRefs(packsForKind(kind).length, FREE_VISIBLE_PACKS);
-  }
-
-  function fillPacks(){
-    const fill = (kind, sel, lsKey)=>{
-      if (!sel) return;
-      const packs = packsForKind(kind);
-      const unlocked = unlockedPacksCountFor(kind);
-      const prev = localStorage.getItem(lsKey) || "classic";
-      sel.innerHTML = "";
-      packs.forEach((p, idx)=>{
-        const o = document.createElement("option");
-        o.value = p.id;
-        const locked = (!isPro() && idx >= unlocked);
-        const need = reqRefsForUnlockIndex(idx, FREE_VISIBLE_PACKS);
-        o.textContent = locked ? `${t("locked")||"LOCKED"} (${need} ref)` : p.name;
-        o.disabled = locked;
-        sel.appendChild(o);
-      });
-      if ([...sel.options].some(o=>o.value===prev && !o.disabled)) sel.value = prev;
-      else sel.value = "classic";
-    };
-    fill("gm", $("gmPack"), LS_GM_PACK);
-    fill("gn", $("gnPack"), LS_GN_PACK);
-  }
+  function getAntiStrength(kind){ return __gmxGp.getAntiStrength(kind); }
+  function readGenParams(kind){ return __gmxGp.readGenParams(kind); }
+  function applyPackDefaultsToUi(kind, pack){ return __gmxGp.applyPackDefaultsToUi(kind, pack); }
+  function unlockedPacksCountFor(kind){ return __gmxGp.unlockedPacksCountFor(kind); }
+  function fillPacks(){ return __gmxGp.fillPacks(); }
 
   function unlockedThemesCount(){ return unlockedCountByRefs(THEMES.length, FREE_VISIBLE_THEMES); }
   function unlockedStylesCount(){ return unlockedCountByRefs(STYLES.length, FREE_VISIBLE_STYLES); }

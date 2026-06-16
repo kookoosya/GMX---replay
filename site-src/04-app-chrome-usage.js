@@ -26,19 +26,9 @@ function fillStyles(){
     if ($("stylesUnlocked")) $("stylesUnlocked").textContent = `${unlocked}/${STYLES.length}`;
   }
 
-const $ = (id) => document.getElementById(id);
+const $ = __gmxChrome.$;
 
-  function toast(type, html, ms=4500){
-    const el = $("toast");
-    if (!el) return;
-    el.className = `toast ${type||""}`;
-    el.innerHTML = `<div class="ticon">${type==="ok"?"OK":type==="warn"?"!":"!"}</div><div class="tmsg">${html}</div>`;
-    el.classList.remove("hidden");
-    if (ms > 0){
-      clearTimeout(el.__t);
-      el.__t = setTimeout(()=>{ el.classList.add("hidden"); }, ms);
-    }
-  }
+  function toast(type, html, ms=4500){ return __gmxChrome.toast(type, html, ms); }
 
   // --- Degraded / offline mode (prevents "white screen" when API flakes) ---
   let API_DEGRADED = false;

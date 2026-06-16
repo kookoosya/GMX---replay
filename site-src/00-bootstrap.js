@@ -8,6 +8,9 @@
   if (!window.__GMXFormatFactory) throw new Error("GMX format factory missing");
   const __gmxFmt = window.__GMXFormatFactory();
 
+if (!window.__GMXChromeFactory) throw new Error("GMX chrome factory missing");
+const __gmxChrome = window.__GMXChromeFactory();
+
   const ADMIN_HANDLE = "@Kristofer_Sol_";
   let SAVE_CAP_FREE = 50;
   const EMPTY = "__EMPTY__";
@@ -40,7 +43,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616l";
+const ASSET_REV = "20260616m";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -91,7 +94,20 @@ function unlockedCountByRefs(total, freeCount=FREE_VISIBLE_THEMES){
   return __gmxUnlock.unlockedCountByRefs(total, freeCount);
 }
 
-
+if (!window.__GMXGenParamsFactory) throw new Error("GMX genparams factory missing");
+const __gmxGp = window.__GMXGenParamsFactory({
+  $: __gmxChrome.$,
+  storage: __gmxSt,
+  packsForKind: (kind) => __gmxThemes.packsForKind(kind),
+  antiWindow: (s) => __gmxAnti.antiWindow(s),
+  getCurrentLang: (kind) => currentLang(kind),
+  isPro,
+  reqRefsForUnlockIndex,
+  unlockedCountByRefs,
+  freeVisiblePacks: FREE_VISIBLE_PACKS,
+  t: (key) => t(key),
+  syncModePanelCopy: () => { try { syncModePanelCopy(); } catch {} },
+});
 
 
 

@@ -68,6 +68,7 @@ for (const rel of appFiles) {
 for (const rel of htmlFiles) {
   mustMatch(rel, /app\.storage\.js/, "app.storage.js script tag");
   mustMatch(rel, /app\.format\.js/, "app.format.js script tag");
+  mustMatch(rel, /app\.chrome\.js/, "app.chrome.js script tag");
   mustMatch(rel, /app\.unlock\.js/, "app.unlock.js script tag");
   mustMatch(rel, /app\.wallpapers\.js/, "app.wallpapers.js script tag");
   mustMatch(rel, /app\.themes\.js/, "app.themes.js script tag");
@@ -75,6 +76,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.generate\.js/, "app.generate.js script tag");
   mustMatch(rel, /app\.banks\.js/, "app.banks.js script tag");
   mustMatch(rel, /app\.antirepeat\.js/, "app.antirepeat.js script tag");
+  mustMatch(rel, /app\.genparams\.js/, "app.genparams.js script tag");
   mustMatch(rel, /app\.auth\.js/, "app.auth.js script tag");
   mustNotMatch(rel, /id="supportOut"/, "supportOut textarea removed");
   mustNotMatch(rel, /id="toolSupport"/, "toolSupport button removed from HTML");

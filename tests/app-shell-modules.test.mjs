@@ -146,3 +146,46 @@ test("format: escapeHtml and friendly errors", () => {
   assert.equal(fmt.friendlyUiErrorMessage("not_connected"), "Connect first.");
   assert.equal(fmt.isNetworkishErrorMessage("request_failed"), true);
 });
+
+test("chrome: exports dom helpers", () => {
+  const chrome = loadFactory("app.chrome.js", "__GMXChromeFactory")();
+  assert.equal(typeof chrome.$, "function");
+  assert.equal(typeof chrome.toast, "function");
+});
+
+test("genparams: anti strength and readGenParams", () => {
+  const mem = new Map();
+  const storage = {
+    keys: { GM_PACK: "gmx_gm_pack", GN_PACK: "gmx_gn_pack" },
+    lsKeyAnti: (kind) => (kind === "gn" ? "gmx_gn_anti" : "gmx_gm_anti"),
+    lsGet: (k, fb = "") => (mem.has(k) ? mem.get(k) : fb),
+    lsSet: (k, v) => mem.set(k, String(v)),
+  };
+  const themes = loadFactory("app.themes.js", "__GMXThemesFactory")();
+  const gen = loadFactory("app.generate.js", "__GMXGenerateFactory")();
+  const anti = loadFactory("app.antirepeat.js", "__GMXAntiRepeatFactory")({
+    storage,
+    repeatKey: gen.repeatKey,
+    readKey: () => [],
+    filterLinesByBan: gen.filterLinesByBan,
+  });
+  const gp = loadFactory("app.genparams.js", "__GMXGenParamsFactory")({
+    $: () => null,
+    storage,
+    packsForKind: (kind) => themes.packsForKind(kind),
+    antiWindow: (s) => anti.antiWindow(s),
+    getCurrentLang: () => "en",
+    isPro: () => false,
+    reqRefsForUnlockIndex: () => 3,
+    unlockedCountByRefs: (total) => total,
+    freeVisiblePacks: 8,
+    t: (key) => key,
+    syncModePanelCopy: () => {},
+  });
+  storage.lsSet("gmx_gm_anti", "4");
+  assert.equal(gp.getAntiStrength("gm"), 4);
+  const params = gp.readGenParams("gm");
+  assert.equal(params.mode, "mid");
+  assert.equal(params.lang, "en");
+  assert.equal(params.antiN, 40);
+});

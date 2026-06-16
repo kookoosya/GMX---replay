@@ -8,6 +8,9 @@
   if (!window.__GMXFormatFactory) throw new Error("GMX format factory missing");
   const __gmxFmt = window.__GMXFormatFactory();
 
+if (!window.__GMXChromeFactory) throw new Error("GMX chrome factory missing");
+const __gmxChrome = window.__GMXChromeFactory();
+
   const ADMIN_HANDLE = "@Kristofer_Sol_";
   let SAVE_CAP_FREE = 50;
   const EMPTY = "__EMPTY__";
@@ -40,7 +43,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616l";
+const ASSET_REV = "20260616m";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -91,7 +94,20 @@ function unlockedCountByRefs(total, freeCount=FREE_VISIBLE_THEMES){
   return __gmxUnlock.unlockedCountByRefs(total, freeCount);
 }
 
-
+if (!window.__GMXGenParamsFactory) throw new Error("GMX genparams factory missing");
+const __gmxGp = window.__GMXGenParamsFactory({
+  $: __gmxChrome.$,
+  storage: __gmxSt,
+  packsForKind: (kind) => __gmxThemes.packsForKind(kind),
+  antiWindow: (s) => __gmxAnti.antiWindow(s),
+  getCurrentLang: (kind) => currentLang(kind),
+  isPro,
+  reqRefsForUnlockIndex,
+  unlockedCountByRefs,
+  freeVisiblePacks: FREE_VISIBLE_PACKS,
+  t: (key) => t(key),
+  syncModePanelCopy: () => { try { syncModePanelCopy(); } catch {} },
+});
 
 
 
@@ -1095,68 +1111,11 @@ function renderWallpaperUI(){
     return __gmxThemes.packsForKind(kind);
   }
 
-  function getAntiStrength(kind){
-    try{
-      const raw = localStorage.getItem(lsKeyAnti(kind));
-      if (raw !== null && raw !== ""){
-        const n = Math.trunc(Number(raw));
-        if (Number.isFinite(n)) return Math.max(0, Math.min(5, n));
-      }
-    }catch(_e){}
-    const packEl = kind === "gn" ? $("gnPack") : $("gmPack");
-    const pid = packEl ? (packEl.value || "classic") : "classic";
-    const packs = packsForKind(kind);
-    const pack = packs.find((p)=>p.id === pid) || packs[0];
-    const anti = pack && Number.isFinite(pack.anti) ? pack.anti : 2;
-    return Math.max(0, Math.min(5, anti));
-  }
-
-  function readGenParams(kind){
-    const modeEl = kind === "gm" ? $("gmMode") : $("gnMode");
-    const styleEl = kind === "gm" ? $("gmStyle") : $("gnStyle");
-    const mode = modeEl ? modeEl.value : "mid";
-    const lang = currentLang(kind);
-    const style = styleEl ? styleEl.value : "classic";
-    const strength = getAntiStrength(kind);
-    const antiN = antiWindow(strength);
-    return { mode, lang, style, antiN };
-  }
-
-  function applyPackDefaultsToUi(kind, pack){
-    if (!pack) return;
-    const styleSel = kind === "gm" ? $("gmStyle") : $("gnStyle");
-    const modeSel  = kind === "gm" ? $("gmMode")  : $("gnMode");
-    if (styleSel && pack.style) styleSel.value = pack.style;
-    if (modeSel && pack.mode) modeSel.value = pack.mode;
-    try{ syncModePanelCopy(); }catch(_e){}
-  }
-
-  function unlockedPacksCountFor(kind){
-    return unlockedCountByRefs(packsForKind(kind).length, FREE_VISIBLE_PACKS);
-  }
-
-  function fillPacks(){
-    const fill = (kind, sel, lsKey)=>{
-      if (!sel) return;
-      const packs = packsForKind(kind);
-      const unlocked = unlockedPacksCountFor(kind);
-      const prev = localStorage.getItem(lsKey) || "classic";
-      sel.innerHTML = "";
-      packs.forEach((p, idx)=>{
-        const o = document.createElement("option");
-        o.value = p.id;
-        const locked = (!isPro() && idx >= unlocked);
-        const need = reqRefsForUnlockIndex(idx, FREE_VISIBLE_PACKS);
-        o.textContent = locked ? `${t("locked")||"LOCKED"} (${need} ref)` : p.name;
-        o.disabled = locked;
-        sel.appendChild(o);
-      });
-      if ([...sel.options].some(o=>o.value===prev && !o.disabled)) sel.value = prev;
-      else sel.value = "classic";
-    };
-    fill("gm", $("gmPack"), LS_GM_PACK);
-    fill("gn", $("gnPack"), LS_GN_PACK);
-  }
+  function getAntiStrength(kind){ return __gmxGp.getAntiStrength(kind); }
+  function readGenParams(kind){ return __gmxGp.readGenParams(kind); }
+  function applyPackDefaultsToUi(kind, pack){ return __gmxGp.applyPackDefaultsToUi(kind, pack); }
+  function unlockedPacksCountFor(kind){ return __gmxGp.unlockedPacksCountFor(kind); }
+  function fillPacks(){ return __gmxGp.fillPacks(); }
 
   function unlockedThemesCount(){ return unlockedCountByRefs(THEMES.length, FREE_VISIBLE_THEMES); }
   function unlockedStylesCount(){ return unlockedCountByRefs(STYLES.length, FREE_VISIBLE_STYLES); }
@@ -1911,19 +1870,9 @@ function fillStyles(){
     if ($("stylesUnlocked")) $("stylesUnlocked").textContent = `${unlocked}/${STYLES.length}`;
   }
 
-const $ = (id) => document.getElementById(id);
+const $ = __gmxChrome.$;
 
-  function toast(type, html, ms=4500){
-    const el = $("toast");
-    if (!el) return;
-    el.className = `toast ${type||""}`;
-    el.innerHTML = `<div class="ticon">${type==="ok"?"OK":type==="warn"?"!":"!"}</div><div class="tmsg">${html}</div>`;
-    el.classList.remove("hidden");
-    if (ms > 0){
-      clearTimeout(el.__t);
-      el.__t = setTimeout(()=>{ el.classList.add("hidden"); }, ms);
-    }
-  }
+  function toast(type, html, ms=4500){ return __gmxChrome.toast(type, html, ms); }
 
   // --- Degraded / offline mode (prevents "white screen" when API flakes) ---
   let API_DEGRADED = false;
