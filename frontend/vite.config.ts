@@ -148,6 +148,8 @@ export default defineConfig(({ command, mode }) => {
         "/app.storage.js": { target: BACKEND, changeOrigin: true },
         "/app.unlock.js": { target: BACKEND, changeOrigin: true },
         "/app.wallpapers.js": { target: BACKEND, changeOrigin: true },
+        "/app.themes.js": { target: BACKEND, changeOrigin: true },
+        "/app.generate.js": { target: BACKEND, changeOrigin: true },
         "/mode.js": { target: BACKEND, changeOrigin: true },
         "/entitlements.js": { target: BACKEND, changeOrigin: true },
         "/themes.json": { target: BACKEND, changeOrigin: true },

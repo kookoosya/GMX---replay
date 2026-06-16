@@ -48,3 +48,18 @@ test("wallpapers: catalog and url helpers", () => {
   assert.equal(ext[0].id, "extv3_01");
   assert.equal(wp.normalizeExtWallpaperIdLocal("ext_3", ext), "extv3_03");
 });
+
+test("themes: catalog exports", () => {
+  const themes = loadFactory("app.themes.js", "__GMXThemesFactory")();
+  assert.equal(themes.THEMES.length, 60);
+  assert.equal(themes.STYLES.length, 12);
+  assert.equal(themes.GM_PACKS.length, 7);
+  assert.equal(themes.packsForKind("gn").length, 7);
+  assert.equal(themes.pickAccentOn("rgba(255,255,255,1)", "rgba(255,255,255,1)"), "#0A0D15");
+});
+
+test("generate: mergeAppendUnique dedupes lines", () => {
+  const gen = loadFactory("app.generate.js", "__GMXGenerateFactory")();
+  const merged = gen.mergeAppendUnique(["Hello", "World"], ["world", "Again"]);
+  assert.deepEqual(merged, ["Hello", "World", "Again"]);
+});

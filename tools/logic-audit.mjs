@@ -57,8 +57,8 @@ for (const rel of appFiles) {
   mustMatch(rel, /attempts < 4/, "bulk generate retry cap");
   mustMatch(rel, /const antiN = antiWindow\(strength\)/, "single generate uses antiWindow");
   mustNotMatch(rel, /const antiN = 0;/, "antiN must not be hardcoded 0");
-  const packFn = (read(rel).match(/function packsForKind\(/g) || []).length;
-  if (packFn !== 1) fail(`packsForKind must be defined once (found ${packFn}) in ${rel}`);
+  mustMatch(rel, /function packsForKind\(/, "packsForKind helper");
+  mustMatch(rel, /__GMXThemesFactory/, "themes module factory wired");
   mustMatch(rel, /function readGenParams\(/, "readGenParams helper");
   mustMatch(rel, /function setWallpaperLayerImage\(/, "wallpaper img layer");
   mustMatch(rel, /unlockedPacksCountFor\(/, "per-kind pack unlock count");
@@ -69,6 +69,8 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.storage\.js/, "app.storage.js script tag");
   mustMatch(rel, /app\.unlock\.js/, "app.unlock.js script tag");
   mustMatch(rel, /app\.wallpapers\.js/, "app.wallpapers.js script tag");
+  mustMatch(rel, /app\.themes\.js/, "app.themes.js script tag");
+  mustMatch(rel, /app\.generate\.js/, "app.generate.js script tag");
   mustMatch(rel, /app\.auth\.js/, "app.auth.js script tag");
   mustNotMatch(rel, /id="supportOut"/, "supportOut textarea removed");
   mustNotMatch(rel, /id="toolSupport"/, "toolSupport button removed from HTML");

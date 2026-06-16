@@ -1,15 +1,5 @@
   function mergeAppendUnique(existing, newLines){
-    const out = (existing||[]).map(s=>String(s||"").trim()).filter(Boolean);
-    const seen = new Set(out.map(s=>s.toLowerCase()));
-    for (const s of (newLines||[])){
-      const t = String(s||"").trim();
-      if (!t) continue;
-      const k = t.toLowerCase();
-      if (seen.has(k)) continue;
-      seen.add(k);
-      out.push(t);
-    }
-    return out;
+    return __gmxGen.mergeAppendUnique(existing, newLines);
   }
 async function generate(kind, count){
     if (!requireConnected(kind==="gm"?"GM":"GN")) return;

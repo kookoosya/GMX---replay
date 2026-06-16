@@ -23,6 +23,8 @@ const shellModules = [
   "app.storage.js",
   "app.unlock.js",
   "app.wallpapers.js",
+  "app.themes.js",
+  "app.generate.js",
 ];
 for (const name of shellModules) {
   const modSrc = path.join(root, "public", name);

@@ -37,7 +37,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616g";
+const ASSET_REV = "20260616h";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -48,6 +48,12 @@ const __gmxWp = window.__GMXWallpapersFactory({
   getSiteCustomUpload: () => __gmxSt.lsGet(K.CUSTOM_BG_GLOBAL),
   getExtCustomUpload: () => __gmxSt.lsGet(K.EXT_CUSTOM_BG_GLOBAL),
 });
+
+if (!window.__GMXThemesFactory) throw new Error("GMX themes factory missing");
+const __gmxThemes = window.__GMXThemesFactory();
+
+if (!window.__GMXGenerateFactory) throw new Error("GMX generate factory missing");
+const __gmxGen = window.__GMXGenerateFactory();
 
 const FREE_VISIBLE_THEMES = __gmxUnlock.FREE_VISIBLE_THEMES;
 const FREE_VISIBLE_STYLES = __gmxUnlock.FREE_VISIBLE_STYLES;

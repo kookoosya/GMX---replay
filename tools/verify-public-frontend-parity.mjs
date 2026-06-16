@@ -21,6 +21,8 @@ const APP_FILES = [
   "app.storage.js",
   "app.unlock.js",
   "app.wallpapers.js",
+  "app.themes.js",
+  "app.generate.js",
   "arcade.html",
   "arcade.js",
   "entitlements.js",

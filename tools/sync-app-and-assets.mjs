@@ -20,7 +20,7 @@ const PUBLIC = path.join(ROOT, "public");
 const ASSETS = path.join(ROOT, "assets");
 const FRONTEND_PUBLIC = path.join(ROOT, "frontend", "public");
 
-const APP_FILES = ["app.html", "app.js", "app.css", "app.auth.js", "app.storage.js", "app.unlock.js", "app.wallpapers.js", "arcade.html", "arcade.js", "entitlements.js", "mode.js", "themes.json"];
+const APP_FILES = ["app.html", "app.js", "app.css", "app.auth.js", "app.storage.js", "app.unlock.js", "app.wallpapers.js", "app.themes.js", "app.generate.js", "arcade.html", "arcade.js", "entitlements.js", "mode.js", "themes.json"];
 
 function ensureDir(dir) {
   fs.mkdirSync(dir, { recursive: true });
