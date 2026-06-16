@@ -1,7 +1,10 @@
 (function (window) {
   if (window.__GMXUiFactory) return;
 
-  window.__GMXUiFactory = function createGMXUi() {
+  window.__GMXUiFactory = function createGMXUi(ctx) {
+    ctx = ctx || {};
+    const api = String(ctx.api || "");
+    const getToken = typeof ctx.getToken === "function" ? ctx.getToken : () => "";
     const __GRID_JOBS = Object.create(null);
     let __LAZY_OBSERVER = null;
 
@@ -116,6 +119,18 @@
       } catch {}
     }
 
-    return { chunkedRender, yieldToUiFrame, prefetchImage, observeLazyBg };
+    async function postEvent(type, meta) {
+      try {
+        const tok = String(getToken() || "").trim();
+        if (!tok || !api) return;
+        await fetch(api + "/api/event", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: "Bearer " + tok },
+          body: JSON.stringify({ type, meta: meta || null }),
+        });
+      } catch {}
+    }
+
+    return { chunkedRender, yieldToUiFrame, prefetchImage, observeLazyBg, postEvent };
   };
 })(window);

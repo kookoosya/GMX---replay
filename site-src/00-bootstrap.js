@@ -48,7 +48,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616t";
+const ASSET_REV = "20260616u";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -78,7 +78,16 @@ const __gmxAnti = window.__GMXAntiRepeatFactory({
 });
 
 if (!window.__GMXUiFactory) throw new Error("GMX ui factory missing");
-const __gmxUi = window.__GMXUiFactory();
+const __gmxUi = window.__GMXUiFactory({
+  api: API,
+  getToken: () => {
+    try {
+      return String(__gmxSt.lsGet(K.TOKEN, "") || "").trim();
+    } catch {
+      return "";
+    }
+  },
+});
 
 const FREE_VISIBLE_THEMES = __gmxUnlock.FREE_VISIBLE_THEMES;
 const FREE_VISIBLE_STYLES = __gmxUnlock.FREE_VISIBLE_STYLES;
@@ -320,6 +329,42 @@ const __gmxWpUi = window.__GMXWallpaperUiFactory({
   applyWallpaper: (tab) => __gmxWpApply.applyWallpaper(tab),
 });
 
+if (!window.__GMXExtViewFactory) throw new Error("GMX extview factory missing");
+const __gmxExtView = window.__GMXExtViewFactory({
+  $: __gmxChrome.$,
+  getStoredExtView: () => __gmxSt.lsGet(K.EXT_VIEW, "theme"),
+  setStoredExtView: (v) => __gmxSt.extLsSet(K.EXT_VIEW, v),
+  renderExtThemes: () => { try { renderExtThemes(); } catch {} },
+  renderExtWallpapers: () => { try { renderExtWallpapers(); } catch {} },
+});
+
+if (!window.__GMXExtThemesUiFactory) throw new Error("GMX extthemesui factory missing");
+const __gmxExtThemesUi = window.__GMXExtThemesUiFactory({
+  $: __gmxChrome.$,
+  t: (key) => t(key),
+  escapeHtml: (s) => __gmxFmt.escapeHtml(s),
+  toast: (type, html, ms) => __gmxChrome.toast(type, html, ms),
+  getExtThemes: () => EXT_THEMES,
+  getExtWallpapers: () => EXT_WALLPAPERS,
+  getChosenExtTheme: () => {
+    try {
+      return localStorage.getItem("gmx_ext_theme") || "classic";
+    } catch {
+      return "classic";
+    }
+  },
+  unlockedCountByRefs,
+  freeVisibleExtThemes: FREE_VISIBLE_EXT_THEMES,
+  freeVisibleExtWallpapers: FREE_VISIBLE_EXT_WALLPAPERS,
+  isPro,
+  reqRefsForUnlockIndex,
+  unlockTagText: (idx, unlocked, free) => unlockTagText(idx, unlocked, free),
+  formatUnlockMeter: (cur, total) => formatUnlockMeter(cur, total),
+  chunkedRender: (grid, items, fn, opts) => __gmxUi.chunkedRender(grid, items, fn, opts),
+  requireConnected: (label) => requireConnected(label),
+  applyExtTheme: (id) => applyExtTheme(id),
+});
+
 if (!window.__GMXNavFactory) throw new Error("GMX nav factory missing");
 const __gmxNav = window.__GMXNavFactory({
   normalizeTopLevelTab: (n) => normalizeTopLevelTab(n),
@@ -360,7 +405,13 @@ const __gmxExtWpUi = window.__GMXExtWallpaperUiFactory({
   t: (key) => t(key),
   toast: (type, html, ms) => __gmxChrome.toast(type, html, ms),
   escapeHtml: (s) => __gmxFmt.escapeHtml(s),
-  initExtWallpaperControls: () => { try { initExtWallpaperControls(); } catch {} },
+  extSyncNow: (reason) => __gmxExtView.extSyncNow(reason),
+  extLsSet: (key, value) => __gmxSt.extLsSet(key, value),
+  keys: { extCustomBgGlobal: K.EXT_CUSTOM_BG_GLOBAL, extWpTarget: K.EXT_WP_TARGET },
+  customUploadId: __gmxWp.CUSTOM_UPLOAD_ID,
+  compressImageToJpegDataURL: (file, opts) => compressImageToJpegDataURL(file, opts),
+  setExtWallpaperForView: (view, id) => setExtWallpaperForView(view, id),
+  normalizeExtWallpaperView: (view) => normalizeExtWallpaperView(view),
   loadCustomWallpapers: () => loadCustomWallpapers(),
   getEffectiveExtCustomWallpapers: () => {
     const out = [...CUSTOM_WALLPAPERS_EXT];

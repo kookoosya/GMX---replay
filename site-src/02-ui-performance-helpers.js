@@ -14,13 +14,5 @@
   function observeLazyBg(el){ return __gmxUi.observeLazyBg(el); }
 
 async function postEvent(type, meta){
-  try{
-    const tok = String(localStorage.getItem(LS_TOKEN) || "").trim();
-    if (!tok) return;
-    await fetch(API + "/api/event", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json", "Authorization":"Bearer " + tok },
-      body: JSON.stringify({ type, meta: meta || null })
-    });
-  }catch{}
+  return __gmxUi.postEvent(type, meta);
 }

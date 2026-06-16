@@ -7,8 +7,20 @@
     const toast = typeof ctx.toast === "function" ? ctx.toast : () => {};
     const escapeHtml = typeof ctx.escapeHtml === "function" ? ctx.escapeHtml : (s) => String(s || "");
 
-    const initExtWallpaperControls =
-      typeof ctx.initExtWallpaperControls === "function" ? ctx.initExtWallpaperControls : () => {};
+    const extSyncNow = typeof ctx.extSyncNow === "function" ? ctx.extSyncNow : () => {};
+    const extLsSet = typeof ctx.extLsSet === "function" ? ctx.extLsSet : () => {};
+    const keys = ctx.keys || {};
+    const extCustomBgGlobalKey = keys.extCustomBgGlobal || "gmx_ext_custom_bg_global";
+    const extWpTargetKey = keys.extWpTarget || "gmx_ext_wp_target";
+    const customUploadId = String(ctx.customUploadId || "custom_upload");
+    const compressImageToJpegDataURL =
+      typeof ctx.compressImageToJpegDataURL === "function"
+        ? ctx.compressImageToJpegDataURL
+        : async () => "";
+    const setExtWallpaperForView =
+      typeof ctx.setExtWallpaperForView === "function" ? ctx.setExtWallpaperForView : () => {};
+    const normalizeExtWallpaperView =
+      typeof ctx.normalizeExtWallpaperView === "function" ? ctx.normalizeExtWallpaperView : (v) => v;
     const loadCustomWallpapers =
       typeof ctx.loadCustomWallpapers === "function" ? ctx.loadCustomWallpapers : async () => false;
     const getEffectiveExtCustomWallpapers =
@@ -49,6 +61,65 @@
       typeof ctx.unlockTagText === "function" ? ctx.unlockTagText : () => "LOCKED";
     const formatUnlockMeter =
       typeof ctx.formatUnlockMeter === "function" ? ctx.formatUnlockMeter : (a, b) => `${a}/${b}`;
+
+    function initExtWallpaperControls() {
+      if (initExtWallpaperControls._done) return;
+      initExtWallpaperControls._done = true;
+      const sel = $("extWpTarget");
+      const clearBtn = $("extWpClear");
+      const addBtn = $("extWpAddCustom");
+      const addFile = $("extWpAddFile");
+      if (addBtn && addFile) {
+        addBtn.onclick = () => {
+          if (requireConnected("Extension themes")) addFile.click();
+        };
+      }
+      if (addFile) {
+        addFile.addEventListener("change", async () => {
+          try {
+            if (!requireConnected("Extension themes")) {
+              addFile.value = "";
+              return;
+            }
+            const f = addFile.files && addFile.files[0];
+            if (!f) return;
+            const data = await compressImageToJpegDataURL(f, { profile: "ext" });
+            extLsSet(extCustomBgGlobalKey, data);
+            const target = $("extWpTarget")?.value || "all";
+            setExtWallpaperForView(normalizeExtWallpaperView(target), customUploadId);
+            extSyncNow("ext_wallpaper");
+            try {
+              renderExtWallpapers();
+            } catch {}
+            toast("ok", t("toast_custom_bg_saved") || "Custom wallpaper saved.");
+          } catch (_e) {
+            toast("warn", t("err_custom_wp_save") || "Could not save image.");
+          } finally {
+            addFile.value = "";
+          }
+        });
+      }
+      if (sel) {
+        syncExtWallpaperTargetUI(sel);
+        sel.addEventListener("change", () => {
+          const target = syncExtWallpaperTargetUI(sel, sel.value || "all");
+          try {
+            localStorage.setItem(extWpTargetKey, target);
+          } catch (_e) {}
+          renderExtWallpapers();
+        });
+      }
+      if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+          const selNow = $("extWpTarget");
+          const target = normalizeExtWallpaperView(selNow?.value || currentExtWallpaperTarget());
+          setExtWallpaperForView(target, "");
+          renderExtWallpapers();
+          extSyncNow("ext_wallpaper");
+          toast("ok", t("toast_wallpaper_cleared") || "Wallpaper cleared.");
+        });
+      }
+    }
 
     function renderExtWallpapers() {
       const grid = $("extWpGrid");
@@ -184,6 +255,6 @@
       }
     }
 
-    return { renderExtWallpapers };
+    return { renderExtWallpapers, initExtWallpaperControls };
   };
 })(window);

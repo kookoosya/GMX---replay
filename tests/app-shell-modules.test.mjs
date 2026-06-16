@@ -79,6 +79,37 @@ test("ui: factory exports perf helpers", () => {
   assert.equal(typeof ui.yieldToUiFrame, "function");
   assert.equal(typeof ui.prefetchImage, "function");
   assert.equal(typeof ui.observeLazyBg, "function");
+  assert.equal(typeof ui.postEvent, "function");
+});
+
+test("chrome: showInfoModal factory export", () => {
+  const chrome = loadFactory("app.chrome.js", "__GMXChromeFactory")({
+    escapeHtml: (s) => String(s || ""),
+  });
+  assert.equal(typeof chrome.showInfoModal, "function");
+});
+
+test("extview: normalizeExtViewValue and bindExtTabs", () => {
+  const extview = loadFactory("app.extview.js", "__GMXExtViewFactory")({
+    $: () => null,
+    getStoredExtView: () => "theme",
+    setStoredExtView: () => {},
+    renderExtThemes: () => {},
+    renderExtWallpapers: () => {},
+  });
+  assert.equal(extview.normalizeExtViewValue("wall"), "wall");
+  assert.equal(extview.normalizeExtViewValue("bogus"), "theme");
+  assert.equal(typeof extview.setExtView, "function");
+  assert.equal(typeof extview.bindExtTabs, "function");
+  assert.equal(typeof extview.extSyncNow, "function");
+});
+
+test("extthemesui: factory exports render helper", () => {
+  const mod = loadFactory("app.extthemesui.js", "__GMXExtThemesUiFactory")({
+    getExtThemes: () => [],
+    getExtWallpapers: () => [],
+  });
+  assert.equal(typeof mod.renderExtThemes, "function");
 });
 
 test("nav: showTab toggles active tab", () => {
@@ -116,6 +147,7 @@ test("extwallpaperui: factory exports render helper", () => {
     $: () => null,
   });
   assert.equal(typeof extWpUi.renderExtWallpapers, "function");
+  assert.equal(typeof extWpUi.initExtWallpaperControls, "function");
 });
 
 test("banks: read/write saved lines", () => {

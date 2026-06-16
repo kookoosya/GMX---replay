@@ -116,6 +116,32 @@
       }
     }
 
+    function showInfoModal(title, html) {
+      try {
+        const old = document.getElementById("gmxInfoModal");
+        if (old) old.remove();
+        const wrap = document.createElement("div");
+        wrap.id = "gmxInfoModal";
+        wrap.style.cssText =
+          "position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px;";
+        wrap.innerHTML = `
+        <div style="max-width:520px;width:100%;background:rgba(20,20,24,.98);border:1px solid rgba(255,255,255,.12);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.5);padding:16px 16px 12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;">
+            <div style="font-weight:800;font-size:15px;line-height:1.2;">${escapeHtml(title || "Info")}</div>
+            <button id="gmxInfoClose" type="button" style="border:0;background:rgba(255,255,255,.08);color:#fff;border-radius:10px;padding:6px 10px;cursor:pointer;">OK</button>
+          </div>
+          <div style="font-size:13px;line-height:1.45;color:rgba(255,255,255,.88);">${html || ""}</div>
+        </div>
+      `;
+        wrap.addEventListener("click", (e) => {
+          if (e.target === wrap) wrap.remove();
+        });
+        document.body.appendChild(wrap);
+        const btn = document.getElementById("gmxInfoClose");
+        if (btn) btn.onclick = () => wrap.remove();
+      } catch (_e) {}
+    }
+
     return {
       $,
       toast,
@@ -125,6 +151,7 @@
       setBusy,
       wireDegradedBar,
       wireFatalBar,
+      showInfoModal,
       isDegraded: () => apiDegraded,
       inflight,
     };

@@ -43,6 +43,8 @@ const shellModules = [
   "app.wallpaperapply.js",
   "app.health.js",
   "app.setbg.js",
+  "app.extview.js",
+  "app.extthemesui.js",
   "app.nav.js",
   "app.extwallpaperui.js",
   "app.accountui.js",

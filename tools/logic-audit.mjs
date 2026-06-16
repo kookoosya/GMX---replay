@@ -90,6 +90,8 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.wallpaperui\.js/, "app.wallpaperui.js script tag");
   mustMatch(rel, /app\.health\.js/, "app.health.js script tag");
   mustMatch(rel, /app\.setbg\.js/, "app.setbg.js script tag");
+  mustMatch(rel, /app\.extview\.js/, "app.extview.js script tag");
+  mustMatch(rel, /app\.extthemesui\.js/, "app.extthemesui.js script tag");
   mustMatch(rel, /app\.nav\.js/, "app.nav.js script tag");
   mustMatch(rel, /app\.extwallpaperui\.js/, "app.extwallpaperui.js script tag");
   mustMatch(rel, /app\.accountui\.js/, "app.accountui.js script tag");

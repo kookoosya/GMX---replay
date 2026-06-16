@@ -48,7 +48,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616t";
+const ASSET_REV = "20260616u";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -78,7 +78,16 @@ const __gmxAnti = window.__GMXAntiRepeatFactory({
 });
 
 if (!window.__GMXUiFactory) throw new Error("GMX ui factory missing");
-const __gmxUi = window.__GMXUiFactory();
+const __gmxUi = window.__GMXUiFactory({
+  api: API,
+  getToken: () => {
+    try {
+      return String(__gmxSt.lsGet(K.TOKEN, "") || "").trim();
+    } catch {
+      return "";
+    }
+  },
+});
 
 const FREE_VISIBLE_THEMES = __gmxUnlock.FREE_VISIBLE_THEMES;
 const FREE_VISIBLE_STYLES = __gmxUnlock.FREE_VISIBLE_STYLES;
@@ -320,6 +329,42 @@ const __gmxWpUi = window.__GMXWallpaperUiFactory({
   applyWallpaper: (tab) => __gmxWpApply.applyWallpaper(tab),
 });
 
+if (!window.__GMXExtViewFactory) throw new Error("GMX extview factory missing");
+const __gmxExtView = window.__GMXExtViewFactory({
+  $: __gmxChrome.$,
+  getStoredExtView: () => __gmxSt.lsGet(K.EXT_VIEW, "theme"),
+  setStoredExtView: (v) => __gmxSt.extLsSet(K.EXT_VIEW, v),
+  renderExtThemes: () => { try { renderExtThemes(); } catch {} },
+  renderExtWallpapers: () => { try { renderExtWallpapers(); } catch {} },
+});
+
+if (!window.__GMXExtThemesUiFactory) throw new Error("GMX extthemesui factory missing");
+const __gmxExtThemesUi = window.__GMXExtThemesUiFactory({
+  $: __gmxChrome.$,
+  t: (key) => t(key),
+  escapeHtml: (s) => __gmxFmt.escapeHtml(s),
+  toast: (type, html, ms) => __gmxChrome.toast(type, html, ms),
+  getExtThemes: () => EXT_THEMES,
+  getExtWallpapers: () => EXT_WALLPAPERS,
+  getChosenExtTheme: () => {
+    try {
+      return localStorage.getItem("gmx_ext_theme") || "classic";
+    } catch {
+      return "classic";
+    }
+  },
+  unlockedCountByRefs,
+  freeVisibleExtThemes: FREE_VISIBLE_EXT_THEMES,
+  freeVisibleExtWallpapers: FREE_VISIBLE_EXT_WALLPAPERS,
+  isPro,
+  reqRefsForUnlockIndex,
+  unlockTagText: (idx, unlocked, free) => unlockTagText(idx, unlocked, free),
+  formatUnlockMeter: (cur, total) => formatUnlockMeter(cur, total),
+  chunkedRender: (grid, items, fn, opts) => __gmxUi.chunkedRender(grid, items, fn, opts),
+  requireConnected: (label) => requireConnected(label),
+  applyExtTheme: (id) => applyExtTheme(id),
+});
+
 if (!window.__GMXNavFactory) throw new Error("GMX nav factory missing");
 const __gmxNav = window.__GMXNavFactory({
   normalizeTopLevelTab: (n) => normalizeTopLevelTab(n),
@@ -360,7 +405,13 @@ const __gmxExtWpUi = window.__GMXExtWallpaperUiFactory({
   t: (key) => t(key),
   toast: (type, html, ms) => __gmxChrome.toast(type, html, ms),
   escapeHtml: (s) => __gmxFmt.escapeHtml(s),
-  initExtWallpaperControls: () => { try { initExtWallpaperControls(); } catch {} },
+  extSyncNow: (reason) => __gmxExtView.extSyncNow(reason),
+  extLsSet: (key, value) => __gmxSt.extLsSet(key, value),
+  keys: { extCustomBgGlobal: K.EXT_CUSTOM_BG_GLOBAL, extWpTarget: K.EXT_WP_TARGET },
+  customUploadId: __gmxWp.CUSTOM_UPLOAD_ID,
+  compressImageToJpegDataURL: (file, opts) => compressImageToJpegDataURL(file, opts),
+  setExtWallpaperForView: (view, id) => setExtWallpaperForView(view, id),
+  normalizeExtWallpaperView: (view) => normalizeExtWallpaperView(view),
   loadCustomWallpapers: () => loadCustomWallpapers(),
   getEffectiveExtCustomWallpapers: () => {
     const out = [...CUSTOM_WALLPAPERS_EXT];
@@ -411,15 +462,7 @@ const __gmxExtWpUi = window.__GMXExtWallpaperUiFactory({
   function observeLazyBg(el){ return __gmxUi.observeLazyBg(el); }
 
 async function postEvent(type, meta){
-  try{
-    const tok = String(localStorage.getItem(LS_TOKEN) || "").trim();
-    if (!tok) return;
-    await fetch(API + "/api/event", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json", "Authorization":"Bearer " + tok },
-      body: JSON.stringify({ type, meta: meta || null })
-    });
-  }catch{}
+  return __gmxUi.postEvent(type, meta);
 }
 
   // ----- Lightweight client logs (for support) -----
@@ -1084,46 +1127,11 @@ function renderExtCustomBgUI(){
   };
 }
 
-function normalizeExtViewValue(view){
-  const v = String(view || "").trim().toLowerCase();
-  if (v === "wall" || v === "custom") return v;
-  return "theme";
-}
+function normalizeExtViewValue(view){ return __gmxExtView.normalizeExtViewValue(view); }
 
-function setExtView(view, opts){
-  const safeView = normalizeExtViewValue(view);
-  const prev = normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW) || "theme");
-  extLsSet(LS_EXT_VIEW, safeView);
-  const options = opts || {};
-  if (!options.silent && prev !== safeView) extSyncNow("ext_view");
-  const btnTheme = $("extTabTheme");
-  const btnWall = $("extTabWall");
-  const paneTheme = $("extThemePane");
-  const paneWall = $("extWallPane");
-  if (!btnTheme || !btnWall || !paneTheme || !paneWall) return;
+function setExtView(view, opts){ return __gmxExtView.setExtView(view, opts); }
 
-  btnTheme.classList.toggle("active", safeView==="theme");
-  btnWall.classList.toggle("active", safeView==="wall");
-
-  btnTheme.setAttribute("aria-selected", safeView==="theme" ? "true" : "false");
-  btnWall.setAttribute("aria-selected", safeView==="wall" ? "true" : "false");
-
-  paneTheme.classList.toggle("hidden", safeView!=="theme");
-  paneWall.classList.toggle("hidden", safeView!=="wall");
-
-  const hasRenderedContent = (safeView==="theme" ? !!paneTheme.querySelector(".themeCard") : !!paneWall.querySelector(".wpCard"));
-  const shouldRender = options.force === true || prev !== safeView || !hasRenderedContent;
-  if (safeView==="theme" && shouldRender) renderExtThemes();
-  if (safeView==="wall" && shouldRender) renderExtWallpapers();
-}
-
-  let __extSyncDebounce = 0;
-  function extSyncNow(reason){
-    try{ clearTimeout(__extSyncDebounce); }catch(_e){}
-    __extSyncDebounce = setTimeout(()=>{
-      try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: reason || "ext_ui_change" }, "*"); }catch(_e){}
-    }, 90);
-  }
+function extSyncNow(reason){ return __gmxExtView.extSyncNow(reason); }
 
   function markExtThemeSelection(id){
     try{
@@ -1281,134 +1289,13 @@ function renderThemes(){
   }, { key: "themeGrid", chunk: 24 });
 }
 
-function renderExtThemes(){
-  const grid = $("extThemeGrid");
-  const st = $("extThemeStatus");
-  if (!grid || !st) return;
-
-  const total = EXT_THEMES.length;
-  const unlocked = unlockedCountByRefs(total, FREE_VISIBLE_EXT_THEMES);
-  const chosen = localStorage.getItem("gmx_ext_theme") || "classic";
-
-  const el = $("extThemesUnlocked");
-  if (el) el.textContent = formatUnlockMeter(Math.min(unlocked, total), total);
-  const wEl = $("extWpUnlocked");
-  if (wEl) wEl.textContent = formatUnlockMeter(Math.min(unlockedCountByRefs(EXT_WALLPAPERS.length, FREE_VISIBLE_EXT_WALLPAPERS), EXT_WALLPAPERS.length), EXT_WALLPAPERS.length);
-
-  const items = EXT_THEMES.map((th, idx)=>({ th, idx }));
-  chunkedRender(grid, items, ({ th, idx })=>{
-    const isUnlocked = isPro() || (idx < unlocked);
-    const card = document.createElement("button");
-    card.type = "button";
-    card.className = "themeCard" + (th.id === chosen ? " active" : "") + (!isUnlocked ? " mystery" : "");
-
-    const sw = document.createElement("div");
-    sw.className = "swatch";
-    sw.style.background = themePreviewBg(th);
-
-    const nm = document.createElement("div");
-    nm.className = "tname";
-    nm.textContent = th.name || th.id;
-
-    const note = document.createElement("div");
-    note.className = "tnote";
-    note.textContent = th.note || "";
-
-    const tag = document.createElement("div");
-    tag.className = "lockTag";
-    tag.textContent = unlockTagText(idx, isUnlocked, FREE_VISIBLE_EXT_THEMES);
-
-    card.appendChild(sw);
-    card.appendChild(nm);
-    card.appendChild(note);
-    card.appendChild(tag);
-
-    if (!isUnlocked){
-      const ov = document.createElement("div");
-      ov.className = "mysteryOverlay";
-      ov.textContent = (t("locked")||"LOCKED");
-      card.appendChild(ov);
-    }
-
-    card.addEventListener("click", ()=>{
-      if (!requireConnected("Extension themes")) return;
-      if (!isUnlocked){
-        const need = reqRefsForUnlockIndex(idx, FREE_VISIBLE_EXT_THEMES);
-        toast("warn", (t("locked_unlock_at") || "Locked. Unlock at {n} referrals (+1 every 3 refs at first, then +1 every 4) or Pro.").replace("{n}", String(need)));
-        return;
-      }
-      applyExtTheme(th.id);
-    });
-
-    return card;
-  }, { key: "extThemeGrid", chunk: 12 });
-
-  const chosenName = EXT_THEMES.find(x=>x.id===chosen)?.name || chosen;
-  st.innerHTML = `<span class="ok">Selected.</span> ${escapeHtml(chosenName)}.`;
-}
+function renderExtThemes(){ return __gmxExtThemesUi.renderExtThemes(); }
 
 function renderExtWallpapers(){ return __gmxExtWpUi.renderExtWallpapers(); }
 
-function bindExtTabs(){
-  if (bindExtTabs._done) return;
-  bindExtTabs._done = true;
+function bindExtTabs(){ return __gmxExtView.bindExtTabs(); }
 
-  const themeBtn  = $("extTabTheme");
-  const wallBtn   = $("extTabWall");
-
-  if (themeBtn)  themeBtn.addEventListener("click", ()=>setExtView("theme"));
-  if (wallBtn)   wallBtn.addEventListener("click",  ()=>setExtView("wall"));
-}
-
-function initExtWallpaperControls(){
-  if (initExtWallpaperControls._done) return;
-  initExtWallpaperControls._done = true;
-  const sel = $("extWpTarget");
-  const clearBtn = $("extWpClear");
-  const addBtn = $("extWpAddCustom");
-  const addFile = $("extWpAddFile");
-  if (addBtn && addFile){
-    addBtn.onclick = ()=>{ if (requireConnected("Extension themes")) addFile.click(); };
-  }
-  if (addFile){
-    addFile.addEventListener("change", async ()=>{
-      try{
-        if (!requireConnected("Extension themes")) { addFile.value = ""; return; }
-        const f = addFile.files && addFile.files[0];
-        if (!f) return;
-        const data = await compressImageToJpegDataURL(f, { profile: "ext" });
-        extLsSet(LS_EXT_CUSTOM_BG_GLOBAL, data);
-        const target = ($("extWpTarget")?.value || "all");
-        setExtWallpaperForView(normalizeExtWallpaperView(target), CUSTOM_UPLOAD_ID);
-        extSyncNow("ext_wallpaper");
-        try{ renderExtWallpapers(); }catch{}
-        toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved."));
-      }catch(e){
-        toast("warn", (t("err_custom_wp_save")||"Could not save image."));
-      }finally{
-        addFile.value = "";
-      }
-    });
-  }
-  if (sel){
-    syncExtWallpaperTargetUI(sel);
-    sel.addEventListener("change", ()=>{
-      const target = syncExtWallpaperTargetUI(sel, sel.value || "all");
-      try{ localStorage.setItem(LS_EXT_WP_TARGET, target); }catch(_e){}
-      renderExtWallpapers();
-    });
-  }
-  if (clearBtn){
-    clearBtn.addEventListener("click", ()=>{
-      const selNow = $("extWpTarget");
-      const target = normalizeExtWallpaperView(selNow?.value || currentExtWallpaperTarget());
-      setExtWallpaperForView(target, "");
-      renderExtWallpapers();
-      extSyncNow("ext_wallpaper");
-      toast("ok", (t("toast_wallpaper_cleared") || "Wallpaper cleared."));
-    });
-  }
-}
+function initExtWallpaperControls(){ return __gmxExtWpUi.initExtWallpaperControls(); }
 
 
 
@@ -1462,26 +1349,7 @@ const $ = __gmxChrome.$;
 
 // Simple info modal (no dependencies)
   function showInfoModal(title, html){
-    try{
-      const old = document.getElementById("gmxInfoModal");
-      if (old) old.remove();
-      const wrap = document.createElement("div");
-      wrap.id = "gmxInfoModal";
-      wrap.style.cssText = "position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px;";
-      wrap.innerHTML = `
-        <div style="max-width:520px;width:100%;background:rgba(20,20,24,.98);border:1px solid rgba(255,255,255,.12);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.5);padding:16px 16px 12px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;">
-            <div style="font-weight:800;font-size:15px;line-height:1.2;">${escapeHtml(title||"Info")}</div>
-            <button id="gmxInfoClose" type="button" style="border:0;background:rgba(255,255,255,.08);color:#fff;border-radius:10px;padding:6px 10px;cursor:pointer;">OK</button>
-          </div>
-          <div style="font-size:13px;line-height:1.45;color:rgba(255,255,255,.88);">${html||""}</div>
-        </div>
-      `;
-      wrap.addEventListener("click", (e)=>{ if (e.target===wrap) wrap.remove(); });
-      document.body.appendChild(wrap);
-      const btn = document.getElementById("gmxInfoClose");
-      if (btn) btn.onclick = ()=>wrap.remove();
-    }catch(e){}
+    return __gmxChrome.showInfoModal(title, html);
   }
 
 

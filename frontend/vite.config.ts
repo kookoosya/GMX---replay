@@ -169,6 +169,8 @@ export default defineConfig(({ command, mode }) => {
         "/app.wallpaperui.js": { target: BACKEND, changeOrigin: true },
         "/app.health.js": { target: BACKEND, changeOrigin: true },
         "/app.setbg.js": { target: BACKEND, changeOrigin: true },
+        "/app.extview.js": { target: BACKEND, changeOrigin: true },
+        "/app.extthemesui.js": { target: BACKEND, changeOrigin: true },
         "/app.nav.js": { target: BACKEND, changeOrigin: true },
         "/app.extwallpaperui.js": { target: BACKEND, changeOrigin: true },
         "/app.accountui.js": { target: BACKEND, changeOrigin: true },
