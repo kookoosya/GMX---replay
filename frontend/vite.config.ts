@@ -171,6 +171,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.genparams.js": { target: BACKEND, changeOrigin: true },
         "/app.cleanfill.js": { target: BACKEND, changeOrigin: true },
         "/app.styles.js": { target: BACKEND, changeOrigin: true },
+        "/app.procontrols.js": { target: BACKEND, changeOrigin: true },
         "/app.toggles.js": { target: BACKEND, changeOrigin: true },
         "/app.custombg.js": { target: BACKEND, changeOrigin: true },
         "/app.tabtheme.js": { target: BACKEND, changeOrigin: true },

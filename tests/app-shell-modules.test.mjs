@@ -944,3 +944,50 @@ test("styles: unlocked count", () => {
   });
   assert.equal(ui.unlockedStylesCount(), 8);
 });
+
+test("procontrols: export/import and pack wiring", () => {
+  const mem = new Map();
+  const storage = {
+    keys: { GM_PACK: "gmx_gm_pack", GN_PACK: "gmx_gn_pack" },
+    lsKeyPack: (kind) => (kind === "gn" ? "gmx_gn_pack" : "gmx_gm_pack"),
+    lsGet: (k, fb = "") => (mem.has(k) ? mem.get(k) : fb),
+    lsSet: (k, v) => mem.set(k, String(v)),
+    lsRemove: (k) => mem.delete(k),
+  };
+  const banks = { gm: ["Gm!"], gn: ["Gn!"] };
+  let imported = false;
+  const pc = loadFactory("app.procontrols.js", "__GMXProControlsFactory")({
+    $: () => null,
+    isPro: () => true,
+    escapeHtml: (s) => s,
+    storage,
+    packsForKind: () => [{ id: "classic", name: "Classic", style: "classic" }],
+    unlockedPacksCountFor: () => 8,
+    applyPackDefaultsToUi: () => {},
+    logEvent: () => {},
+    getProToolsNote: () => "Pro only",
+    readKey: (k) => (k === "bank_gn" ? banks.gn : banks.gm),
+    writeKey: (k, v) => {
+      if (k === "bank_gn") banks.gn = v;
+      else banks.gm = v;
+    },
+    getBankKey: (kind) => `bank_${kind}`,
+    allKeysForKind: (kind) => [`bank_${kind}`],
+    allLegacyKeysForKind: () => [],
+    getHandle: () => "@test",
+    dedupeLines: (lines) => lines,
+    normalizeLine: (s) => String(s || "").trim(),
+    cleanupKeyLines: (lines) => lines,
+    setLangIndex: () => {},
+    getBankMigrationKey: (kind) => `mig_${kind}`,
+    trimKindToCap: () => {},
+    onAfterImport: () => {
+      imported = true;
+    },
+  });
+  const json = pc.exportData();
+  assert.match(json, /"@test"/);
+  pc.importData(json);
+  assert.equal(imported, true);
+  assert.equal(pc.cleanupKind("gm"), 0);
+});

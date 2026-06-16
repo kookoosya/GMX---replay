@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260617e";
+const ASSET_REV = "20260617f";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -3960,19 +3960,6 @@ function cleanupKeyLines(lines){
     return changed;
   }
 
-  function cleanupKind(kind){
-    let changed = 0;
-    for (const k of allKeysForKind(kind)){
-      const before = readKey(k);
-      const after = cleanupKeyLines(before).map(normalizeLine).filter(Boolean);
-      if (after.join("\n") !== before.join("\n")){
-        writeKey(k, after);
-        changed++;
-      }
-    }
-    return changed;
-  }
-
   function dedupeKind(kind){
     let changed = 0;
     for (const k of allKeysForKind(kind)){
@@ -3986,188 +3973,50 @@ function cleanupKeyLines(lines){
     return changed;
   }
 
-  function exportData(){
-    const gmBank = readKey(getBankKey("gm"));
-    const gnBank = readKey(getBankKey("gn"));
-    const data = {
-      v: 2,
-      handle: getHandle(),
-      theme: localStorage.getItem("gmx_theme") || "classic",
-      customBg: localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || null,
-      gm: { bank: gmBank, index: [], global: gmBank, langs: {} },
-      gn: { bank: gnBank, index: [], global: gnBank, langs: {} }
-    };
-    return JSON.stringify(data);
-  }
-
-  function importData(jsonText){
-    const data = JSON.parse(jsonText);
-    if (!data || typeof data !== "object") throw new Error("bad_json");
-    if (!data.gm || !data.gn) throw new Error("missing_sections");
-
-    if (data.theme) localStorage.setItem("gmx_theme", String(data.theme));
-    if ("customBg" in data){
-      if (data.customBg) localStorage.setItem(LS_CUSTOM_BG_GLOBAL, String(data.customBg));
-      else localStorage.removeItem(LS_CUSTOM_BG_GLOBAL);
-    }
-
-    const mergeImportedBank = (kind, payload)=>{
-      const direct = Array.isArray(payload?.bank) ? payload.bank : [];
-      const legacyGlobal = Array.isArray(payload?.global) ? payload.global : [];
-      const legacyLangs = (payload?.langs && typeof payload.langs === "object") ? payload.langs : {};
-      const merged = [];
-      merged.push(...direct);
-      merged.push(...legacyGlobal);
-      for (const arr of Object.values(legacyLangs)){
-        if (Array.isArray(arr)) merged.push(...arr);
-      }
-      for (const k of Array.from(new Set([...allLegacyKeysForKind(kind), getBankKey(kind)]))) localStorage.removeItem(k);
-      setLangIndex(kind, []);
-      writeKey(getBankKey(kind), dedupeLines(merged));
-      try{ localStorage.setItem(kind === "gm" ? LS_GM_REPLY_LANG : LS_GN_REPLY_LANG, "en"); }catch{}
-      try{ localStorage.setItem(getBankMigrationKey(kind), "1"); }catch{}
-    };
-
-    mergeImportedBank("gm", data.gm);
-    mergeImportedBank("gn", data.gn);
-    if (!isPro()){
-      try{ trimKindToCap("gm"); trimKindToCap("gn"); }catch(_e){}
-    }
-
-    applyTheme(localStorage.getItem("gmx_theme") || "classic");
-    applyUserBg();
-    initWallpapers();
-    renderThemes();
-    fillStyles();
-    try { __gmxStyles.wireStyleSelectors(); } catch (_e) {}
-    fillPacks();
-    renderLangChips("gm"); renderLangChips("gn");
-    renderList("gm"); renderList("gn");
-  }
-
-  async function copyToClipboard(text){
-    try{
-      await navigator.clipboard.writeText(text);
-      return true;
-    }catch{
-      // fallback
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      try{ document.execCommand("copy"); }catch{}
-      ta.remove();
-      return true;
-    }
-  }
-
-  function bindProTools(){
-    const note = $("pro_tools_note");
-    const gate = ()=>{
-      if (!isPro()){
-        if (note) note.textContent = (I18N[localStorage.getItem(LS_SITE_LANG)||"en"]?.pro_tools_note) || (I18N.en?.pro_tools_note) || "Pro-only tools.";
-        return false;
-      }
-      if (note) note.textContent = "";
-      return true;
-    };
-
-    const on = (id, fn)=>{
-      const el = $(id);
-      if (!el) return;
-      el.addEventListener("click", async ()=>{
-        if (!gate()) return;
-        try{
-          const msg = fn();
-          if (note) note.textContent = msg || "Done.";
-        }catch(e){
-          if (note) note.textContent = "Failed: " + (e && e.message ? e.message : "error");
-        }
-      });
-    };
-
-        on("toolCleanupGm", ()=> `GM: cleaned ${cleanupKind("gm")} list(s).`);
-    on("toolCleanupGn", ()=> `GN: cleaned ${cleanupKind("gn")} list(s).`);
-
-    const expBtn = $("toolExport");
-    if (expBtn){
-      expBtn.addEventListener("click", async ()=>{
-        if (!gate()) return;
-        const data = exportData();
-        await copyToClipboard(data);
-        if (note) note.textContent = "Export copied to clipboard (JSON).";
-      });
-    }
-    const impBtn = $("toolImport");
-    if (impBtn){
-      impBtn.addEventListener("click", ()=>{
-        if (!gate()) return;
-        const v = prompt("Paste export JSON here:");
-        if (!v) return;
-        try{
-          importData(v);
-          if (note) note.textContent = "Import complete.";
-        }catch(e){
-          if (note) note.textContent = "Import failed: " + (e && e.message ? e.message : "error");
-        }
-      });
-    }
-  }
-
-
-  function bindProControls(){
-    // packs
-    const bindPack = (kind)=>{
-      const sel = kind==="gm" ? $("gmPack") : $("gnPack");
-      const btn = kind==="gm" ? $("gmPackApply") : $("gnPackApply");
-      const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
-      if (sel){
-        sel.addEventListener("change", ()=>{
-          const pid = sel.value || "classic";
-          localStorage.setItem(lsKeyPack(kind), pid);
-          logEvent("pack_change", { kind, pack: pid });
-          const packs = packsForKind(kind);
-          const idx = packs.findIndex(x=>x.id===pid);
-          const locked = (!isPro() && idx >= unlockedPacksCountFor(kind));
-          if (!locked){
-            const packRow = packs.find(x=>x.id===pid) || packs[0];
-            applyPackDefaultsToUi(kind, packRow);
-          }
-        });
-      }
-      if (btn){
-        btn.addEventListener("click", ()=>{
-          const pid = sel ? (sel.value || "classic") : "classic";
-          const packs = packsForKind(kind);
-          const p = packs.find(x=>x.id===pid) || packs[0];
-          const idx = packs.findIndex(x=>x.id===pid);
-          const locked = (!isPro() && idx >= unlockedPacksCountFor(kind));
-          if (locked){
-            if (msgEl) msgEl.innerHTML = `<span class="warn">Pack is locked. Upgrade to Pro or unlock via referrals.</span>`;
-            return;
-          }
-          applyPackDefaultsToUi(kind, p);
-
-          if (msgEl) msgEl.innerHTML = `<span class="ok">Applied pack: ${escapeHtml(p.name)}</span>`;
-          logEvent("pack_apply", { kind, pack: pid });
-        });
-      }
-    };
-
-    const bindRanges = (_kind)=>{};
-
-    // initial sync hook kept only for compatibility after removing the old anti-repeat slider.
-    const sync = (_kind)=>{};
-
-    ["gm","gn"].forEach(kind=>{
-      bindPack(kind);
-      bindRanges(kind);
-      sync(kind);
-    });
-
-    // Expose a safe re-sync hook after subscription/referral refresh
-    try{ window.__syncProControls = ()=>{ ["gm","gn"].forEach(sync); }; } catch {}
-  }
+  if (!window.__GMXProControlsFactory) throw new Error("GMX procontrols factory missing");
+  const __gmxProControls = window.__GMXProControlsFactory({
+    $,
+    isPro,
+    escapeHtml,
+    storage: __gmxSt,
+    packsForKind,
+    unlockedPacksCountFor,
+    applyPackDefaultsToUi,
+    logEvent,
+    getProToolsNote: () =>
+      (I18N[localStorage.getItem(LS_SITE_LANG) || "en"]?.pro_tools_note) ||
+      (I18N.en?.pro_tools_note) ||
+      "Pro-only tools.",
+    readKey,
+    writeKey,
+    getBankKey,
+    allKeysForKind,
+    allLegacyKeysForKind,
+    getHandle,
+    dedupeLines,
+    normalizeLine,
+    cleanupKeyLines,
+    setLangIndex,
+    getBankMigrationKey,
+    trimKindToCap,
+    themeKey: "gmx_theme",
+    customBgKey: LS_CUSTOM_BG_GLOBAL,
+    gmReplyLangKey: LS_GM_REPLY_LANG,
+    gnReplyLangKey: LS_GN_REPLY_LANG,
+    onAfterImport: () => {
+      applyTheme(localStorage.getItem("gmx_theme") || "classic");
+      applyUserBg();
+      initWallpapers();
+      renderThemes();
+      fillStyles();
+      try { __gmxStyles.wireStyleSelectors(); } catch (_e) {}
+      fillPacks();
+      renderLangChips("gm");
+      renderLangChips("gn");
+      renderList("gm");
+      renderList("gn");
+    },
+  });
 
   // Light/Dark mode (site-only)
   const LS_SITE_MODE = K.SITE_MODE;
@@ -4191,8 +4040,7 @@ function cleanupKeyLines(lines){
     });
   }
 
-  bindProTools();
-  bindProControls();
+  __gmxProControls.wire();
 
   if (typeof window !== "undefined" && /^(127\.0\.0\.1|localhost)$/.test(location.hostname)) {
     window.__GMX_TEST__ = Object.assign(window.__GMX_TEST__ || {}, {

@@ -43,6 +43,7 @@ const APP_FILES = [
   "app.genparams.js",
   "app.cleanfill.js",
   "app.styles.js",
+  "app.procontrols.js",
   "app.toggles.js",
   "app.custombg.js",
   "app.tabtheme.js",
