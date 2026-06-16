@@ -21,7 +21,9 @@ for (const rel of appPaths) {
   if (/anti_last_n=0&count=\$\{reqCount\}/.test(text)) {
     fail(`${rel}: bulk/refill must not hardcode anti_last_n=0`);
   }
-  if (!/SITE_WALLPAPER_PACK_COUNT = 58/.test(text)) fail(`${rel}: wallpaper count must be 58`);
+  if (!/SITE_WALLPAPER_PACK_COUNT = (?:58|__gmxWp\.SITE_PACK_COUNT)/.test(text)) {
+    fail(`${rel}: wallpaper count must be 58`);
+  }
   ok(rel);
 }
 

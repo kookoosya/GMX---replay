@@ -61,6 +61,9 @@ export async function startAppShell() {
     // we need to inject them explicitly in a safe order.
     await injectAppShellRuntime("/mode.js", "gmx-legacy-mode");
     await injectAppShellRuntime("/entitlements.js", "gmx-legacy-entitlements");
+    await injectAppShellRuntime("/app.storage.js", "gmx-legacy-storage");
+    await injectAppShellRuntime("/app.unlock.js", "gmx-legacy-unlock");
+    await injectAppShellRuntime("/app.wallpapers.js", "gmx-legacy-wallpapers");
     await injectAppShellRuntime("/app.auth.js", "gmx-legacy-auth");
     await injectAppShellRuntime("/app.js", "gmx-app-shell-runtime");
     await waitForAppShellReady();

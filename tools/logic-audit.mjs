@@ -31,16 +31,25 @@ function mustMatch(rel, pattern, label) {
 
 const appFiles = ["public/app.js", "public/bridge/app.js", "frontend/public/app.js"];
 const htmlFiles = ["public/app.html", "public/bridge/app.html", "frontend/public/app.html"];
+const wallpaperModule = "public/app.wallpapers.js";
+
+if (fs.existsSync(path.join(root, wallpaperModule))) {
+  mustMatch(wallpaperModule, /const SITE_PACK_COUNT = 58;/, "wallpaper pack count must be 58");
+  mustNotMatch(wallpaperModule, /source\.unsplash\.com/, "unsplash URLs forbidden");
+  mustNotMatch(wallpaperModule, /sitePackWallpaperDataUri/, "chart SVG data-uri wallpapers forbidden");
+  mustNotMatch(wallpaperModule, /SITE_WALLPAPER_LUX/, "lux SVG wallpaper catalog removed");
+  mustMatch(wallpaperModule, /\/assets\/wallpapers\/thumbs\/\$\{norm\}\.webp/, "wallpaper thumbs must use webp files");
+  mustMatch(wallpaperModule, /\/assets\/extbg\/\$\{norm\}\.webp/, "extension wallpapers use webp CDN paths");
+}
 
 for (const rel of appFiles) {
   if (!fs.existsSync(path.join(root, rel))) continue;
-  mustMatch(rel, /const SITE_WALLPAPER_PACK_COUNT = 58;/, "wallpaper pack count must be 58");
-  mustMatch(rel, /const CRYPTO_SITE_WALL_SOURCES = \[\];/, "no unsplash/crypto URL wallpapers");
+  mustMatch(rel, /SITE_WALLPAPER_PACK_COUNT = __gmxWp\.SITE_PACK_COUNT/, "wallpaper pack count wired from module");
+  mustMatch(rel, /__GMXWallpapersFactory/, "wallpapers module factory wired");
   mustNotMatch(rel, /source\.unsplash\.com/, "unsplash URLs forbidden");
   mustNotMatch(rel, /sitePackWallpaperDataUri/, "chart SVG data-uri wallpapers forbidden");
   mustNotMatch(rel, /SITE_WALLPAPER_LUX/, "lux SVG wallpaper catalog removed");
   mustNotMatch(rel, /GM Candle|Degen Order|Bitcoin Terminal/, "crypto chart wallpaper names forbidden");
-  mustMatch(rel, /\/assets\/wallpapers\/thumbs\/\$\{norm\}\.webp/, "wallpaper thumbs must use webp files");
 
   mustNotMatch(rel, /function supportBundle\(/, "supportBundle removed");
   mustNotMatch(rel, /initWpLazyLoad/, "initWpLazyLoad removed");
@@ -48,7 +57,6 @@ for (const rel of appFiles) {
   mustMatch(rel, /attempts < 4/, "bulk generate retry cap");
   mustMatch(rel, /const antiN = antiWindow\(strength\)/, "single generate uses antiWindow");
   mustNotMatch(rel, /const antiN = 0;/, "antiN must not be hardcoded 0");
-  mustMatch(rel, /\/assets\/extbg\/\$\{norm\}\.webp/, "extension wallpapers use webp CDN paths");
   const packFn = (read(rel).match(/function packsForKind\(/g) || []).length;
   if (packFn !== 1) fail(`packsForKind must be defined once (found ${packFn}) in ${rel}`);
   mustMatch(rel, /function readGenParams\(/, "readGenParams helper");
@@ -58,6 +66,10 @@ for (const rel of appFiles) {
 }
 
 for (const rel of htmlFiles) {
+  mustMatch(rel, /app\.storage\.js/, "app.storage.js script tag");
+  mustMatch(rel, /app\.unlock\.js/, "app.unlock.js script tag");
+  mustMatch(rel, /app\.wallpapers\.js/, "app.wallpapers.js script tag");
+  mustMatch(rel, /app\.auth\.js/, "app.auth.js script tag");
   mustNotMatch(rel, /id="supportOut"/, "supportOut textarea removed");
   mustNotMatch(rel, /id="toolSupport"/, "toolSupport button removed from HTML");
 }

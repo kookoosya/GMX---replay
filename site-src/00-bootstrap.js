@@ -37,37 +37,35 @@
     }
   }
 // --- Unlock logic (Variant A)
-const FREE_VISIBLE_THEMES = 8;
-const FREE_VISIBLE_STYLES = 5;
-const FREE_VISIBLE_PACKS = 2;
-const FREE_VISIBLE_WALLPAPERS = 8;
-const FREE_VISIBLE_EXT_THEMES = 4;
-const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260616f";
+const ASSET_REV = "20260616g";
+
+if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
+const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
+
+if (!window.__GMXWallpapersFactory) throw new Error("GMX wallpapers factory missing");
+const __gmxWp = window.__GMXWallpapersFactory({
+  getAssetRev: () => ASSET_REV,
+  getSiteCustomUpload: () => __gmxSt.lsGet(K.CUSTOM_BG_GLOBAL),
+  getExtCustomUpload: () => __gmxSt.lsGet(K.EXT_CUSTOM_BG_GLOBAL),
+});
+
+const FREE_VISIBLE_THEMES = __gmxUnlock.FREE_VISIBLE_THEMES;
+const FREE_VISIBLE_STYLES = __gmxUnlock.FREE_VISIBLE_STYLES;
+const FREE_VISIBLE_PACKS = __gmxUnlock.FREE_VISIBLE_PACKS;
+const FREE_VISIBLE_WALLPAPERS = __gmxUnlock.FREE_VISIBLE_WALLPAPERS;
+const FREE_VISIBLE_EXT_THEMES = __gmxUnlock.FREE_VISIBLE_EXT_THEMES;
+const FREE_VISIBLE_EXT_WALLPAPERS = __gmxUnlock.FREE_VISIBLE_EXT_WALLPAPERS;
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
-  if (idx < freeCount) return 0;
-  const k = (idx - freeCount) + 1;
-  if (k <= 8) return k * 3;
-  return 24 + (k - 8) * 4;
+  return __gmxUnlock.reqRefsForUnlockIndex(idx, freeCount);
 }
 
 function formatUnlockMeter(cur, total){
-  const c = Math.max(0, Number(cur) || 0);
-  const t = Math.max(0, Number(total) || 0);
-  if (isPro() || (t > 0 && c >= t)) return "All";
-  if (!t) return "0";
-  return `${Math.min(c, t)}/${t}`;
+  return __gmxUnlock.formatUnlockMeter(cur, total);
 }
 
 function unlockedCountByRefs(total, freeCount=FREE_VISIBLE_THEMES){
-  if (isPro()) return total;
-  const r = Number(REF_COUNT||0);
-  if (total <= freeCount) return total;
-  const extraFast = Math.min(8, Math.floor(r / 3));
-  const extraSlow = (r > 24) ? Math.floor((r - 24) / 4) : 0;
-  const extra = extraFast + extraSlow;
-  return Math.min(total, freeCount + extra);
+  return __gmxUnlock.unlockedCountByRefs(total, freeCount);
 }
 
 

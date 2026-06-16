@@ -113,81 +113,9 @@
   ].slice(0, 60);
 
   const EXT_THEMES = THEMES.map(t=>({ id:t.id, name:t.name, note:t.note, a:t.a, b:t.b }));
-  const EXT_WALLPAPER_PACK_COUNT = 58;
-  const EXT_WALLPAPER_FREE_PACK_COUNT = 4;
-  const EXT_PACK_NAMES = [
-    "Coastal Dawn",
-    "Forest Mist",
-    "Mountain Lake",
-    "City Sunset",
-    "Desert Dunes",
-    "Ocean Horizon",
-    "Nordic Fjord",
-    "Rainy Street",
-    "Cherry Blossom",
-    "Golden Hour",
-    "Misty Pines",
-    "Alpine Meadow",
-    "River Bend",
-    "Cliff Coast",
-    "Lavender Field",
-    "Autumn Trail",
-    "Snow Peak",
-    "Bamboo Grove",
-    "Harbor Lights",
-    "Vineyard Hills",
-    "Canyon View",
-    "Tropical Cove",
-    "Urban Night",
-    "Meadow Bloom",
-    "Glacier Bay",
-    "Sandstone Arch",
-    "Waterfall Glen",
-    "Prairie Wind",
-    "Island Palm",
-    "Moonlit Bay",
-    "Cedar Forest",
-    "Rose Garden",
-    "Stone Bridge",
-    "Lighthouse Shore",
-    "Wildflower Hill",
-    "Cloud Valley",
-    "Emerald Coast",
-    "Silver Lake",
-    "Amber Woods",
-    "Coral Reef",
-    "Indigo Sky",
-    "Morning Fog",
-    "Twilight Pier",
-    "Bamboo Path",
-    "Rocky Shore",
-    "Savanna Gold",
-    "Maple Lane",
-    "Crystal Cave",
-    "Dunescape",
-    "Orchid Green",
-    "Vineyard Dawn",
-    "Ice Lagoon",
-    "Red Rock",
-    "Moss Garden",
-    "Delta Mirror",
-    "Panorama Ridge",
-    "Silk Clouds",
-    "Cedar Sunset"
-  ];
-  const CRYPTO_EXT_WALL_SOURCES = [];
-  function buildExtWallpapers(){
-    const out = [];
-    for (let i=1; i<=EXT_WALLPAPER_PACK_COUNT; i++){
-      out.push({
-        id: `extv3_${String(i).padStart(2, "0")}`,
-        name: EXT_PACK_NAMES[i - 1] || `Scene ${i}`,
-        tier: i <= EXT_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
-      });
-    }
-    return out;
-  }
-  const EXT_WALLPAPERS = buildExtWallpapers();
+  const EXT_WALLPAPER_PACK_COUNT = __gmxWp.EXT_PACK_COUNT;
+  const EXT_WALLPAPER_FREE_PACK_COUNT = __gmxWp.EXT_FREE_PACK_COUNT;
+  const EXT_WALLPAPERS = __gmxWp.buildExtWallpapers();
   function migrateLegacyExtWallpaperSelectionOnce(){
     try{
       const done = "gmx_ext_wallpaper_pexels_v2";

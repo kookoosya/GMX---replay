@@ -20,7 +20,7 @@ const PUBLIC = path.join(ROOT, "public");
 const ASSETS = path.join(ROOT, "assets");
 const FRONTEND_PUBLIC = path.join(ROOT, "frontend", "public");
 
-const APP_FILES = ["app.html", "app.js", "app.css", "app.auth.js", "app.storage.js", "arcade.html", "arcade.js", "entitlements.js", "mode.js", "themes.json"];
+const APP_FILES = ["app.html", "app.js", "app.css", "app.auth.js", "app.storage.js", "app.unlock.js", "app.wallpapers.js", "arcade.html", "arcade.js", "entitlements.js", "mode.js", "themes.json"];
 
 function ensureDir(dir) {
   fs.mkdirSync(dir, { recursive: true });
@@ -57,6 +57,10 @@ for (const f of APP_FILES) {
     copyFile(src, dest);
     n++;
     console.log(`  ${f}`);
+    if (f === "app.html") {
+      copyFile(src, path.join(PUBLIC, "bridge", "app.html"));
+      console.log("  bridge/app.html");
+    }
   }
 }
 

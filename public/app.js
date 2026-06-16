@@ -37,37 +37,35 @@
     }
   }
 // --- Unlock logic (Variant A)
-const FREE_VISIBLE_THEMES = 8;
-const FREE_VISIBLE_STYLES = 5;
-const FREE_VISIBLE_PACKS = 2;
-const FREE_VISIBLE_WALLPAPERS = 8;
-const FREE_VISIBLE_EXT_THEMES = 4;
-const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260616f";
+const ASSET_REV = "20260616g";
+
+if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
+const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
+
+if (!window.__GMXWallpapersFactory) throw new Error("GMX wallpapers factory missing");
+const __gmxWp = window.__GMXWallpapersFactory({
+  getAssetRev: () => ASSET_REV,
+  getSiteCustomUpload: () => __gmxSt.lsGet(K.CUSTOM_BG_GLOBAL),
+  getExtCustomUpload: () => __gmxSt.lsGet(K.EXT_CUSTOM_BG_GLOBAL),
+});
+
+const FREE_VISIBLE_THEMES = __gmxUnlock.FREE_VISIBLE_THEMES;
+const FREE_VISIBLE_STYLES = __gmxUnlock.FREE_VISIBLE_STYLES;
+const FREE_VISIBLE_PACKS = __gmxUnlock.FREE_VISIBLE_PACKS;
+const FREE_VISIBLE_WALLPAPERS = __gmxUnlock.FREE_VISIBLE_WALLPAPERS;
+const FREE_VISIBLE_EXT_THEMES = __gmxUnlock.FREE_VISIBLE_EXT_THEMES;
+const FREE_VISIBLE_EXT_WALLPAPERS = __gmxUnlock.FREE_VISIBLE_EXT_WALLPAPERS;
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
-  if (idx < freeCount) return 0;
-  const k = (idx - freeCount) + 1;
-  if (k <= 8) return k * 3;
-  return 24 + (k - 8) * 4;
+  return __gmxUnlock.reqRefsForUnlockIndex(idx, freeCount);
 }
 
 function formatUnlockMeter(cur, total){
-  const c = Math.max(0, Number(cur) || 0);
-  const t = Math.max(0, Number(total) || 0);
-  if (isPro() || (t > 0 && c >= t)) return "All";
-  if (!t) return "0";
-  return `${Math.min(c, t)}/${t}`;
+  return __gmxUnlock.formatUnlockMeter(cur, total);
 }
 
 function unlockedCountByRefs(total, freeCount=FREE_VISIBLE_THEMES){
-  if (isPro()) return total;
-  const r = Number(REF_COUNT||0);
-  if (total <= freeCount) return total;
-  const extraFast = Math.min(8, Math.floor(r / 3));
-  const extraSlow = (r > 24) ? Math.floor((r - 24) / 4) : 0;
-  const extra = extraFast + extraSlow;
-  return Math.min(total, freeCount + extra);
+  return __gmxUnlock.unlockedCountByRefs(total, freeCount);
 }
 
 
@@ -633,83 +631,12 @@ function readFileAsDataURL(file){
   // Wallpapers — per-tab. Photo pack (webp under /assets/wallpapers/v2_*.webp).
   const LS_WP_GLOBAL = K.WP_GLOBAL;
   const LS_WP_TAB_PREFIX = K.WP_TAB_PREFIX;
-  const SITE_WALLPAPER_PACK_COUNT = 58;
-  const SITE_WALLPAPER_FREE_PACK_COUNT = 10;
-  const SITE_PACK_NAMES = [
-    "Coastal Dawn",
-    "Forest Mist",
-    "Mountain Lake",
-    "City Sunset",
-    "Desert Dunes",
-    "Ocean Horizon",
-    "Nordic Fjord",
-    "Rainy Street",
-    "Cherry Blossom",
-    "Golden Hour",
-    "Misty Pines",
-    "Alpine Meadow",
-    "River Bend",
-    "Cliff Coast",
-    "Lavender Field",
-    "Autumn Trail",
-    "Snow Peak",
-    "Bamboo Grove",
-    "Harbor Lights",
-    "Vineyard Hills",
-    "Canyon View",
-    "Tropical Cove",
-    "Urban Night",
-    "Meadow Bloom",
-    "Glacier Bay",
-    "Sandstone Arch",
-    "Waterfall Glen",
-    "Prairie Wind",
-    "Island Palm",
-    "Moonlit Bay",
-    "Cedar Forest",
-    "Rose Garden",
-    "Stone Bridge",
-    "Lighthouse Shore",
-    "Wildflower Hill",
-    "Cloud Valley",
-    "Emerald Coast",
-    "Silver Lake",
-    "Amber Woods",
-    "Coral Reef",
-    "Indigo Sky",
-    "Morning Fog",
-    "Twilight Pier",
-    "Bamboo Path",
-    "Rocky Shore",
-    "Savanna Gold",
-    "Maple Lane",
-    "Crystal Cave",
-    "Dunescape",
-    "Orchid Green",
-    "Vineyard Dawn",
-    "Ice Lagoon",
-    "Red Rock",
-    "Moss Garden",
-    "Delta Mirror",
-    "Panorama Ridge",
-    "Silk Clouds",
-    "Cedar Sunset"
-  ];
-  const CRYPTO_SITE_WALL_SOURCES = [];
-  function buildSiteWallpapers(){
-    const out = [];
-    for (let i=1; i<=SITE_WALLPAPER_PACK_COUNT; i++){
-      const m = cryptoWallpaperMotif(i);
-      const n = String(i).padStart(3, "0");
-      out.push({
-        id: `v2_${n}`,
-        name: `${m.label} • ${m.sub} #${i}`,
-        tier: i <= SITE_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
-      });
-    }
-    return out;
-  }
-  const WALLPAPERS = buildSiteWallpapers();
+  const SITE_WALLPAPER_PACK_COUNT = __gmxWp.SITE_PACK_COUNT;
+  const SITE_WALLPAPER_FREE_PACK_COUNT = __gmxWp.SITE_FREE_PACK_COUNT;
+  const CUSTOM_WP_FREE_COUNT = __gmxWp.CUSTOM_WP_FREE_COUNT;
+  const CUSTOM_UPLOAD_ID = __gmxWp.CUSTOM_UPLOAD_ID;
+  const CUSTOM_WP_RE = __gmxWp.CUSTOM_WP_RE;
+  const WALLPAPERS = __gmxWp.buildSiteWallpapers();
   const WALLPAPER_REFRESH_MIGRATION_KEY = K.WALLPAPER_REFRESH_MIGRATION;
   function migrateLegacyWallpaperSelectionOnce(){
     try{
@@ -749,9 +676,6 @@ function readFileAsDataURL(file){
     ["wallet","wp_apply_wallet"]
   ];
 
-  const CUSTOM_WP_RE = /^custom_[a-zA-Z0-9_.-]+\.(png|jpg|jpeg|webp)$/i;
-  const CUSTOM_WP_FREE_COUNT = 5;
-  const CUSTOM_UPLOAD_ID = "custom_upload";
   let CUSTOM_WALLPAPERS_SITE = [];
   let CUSTOM_WALLPAPERS_EXT = [];
   let CUSTOM_WALLPAPERS_LOADED = false;
@@ -772,14 +696,7 @@ function readFileAsDataURL(file){
 
   // ---- Wallpaper migration / validation (keeps old saved ids from breaking the UI)
   function normalizeWallpaperId(id){
-    const v = String(id||"").trim();
-    if (!v) return "";
-    if (WALLPAPERS.some(x=>x.id===v)) return v;
-    if (v === CUSTOM_UPLOAD_ID) return v;
-    if (CUSTOM_WP_RE.test(v)) return v;
-    // migrate legacy svg ids (w01..w99) or removed v3 ids to a safe default
-    if (/^w\d+$/i.test(v) || /^v3_\d+$/i.test(v) || /^free\d+$/i.test(v) || /^lux_/i.test(v)) return "v2_001";
-    return "v2_001";
+    return __gmxWp.normalizeWallpaperId(id, WALLPAPERS);
   }
 
   function normalizeAllWallpapers(){
@@ -801,165 +718,19 @@ function readFileAsDataURL(file){
   normalizeAllWallpapers();
 
   function normalizeExtWallpaperIdLocal(id){
-    const v = String(id||"").trim();
-    if (!v) return "";
-    if (EXT_WALLPAPERS.some(x=>String(x.id||"").toLowerCase()===v.toLowerCase())) return v;
-    if (v === CUSTOM_UPLOAD_ID) return v;
-    if (CUSTOM_WP_RE.test(v)) return v;
-    let m = v.match(/^extv3_(\d{1,2})$/i);
-    if (m){
-      const n = String(Math.max(1, Math.min(58, Number(m[1]) || 1))).padStart(2, "0");
-      return `extv3_${n}`;
-    }
-    m = v.match(/^ext_free_(\d{1,2})$/i);
-    if (m){
-      const n = String(Math.max(1, Math.min(2, Number(m[1]) || 1))).padStart(2, "0");
-      return `ext_free_${n}`;
-    }
-    m = v.match(/^ext_(\d{1,2})$/i);
-    if (m){
-      const num = Math.max(1, Math.min(58, Number(m[1]) || 1));
-      return `extv3_${String(num).padStart(2, "0")}`;
-    }
-    if (/^lux_ext_/i.test(v) || /^ext_free_/i.test(v)) return "extv3_01";
-    return "extv3_01";
+    return __gmxWp.normalizeExtWallpaperIdLocal(id, EXT_WALLPAPERS);
   }
-
-  function svgDataUri(svg){
-    return `data:image/svg+xml;utf8,${encodeURIComponent(String(svg || ""))}`;
-  }
-
-  function cryptoWallpaperPalette(num){
-    const palettes = [
-      { a: "#7c3aed", b: "#14f195", glow: "#14f195", x: "#070a12" },  // Solana glow
-      { a: "#9945ff", b: "#06b6d4", glow: "#06b6d4", x: "#0a0d15" },  // Neon CT-ish
-      { a: "#22c55e", b: "#7c3aed", glow: "#22c55e", x: "#050810" }, // DeGen green
-      { a: "#f97316", b: "#7c3aed", glow: "#f7931a", x: "#070a12" }, // Alpha burn
-    ];
-    return palettes[(Math.abs(num | 0) || 0) % palettes.length] || palettes[0];
-  }
-
-  function cryptoWallpaperMotif(num){
-    const m = (Math.abs(num | 0) || 0) % 6;
-    if (m === 0) return { label: "SOLANA", sub: "X" };
-    if (m === 1) return { label: "DEGEN", sub: "SOL" };
-    if (m === 2) return { label: "CT", sub: "X" };
-    if (m === 3) return { label: "WAGMI", sub: "SOL" };
-    if (m === 4) return { label: "DEGEN", sub: "X" };
-    return { label: "SOL/X", sub: "CT" };
-  }
-
-  function cryptoWallpaperDataUri(kind, num, thumb){
-    const isExt = String(kind) === "ext";
-    const N = Math.max(1, Math.min(99, Number(num) || 1));
-    const p = cryptoWallpaperPalette(N);
-    const motif = cryptoWallpaperMotif(N);
-
-    const W = isExt ? (thumb ? 360 : 1080) : (thumb ? 480 : 1920);
-    const H = isExt ? (thumb ? 640 : 1920) : (thumb ? 270 : 1080);
-
-    const solCx = W / 2;
-    const solTop = H * 0.22;
-    const solW = W * 0.38;
-    const solH = H * 0.42;
-
-    const xCx = W * 0.5;
-    const xCy = H * 0.72;
-    const xSize = W * 0.18;
-
-    const t = (N * 9973) % 10000;
-    const circles = [];
-    for (let i = 0; i < 7; i++){
-      const a = (t + i * 173) % 1000;
-      const b = (t + i * 331) % 1000;
-      circles.push({ x: Math.round(W * (0.12 + (a % 70) / 100)), y: Math.round(H * (0.12 + (b % 70) / 100)) });
-    }
-
-    const tri = `<polygon points="${(solCx - solW / 2)},${solTop} ${(
-      solCx + solW / 2
-    )},${solTop} ${solCx},${solTop + solH}" fill="url(#solGrad)"/>`;
-
-    const xIcon = `
-      <g opacity="0.95">
-        <path d="M ${xCx - xSize} ${xCy - xSize} L ${xCx + xSize} ${xCy + xSize}" stroke="${p.glow}" stroke-width="${Math.max(10, W * 0.018)}" stroke-linecap="round"/>
-        <path d="M ${xCx + xSize} ${xCy - xSize} L ${xCx - xSize} ${xCy + xSize}" stroke="${p.glow}" stroke-width="${Math.max(10, W * 0.018)}" stroke-linecap="round"/>
-      </g>`;
-
-    const labelY = H * 0.58;
-    const subY = H * 0.66;
-    const fontSizeA = Math.max(42, W * (isExt ? 0.065 : 0.07));
-    const fontSizeB = Math.max(24, W * (isExt ? 0.04 : 0.045));
-
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
-      <defs>
-        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="${p.x}"/>
-          <stop offset="35%" stop-color="${p.a}"/>
-          <stop offset="100%" stop-color="${p.b}"/>
-        </linearGradient>
-        <linearGradient id="solGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${p.b}"/>
-          <stop offset="100%" stop-color="${p.a}"/>
-        </linearGradient>
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="${thumb ? 10 : 18}" result="blur"/>
-          <feMerge>
-            <feMergeNode in="blur"/>
-            <feMergeNode in="SourceGraphic"/>
-          </feMerge>
-        </filter>
-      </defs>
-
-      <rect width="${W}" height="${H}" fill="url(#bg)"/>
-
-      <g opacity="0.20">
-        ${circles.map(c => `<circle cx="${c.x}" cy="${c.y}" r="${Math.max(3, W * 0.01)}" fill="${p.glow}"/>`).join("")}
-      </g>
-
-      <g opacity="0.28" stroke="${p.glow}">
-        ${circles.map(c => `<path d="M ${c.x - W * 0.18} ${c.y} C ${c.x} ${c.y - H * 0.08} ${c.x} ${c.y + H * 0.12} ${c.x + W * 0.18} ${c.y}" fill="none" stroke-width="${Math.max(2, W * 0.005)}"/>`).join("")}
-      </g>
-
-      <g filter="url(#glow)">${tri}</g>
-      ${xIcon}
-
-      <text x="${W / 2}" y="${labelY}" text-anchor="middle" fill="rgba(255,255,255,0.92)" font-size="${fontSizeA}" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-weight="900" letter-spacing="0.5">${motif.label}</text>
-      <text x="${W / 2}" y="${subY}" text-anchor="middle" fill="rgba(255,255,255,0.74)" font-size="${fontSizeB}" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-weight="800" letter-spacing="0.7">${motif.sub}</text>
-    </svg>`;
-
-    return svgDataUri(svg);
-  }
-
-
 
   function extWallpaperAssetPath(id){
-    const norm = normalizeExtWallpaperIdLocal(id);
-    if (!norm) return "";
-    if (norm.startsWith("extv3_")) return norm + ".webp";
-    return norm + ".svg";
+    return __gmxWp.extWallpaperAssetPath(id, EXT_WALLPAPERS);
   }
 
   function extWallpaperFullUrl(id){
-    const norm = normalizeExtWallpaperIdLocal(id);
-    if (!norm) return "";
-    if (norm === CUSTOM_UPLOAD_ID){
-      try{ return localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
-    }
-    if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("extv3_")) return `/assets/extbg/${norm}.webp?v=${ASSET_REV}`;
-    const p = extWallpaperAssetPath(norm);
-    return p ? `/assets/extbg/${p}?v=${ASSET_REV}` : "";
+    return __gmxWp.extWallpaperFullUrl(id, EXT_WALLPAPERS);
   }
 
   function extWallpaperThumbUrl(id){
-    const norm = normalizeExtWallpaperIdLocal(id);
-    if (!norm) return "";
-    if (norm === CUSTOM_UPLOAD_ID){
-      try{ return localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
-    }
-    if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("extv3_")) return `/assets/extbg/thumbs/${norm}.webp?v=${ASSET_REV}`;
-    return `/assets/extbg/thumbs/extv3_01.webp?v=${ASSET_REV}`;
+    return __gmxWp.extWallpaperThumbUrl(id, EXT_WALLPAPERS);
   }
   try{
     const cur = localStorage.getItem(LS_EXT_WP);
@@ -998,37 +769,19 @@ function readFileAsDataURL(file){
   }
 
   function wallpaperAssetPath(id){
-    if (!id) return "";
-    if (String(id).startsWith("v2_")) return String(id) + ".webp";
-    return String(id) + ".svg";
+    return __gmxWp.wallpaperAssetPath(id);
   }
 
   function wallpaperFullUrl(id){
-    const norm = normalizeWallpaperId(id);
-    if (!norm) return "";
-    if (norm === CUSTOM_UPLOAD_ID){
-      try{ return localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
-    }
-    if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("v2_")) return `/assets/wallpapers/${norm}.webp?v=${ASSET_REV}`;
-    const p = wallpaperAssetPath(norm);
-    return p ? `/assets/wallpapers/${p}?v=${ASSET_REV}` : "";
+    return __gmxWp.wallpaperFullUrl(id, WALLPAPERS);
   }
 
   function wallpaperThumbUrl(id){
-    const norm = normalizeWallpaperId(id);
-    if (!norm) return "";
-    if (norm === CUSTOM_UPLOAD_ID){
-      try{ return localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
-    }
-    if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("v2_")) return `/assets/wallpapers/thumbs/${norm}.webp?v=${ASSET_REV}`;
-    return `/assets/wallpapers/thumbs/v2_001.webp?v=${ASSET_REV}`;
+    return __gmxWp.wallpaperThumbUrl(id, WALLPAPERS);
   }
 
   function wallpaperUrl(id){
-    const full = wallpaperFullUrl(id);
-    return full ? `url("${full}")` : "none";
+    return __gmxWp.wallpaperUrl(id, WALLPAPERS);
   }
 
   function wallpaperUnlocked(wp, idx, effectiveCustomLen){
@@ -1490,81 +1243,9 @@ function renderWallpaperUI(){
   ].slice(0, 60);
 
   const EXT_THEMES = THEMES.map(t=>({ id:t.id, name:t.name, note:t.note, a:t.a, b:t.b }));
-  const EXT_WALLPAPER_PACK_COUNT = 58;
-  const EXT_WALLPAPER_FREE_PACK_COUNT = 4;
-  const EXT_PACK_NAMES = [
-    "Coastal Dawn",
-    "Forest Mist",
-    "Mountain Lake",
-    "City Sunset",
-    "Desert Dunes",
-    "Ocean Horizon",
-    "Nordic Fjord",
-    "Rainy Street",
-    "Cherry Blossom",
-    "Golden Hour",
-    "Misty Pines",
-    "Alpine Meadow",
-    "River Bend",
-    "Cliff Coast",
-    "Lavender Field",
-    "Autumn Trail",
-    "Snow Peak",
-    "Bamboo Grove",
-    "Harbor Lights",
-    "Vineyard Hills",
-    "Canyon View",
-    "Tropical Cove",
-    "Urban Night",
-    "Meadow Bloom",
-    "Glacier Bay",
-    "Sandstone Arch",
-    "Waterfall Glen",
-    "Prairie Wind",
-    "Island Palm",
-    "Moonlit Bay",
-    "Cedar Forest",
-    "Rose Garden",
-    "Stone Bridge",
-    "Lighthouse Shore",
-    "Wildflower Hill",
-    "Cloud Valley",
-    "Emerald Coast",
-    "Silver Lake",
-    "Amber Woods",
-    "Coral Reef",
-    "Indigo Sky",
-    "Morning Fog",
-    "Twilight Pier",
-    "Bamboo Path",
-    "Rocky Shore",
-    "Savanna Gold",
-    "Maple Lane",
-    "Crystal Cave",
-    "Dunescape",
-    "Orchid Green",
-    "Vineyard Dawn",
-    "Ice Lagoon",
-    "Red Rock",
-    "Moss Garden",
-    "Delta Mirror",
-    "Panorama Ridge",
-    "Silk Clouds",
-    "Cedar Sunset"
-  ];
-  const CRYPTO_EXT_WALL_SOURCES = [];
-  function buildExtWallpapers(){
-    const out = [];
-    for (let i=1; i<=EXT_WALLPAPER_PACK_COUNT; i++){
-      out.push({
-        id: `extv3_${String(i).padStart(2, "0")}`,
-        name: EXT_PACK_NAMES[i - 1] || `Scene ${i}`,
-        tier: i <= EXT_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
-      });
-    }
-    return out;
-  }
-  const EXT_WALLPAPERS = buildExtWallpapers();
+  const EXT_WALLPAPER_PACK_COUNT = __gmxWp.EXT_PACK_COUNT;
+  const EXT_WALLPAPER_FREE_PACK_COUNT = __gmxWp.EXT_FREE_PACK_COUNT;
+  const EXT_WALLPAPERS = __gmxWp.buildExtWallpapers();
   function migrateLegacyExtWallpaperSelectionOnce(){
     try{
       const done = "gmx_ext_wallpaper_pexels_v2";
