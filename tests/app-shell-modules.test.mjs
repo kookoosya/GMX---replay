@@ -1112,3 +1112,28 @@ test("walletui: renderWalletStatus shows Pro active", () => {
   ui.renderWalletStatus({ active: true, paidUntil: "2026-12-01" });
   assert.match(els.w_status_desc.innerHTML, /Pro active/);
 });
+
+test("walletpay: verifyIntentWithRetry retries transient errors", async () => {
+  let calls = 0;
+  const pay = loadFactory("app.walletpay.js", "__GMXWalletPayFactory")({
+    api: async () => {
+      calls++;
+      if (calls < 2) throw new Error("payment_not_verified");
+      return { ok: true, sub: { active: true } };
+    },
+  });
+  const j = await pay.verifyIntentWithRetry("intent1", "sig", "payer");
+  assert.equal(calls, 2);
+  assert.equal(j.ok, true);
+});
+
+test("walletpay: buildPaymentTx rejects missing wallet", async () => {
+  const code = readFileSync(path.join(root, "public", "app.walletpay.js"), "utf8");
+  const fn = new Function("window", `${code}; return window.__GMXWalletPayFactory;`);
+  const win = { solanaWeb3: { Transaction: function () {}, SystemProgram: {} } };
+  const pay = fn(win)({ getWallet: () => ({ publicKey: null }) });
+  await assert.rejects(
+    () => pay.buildPaymentTx({ amountBase: "1000", currency: "SOL" }),
+    /wallet_not_connected/
+  );
+});

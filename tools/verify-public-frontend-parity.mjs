@@ -74,6 +74,7 @@ const APP_FILES = [
   "app.siteboot.js",
   "app.siteinit.js",
   "app.wallethelpers.js",
+  "app.walletpay.js",
   "app.walletui.js",
   "arcade.html",
   "arcade.js",
