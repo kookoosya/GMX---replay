@@ -36,6 +36,8 @@ const APP_FILES = [
   "app.tabtheme.js",
   "app.logs.js",
   "app.paywall.js",
+  "app.help.js",
+  "app.usage.js",
   "arcade.html",
   "arcade.js",
   "entitlements.js",

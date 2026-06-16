@@ -38,6 +38,8 @@ const shellModules = [
   "app.tabtheme.js",
   "app.logs.js",
   "app.paywall.js",
+  "app.help.js",
+  "app.usage.js",
 ];
 for (const name of shellModules) {
   const modSrc = path.join(root, "public", name);

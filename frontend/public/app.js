@@ -48,7 +48,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616p";
+const ASSET_REV = "20260616q";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -162,6 +162,56 @@ const __gmxPaywall = window.__GMXPaywallFactory({
   storage: __gmxSt,
   getHandle: () => getHandle(),
   trackEvent: (type, meta) => trackEvent(type, meta),
+  onNavigateWallet: () => { try { tab("wallet"); } catch {} },
+});
+
+let __gmxHelp;
+if (!window.__GMXUsageFactory) throw new Error("GMX usage factory missing");
+const __gmxUsage = window.__GMXUsageFactory({
+  $: __gmxChrome.$,
+  getToken: () => getToken(),
+  getHandle: () => getHandle(),
+  api: (path, method, body) => api(path, method, body),
+  isPro,
+  getSaveCapFree: () => SAVE_CAP_FREE,
+  setSaveCapFree: (v) => { SAVE_CAP_FREE = v; },
+  setAuthOk: (v) => { AUTH_OK = v; },
+  applyAdminVisibility: () => { try { applyAdminVisibility(); } catch {} },
+  setLastUsage: (u) => { LAST_USAGE = u; },
+  getLastUsage: () => LAST_USAGE,
+  setSub: (s) => { SUB = s; },
+  renderWalletStatus: (sub) => { try { renderWalletStatus(sub); } catch {} },
+  applyRefCountEligible: (n, opts) => applyRefCountEligible(n, opts),
+  getLastUsageCosmeticSig: () => LAST_USAGE_COSMETIC_SIG,
+  setLastUsageCosmeticSig: (s) => { LAST_USAGE_COSMETIC_SIG = s; },
+  onCosmeticRefresh: () => {
+    fillStyles();
+    fillPacks();
+    try { window.__syncProControls && window.__syncProControls(); } catch {}
+    applyUserBg();
+    initWallpapers();
+    renderThemes();
+    initExtWallpaperControls();
+    normalizeStoredExtWallpaperSelections();
+    renderExtThemes();
+    renderExtWallpapers();
+    renderExtCustomBgUI();
+    try {
+      setExtView(normalizeExtViewValue(__gmxSt.lsGet(K.EXT_VIEW, "theme")), { force: true, silent: true });
+    } catch {}
+  },
+  scheduleRefStatsRefresh: (ms) => { try { scheduleRefStatsRefresh(ms); } catch {} },
+  renderHelpIfOpen: () => { try { __gmxHelp.renderHelpIfOpen(); } catch {} },
+});
+
+if (!window.__GMXHelpFactory) throw new Error("GMX help factory missing");
+__gmxHelp = window.__GMXHelpFactory({
+  $: __gmxChrome.$,
+  isPro,
+  getSaveCapFree: () => SAVE_CAP_FREE,
+  getLastUsage: () => LAST_USAGE,
+  getLastSaved: () => LAST_SAVED,
+  normLimitForUI: (n) => __gmxUsage.normLimitForUI(n),
   onNavigateWallet: () => { try { tab("wallet"); } catch {} },
 });
 
@@ -514,43 +564,8 @@ async function postEvent(type, meta){
     return out;
   }
 
-  function ensureWallpaperLayer(){
-    let layer = document.getElementById("gmxWallLayer");
-    if (!layer){
-      layer = document.createElement("div");
-      layer.id = "gmxWallLayer";
-      layer.className = "gmxWallLayer";
-      layer.setAttribute("aria-hidden", "true");
-      document.body.prepend(layer);
-    }
-    return layer;
-  }
-
-  function setWallpaperLayerImage(layer, url){
-    if (!layer) return;
-    if (!url){
-      layer.replaceChildren();
-      layer.style.display = "none";
-      layer.removeAttribute("data-wall-url");
-      return;
-    }
-    const safe = String(url).replace(/"/g, "%22");
-    if (layer.getAttribute("data-wall-url") === url && layer.querySelector("img")){
-      layer.style.display = "block";
-      return;
-    }
-    layer.setAttribute("data-wall-url", url);
-    layer.replaceChildren();
-    const img = document.createElement("img");
-    img.className = "gmxWallImg";
-    img.alt = "";
-    img.decoding = "async";
-    img.loading = "eager";
-    img.draggable = false;
-    img.src = url;
-    layer.appendChild(img);
-    layer.style.display = "block";
-  }
+  function ensureWallpaperLayer(){ return __gmxWp.ensureWallpaperLayer(); }
+  function setWallpaperLayerImage(layer, url){ return __gmxWp.setWallpaperLayerImage(layer, url); }
 
   function applyWallpaper(tab){
     const safeTab = String(tab || currentTabName() || "home");
@@ -1892,95 +1907,15 @@ const $ = __gmxChrome.$;
   }
 
 
-  function normLimitForUI(limit){
-    const n = Number(limit);
-    if (!Number.isFinite(n)) return Infinity;
-    // backend uses a huge number to represent "unlimited" for Pro
-    if (n >= 999999) return Infinity;
-    return n;
-  }
+  function normLimitForUI(limit){ return __gmxUsage.normLimitForUI(limit); }
+  function setMeter(valId, fillId, used, limit){ return __gmxUsage.setMeter(valId, fillId, used, limit); }
 
-  function setMeter(valId, fillId, used, limit){
-    const v = $(valId);
-    const f = $(fillId);
-    const cap = normLimitForUI(limit);
-    if (v) v.textContent = (cap === Infinity) ? `${used}/unlimited` : `${used}/${cap}`;
-    if (f){
-      const pct = (cap === Infinity) ? 100 : (cap ? Math.min(100, Math.round((used/cap)*100)) : 0);
-      f.style.width = pct + "%";
-    }
-  }
+  function renderHelpModal(){ return __gmxHelp.renderHelpModal(); }
+  function openHelpModal(){ return __gmxHelp.openHelpModal(); }
+  function closeHelpModal(){ return __gmxHelp.closeHelpModal(); }
+  function bindHelpModal(){ return __gmxHelp.bindHelpModal(); }
 
-function renderHelpModal(){
-  const gmSaved = Number(LAST_SAVED.gm ?? 0) || 0;
-  const gnSaved = Number(LAST_SAVED.gn ?? 0) || 0;
-  const gmUsed = Number(LAST_USAGE?.gm?.used ?? 0) || 0;
-  const gnUsed = Number(LAST_USAGE?.gn?.used ?? 0) || 0;
-  const gmLimit = normLimitForUI(LAST_USAGE?.gm?.limit ?? 70);
-  const gnLimit = normLimitForUI(LAST_USAGE?.gn?.limit ?? 70);
-
-  const savedEl = $("help_saved");
-  if (savedEl) savedEl.textContent = isPro() ? `GM ${gmSaved}/unlimited • GN ${gnSaved}/unlimited` : `GM ${gmSaved}/${SAVE_CAP_FREE} • GN ${gnSaved}/${SAVE_CAP_FREE}`;
-
-  const dailyEl = $("help_daily");
-  if (dailyEl) dailyEl.textContent = (isPro() || gmLimit===Infinity || gnLimit===Infinity)
-    ? `GM ${gmUsed}/unlimited • GN ${gnUsed}/unlimited`
-    : `GM ${gmUsed}/${gmLimit} • GN ${gnUsed}/${gnLimit}`;
-
-  // aggregate bars
-  const savedFill = $("helpSavedFill");
-  if (savedFill){
-    if (isPro()) savedFill.style.width = "100%";
-    else{
-      const used = gmSaved + gnSaved;
-      const cap = SAVE_CAP_FREE * 2;
-      savedFill.style.width = Math.min(100, Math.round((used/cap)*100)) + "%";
-    }
-  }
-  const dailyFill = $("helpDailyFill");
-  if (dailyFill){
-    if (isPro() || gmLimit===Infinity || gnLimit===Infinity) dailyFill.style.width = "100%";
-    else{
-      const used = gmUsed + gnUsed;
-      const cap = (gmLimit + gnLimit) || 140;
-      dailyFill.style.width = Math.min(100, Math.round((used/cap)*100)) + "%";
-    }
-  }
-}
-
-function openHelpModal(){
-  const m = $("help_modal");
-  if (!m) return;
-  try{ renderHelpModal(); }catch{}
-  m.classList.remove("hidden");
-}
-function closeHelpModal(){
-  const m = $("help_modal");
-  if (!m) return;
-  m.classList.add("hidden");
-}
-
-function bindHelpModal(){
-  const m = $("help_modal");
-  if (!m) return;
-  m.addEventListener("click", (e)=>{ if (e.target === m) closeHelpModal(); });
-
-  const closeBtn = $("help_close");
-  if (closeBtn) closeBtn.onclick = ()=>closeHelpModal();
-
-  const goWallet = $("help_go_wallet");
-  if (goWallet) goWallet.onclick = ()=>{ closeHelpModal(); tab("wallet"); };
-
-  const openBtn = $("btnHelp");
-  if (openBtn) openBtn.onclick = ()=>openHelpModal();
-
-  window.addEventListener("keydown", (e)=>{
-    if (e.key === "Escape" && !$("help_modal")?.classList.contains("hidden")) closeHelpModal();
-    if (e.key === "?" && ($("help_modal")?.classList.contains("hidden"))) openHelpModal();
-  });
-}
-
-function applyRefCountEligible(eligible, { renderUnlockUi = false } = {}){
+  function applyRefCountEligible(eligible, { renderUnlockUi = false } = {}){
     const num = Math.max(0, Number(eligible || 0) || 0);
     const changed = REF_COUNT !== num;
     REF_COUNT = num;
@@ -1997,91 +1932,9 @@ function applyRefCountEligible(eligible, { renderUnlockUi = false } = {}){
     return changed;
   }
 
-  function usageCosmeticSignature(j){
-    const eligible = Number(j?.limits?.referralUnlocks?.eligible ?? 0) || 0;
-    const tier = String(j?.sub?.tier || j?.sub?.plan || "");
-    const active = j?.sub?.active ? "1" : "0";
-    return `${active}|${tier}|${eligible}|${SAVE_CAP_FREE}`;
-  }
+  function usageCosmeticSignature(j){ return __gmxUsage.usageCosmeticSignature(j); }
 
-async function refreshUsage(){
-    if (!getToken()){ return; }
-    const h = getHandle();
-    if (!h) return;
-    try{
-      const j = await api("/api/usage");
-      AUTH_OK = true;
-      applyAdminVisibility();
-
-      const fallbackFree = Number(j?.limits?.freeDaily ?? 70) || 70;
-      // Keep Free saved-lines cap in sync with backend config (no UI hardcodes)
-      const cap = Number(j?.limits?.saveCapFree ?? SAVE_CAP_FREE) || SAVE_CAP_FREE;
-      SAVE_CAP_FREE = Math.max(10, Math.min(1000, cap));
-      const gm = j.gm || { used:0, limit:fallbackFree };
-            const gn = j.gn || { used:0, limit:fallbackFree };
-
-      LAST_USAGE = { gm, gn, resetAt: j.resetAt || null };
-
-      SUB = j.sub || null;
-      renderWalletStatus(j.sub);
-
-      applyRefCountEligible(Number(j?.limits?.referralUnlocks?.eligible ?? 0) || 0, { renderUnlockUi: true });
-
-      const gmCapUI = normLimitForUI(gm.limit);
-      const gnCapUI = normLimitForUI(gn.limit);
-      const up = $("usedPill");
-      if (up) up.textContent = (isPro() || gmCapUI===Infinity || gnCapUI===Infinity)
-        ? `GM ${gm.used}/unlimited • GN ${gn.used}/unlimited`
-        : `GM ${gm.used}/${gmCapUI} • GN ${gn.used}/${gnCapUI}`;
-
-      // Header status pills
-      try{
-        const pp = $("planPill");
-        if (pp) pp.textContent = isPro() ? "Pro" : "Free";
-        const sp = $("syncPill");
-        if (sp) {
-          const d = new Date();
-          sp.textContent = d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-        }
-      }catch(_e){}
-
-      // meters (optional)
-      setMeter("gmDailyVal","gmDailyFill", gm.used, gm.limit);
-      setMeter("gnDailyVal","gnDailyFill", gn.used, gn.limit);
-
-      const gmu = $("kGmUsed");
-      if (gmu) gmu.textContent = String(gm.used);
-      const gnu = $("kGnUsed");
-      if (gnu) gnu.textContent = String(gn.used);
-
-      const ra = $("kResetAt");
-      if (ra) ra.textContent = j.resetAt || "-";
-
-      const cosmeticSig = usageCosmeticSignature(j);
-      if (cosmeticSig !== LAST_USAGE_COSMETIC_SIG){
-        LAST_USAGE_COSMETIC_SIG = cosmeticSig;
-        fillStyles();
-        fillPacks();
-        try{ window.__syncProControls && window.__syncProControls(); }catch(e){}
-        applyUserBg();
-        initWallpapers();
-        renderThemes();
-        initExtWallpaperControls();
-        normalizeStoredExtWallpaperSelections();
-        renderExtThemes();
-        renderExtWallpapers();
-        renderExtCustomBgUI();
-        setExtView(normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW)||"theme"), { force:true, silent:true });
-      }
-
-      try{ scheduleRefStatsRefresh(120); }catch(e){}
-
-      try{ if (!$("help_modal")?.classList.contains("hidden")) renderHelpModal(); }catch(_e){}
-    }catch(e){
-      AUTH_OK = false;
-      try{ applyAdminVisibility(); }catch(_e){}
-    }
-  }
+  async function refreshUsage(){ return __gmxUsage.refreshUsage(); }
 
   function applyAdminVisibility(){
     const h = getHandle();

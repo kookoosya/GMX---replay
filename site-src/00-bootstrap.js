@@ -48,7 +48,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616p";
+const ASSET_REV = "20260616q";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -162,6 +162,56 @@ const __gmxPaywall = window.__GMXPaywallFactory({
   storage: __gmxSt,
   getHandle: () => getHandle(),
   trackEvent: (type, meta) => trackEvent(type, meta),
+  onNavigateWallet: () => { try { tab("wallet"); } catch {} },
+});
+
+let __gmxHelp;
+if (!window.__GMXUsageFactory) throw new Error("GMX usage factory missing");
+const __gmxUsage = window.__GMXUsageFactory({
+  $: __gmxChrome.$,
+  getToken: () => getToken(),
+  getHandle: () => getHandle(),
+  api: (path, method, body) => api(path, method, body),
+  isPro,
+  getSaveCapFree: () => SAVE_CAP_FREE,
+  setSaveCapFree: (v) => { SAVE_CAP_FREE = v; },
+  setAuthOk: (v) => { AUTH_OK = v; },
+  applyAdminVisibility: () => { try { applyAdminVisibility(); } catch {} },
+  setLastUsage: (u) => { LAST_USAGE = u; },
+  getLastUsage: () => LAST_USAGE,
+  setSub: (s) => { SUB = s; },
+  renderWalletStatus: (sub) => { try { renderWalletStatus(sub); } catch {} },
+  applyRefCountEligible: (n, opts) => applyRefCountEligible(n, opts),
+  getLastUsageCosmeticSig: () => LAST_USAGE_COSMETIC_SIG,
+  setLastUsageCosmeticSig: (s) => { LAST_USAGE_COSMETIC_SIG = s; },
+  onCosmeticRefresh: () => {
+    fillStyles();
+    fillPacks();
+    try { window.__syncProControls && window.__syncProControls(); } catch {}
+    applyUserBg();
+    initWallpapers();
+    renderThemes();
+    initExtWallpaperControls();
+    normalizeStoredExtWallpaperSelections();
+    renderExtThemes();
+    renderExtWallpapers();
+    renderExtCustomBgUI();
+    try {
+      setExtView(normalizeExtViewValue(__gmxSt.lsGet(K.EXT_VIEW, "theme")), { force: true, silent: true });
+    } catch {}
+  },
+  scheduleRefStatsRefresh: (ms) => { try { scheduleRefStatsRefresh(ms); } catch {} },
+  renderHelpIfOpen: () => { try { __gmxHelp.renderHelpIfOpen(); } catch {} },
+});
+
+if (!window.__GMXHelpFactory) throw new Error("GMX help factory missing");
+__gmxHelp = window.__GMXHelpFactory({
+  $: __gmxChrome.$,
+  isPro,
+  getSaveCapFree: () => SAVE_CAP_FREE,
+  getLastUsage: () => LAST_USAGE,
+  getLastSaved: () => LAST_SAVED,
+  normLimitForUI: (n) => __gmxUsage.normLimitForUI(n),
   onNavigateWallet: () => { try { tab("wallet"); } catch {} },
 });
 

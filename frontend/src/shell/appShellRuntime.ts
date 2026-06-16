@@ -79,6 +79,8 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.tabtheme.js", "gmx-legacy-tabtheme");
     await injectAppShellRuntime("/app.logs.js", "gmx-legacy-logs");
     await injectAppShellRuntime("/app.paywall.js", "gmx-legacy-paywall");
+    await injectAppShellRuntime("/app.help.js", "gmx-legacy-help");
+    await injectAppShellRuntime("/app.usage.js", "gmx-legacy-usage");
     await injectAppShellRuntime("/app.auth.js", "gmx-legacy-auth");
     await injectAppShellRuntime("/app.js", "gmx-app-shell-runtime");
     await waitForAppShellReady();

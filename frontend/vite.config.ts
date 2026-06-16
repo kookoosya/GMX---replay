@@ -163,6 +163,8 @@ export default defineConfig(({ command, mode }) => {
         "/app.tabtheme.js": { target: BACKEND, changeOrigin: true },
         "/app.logs.js": { target: BACKEND, changeOrigin: true },
         "/app.paywall.js": { target: BACKEND, changeOrigin: true },
+        "/app.help.js": { target: BACKEND, changeOrigin: true },
+        "/app.usage.js": { target: BACKEND, changeOrigin: true },
         "/mode.js": { target: BACKEND, changeOrigin: true },
         "/entitlements.js": { target: BACKEND, changeOrigin: true },
         "/themes.json": { target: BACKEND, changeOrigin: true },

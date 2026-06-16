@@ -170,43 +170,8 @@
     return out;
   }
 
-  function ensureWallpaperLayer(){
-    let layer = document.getElementById("gmxWallLayer");
-    if (!layer){
-      layer = document.createElement("div");
-      layer.id = "gmxWallLayer";
-      layer.className = "gmxWallLayer";
-      layer.setAttribute("aria-hidden", "true");
-      document.body.prepend(layer);
-    }
-    return layer;
-  }
-
-  function setWallpaperLayerImage(layer, url){
-    if (!layer) return;
-    if (!url){
-      layer.replaceChildren();
-      layer.style.display = "none";
-      layer.removeAttribute("data-wall-url");
-      return;
-    }
-    const safe = String(url).replace(/"/g, "%22");
-    if (layer.getAttribute("data-wall-url") === url && layer.querySelector("img")){
-      layer.style.display = "block";
-      return;
-    }
-    layer.setAttribute("data-wall-url", url);
-    layer.replaceChildren();
-    const img = document.createElement("img");
-    img.className = "gmxWallImg";
-    img.alt = "";
-    img.decoding = "async";
-    img.loading = "eager";
-    img.draggable = false;
-    img.src = url;
-    layer.appendChild(img);
-    layer.style.display = "block";
-  }
+  function ensureWallpaperLayer(){ return __gmxWp.ensureWallpaperLayer(); }
+  function setWallpaperLayerImage(layer, url){ return __gmxWp.setWallpaperLayerImage(layer, url); }
 
   function applyWallpaper(tab){
     const safeTab = String(tab || currentTabName() || "home");

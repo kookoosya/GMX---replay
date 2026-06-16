@@ -307,6 +307,72 @@ test("paywall: stable abVariant", () => {
   assert.equal(a, b);
 });
 
+test("usage: normLimitForUI and setMeter", () => {
+  const usage = loadFactory("app.usage.js", "__GMXUsageFactory")({
+    $: () => null,
+    getToken: () => "",
+    getSaveCapFree: () => 50,
+  });
+  assert.equal(usage.normLimitForUI(70), 70);
+  assert.equal(usage.normLimitForUI(999999), Infinity);
+  assert.equal(usage.normLimitForUI("x"), Infinity);
+  usage.setMeter(null, null, 3, 10);
+});
+
+test("help: factory exports modal helpers", () => {
+  const help = loadFactory("app.help.js", "__GMXHelpFactory")({
+    $: () => null,
+    isPro: () => false,
+    getSaveCapFree: () => 50,
+    getLastUsage: () => ({ gm: { used: 1, limit: 70 }, gn: { used: 2, limit: 70 } }),
+    getLastSaved: () => ({ gm: 0, gn: 0 }),
+    normLimitForUI: (n) => n,
+  });
+  assert.equal(typeof help.renderHelpModal, "function");
+  assert.equal(typeof help.bindHelpModal, "function");
+  assert.equal(help.isOpen(), false);
+});
+
+test("wallpapers: layer DOM helpers", () => {
+  const prevDoc = globalThis.document;
+  function mockLayer() {
+    const children = [];
+    return {
+      id: "",
+      className: "",
+      style: { display: "" },
+      _attrs: {},
+      setAttribute(k, v) { this._attrs[k] = v; },
+      getAttribute(k) { return this._attrs[k] ?? null; },
+      removeAttribute(k) { delete this._attrs[k]; },
+      replaceChildren() { children.length = 0; },
+      appendChild(el) { children.push(el); },
+      querySelector() { return children[0] || null; },
+    };
+  }
+  const body = { prepend() {} };
+  globalThis.document = {
+    getElementById: () => null,
+    createElement: () => mockLayer(),
+    body,
+  };
+  try {
+    const factory = loadFactory("app.wallpapers.js", "__GMXWallpapersFactory");
+    const wp = factory({
+      getAssetRev: () => "",
+      getSiteCustomUpload: () => "",
+      getExtCustomUpload: () => "",
+    });
+    const layer = wp.ensureWallpaperLayer();
+    assert.ok(layer);
+    wp.setWallpaperLayerImage(layer, "");
+    wp.setWallpaperLayerImage(layer, "https://example.com/a.webp");
+    assert.equal(layer.style.display, "block");
+  } finally {
+    globalThis.document = prevDoc;
+  }
+});
+
 test("styles: unlocked count", () => {
   const styles = loadFactory("app.themes.js", "__GMXThemesFactory")();
   const ui = loadFactory("app.styles.js", "__GMXStylesFactory")({
