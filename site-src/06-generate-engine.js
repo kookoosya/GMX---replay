@@ -94,16 +94,7 @@ if (effCount <= 0){
 
         const cur = readKey(keyActive);
         const r = String(reply||"").trim();
-        const exactKey = r.toLowerCase();
-        const nearKey = repeatKey(r, Math.max(1, strength));
-        const already = cur.some((s)=>{
-          const raw = String(s||"").trim();
-          if (!raw) return false;
-          if (raw.toLowerCase() === exactKey) return true;
-          if (strength > 0 && nearKey && repeatKey(raw, Math.max(1, strength)) === nearKey) return true;
-          return false;
-        });
-        if (already){
+        if (__gmxGen.isLineAlreadySaved(cur, r, strength)){
           renderList(kind);
           didRender = true;
           if (msgEl) msgEl.innerHTML = `<span class="muted">Duplicate ignored.</span>`;
@@ -128,21 +119,10 @@ if (effCount <= 0){
         try{ await refreshUsage(); }catch{}
       } else {
         // Bulk generate as loose random fill first. Best pass is an optional second pass.
-        const exactSeen = new Set(readKey(keyActive).map(s=>String(s||"").trim().toLowerCase()).filter(Boolean));
         const accepted = [];
-        const acceptedExact = new Set();
         const takeLines = (arr)=>{
-          for (const raw of (arr || [])){
-            const s = normalizeLine(raw);
-            if (!s) continue;
-            const exact = s.toLowerCase();
-            if (exactSeen.has(exact)) continue;
-            if (acceptedExact.has(exact)) continue;
-            acceptedExact.add(exact);
-            exactSeen.add(exact);
-            accepted.push(s);
-            if (accepted.length >= effCount) break;
-          }
+          const chunk = __gmxGen.collectBulkUniqueLines([...readKey(keyActive), ...accepted], arr, effCount - accepted.length);
+          if (chunk.length) accepted.push(...chunk);
         };
 
         const buffer = 12;
@@ -163,20 +143,7 @@ if (effCount <= 0){
         const preferBest = autoClean || getBestMode();
         let selected = [];
         if (preferBest){
-          const byShape = new Map();
-          for (const line of incoming){
-            const v = String(line || "").trim();
-            if (!v) continue;
-            const sc = scoreLineForBest(kind, v);
-            if (!Number.isFinite(sc) || sc <= -1e8) continue;
-            const shape = bestLineShape(kind, v) || v.toLowerCase();
-            const prev = byShape.get(shape);
-            if (!prev || sc > prev.sc || (sc === prev.sc && v.length > prev.v.length)) byShape.set(shape, { v, sc });
-          }
-          selected = Array.from(byShape.values())
-            .sort((a,b)=> b.sc - a.sc || b.v.length - a.v.length)
-            .slice(0, effCount)
-            .map(x=>x.v);
+          selected = __gmxGen.selectBestByShape(kind, incoming, Math.max(1, strength)).slice(0, effCount);
         } else {
           selected = incoming.slice(0, effCount).sort(()=>Math.random()-0.5);
         }

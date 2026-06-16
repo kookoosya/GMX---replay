@@ -753,39 +753,7 @@ function closeLangMenu(){
     } catch {}
   }
 
-  function repeatKey(s, strength){
-    let t = normalizeLine(s).toLowerCase();
-    if (!t) return "";
-    try{ t = t.replace(/\p{Extended_Pictographic}/gu, " "); }catch{}
-    t = t.replace(/\b(gm|good morning|morning)\b/g, "gm");
-    t = t.replace(/\b(gn|good night|night)\b/g, "gn");
-    if (strength >= 1){
-      t = t.replace(/\b(legend|bro|degen|friend|homie)\b/g, "@voc");
-    }
-    if (strength >= 2){
-      t = t.replace(/[~`!@#$%^&*()_=+\[\]{};:'",.<>/?\\|]/g, " ");
-      t = t.replace(/\s+/g, " ").trim();
-    }
-    if (strength >= 3){
-      try{
-        t = t.replace(/[^\p{L}\p{N}\s]/gu, " ");
-      } catch {
-        t = t.replace(/[^a-z0-9\s]/gi, " ");
-      }
-      t = t.replace(/\b(a|an|the|and|to|your|you|on|this|that|here|today|tonight|tomorrow|back|really|just)\b/g, " ");
-      t = t.replace(/\s+/g, " ").trim();
-    }
-    if (strength >= 4){
-      t = t.replace(/\b(good|nice|solid|strong|clean|calm|soft|easy|quiet|steady|warm|kind|smooth)\b/g, "@adj");
-      t = t.replace(/\b(gm|gn)\s+(this|keeping|saving|holding|closing)\b/g, "@open");
-      t = t.replace(/\b(good one|nice post|clean one|strong post|solid post|good post|clean post|strong take|solid take|clean read|good read|nice read|solid read)\b/g, "@post");
-      t = t.replace(/\b(sleep easy|sleep well|rest easy|rest well|good rest|real rest|proper rest|easy reset|soft landing|calm close|easy close|soft close)\b/g, "@close");
-      t = t.replace(/\b(this reads|this lands|this sits|this holds|this closes|keeping this one|saving this one|holding this one)\b/g, "@canned");
-      t = t.replace(/\b(start the day|start the session|open the day|open the morning|open the session|close the day|end the day)\b/g, "@phase");
-      t = t.replace(/\s+/g, " ").trim();
-    }
-    return t;
-  }
+  function repeatKey(s, strength){ return __gmxGen.repeatKey(s, strength); }
 
   function buildBanSet(kind, key, strength){
     const ban = new Set();
@@ -808,37 +776,14 @@ function closeLangMenu(){
     const strength = getAntiStrength(kind);
     if (strength <= 0) return lines || [];
     const ban = buildBanSet(kind, key, strength);
-
-    const out = [];
-    for (const s of (lines || [])){
-      const rk = repeatKey(s, strength);
-      if (!rk) continue;
-      if (ban.has(rk)) continue;
-      ban.add(rk);
-      out.push(s);
-    }
-    return out;
+    return __gmxGen.filterLinesByBan(lines, ban, strength);
   }
 
   
   const CLEAN_FILL_INFLIGHT = { gm:false, gn:false };
 
   function dedupeLinesByShape(lines, strength){
-    const out = [];
-    const seenExact = new Set();
-    const seenShape = new Set();
-    for (const raw of (lines || [])){
-      const t = normalizeLine(raw);
-      if (!t) continue;
-      const exact = t.toLowerCase();
-      if (seenExact.has(exact)) continue;
-      const shape = repeatKey(t, Math.max(1, strength));
-      if (shape && seenShape.has(shape)) continue;
-      seenExact.add(exact);
-      if (shape) seenShape.add(shape);
-      out.push(t);
-    }
-    return out;
+    return __gmxGen.dedupeLinesByShape(lines, strength);
   }
 
   async function dedupeLinesByShapeAsync(lines, strength, yieldEvery){
@@ -989,27 +934,9 @@ function cleanupKeyLines(lines){
     if (el) el.textContent = String(v);
   }
 
-  function normalizeLine(s){
-    let t = String(s||"");
-    t = t.replace(/\s+/g, " ").trim();
-    // remove leading dashes that look botted
-    t = t.replace(/^(?:-|–|—)+\s*/,"");
-    return t;
-  }
+  function normalizeLine(s){ return __gmxGen.normalizeLine(s); }
 
-  function dedupeLines(lines){
-    const seen = new Set();
-    const out = [];
-    for (const x of lines){
-      const t = normalizeLine(x);
-      const key = t.toLowerCase();
-      if (!t) continue;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      out.push(t);
-    }
-    return out;
-  }
+  function dedupeLines(lines){ return __gmxGen.dedupeLines(lines); }
 
   function normalizeKind(kind){
     let changed = 0;

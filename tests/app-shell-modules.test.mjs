@@ -63,3 +63,19 @@ test("generate: mergeAppendUnique dedupes lines", () => {
   const merged = gen.mergeAppendUnique(["Hello", "World"], ["world", "Again"]);
   assert.deepEqual(merged, ["Hello", "World", "Again"]);
 });
+
+test("generate: repeatKey and bulk collect", () => {
+  const gen = loadFactory("app.generate.js", "__GMXGenerateFactory")();
+  const rk = gen.repeatKey("GM legend bro", 2);
+  assert.ok(rk.includes("gm"));
+  const bulk = gen.collectBulkUniqueLines(["Hello"], ["hello", "Fresh line"], 5);
+  assert.deepEqual(bulk, ["Fresh line"]);
+  assert.equal(gen.isLineAlreadySaved(["GM vibes"], "gm vibes", 1), true);
+});
+
+test("ui: factory exports perf helpers", () => {
+  const ui = loadFactory("app.ui.js", "__GMXUiFactory")();
+  assert.equal(typeof ui.chunkedRender, "function");
+  assert.equal(typeof ui.yieldToUiFrame, "function");
+  assert.equal(typeof ui.prefetchImage, "function");
+});

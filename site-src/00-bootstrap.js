@@ -37,7 +37,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616h";
+const ASSET_REV = "20260616i";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -54,6 +54,9 @@ const __gmxThemes = window.__GMXThemesFactory();
 
 if (!window.__GMXGenerateFactory) throw new Error("GMX generate factory missing");
 const __gmxGen = window.__GMXGenerateFactory();
+
+if (!window.__GMXUiFactory) throw new Error("GMX ui factory missing");
+const __gmxUi = window.__GMXUiFactory();
 
 const FREE_VISIBLE_THEMES = __gmxUnlock.FREE_VISIBLE_THEMES;
 const FREE_VISIBLE_STYLES = __gmxUnlock.FREE_VISIBLE_STYLES;

@@ -49,7 +49,7 @@
     "i18n:apply-batch2c": "node tools/apply-batch2c-i18n-fixes.mjs",
     "audit:logic": "node tools/logic-audit.mjs --strict",
     "audit:runtime": "node tools/runtime_audit.mjs --strict",
-    "build:site": "node tools/build-site-app.mjs && node tools/sync-site-public.mjs",
+    "build:site": "node tools/build-app-generate.mjs && node tools/build-site-app.mjs && node tools/sync-site-public.mjs",
     "sync:site": "node tools/sync-site-public.mjs",
     "audit:all": "npm run audit:logic && npm run audit:runtime",
     "build:server": "node tools/build-server.mjs",

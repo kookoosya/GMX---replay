@@ -24,6 +24,7 @@ const shellModules = [
   "app.unlock.js",
   "app.wallpapers.js",
   "app.themes.js",
+  "app.ui.js",
   "app.generate.js",
 ];
 for (const name of shellModules) {

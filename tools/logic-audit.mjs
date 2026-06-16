@@ -70,6 +70,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.unlock\.js/, "app.unlock.js script tag");
   mustMatch(rel, /app\.wallpapers\.js/, "app.wallpapers.js script tag");
   mustMatch(rel, /app\.themes\.js/, "app.themes.js script tag");
+  mustMatch(rel, /app\.ui\.js/, "app.ui.js script tag");
   mustMatch(rel, /app\.generate\.js/, "app.generate.js script tag");
   mustMatch(rel, /app\.auth\.js/, "app.auth.js script tag");
   mustNotMatch(rel, /id="supportOut"/, "supportOut textarea removed");
