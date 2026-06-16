@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260617f";
+const ASSET_REV = "20260617g";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -1644,6 +1644,37 @@ countEl.textContent = lines.length;
   }
   // Keep existing order, append only truly-new unique lines.
   // Important: duplicates MUST NOT be moved to the top.
+
+  if (!window.__GMXCleanFillRunFactory) throw new Error("GMX cleanfillrun factory missing");
+  const __gmxCfr = window.__GMXCleanFillRunFactory({
+    $,
+    api,
+    escapeHtml: (s) => __gmxFmt.escapeHtml(s),
+    getCleanFillStrength: () => __gmxCf.CLEAN_FILL_STRENGTH,
+    readGenParams,
+    activeKey,
+    readKey,
+    writeKey,
+    remainingSlots,
+    normalizeLine: (s) => __gmxGen.normalizeLine(s),
+    repeatKey: (s, strength) => __gmxGen.repeatKey(s, strength),
+    dedupeLinesByShape: (lines, strength) => __gmxGen.dedupeLinesByShape(lines, strength),
+    yieldToUiFrame: () => __gmxUi.yieldToUiFrame(),
+    pushRecent: (kind, keys) => __gmxAnti.pushRecent(kind, keys),
+    renderList,
+    getHandle,
+    tab,
+  });
+
+  function oneClickCleanup(kind, opts) {
+    return __gmxCfr.oneClickCleanup(kind, opts);
+  }
+  function refillCleanFill(kind, targetCount, opts) {
+    return __gmxCfr.refillCleanFill(kind, targetCount, opts);
+  }
+  function cleanupKeyLines(lines) {
+    return __gmxCfr.cleanupKeyLines(lines);
+  }
 
   function mergeAppendUnique(existing, newLines){
     return __gmxGen.mergeAppendUnique(existing, newLines);
@@ -3748,36 +3779,24 @@ function pruneLegacyAdminPanels(){
   __gmxGmGnWire.wireReplyLangSelects({ gmLangSel, gnLangSel });
   __gmxGmGnWire.wireGmGnPanels();
 
+  if (!window.__GMXWallpaperUploadFactory) throw new Error("GMX wallpaperupload factory missing");
+  window.__GMXWallpaperUploadFactory({
+    $,
+    requireConnected,
+    compressImageToJpegDataURL,
+    customUploadId: CUSTOM_UPLOAD_ID,
+    lsSet: (k, v) => { try { __gmxSt.lsSet(k, v); } catch {} },
+    customBgGlobalKey: LS_CUSTOM_BG_GLOBAL,
+    wpGlobalKey: LS_WP_GLOBAL,
+    setWallpaperForTab,
+    renderWallpaperUI,
+    currentTabName,
+    applyWallpaper,
+    applyUserBg,
+    toast,
+    t,
+  }).wire();
 
-  // Add wallpaper (themes - custom upload in wallpapers tab)
-  const wpAddCustom = $("wpAddCustom");
-  const wpAddFile = $("wpAddFile");
-  if (wpAddCustom && wpAddFile){
-    wpAddCustom.onclick = ()=>{ if (requireConnected("Themes")) wpAddFile.click(); };
-  }
-  if (wpAddFile){
-    wpAddFile.addEventListener("change", async ()=>{
-      try{
-        if (!requireConnected("Themes")) { wpAddFile.value = ""; return; }
-        const f = wpAddFile.files && wpAddFile.files[0];
-        if (!f) return;
-        const data = await compressImageToJpegDataURL(f, { profile: "site" });
-        localStorage.setItem(LS_CUSTOM_BG_GLOBAL, data);
-        const targetTab = ($("wpTab")?.value || "all");
-        if (targetTab === "all") localStorage.setItem(LS_WP_GLOBAL, CUSTOM_UPLOAD_ID);
-        else setWallpaperForTab(targetTab, CUSTOM_UPLOAD_ID);
-        try{ renderWallpaperUI(); }catch{}
-        const previewTab = (targetTab === "all") ? currentTabName() : targetTab;
-        applyWallpaper(previewTab);
-        applyUserBg(previewTab);
-        toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved."));
-      }catch(e){
-        toast("warn", (t("err_custom_wp_save")||"Could not save image (too large or blocked)."));
-      }finally{
-        wpAddFile.value = "";
-      }
-    });
-  }
   function pushRecent(kind, keys){ return __gmxAnti.pushRecent(kind, keys); }
 
   function repeatKey(s, strength){ return __gmxGen.repeatKey(s, strength); }
@@ -3786,156 +3805,6 @@ function pruneLegacyAdminPanels(){
 
   function filterAntiRepeat(kind, key, lines){
     return __gmxAnti.filterLines(kind, key, lines, getAntiStrength(kind));
-  }
-
-  
-  const CLEAN_FILL_INFLIGHT = { gm:false, gn:false };
-
-  function dedupeLinesByShape(lines, strength){
-    return __gmxGen.dedupeLinesByShape(lines, strength);
-  }
-
-  async function dedupeLinesByShapeAsync(lines, strength, yieldEvery){
-    const out = [];
-    const seenExact = new Set();
-    const seenShape = new Set();
-    const step = Math.max(40, Number(yieldEvery) || 180);
-    let scanned = 0;
-    for (const raw of (lines || [])){
-      scanned++;
-      const t = normalizeLine(raw);
-      if (!t) {
-        if ((scanned % step) === 0) await yieldToUiFrame();
-        continue;
-      }
-      const exact = t.toLowerCase();
-      if (seenExact.has(exact)) {
-        if ((scanned % step) === 0) await yieldToUiFrame();
-        continue;
-      }
-      const shape = repeatKey(t, Math.max(1, strength));
-      if (shape && seenShape.has(shape)) {
-        if ((scanned % step) === 0) await yieldToUiFrame();
-        continue;
-      }
-      seenExact.add(exact);
-      if (shape) seenShape.add(shape);
-      out.push(t);
-      if ((scanned % step) === 0) await yieldToUiFrame();
-    }
-    return out;
-  }
-
-  async function refillCleanFill(kind, targetCount, opts){
-    const key = activeKey(kind);
-    const { mode, lang, style, antiN } = readGenParams(kind);
-
-    const before = readKey(key);
-    const cleaned = await dedupeLinesByShapeAsync(before, CLEAN_FILL_STRENGTH, 200);
-    const removed = Math.max(0, before.length - cleaned.length);
-    let cur = cleaned.slice();
-    writeKey(key, cur);
-    await yieldToUiFrame();
-
-    const remSlotsNow = remainingSlots(kind);
-    let desiredTotal = Number.isFinite(targetCount) ? Math.max(0, Math.trunc(targetCount)) : before.length;
-    if (remSlotsNow !== Infinity){
-      desiredTotal = Math.min(cur.length + remSlotsNow, desiredTotal);
-    }
-    desiredTotal = Math.max(cur.length, desiredTotal);
-
-    const exactSeen = new Set(cur.map(s=>String(s||"").trim().toLowerCase()).filter(Boolean));
-    const shapeSeen = new Set(cur.map(s=>repeatKey(s, CLEAN_FILL_STRENGTH)).filter(Boolean));
-    const addedShapeKeys = [];
-    let refilled = 0;
-    let attempts = 0;
-    let stalled = 0;
-    const refillDeadline = Date.now() + 45000;
-    while (cur.length < desiredTotal && attempts < 3){
-      if (Date.now() > refillDeadline) break;
-      attempts++;
-      const missing = desiredTotal - cur.length;
-      const reqCount = Math.min(180, missing + 50 + (stalled * 20));
-      const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}&count=${reqCount}`, "GET", null, { signal: opts?.signal, timeoutMs: 12000 });
-      const list = Array.isArray(bulk?.list) ? bulk.list : [];
-      if (!list.length) {
-        stalled++;
-        if (stalled >= 2) break;
-        continue;
-      }
-      let progress = 0;
-      let scannedBatch = 0;
-      for (const raw of list){
-        scannedBatch++;
-        const t = normalizeLine(raw);
-        if (!t) continue;
-        const exact = t.toLowerCase();
-        if (exactSeen.has(exact)) continue;
-        const shape = repeatKey(t, CLEAN_FILL_STRENGTH);
-        if (shape && shapeSeen.has(shape)) continue;
-        exactSeen.add(exact);
-        if (shape){
-          shapeSeen.add(shape);
-          addedShapeKeys.push(shape);
-        }
-        cur.push(t);
-        refilled++;
-        progress++;
-        if ((scannedBatch % 120) === 0) await yieldToUiFrame();
-        if (cur.length >= desiredTotal) break;
-      }
-      if (progress <= 0) {
-        stalled++;
-        if (stalled >= 2) break;
-        continue;
-      }
-      stalled = 0;
-    }
-
-    writeKey(key, cur);
-    if (addedShapeKeys.length) pushRecent(kind, addedShapeKeys);
-    return { removed, refilled, finalCount: cur.length, targetCount: desiredTotal };
-  }
-
-  async function oneClickCleanup(kind, opts){
-    const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
-    if (!getHandle()){
-      tab("home");
-      return { removed:0, refilled:0, finalCount:0, targetCount:0 };
-    }
-    if (CLEAN_FILL_INFLIGHT[kind]) return null;
-    const key = activeKey(kind);
-    const cur = readKey(key);
-    const targetCount = Number.isFinite(opts?.targetCount) ? Math.max(0, Math.trunc(opts.targetCount)) : cur.length;
-    if (!cur.length && targetCount <= 0){
-      if (msgEl && !opts?.silent) msgEl.innerHTML = `<span class="muted">Nothing saved yet.</span>`;
-      return { removed:0, refilled:0, finalCount:0, targetCount:0 };
-    }
-
-    CLEAN_FILL_INFLIGHT[kind] = true;
-    try{
-      if (msgEl && !opts?.silent) msgEl.innerHTML = `<span class="muted">Best pass...</span>`;
-      const res = await refillCleanFill(kind, targetCount, opts || {});
-      renderList(kind);
-      if (msgEl && !opts?.keepMessage){
-        if (res.finalCount >= res.targetCount){
-          msgEl.innerHTML = `<span class="ok">Best pass removed ${res.removed} and refilled ${res.refilled}. Bank now has ${res.finalCount}/${res.targetCount}.</span>`;
-        } else {
-          msgEl.innerHTML = `<span class="warn">Best pass removed ${res.removed} and refilled ${res.refilled}. Bank finished at ${res.finalCount}/${res.targetCount}. Try another tone or preset for a wider pool.</span>`;
-        }
-      }
-      return res;
-    } catch(e){
-      const m = (e && e.message) ? e.message : "failed";
-      if (msgEl && !opts?.keepMessage) msgEl.innerHTML = `<span class="bad">${escapeHtml(m)}</span>`;
-      return { removed:0, refilled:0, finalCount:cur.length, targetCount };
-    } finally {
-      CLEAN_FILL_INFLIGHT[kind] = false;
-    }
-  }
-
-function cleanupKeyLines(lines){
-    return dedupeLinesByShape((lines||[]).filter(Boolean), CLEAN_FILL_STRENGTH);
   }
 
   function setRangeText(id, v){
@@ -4018,27 +3887,13 @@ function cleanupKeyLines(lines){
     },
   });
 
-  // Light/Dark mode (site-only)
-  const LS_SITE_MODE = K.SITE_MODE;
-  function applySiteMode(mode, persist){
-    const m = (mode === "light") ? "light" : "dark";
-    document.documentElement.classList.toggle("mode-light", m === "light");
-    if (persist){ try{ localStorage.setItem(LS_SITE_MODE, m); }catch{} }
-    const btn = $("btnMode");
-    if (btn) btn.textContent = (m === "light") ? "Dark" : "Light";
-  }
-  function initModeToggle(){
-    const btn = $("btnMode");
-    if (!btn) return;
-    let m = "dark";
-    try{ m = localStorage.getItem(LS_SITE_MODE) || ""; }catch{}
-    if (!m) m = document.documentElement.classList.contains("mode-light") ? "light" : "dark";
-    applySiteMode(m, false);
-    btn.addEventListener("click", ()=>{
-      const now = document.documentElement.classList.contains("mode-light") ? "light" : "dark";
-      applySiteMode(now === "light" ? "dark" : "light", true);
-    });
-  }
+  if (!window.__GMXSiteModeFactory) throw new Error("GMX sitemode factory missing");
+  const __gmxSiteMode = window.__GMXSiteModeFactory({
+    $,
+    siteModeKey: K.SITE_MODE,
+    lsGet: (k, d) => __gmxSt.lsGet(k, d),
+    lsSet: (k, v) => { try { __gmxSt.lsSet(k, v); } catch {} },
+  });
 
   __gmxProControls.wire();
 
@@ -4065,7 +3920,7 @@ function cleanupKeyLines(lines){
   $("xHandle").value = getHandle() || "";
 
   applyAdminVisibility();
-  try{ initModeToggle(); }catch(e){}
+  try{ __gmxSiteMode.initModeToggle(); }catch(e){}
   applyLang();
   try{ initThemeWallTabs(); }catch{}
   try{ bindExtTabs(); }catch{}

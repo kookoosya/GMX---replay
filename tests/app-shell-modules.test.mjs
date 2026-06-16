@@ -991,3 +991,29 @@ test("procontrols: export/import and pack wiring", () => {
   assert.equal(imported, true);
   assert.equal(pc.cleanupKind("gm"), 0);
 });
+
+test("sitemode: apply and toggle labels", () => {
+  const mem = new Map();
+  const doc = {
+    documentElement: { classList: { toggle() {}, contains: () => false } },
+  };
+  const btn = { textContent: "" };
+  const mode = loadFactory("app.sitemode.js", "__GMXSiteModeFactory")({
+    $: (id) => (id === "btnMode" ? btn : null),
+    siteModeKey: "gmx_site_mode",
+    lsGet: (k, fb = "") => (mem.has(k) ? mem.get(k) : fb),
+    lsSet: (k, v) => mem.set(k, String(v)),
+    document: doc,
+  });
+  assert.equal(mode.applySiteMode("light", true), "light");
+  assert.equal(mem.get("gmx_site_mode"), "light");
+  assert.equal(btn.textContent, "Dark");
+});
+
+test("cleanfillrun: cleanupKeyLines delegates to shape dedupe", () => {
+  const run = loadFactory("app.cleanfillrun.js", "__GMXCleanFillRunFactory")({
+    getCleanFillStrength: () => 2,
+    dedupeLinesByShape: (lines, strength) => (strength === 2 ? ["a"] : lines),
+  });
+  assert.deepEqual(run.cleanupKeyLines(["a", "b"]), ["a"]);
+});

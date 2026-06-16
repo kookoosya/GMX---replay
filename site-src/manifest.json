@@ -9,6 +9,7 @@
     "04-app-chrome-usage.js",
     "05-lists-single-saved-bank-per-kind-legacy-global-l.js",
     "06-best-pick-a-strong-line-and-copy-it.js",
+    "06-clean-fill-run.js",
     "06-generate-engine.js",
     "07-leaderboard.js",
     "08-prediction-market.js",

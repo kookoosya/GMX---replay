@@ -67,6 +67,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.sitei18nui.js", "gmx-legacy-sitei18nui");
     await injectAppShellRuntime("/app.sitei18ndynamic.js", "gmx-legacy-sitei18ndynamic");
     await injectAppShellRuntime("/app.chrome.js", "gmx-legacy-chrome");
+    await injectAppShellRuntime("/app.sitemode.js", "gmx-legacy-sitemode");
     await injectAppShellRuntime("/app.modals.js", "gmx-legacy-modals");
     await injectAppShellRuntime("/app.shellerrors.js", "gmx-legacy-shellerrors");
     await injectAppShellRuntime("/app.langui.js", "gmx-legacy-langui");
@@ -85,6 +86,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.antirepeat.js", "gmx-legacy-antirepeat");
     await injectAppShellRuntime("/app.genparams.js", "gmx-legacy-genparams");
     await injectAppShellRuntime("/app.cleanfill.js", "gmx-legacy-cleanfill");
+    await injectAppShellRuntime("/app.cleanfillrun.js", "gmx-legacy-cleanfillrun");
     await injectAppShellRuntime("/app.styles.js", "gmx-legacy-styles");
     await injectAppShellRuntime("/app.procontrols.js", "gmx-legacy-procontrols");
     await injectAppShellRuntime("/app.toggles.js", "gmx-legacy-toggles");
@@ -96,6 +98,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.usage.js", "gmx-legacy-usage");
     await injectAppShellRuntime("/app.wallpaperapply.js", "gmx-legacy-wallpaperapply");
     await injectAppShellRuntime("/app.wallpaperui.js", "gmx-legacy-wallpaperui");
+    await injectAppShellRuntime("/app.wallpaperupload.js", "gmx-legacy-wallpaperupload");
     await injectAppShellRuntime("/app.themesui.js", "gmx-legacy-themesui");
     await injectAppShellRuntime("/app.health.js", "gmx-legacy-health");
     await injectAppShellRuntime("/app.setbg.js", "gmx-legacy-setbg");

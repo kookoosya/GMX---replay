@@ -72,6 +72,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.sitei18nui\.js/, "app.sitei18nui.js script tag");
   mustMatch(rel, /app\.sitei18ndynamic\.js/, "app.sitei18ndynamic.js script tag");
   mustMatch(rel, /app\.chrome\.js/, "app.chrome.js script tag");
+  mustMatch(rel, /app\.sitemode\.js/, "app.sitemode.js script tag");
   mustMatch(rel, /app\.modals\.js/, "app.modals.js script tag");
   mustMatch(rel, /app\.shellerrors\.js/, "app.shellerrors.js script tag");
   mustMatch(rel, /app\.langui\.js/, "app.langui.js script tag");
@@ -90,6 +91,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.antirepeat\.js/, "app.antirepeat.js script tag");
   mustMatch(rel, /app\.genparams\.js/, "app.genparams.js script tag");
   mustMatch(rel, /app\.cleanfill\.js/, "app.cleanfill.js script tag");
+  mustMatch(rel, /app\.cleanfillrun\.js/, "app.cleanfillrun.js script tag");
   mustMatch(rel, /app\.styles\.js/, "app.styles.js script tag");
   mustMatch(rel, /app\.procontrols\.js/, "app.procontrols.js script tag");
   mustMatch(rel, /app\.toggles\.js/, "app.toggles.js script tag");
@@ -101,6 +103,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.usage\.js/, "app.usage.js script tag");
   mustMatch(rel, /app\.wallpaperapply\.js/, "app.wallpaperapply.js script tag");
   mustMatch(rel, /app\.wallpaperui\.js/, "app.wallpaperui.js script tag");
+  mustMatch(rel, /app\.wallpaperupload\.js/, "app.wallpaperupload.js script tag");
   mustMatch(rel, /app\.themesui\.js/, "app.themesui.js script tag");
   mustMatch(rel, /app\.health\.js/, "app.health.js script tag");
   mustMatch(rel, /app\.setbg\.js/, "app.setbg.js script tag");
