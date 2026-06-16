@@ -367,6 +367,18 @@ footer{
   -webkit-backdrop-filter: blur(16px) saturate(1.18);
   box-shadow: 0 18px 52px rgba(0,0,0,.28);
 }
+
+/* When wallpaper is enabled, extra backdrop blur makes the wallpaper look smeared. */
+body.has-wallpaper .card,
+body.has-wallpaper .panel,
+body.has-wallpaper section,
+body.has-wallpaper header,
+body.has-wallpaper main,
+body.has-wallpaper footer{
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: transparent !important;
+}
 button,
 .btn,
 select,

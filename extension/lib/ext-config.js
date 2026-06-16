@@ -2,22 +2,29 @@
   if (global.GMXExtConfig) return;
 
   const EXT_WP_NAMES = [
-    "Grid", "Mist", "Pulse", "Flow", "Bloom", "Drift", "Nebula", "Shift", "Haze", "Glow",
-    "Prism", "Vapor", "Crystal", "Aura", "Frost", "Ember", "Storm", "Dawn", "Dusk", "Luna",
-    "Cosmos", "Signal", "Node", "Chain", "Peak", "Valley", "Ridge", "Wave", "Spark", "Flux",
-    "Beam", "Ray", "Core", "Edge", "Lens", "Phase", "Echo", "Trace", "Silk", "Mesh",
-    "Weave", "Braid", "Knot", "Rift", "Void", "Scope", "Lane", "Path", "Route", "Arch",
-    "Gate", "Port", "Hub", "Zone", "Field", "Realm", "Span",
+    "Solana Circuit",
+    "DEGEN Terminal",
+    "CT Warroom",
+    "X Bull Feed",
+    "Onchain Prism",
+    "Mempool Riot",
+    "WAGMI Signal",
+    "Alpha Drift",
+    "Neon Vault",
+    "Solana Flux",
+    "Degen Node",
+    "Bullish X",
   ];
 
   const EXT_WALLPAPER_OPTIONS = (() => {
     const out = [
-      { id: "ext_free_01", name: "Mempool Grid" },
-      { id: "ext_free_02", name: "Solana Glass" },
+      { id: "ext_free_01", name: "X Bull Mempool" },
+      { id: "ext_free_02", name: "Solana Neon" },
     ];
     for (let i = 1; i <= 58; i++) {
       const n = String(i).padStart(2, "0");
-      out.push({ id: `w${n}`, name: EXT_WP_NAMES[(i - 1) % EXT_WP_NAMES.length] || `Wall ${i}` });
+      const base = EXT_WP_NAMES[(i - 1) % EXT_WP_NAMES.length] || "Wall";
+      out.push({ id: `w${n}`, name: `${base} #${i}` });
     }
     return out;
   })();

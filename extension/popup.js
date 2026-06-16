@@ -300,6 +300,108 @@ function prefetchWallpaper(url){
 
 const WALL_CACHE = new Map();
 
+function extCryptoPalette(num) {
+  const palettes = [
+    { a: "#7c3aed", b: "#14f195", glow: "#14f195", x: "#0b1020" }, // Solana glow
+    { a: "#9945ff", b: "#06b6d4", glow: "#06b6d4", x: "#0a0d15" }, // Neon CT-ish
+    { a: "#22c55e", b: "#7c3aed", glow: "#22c55e", x: "#070a12" }, // Green/DeGen
+    { a: "#f97316", b: "#7c3aed", glow: "#f7931a", x: "#070a12" }, // Burn/alpha
+  ];
+  const p = palettes[Math.max(0, num | 0) % palettes.length] || palettes[0];
+  return p;
+}
+
+function extCryptoMotif(num) {
+  const m = (num | 0) % 6;
+  if (m === 0) return { label: "SOLANA", sub: "X" };
+  if (m === 1) return { label: "DEGEN", sub: "SOL" };
+  if (m === 2) return { label: "CT", sub: "X" };
+  if (m === 3) return { label: "WAGMI", sub: "SOL" };
+  if (m === 4) return { label: "Degen", sub: "X" };
+  return { label: "SOL/X", sub: "CT" };
+}
+
+function extCryptoWallpaperDataUri(num, thumb = false) {
+  const N = Math.max(1, Math.min(99, Number(num) || 1));
+  const p = extCryptoPalette(N);
+  const motif = extCryptoMotif(N);
+
+  const W = thumb ? 360 : 1080;
+  const H = thumb ? 640 : 1920;
+
+  // Deterministic "grid" lines.
+  const lines = [];
+  for (let i = 0; i < 9; i++) {
+    const t = (N * 17 + i * 29) % 1000;
+    const x = Math.round((W * (0.12 + (t % 70) / 100)) * 10) / 10;
+    const y = Math.round((H * (0.12 + ((t * 3) % 70) / 100)) * 10) / 10;
+    lines.push({ x, y });
+  }
+
+  const solCx = W / 2;
+  const solTop = H * 0.22;
+  const solW = W * 0.38;
+  const solH = H * 0.42;
+
+  const xCx = W * 0.5;
+  const xCy = H * 0.72;
+  const xSize = W * 0.18;
+
+  const tri = `<polygon points="${(solCx - solW / 2)},${solTop} ${(
+    solCx + solW / 2
+  )},${solTop} ${solCx},${solTop + solH}" fill="url(#solGrad)"/>`;
+
+  const xIcon = `
+    <g opacity="0.95">
+      <path d="M ${xCx - xSize} ${xCy - xSize} L ${xCx + xSize} ${xCy + xSize}" stroke="${p.glow}" stroke-width="${Math.max(10, W * 0.018)}" stroke-linecap="round"/>
+      <path d="M ${xCx + xSize} ${xCy - xSize} L ${xCx - xSize} ${xCy + xSize}" stroke="${p.glow}" stroke-width="${Math.max(10, W * 0.018)}" stroke-linecap="round"/>
+    </g>`;
+
+  const labelY = H * 0.58;
+  const subY = H * 0.66;
+  const fontSizeA = Math.max(48, W * 0.065);
+  const fontSizeB = Math.max(28, W * 0.04);
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="${p.x}"/>
+      <stop offset="35%" stop-color="${p.a}"/>
+      <stop offset="100%" stop-color="${p.b}"/>
+    </linearGradient>
+    <linearGradient id="solGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${p.b}"/>
+      <stop offset="100%" stop-color="${p.a}"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="${thumb ? 10 : 18}" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="${W}" height="${H}" fill="url(#bg)"/>
+
+  <g opacity="0.20">
+    ${lines.map(l => `<circle cx="${l.x}" cy="${l.y}" r="${Math.max(3, W * 0.01)}" fill="${p.glow}"/>`).join("")}
+  </g>
+
+  <g opacity="0.28" stroke="${p.glow}">
+    ${lines.map(l => `<path d="M ${l.x - W * 0.18} ${l.y} C ${l.x} ${l.y - H * 0.08} ${l.x} ${l.y + H * 0.12} ${l.x + W * 0.18} ${l.y}" fill="none" stroke-width="${Math.max(2, W * 0.005)}"/>`).join("")}
+  </g>
+
+  <g filter="url(#glow)">${tri}</g>
+  ${xIcon}
+
+  <text x="${W / 2}" y="${labelY}" text-anchor="middle" fill="rgba(255,255,255,0.92)" font-size="${fontSizeA}" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-weight="900" letter-spacing="0.5">${motif.label}</text>
+  <text x="${W / 2}" y="${subY}" text-anchor="middle" fill="rgba(255,255,255,0.74)" font-size="${fontSizeB}" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-weight="800" letter-spacing="0.7">${motif.sub}</text>
+
+  </svg>`;
+
+  return svgDataUri(svg);
+}
+
 function normalizeExtWallpaperId(raw) {
   return canonicalExtWallpaperId(raw);
 }
@@ -325,11 +427,28 @@ async function resolveWallpaperSource(base, wallpaperId) {
     id = `extv3_${String(Math.max(1, Math.min(58, Number(extMatch[1]) || 1))).padStart(2, "0")}`;
   }
   if (id.startsWith("extv3_")) {
-    const remote = `${origin}/assets/extbg/${encodeURIComponent(id)}.webp?v=${ASSET_REV}`;
-    WALL_CACHE.set(cacheKey, remote);
-    try { prefetchWallpaper(remote); } catch {}
-    return remote;
+    const num = Number((id.match(/^extv3_(\d{1,2})$/i) || [])[1]) || 1;
+    const data = extCryptoWallpaperDataUri(num, false);
+    WALL_CACHE.set(cacheKey, data);
+    try { prefetchWallpaper(data); } catch {}
+    return data;
   }
+  if (/^ext_free_(\d{2})$/i.test(id)) {
+    const num = Number((id.match(/^ext_free_(\d{1,2})$/i) || [])[1]) || 1;
+    const data = extCryptoWallpaperDataUri(num, false);
+    WALL_CACHE.set(cacheKey, data);
+    try { prefetchWallpaper(data); } catch {}
+    return data;
+  }
+  if (/^w(\d{2})$/i.test(id)) {
+    const num = Number(id.slice(1)) || 1;
+    const data = extCryptoWallpaperDataUri(num, false);
+    WALL_CACHE.set(cacheKey, data);
+    try { prefetchWallpaper(data); } catch {}
+    return data;
+  }
+
+  // Keep custom uploads as real images.
   const localUrl = chrome.runtime.getURL(`extbg/${encodeURIComponent(id)}.svg`) + `?v=${ASSET_REV}`;
   WALL_CACHE.set(cacheKey, localUrl);
   try { prefetchWallpaper(localUrl.split("?")[0]); } catch {}
