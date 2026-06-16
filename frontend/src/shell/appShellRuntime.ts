@@ -128,6 +128,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.connect.js", "gmx-legacy-connect");
     await injectAppShellRuntime("/app.siteboot.js", "gmx-legacy-siteboot");
     await injectAppShellRuntime("/app.siteinit.js", "gmx-legacy-siteinit");
+    await injectAppShellRuntime("/app.siteinitwire.js", "gmx-legacy-siteinitwire");
     await injectAppShellRuntime("/app.wallethelpers.js", "gmx-legacy-wallethelpers");
     await injectAppShellRuntime("/app.walletpay.js", "gmx-legacy-walletpay");
     await injectAppShellRuntime("/app.walletui.js", "gmx-legacy-walletui");

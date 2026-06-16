@@ -1381,3 +1381,46 @@ test("shellwire: wires tab and lazy auth helpers", () => {
     globalThis.document = prevDoc;
   }
 });
+
+test("siteinitwire: builds nested siteinit ctx and delegates run", async () => {
+  const prevLs = globalThis.localStorage;
+  globalThis.localStorage = {
+    getItem: (k) => (k === "gmx_site_lang" ? "en" : null),
+    setItem: () => {},
+  };
+  try {
+    const win = {};
+    new Function("window", `${readFileSync(path.join(root, "public", "app.siteinitwire.js"), "utf8")};`)(win);
+    let captured = null;
+    win.__GMXSiteInitFactory = (cfg) => {
+      captured = cfg;
+      return { run: async () => {} };
+    };
+    const wire = win.__GMXSiteInitWireFactory({
+      setBestMode: () => {},
+      setCleanFillEnabled: () => {},
+      siteLangMenu: {
+        bootstrapSiteLangUi: async () => ({ siteLangSel: null }),
+        wireI18nObserver: () => {},
+        wireSiteLangSelectChange: () => {},
+        fillReplyLangSelects: () => ({}),
+      },
+      styles: { wireStyleSelectors: () => {} },
+      storage: { lsGet: (_k, d) => d, lsSet: () => {}, lsKeyPack: () => "pack" },
+      bankUi: { getGmView: () => "gm", getGnView: () => "gn" },
+      tabState: { setCurrentTab: () => {} },
+      K: { SITE_MODE: "gmx_site_mode" },
+      I18N: { en: { pro_tools_note: "Pro tools" } },
+      LS_SITE_LANG: "gmx_site_lang",
+      applyLang: () => {},
+      renderLangChips: () => {},
+      getHandle: () => "@demo",
+      renderList: () => {},
+    });
+    await wire.run();
+    assert.equal(captured.getProToolsNote(), "Pro tools");
+    assert.equal(captured.gmGnWireCtx.getGmView(), "gm");
+  } finally {
+    globalThis.localStorage = prevLs;
+  }
+});

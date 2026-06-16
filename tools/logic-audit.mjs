@@ -144,6 +144,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.connect\.js/, "app.connect.js script tag");
   mustMatch(rel, /app\.siteboot\.js/, "app.siteboot.js script tag");
   mustMatch(rel, /app\.siteinit\.js/, "app.siteinit.js script tag");
+  mustMatch(rel, /app\.siteinitwire\.js/, "app.siteinitwire.js script tag");
   mustMatch(rel, /app\.wallethelpers\.js/, "app.wallethelpers.js script tag");
   mustMatch(rel, /app\.walletpay\.js/, "app.walletpay.js script tag");
   mustMatch(rel, /app\.walletui\.js/, "app.walletui.js script tag");

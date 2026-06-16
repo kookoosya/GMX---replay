@@ -84,6 +84,7 @@ const shellModules = [
   "app.connect.js",
   "app.siteboot.js",
   "app.siteinit.js",
+  "app.siteinitwire.js",
   "app.wallethelpers.js",
   "app.walletpay.js",
   "app.walletui.js",
