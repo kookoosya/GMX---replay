@@ -48,7 +48,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616o";
+const ASSET_REV = "20260616p";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -150,6 +150,21 @@ const __gmxCbg = window.__GMXCustomBgFactory({
 __gmxCbg.migrateLegacy();
 __gmxToggles.bootstrap();
 
+if (!window.__GMXTabThemeFactory) throw new Error("GMX tabtheme factory missing");
+const __gmxTabTheme = window.__GMXTabThemeFactory();
+
+if (!window.__GMXLogsFactory) throw new Error("GMX logs factory missing");
+const __gmxLogs = window.__GMXLogsFactory();
+
+if (!window.__GMXPaywallFactory) throw new Error("GMX paywall factory missing");
+const __gmxPaywall = window.__GMXPaywallFactory({
+  $: __gmxChrome.$,
+  storage: __gmxSt,
+  getHandle: () => getHandle(),
+  trackEvent: (type, meta) => trackEvent(type, meta),
+  onNavigateWallet: () => { try { tab("wallet"); } catch {} },
+});
+
 
 
 
@@ -208,13 +223,7 @@ async function postEvent(type, meta){
 }
 
   // ----- Lightweight client logs (for support) -----
-  const LOGS = [];
-  function logEvent(type, data){
-    try{
-      LOGS.push({ ts: Date.now(), type, data: data || null });
-      if (LOGS.length > 200) LOGS.shift();
-    } catch {}
-  }
+  function logEvent(type, data){ return __gmxLogs.logEvent(type, data); }
 
   const LS_HANDLE = K.HANDLE;
   const LS_TOKEN  = K.TOKEN;
@@ -330,65 +339,7 @@ async function postEvent(type, meta){
   function renderCustomBgUI(){ /* merged into wallpapers tab */ }
   function syncCustomBgUI(){ /* merged into wallpapers tab */ }
 
-  // Background themes per tab (CSS-only, no assets)
-  const TAB_THEME = (function(){
-    const base = "linear-gradient(180deg, rgba(10,12,18,1) 0%, rgba(8,10,14,1) 100%)";
-    const readVar = (name, fallback)=> (getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback);
-    const parseRGB = (s)=>{
-      // accepts rgb(...) / rgba(...)
-      const m = String(s||"").match(/rgba?\((\s*\d+\s*),\s*(\d+)\s*,\s*(\d+)/i);
-      if (m) return { r:+m[1], g:+m[2], b:+m[3] };
-      return { r:124, g:92, b:255 };
-    };
-    const tint = (s, a)=>{
-      const c = parseRGB(s);
-      return `rgba(${c.r},${c.g},${c.b},${a})`;
-    };
-    const A = (a)=> tint(readVar("--accentA","rgba(124,92,255,1)"), a);
-    const B = (a)=> tint(readVar("--accentB","rgba(0,229,255,1)"), a);
-
-    function mk(aX,aY,bX,bY, extra=""){
-      const layers = [
-        `radial-gradient(1200px 620px at ${aX}% ${aY}%, ${A(.22)}, transparent 60%)`,
-        `radial-gradient(900px 520px at ${bX}% ${bY}%, ${B(.18)}, transparent 58%)`,
-        `radial-gradient(760px 440px at 60% 100%, ${A(.10)}, transparent 62%)`,
-        `radial-gradient(720px 420px at 10% 92%, ${B(.08)}, transparent 65%)`,
-        base
-      ];
-      if (extra) layers.unshift(extra);
-      return layers.join(", ");
-    }
-
-    const stripe135 = "repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 2px, transparent 2px 10px)";
-    const stripe90  = "repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 2px, transparent 2px 12px)";
-    const sheen45   = `linear-gradient(135deg, rgba(255,255,255,.04), transparent 55%)`;
-    const sheen225  = `linear-gradient(225deg, rgba(255,255,255,.04), transparent 60%)`;
-    const sheenA    = ()=> `linear-gradient(135deg, ${A(.10)}, transparent 55%)`;
-    const sheenB    = ()=> `linear-gradient(135deg, ${B(.10)}, transparent 60%)`;
-    const conicGM   = ()=> `conic-gradient(from 210deg at 18% 22%, ${A(.12)}, transparent 35%, ${B(.10)}, transparent 70%)`;
-    const conicGN   = ()=> `conic-gradient(from 180deg at 80% 20%, ${B(.12)}, transparent 40%, ${A(.10)}, transparent 75%)`;
-    const conicPay  = "conic-gradient(from 230deg at 50% 10%, rgba(255,255,255,.05), transparent 25%, rgba(255,255,255,.04), transparent 60%)";
-    const topSoft   = "linear-gradient(0deg, rgba(255,255,255,.03), transparent 45%)";
-    const topSoft2  = "linear-gradient(180deg, rgba(255,255,255,.03), transparent 60%)";
-
-    return {
-      home:      ()=> mk(20,10,80,20),
-      gm:        ()=> mk(22,12,76,18, conicGM()),
-      gn:        ()=> mk(18,18,82,14, conicGN()),
-
-      studio:    ()=> mk(18,12,82,24, sheenA()),
-      packs:     ()=> mk(24,14,78,26, sheenB()),
-      bulk:      ()=> mk(20,16,86,18, stripe135),
-      history:   ()=> mk(16,16,84,22, topSoft),
-      favorites: ()=> mk(24,10,78,20, topSoft2),
-
-      referrals: ()=> mk(20,14,86,22, stripe90),
-      prediction:()=> mk(18,12,82,22, conicPay),
-      themes:    ()=> mk(18,10,84,20, sheen45),
-      extthemes: ()=> mk(18,12,82,22, sheen225),
-      wallet:    ()=> mk(22,12,76,22, conicPay)
-    };
-  })();
+  const TAB_THEME = __gmxTabTheme.TAB_THEME;
 
 
   // Wallpapers — per-tab. Photo pack (webp under /assets/wallpapers/v2_*.webp).
@@ -1690,9 +1641,7 @@ const $ = __gmxChrome.$;
     if (hasWall){
       document.documentElement.style.setProperty("--bg", "linear-gradient(180deg, rgba(5,7,15,.12) 0%, rgba(5,7,15,.32) 100%)");
     } else {
-      const theme = TAB_THEME[safeTab] || TAB_THEME.home;
-      const bg = (typeof theme === "function") ? theme() : theme;
-      document.documentElement.style.setProperty("--bg", bg);
+      document.documentElement.style.setProperty("--bg", __gmxTabTheme.getTabBg(safeTab));
     }
     applyWallpaper(safeTab);
     applyUserBg(safeTab);
@@ -1814,20 +1763,7 @@ const $ = __gmxChrome.$;
   function setBestMode(next, silent){ return __gmxToggles.setBestMode(next, silent); }
   function syncBestModeUi(){ return __gmxToggles.syncBestModeUi(); }
 
-  // --- Lightweight analytics (no content) ---
-  function abVariant(){
-    const h = getHandle() || "anon";
-    const key = "gmx_ab_paywall_v1_" + h;
-    const cached = localStorage.getItem(key);
-    if (cached === "A" || cached === "B") return cached;
-    // stable hash (fast)
-    let x = 5381;
-    for (let i=0;i<h.length;i++) x = ((x<<5)+x) + h.charCodeAt(i);
-    const v = (Math.abs(x) % 2 === 0) ? "A" : "B";
-    localStorage.setItem(key, v);
-    return v;
-  }
-
+  function abVariant(){ return __gmxPaywall.abVariant(); }
   async function trackEvent(type, meta){
     if (!getToken()){ return; }
     try{
@@ -1835,99 +1771,13 @@ const $ = __gmxChrome.$;
       await api("/api/event", "POST", { type, meta: meta || {} });
     }catch(_e){}
   }
-
-  // --- Soft paywall modal ---
-  function openLimitModal(payload){
-    const m = $("limit_modal");
-    if (!m) return;
-    const v = abVariant();
-    const desc = $("limit_modal_desc");
-    const hint = $("limit_modal_hint");
-    const kind = payload?.kind || "gm";
-    const resetAt = payload?.resetAt || "";
-    if (desc){
-      desc.textContent = (v === "A")
-        ? `You reached the free saved-line cap for ${kind.toUpperCase()}. Upgrade to Pro for unlimited saved lines + all cosmetics`
-        : `Free saved-line cap reached for ${kind.toUpperCase()}. Pro removes caps and unlocks everything`;
-    }
-    if (hint){
-      hint.textContent = resetAt ? (`Next reset: ${resetAt}`) : "";
-    }
-    m.classList.remove("hidden");
-    trackEvent("upgrade_modal_open", { v, kind, reason: payload?.reason || "limit" });
-  }
-  function closeLimitModal(){
-    const m = $("limit_modal");
-    if (m) m.classList.add("hidden");
-  }
-
-  function bindLimitModal(){
-    const m = $("limit_modal");
-    const close = $("limit_modal_close");
-    const up = $("limit_modal_upgrade");
-    if (m) m.addEventListener("click", (e)=>{ if (e.target === m) closeLimitModal(); });
-    if (close) close.onclick = ()=>closeLimitModal();
-    if (up) up.onclick = ()=>{
-      closeLimitModal();
-      // move user to Upgrade Pro tab
-      try{ tab("wallet"); }catch{}
-      trackEvent("pay_click", { v: abVariant(), source:"paywall_modal" });
-    };
-  }
-
-  // --- Payment UX state machine ---
-  function setPayState(state, hint){
-    const box = $("pay_state_box");
-    const s1 = $("pay_step_processing");
-    const s2 = $("pay_step_confirming");
-    const s3 = $("pay_step_verified");
-    const h = $("pay_state_hint");
-    if (!box || !s1 || !s2 || !s3) return;
-
-    const reset = ()=>{
-      [s1,s2,s3].forEach(x=>{
-        x.style.opacity = "0.55";
-        x.style.borderColor = "var(--border)";
-      });
-    };
-    reset();
-    box.classList.remove("hidden");
-
-    const on = (el)=>{
-      el.style.opacity = "1";
-      el.style.borderColor = "rgba(0,0,0,0.25)";
-    };
-
-    if (state === "idle"){
-      box.classList.add("hidden");
-    } else if (state === "processing"){
-      on(s1);
-    } else if (state === "confirming"){
-      on(s1); on(s2);
-    } else if (state === "verified"){
-      on(s1); on(s2); on(s3);
-    } else if (state === "failed"){
-      // show as processing but with hint
-      on(s1);
-    }
-    if (h) h.textContent = hint ? String(hint) : "";
-  }
-
-  function openPaySuccess(){
-    const m = $("pay_success_modal");
-    if (!m) return;
-    m.classList.remove("hidden");
-  }
-  function closePaySuccess(){
-    const m = $("pay_success_modal");
-    if (m) m.classList.add("hidden");
-  }
-  function bindPaySuccess(){
-    const m = $("pay_success_modal");
-    const ok = $("pay_success_ok");
-    if (m) m.addEventListener("click", (e)=>{ if (e.target === m) closePaySuccess(); });
-    if (ok) ok.onclick = ()=>closePaySuccess();
-  }
+  function openLimitModal(payload){ return __gmxPaywall.openLimitModal(payload); }
+  function closeLimitModal(){ return __gmxPaywall.closeLimitModal(); }
+  function bindLimitModal(){ return __gmxPaywall.bindLimitModal(); }
+  function setPayState(state, hint){ return __gmxPaywall.setPayState(state, hint); }
+  function openPaySuccess(){ return __gmxPaywall.openPaySuccess(); }
+  function closePaySuccess(){ return __gmxPaywall.closePaySuccess(); }
+  function bindPaySuccess(){ return __gmxPaywall.bindPaySuccess(); }
 
   function getToken(){ return __getGMXAuth().getToken(); }
 

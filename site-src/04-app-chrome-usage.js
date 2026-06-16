@@ -43,9 +43,7 @@ const $ = __gmxChrome.$;
     if (hasWall){
       document.documentElement.style.setProperty("--bg", "linear-gradient(180deg, rgba(5,7,15,.12) 0%, rgba(5,7,15,.32) 100%)");
     } else {
-      const theme = TAB_THEME[safeTab] || TAB_THEME.home;
-      const bg = (typeof theme === "function") ? theme() : theme;
-      document.documentElement.style.setProperty("--bg", bg);
+      document.documentElement.style.setProperty("--bg", __gmxTabTheme.getTabBg(safeTab));
     }
     applyWallpaper(safeTab);
     applyUserBg(safeTab);
@@ -167,20 +165,7 @@ const $ = __gmxChrome.$;
   function setBestMode(next, silent){ return __gmxToggles.setBestMode(next, silent); }
   function syncBestModeUi(){ return __gmxToggles.syncBestModeUi(); }
 
-  // --- Lightweight analytics (no content) ---
-  function abVariant(){
-    const h = getHandle() || "anon";
-    const key = "gmx_ab_paywall_v1_" + h;
-    const cached = localStorage.getItem(key);
-    if (cached === "A" || cached === "B") return cached;
-    // stable hash (fast)
-    let x = 5381;
-    for (let i=0;i<h.length;i++) x = ((x<<5)+x) + h.charCodeAt(i);
-    const v = (Math.abs(x) % 2 === 0) ? "A" : "B";
-    localStorage.setItem(key, v);
-    return v;
-  }
-
+  function abVariant(){ return __gmxPaywall.abVariant(); }
   async function trackEvent(type, meta){
     if (!getToken()){ return; }
     try{
@@ -188,99 +173,13 @@ const $ = __gmxChrome.$;
       await api("/api/event", "POST", { type, meta: meta || {} });
     }catch(_e){}
   }
-
-  // --- Soft paywall modal ---
-  function openLimitModal(payload){
-    const m = $("limit_modal");
-    if (!m) return;
-    const v = abVariant();
-    const desc = $("limit_modal_desc");
-    const hint = $("limit_modal_hint");
-    const kind = payload?.kind || "gm";
-    const resetAt = payload?.resetAt || "";
-    if (desc){
-      desc.textContent = (v === "A")
-        ? `You reached the free saved-line cap for ${kind.toUpperCase()}. Upgrade to Pro for unlimited saved lines + all cosmetics`
-        : `Free saved-line cap reached for ${kind.toUpperCase()}. Pro removes caps and unlocks everything`;
-    }
-    if (hint){
-      hint.textContent = resetAt ? (`Next reset: ${resetAt}`) : "";
-    }
-    m.classList.remove("hidden");
-    trackEvent("upgrade_modal_open", { v, kind, reason: payload?.reason || "limit" });
-  }
-  function closeLimitModal(){
-    const m = $("limit_modal");
-    if (m) m.classList.add("hidden");
-  }
-
-  function bindLimitModal(){
-    const m = $("limit_modal");
-    const close = $("limit_modal_close");
-    const up = $("limit_modal_upgrade");
-    if (m) m.addEventListener("click", (e)=>{ if (e.target === m) closeLimitModal(); });
-    if (close) close.onclick = ()=>closeLimitModal();
-    if (up) up.onclick = ()=>{
-      closeLimitModal();
-      // move user to Upgrade Pro tab
-      try{ tab("wallet"); }catch{}
-      trackEvent("pay_click", { v: abVariant(), source:"paywall_modal" });
-    };
-  }
-
-  // --- Payment UX state machine ---
-  function setPayState(state, hint){
-    const box = $("pay_state_box");
-    const s1 = $("pay_step_processing");
-    const s2 = $("pay_step_confirming");
-    const s3 = $("pay_step_verified");
-    const h = $("pay_state_hint");
-    if (!box || !s1 || !s2 || !s3) return;
-
-    const reset = ()=>{
-      [s1,s2,s3].forEach(x=>{
-        x.style.opacity = "0.55";
-        x.style.borderColor = "var(--border)";
-      });
-    };
-    reset();
-    box.classList.remove("hidden");
-
-    const on = (el)=>{
-      el.style.opacity = "1";
-      el.style.borderColor = "rgba(0,0,0,0.25)";
-    };
-
-    if (state === "idle"){
-      box.classList.add("hidden");
-    } else if (state === "processing"){
-      on(s1);
-    } else if (state === "confirming"){
-      on(s1); on(s2);
-    } else if (state === "verified"){
-      on(s1); on(s2); on(s3);
-    } else if (state === "failed"){
-      // show as processing but with hint
-      on(s1);
-    }
-    if (h) h.textContent = hint ? String(hint) : "";
-  }
-
-  function openPaySuccess(){
-    const m = $("pay_success_modal");
-    if (!m) return;
-    m.classList.remove("hidden");
-  }
-  function closePaySuccess(){
-    const m = $("pay_success_modal");
-    if (m) m.classList.add("hidden");
-  }
-  function bindPaySuccess(){
-    const m = $("pay_success_modal");
-    const ok = $("pay_success_ok");
-    if (m) m.addEventListener("click", (e)=>{ if (e.target === m) closePaySuccess(); });
-    if (ok) ok.onclick = ()=>closePaySuccess();
-  }
+  function openLimitModal(payload){ return __gmxPaywall.openLimitModal(payload); }
+  function closeLimitModal(){ return __gmxPaywall.closeLimitModal(); }
+  function bindLimitModal(){ return __gmxPaywall.bindLimitModal(); }
+  function setPayState(state, hint){ return __gmxPaywall.setPayState(state, hint); }
+  function openPaySuccess(){ return __gmxPaywall.openPaySuccess(); }
+  function closePaySuccess(){ return __gmxPaywall.closePaySuccess(); }
+  function bindPaySuccess(){ return __gmxPaywall.bindPaySuccess(); }
 
   function getToken(){ return __getGMXAuth().getToken(); }
 

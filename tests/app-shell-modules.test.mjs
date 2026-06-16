@@ -261,6 +261,52 @@ test("custombg: tab unlock helpers", () => {
   assert.equal(cbg.requiredRefsForCustomBgTab("gm"), 0);
 });
 
+test("tabtheme: getTabBg returns gradient string", () => {
+  const prevGcs = globalThis.getComputedStyle;
+  const prevDoc = globalThis.document;
+  globalThis.document = { documentElement: {} };
+  globalThis.getComputedStyle = () => ({
+    getPropertyValue: (name) =>
+      name === "--accentB" ? "rgba(0,229,255,1)" : "rgba(124,92,255,1)",
+  });
+  try {
+    const tabTheme = loadFactory("app.tabtheme.js", "__GMXTabThemeFactory")();
+    const bg = tabTheme.getTabBg("home");
+    assert.match(bg, /linear-gradient/);
+    assert.equal(typeof tabTheme.TAB_THEME.home, "function");
+  } finally {
+    globalThis.getComputedStyle = prevGcs;
+    globalThis.document = prevDoc;
+  }
+});
+
+test("logs: ring buffer", () => {
+  const logs = loadFactory("app.logs.js", "__GMXLogsFactory")();
+  logs.logEvent("test", { a: 1 });
+  const out = logs.getLogs();
+  assert.equal(out.length, 1);
+  assert.equal(out[0].type, "test");
+});
+
+test("paywall: stable abVariant", () => {
+  const mem = new Map();
+  const storage = {
+    lsGet(k, fb = "") { return mem.has(k) ? mem.get(k) : fb; },
+    lsSet(k, v) { mem.set(k, String(v)); },
+  };
+  const paywall = loadFactory("app.paywall.js", "__GMXPaywallFactory")({
+    $: () => null,
+    storage,
+    getHandle: () => "user123",
+    trackEvent: async () => {},
+    onNavigateWallet: () => {},
+  });
+  const a = paywall.abVariant();
+  const b = paywall.abVariant();
+  assert.ok(a === "A" || a === "B");
+  assert.equal(a, b);
+});
+
 test("styles: unlocked count", () => {
   const styles = loadFactory("app.themes.js", "__GMXThemesFactory")();
   const ui = loadFactory("app.styles.js", "__GMXStylesFactory")({

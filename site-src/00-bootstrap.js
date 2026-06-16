@@ -48,7 +48,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616o";
+const ASSET_REV = "20260616p";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -149,6 +149,21 @@ const __gmxCbg = window.__GMXCustomBgFactory({
 });
 __gmxCbg.migrateLegacy();
 __gmxToggles.bootstrap();
+
+if (!window.__GMXTabThemeFactory) throw new Error("GMX tabtheme factory missing");
+const __gmxTabTheme = window.__GMXTabThemeFactory();
+
+if (!window.__GMXLogsFactory) throw new Error("GMX logs factory missing");
+const __gmxLogs = window.__GMXLogsFactory();
+
+if (!window.__GMXPaywallFactory) throw new Error("GMX paywall factory missing");
+const __gmxPaywall = window.__GMXPaywallFactory({
+  $: __gmxChrome.$,
+  storage: __gmxSt,
+  getHandle: () => getHandle(),
+  trackEvent: (type, meta) => trackEvent(type, meta),
+  onNavigateWallet: () => { try { tab("wallet"); } catch {} },
+});
 
 
 
