@@ -47,17 +47,7 @@
   const LS_GN_RECENT = K.GN_RECENT;
 
 
-  // Legacy helper kept for compatibility with old code paths.
-  if (typeof window.antiWindow !== "function"){
-    window.antiWindow = function(strength){
-      const s = Math.max(0, Math.min(5, Math.trunc(Number(strength) || 0)));
-      const map = [0, 10, 20, 30, 40, 50];
-      return map[s] ?? 0;
-    };
-  }
-  function antiWindow(strength){
-    return window.antiWindow(strength);
-  }
+  function antiWindow(strength){ return __gmxAnti.antiWindow(strength); }
 
   function lsKeyCleanFill(kind){ return __gmxSt.lsKeyCleanFill(kind); }
   const LS_CLEAN_FILL_BOOTSTRAP = K.CLEAN_FILL_BOOTSTRAP;
@@ -120,15 +110,7 @@ function cleanFillCopy(kind){
   function lsKeyAnti(kind){ return __gmxSt.lsKeyAnti(kind); }
 
   function lsKeyRecent(kind){ return __gmxSt.lsKeyRecent(kind); }
-  function getRecent(kind){
-    try{
-      const raw = localStorage.getItem(lsKeyRecent(kind));
-      const arr = raw ? JSON.parse(raw) : [];
-      return Array.isArray(arr) ? arr.filter(x=>typeof x==="string") : [];
-    } catch {
-      return [];
-    }
-  }
+  function getRecent(kind){ return __gmxAnti.getRecent(kind); }
 
 
   

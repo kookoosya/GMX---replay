@@ -37,7 +37,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616j";
+const ASSET_REV = "20260616k";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -57,6 +57,14 @@ const __gmxGen = window.__GMXGenerateFactory();
 
 if (!window.__GMXBanksFactory) throw new Error("GMX banks factory missing");
 const __gmxBanks = window.__GMXBanksFactory({ storage: __gmxSt, dedupeLines: __gmxGen.dedupeLines, EMPTY });
+
+if (!window.__GMXAntiRepeatFactory) throw new Error("GMX anti-repeat factory missing");
+const __gmxAnti = window.__GMXAntiRepeatFactory({
+  storage: __gmxSt,
+  repeatKey: __gmxGen.repeatKey,
+  readKey: __gmxBanks.readKey,
+  filterLinesByBan: __gmxGen.filterLinesByBan,
+});
 
 if (!window.__GMXUiFactory) throw new Error("GMX ui factory missing");
 const __gmxUi = window.__GMXUiFactory();

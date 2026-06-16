@@ -25,6 +25,7 @@ const APP_FILES = [
   "app.ui.js",
   "app.generate.js",
   "app.banks.js",
+  "app.antirepeat.js",
   "arcade.html",
   "arcade.js",
   "entitlements.js",

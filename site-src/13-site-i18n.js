@@ -744,39 +744,14 @@ function closeLangMenu(){
       }
     });
   }
-  function pushRecent(kind, keys){
-    try{
-      const cur = getRecent(kind);
-      const merged = cur.concat(keys || []);
-      const out = merged.slice(-120);
-      localStorage.setItem(lsKeyRecent(kind), JSON.stringify(out));
-    } catch {}
-  }
+  function pushRecent(kind, keys){ return __gmxAnti.pushRecent(kind, keys); }
 
   function repeatKey(s, strength){ return __gmxGen.repeatKey(s, strength); }
 
-  function buildBanSet(kind, key, strength){
-    const ban = new Set();
-    if (strength <= 0) return ban;
-
-    const recent = getRecent(kind);
-    const keep = Math.min(recent.length, antiWindow(strength));
-    for (const k of recent.slice(recent.length - keep)) ban.add(k);
-
-    // Also ban everything already saved in the active list (so Bulk never repeats what you already have).
-    const cur = readKey(key);
-    for (const s of cur){
-      const rk = repeatKey(s, Math.max(1, strength));
-      if (rk) ban.add(rk);
-    }
-    return ban;
-  }
+  function buildBanSet(kind, key, strength){ return __gmxAnti.buildBanSet(kind, key, strength); }
 
   function filterAntiRepeat(kind, key, lines){
-    const strength = getAntiStrength(kind);
-    if (strength <= 0) return lines || [];
-    const ban = buildBanSet(kind, key, strength);
-    return __gmxGen.filterLinesByBan(lines, ban, strength);
+    return __gmxAnti.filterLines(kind, key, lines, getAntiStrength(kind));
   }
 
   

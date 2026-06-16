@@ -107,3 +107,34 @@ test("banks: read/write saved lines", () => {
   banks.writeKey(key, ["A", "B"]);
   assert.equal(storage.lsGet(key), "A\nB");
 });
+
+test("antirepeat: window map and ban filtering", () => {
+  const mem = new Map();
+  const storage = {
+    lsKeyRecent(kind) {
+      return kind === "gn" ? "gmx_gn_recent" : "gmx_gm_recent";
+    },
+    lsGet(key, fallback = "") {
+      return mem.has(key) ? mem.get(key) : fallback;
+    },
+    lsSet(key, value) {
+      if (value === undefined || value === null || value === "") mem.delete(key);
+      else mem.set(key, String(value));
+    },
+  };
+  const gen = loadFactory("app.generate.js", "__GMXGenerateFactory")();
+  const anti = loadFactory("app.antirepeat.js", "__GMXAntiRepeatFactory")({
+    storage,
+    repeatKey: gen.repeatKey,
+    readKey: () => ["GM legend"],
+    filterLinesByBan: gen.filterLinesByBan,
+  });
+  assert.equal(anti.antiWindow(2), 20);
+  assert.equal(anti.antiWindow(9), 50);
+  anti.pushRecent("gm", ["shape_a", "shape_b"]);
+  assert.deepEqual(anti.getRecent("gm"), ["shape_a", "shape_b"]);
+  const ban = anti.buildBanSet("gm", "gmx_gm_bank", 2);
+  assert.ok(ban.size >= 2);
+  const kept = anti.filterLines("gm", "gmx_gm_bank", ["GM legend", "Fresh morning"], 2);
+  assert.deepEqual(kept, ["Fresh morning"]);
+});
