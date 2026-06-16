@@ -75,6 +75,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.sitemode\.js/, "app.sitemode.js script tag");
   mustMatch(rel, /app\.modals\.js/, "app.modals.js script tag");
   mustMatch(rel, /app\.shellerrors\.js/, "app.shellerrors.js script tag");
+  mustMatch(rel, /app\.recover\.js/, "app.recover.js script tag");
   mustMatch(rel, /app\.langui\.js/, "app.langui.js script tag");
   mustMatch(rel, /app\.sitelangmenu\.js/, "app.sitelangmenu.js script tag");
   mustMatch(rel, /app\.tabstate\.js/, "app.tabstate.js script tag");
@@ -115,9 +116,11 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.nav\.js/, "app.nav.js script tag");
   mustMatch(rel, /app\.tabwire\.js/, "app.tabwire.js script tag");
   mustMatch(rel, /app\.gmgnwire\.js/, "app.gmgnwire.js script tag");
+  mustMatch(rel, /app\.sitesync\.js/, "app.sitesync.js script tag");
   mustMatch(rel, /app\.extwallpaperui\.js/, "app.extwallpaperui.js script tag");
   mustMatch(rel, /app\.accountui\.js/, "app.accountui.js script tag");
   mustMatch(rel, /app\.authwire\.js/, "app.authwire.js script tag");
+  mustMatch(rel, /app\.siteboot\.js/, "app.siteboot.js script tag");
   mustMatch(rel, /app\.auth\.js/, "app.auth.js script tag");
   mustNotMatch(rel, /id="supportOut"/, "supportOut textarea removed");
   mustNotMatch(rel, /id="toolSupport"/, "toolSupport button removed from HTML");

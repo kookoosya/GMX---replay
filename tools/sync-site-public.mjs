@@ -29,6 +29,7 @@ const shellModules = [
   "app.sitemode.js",
   "app.modals.js",
   "app.shellerrors.js",
+  "app.recover.js",
   "app.langui.js",
   "app.sitelangmenu.js",
   "app.tabstate.js",
@@ -69,9 +70,11 @@ const shellModules = [
   "app.nav.js",
   "app.tabwire.js",
   "app.gmgnwire.js",
+  "app.sitesync.js",
   "app.extwallpaperui.js",
   "app.accountui.js",
   "app.authwire.js",
+  "app.siteboot.js",
 ];
 for (const name of shellModules) {
   const modSrc = path.join(root, "public", name);

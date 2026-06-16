@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260617g";
+const ASSET_REV = "20260617h";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -1674,6 +1674,22 @@ countEl.textContent = lines.length;
   }
   function cleanupKeyLines(lines) {
     return __gmxCfr.cleanupKeyLines(lines);
+  }
+
+  function pushRecent(kind, keys) {
+    return __gmxAnti.pushRecent(kind, keys);
+  }
+  function repeatKey(s, strength) {
+    return __gmxGen.repeatKey(s, strength);
+  }
+  function filterAntiRepeat(kind, key, lines) {
+    return __gmxAnti.filterLines(kind, key, lines, getAntiStrength(kind));
+  }
+  function normalizeLine(s) {
+    return __gmxGen.normalizeLine(s);
+  }
+  function dedupeLines(lines) {
+    return __gmxGen.dedupeLines(lines);
   }
 
   function mergeAppendUnique(existing, newLines){
@@ -3687,6 +3703,12 @@ function pruneLegacyAdminPanels(){
 
   function fillSelect(sel, arr){ return __gmxSiteLangMenu.fillSelect(sel, arr); }
 
+  if (!window.__GMXSiteSyncFactory) throw new Error("GMX sitesync factory missing");
+  window.__GMXSiteSyncFactory({
+    setBestMode,
+    setCleanFillEnabled,
+  }).wire();
+
   // --- init ---
   const { siteLangSel } = await __gmxSiteLangMenu.bootstrapSiteLangUi();
 
@@ -3698,27 +3720,6 @@ function pruneLegacyAdminPanels(){
   __gmxSiteLangMenu.wireI18nObserver();
 
   updateLangFlags();
-
-  // Track referral link clicks (promoter analytics)
-  try{
-    const ref = new URLSearchParams(location.search).get("ref");
-    if (ref){
-      fetch("/api/referral/click?ref=" + encodeURIComponent(ref)).catch(()=>{});
-    }
-  }catch{}
-
-  window.addEventListener("message", (e)=>{
-    try{
-      if (!e || !e.data) return;
-      if (e.data.type === "GMX_BEST_MODE_SYNC"){
-        setBestMode(e.data.value === true, true);
-        return;
-      }
-      if (e.data.type === "GMX_CLEAN_FILL_SYNC"){
-        if (e.data.kind === "gm" || e.data.kind === "gn") setCleanFillEnabled(e.data.kind, e.data.value === true, true);
-      }
-    }catch(_e){}
-  });
 
   __gmxSiteLangMenu.wireSiteLangSelectChange(siteLangSel);
 
@@ -3736,8 +3737,6 @@ function pruneLegacyAdminPanels(){
   // initial language chips
   renderLangChips("gm");
   renderLangChips("gn");
-
-  // referrals UI
 
   // default reply langs (persist per tab)
   if (!window.__GMXGmGnWireFactory) throw new Error("GMX gmgnwire factory missing");
@@ -3796,51 +3795,6 @@ function pruneLegacyAdminPanels(){
     toast,
     t,
   }).wire();
-
-  function pushRecent(kind, keys){ return __gmxAnti.pushRecent(kind, keys); }
-
-  function repeatKey(s, strength){ return __gmxGen.repeatKey(s, strength); }
-
-  function buildBanSet(kind, key, strength){ return __gmxAnti.buildBanSet(kind, key, strength); }
-
-  function filterAntiRepeat(kind, key, lines){
-    return __gmxAnti.filterLines(kind, key, lines, getAntiStrength(kind));
-  }
-
-  function setRangeText(id, v){
-    const el = $(id);
-    if (el) el.textContent = String(v);
-  }
-
-  function normalizeLine(s){ return __gmxGen.normalizeLine(s); }
-
-  function dedupeLines(lines){ return __gmxGen.dedupeLines(lines); }
-
-  function normalizeKind(kind){
-    let changed = 0;
-    for (const k of allKeysForKind(kind)){
-      const before = readKey(k);
-      const after = before.map(normalizeLine).filter(Boolean);
-      if (after.join("\n") !== before.join("\n")){
-        writeKey(k, after);
-        changed++;
-      }
-    }
-    return changed;
-  }
-
-  function dedupeKind(kind){
-    let changed = 0;
-    for (const k of allKeysForKind(kind)){
-      const before = readKey(k);
-      const after = dedupeLines(before);
-      if (after.join("\n") !== before.join("\n")){
-        writeKey(k, after);
-        changed++;
-      }
-    }
-    return changed;
-  }
 
   if (!window.__GMXProControlsFactory) throw new Error("GMX procontrols factory missing");
   const __gmxProControls = window.__GMXProControlsFactory({
@@ -3913,115 +3867,58 @@ function pruneLegacyAdminPanels(){
     });
   }
 
-  AUTH_OK = !!(getHandle() && getToken());
+  if (!window.__GMXSiteBootFactory) throw new Error("GMX siteboot factory missing");
+  window.__GMXSiteBootFactory({
+    $,
+    getHandle,
+    getToken,
+    setAuthOk: (v) => { AUTH_OK = !!v; },
+    setInitDone: (v) => { INIT_DONE = !!v; },
+    applyAdminVisibility,
+    initModeToggle: () => __gmxSiteMode.initModeToggle(),
+    applyLang,
+    initThemeWallTabs,
+    bindExtTabs,
+    initExtWallpaperControls,
+    normalizeStoredExtWallpaperSelections,
+    migrateLegacyWallpaperSelectionOnce,
+    migrateLegacyExtWallpaperSelectionOnce,
+    renderExtThemes,
+    renderExtWallpapers,
+    renderExtCustomBgUI,
+    setExtView,
+    normalizeExtViewValue,
+    restoreDrafts,
+    normalizeTopLevelTab,
+    tab,
+    setCurrentTab: (n) => __gmxTabState.setCurrentTab(n),
+    setBg,
+    ping,
+    loadBuild,
+    bindWalletTab,
+    bindLimitModal,
+    bindPaySuccess,
+    loadPlans,
+    loadBillingProof,
+    bindHelpModal,
+    watchBuildUpdates,
+    initSession,
+    refreshUsage,
+    migrateLegacyBank,
+    renderList,
+    initProTabs,
+    lsGet: (k, d) => __gmxSt.lsGet(k, d),
+    lastTabKey: LS_LAST_TAB,
+    extViewKey: LS_EXT_VIEW,
+  }).run();
 
-  // restore session if exists
-  $("handlePill").textContent = getHandle() ? getHandle() : "not set";
-  $("xHandle").value = getHandle() || "";
-
-  applyAdminVisibility();
-  try{ __gmxSiteMode.initModeToggle(); }catch(e){}
-  applyLang();
-  try{ initThemeWallTabs(); }catch{}
-  try{ bindExtTabs(); }catch{}
-  try{ initExtWallpaperControls(); }catch{}
-  try{ normalizeStoredExtWallpaperSelections(); }catch{}
-  try{ migrateLegacyWallpaperSelectionOnce(); }catch{}
-  try{ migrateLegacyExtWallpaperSelectionOnce(); }catch{}
-  try{ renderExtThemes(); }catch{}
-  try{ renderExtWallpapers(); }catch{}
-  try{ renderExtCustomBgUI(); }catch{}
-  try{ setExtView(normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW) || "theme"), { force:true, silent:true }); }catch{}
-  restoreDrafts();
-
-  let bootTab = "home";
-  try{
-    const storedTab = String(localStorage.getItem(LS_LAST_TAB) || "").trim();
-    bootTab = normalizeTopLevelTab(storedTab || "home");
-  }catch{}
-  tab(bootTab);
-  __gmxTabState.setCurrentTab(bootTab);
-  setBg(bootTab);
-
-  ping();
-  loadBuild();
-  try{ bindWalletTab(); }catch(e){}
-  try{ bindLimitModal(); }catch(e){}
-  try{ bindPaySuccess(); }catch(e){}
-  try{ loadPlans(); }catch(e){}
-  try{ loadBillingProof(); }catch(e){}
-  try{ bindHelpModal(); }catch(e){}
-  try{ watchBuildUpdates(); }catch(e){}
-
-  // Only refresh protected stats when we successfully obtained a token.
-  // If init fails (API down, invalid handle, etc.) we keep the UI usable and avoid noisy 401s.
-  if (getHandle()){
-    initSession(false).then(async (tok)=>{
-      if (!tok) return;
-      try{ await refreshUsage(); }catch{}
-      // Plans & proof are public; already loaded above.
-    }).catch(()=>{});
-  }
-
-  try{ migrateLegacyBank("gm"); }catch(e){}
-  try{ migrateLegacyBank("gn"); }catch(e){}
-
-  renderList("gm");
-  renderList("gn");
-
-    try{ initProTabs(); }catch(e){}
-INIT_DONE = true;
-
-// --- Stability watchdog (auto-recover from unexpected runtime crashes) ---
-(function(){
-  const KEY = "gmx_autorecover_v1";
-  function read(){
-    try{ return JSON.parse(localStorage.getItem(KEY) || "{}"); }catch(e){ return {}; }
-  }
-  function write(v){
-    try{ localStorage.setItem(KEY, JSON.stringify(v)); }catch(e){}
-  }
-  function shouldReload(){
-    const now = Date.now();
-    const s = read();
-    const arr = Array.isArray(s.reloads) ? s.reloads : [];
-    const fresh = arr.filter(ts => (now - ts) < 10*60*1000);
-    if (fresh.length >= 3) return false; // prevent reload loops
-    fresh.push(now);
-    s.reloads = fresh;
-    write(s);
-    return true;
-  }
-  function scheduleReload(){
-    if (window.__gmxRecovering) return;
-    if (!shouldReload()) return;
-    window.__gmxRecovering = true;
-    try{
-      try{ if (typeof toast === "function") toast("warn", "Recovering... reloading", 2500); }catch{}
-    }catch{}
-    setTimeout(()=>{ try{ location.reload(); }catch{} }, 1200);
-  }
-  window.addEventListener("error", (e)=>{
-    // Ignore extremely noisy non-critical errors
-    const msg = String(e?.message || "");
-    if (msg.includes("ResizeObserver") || msg.includes("Non-Error promise rejection")) return;
-    // Never auto-reload on expected network/API errors (we show degraded mode instead)
-    if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("request_failed") || msg.includes("timeout")){
-      try{ if (typeof setDegraded === "function") setDegraded(true, "API/network issue. You can still edit lists locally."); }catch{}
-      return;
-    }
-    scheduleReload();
-  });
-  window.addEventListener("unhandledrejection", (e)=>{
-    const msg = String(e?.reason?.message || e?.reason || "");
-    if (msg.includes("ResizeObserver")) return;
-    if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("request_failed") || msg.includes("timeout") || msg.includes("not_connected")){
-      try{ if (typeof setDegraded === "function") setDegraded(true, "API/network issue. You can still edit lists locally."); }catch{}
-      return;
-    }
-    scheduleReload();
-  });
-})();
+  if (!window.__GMXRecoverFactory) throw new Error("GMX recover factory missing");
+  window.__GMXRecoverFactory({
+    toast,
+    setDegraded,
+    lsGet: (k, d) => __gmxSt.lsGet(k, d),
+    lsSet: (k, v) => { try { __gmxSt.lsSet(k, v); } catch {} },
+  }).wire();
 
   // ----- Connect -----
   const connectBtn = $("btnConnect");

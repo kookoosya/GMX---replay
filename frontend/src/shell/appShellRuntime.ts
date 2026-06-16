@@ -70,6 +70,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.sitemode.js", "gmx-legacy-sitemode");
     await injectAppShellRuntime("/app.modals.js", "gmx-legacy-modals");
     await injectAppShellRuntime("/app.shellerrors.js", "gmx-legacy-shellerrors");
+    await injectAppShellRuntime("/app.recover.js", "gmx-legacy-recover");
     await injectAppShellRuntime("/app.langui.js", "gmx-legacy-langui");
     await injectAppShellRuntime("/app.sitelangmenu.js", "gmx-legacy-sitelangmenu");
     await injectAppShellRuntime("/app.tabstate.js", "gmx-legacy-tabstate");
@@ -110,9 +111,11 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.nav.js", "gmx-legacy-nav");
     await injectAppShellRuntime("/app.tabwire.js", "gmx-legacy-tabwire");
     await injectAppShellRuntime("/app.gmgnwire.js", "gmx-legacy-gmgnwire");
+    await injectAppShellRuntime("/app.sitesync.js", "gmx-legacy-sitesync");
     await injectAppShellRuntime("/app.extwallpaperui.js", "gmx-legacy-extwallpaperui");
     await injectAppShellRuntime("/app.accountui.js", "gmx-legacy-accountui");
     await injectAppShellRuntime("/app.authwire.js", "gmx-legacy-authwire");
+    await injectAppShellRuntime("/app.siteboot.js", "gmx-legacy-siteboot");
     await injectAppShellRuntime("/app.auth.js", "gmx-legacy-auth");
     await injectAppShellRuntime("/app.js", "gmx-app-shell-runtime");
     await waitForAppShellReady();

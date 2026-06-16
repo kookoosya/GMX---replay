@@ -1017,3 +1017,70 @@ test("cleanfillrun: cleanupKeyLines delegates to shape dedupe", () => {
   });
   assert.deepEqual(run.cleanupKeyLines(["a", "b"]), ["a"]);
 });
+
+test("recover: classifies network errors", () => {
+  const rec = loadFactory("app.recover.js", "__GMXRecoverFactory")({
+    toast: () => {},
+    setDegraded: () => {},
+    lsGet: () => "{}",
+    lsSet: () => {},
+  });
+  assert.equal(rec.isNetworkMessage("Failed to fetch"), true);
+  assert.equal(rec.isNetworkMessage("boom"), false);
+});
+
+test("sitesync: cross-frame best mode sync", () => {
+  let best = false;
+  const listeners = [];
+  const fakeWin = {
+    addEventListener: (type, fn) => {
+      if (type === "message") listeners.push(fn);
+    },
+  };
+  const sync = loadFactory("app.sitesync.js", "__GMXSiteSyncFactory")({
+    setBestMode: (v) => {
+      best = !!v;
+    },
+    setCleanFillEnabled: () => {},
+    window: fakeWin,
+  });
+  sync.wireCrossFrameSync();
+  listeners[0]({ data: { type: "GMX_BEST_MODE_SYNC", value: true } });
+  assert.equal(best, true);
+});
+
+test("siteboot: restores handle pill and marks init done", () => {
+  const els = {
+    handlePill: { textContent: "" },
+    xHandle: { value: "" },
+  };
+  let authOk = false;
+  let initDone = false;
+  const boot = loadFactory("app.siteboot.js", "__GMXSiteBootFactory")({
+    $: (id) => els[id] || null,
+    getHandle: () => "@demo",
+    getToken: () => "tok",
+    setAuthOk: (v) => {
+      authOk = !!v;
+    },
+    setInitDone: (v) => {
+      initDone = !!v;
+    },
+    applyAdminVisibility: () => {},
+    initModeToggle: () => {},
+    applyLang: () => {},
+    normalizeTopLevelTab: (v) => v || "home",
+    tab: () => {},
+    setCurrentTab: () => {},
+    setBg: () => {},
+    ping: () => {},
+    loadBuild: () => {},
+    renderList: () => {},
+    lsGet: (_k, fb) => fb,
+  });
+  boot.run();
+  assert.equal(authOk, true);
+  assert.equal(initDone, true);
+  assert.equal(els.handlePill.textContent, "@demo");
+  assert.equal(els.xHandle.value, "@demo");
+});

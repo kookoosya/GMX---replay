@@ -28,3 +28,19 @@
   function cleanupKeyLines(lines) {
     return __gmxCfr.cleanupKeyLines(lines);
   }
+
+  function pushRecent(kind, keys) {
+    return __gmxAnti.pushRecent(kind, keys);
+  }
+  function repeatKey(s, strength) {
+    return __gmxGen.repeatKey(s, strength);
+  }
+  function filterAntiRepeat(kind, key, lines) {
+    return __gmxAnti.filterLines(kind, key, lines, getAntiStrength(kind));
+  }
+  function normalizeLine(s) {
+    return __gmxGen.normalizeLine(s);
+  }
+  function dedupeLines(lines) {
+    return __gmxGen.dedupeLines(lines);
+  }
