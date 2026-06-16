@@ -156,6 +156,19 @@ test("sitei18nui: siteTr fallback", () => {
   assert.equal(ui.siteTr("missing", "Fallback"), "Fallback");
 });
 
+test("sitei18ndynamic: nextReferralUnlockAt steps", () => {
+  const dyn = loadFactory("app.sitei18ndynamic.js", "__GMXSiteI18nDynamicFactory")({
+    t: (k) => k,
+    siteTr: (k, fb) => fb || k,
+    $: () => null,
+  });
+  assert.equal(dyn.nextReferralUnlockAt(0), 1);
+  assert.equal(dyn.nextReferralUnlockAt(3), 7);
+  assert.equal(dyn.nextReferralUnlockAt(100), 0);
+  const copy = dyn.getReferralUiCopy("en");
+  assert.equal(copy.title, "r_how");
+});
+
 test("extview: normalizeExtViewValue and bindExtTabs", () => {
   const extview = loadFactory("app.extview.js", "__GMXExtViewFactory")({
     $: () => null,

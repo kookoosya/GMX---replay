@@ -149,6 +149,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.format.js": { target: BACKEND, changeOrigin: true },
         "/app.i18nui.js": { target: BACKEND, changeOrigin: true },
         "/app.sitei18nui.js": { target: BACKEND, changeOrigin: true },
+        "/app.sitei18ndynamic.js": { target: BACKEND, changeOrigin: true },
         "/app.chrome.js": { target: BACKEND, changeOrigin: true },
         "/app.langui.js": { target: BACKEND, changeOrigin: true },
         "/app.tabstate.js": { target: BACKEND, changeOrigin: true },

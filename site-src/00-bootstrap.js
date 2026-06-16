@@ -57,9 +57,24 @@ const __gmxSiteI18nUi = window.__GMXSiteI18nUiFactory({
     __gmxI18nUi.sanitizeI18nValue(lang, value, fallback),
   onPatchDynamicCopy: (lang, merged) => {
     try {
-      patchDynamicCopy(lang, merged);
+      __gmxSiteI18nDynamic.patchDynamicCopy(lang, merged);
     } catch (_e) {}
   },
+});
+
+if (!window.__GMXSiteI18nDynamicFactory) throw new Error("GMX sitei18ndynamic factory missing");
+const __gmxSiteI18nDynamic = window.__GMXSiteI18nDynamicFactory({
+  t: (key) => __gmxI18nUi.t(key),
+  siteTr: (key, fb) => __gmxSiteI18nUi.siteTr(key, fb),
+  $: __gmxChrome.$,
+  escapeHtml: (s) => __gmxFmt.escapeHtml(s),
+  syncPredictionFilterCopy: () => { try { syncPredictionFilterCopy(); } catch {} },
+  syncCleanFillUi: () => { try { syncCleanFillUi(); } catch {} },
+  syncReferralCardCopy: () => { try { syncReferralCardCopy(); } catch {} },
+  initReferralPromoDetailsState: () => { try { initReferralPromoDetailsState(); } catch {} },
+  getCurrentTab: () => __gmxTabState.getCurrentTab(),
+  getHandle: () => { try { return getHandle(); } catch { return ""; } },
+  scheduleRefStatsRefresh: (ms) => { try { scheduleRefStatsRefresh(ms); } catch {} },
 });
 
 if (!window.__GMXLangUiFactory) throw new Error("GMX langui factory missing");
@@ -95,7 +110,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616y";
+const ASSET_REV = "20260616z";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -214,7 +229,7 @@ const __gmxGp = window.__GMXGenParamsFactory({
   unlockedCountByRefs,
   freeVisiblePacks: FREE_VISIBLE_PACKS,
   t: (key) => __gmxI18nUi.t(key),
-  syncModePanelCopy: () => { try { syncModePanelCopy(); } catch {} },
+  syncModePanelCopy: () => { try { __gmxSiteI18nDynamic.syncModePanelCopy(); } catch {} },
 });
 
 if (!window.__GMXCleanFillFactory) throw new Error("GMX cleanfill factory missing");

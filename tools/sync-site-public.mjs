@@ -24,6 +24,7 @@ const shellModules = [
   "app.format.js",
   "app.i18nui.js",
   "app.sitei18nui.js",
+  "app.sitei18ndynamic.js",
   "app.chrome.js",
   "app.langui.js",
   "app.tabstate.js",
