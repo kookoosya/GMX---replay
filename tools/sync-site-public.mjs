@@ -31,6 +31,7 @@ const shellModules = [
   "app.banks.js",
   "app.antirepeat.js",
   "app.genparams.js",
+  "app.cleanfill.js",
 ];
 for (const name of shellModules) {
   const modSrc = path.join(root, "public", name);

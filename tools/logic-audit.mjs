@@ -77,6 +77,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.banks\.js/, "app.banks.js script tag");
   mustMatch(rel, /app\.antirepeat\.js/, "app.antirepeat.js script tag");
   mustMatch(rel, /app\.genparams\.js/, "app.genparams.js script tag");
+  mustMatch(rel, /app\.cleanfill\.js/, "app.cleanfill.js script tag");
   mustMatch(rel, /app\.auth\.js/, "app.auth.js script tag");
   mustNotMatch(rel, /id="supportOut"/, "supportOut textarea removed");
   mustNotMatch(rel, /id="toolSupport"/, "toolSupport button removed from HTML");

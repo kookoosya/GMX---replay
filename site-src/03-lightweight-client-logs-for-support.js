@@ -7,9 +7,6 @@
     } catch {}
   }
 
-  const INFLIGHT = { gm:false, gn:false };
-  const ABORT = { gm:null, gn:null };
-
   const LS_HANDLE = K.HANDLE;
   const LS_TOKEN  = K.TOKEN;
 
@@ -42,7 +39,7 @@
   const LS_GN_ANTI = K.GN_ANTI;
   const LS_GM_CLEAN_FILL = K.GM_CLEAN_FILL;
   const LS_GN_CLEAN_FILL = K.GN_CLEAN_FILL;
-  const CLEAN_FILL_STRENGTH = 2;
+  const CLEAN_FILL_STRENGTH = __gmxCf.CLEAN_FILL_STRENGTH;
   const LS_GM_RECENT = K.GM_RECENT;
   const LS_GN_RECENT = K.GN_RECENT;
 
@@ -52,58 +49,10 @@
   function lsKeyCleanFill(kind){ return __gmxSt.lsKeyCleanFill(kind); }
   const LS_CLEAN_FILL_BOOTSTRAP = K.CLEAN_FILL_BOOTSTRAP;
 
-  function bootstrapCleanFillDefaults(){ __gmxSt.bootstrapCleanFillDefaults(); }
-
-  function getCleanFillEnabled(kind){ return __gmxSt.getCleanFillEnabled(kind); }
-  function setCleanFillEnabled(kind, next, silent){
-    const on = !!next;
-    __gmxSt.setCleanFillEnabledRaw(kind, on);
-    try{ syncCleanFillUi(kind); }catch(_e){}
-    if (!silent){
-      try{ window.postMessage({ type: "GMX_CLEAN_FILL_SYNC", kind, value: on }, "*"); }catch(_e){}
-      try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "clean_fill_change", kind, value: on }, "*"); }catch(_e){}
-    }
-    return on;
-  }
-  bootstrapCleanFillDefaults();
-
-function cleanFillCopy(kind){
-    const ru = siteLang() === "ru";
-    const on = getCleanFillEnabled(kind);
-    return {
-      label: ru ? "Best pass" : "Best pass",
-      button: on ? (ru ? "Best pass: on" : "Best pass: on") : (ru ? "Best pass: off" : "Best pass: off"),
-      hint: on
-        ? (ru
-            ? "Включено: Best pass после запуска режет shape-дубли в сохранённом списке и добивает недостающее обратно до текущей цели."
-            : "On: Best pass prunes shape-level near-duplicates from the saved list, then refills the missing slots back to your current target.")
-        : (ru
-            ? "Выключено: сначала идёт loose random fill. Если первая пачка слишком узкая, Batch автоматически добирает недостающее. Включай Best pass, когда хочешь ещё и чистить сохранённый банк после запуска."
-            : "Off: generation starts as loose random fill. If the first batch comes back too thin, Batch auto-refills the missing slots. Turn Best pass on when you also want the saved bank cleaned after the run."),
-      action: ru ? "Run best pass" : "Run best pass"
-    };
-  }
-  function syncCleanFillUi(kind){
-    const kinds = kind ? [kind] : ["gm","gn"];
-    kinds.forEach((k)=>{
-      const copy = cleanFillCopy(k);
-      const label = $(k === "gm" ? "gm_anti_label" : "gn_anti_label");
-      if (label) label.textContent = copy.label;
-      const note = $(k === "gm" ? "gm_repeat_note" : "gn_repeat_note");
-      if (note) note.textContent = copy.hint;
-      const toggle = $(k + "CleanFillToggle");
-      if (toggle){
-        toggle.textContent = copy.button;
-        toggle.classList.toggle("active", getCleanFillEnabled(k));
-        toggle.setAttribute("aria-pressed", getCleanFillEnabled(k) ? "true" : "false");
-      }
-      const cleanupBtn = $(k + "Cleanup");
-      if (cleanupBtn){
-        cleanupBtn.style.display = "";
-        cleanupBtn.textContent = copy.action;
-      }
-    });
-  }
+  function getCleanFillEnabled(kind){ return __gmxCf.getEnabled(kind); }
+  function setCleanFillEnabled(kind, next, silent){ return __gmxCf.setEnabled(kind, next, silent); }
+  function cleanFillCopy(kind){ return __gmxCf.copyForKind(kind); }
+  function syncCleanFillUi(kind){ return __gmxCf.syncUi(kind); }
 
   // Helpers for LS key selection (used by Pro controls).
   function lsKeyPack(kind){ return __gmxSt.lsKeyPack(kind); }

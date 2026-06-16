@@ -156,6 +156,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.banks.js": { target: BACKEND, changeOrigin: true },
         "/app.antirepeat.js": { target: BACKEND, changeOrigin: true },
         "/app.genparams.js": { target: BACKEND, changeOrigin: true },
+        "/app.cleanfill.js": { target: BACKEND, changeOrigin: true },
         "/mode.js": { target: BACKEND, changeOrigin: true },
         "/entitlements.js": { target: BACKEND, changeOrigin: true },
         "/themes.json": { target: BACKEND, changeOrigin: true },

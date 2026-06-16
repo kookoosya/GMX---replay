@@ -9,11 +9,16 @@
   const __gmxFmt = window.__GMXFormatFactory();
 
 if (!window.__GMXChromeFactory) throw new Error("GMX chrome factory missing");
-const __gmxChrome = window.__GMXChromeFactory();
+const __gmxChrome = window.__GMXChromeFactory({
+  inflight: INFLIGHT,
+  escapeHtml: (s) => __gmxFmt.escapeHtml(s),
+});
 
   const ADMIN_HANDLE = "@Kristofer_Sol_";
   let SAVE_CAP_FREE = 50;
   const EMPTY = "__EMPTY__";
+  const INFLIGHT = { gm: false, gn: false };
+  const ABORT = { gm: null, gn: null };
 
   let SUB = null;
   let REF_COUNT = 0;
@@ -43,7 +48,7 @@ const __gmxChrome = window.__GMXChromeFactory();
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616m";
+const ASSET_REV = "20260616n";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -108,6 +113,14 @@ const __gmxGp = window.__GMXGenParamsFactory({
   t: (key) => t(key),
   syncModePanelCopy: () => { try { syncModePanelCopy(); } catch {} },
 });
+
+if (!window.__GMXCleanFillFactory) throw new Error("GMX cleanfill factory missing");
+const __gmxCf = window.__GMXCleanFillFactory({
+  storage: __gmxSt,
+  $: __gmxChrome.$,
+  siteLang: () => siteLang(),
+});
+__gmxCf.bootstrap();
 
 
 
@@ -175,9 +188,6 @@ async function postEvent(type, meta){
     } catch {}
   }
 
-  const INFLIGHT = { gm:false, gn:false };
-  const ABORT = { gm:null, gn:null };
-
   const LS_HANDLE = K.HANDLE;
   const LS_TOKEN  = K.TOKEN;
 
@@ -210,7 +220,7 @@ async function postEvent(type, meta){
   const LS_GN_ANTI = K.GN_ANTI;
   const LS_GM_CLEAN_FILL = K.GM_CLEAN_FILL;
   const LS_GN_CLEAN_FILL = K.GN_CLEAN_FILL;
-  const CLEAN_FILL_STRENGTH = 2;
+  const CLEAN_FILL_STRENGTH = __gmxCf.CLEAN_FILL_STRENGTH;
   const LS_GM_RECENT = K.GM_RECENT;
   const LS_GN_RECENT = K.GN_RECENT;
 
@@ -220,58 +230,10 @@ async function postEvent(type, meta){
   function lsKeyCleanFill(kind){ return __gmxSt.lsKeyCleanFill(kind); }
   const LS_CLEAN_FILL_BOOTSTRAP = K.CLEAN_FILL_BOOTSTRAP;
 
-  function bootstrapCleanFillDefaults(){ __gmxSt.bootstrapCleanFillDefaults(); }
-
-  function getCleanFillEnabled(kind){ return __gmxSt.getCleanFillEnabled(kind); }
-  function setCleanFillEnabled(kind, next, silent){
-    const on = !!next;
-    __gmxSt.setCleanFillEnabledRaw(kind, on);
-    try{ syncCleanFillUi(kind); }catch(_e){}
-    if (!silent){
-      try{ window.postMessage({ type: "GMX_CLEAN_FILL_SYNC", kind, value: on }, "*"); }catch(_e){}
-      try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "clean_fill_change", kind, value: on }, "*"); }catch(_e){}
-    }
-    return on;
-  }
-  bootstrapCleanFillDefaults();
-
-function cleanFillCopy(kind){
-    const ru = siteLang() === "ru";
-    const on = getCleanFillEnabled(kind);
-    return {
-      label: ru ? "Best pass" : "Best pass",
-      button: on ? (ru ? "Best pass: on" : "Best pass: on") : (ru ? "Best pass: off" : "Best pass: off"),
-      hint: on
-        ? (ru
-            ? "Включено: Best pass после запуска режет shape-дубли в сохранённом списке и добивает недостающее обратно до текущей цели."
-            : "On: Best pass prunes shape-level near-duplicates from the saved list, then refills the missing slots back to your current target.")
-        : (ru
-            ? "Выключено: сначала идёт loose random fill. Если первая пачка слишком узкая, Batch автоматически добирает недостающее. Включай Best pass, когда хочешь ещё и чистить сохранённый банк после запуска."
-            : "Off: generation starts as loose random fill. If the first batch comes back too thin, Batch auto-refills the missing slots. Turn Best pass on when you also want the saved bank cleaned after the run."),
-      action: ru ? "Run best pass" : "Run best pass"
-    };
-  }
-  function syncCleanFillUi(kind){
-    const kinds = kind ? [kind] : ["gm","gn"];
-    kinds.forEach((k)=>{
-      const copy = cleanFillCopy(k);
-      const label = $(k === "gm" ? "gm_anti_label" : "gn_anti_label");
-      if (label) label.textContent = copy.label;
-      const note = $(k === "gm" ? "gm_repeat_note" : "gn_repeat_note");
-      if (note) note.textContent = copy.hint;
-      const toggle = $(k + "CleanFillToggle");
-      if (toggle){
-        toggle.textContent = copy.button;
-        toggle.classList.toggle("active", getCleanFillEnabled(k));
-        toggle.setAttribute("aria-pressed", getCleanFillEnabled(k) ? "true" : "false");
-      }
-      const cleanupBtn = $(k + "Cleanup");
-      if (cleanupBtn){
-        cleanupBtn.style.display = "";
-        cleanupBtn.textContent = copy.action;
-      }
-    });
-  }
+  function getCleanFillEnabled(kind){ return __gmxCf.getEnabled(kind); }
+  function setCleanFillEnabled(kind, next, silent){ return __gmxCf.setEnabled(kind, next, silent); }
+  function cleanFillCopy(kind){ return __gmxCf.copyForKind(kind); }
+  function syncCleanFillUi(kind){ return __gmxCf.syncUi(kind); }
 
   // Helpers for LS key selection (used by Pro controls).
   function lsKeyPack(kind){ return __gmxSt.lsKeyPack(kind); }
@@ -1873,60 +1835,18 @@ function fillStyles(){
 const $ = __gmxChrome.$;
 
   function toast(type, html, ms=4500){ return __gmxChrome.toast(type, html, ms); }
+  function setDegraded(on, msg){ return __gmxChrome.setDegraded(on, msg); }
+  function showFatal(msg){ return __gmxChrome.showFatal(msg); }
+  function hideFatal(){ return __gmxChrome.hideFatal(); }
+  function setBusy(kind, on, label){ return __gmxChrome.setBusy(kind, on, label); }
 
-  // --- Degraded / offline mode (prevents "white screen" when API flakes) ---
-  let API_DEGRADED = false;
-  let DEGRADED_HIDDEN = false;
-  let LAST_ONLINE_AT = Date.now();
+  __gmxChrome.wireDegradedBar();
 
-  function setDegraded(on, msg){
-    API_DEGRADED = !!on;
-    const bar = $("degradedBar");
-    if (!bar) return;
-    if (!API_DEGRADED){
-      bar.classList.add("hidden");
-      DEGRADED_HIDDEN = false;
-      LAST_ONLINE_AT = Date.now();
-      return;
-    }
-    if (DEGRADED_HIDDEN) return;
-    const title = $("degradedTitle");
-    const text  = $("degradedMsg");
-    if (title) title.textContent = (navigator.onLine === false) ? "Offline (browser)" : "Offline mode";
-    if (text)  text.textContent = msg || "API is unreachable. You can still edit lists locally; sync/verify will retry when back online.";
-    bar.classList.remove("hidden");
-  }
-
-  const dRetry = $("degradedRetry");
-  if (dRetry) dRetry.onclick = ()=>{ try{ window.__gmxRetryNow?.(); }catch{} };
-  const dHide = $("degradedHide");
-  if (dHide) dHide.onclick = ()=>{ DEGRADED_HIDDEN = true; $("degradedBar")?.classList.add("hidden"); };
-
-  window.addEventListener("offline", ()=>setDegraded(true, "Browser reports offline. Check your connection."));
-
-  
   let INIT_DONE = false;
   const esc = (s)=>__gmxFmt.escapeHtml(s);
 
-  function showFatal(msg){
-    const ov = $("fatalOverlay");
-    if (!ov) return;
-    const fm = $("fatalMsg");
-    if (fm) fm.textContent = msg || "Something went wrong.";
-    ov.classList.remove("hidden");
-  }
-
-  function hideFatal(){
-    const ov = $("fatalOverlay");
-    if (!ov) return;
-    ov.classList.add("hidden");
-  }
-
-  const fr = $("fatalReload");
-  if (fr) fr.addEventListener("click", ()=>location.reload());
-  const fh = $("fatalGoHome");
-  if (fh) fh.addEventListener("click", ()=>{
-    try{ hideFatal(); tab("home"); }catch{ location.href="/"; }
+  __gmxChrome.wireFatalBar({
+    onGoHome: () => { try { hideFatal(); tab("home"); } catch { location.href = "/"; } },
   });
 
   window.addEventListener("error", (e)=>{
@@ -1948,30 +1868,6 @@ const $ = __gmxChrome.$;
       if (!INIT_DONE) showFatal(msg);
     }catch{}
   });
-
-  function setBusy(kind, on, label){
-    INFLIGHT[kind] = !!on;
-    const ids = (kind==="gm")
-      ? ["gmRand1","gmRand10","gmBestBtn","gmNewAdd","gmPasteAdd","gmCleanup","gmClear","gmClearAll","gmCopyAll","gmExport","gmViewGlobal","gmViewLang","gmFilter","gmFilterClear"]
-      : ["gnRand1","gnRand10","gnBestBtn","gnNewAdd","gnPasteAdd","gnCleanup","gnClear","gnClearAll","gnCopyAll","gnExport","gnViewGlobal","gnViewLang","gnFilter","gnFilterClear"];
-
-    for (const id of ids){
-      const el = $(id);
-      if (!el) continue;
-      if (el.tagName === "INPUT") el.disabled = !!on;
-      else el.disabled = !!on;
-    }
-
-    const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
-    if (msgEl){
-      if (on){
-        msgEl.innerHTML = `<span class="spinner"></span> <span class="muted">${escapeHtml(label||"Working...")}</span>`;
-      } else {
-        // keep whatever message was set by the action; do not overwrite
-      }
-    }
-  }
-
 
     function setBg(tab){
     const safeTab = String(tab || "home");

@@ -151,6 +151,32 @@ test("chrome: exports dom helpers", () => {
   const chrome = loadFactory("app.chrome.js", "__GMXChromeFactory")();
   assert.equal(typeof chrome.$, "function");
   assert.equal(typeof chrome.toast, "function");
+  assert.equal(typeof chrome.setDegraded, "function");
+  assert.equal(typeof chrome.setBusy, "function");
+});
+
+test("cleanfill: toggle persisted in storage", () => {
+  const mem = new Map();
+  const storage = {
+    bootstrapCleanFillDefaults() {},
+    getCleanFillEnabled(kind) {
+      return mem.get(kind === "gn" ? "gn_cf" : "gm_cf") === "1";
+    },
+    setCleanFillEnabledRaw(kind, on) {
+      mem.set(kind === "gn" ? "gn_cf" : "gm_cf", on ? "1" : "0");
+    },
+  };
+  const cf = loadFactory("app.cleanfill.js", "__GMXCleanFillFactory")({
+    storage,
+    $: () => null,
+    siteLang: () => "en",
+  });
+  assert.equal(cf.CLEAN_FILL_STRENGTH, 2);
+  assert.equal(cf.getEnabled("gm"), false);
+  cf.setEnabled("gm", true, true);
+  assert.equal(cf.getEnabled("gm"), true);
+  const copy = cf.copyForKind("gm");
+  assert.equal(copy.button, "Best pass: on");
 });
 
 test("genparams: anti strength and readGenParams", () => {

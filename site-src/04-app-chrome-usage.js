@@ -29,60 +29,18 @@ function fillStyles(){
 const $ = __gmxChrome.$;
 
   function toast(type, html, ms=4500){ return __gmxChrome.toast(type, html, ms); }
+  function setDegraded(on, msg){ return __gmxChrome.setDegraded(on, msg); }
+  function showFatal(msg){ return __gmxChrome.showFatal(msg); }
+  function hideFatal(){ return __gmxChrome.hideFatal(); }
+  function setBusy(kind, on, label){ return __gmxChrome.setBusy(kind, on, label); }
 
-  // --- Degraded / offline mode (prevents "white screen" when API flakes) ---
-  let API_DEGRADED = false;
-  let DEGRADED_HIDDEN = false;
-  let LAST_ONLINE_AT = Date.now();
+  __gmxChrome.wireDegradedBar();
 
-  function setDegraded(on, msg){
-    API_DEGRADED = !!on;
-    const bar = $("degradedBar");
-    if (!bar) return;
-    if (!API_DEGRADED){
-      bar.classList.add("hidden");
-      DEGRADED_HIDDEN = false;
-      LAST_ONLINE_AT = Date.now();
-      return;
-    }
-    if (DEGRADED_HIDDEN) return;
-    const title = $("degradedTitle");
-    const text  = $("degradedMsg");
-    if (title) title.textContent = (navigator.onLine === false) ? "Offline (browser)" : "Offline mode";
-    if (text)  text.textContent = msg || "API is unreachable. You can still edit lists locally; sync/verify will retry when back online.";
-    bar.classList.remove("hidden");
-  }
-
-  const dRetry = $("degradedRetry");
-  if (dRetry) dRetry.onclick = ()=>{ try{ window.__gmxRetryNow?.(); }catch{} };
-  const dHide = $("degradedHide");
-  if (dHide) dHide.onclick = ()=>{ DEGRADED_HIDDEN = true; $("degradedBar")?.classList.add("hidden"); };
-
-  window.addEventListener("offline", ()=>setDegraded(true, "Browser reports offline. Check your connection."));
-
-  
   let INIT_DONE = false;
   const esc = (s)=>__gmxFmt.escapeHtml(s);
 
-  function showFatal(msg){
-    const ov = $("fatalOverlay");
-    if (!ov) return;
-    const fm = $("fatalMsg");
-    if (fm) fm.textContent = msg || "Something went wrong.";
-    ov.classList.remove("hidden");
-  }
-
-  function hideFatal(){
-    const ov = $("fatalOverlay");
-    if (!ov) return;
-    ov.classList.add("hidden");
-  }
-
-  const fr = $("fatalReload");
-  if (fr) fr.addEventListener("click", ()=>location.reload());
-  const fh = $("fatalGoHome");
-  if (fh) fh.addEventListener("click", ()=>{
-    try{ hideFatal(); tab("home"); }catch{ location.href="/"; }
+  __gmxChrome.wireFatalBar({
+    onGoHome: () => { try { hideFatal(); tab("home"); } catch { location.href = "/"; } },
   });
 
   window.addEventListener("error", (e)=>{
@@ -104,30 +62,6 @@ const $ = __gmxChrome.$;
       if (!INIT_DONE) showFatal(msg);
     }catch{}
   });
-
-  function setBusy(kind, on, label){
-    INFLIGHT[kind] = !!on;
-    const ids = (kind==="gm")
-      ? ["gmRand1","gmRand10","gmBestBtn","gmNewAdd","gmPasteAdd","gmCleanup","gmClear","gmClearAll","gmCopyAll","gmExport","gmViewGlobal","gmViewLang","gmFilter","gmFilterClear"]
-      : ["gnRand1","gnRand10","gnBestBtn","gnNewAdd","gnPasteAdd","gnCleanup","gnClear","gnClearAll","gnCopyAll","gnExport","gnViewGlobal","gnViewLang","gnFilter","gnFilterClear"];
-
-    for (const id of ids){
-      const el = $(id);
-      if (!el) continue;
-      if (el.tagName === "INPUT") el.disabled = !!on;
-      else el.disabled = !!on;
-    }
-
-    const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
-    if (msgEl){
-      if (on){
-        msgEl.innerHTML = `<span class="spinner"></span> <span class="muted">${escapeHtml(label||"Working...")}</span>`;
-      } else {
-        // keep whatever message was set by the action; do not overwrite
-      }
-    }
-  }
-
 
     function setBg(tab){
     const safeTab = String(tab || "home");
