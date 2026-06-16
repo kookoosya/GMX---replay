@@ -1348,3 +1348,36 @@ test("connect: reset clears session message", async () => {
   assert.match(els.connectMsg.innerHTML, /Session cleared/);
   assert.equal(els.handlePill.textContent, "not set");
 });
+
+test("shellwire: wires tab and lazy auth helpers", () => {
+  let shown = "";
+  const win = { addEventListener: () => {} };
+  const prevDoc = globalThis.document;
+  globalThis.document = { querySelectorAll: () => [] };
+  try {
+    new Function("window", `${readFileSync(path.join(root, "public", "app.shellerrors.js"), "utf8")};`)(win);
+    new Function("window", `${readFileSync(path.join(root, "public", "app.tabwire.js"), "utf8")};`)(win);
+    new Function("window", `${readFileSync(path.join(root, "public", "app.authwire.js"), "utf8")};`)(win);
+    win.__GMXAuthFactory = () => ({
+      getHandle: () => "@demo",
+      getToken: () => "tok",
+      normalizeHandle: (s) => String(s || "").trim(),
+      isConnected: () => true,
+      requireConnected: () => true,
+      isPublicApi: () => false,
+      initSession: async () => true,
+      api: async () => ({}),
+    });
+    new Function("window", `${readFileSync(path.join(root, "public", "app.shellwire.js"), "utf8")};`)(win);
+    const wire = win.__GMXShellWireFactory({
+      chrome: { wireDegradedBar: () => {}, wireFatalBar: () => {}, toast: () => {}, $: () => null },
+      showTab: (n) => { shown = n; },
+      buildAuthConfig: () => ({}),
+    });
+    wire.tab("wallet");
+    assert.equal(shown, "wallet");
+    assert.equal(wire.getToken(), "tok");
+  } finally {
+    globalThis.document = prevDoc;
+  }
+});
