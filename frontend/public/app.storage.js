@@ -27,6 +27,8 @@
       CUSTOM_BG_TAB_PREFIX: "gmx_custom_bg_tab_",
       GM_PACK: "gmx_gm_pack",
       GN_PACK: "gmx_gn_pack",
+      GM_STYLE: "gmx_gm_style_v2",
+      GN_STYLE: "gmx_gn_style_v2",
       GM_ANTI: "gmx_gm_anti",
       GN_ANTI: "gmx_gn_anti",
       GM_CLEAN_FILL: "gmx_gm_clean_fill",
@@ -158,6 +160,10 @@
       return kind === "gn" ? keys.GN_PACK : keys.GM_PACK;
     }
 
+    function lsKeyStyle(kind) {
+      return kind === "gn" ? keys.GN_STYLE : keys.GM_STYLE;
+    }
+
     function lsKeyAnti(kind) {
       return kind === "gn" ? keys.GN_ANTI : keys.GM_ANTI;
     }
@@ -198,6 +204,7 @@
       extLsSet,
       lsKeyCleanFill,
       lsKeyPack,
+      lsKeyStyle,
       lsKeyAnti,
       lsKeyRecent,
       bootstrapCleanFillDefaults,

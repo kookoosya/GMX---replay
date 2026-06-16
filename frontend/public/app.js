@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260617d";
+const ASSET_REV = "20260617e";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -280,12 +280,15 @@ __gmxCf.bootstrap();
 if (!window.__GMXStylesFactory) throw new Error("GMX styles factory missing");
 const __gmxStyles = window.__GMXStylesFactory({
   $: __gmxChrome.$,
+  storage: __gmxSt,
   getStyles: () => __gmxThemes.STYLES,
+  normalizeStyle: (s) => __gmxGp.normalizeStyle(s),
   isPro,
   reqRefsForUnlockIndex,
   unlockedCountByRefs,
   freeVisibleStyles: FREE_VISIBLE_STYLES,
   t: (key) => __gmxI18nUi.t(key),
+  syncModePanelCopy: () => { try { __gmxSiteI18nDynamic.syncModePanelCopy(); } catch {} },
 });
 
 if (!window.__GMXTogglesFactory) throw new Error("GMX toggles factory missing");
@@ -1657,31 +1660,16 @@ async function generate(kind, count){
     }
     const h = getHandle();
 
-    const modeEl  = kind==="gm" ? $("gmMode") : $("gnMode");
-    const styleEl = kind==="gm" ? $("gmStyle") : $("gnStyle");
     const packEl  = kind==="gm" ? $("gmPack") : $("gnPack");
-
-    const mode = modeEl ? modeEl.value : "mid";
-    const lang = currentLang(kind);
-
-    let style = styleEl ? styleEl.value : "classic";
-    const packs = (typeof packsForKind === "function") ? packsForKind(kind) : (PACKS || []);
     const packId = packEl ? (packEl.value || "classic") : "classic";
-    const packIdx = packs.findIndex(p=>p.id===packId);
-    const packLocked = (!isPro() && packIdx >= unlockedPacksCountFor(kind));
-    const pack = packs.find(p=>p.id===packId) || packs[0] || null;
+    const { mode, lang, style, antiN } = readGenParams(kind);
 
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
 
     const strength = getAntiStrength(kind);
-    const antiN = antiWindow(strength);
     const autoClean = (count <= 1) ? getCleanFillEnabled(kind) : false;
 
     if ((kind==="gm" ? gmView : gnView) === "lang") ensureIndexed(kind, lang);
-
-    // Reply tone + Size use the live dropdowns (pack preset applies via UI / pack change).
-    if (!styleEl) style = pack && pack.style ? pack.style : style;
-    if (!modeEl && pack && pack.mode) mode = pack.mode;
 
     const keyActive = activeKey(kind);
     const keyGlobal = getGlobalKey(kind);
@@ -3707,6 +3695,7 @@ function pruneLegacyAdminPanels(){
 
   // styles + theme (depend on SUB/REF_COUNT, but must exist before refreshUsage)
   fillStyles();
+  try { __gmxStyles.wireStyleSelectors(); } catch (_e) {}
       fillPacks();
   applyTheme(localStorage.getItem("gmx_theme") || "classic");
   renderThemes();
@@ -3748,6 +3737,8 @@ function pruneLegacyAdminPanels(){
     lsSet: (k, v) => { try { __gmxSt.lsSet(k, v); } catch {} },
     lsGmReplyLang: LS_GM_REPLY_LANG,
     lsGnReplyLang: LS_GN_REPLY_LANG,
+    persistStyle: (kind, style) => { try { __gmxGp.persistStyle(kind, style); } catch {} },
+    lsKeyPack: (kind) => __gmxSt.lsKeyPack(kind),
     getGmView: () => gmView,
     getGnView: () => gnView,
     ensureIndexed,
@@ -4048,6 +4039,7 @@ function cleanupKeyLines(lines){
     initWallpapers();
     renderThemes();
     fillStyles();
+    try { __gmxStyles.wireStyleSelectors(); } catch (_e) {}
     fillPacks();
     renderLangChips("gm"); renderLangChips("gn");
     renderList("gm"); renderList("gn");

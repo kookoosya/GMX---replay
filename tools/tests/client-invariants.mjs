@@ -12,8 +12,8 @@ for (const rel of appPaths) {
   if (packFn !== 1) fail(`${rel}: expected 1 packsForKind(), found ${packFn}`);
   if (!text.includes("function readGenParams(")) fail(`${rel}: missing readGenParams`);
   if (!text.includes("function setWallpaperLayerImage(")) fail(`${rel}: missing setWallpaperLayerImage`);
-  if (!text.includes("const antiN = antiWindow(strength)")) {
-    fail(`${rel}: generate() must use antiWindow(strength) for antiN`);
+  if (!/\{ mode, lang, style, antiN \} = readGenParams\(kind\)/.test(text)) {
+    fail(`${rel}: generate() must read mode/lang/style/antiN via readGenParams`);
   }
   if (/if \(!packLocked && pack && pack\.style\) style = pack\.style/.test(text)) {
     fail(`${rel}: must not override style from pack on every generate`);

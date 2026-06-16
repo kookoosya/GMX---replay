@@ -583,6 +583,42 @@ test("genparams: anti strength and readGenParams", () => {
   assert.equal(params.antiN, 40);
 });
 
+test("genparams: normalizeStyle and dropdown style wins over pack", () => {
+  const mem = new Map();
+  const storage = {
+    keys: { GM_PACK: "gmx_gm_pack", GN_PACK: "gmx_gn_pack", GM_STYLE: "gmx_gm_style_v2" },
+    lsKeyAnti: (kind) => (kind === "gn" ? "gmx_gn_anti" : "gmx_gm_anti"),
+    lsKeyStyle: (kind) => (kind === "gn" ? "gmx_gn_style_v2" : "gmx_gm_style_v2"),
+    lsGet: (k, fb = "") => (mem.has(k) ? mem.get(k) : fb),
+    lsSet: (k, v) => mem.set(k, String(v)),
+  };
+  const themes = loadFactory("app.themes.js", "__GMXThemesFactory")();
+  const gp = loadFactory("app.genparams.js", "__GMXGenParamsFactory")({
+    $: (id) => {
+      if (id === "gmStyle") return { value: "degen" };
+      if (id === "gmMode") return { value: "mid" };
+      if (id === "gmPack") return { value: "classic" };
+      return null;
+    },
+    storage,
+    packsForKind: (kind) => themes.packsForKind(kind),
+    antiWindow: () => 0,
+    getCurrentLang: () => "en",
+    isPro: () => true,
+    reqRefsForUnlockIndex: () => 3,
+    unlockedCountByRefs: (total) => total,
+    freeVisiblePacks: 8,
+    t: (key) => key,
+    syncModePanelCopy: () => {},
+  });
+  assert.equal(gp.normalizeStyle("INVALID"), "classic");
+  assert.equal(gp.normalizeStyle("alpha"), "alpha");
+  const params = gp.readGenParams("gm");
+  assert.equal(params.style, "degen");
+  gp.persistStyle("gm", "meme");
+  assert.equal(mem.get("gmx_gm_style_v2"), "meme");
+});
+
 test("toggles: best mode storage", () => {
   const mem = new Map();
   const storage = {
@@ -888,14 +924,23 @@ test("wallpapers: layer DOM helpers", () => {
 
 test("styles: unlocked count", () => {
   const styles = loadFactory("app.themes.js", "__GMXThemesFactory")();
+  const mem = new Map();
+  const storage = {
+    keys: { GM_STYLE: "gmx_gm_style_v2", GN_STYLE: "gmx_gn_style_v2" },
+    lsKeyStyle: (kind) => (kind === "gn" ? "gmx_gn_style_v2" : "gmx_gm_style_v2"),
+    lsGet: (k, fb = "") => (mem.has(k) ? mem.get(k) : fb),
+    lsSet: (k, v) => mem.set(k, String(v)),
+  };
   const ui = loadFactory("app.styles.js", "__GMXStylesFactory")({
     $: () => null,
+    storage,
     getStyles: () => styles.STYLES,
     isPro: () => false,
     reqRefsForUnlockIndex: () => 3,
     unlockedCountByRefs: (total, free) => Math.min(total, free),
     freeVisibleStyles: 8,
     t: (k) => k,
+    normalizeStyle: (s) => String(s || "classic").toLowerCase(),
   });
   assert.equal(ui.unlockedStylesCount(), 8);
 });

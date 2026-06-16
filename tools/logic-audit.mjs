@@ -55,7 +55,7 @@ for (const rel of appFiles) {
   mustNotMatch(rel, /initWpLazyLoad/, "initWpLazyLoad removed");
   mustMatch(rel, /function applyRefCountEligible/, "REF_COUNT helper present");
   mustMatch(rel, /attempts < 4/, "bulk generate retry cap");
-  mustMatch(rel, /const antiN = antiWindow\(strength\)/, "single generate uses antiWindow");
+  mustMatch(rel, /\{ mode, lang, style, antiN \} = readGenParams\(kind\)/, "generate uses readGenParams for style/mode");
   mustNotMatch(rel, /const antiN = 0;/, "antiN must not be hardcoded 0");
   mustMatch(rel, /function packsForKind\(/, "packsForKind helper");
   mustMatch(rel, /__GMXThemesFactory/, "themes module factory wired");

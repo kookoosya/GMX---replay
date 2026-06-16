@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260617d";
+const ASSET_REV = "20260617e";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -280,12 +280,15 @@ __gmxCf.bootstrap();
 if (!window.__GMXStylesFactory) throw new Error("GMX styles factory missing");
 const __gmxStyles = window.__GMXStylesFactory({
   $: __gmxChrome.$,
+  storage: __gmxSt,
   getStyles: () => __gmxThemes.STYLES,
+  normalizeStyle: (s) => __gmxGp.normalizeStyle(s),
   isPro,
   reqRefsForUnlockIndex,
   unlockedCountByRefs,
   freeVisibleStyles: FREE_VISIBLE_STYLES,
   t: (key) => __gmxI18nUi.t(key),
+  syncModePanelCopy: () => { try { __gmxSiteI18nDynamic.syncModePanelCopy(); } catch {} },
 });
 
 if (!window.__GMXTogglesFactory) throw new Error("GMX toggles factory missing");

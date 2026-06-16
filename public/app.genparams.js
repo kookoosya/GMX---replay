@@ -1,6 +1,21 @@
 (function (window) {
   if (window.__GMXGenParamsFactory) return;
 
+  const VALID_STYLES = new Set([
+    "classic",
+    "classy",
+    "emoji",
+    "noemoji",
+    "minimal",
+    "meme",
+    "degen",
+    "alpha",
+    "cheer",
+    "calm",
+    "builder",
+    "focus",
+  ]);
+
   window.__GMXGenParamsFactory = function createGMXGenParams(ctx) {
     const $ = typeof ctx.$ === "function" ? ctx.$ : () => null;
     const storage = ctx.storage || {};
@@ -25,6 +40,32 @@
           : "gmx_gm_anti";
     }
 
+    function lsKeyStyle(kind) {
+      return typeof storage.lsKeyStyle === "function"
+        ? storage.lsKeyStyle(kind)
+        : kind === "gn"
+          ? K.GN_STYLE || "gmx_gn_style_v2"
+          : K.GM_STYLE || "gmx_gm_style_v2";
+    }
+
+    function normalizeStyle(style) {
+      const s = String(style || "classic").toLowerCase().trim();
+      return VALID_STYLES.has(s) ? s : "classic";
+    }
+
+    function persistStyle(kind, style) {
+      try {
+        storage.lsSet(lsKeyStyle(kind), normalizeStyle(style));
+      } catch {}
+    }
+
+    function packForKind(kind) {
+      const packEl = kind === "gn" ? $("gnPack") : $("gmPack");
+      const packId = packEl ? packEl.value || "classic" : "classic";
+      const packs = packsForKind(kind);
+      return packs.find((p) => p.id === packId) || packs[0] || null;
+    }
+
     function getAntiStrength(kind) {
       try {
         const raw = storage.lsGet(lsKeyAnti(kind), "");
@@ -33,10 +74,7 @@
           if (Number.isFinite(n)) return Math.max(0, Math.min(5, n));
         }
       } catch {}
-      const packEl = kind === "gn" ? $("gnPack") : $("gmPack");
-      const pid = packEl ? packEl.value || "classic" : "classic";
-      const packs = packsForKind(kind);
-      const pack = packs.find((p) => p.id === pid) || packs[0];
+      const pack = packForKind(kind);
       const anti = pack && Number.isFinite(pack.anti) ? pack.anti : 2;
       return Math.max(0, Math.min(5, anti));
     }
@@ -44,9 +82,22 @@
     function readGenParams(kind) {
       const modeEl = kind === "gm" ? $("gmMode") : $("gnMode");
       const styleEl = kind === "gm" ? $("gmStyle") : $("gnStyle");
-      const mode = modeEl ? modeEl.value : "mid";
+      const pack = packForKind(kind);
+
+      let mode = modeEl && modeEl.value ? modeEl.value : pack && pack.mode ? pack.mode : "mid";
+      let style = "classic";
+
+      if (styleEl) {
+        const raw = styleEl.value || storage.lsGet(lsKeyStyle(kind), "") || "classic";
+        style = normalizeStyle(raw);
+        if (styleEl.value !== style) styleEl.value = style;
+      } else {
+        const saved = storage.lsGet(lsKeyStyle(kind), "");
+        if (saved) style = normalizeStyle(saved);
+        else if (pack && pack.style) style = normalizeStyle(pack.style);
+      }
+
       const lang = getCurrentLang(kind);
-      const style = styleEl ? styleEl.value : "classic";
       const strength = getAntiStrength(kind);
       const antiN = antiWindow(strength);
       return { mode, lang, style, antiN };
@@ -56,7 +107,11 @@
       if (!pack) return;
       const styleSel = kind === "gm" ? $("gmStyle") : $("gnStyle");
       const modeSel = kind === "gm" ? $("gmMode") : $("gnMode");
-      if (styleSel && pack.style) styleSel.value = pack.style;
+      if (styleSel && pack.style) {
+        const style = normalizeStyle(pack.style);
+        styleSel.value = style;
+        persistStyle(kind, style);
+      }
       if (modeSel && pack.mode) modeSel.value = pack.mode;
       try {
         syncModePanelCopy();
@@ -91,6 +146,9 @@
     }
 
     return {
+      VALID_STYLES,
+      normalizeStyle,
+      persistStyle,
       getAntiStrength,
       readGenParams,
       applyPackDefaultsToUi,

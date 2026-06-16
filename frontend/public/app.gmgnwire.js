@@ -33,6 +33,8 @@
     const lsSet = typeof ctx.lsSet === "function" ? ctx.lsSet : () => {};
     const lsGmReplyLang = ctx.lsGmReplyLang || "gmx_gm_reply_lang";
     const lsGnReplyLang = ctx.lsGnReplyLang || "gmx_gn_reply_lang";
+    const persistStyle = typeof ctx.persistStyle === "function" ? ctx.persistStyle : () => {};
+    const lsKeyPack = typeof ctx.lsKeyPack === "function" ? ctx.lsKeyPack : () => "";
     const getGmView = typeof ctx.getGmView === "function" ? ctx.getGmView : () => "global";
     const getGnView = typeof ctx.getGnView === "function" ? ctx.getGnView : () => "global";
     const ensureIndexed = typeof ctx.ensureIndexed === "function" ? ctx.ensureIndexed : () => {};
@@ -213,6 +215,12 @@
             if (modeEl) modeEl.value = "min";
             if (styleEl) styleEl.value = "cheer";
             if (packEl) packEl.value = "classic";
+          }
+          if (styleEl) persistStyle(kind, styleEl.value);
+          if (packEl) {
+            try {
+              lsSet(lsKeyPack(kind), packEl.value || "classic");
+            } catch (_e) {}
           }
           wrap?.querySelectorAll("[data-preset]").forEach((b) => {
             b.classList.toggle("active", b === btn);

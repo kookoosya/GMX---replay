@@ -65,6 +65,7 @@
 
   // styles + theme (depend on SUB/REF_COUNT, but must exist before refreshUsage)
   fillStyles();
+  try { __gmxStyles.wireStyleSelectors(); } catch (_e) {}
       fillPacks();
   applyTheme(localStorage.getItem("gmx_theme") || "classic");
   renderThemes();
@@ -106,6 +107,8 @@
     lsSet: (k, v) => { try { __gmxSt.lsSet(k, v); } catch {} },
     lsGmReplyLang: LS_GM_REPLY_LANG,
     lsGnReplyLang: LS_GN_REPLY_LANG,
+    persistStyle: (kind, style) => { try { __gmxGp.persistStyle(kind, style); } catch {} },
+    lsKeyPack: (kind) => __gmxSt.lsKeyPack(kind),
     getGmView: () => gmView,
     getGnView: () => gnView,
     ensureIndexed,
@@ -406,6 +409,7 @@ function cleanupKeyLines(lines){
     initWallpapers();
     renderThemes();
     fillStyles();
+    try { __gmxStyles.wireStyleSelectors(); } catch (_e) {}
     fillPacks();
     renderLangChips("gm"); renderLangChips("gn");
     renderList("gm"); renderList("gn");

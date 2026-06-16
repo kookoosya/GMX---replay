@@ -13,31 +13,16 @@ async function generate(kind, count){
     }
     const h = getHandle();
 
-    const modeEl  = kind==="gm" ? $("gmMode") : $("gnMode");
-    const styleEl = kind==="gm" ? $("gmStyle") : $("gnStyle");
     const packEl  = kind==="gm" ? $("gmPack") : $("gnPack");
-
-    const mode = modeEl ? modeEl.value : "mid";
-    const lang = currentLang(kind);
-
-    let style = styleEl ? styleEl.value : "classic";
-    const packs = (typeof packsForKind === "function") ? packsForKind(kind) : (PACKS || []);
     const packId = packEl ? (packEl.value || "classic") : "classic";
-    const packIdx = packs.findIndex(p=>p.id===packId);
-    const packLocked = (!isPro() && packIdx >= unlockedPacksCountFor(kind));
-    const pack = packs.find(p=>p.id===packId) || packs[0] || null;
+    const { mode, lang, style, antiN } = readGenParams(kind);
 
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
 
     const strength = getAntiStrength(kind);
-    const antiN = antiWindow(strength);
     const autoClean = (count <= 1) ? getCleanFillEnabled(kind) : false;
 
     if ((kind==="gm" ? gmView : gnView) === "lang") ensureIndexed(kind, lang);
-
-    // Reply tone + Size use the live dropdowns (pack preset applies via UI / pack change).
-    if (!styleEl) style = pack && pack.style ? pack.style : style;
-    if (!modeEl && pack && pack.mode) mode = pack.mode;
 
     const keyActive = activeKey(kind);
     const keyGlobal = getGlobalKey(kind);
