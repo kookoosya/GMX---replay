@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260617c";
+const ASSET_REV = "20260617d";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -3720,141 +3720,42 @@ function pruneLegacyAdminPanels(){
   // referrals UI
 
   // default reply langs (persist per tab)
-  const validReply = (v)=> REPLY_LANGS.some(([code])=>code===v) ? v : "en";
-  const storedGm = localStorage.getItem(LS_GM_REPLY_LANG) || "en";
-  const storedGn = localStorage.getItem(LS_GN_REPLY_LANG) || "en";
-  if (gmLangSel) gmLangSel.value = validReply(storedGm);
-  if (gnLangSel) gnLangSel.value = validReply(storedGn);
-
-  if (gmLangSel) gmLangSel.addEventListener("change", ()=>{
-    try{ localStorage.setItem(LS_GM_REPLY_LANG, gmLangSel.value); }catch{}
-    updateLangFlags();
-    if (gmView === "lang") ensureIndexed("gm", gmLangSel.value);
-    renderList("gm");
-    renderLangChips("gm");
+  if (!window.__GMXGmGnWireFactory) throw new Error("GMX gmgnwire factory missing");
+  const __gmxGmGnWire = window.__GMXGmGnWireFactory({
+    $,
+    requireConnected,
+    setView,
+    generate,
+    trackEvent,
+    getBestMode,
+    setBestMode,
+    getCleanFillEnabled,
+    setCleanFillEnabled,
+    doBestServer,
+    doBest,
+    commitNewLine,
+    oneClickCleanup,
+    clearView,
+    clearAll,
+    addPasted,
+    copyAll,
+    exportAll,
+    renderList,
+    saveDraft,
+    getHandle,
+    getReplyLangs: () => REPLY_LANGS,
+    lsGet: (k, d) => __gmxSt.lsGet(k, d),
+    lsSet: (k, v) => { try { __gmxSt.lsSet(k, v); } catch {} },
+    lsGmReplyLang: LS_GM_REPLY_LANG,
+    lsGnReplyLang: LS_GN_REPLY_LANG,
+    getGmView: () => gmView,
+    getGnView: () => gnView,
+    ensureIndexed,
+    renderLangChips,
+    updateLangFlags,
   });
-  if (gnLangSel) gnLangSel.addEventListener("change", ()=>{
-    try{ localStorage.setItem(LS_GN_REPLY_LANG, gnLangSel.value); }catch{}
-    updateLangFlags();
-    if (gnView === "lang") ensureIndexed("gn", gnLangSel.value);
-    renderList("gn");
-    renderLangChips("gn");
-  });
-
-  const gmViewGlobalBtn = $("gmViewGlobal");
-  if (gmViewGlobalBtn) gmViewGlobalBtn.onclick = ()=>{ if(requireConnected("GM")) setView("gm","global"); };
-  const gmViewLangBtn = $("gmViewLang");
-  if (gmViewLangBtn) gmViewLangBtn.onclick = ()=>{ if(requireConnected("GM")) setView("gm","lang"); };
-  const gnViewGlobalBtn = $("gnViewGlobal");
-  if (gnViewGlobalBtn) gnViewGlobalBtn.onclick = ()=>{ if(requireConnected("GN")) setView("gn","global"); };
-  const gnViewLangBtn = $("gnViewLang");
-  if (gnViewLangBtn) gnViewLangBtn.onclick = ()=>{ if(requireConnected("GN")) setView("gn","lang"); };
-
-  const gmRand1Btn = $("gmRand1");
-  if (gmRand1Btn) gmRand1Btn.onclick = ()=>{ if(requireConnected("GM")){ try{trackEvent("generate_click",{kind:"gm",count:1});}catch(_e){} generate("gm", 1); } };
-  const gmRand10Btn = $("gmRand10");
-  if (gmRand10Btn) gmRand10Btn.onclick = ()=>{ if(requireConnected("GM")){ try{trackEvent("generate_click",{kind:"gm",count:10});}catch(_e){} generate("gm", 10); } };
-  const gmBestBtn = $("gmBestBtn");
-  if (gmBestBtn) gmBestBtn.onclick = ()=>{ if(requireConnected("GM")){ try{trackEvent("best_click",{kind:"gm",mode:getBestMode()?"live":"saved"});}catch(_e){} (getBestMode() ? doBestServer("gm") : doBest("gm")); } };
-
-  const gmBestModeToggle = $("gmBestModeToggle");
-  if (gmBestModeToggle) gmBestModeToggle.onclick = ()=>{ setBestMode(!getBestMode()); };
-  const gmCleanFillToggle = $("gmCleanFillToggle");
-  if (gmCleanFillToggle) gmCleanFillToggle.onclick = ()=>{ setCleanFillEnabled("gm", !getCleanFillEnabled("gm")); };
-
-  const gnRand1Btn = $("gnRand1");
-  if (gnRand1Btn) gnRand1Btn.onclick = ()=>{ if(requireConnected("GN")){ try{trackEvent("generate_click",{kind:"gn",count:1});}catch(_e){} generate("gn", 1); } };
-  const gnRand10Btn = $("gnRand10");
-  if (gnRand10Btn) gnRand10Btn.onclick = ()=>{ if(requireConnected("GN")){ try{trackEvent("generate_click",{kind:"gn",count:10});}catch(_e){} generate("gn", 10); } };
-  const gnBestBtn = $("gnBestBtn");
-  if (gnBestBtn) gnBestBtn.onclick = ()=>{ if(requireConnected("GN")){ try{trackEvent("best_click",{kind:"gn",mode:getBestMode()?"live":"saved"});}catch(_e){} (getBestMode() ? doBestServer("gn") : doBest("gn")); } };
-
-  const gnBestModeToggle = $("gnBestModeToggle");
-  if (gnBestModeToggle) gnBestModeToggle.onclick = ()=>{ setBestMode(!getBestMode()); };
-  const gnCleanFillToggle = $("gnCleanFillToggle");
-  if (gnCleanFillToggle) gnCleanFillToggle.onclick = ()=>{ setCleanFillEnabled("gn", !getCleanFillEnabled("gn")); };
-
-  const gmNewAddBtn = $("gmNewAdd");
-  if (gmNewAddBtn) gmNewAddBtn.onclick = ()=>{ if(requireConnected("GM")) commitNewLine("gm"); };
-  const gmNewLineInp = $("gmNewLine");
-  if (gmNewLineInp) gmNewLineInp.addEventListener("keydown", (e)=>{ if(e.key==="Enter"){ e.preventDefault(); if(requireConnected("GM")) commitNewLine("gm"); } });
-  const gmCleanupBtn = $("gmCleanup");
-  if (gmCleanupBtn) gmCleanupBtn.onclick = ()=>{ if(requireConnected("GM")) oneClickCleanup("gm"); };
-  const gmClearBtn = $("gmClear");
-  if (gmClearBtn) gmClearBtn.onclick = ()=>{ if(requireConnected("GM")) clearView("gm"); };
-  const gmClearAllBtn = $("gmClearAll");
-  if (gmClearAllBtn) gmClearAllBtn.onclick = ()=>{ if(requireConnected("GM")) clearAll("gm"); };
-  const gmPasteAddBtn = $("gmPasteAdd");
-  if (gmPasteAddBtn) gmPasteAddBtn.onclick = ()=>{ if(requireConnected("GM")) addPasted("gm"); };
-
-  const gnNewAddBtn = $("gnNewAdd");
-  if (gnNewAddBtn) gnNewAddBtn.onclick = ()=>{ if(requireConnected("GN")) commitNewLine("gn"); };
-  const gnNewLineInp = $("gnNewLine");
-  if (gnNewLineInp) gnNewLineInp.addEventListener("keydown", (e)=>{ if(e.key==="Enter"){ e.preventDefault(); if(requireConnected("GN")) commitNewLine("gn"); } });
-  const gnCleanupBtn = $("gnCleanup");
-  if (gnCleanupBtn) gnCleanupBtn.onclick = ()=>{ if(requireConnected("GN")) oneClickCleanup("gn"); };
-  const gnClearBtn = $("gnClear");
-  if (gnClearBtn) gnClearBtn.onclick = ()=>{ if(requireConnected("GN")) clearView("gn"); };
-  const gnClearAllBtn = $("gnClearAll");
-  if (gnClearAllBtn) gnClearAllBtn.onclick = ()=>{ if(requireConnected("GN")) clearAll("gn"); };
-  const gnPasteAddBtn = $("gnPasteAdd");
-  if (gnPasteAddBtn) gnPasteAddBtn.onclick = ()=>{ if(requireConnected("GN")) addPasted("gn"); };
-
-  // copy/export
-  const gmCopyAllBtn = $("gmCopyAll");
-  if (gmCopyAllBtn) gmCopyAllBtn.onclick = ()=>{ if(requireConnected("GM")) copyAll("gm"); };
-  const gmExportBtn = $("gmExport");
-  if (gmExportBtn) gmExportBtn.onclick = ()=>{ if(requireConnected("GM")) exportAll("gm"); };
-  const gnCopyAllBtn = $("gnCopyAll");
-  if (gnCopyAllBtn) gnCopyAllBtn.onclick = ()=>{ if(requireConnected("GN")) copyAll("gn"); };
-  const gnExportBtn = $("gnExport");
-  if (gnExportBtn) gnExportBtn.onclick = ()=>{ if(requireConnected("GN")) exportAll("gn"); };
-
-  // filters (view only)
-  const gmFilterInp = $("gmFilter");
-  if (gmFilterInp) gmFilterInp.addEventListener("input", ()=>renderList("gm"));
-  const gnFilterInp = $("gnFilter");
-  if (gnFilterInp) gnFilterInp.addEventListener("input", ()=>renderList("gn"));
-  const gmFilterClearBtn = $("gmFilterClear");
-  if (gmFilterClearBtn) gmFilterClearBtn.onclick = ()=>{ if (gmFilterInp) gmFilterInp.value=""; renderList("gm"); };
-  const gnFilterClearBtn = $("gnFilterClear");
-  if (gnFilterClearBtn) gnFilterClearBtn.onclick = ()=>{ if (gnFilterInp) gnFilterInp.value=""; renderList("gn"); };
-
-  // Quick presets: Casual / Pro / Fun
-  document.querySelectorAll(".quickPresets [data-preset]").forEach(btn=>{
-    btn.onclick = ()=>{
-      const wrap = btn.closest(".quickPresets");
-      const kind = wrap?.dataset?.kind || "gm";
-      const preset = btn.dataset.preset || "casual";
-      const modeEl = kind==="gm" ? $("gmMode") : $("gnMode");
-      const styleEl = kind==="gm" ? $("gmStyle") : $("gnStyle");
-      const packEl = kind==="gm" ? $("gmPack") : $("gnPack");
-      if (preset==="casual"){ if(modeEl) modeEl.value="mid"; if(styleEl) styleEl.value="classic"; if(packEl) packEl.value="classic"; }
-      else if (preset==="pro"){ if(modeEl) modeEl.value="mid"; if(styleEl) styleEl.value="alpha"; if(packEl) packEl.value="king"; }
-      else if (preset==="fun"){ if(modeEl) modeEl.value="min"; if(styleEl) styleEl.value="cheer"; if(packEl) packEl.value="classic"; }
-      wrap?.querySelectorAll("[data-preset]").forEach(b=>b.classList.toggle("active", b===btn));
-    };
-  });
-
-  // Ctrl+Enter = Batch 10 when on GM/GN tab
-  document.addEventListener("keydown", (e)=>{
-    if (!(e.ctrlKey||e.metaKey) || e.key!=="Enter") return;
-    const active = $("t_gm")?.classList.contains("active") ? "gm" : ($("t_gn")?.classList.contains("active") ? "gn" : null);
-    if (!active) return;
-    const target = e.target; if (!target) return;
-    const inGM = active==="gm" && target.closest("#tab-gm");
-    const inGN = active==="gn" && target.closest("#tab-gn");
-    if (inGM && getHandle()){ e.preventDefault(); generate("gm", 10); }
-    else if (inGN && getHandle()){ e.preventDefault(); generate("gn", 10); }
-  });
-
-  // draft autosave
-  const gmPaste = $("gmPaste");
-  const gnPaste = $("gnPaste");
-  if (gmNewLineInp) gmNewLineInp.addEventListener("input", ()=>saveDraft("gm"));
-  if (gnNewLineInp) gnNewLineInp.addEventListener("input", ()=>saveDraft("gn"));
-  if (gmPaste) gmPaste.addEventListener("input", ()=>saveDraft("gm"));
-  if (gnPaste) gnPaste.addEventListener("input", ()=>saveDraft("gn"));
+  __gmxGmGnWire.wireReplyLangSelects({ gmLangSel, gnLangSel });
+  __gmxGmGnWire.wireGmGnPanels();
 
 
   // Add wallpaper (themes - custom upload in wallpapers tab)

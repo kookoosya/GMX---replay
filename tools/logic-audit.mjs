@@ -110,6 +110,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.extcustombgui\.js/, "app.extcustombgui.js script tag");
   mustMatch(rel, /app\.nav\.js/, "app.nav.js script tag");
   mustMatch(rel, /app\.tabwire\.js/, "app.tabwire.js script tag");
+  mustMatch(rel, /app\.gmgnwire\.js/, "app.gmgnwire.js script tag");
   mustMatch(rel, /app\.extwallpaperui\.js/, "app.extwallpaperui.js script tag");
   mustMatch(rel, /app\.accountui\.js/, "app.accountui.js script tag");
   mustMatch(rel, /app\.authwire\.js/, "app.authwire.js script tag");

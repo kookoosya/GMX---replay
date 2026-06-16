@@ -142,6 +142,25 @@ test("modals: open close stack and info", () => {
   assert.ok(!els.gmx_info_modal.classList.contains("hidden"));
 });
 
+test("gmgnwire: factory exports panel wiring", () => {
+  const els = {};
+  globalThis.document = {
+    getElementById(id) { return els[id] || null; },
+    querySelectorAll() { return []; },
+    addEventListener() {},
+  };
+  const wire = loadFactory("app.gmgnwire.js", "__GMXGmGnWireFactory")({
+    $: (id) => els[id] || null,
+    lsGet: (_k, d) => d,
+    lsSet: () => {},
+    getReplyLangs: () => [["en", "English"]],
+  });
+  assert.equal(typeof wire.wireGmGnPanels, "function");
+  assert.equal(typeof wire.wireReplyLangSelects, "function");
+  wire.wireGmGnPanels();
+  wire.wireReplyLangSelects({ gmLangSel: { value: "en", addEventListener() {} }, gnLangSel: null });
+});
+
 test("i18nui: tr and prettyError", () => {
   const i18n = loadFactory("app.i18nui.js", "__GMXI18nUiFactory")({
     getSiteLang: () => "en",

@@ -61,6 +61,7 @@ const APP_FILES = [
   "app.extcustombgui.js",
   "app.nav.js",
   "app.tabwire.js",
+  "app.gmgnwire.js",
   "app.extwallpaperui.js",
   "app.accountui.js",
   "app.authwire.js",

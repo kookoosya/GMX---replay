@@ -190,6 +190,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.extcustombgui.js": { target: BACKEND, changeOrigin: true },
         "/app.nav.js": { target: BACKEND, changeOrigin: true },
         "/app.tabwire.js": { target: BACKEND, changeOrigin: true },
+        "/app.gmgnwire.js": { target: BACKEND, changeOrigin: true },
         "/app.extwallpaperui.js": { target: BACKEND, changeOrigin: true },
         "/app.accountui.js": { target: BACKEND, changeOrigin: true },
         "/mode.js": { target: BACKEND, changeOrigin: true },
