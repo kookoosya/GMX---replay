@@ -20,7 +20,7 @@ const PUBLIC = path.join(ROOT, "public");
 const ASSETS = path.join(ROOT, "assets");
 const FRONTEND_PUBLIC = path.join(ROOT, "frontend", "public");
 
-const APP_FILES = ["app.html", "app.js", "app.css", "app.auth.js", "app.storage.js", "app.format.js", "app.chrome.js", "app.unlock.js", "app.wallpapers.js", "app.themes.js", "app.ui.js", "app.generate.js", "app.banks.js", "app.antirepeat.js", "app.genparams.js", "app.cleanfill.js", "app.styles.js", "app.toggles.js", "app.custombg.js", "app.tabtheme.js", "app.logs.js", "app.paywall.js", "app.help.js", "app.usage.js", "app.wallpaperapply.js", "app.wallpaperui.js", "app.health.js", "app.setbg.js", "app.extview.js", "app.extthemesui.js", "app.nav.js", "app.extwallpaperui.js", "app.accountui.js", "arcade.html", "arcade.js", "entitlements.js", "mode.js", "themes.json"];
+const APP_FILES = ["app.html", "app.js", "app.css", "app.auth.js", "app.storage.js", "app.format.js", "app.chrome.js", "app.unlock.js", "app.wallpapers.js", "app.themes.js", "app.ui.js", "app.generate.js", "app.banks.js", "app.antirepeat.js", "app.genparams.js", "app.cleanfill.js", "app.styles.js", "app.toggles.js", "app.custombg.js", "app.tabtheme.js", "app.logs.js", "app.paywall.js", "app.help.js", "app.usage.js", "app.wallpaperapply.js", "app.wallpaperui.js", "app.themesui.js", "app.health.js", "app.setbg.js", "app.extview.js", "app.extapply.js", "app.extthemesui.js", "app.extcustombgui.js", "app.nav.js", "app.extwallpaperui.js", "app.accountui.js", "arcade.html", "arcade.js", "entitlements.js", "mode.js", "themes.json"];
 
 function ensureDir(dir) {
   fs.mkdirSync(dir, { recursive: true });

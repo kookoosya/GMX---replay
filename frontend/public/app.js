@@ -48,7 +48,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616u";
+const ASSET_REV = "20260616v";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -329,6 +329,33 @@ const __gmxWpUi = window.__GMXWallpaperUiFactory({
   applyWallpaper: (tab) => __gmxWpApply.applyWallpaper(tab),
 });
 
+if (!window.__GMXThemesUiFactory) throw new Error("GMX themesui factory missing");
+const __gmxThemesUi = window.__GMXThemesUiFactory({
+  $: __gmxChrome.$,
+  t: (key) => t(key),
+  toast: (type, html, ms) => __gmxChrome.toast(type, html, ms),
+  getThemes: () => THEMES,
+  getWallpapers: () => WALLPAPERS,
+  getChosenTheme: () => {
+    try {
+      return localStorage.getItem("gmx_theme") || "classic";
+    } catch {
+      return "classic";
+    }
+  },
+  unlockedThemesCount: () => unlockedThemesCount(),
+  unlockedCountByRefs,
+  freeVisibleThemes: FREE_VISIBLE_THEMES,
+  freeVisibleWallpapers: FREE_VISIBLE_WALLPAPERS,
+  isPro,
+  reqRefsForUnlockIndex,
+  formatUnlockMeter: (cur, total) => formatUnlockMeter(cur, total),
+  setMeter: (valId, fillId, used, limit) => { try { setMeter(valId, fillId, used, limit); } catch {} },
+  chunkedRender: (grid, items, fn, opts) => __gmxUi.chunkedRender(grid, items, fn, opts),
+  requireConnected: (label) => requireConnected(label),
+  applyTheme: (id) => applyTheme(id),
+});
+
 if (!window.__GMXExtViewFactory) throw new Error("GMX extview factory missing");
 const __gmxExtView = window.__GMXExtViewFactory({
   $: __gmxChrome.$,
@@ -336,6 +363,50 @@ const __gmxExtView = window.__GMXExtViewFactory({
   setStoredExtView: (v) => __gmxSt.extLsSet(K.EXT_VIEW, v),
   renderExtThemes: () => { try { renderExtThemes(); } catch {} },
   renderExtWallpapers: () => { try { renderExtWallpapers(); } catch {} },
+});
+
+if (!window.__GMXExtApplyFactory) throw new Error("GMX extapply factory missing");
+const __gmxExtApply = window.__GMXExtApplyFactory({
+  $: __gmxChrome.$,
+  extLsSet: (key, value) => __gmxSt.extLsSet(key, value),
+  extThemeStorageKey: "gmx_ext_theme",
+  isPro,
+  getExtThemes: () => EXT_THEMES,
+  unlockedExtThemesCount: () => unlockedCountByRefs(EXT_THEMES.length, FREE_VISIBLE_EXT_THEMES),
+  getStoredExtView: () => __gmxSt.lsGet(K.EXT_VIEW, "theme"),
+  normalizeExtViewValue: (v) => __gmxExtView.normalizeExtViewValue(v),
+  setExtView: (v, o) => __gmxExtView.setExtView(v, o),
+  extSyncNow: (r) => __gmxExtView.extSyncNow(r),
+  normalizeExtWallpaperId: (id) => normalizeExtWallpaperIdLocal(id),
+  normalizeExtWallpaperView: (v) => normalizeExtWallpaperView(v),
+  currentExtWallpaperTarget: () => currentExtWallpaperTarget(),
+  setExtWallpaperForView: (v, id) => setExtWallpaperForView(v, id),
+  removeExtCustomBgLegacy: () => { try { localStorage.removeItem(K.EXT_CUSTOM_BG_LEGACY); } catch {} },
+  renderExtWallpapers: () => { try { renderExtWallpapers(); } catch {} },
+});
+
+if (!window.__GMXExtCustomBgUiFactory) throw new Error("GMX extcustombgui factory missing");
+const __gmxExtCbgUi = window.__GMXExtCustomBgUiFactory({
+  $: __gmxChrome.$,
+  t: (key) => t(key),
+  toast: (type, html, ms) => __gmxChrome.toast(type, html, ms),
+  escapeHtml: (s) => __gmxFmt.escapeHtml(s),
+  bindExtTabs: () => __gmxExtView.bindExtTabs(),
+  extSyncNow: (r) => __gmxExtView.extSyncNow(r),
+  requireConnected: (label) => requireConnected(label),
+  compressImageToJpegDataURL: (file, opts) => compressImageToJpegDataURL(file, opts),
+  unlockedCountByRefs,
+  reqRefsForUnlockIndex,
+  isPro,
+  lsGet: (key, def) => __gmxSt.lsGet(key, def),
+  lsSet: (key, val) => __gmxSt.lsSet(key, val),
+  lsRemove: (key) => { try { localStorage.removeItem(key); } catch {} },
+  keys: {
+    extCustomBgGlobal: K.EXT_CUSTOM_BG_GLOBAL,
+    extCustomBgTabPrefix: K.EXT_CUSTOM_BG_TAB_PREFIX,
+    extCustomBgTarget: K.EXT_CUSTOM_BG_TARGET,
+    extCustomBgLegacy: K.EXT_CUSTOM_BG_LEGACY,
+  },
 });
 
 if (!window.__GMXExtThemesUiFactory) throw new Error("GMX extthemesui factory missing");
@@ -358,11 +429,11 @@ const __gmxExtThemesUi = window.__GMXExtThemesUiFactory({
   freeVisibleExtWallpapers: FREE_VISIBLE_EXT_WALLPAPERS,
   isPro,
   reqRefsForUnlockIndex,
-  unlockTagText: (idx, unlocked, free) => unlockTagText(idx, unlocked, free),
+  unlockTagText: (idx, unlocked, free) => __gmxThemesUi.unlockTagText(idx, unlocked, free),
   formatUnlockMeter: (cur, total) => formatUnlockMeter(cur, total),
   chunkedRender: (grid, items, fn, opts) => __gmxUi.chunkedRender(grid, items, fn, opts),
   requireConnected: (label) => requireConnected(label),
-  applyExtTheme: (id) => applyExtTheme(id),
+  applyExtTheme: (id) => __gmxExtApply.applyExtTheme(id),
 });
 
 if (!window.__GMXNavFactory) throw new Error("GMX nav factory missing");
@@ -438,8 +509,8 @@ const __gmxExtWpUi = window.__GMXExtWallpaperUiFactory({
   observeLazyBg: (el) => __gmxUi.observeLazyBg(el),
   prefetchImage: (url) => __gmxUi.prefetchImage(url),
   requireConnected: (label) => requireConnected(label),
-  applyExtWallpaper: (id, target) => applyExtWallpaper(id, target),
-  unlockTagText: (idx, unlocked, free) => unlockTagText(idx, unlocked, free),
+  applyExtWallpaper: (id, target) => __gmxExtApply.applyExtWallpaper(id, target),
+  unlockTagText: (idx, unlocked, free) => __gmxThemesUi.unlockTagText(idx, unlocked, free),
   formatUnlockMeter: (cur, total) => formatUnlockMeter(cur, total),
 });
 
@@ -878,19 +949,7 @@ function extLsSet(key, value){ __gmxSt.extLsSet(key, value); }
 // Custom background for extension popup (per-tab + global)
 // Note: this is stored on the site and later synced to the extension.
 const LS_EXT_CUSTOM_BG_GLOBAL = K.EXT_CUSTOM_BG_GLOBAL;
-const LS_EXT_CUSTOM_BG_TAB_PREFIX = K.EXT_CUSTOM_BG_TAB_PREFIX;
-const LS_EXT_CUSTOM_BG_TARGET = K.EXT_CUSTOM_BG_TARGET;
-const LS_EXT_CUSTOM_BG_LEGACY = K.EXT_CUSTOM_BG_LEGACY;
 
-const EXT_POPUP_TABS = [
-  ["all","wp_apply_all"],
-  ["home","wp_apply_home"],
-  ["gm","wp_apply_gm"],
-  ["gn","wp_apply_gn"],
-  ["referrals","wp_apply_referrals"],
-  ["themes","wp_apply_themes"],
-  ["wallet","wp_apply_wallet"],
-];
 const LS_EXT_WP_TARGET = K.EXT_WP_TARGET;
 const LS_EXT_WP_VIEW_PREFIX = K.EXT_WP_VIEW_PREFIX;
 const EXT_WALLPAPER_VIEWS = [
@@ -898,10 +957,6 @@ const EXT_WALLPAPER_VIEWS = [
   ["popup", "Popup"],
   ["quick", "Quick panel"],
 ];
-
-function extCustomBgKeyForTab(tab){
-  return (tab === "all") ? LS_EXT_CUSTOM_BG_GLOBAL : (LS_EXT_CUSTOM_BG_TAB_PREFIX + tab);
-}
 
 function normalizeExtWallpaperView(view){
   const safe = String(view || "").trim().toLowerCase();
@@ -964,330 +1019,25 @@ function normalizeStoredExtWallpaperSelections(){
   }
 }
 
-function migrateExtCustomBgLegacy(){
-  try{
-    const legacy = localStorage.getItem(LS_EXT_CUSTOM_BG_LEGACY);
-    if (legacy && !localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL)){
-      localStorage.setItem(LS_EXT_CUSTOM_BG_GLOBAL, legacy);
-    }
-    if (legacy) localStorage.removeItem(LS_EXT_CUSTOM_BG_LEGACY);
-  }catch(e){}
-}
-migrateExtCustomBgLegacy();
-
-function listExtCustomBgUsedTabs(){
-  const used = [];
-  try{
-    for (const [k] of EXT_POPUP_TABS){
-      if (k === "all") continue;
-      if (localStorage.getItem(LS_EXT_CUSTOM_BG_TAB_PREFIX + k)) used.push(k);
-    }
-    if (localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL)) used.push("all");
-  }catch(e){}
-  return used;
-}
-
-function canSetExtCustomBgOnTab(tab){
-  if (tab === "all") return true;
-  if (isPro()) return true;
-
-  const used = listExtCustomBgUsedTabs();
-  if (used.includes(tab)) return true; // existing slot can always be edited/cleared
-
-  // free: up to 3 tabs of choice
-  if (used.filter(x=>x!=="all").length < 3) return true;
-
-  // beyond 3: only if unlocked by refs
-  const tabsOnly = EXT_POPUP_TABS.filter(t=>t[0]!=="all").map(t=>t[0]);
-  const idx = tabsOnly.indexOf(tab);
-  if (idx < 0) return false;
-  const unlocked = unlockedCountByRefs(tabsOnly.length, 3);
-  return idx < unlocked;
-}
-
-function requiredRefsForExtCustomBgTab(tab){
-  if (tab === "all") return 0;
-  const tabsOnly = EXT_POPUP_TABS.filter(t=>t[0]!=="all").map(t=>t[0]);
-  const idx = tabsOnly.indexOf(tab);
-  if (idx < 0) return 0;
-  return reqRefsForUnlockIndex(idx, 3);
-}
-
-function renderExtCustomBgUI(){
-  bindExtTabs();
-  migrateExtCustomBgLegacy();
-
-  const tabSel = $("extCustomBgTab");
-  const st = $("extCustomBgStatus");
-  const nm = $("extCustomBgName");
-  const btnClear = $("extCustomBgClear");
-  const btnPick = $("extCustomBgPick");
-  const inp = $("extCustomBgFile");
-  const btnRemove = $("extCustomBgRemove");
-
-  if (!tabSel || !st || !btnPick || !inp || !btnRemove || !btnClear) return;
-
-  const prev = localStorage.getItem(LS_EXT_CUSTOM_BG_TARGET) || tabSel.value || "all";
-
-  tabSel.innerHTML = "";
-  for (const [k, labelKey] of EXT_POPUP_TABS){
-    const o = document.createElement("option");
-    o.value = k;
-    o.textContent = t(labelKey);
-    tabSel.appendChild(o);
-  }
-  if ([...tabSel.options].some(o=>o.value===prev)) tabSel.value = prev;
-  localStorage.setItem(LS_EXT_CUSTOM_BG_TARGET, tabSel.value);
-
-  const target = tabSel.value || "all";
-  const key = extCustomBgKeyForTab(target);
-  const cur = localStorage.getItem(key);
-  const used = listExtCustomBgUsedTabs();
-  const usedCount = used.filter(x=>x!=="all").length;
-  const slots = Math.min(EXT_POPUP_TABS.length-1, unlockedCountByRefs(EXT_POPUP_TABS.length-1, 3));
-  const isAllowed = canSetExtCustomBgOnTab(target);
-  const needRefs = requiredRefsForExtCustomBgTab(target);
-
-  if (nm) nm.textContent = cur ? "saved" : "";
-
-  let msg = cur
-    ? `<span class="ok">Active.</span> Custom background is set for <b>${escapeHtml(t(EXT_POPUP_TABS.find(x=>x[0]===target)?.[1]||"wp_apply_all"))}</b>.`
-    : `<span class="muted">None.</span> Upload an image to set a custom background.`;
-
-  if (!isPro()){
-    msg += ` <span class="muted">Slots:</span> ${Math.min(usedCount, slots)}/${slots}.`;
-  }
-  if (!isAllowed){
-    msg += ` <span class="warn">Locked:</span> need ${needRefs} referrals for this tab (or upgrade to Pro).`;
-  }
-  st.innerHTML = msg;
-
-  tabSel.onchange = ()=>{
-    localStorage.setItem(LS_EXT_CUSTOM_BG_TARGET, tabSel.value);
-    renderExtCustomBgUI();
-  };
-
-  btnClear.onclick = ()=>{
-    if (!requireConnected("Extension themes")) return;
-    try{
-      localStorage.removeItem(LS_EXT_CUSTOM_BG_GLOBAL);
-      for (const [k] of EXT_POPUP_TABS){
-        if (k === "all") continue;
-        localStorage.removeItem(LS_EXT_CUSTOM_BG_TAB_PREFIX + k);
-      }
-    }catch(e){}
-    renderExtCustomBgUI();
-    toast("ok", (t("toast_cleared")||"Cleared."));
-  };
-
-  btnPick.onclick = ()=>{
-    if (!requireConnected("Extension themes")) return;
-    if (!canSetExtCustomBgOnTab(target)){
-      renderExtCustomBgUI();
-      return;
-    }
-    inp.click();
-  };
-
-  if (!inp._bound){
-    inp._bound = true;
-    inp.addEventListener("change", async ()=>{
-      try{
-        if (!requireConnected("Extension themes")) { inp.value=""; return; }
-        const tab = tabSel.value || "all";
-        if (!canSetExtCustomBgOnTab(tab)){
-          inp.value=""; renderExtCustomBgUI(); return;
-        }
-        const file = inp.files && inp.files[0];
-        if (!file) return;
-        if (nm) nm.textContent = file.name || "";
-
-        const dataUrl = await compressImageToJpegDataURL(file, { profile: "ext" });
-        localStorage.setItem(extCustomBgKeyForTab(tab), dataUrl);
-        extSyncNow();
-
-        renderExtCustomBgUI();
-        if (st) st.innerHTML = `<span class="ok">Saved.</span> Auto-fitted for extension popup ratio.`;
-        toast("ok", (t("toast_custom_bg_saved")||"Custom background saved."));
-      }catch(e){
-        st.innerHTML = `<span class="bad">Error.</span> Could not save background.`;
-      }finally{
-        inp.value = "";
-      }
-    });
-  }
-
-  btnRemove.onclick = ()=>{
-    if (!requireConnected("Extension themes")) return;
-    const tab = tabSel.value || "all";
-    localStorage.removeItem(extCustomBgKeyForTab(tab));
-    extSyncNow();
-    renderExtCustomBgUI();
-    toast("ok", (t("toast_removed")||"Removed."));
-  };
-}
-
 function normalizeExtViewValue(view){ return __gmxExtView.normalizeExtViewValue(view); }
 
 function setExtView(view, opts){ return __gmxExtView.setExtView(view, opts); }
 
 function extSyncNow(reason){ return __gmxExtView.extSyncNow(reason); }
 
-  function markExtThemeSelection(id){
-    try{
-      const grid = $("extThemeGrid");
-      if (!grid) return;
-      const cards = grid.querySelectorAll(".themeCard[data-theme-id]");
-      cards.forEach((card)=>{
-        card.classList.toggle("active", card.getAttribute("data-theme-id") === String(id || "").trim());
-      });
-    }catch(_e){}
-  }
+function markWallpaperSelection(activeId){ return __gmxWpUi.markWallpaperSelection(activeId); }
 
-  function markWallpaperSelection(activeId){ return __gmxWpUi.markWallpaperSelection(activeId); }
+function unlockedExtThemesCount(){ return unlockedCountByRefs(EXT_THEMES.length, FREE_VISIBLE_EXT_THEMES); }
 
-function markExtWallpaperSelection(id){
-    try{
-      const grid = $("extWpGrid");
-      if (!grid) return;
-      const chosen = String(id || "").trim();
-      const cards = grid.querySelectorAll(".wpCard[data-wp-id]");
-      cards.forEach((card)=>{
-        card.classList.toggle("active", card.getAttribute("data-wp-id") === chosen);
-      });
-    }catch(_e){}
-  }
+function unlockTagText(idx, unlocked, freeCount){ return __gmxThemesUi.unlockTagText(idx, unlocked, freeCount); }
 
-  function unlockedExtThemesCount(){ return unlockedCountByRefs(EXT_THEMES.length, FREE_VISIBLE_EXT_THEMES); }
+function applyExtTheme(id){ return __gmxExtApply.applyExtTheme(id); }
 
-  function applyExtTheme(id){
-    const unlocked = unlockedExtThemesCount();
-    const idx = EXT_THEMES.findIndex(x=>x.id===id);
-    if (!isPro() && (idx<0 || idx >= unlocked)) return;
-    extLsSet("gmx_ext_theme", id);
-    markExtThemeSelection(id);
-    if (normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW) || "theme") !== "theme") setExtView("theme");
-    extSyncNow("ext_theme");
-    const st = $("extThemeStatus");
-    if (st) st.innerHTML = '<span class="ok">Selected.</span>';
-  }
+function applyExtWallpaper(id, targetView){ return __gmxExtApply.applyExtWallpaper(id, targetView); }
 
-  function applyExtWallpaper(id, targetView){
-    const safeId = normalizeExtWallpaperIdLocal(id);
-    if (!safeId) return;
-    const safeTarget = normalizeExtWallpaperView(targetView || currentExtWallpaperTarget());
-    setExtWallpaperForView(safeTarget, safeId);
-    try{ localStorage.removeItem(LS_EXT_CUSTOM_BG_LEGACY); }catch(e){}
-    if (normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW) || "theme") !== "wall") setExtView("wall");
-    extSyncNow("ext_wallpaper");
-    renderExtWallpapers();
-  }
+function renderThemes(){ return __gmxThemesUi.renderThemes(); }
 
-
-/* removed legacy renderExtThemes (cat/status filters) */
-
-/* rebuilt Theme + Extension Themes renderers (no dead references) */
-
-function themePreviewBg(th){
-  const a = th?.a || "rgba(124,92,255,1)";
-  const b = th?.b || "rgba(0,229,255,1)";
-  return `linear-gradient(135deg, ${a}, ${b})`;
-}
-
-
-function syncThemesUnlockMeters(curThemes, totalThemes, curWps, totalWps){
-  const label = formatUnlockMeter(curThemes, totalThemes);
-  const wpLabel = formatUnlockMeter(curWps, totalWps);
-  for (const id of ["themesUnlocked", "themesUnlockedVal"]) {
-    const el = $(id);
-    if (el) el.textContent = label;
-  }
-  for (const id of ["wpUnlocked", "wpUnlockedVal"]) {
-    const el = $(id);
-    if (el) el.textContent = wpLabel;
-  }
-  try{ setMeter("themesUnlockedVal", "themesUnlockedFill", curThemes, totalThemes); }catch{}
-  try{ setMeter("wpUnlockedVal", "wpUnlockedFill", curWps, totalWps); }catch{}
-  const refKpi = $("themes_k_ref")?.closest?.(".kpi");
-  if (refKpi) refKpi.style.display = isPro() ? "none" : "";
-  const freeTip = $("themes_free_tip");
-  if (freeTip) {
-    freeTip.textContent = isPro()
-      ? (t("themes_pro_tip") || "Pro unlocks the full theme and wallpaper library.")
-      : (t("themes_free_tip") || "On Free, referrals increase your cosmetic room. On Pro, the full set is already open.");
-  }
-}
-
-function unlockTagText(idx, unlocked, freeCount){
-  if (idx < freeCount) return "FREE";
-  if (unlocked) return "UNLOCKED";
-  const need = reqRefsForUnlockIndex(idx, freeCount);
-  return `${need} ref`;
-}
-
-function renderThemes(){
-  const grid = $("themeGrid");
-  if (!grid) return;
-
-  const total = THEMES.length;
-  const unlocked = unlockedThemesCount();
-  const chosen = localStorage.getItem("gmx_theme") || "classic";
-
-  const curThemes = Math.min(unlocked, total);
-  const curWps = Math.min(unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS), WALLPAPERS.length);
-
-  syncThemesUnlockMeters(curThemes, total, curWps, WALLPAPERS.length);
-
-  const items = THEMES.map((th, idx)=>({ th, idx }));
-  chunkedRender(grid, items, ({ th, idx })=>{
-    const isUnlocked = isPro() || (idx < unlocked);
-    const card = document.createElement("button");
-    card.type = "button";
-    card.dataset.themeId = th.id;
-    card.className = "themeCard" + (th.id === chosen ? " active" : "") + (!isUnlocked ? " mystery" : "");
-
-    const sw = document.createElement("div");
-    sw.className = "swatch";
-    sw.style.background = themePreviewBg(th);
-
-    const nm = document.createElement("div");
-    nm.className = "tname";
-    nm.textContent = th.name || th.id;
-
-    const note = document.createElement("div");
-    note.className = "tnote";
-    note.textContent = th.note || "";
-
-    const tag = document.createElement("div");
-    tag.className = "lockTag";
-    tag.textContent = unlockTagText(idx, isUnlocked, FREE_VISIBLE_THEMES);
-
-    card.appendChild(sw);
-    card.appendChild(nm);
-    card.appendChild(note);
-    card.appendChild(tag);
-
-    if (!isUnlocked){
-      const ov = document.createElement("div");
-      ov.className = "mysteryOverlay";
-      ov.textContent = (t("locked")||"LOCKED");
-      card.appendChild(ov);
-    }
-
-    card.addEventListener("click", ()=>{
-      if (!requireConnected("Themes")) return;
-      if (!isUnlocked){
-        const need = reqRefsForUnlockIndex(idx, FREE_VISIBLE_THEMES);
-        toast("warn", (t("locked_unlock_at") || "Locked. Unlock at {n} referrals (+1 every 3 refs at first, then +1 every 4) or Pro.").replace("{n}", String(need)));
-        return;
-      }
-      applyTheme(th.id);
-      renderThemes();
-    });
-
-    return card;
-  }, { key: "themeGrid", chunk: 24 });
-}
+function renderExtCustomBgUI(){ return __gmxExtCbgUi.renderExtCustomBgUI(); }
 
 function renderExtThemes(){ return __gmxExtThemesUi.renderExtThemes(); }
 

@@ -112,6 +112,33 @@ test("extthemesui: factory exports render helper", () => {
   assert.equal(typeof mod.renderExtThemes, "function");
 });
 
+test("themesui: unlockTagText and renderThemes", () => {
+  const mod = loadFactory("app.themesui.js", "__GMXThemesUiFactory")({
+    reqRefsForUnlockIndex: (idx, free) => (idx < free ? 0 : 3),
+    freeVisibleThemes: 8,
+  });
+  assert.equal(mod.unlockTagText(0, false, 8), "FREE");
+  assert.equal(mod.unlockTagText(10, false, 8), "3 ref");
+  assert.equal(typeof mod.renderThemes, "function");
+});
+
+test("extapply: factory exports apply helpers", () => {
+  const mod = loadFactory("app.extapply.js", "__GMXExtApplyFactory")({
+    $: () => null,
+    getExtThemes: () => [{ id: "classic" }],
+    unlockedExtThemesCount: () => 1,
+  });
+  assert.equal(typeof mod.applyExtTheme, "function");
+  assert.equal(typeof mod.applyExtWallpaper, "function");
+});
+
+test("extcustombgui: factory exports render helper", () => {
+  const mod = loadFactory("app.extcustombgui.js", "__GMXExtCustomBgUiFactory")({
+    $: () => null,
+  });
+  assert.equal(typeof mod.renderExtCustomBgUI, "function");
+});
+
 test("nav: showTab toggles active tab", () => {
   const flags = new Map();
   const prevDoc = globalThis.document;
