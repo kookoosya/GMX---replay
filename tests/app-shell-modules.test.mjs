@@ -341,6 +341,60 @@ test("wallpaperapply: applyWallpaper toggles hasWallBg", () => {
   }
 });
 
+test("setbg: applies tab gradient and delegates wallpaper hooks", () => {
+  let wpCalled = "";
+  let userCalled = "";
+  const prevDoc = globalThis.document;
+  globalThis.document = {
+    body: { classList: { contains: () => false } },
+    documentElement: { style: { setProperty() {} } },
+  };
+  try {
+    const setbg = loadFactory("app.setbg.js", "__GMXSetBgFactory")({
+      getTabBg: () => "linear-gradient(red, blue)",
+      applyWallpaper: (tab) => { wpCalled = tab; },
+      applyUserBg: (tab) => { userCalled = tab; },
+    });
+    setbg.setBg("gm");
+    assert.equal(wpCalled, "gm");
+    assert.equal(userCalled, "gm");
+  } finally {
+    globalThis.document = prevDoc;
+  }
+});
+
+test("accountui: applyRefCountEligible updates count", () => {
+  const mem = new Map();
+  let refCount = 0;
+  const storage = {
+    lsSet(k, v) { mem.set(k, String(v)); },
+    lsGet(k, fb = "") { return mem.has(k) ? mem.get(k) : fb; },
+  };
+  const account = loadFactory("app.accountui.js", "__GMXAccountUiFactory")({
+    $: () => null,
+    storage,
+    refEligibleCacheKey: "gmx_ref_eligible_cache",
+    getRefCount: () => refCount,
+    setRefCount: (n) => { refCount = n; },
+    getAuthOk: () => false,
+    getIsAdminFlag: () => false,
+  });
+  const changed = account.applyRefCountEligible(5);
+  assert.equal(refCount, 5);
+  assert.equal(changed, true);
+  assert.equal(mem.get("gmx_ref_eligible_cache"), "5");
+});
+
+test("wallpaperui: factory exports grid helpers", () => {
+  const wpUi = loadFactory("app.wallpaperui.js", "__GMXWallpaperUiFactory")({
+    $: () => null,
+    storage: { lsGet: () => "", lsSet() {}, lsRemove() {} },
+  });
+  assert.equal(typeof wpUi.renderWallpaperUI, "function");
+  assert.equal(typeof wpUi.initWallpapers, "function");
+  assert.equal(typeof wpUi.markWallpaperSelection, "function");
+});
+
 test("health: ping inactive without session", async () => {
   const health = loadFactory("app.health.js", "__GMXHealthFactory")({
     $: () => null,

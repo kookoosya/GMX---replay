@@ -332,17 +332,7 @@ function setExtView(view, opts){
     }catch(_e){}
   }
 
-  function markWallpaperSelection(activeId){
-    try{
-      const grid = $('wpGrid');
-      if (!grid) return;
-      const chosen = String(activeId || '').trim();
-      const cards = grid.querySelectorAll('.wpCard[data-wp-id]');
-      cards.forEach((card)=>{
-        card.classList.toggle('active', card.getAttribute('data-wp-id') === chosen);
-      });
-    }catch(_e){}
-  }
+  function markWallpaperSelection(activeId){ return __gmxWpUi.markWallpaperSelection(activeId); }
 
 function markExtWallpaperSelection(id){
     try{

@@ -37,17 +37,7 @@ const $ = __gmxChrome.$;
     }catch{}
   });
 
-    function setBg(tab){
-    const safeTab = String(tab || "home");
-    const hasWall = document.body.classList.contains("hasWallBg");
-    if (hasWall){
-      document.documentElement.style.setProperty("--bg", "linear-gradient(180deg, rgba(5,7,15,.12) 0%, rgba(5,7,15,.32) 100%)");
-    } else {
-      document.documentElement.style.setProperty("--bg", __gmxTabTheme.getTabBg(safeTab));
-    }
-    applyWallpaper(safeTab);
-    applyUserBg(safeTab);
-  }
+    function setBg(tab){ return __gmxSetBg.setBg(tab); }
 
   function ensurePredictionTabVisible(){
     try{
@@ -236,35 +226,12 @@ const $ = __gmxChrome.$;
   function closeHelpModal(){ return __gmxHelp.closeHelpModal(); }
   function bindHelpModal(){ return __gmxHelp.bindHelpModal(); }
 
-  function applyRefCountEligible(eligible, { renderUnlockUi = false } = {}){
-    const num = Math.max(0, Number(eligible || 0) || 0);
-    const changed = REF_COUNT !== num;
-    REF_COUNT = num;
-    try{ localStorage.setItem(LS_REF_ELIGIBLE_CACHE, String(num)); }catch(_e){}
-    if ($("refCountPill")) $("refCountPill").textContent = String(num);
-    if ($("refCountRight")) $("refCountRight").textContent = String(num);
-    if ($("refCountInline")) $("refCountInline").textContent = String(num);
-    if ($("refEligibleInline")) $("refEligibleInline").textContent = String(num);
-    if (!renderUnlockUi || !changed) return changed;
-    try{ renderThemes(); }catch(_e){}
-    try{ renderExtThemes(); }catch(_e){}
-    try{ fillStyles(); }catch(_e){}
-    try{ fillPacks(); }catch(_e){}
-    return changed;
-  }
+  function applyRefCountEligible(eligible, opts){ return __gmxAccount.applyRefCountEligible(eligible, opts); }
 
   function usageCosmeticSignature(j){ return __gmxUsage.usageCosmeticSignature(j); }
 
   async function refreshUsage(){ return __gmxUsage.refreshUsage(); }
 
-  function applyAdminVisibility(){
-    const h = getHandle();
-    const tok = localStorage.getItem(LS_TOKEN) || "";
-    // show Admin only after we validated the session in this page load
-    const isAdmin = AUTH_OK && (localStorage.getItem(LS_IS_ADMIN) === "1");
-    const ta = $("t_admin");
-    if (ta) ta.classList.toggle("hidden", !isAdmin);
-    if (!isAdmin) document.getElementById("tab-admin")?.classList.add("hidden");
-  }
+  function applyAdminVisibility(){ return __gmxAccount.applyAdminVisibility(); }
 
 

@@ -87,7 +87,10 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.help\.js/, "app.help.js script tag");
   mustMatch(rel, /app\.usage\.js/, "app.usage.js script tag");
   mustMatch(rel, /app\.wallpaperapply\.js/, "app.wallpaperapply.js script tag");
+  mustMatch(rel, /app\.wallpaperui\.js/, "app.wallpaperui.js script tag");
   mustMatch(rel, /app\.health\.js/, "app.health.js script tag");
+  mustMatch(rel, /app\.setbg\.js/, "app.setbg.js script tag");
+  mustMatch(rel, /app\.accountui\.js/, "app.accountui.js script tag");
   mustMatch(rel, /app\.auth\.js/, "app.auth.js script tag");
   mustNotMatch(rel, /id="supportOut"/, "supportOut textarea removed");
   mustNotMatch(rel, /id="toolSupport"/, "toolSupport button removed from HTML");
