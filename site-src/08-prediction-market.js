@@ -154,3 +154,32 @@ async function loadPredictionSignals(opts){
     if (status) status.textContent = msg;
   }
 }
+
+function bindPredictionMarketUI(){
+  if (bindPredictionMarketUI._done) return;
+  bindPredictionMarketUI._done = true;
+  const pmRefreshBtn = $("pm_refresh");
+  if (pmRefreshBtn) pmRefreshBtn.onclick = ()=>{ loadPredictionSignals({ force:true }); };
+  syncPredictionFilterCopy();
+  const pmAssetSel = $("pm_asset");
+  if (pmAssetSel) pmAssetSel.addEventListener("change", ()=>{
+    PM_FILTERS.asset = String(pmAssetSel.value || "all");
+    renderPredictionSignals(PM_LAST_SIGNALS);
+  });
+  const pmBiasSel = $("pm_bias");
+  if (pmBiasSel) pmBiasSel.addEventListener("change", ()=>{
+    PM_FILTERS.bias = String(pmBiasSel.value || "all").toLowerCase();
+    renderPredictionSignals(PM_LAST_SIGNALS);
+  });
+  const pmConfSel = $("pm_conf");
+  if (pmConfSel) pmConfSel.addEventListener("change", ()=>{
+    PM_FILTERS.minConf = Number(pmConfSel.value || 0) || 0;
+    renderPredictionSignals(PM_LAST_SIGNALS);
+  });
+  setInterval(()=>{
+    try{
+      if (__gmxTabState.getCurrentTab() === "prediction") loadPredictionSignals({ force:false });
+    }catch{}
+  }, 60000);
+}
+bindPredictionMarketUI();

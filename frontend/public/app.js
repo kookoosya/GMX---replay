@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260617n";
+const ASSET_REV = "20260617o";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -1296,76 +1296,20 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
 
 // ----- Leaderboard -----
 let LB_DAYS = 7;
+if (!window.__GMXLeaderboardFactory) throw new Error("GMX leaderboard factory missing");
+const __gmxLeaderboard = window.__GMXLeaderboardFactory({
+  $,
+  escapeHtml,
+  t,
+  getToken,
+  getHandle,
+});
 async function loadLeaderboard(days){
-  try{
-    LB_DAYS = Number(days||7) || 7;
-    const st = $("lb_status");
-
-    st.textContent = "";
-    const body = $("lb_body");
-    if (body) body.innerHTML = `<tr><td colspan="4" class="muted">${escapeHtml(t('loading')||'Loading...')}</td></tr>`;
-
-    // If user is connected, include token (shows "me" rank).
-    const opts = {};
-    const token = getToken();
-    if (token) opts.headers = { Authorization: "Bearer " + token };
-    const r = await fetch(`/api/leaderboard/referrals?days=${encodeURIComponent(LB_DAYS)}`, { cache:"no-store", ...opts });
-    const j = await r.json().catch(()=>null);
-    if (!r.ok || !j || !j.ok) throw new Error(j?.error || `http_${r.status}`);
-
-    const top = Array.isArray(j.top) ? j.top : [];
-    if (body){
-      if (!top.length){
-        body.innerHTML = `<tr><td colspan="4" class="muted">${escapeHtml(t('lb_empty')||'No data yet.')}</td></tr>`;
-      } else {
-        body.innerHTML = top.map((row, idx)=>{
-          const h = escHtml(String(row.handle||""));
-          const eligible = Number(row.eligible||0)||0;
-          const active = Number(row.active||0)||0;
-          return `<tr><td>${idx+1}</td><td>@${h}</td><td>${eligible}</td><td>${active}</td></tr>`;
-        }).join("");
-      }
-    }
-
-    const you = $("lb_you");
-    if (you){
-      const me = j.me;
-      if (me && me.handle){
-        const h = escHtml(String(me.handle||""));
-        const eligible = Number(me.eligible||0)||0;
-        // rank in top list, else show ">50"
-        const idx = top.findIndex(r=>String(r.handle||"")===String(me.handle||""));
-        const rank = idx >= 0 ? String(idx+1) : ">50";
-        you.innerHTML = `${escapeHtml(t('lb_you')||'You')}: <b>#${rank}</b> @${h} В· ${escapeHtml(t('lb_eligible')||'Eligible')}: <b>${eligible}</b>`;
-      } else {
-        you.textContent = getHandle() ? "" : (t('connectFirst') || "Connect first.");
-      }
-    }
-
-    if (st) st.textContent = `${LB_DAYS}d`;
-    return j;
-  }catch(e){
-    const st = $("lb_status");
-    if (st) st.textContent = (t('error')||'Error') + ": " + String(e?.message||e||'failed');
-    const body = $("lb_body");
-    if (body) body.innerHTML = `<tr><td colspan="4" class="muted">${escapeHtml(t('lb_failed')||'Could not load leaderboard.')}</td></tr>`;
-    return null;
-  }
+  const j = await __gmxLeaderboard.loadLeaderboard(days);
+  LB_DAYS = __gmxLeaderboard.getLbDays();
+  return j;
 }
-
-function bindLeaderboardUI(){
-  if (bindLeaderboardUI._done) return;
-  bindLeaderboardUI._done = true;
-  const b7 = $("lb_7d");
-  const b30 = $("lb_30d");
-  const set = (d)=>{
-    if (b7) b7.classList.toggle("active", d===7);
-    if (b30) b30.classList.toggle("active", d===30);
-    loadLeaderboard(d);
-  };
-  if (b7) b7.addEventListener("click", ()=>set(7));
-  if (b30) b30.addEventListener("click", ()=>set(30));
-}
+const bindLeaderboardUI = () => __gmxLeaderboard.bindLeaderboardUI();
 
 // ----- Prediction market -----
 let PM_LAST_JSON = "";
@@ -1524,112 +1468,9 @@ async function loadPredictionSignals(opts){
   }
 }
 
-// ----- Referrals -----
-
-  function escHtml(s){
-    return String(s||"").replace(/[&<>"']/g, (c)=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]));
-  }
-  function fmtShortDate(iso){
-    if (!iso) return "";
-    try{
-      const d = new Date(iso);
-      if (!isFinite(d.getTime())) return String(iso).slice(0,10);
-      return d.toLocaleDateString();
-    }catch(_e){
-      return String(iso).slice(0,10);
-    }
-  }
-
-  async function loadRefInvited(days=30){
-    const body = $("refInvitedBody");
-    if (!body) return;
-    body.innerHTML = `<tr><td colspan="4" class="muted">${t("r_loading") || "Loading..."}<\/td><\/tr>`;
-    const j = await api("/api/referral/list?days=" + encodeURIComponent(String(days)));
-    if (!j || !j.ok) throw new Error("ref_list_failed");
-    const list = Array.isArray(j.list) ? j.list : [];
-    if (!list.length){
-      body.innerHTML = `<tr><td colspan="4" class="muted">${t("r_no_invited") || "No invited users yet"}<\/td><\/tr>`;
-      return;
-    }
-    body.innerHTML = list.map((r)=>{
-      const status = r.fraud ? ((t("r_flagged") || "Flagged") + (r.fraudReason ? (": " + escHtml(r.fraudReason)) : "")) : (r.eligible ? (t("r_eligible") || "Eligible") : (t("r_not_yet") || "Not yet"));
-      return `<tr>
-        <td>${escHtml(r.handle||"")}</td>
-        <td>${Number(r.inserts||0)}</td>
-        <td>${Number(r.activeDays||0)}</td>
-        <td>${status}</td>
-      </tr>`;
-    }).join("");
-  }
-
-async function loadRefLeaderboard(days=90){
-  const body = $("refLeaderBody");
-  const meEl = $("refLeaderMe");
-  const lang = localStorage.getItem(LS_SITE_LANG) || "en";
-  const ui = getReferralUiCopy(lang);
-  if (body) body.innerHTML = `<tr><td colspan="3" class="muted">${escapeHtml(ui.leaderboardLoading || "Loading...")}</td></tr>`;
-  const j = await api("/api/leaderboard/referrals?days=" + encodeURIComponent(String(days)));
-  if (!j || !j.ok) throw new Error("leaderboard_failed");
-  const top = Array.isArray(j.top) ? j.top : [];
-  if (!top.length){
-    if (body) body.innerHTML = `<tr><td colspan="3" class="muted">${escapeHtml(ui.leaderboardEmpty || "No data yet")}</td></tr>`;
-  } else {
-    if (body) body.innerHTML = top.map((r,i)=>`<tr><td>${i+1}</td><td>${escHtml(r.handle||"")}</td><td>${Number(r.eligible||0)}</td></tr>`).join("");
-  }
-  if (meEl){
-    if (j.me && j.me.handle){
-      meEl.textContent = `${ui.youLabel || "You"}: ${j.me.handle} — ${ui.eligible}: ${Number(j.me.eligible||0)} (${ui.rulesLabel || "rules"}: ≥${j.rules?.minInserts||5} inserts + ≥${j.rules?.minActiveDays||3} active days in ${days}d)`;
-    } else {
-      meEl.textContent = "";
-    }
-  }
-}
-
-
-  const refLoadBtn = $("refLoad");
-  if (refLoadBtn) refLoadBtn.onclick = async ()=>{
-    if (!requireConnected("Referrals")) return;
-    try{
-      const j = await refreshRefStats(true);
-      if (!j) throw new Error("ref_stats_unavailable");
-      const link = $("refLink");
-      if (link) link.value = j.refLink || "";
-      revealReferralLinkUi();
-      const confirmed = Number(j.confirmedRefs ?? 0) || 0;
-      const active = Number(j.activeRefs ?? 0) || 0;
-      const eligible = Number(j.eligibleRefs ?? j.referrals ?? j.count ?? 0) || 0;
-      applyRefCountEligible(eligible);
-      if ($("refConfirmedInline")) $("refConfirmedInline").textContent = String(confirmed);
-      if ($("refActiveInline")) $("refActiveInline").textContent = String(active);
-      try{ renderThemes(); }catch(e){}
-      try{ renderExtThemes(); }catch(e){}
-      try{ initWallpapers(); }catch(e){}
-      try{ renderExtWallpapers(); }catch(e){}
-const msg = $("refMsg");
-      try{ await loadRefInvited(30); }catch(e){}
-      if (msg) msg.innerHTML = '<span class="ok">' + escapeHtml(t("ref_loaded")) + '</span>';
-      try{ fillStyles(); fillPacks(); }catch{}
-      try{ await refreshUsage(); }catch{}
-    }catch(e){
-      const msg = $("refMsg");
-      if (msg) msg.innerHTML = '<span class="bad">' + escapeHtml(e?.message||"failed") + '</span>';
-    }
-  };
-
-  try{ initReferralPromoDetailsState(); }catch{}
-
-  const refCopyBtn = $("refCopy");
-  if (refCopyBtn) refCopyBtn.onclick = async ()=>{
-    if (!requireConnected("Referrals")) return;
-    const link = $("refLink");
-    const v = (link?.value || "").trim();
-    if (!v) return;
-    await navigator.clipboard.writeText(v);
-    const msg = $("refMsg");
-    const lang = localStorage.getItem(LS_SITE_LANG) || "en";
-    const ui = getReferralUiCopy(lang);
-    if (msg) msg.innerHTML = '<span class="ok">' + escapeHtml(ui.copied || "Copied.") + '</span>';
-  };
+function bindPredictionMarketUI(){
+  if (bindPredictionMarketUI._done) return;
+  bindPredictionMarketUI._done = true;
   const pmRefreshBtn = $("pm_refresh");
   if (pmRefreshBtn) pmRefreshBtn.onclick = ()=>{ loadPredictionSignals({ force:true }); };
   syncPredictionFilterCopy();
@@ -1653,6 +1494,34 @@ const msg = $("refMsg");
       if (__gmxTabState.getCurrentTab() === "prediction") loadPredictionSignals({ force:false });
     }catch{}
   }, 60000);
+}
+bindPredictionMarketUI();
+
+// ----- Referrals -----
+  if (!window.__GMXReferralsFactory) throw new Error("GMX referrals factory missing");
+  const __gmxReferrals = window.__GMXReferralsFactory({
+    $,
+    escapeHtml,
+    api,
+    t,
+    requireConnected,
+    getReferralUiCopy,
+    siteLangKey: LS_SITE_LANG,
+    refreshRefStats,
+    revealReferralLinkUi,
+    applyRefCountEligible,
+    renderThemes,
+    renderExtThemes,
+    initWallpapers,
+    renderExtWallpapers,
+    fillStyles,
+    fillPacks,
+    refreshUsage,
+    initReferralPromoDetailsState,
+  });
+  const loadRefInvited = (days) => __gmxReferrals.loadRefInvited(days);
+  const loadRefLeaderboard = (days) => __gmxReferrals.loadRefLeaderboard(days);
+  __gmxReferrals.bindReferrals();
 
 // ----- Wallet / Billing -----
   let BILLING = { receiver:"", plans:[], solUsd:0, rpcPublic:"" };
@@ -1786,25 +1655,17 @@ const msg = $("refMsg");
   __gmxAdmin.bindAdmin();
 
   // ----- Redeem code -----
-  const redeemBtn = $("btnRedeem");
-  if (redeemBtn) redeemBtn.onclick = async ()=>{
-    if (!requireConnected("Home")) return;
-    const h = getHandle();
-    if (!h){ tab("home"); return; }
-    const code = $("redeemCode").value.trim();
-    if (!code){
-      $("connectMsg").innerHTML = `<span class="warn">Paste a code first.</span>`;
-      return;
-    }
-    try{
-      const j = await api("/api/billing/redeem", "POST", { handle: h, code });
-      $("connectMsg").innerHTML = `<span class="ok">Activated.</span>`;
-      renderWalletStatus(j.sub);
-      await refreshUsage();
-    }catch(e){
-      $("connectMsg").innerHTML = `<span class="bad">${e.message || "redeem_failed"}</span>`;
-    }
-  };
+  if (!window.__GMXRedeemFactory) throw new Error("GMX redeem factory missing");
+  const __gmxRedeem = window.__GMXRedeemFactory({
+    $,
+    api,
+    requireConnected,
+    getHandle,
+    tab,
+    renderWalletStatus,
+    refreshUsage,
+  });
+  __gmxRedeem.bindRedeem();
 
   if (!window.__GMXSiteInitFactory) throw new Error("GMX siteinit factory missing");
   await window.__GMXSiteInitFactory({

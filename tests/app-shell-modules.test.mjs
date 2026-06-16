@@ -1233,3 +1233,42 @@ test("bankui: renderList warns when disconnected", () => {
   bankui.renderList("gm");
   assert.match(els.gmMsg.innerHTML, /Connect first/);
 });
+
+test("leaderboard: bindLeaderboardUI is idempotent", () => {
+  const lb = loadFactory("app.leaderboard.js", "__GMXLeaderboardFactory")({ $: () => null });
+  lb.bindLeaderboardUI();
+  lb.bindLeaderboardUI();
+  assert.equal(lb.bindLeaderboardUI._done, true);
+});
+
+test("leaderboard: getLbDays defaults to 7", () => {
+  const lb = loadFactory("app.leaderboard.js", "__GMXLeaderboardFactory")({});
+  assert.equal(lb.getLbDays(), 7);
+});
+
+test("referrals: loadRefInvited renders empty state", async () => {
+  const els = { refInvitedBody: { innerHTML: "" } };
+  const refs = loadFactory("app.referrals.js", "__GMXReferralsFactory")({
+    $: (id) => els[id] || null,
+    api: async () => ({ ok: true, list: [] }),
+    t: (_k, fb) => fb,
+  });
+  await refs.loadRefInvited(30);
+  assert.match(els.refInvitedBody.innerHTML, /No invited users yet/);
+});
+
+test("redeem: bindRedeem warns on empty code", () => {
+  const els = {
+    btnRedeem: { onclick: null },
+    redeemCode: { value: "" },
+    connectMsg: { innerHTML: "" },
+  };
+  const redeem = loadFactory("app.redeem.js", "__GMXRedeemFactory")({
+    $: (id) => els[id] || null,
+    requireConnected: () => true,
+    getHandle: () => "@demo",
+  });
+  redeem.bindRedeem();
+  els.btnRedeem.onclick();
+  assert.match(els.connectMsg.innerHTML, /Paste a code first/);
+});
