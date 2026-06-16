@@ -79,3 +79,31 @@ test("ui: factory exports perf helpers", () => {
   assert.equal(typeof ui.yieldToUiFrame, "function");
   assert.equal(typeof ui.prefetchImage, "function");
 });
+
+test("banks: read/write saved lines", () => {
+  const mem = new Map();
+  const storage = {
+    keys: {},
+    lsGet(key, fallback = "") {
+      return mem.has(key) ? mem.get(key) : fallback;
+    },
+    lsSet(key, value) {
+      if (value === undefined || value === null || value === "") mem.delete(key);
+      else mem.set(key, String(value));
+    },
+    lsRemove(key) {
+      mem.delete(key);
+    },
+  };
+  const gen = loadFactory("app.generate.js", "__GMXGenerateFactory")();
+  const banks = loadFactory("app.banks.js", "__GMXBanksFactory")({
+    storage,
+    dedupeLines: gen.dedupeLines,
+    EMPTY: "__EMPTY__",
+  });
+  const key = "test_bank_key";
+  storage.lsSet(key, "Line one\nLine two");
+  assert.deepEqual(banks.readKey(key), ["Line one", "Line two"]);
+  banks.writeKey(key, ["A", "B"]);
+  assert.equal(storage.lsGet(key), "A\nB");
+});

@@ -73,6 +73,7 @@ async function doBestServer(kind){
 
   const { mode, lang, style, antiN } = readGenParams(kind);
   const keyActive = activeKey(kind);
+  const strength = getAntiStrength(kind);
 
   setBusy(kind, true, "Picking the best reply...");
   try{
@@ -90,14 +91,7 @@ async function doBestServer(kind){
     }
 
     const cur = readKey(keyActive);
-    const rk = best.toLowerCase();
-    const bestShape = bestLineShape(kind, best);
-    const already = cur.some((s)=>{
-      const raw = String(s||"").trim();
-      if (!raw) return false;
-      if (raw.toLowerCase() === rk) return true;
-      return !!bestShape && bestLineShape(kind, raw) === bestShape;
-    });
+    const already = __gmxGen.isLineAlreadySaved(cur, best, strength);
     let saved = false;
 
     if (!already){

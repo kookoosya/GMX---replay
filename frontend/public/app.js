@@ -37,7 +37,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616i";
+const ASSET_REV = "20260616j";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -54,6 +54,9 @@ const __gmxThemes = window.__GMXThemesFactory();
 
 if (!window.__GMXGenerateFactory) throw new Error("GMX generate factory missing");
 const __gmxGen = window.__GMXGenerateFactory();
+
+if (!window.__GMXBanksFactory) throw new Error("GMX banks factory missing");
+const __gmxBanks = window.__GMXBanksFactory({ storage: __gmxSt, dedupeLines: __gmxGen.dedupeLines, EMPTY });
 
 if (!window.__GMXUiFactory) throw new Error("GMX ui factory missing");
 const __gmxUi = window.__GMXUiFactory();
@@ -2630,65 +2633,18 @@ async function refreshUsage(){
 
 
   // ----- Lists (single saved bank per kind; legacy global/lang banks migrate once) -----
-  function linesFromText(t){
-    return String(t||"").split(/\r?\n/).map(x=>x.trim()).filter(x=>x && x!==EMPTY);
-  }
-
-  function getLangIndexKey(kind){ return kind==="gm" ? GM_LANGS : GN_LANGS; }
-  function getGlobalKey(kind){ return kind==="gm" ? GM_GLOBAL : GN_GLOBAL; }
-  function getLangKey(kind, lang){ return `gmx_${kind}_lang_${lang}`; }
-  function getBankKey(kind){ return kind==="gm" ? "gmx_gm_bank" : "gmx_gn_bank"; }
-  function getBankMigrationKey(kind){ return kind==="gm" ? "gmx_gm_bank_migrated_v2" : "gmx_gn_bank_migrated_v2"; }
-
-  function getLangIndex(kind){
-    try{ return JSON.parse(localStorage.getItem(getLangIndexKey(kind)) || "[]"); }
-    catch{ return []; }
-  }
-  function setLangIndex(kind, arr){
-    const uniq = Array.from(new Set(arr.filter(Boolean)));
-    localStorage.setItem(getLangIndexKey(kind), JSON.stringify(uniq));
-  }
-
-  function readKey(key){ return linesFromText(localStorage.getItem(key) || ""); }
-  function writeKey(key, lines){ localStorage.setItem(key, lines.join("\n")); }
-
-  function allLegacyKeysForKind(kind){
-    const keys = [getGlobalKey(kind)];
-    for (const lang of getLangIndex(kind)){
-      keys.push(getLangKey(kind, lang));
-    }
-    return Array.from(new Set(keys));
-  }
-
-  function migrateLegacyBank(kind){
-    const bankKey = getBankKey(kind);
-    const marker = getBankMigrationKey(kind);
-    const bankNow = dedupeLines(readKey(bankKey));
-    if ((localStorage.getItem(marker) || "") === "1") {
-      if (bankNow.join("\n") !== readKey(bankKey).join("\n")) writeKey(bankKey, bankNow);
-      return bankNow.length;
-    }
-
-    const merged = [];
-    const mergeCap = 5000;
-    for (const key of allLegacyKeysForKind(kind)){
-      if (merged.length >= mergeCap) break;
-      merged.push(...readKey(key).slice(0, mergeCap - merged.length));
-    }
-    if (merged.length < mergeCap) merged.push(...bankNow.slice(0, mergeCap - merged.length));
-
-    const finalBank = dedupeLines(merged).slice(0, mergeCap);
-    writeKey(bankKey, finalBank);
-
-    for (const key of allLegacyKeysForKind(kind)){
-      localStorage.removeItem(key);
-    }
-    setLangIndex(kind, []);
-    try{ localStorage.setItem(kind === "gm" ? LS_GM_REPLY_LANG : LS_GN_REPLY_LANG, "en"); }catch{}
-    try{ localStorage.setItem(marker, "1"); }catch{}
-    return finalBank.length;
-  }
-
+  function linesFromText(t){ return __gmxBanks.linesFromText(t); }
+  function getLangIndexKey(kind){ return __gmxBanks.getLangIndexKey(kind); }
+  function getGlobalKey(kind){ return __gmxBanks.getGlobalKey(kind); }
+  function getLangKey(kind, lang){ return __gmxBanks.getLangKey(kind, lang); }
+  function getBankKey(kind){ return __gmxBanks.getBankKey(kind); }
+  function getBankMigrationKey(kind){ return __gmxBanks.getBankMigrationKey(kind); }
+  function getLangIndex(kind){ return __gmxBanks.getLangIndex(kind); }
+  function setLangIndex(kind, arr){ return __gmxBanks.setLangIndex(kind, arr); }
+  function readKey(key){ return __gmxBanks.readKey(key); }
+  function writeKey(key, lines){ return __gmxBanks.writeKey(key, lines); }
+  function allLegacyKeysForKind(kind){ return __gmxBanks.allLegacyKeysForKind(kind); }
+  function migrateLegacyBank(kind){ return __gmxBanks.migrateLegacyBank(kind); }
 
 // ----- Best (pick a strong line and copy it) -----
 function bestLineShape(kind, s){ return __gmxGen.bestLineShape(kind, s); }
@@ -2765,6 +2721,7 @@ async function doBestServer(kind){
 
   const { mode, lang, style, antiN } = readGenParams(kind);
   const keyActive = activeKey(kind);
+  const strength = getAntiStrength(kind);
 
   setBusy(kind, true, "Picking the best reply...");
   try{
@@ -2782,14 +2739,7 @@ async function doBestServer(kind){
     }
 
     const cur = readKey(keyActive);
-    const rk = best.toLowerCase();
-    const bestShape = bestLineShape(kind, best);
-    const already = cur.some((s)=>{
-      const raw = String(s||"").trim();
-      if (!raw) return false;
-      if (raw.toLowerCase() === rk) return true;
-      return !!bestShape && bestLineShape(kind, raw) === bestShape;
-    });
+    const already = __gmxGen.isLineAlreadySaved(cur, best, strength);
     let saved = false;
 
     if (!already){

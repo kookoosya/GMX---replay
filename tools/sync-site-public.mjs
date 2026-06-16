@@ -26,6 +26,7 @@ const shellModules = [
   "app.themes.js",
   "app.ui.js",
   "app.generate.js",
+  "app.banks.js",
 ];
 for (const name of shellModules) {
   const modSrc = path.join(root, "public", name);
