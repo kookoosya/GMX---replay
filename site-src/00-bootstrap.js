@@ -48,7 +48,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616v";
+const ASSET_REV = "20260616w";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -87,6 +87,34 @@ const __gmxUi = window.__GMXUiFactory({
       return "";
     }
   },
+});
+
+if (!window.__GMXWallpaperStoreFactory) throw new Error("GMX wallpaperstore factory missing");
+const __gmxWpStore = window.__GMXWallpaperStoreFactory({
+  keys: {
+    wpGlobal: K.WP_GLOBAL,
+    wpTabPrefix: K.WP_TAB_PREFIX,
+    wallpaperRefreshMigration: K.WALLPAPER_REFRESH_MIGRATION,
+  },
+  lsGet: (key, def) => __gmxSt.lsGet(key, def),
+  lsSet: (key, val) => __gmxSt.lsSet(key, val),
+  lsRemove: (key) => { try { localStorage.removeItem(key); } catch {} },
+  normalizeWallpaperId: (id) => normalizeWallpaperId(id),
+  getWallpaperTabs: () => WALLPAPER_TABS,
+});
+
+if (!window.__GMXExtWallpaperStoreFactory) throw new Error("GMX extwallpaperstore factory missing");
+const __gmxExtWpStore = window.__GMXExtWallpaperStoreFactory({
+  keys: {
+    extWp: K.EXT_WP,
+    extWpTarget: K.EXT_WP_TARGET,
+    extWpViewPrefix: K.EXT_WP_VIEW_PREFIX,
+  },
+  extLsSet: (key, value) => __gmxSt.extLsSet(key, value),
+  lsGet: (key, def) => __gmxSt.lsGet(key, def),
+  lsSet: (key, val) => __gmxSt.lsSet(key, val),
+  lsRemove: (key) => { try { localStorage.removeItem(key); } catch {} },
+  normalizeExtWallpaperId: (id) => normalizeExtWallpaperIdLocal(id),
 });
 
 const FREE_VISIBLE_THEMES = __gmxUnlock.FREE_VISIBLE_THEMES;
@@ -214,7 +242,7 @@ const __gmxUsage = window.__GMXUsageFactory({
     initWallpapers();
     renderThemes();
     initExtWallpaperControls();
-    normalizeStoredExtWallpaperSelections();
+    try { __gmxExtWpStore.normalizeStoredExtWallpaperSelections(); } catch {}
     renderExtThemes();
     renderExtWallpapers();
     renderExtCustomBgUI();
@@ -240,7 +268,7 @@ __gmxHelp = window.__GMXHelpFactory({
 if (!window.__GMXWallpaperApplyFactory) throw new Error("GMX wallpaperapply factory missing");
 const __gmxWpApply = window.__GMXWallpaperApplyFactory({
   getCurrentTab: () => { try { return currentTabName(); } catch { return "home"; } },
-  getWallpaperForTab: (tab) => getWallpaperForTab(tab),
+  getWallpaperForTab: (tab) => __gmxWpStore.getWallpaperForTab(tab),
   getEffectiveCustomWallpapers: () => effectiveCustomWallpapersSite(),
   getWallpapers: () => WALLPAPERS,
   wallpaperUnlocked: (wp, idx, len) => wallpaperUnlocked(wp, idx, len),
@@ -282,6 +310,15 @@ const __gmxSetBg = window.__GMXSetBgFactory({
   applyUserBg: (tab) => __gmxCbg.applyUserBg(tab),
 });
 
+if (!window.__GMXThemeApplyFactory) throw new Error("GMX themeapply factory missing");
+const __gmxThemeApply = window.__GMXThemeApplyFactory({
+  pickAccentOn: (a, b) => __gmxThemes.pickAccentOn(a, b),
+  getThemes: () => THEMES,
+  getCurrentTab: () => { try { return currentTabName(); } catch { return "home"; } },
+  setBg: (tab) => { try { __gmxSetBg.setBg(tab); } catch {} },
+  themeStorageKey: "gmx_theme",
+});
+
 if (!window.__GMXAccountUiFactory) throw new Error("GMX accountui factory missing");
 const __gmxAccount = window.__GMXAccountUiFactory({
   $: __gmxChrome.$,
@@ -308,8 +345,8 @@ const __gmxWpUi = window.__GMXWallpaperUiFactory({
   storage: __gmxSt,
   keys: { wpGlobal: K.WP_GLOBAL, themewallView: K.THEMEWALL_VIEW },
   getWallpaperTabs: () => WALLPAPER_TABS,
-  wallpaperKeyForTab: (tab) => wallpaperKeyForTab(tab),
-  setWallpaperForTab: (tab, id) => setWallpaperForTab(tab, id),
+  wallpaperKeyForTab: (tab) => __gmxWpStore.wallpaperKeyForTab(tab),
+  setWallpaperForTab: (tab, id) => __gmxWpStore.setWallpaperForTab(tab, id),
   getEffectiveCustomWallpapers: () => effectiveCustomWallpapersSite(),
   getWallpapers: () => WALLPAPERS,
   unlockedCountByRefs,
@@ -353,7 +390,7 @@ const __gmxThemesUi = window.__GMXThemesUiFactory({
   setMeter: (valId, fillId, used, limit) => { try { setMeter(valId, fillId, used, limit); } catch {} },
   chunkedRender: (grid, items, fn, opts) => __gmxUi.chunkedRender(grid, items, fn, opts),
   requireConnected: (label) => requireConnected(label),
-  applyTheme: (id) => applyTheme(id),
+  applyTheme: (id) => __gmxThemeApply.applyTheme(id),
 });
 
 if (!window.__GMXExtViewFactory) throw new Error("GMX extview factory missing");
@@ -378,9 +415,9 @@ const __gmxExtApply = window.__GMXExtApplyFactory({
   setExtView: (v, o) => __gmxExtView.setExtView(v, o),
   extSyncNow: (r) => __gmxExtView.extSyncNow(r),
   normalizeExtWallpaperId: (id) => normalizeExtWallpaperIdLocal(id),
-  normalizeExtWallpaperView: (v) => normalizeExtWallpaperView(v),
-  currentExtWallpaperTarget: () => currentExtWallpaperTarget(),
-  setExtWallpaperForView: (v, id) => setExtWallpaperForView(v, id),
+  normalizeExtWallpaperView: (v) => __gmxExtWpStore.normalizeExtWallpaperView(v),
+  currentExtWallpaperTarget: () => __gmxExtWpStore.currentExtWallpaperTarget(),
+  setExtWallpaperForView: (v, id) => __gmxExtWpStore.setExtWallpaperForView(v, id),
   removeExtCustomBgLegacy: () => { try { localStorage.removeItem(K.EXT_CUSTOM_BG_LEGACY); } catch {} },
   renderExtWallpapers: () => { try { renderExtWallpapers(); } catch {} },
 });
@@ -481,8 +518,8 @@ const __gmxExtWpUi = window.__GMXExtWallpaperUiFactory({
   keys: { extCustomBgGlobal: K.EXT_CUSTOM_BG_GLOBAL, extWpTarget: K.EXT_WP_TARGET },
   customUploadId: __gmxWp.CUSTOM_UPLOAD_ID,
   compressImageToJpegDataURL: (file, opts) => compressImageToJpegDataURL(file, opts),
-  setExtWallpaperForView: (view, id) => setExtWallpaperForView(view, id),
-  normalizeExtWallpaperView: (view) => normalizeExtWallpaperView(view),
+  setExtWallpaperForView: (view, id) => __gmxExtWpStore.setExtWallpaperForView(view, id),
+  normalizeExtWallpaperView: (view) => __gmxExtWpStore.normalizeExtWallpaperView(view),
   loadCustomWallpapers: () => loadCustomWallpapers(),
   getEffectiveExtCustomWallpapers: () => {
     const out = [...CUSTOM_WALLPAPERS_EXT];
@@ -494,10 +531,10 @@ const __gmxExtWpUi = window.__GMXExtWallpaperUiFactory({
     return out;
   },
   getExtWallpapers: () => EXT_WALLPAPERS,
-  syncExtWallpaperTargetUI: (sel, pref) => syncExtWallpaperTargetUI(sel, pref),
-  getExtWallpaperForView: (view) => getExtWallpaperForView(view),
-  currentExtWallpaperTarget: () => currentExtWallpaperTarget(),
-  extWallpaperLabel: (view) => extWallpaperLabel(view),
+  syncExtWallpaperTargetUI: (sel, pref) => __gmxExtWpStore.syncExtWallpaperTargetUI(sel, pref),
+  getExtWallpaperForView: (view) => __gmxExtWpStore.getExtWallpaperForView(view),
+  currentExtWallpaperTarget: () => __gmxExtWpStore.currentExtWallpaperTarget(),
+  extWallpaperLabel: (view) => __gmxExtWpStore.extWallpaperLabel(view),
   unlockedCountByRefs,
   freeVisibleExtWallpapers: FREE_VISIBLE_EXT_WALLPAPERS,
   customWpFreeCount: __gmxWp.CUSTOM_WP_FREE_COUNT,

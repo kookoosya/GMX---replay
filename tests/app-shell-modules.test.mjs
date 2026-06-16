@@ -112,6 +112,63 @@ test("extthemesui: factory exports render helper", () => {
   assert.equal(typeof mod.renderExtThemes, "function");
 });
 
+test("themeapply: factory exports applyTheme", () => {
+  const prevDoc = globalThis.document;
+  const props = new Map();
+  let bgTab = "";
+  globalThis.document = {
+    documentElement: {
+      style: { setProperty: (k, v) => props.set(k, v) },
+      classList: { contains: () => false, add: () => {} },
+      dataset: {},
+    },
+  };
+  try {
+    const mod = loadFactory("app.themeapply.js", "__GMXThemeApplyFactory")({
+      pickAccentOn: () => "#fff",
+      getThemes: () => [{ id: "classic", a: "red", b: "blue" }],
+      getCurrentTab: () => "home",
+      setBg: (tab) => { bgTab = tab; },
+    });
+    assert.equal(typeof mod.applyTheme, "function");
+    mod.applyTheme("classic");
+    assert.equal(bgTab, "home");
+    assert.equal(props.get("--accentA"), "red");
+  } finally {
+    globalThis.document = prevDoc;
+  }
+});
+
+test("wallpaperstore: tab key helpers", () => {
+  const mem = new Map();
+  const store = loadFactory("app.wallpaperstore.js", "__GMXWallpaperStoreFactory")({
+    keys: { wpGlobal: "gmx_wp_global", wpTabPrefix: "gmx_wp_tab_" },
+    lsGet: (k, d) => (mem.has(k) ? mem.get(k) : d),
+    lsSet: (k, v) => { mem.set(k, v); },
+    lsRemove: (k) => { mem.delete(k); },
+    normalizeWallpaperId: (id) => id,
+  });
+  store.setWallpaperForTab("gm", "v2_001");
+  assert.equal(store.getWallpaperForTab("gm"), "v2_001");
+  assert.equal(store.wallpaperKeyForTab("gm"), "gmx_wp_tab_gm");
+});
+
+test("extwallpaperstore: view normalization", () => {
+  const mem = new Map();
+  const store = loadFactory("app.extwallpaperstore.js", "__GMXExtWallpaperStoreFactory")({
+    keys: { extWp: "gmx_ext_wp", extWpTarget: "gmx_ext_wp_target", extWpViewPrefix: "gmx_ext_wp_view_" },
+    extLsSet: (k, v) => { mem.set(k, v); },
+    lsGet: (k, d) => (mem.has(k) ? mem.get(k) : d),
+    lsSet: (k, v) => { mem.set(k, v); },
+    lsRemove: (k) => { mem.delete(k); },
+    normalizeExtWallpaperId: (id) => id,
+  });
+  assert.equal(store.normalizeExtWallpaperView("popup"), "popup");
+  assert.equal(store.normalizeExtWallpaperView("bogus"), "all");
+  store.setExtWallpaperForView("popup", "extv3_01");
+  assert.equal(store.getExtWallpaperForView("popup"), "extv3_01");
+});
+
 test("themesui: unlockTagText and renderThemes", () => {
   const mod = loadFactory("app.themesui.js", "__GMXThemesUiFactory")({
     reqRefsForUnlockIndex: (idx, free) => (idx < free ? 0 : 3),

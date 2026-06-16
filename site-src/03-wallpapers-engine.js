@@ -7,44 +7,7 @@
   const CUSTOM_UPLOAD_ID = __gmxWp.CUSTOM_UPLOAD_ID;
   const CUSTOM_WP_RE = __gmxWp.CUSTOM_WP_RE;
   const WALLPAPERS = __gmxWp.buildSiteWallpapers();
-  const WALLPAPER_REFRESH_MIGRATION_KEY = K.WALLPAPER_REFRESH_MIGRATION;
-  function migrateLegacyWallpaperSelectionOnce(){
-    try{
-      if (localStorage.getItem(WALLPAPER_REFRESH_MIGRATION_KEY) === "1") return;
-      const mapLegacy = (id) => {
-        const v = String(id || "").trim();
-        if (!v) return "";
-        if (/^free0[12]$/i.test(v) || /^w\d+$/i.test(v) || /^v3_\d+$/i.test(v) || /^lux_/i.test(v)) return "v2_001";
-        if (v.startsWith("v2_")) return v;
-        return "v2_001";
-      };
-      const g = mapLegacy(localStorage.getItem(LS_WP_GLOBAL));
-      if (g) localStorage.setItem(LS_WP_GLOBAL, g); else localStorage.removeItem(LS_WP_GLOBAL);
-      for (const [tab] of WALLPAPER_TABS){
-        const k = wallpaperKeyForTab(tab);
-        const norm = mapLegacy(localStorage.getItem(k));
-        if (norm) localStorage.setItem(k, norm); else localStorage.removeItem(k);
-      }
-      localStorage.setItem(WALLPAPER_REFRESH_MIGRATION_KEY, "1");
-    }catch{}
-  }
-
-  const WALLPAPER_TABS = [
-    ["all","wp_apply_all"],
-    ["home","wp_apply_home"],
-    ["gm","wp_apply_gm"],
-    ["gn","wp_apply_gn"],
-    ["prediction","wp_apply_prediction"],
-    ["studio","wp_apply_studio"],
-    ["packs","wp_apply_packs"],
-    ["bulk","wp_apply_bulk"],
-    ["history","wp_apply_history"],
-    ["favorites","wp_apply_favorites"],
-    ["referrals","wp_apply_referrals"],
-    ["themes","wp_apply_themes"],
-    ["extthemes","wp_apply_extthemes"],
-    ["wallet","wp_apply_wallet"]
-  ];
+  const WALLPAPER_TABS = __gmxWpStore.SITE_WALLPAPER_TABS;
 
   let CUSTOM_WALLPAPERS_SITE = [];
   let CUSTOM_WALLPAPERS_EXT = [];
@@ -69,23 +32,7 @@
     return __gmxWp.normalizeWallpaperId(id, WALLPAPERS);
   }
 
-  function normalizeAllWallpapers(){
-    try{
-      const g = normalizeWallpaperId(localStorage.getItem(LS_WP_GLOBAL));
-      if (g) localStorage.setItem(LS_WP_GLOBAL, g);
-      else localStorage.removeItem(LS_WP_GLOBAL);
-    }catch{}
-    try{
-      for (const [tab] of WALLPAPER_TABS){
-        const k = wallpaperKeyForTab(tab);
-        const cur = localStorage.getItem(k);
-        const norm = normalizeWallpaperId(cur);
-        if (norm) localStorage.setItem(k, norm);
-        else localStorage.removeItem(k);
-      }
-    }catch{}
-  }
-  normalizeAllWallpapers();
+  __gmxWpStore.normalizeAllWallpapers();
 
   function normalizeExtWallpaperIdLocal(id){
     return __gmxWp.normalizeExtWallpaperIdLocal(id, EXT_WALLPAPERS);
@@ -102,12 +49,7 @@
   function extWallpaperThumbUrl(id){
     return __gmxWp.extWallpaperThumbUrl(id, EXT_WALLPAPERS);
   }
-  try{
-    const cur = localStorage.getItem(LS_EXT_WP);
-    const norm = normalizeExtWallpaperIdLocal(cur);
-    if (norm) localStorage.setItem(LS_EXT_WP, norm);
-    else localStorage.removeItem(LS_EXT_WP);
-  }catch{}
+  try{ __gmxExtWpStore.normalizeStoredExtWallpaperSelections(); }catch{}
 
   const TOP_LEVEL_TABS = ["home","gm","gn","prediction","referrals","leaderboard","themes","extthemes","wallet","admin"];
   function normalizeTopLevelTab(raw){
@@ -120,23 +62,10 @@
   let CURRENT_TAB = "home";
   function currentTabName(){ return CURRENT_TAB; }
 
-  function wallpaperKeyForTab(tab){
-    if (!tab || tab === "all") return LS_WP_GLOBAL;
-    return LS_WP_TAB_PREFIX + tab;
-  }
-
-  function getWallpaperForTab(tab){
-    const direct = localStorage.getItem(wallpaperKeyForTab(tab)) || "";
-    if (direct) return direct;
-    const global = localStorage.getItem(LS_WP_GLOBAL) || "";
-    return global;
-  }
-
-  function setWallpaperForTab(tab, id){
-    const k = wallpaperKeyForTab(tab);
-    if (!id) localStorage.removeItem(k);
-    else localStorage.setItem(k, id);
-  }
+  function wallpaperKeyForTab(tab){ return __gmxWpStore.wallpaperKeyForTab(tab); }
+  function getWallpaperForTab(tab){ return __gmxWpStore.getWallpaperForTab(tab); }
+  function setWallpaperForTab(tab, id){ return __gmxWpStore.setWallpaperForTab(tab, id); }
+  function migrateLegacyWallpaperSelectionOnce(){ return __gmxWpStore.migrateLegacyWallpaperSelectionOnce(); }
 
   function wallpaperAssetPath(id){
     return __gmxWp.wallpaperAssetPath(id);

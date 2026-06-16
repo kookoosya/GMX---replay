@@ -71,7 +71,9 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.chrome\.js/, "app.chrome.js script tag");
   mustMatch(rel, /app\.unlock\.js/, "app.unlock.js script tag");
   mustMatch(rel, /app\.wallpapers\.js/, "app.wallpapers.js script tag");
+  mustMatch(rel, /app\.wallpaperstore\.js/, "app.wallpaperstore.js script tag");
   mustMatch(rel, /app\.themes\.js/, "app.themes.js script tag");
+  mustMatch(rel, /app\.themeapply\.js/, "app.themeapply.js script tag");
   mustMatch(rel, /app\.ui\.js/, "app.ui.js script tag");
   mustMatch(rel, /app\.generate\.js/, "app.generate.js script tag");
   mustMatch(rel, /app\.banks\.js/, "app.banks.js script tag");
@@ -92,6 +94,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.health\.js/, "app.health.js script tag");
   mustMatch(rel, /app\.setbg\.js/, "app.setbg.js script tag");
   mustMatch(rel, /app\.extview\.js/, "app.extview.js script tag");
+  mustMatch(rel, /app\.extwallpaperstore\.js/, "app.extwallpaperstore.js script tag");
   mustMatch(rel, /app\.extapply\.js/, "app.extapply.js script tag");
   mustMatch(rel, /app\.extthemesui\.js/, "app.extthemesui.js script tag");
   mustMatch(rel, /app\.extcustombgui\.js/, "app.extcustombgui.js script tag");

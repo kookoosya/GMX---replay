@@ -66,7 +66,9 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.chrome.js", "gmx-legacy-chrome");
     await injectAppShellRuntime("/app.unlock.js", "gmx-legacy-unlock");
     await injectAppShellRuntime("/app.wallpapers.js", "gmx-legacy-wallpapers");
+    await injectAppShellRuntime("/app.wallpaperstore.js", "gmx-legacy-wallpaperstore");
     await injectAppShellRuntime("/app.themes.js", "gmx-legacy-themes");
+    await injectAppShellRuntime("/app.themeapply.js", "gmx-legacy-themeapply");
     await injectAppShellRuntime("/app.ui.js", "gmx-legacy-ui");
     await injectAppShellRuntime("/app.generate.js", "gmx-legacy-generate");
     await injectAppShellRuntime("/app.banks.js", "gmx-legacy-banks");
@@ -87,6 +89,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.health.js", "gmx-legacy-health");
     await injectAppShellRuntime("/app.setbg.js", "gmx-legacy-setbg");
     await injectAppShellRuntime("/app.extview.js", "gmx-legacy-extview");
+    await injectAppShellRuntime("/app.extwallpaperstore.js", "gmx-legacy-extwallpaperstore");
     await injectAppShellRuntime("/app.extapply.js", "gmx-legacy-extapply");
     await injectAppShellRuntime("/app.extthemesui.js", "gmx-legacy-extthemesui");
     await injectAppShellRuntime("/app.extcustombgui.js", "gmx-legacy-extcustombgui");
