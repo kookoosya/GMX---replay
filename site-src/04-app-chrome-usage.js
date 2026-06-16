@@ -220,79 +220,13 @@ const $ = __gmxChrome.$;
 
 
 
-  function setApiPillState(state){
-    const d = $("apiDot");
-    const tEl = $("apiText");
-    const active = state === "active";
-    if (d) d.classList.toggle("ok", active);
-    if (tEl) tEl.textContent = active ? "active" : (state === "offline" ? "offline" : "inactive");
-  }
+  function setApiPillState(state){ return __gmxHealth.setApiPillState(state); }
 
-  async function ping(){
-    const sessionLive = !!(getHandle() && getToken() && AUTH_OK);
-    if (!sessionLive){
-      setApiPillState("inactive");
-      return;
-    }
-    try{
-      const j = await api("/api/health");
-      setApiPillState(j && j.ok ? "active" : "offline");
-    }catch{
-      setApiPillState("offline");
-    }
-  }
+  async function ping(){ return __gmxHealth.ping(); }
 
-  // Expose a retry hook for the degraded bar (wired earlier).
-  window.__gmxRetryNow = async ()=>{
-    try{ await ping(); }catch{}
-    // If user already set a handle, try to refresh token silently.
-    try{ if (getHandle()) await initSession(true); }catch{}
-    // Refresh public panels when possible.
-    try{ if (CURRENT_TAB === "wallet"){ await loadPlans(); await loadBillingProof(); } }catch{}
-    try{ if (CURRENT_TAB === "referrals"){ scheduleRefStatsRefresh(120); } }catch{}
-    try{ if (getHandle()) await refreshUsage(); }catch{}
-  };
+  async function loadBuild(){ return __gmxHealth.loadBuild(); }
 
-  window.addEventListener("online", ()=>{ try{ setDegraded(false); window.__gmxRetryNow?.(); }catch{} });
-
-  let BUILD_ID = "";
-
-  async function loadBuild(){
-    try{
-      const j = await api("/api/version?x=1");
-      BUILD_ID = String(j.build || "");
-      const b = $("ui_build");
-      if (b) b.textContent = BUILD_ID ? ("build " + BUILD_ID) : "";
-      const link = document.querySelector('link[rel="stylesheet"]');
-      if (link && link.href.includes("BUILD")){
-        link.href = "/app.css?v=" + encodeURIComponent(j.build);
-      }
-    }catch{
-      AUTH_OK = false;
-      try{ applyAdminVisibility(); }catch{}
-    }
-  }
-
-  function watchBuildUpdates(){
-    // Helps when the wallet/extension updates and the page needs a clean reload.
-    let last = BUILD_ID;
-    let busy = false;
-    setInterval(async ()=>{
-      if (busy) return;
-      busy = true;
-      try{
-        const j = await api("/api/version?x=1");
-        const now = String(j.build || "");
-        if (last && now && now !== last){
-          toast("ok", "Update installed. Reloading...");
-          setTimeout(()=>{ try{ location.reload(); }catch{} }, 700);
-        }
-        if (now) last = now;
-      }catch(e){}
-      busy = false;
-    }, 5 * 60 * 1000);
-  }
-
+  function watchBuildUpdates(){ return __gmxHealth.watchBuildUpdates(); }
 
   function normLimitForUI(limit){ return __gmxUsage.normLimitForUI(limit); }
   function setMeter(valId, fillId, used, limit){ return __gmxUsage.setMeter(valId, fillId, used, limit); }

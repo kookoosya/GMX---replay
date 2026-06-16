@@ -38,6 +38,8 @@ const APP_FILES = [
   "app.paywall.js",
   "app.help.js",
   "app.usage.js",
+  "app.wallpaperapply.js",
+  "app.health.js",
   "arcade.html",
   "arcade.js",
   "entitlements.js",

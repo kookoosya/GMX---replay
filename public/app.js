@@ -48,7 +48,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616q";
+const ASSET_REV = "20260616r";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -146,6 +146,19 @@ const __gmxCbg = window.__GMXCustomBgFactory({
   isPro,
   unlockedCountByRefs,
   reqRefsForUnlockIndex,
+  getCurrentTab: () => { try { return currentTabName(); } catch { return "home"; } },
+  hasWallBg: () => document.body.classList.contains("hasWallBg"),
+  hasActiveUnlockedWallpaper: (tab) => {
+    try {
+      const wid = getWallpaperForTab(tab);
+      if (!wid) return false;
+      const wp = WALLPAPERS.find((x) => x.id === wid) || null;
+      const idx = wp ? WALLPAPERS.findIndex((x) => x.id === wid) : -1;
+      return !!(wp && wallpaperUnlocked(wp, idx));
+    } catch {
+      return false;
+    }
+  },
 });
 __gmxCbg.migrateLegacy();
 __gmxToggles.bootstrap();
@@ -214,6 +227,44 @@ __gmxHelp = window.__GMXHelpFactory({
   normLimitForUI: (n) => __gmxUsage.normLimitForUI(n),
   onNavigateWallet: () => { try { tab("wallet"); } catch {} },
 });
+
+if (!window.__GMXWallpaperApplyFactory) throw new Error("GMX wallpaperapply factory missing");
+const __gmxWpApply = window.__GMXWallpaperApplyFactory({
+  getCurrentTab: () => { try { return currentTabName(); } catch { return "home"; } },
+  getWallpaperForTab: (tab) => getWallpaperForTab(tab),
+  getEffectiveCustomWallpapers: () => effectiveCustomWallpapersSite(),
+  getWallpapers: () => WALLPAPERS,
+  wallpaperUnlocked: (wp, idx, len) => wallpaperUnlocked(wp, idx, len),
+  wallpaperFullUrl: (id) => wallpaperFullUrl(id),
+  ensureWallpaperLayer: () => __gmxWp.ensureWallpaperLayer(),
+  setWallpaperLayerImage: (layer, url) => __gmxWp.setWallpaperLayerImage(layer, url),
+});
+
+if (!window.__GMXHealthFactory) throw new Error("GMX health factory missing");
+const __gmxHealth = window.__GMXHealthFactory({
+  $: __gmxChrome.$,
+  api: (path, method, body) => api(path, method, body),
+  getHandle: () => getHandle(),
+  getToken: () => getToken(),
+  getAuthOk: () => AUTH_OK,
+  setAuthOk: (v) => { AUTH_OK = v; },
+  applyAdminVisibility: () => { try { applyAdminVisibility(); } catch {} },
+  toast: (type, html, ms) => __gmxChrome.toast(type, html, ms),
+  setDegraded: (on, msg) => __gmxChrome.setDegraded(on, msg),
+  onRetrySession: async () => { try { if (getHandle()) await initSession(true); } catch {} },
+  onRetryWallet: async () => {
+    try {
+      if (CURRENT_TAB === "wallet") {
+        await loadPlans();
+        await loadBillingProof();
+      }
+    } catch {}
+  },
+  onRetryReferrals: () => { try { if (CURRENT_TAB === "referrals") scheduleRefStatsRefresh(120); } catch {} },
+  onRetryUsage: async () => { try { if (getHandle()) await refreshUsage(); } catch {} },
+});
+__gmxHealth.wireRetryNow();
+__gmxHealth.wireOnlineRetry();
 
 
 
@@ -347,44 +398,7 @@ async function postEvent(type, meta){
   async function compressImageToJpegDataURL(file, options){ return __gmxCbg.compressImageToJpegDataURL(file, options); }
   async function fitImageToCoverDataUrl(file, maxW, maxH, quality){ return __gmxCbg.fitImageToCoverDataUrl(file, maxW, maxH, quality); }
 
-  function applyUserBg(tab){
-    const target = tab || currentTabName();
-
-    if (document.body.classList.contains("hasWallBg")){
-      document.documentElement.style.setProperty("--bg_user", "none");
-      document.body.classList.remove("hasUserBg");
-      return;
-    }
-
-    // Priority: per-tab custom background.
-    let data = "";
-    try{ data = localStorage.getItem(customBgKeyForTab(target)) || ""; }catch{}
-
-    // Global custom background only applies when there is NO active (unlocked) wallpaper.
-    if (!data){
-      let wallOk = false;
-      try{
-        const wid = getWallpaperForTab(target);
-        if (wid){
-          const wp = WALLPAPERS.find(x=>x.id===wid) || null;
-          let idx = -1;
-          try{ idx = wp ? WALLPAPERS.findIndex(x=>x.id===wid) : -1; }catch{}
-          wallOk = wp ? wallpaperUnlocked(wp, idx) : false;
-        }
-      }catch{}
-      if (!wallOk){
-        try{ data = localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{}
-      }
-    }
-
-    const on = !!data;
-    if (on){
-      document.documentElement.style.setProperty("--bg_user", `url("${data}")`);
-    } else {
-      document.documentElement.style.setProperty("--bg_user", "none");
-    }
-    document.body.classList.toggle("hasUserBg", on);
-  }
+  function applyUserBg(tab){ return __gmxCbg.applyUserBg(tab); }
 
   function renderCustomBgUI(){ /* merged into wallpapers tab */ }
   function syncCustomBgUI(){ /* merged into wallpapers tab */ }
@@ -567,25 +581,7 @@ async function postEvent(type, meta){
   function ensureWallpaperLayer(){ return __gmxWp.ensureWallpaperLayer(); }
   function setWallpaperLayerImage(layer, url){ return __gmxWp.setWallpaperLayerImage(layer, url); }
 
-  function applyWallpaper(tab){
-    const safeTab = String(tab || currentTabName() || "home");
-    const id = getWallpaperForTab(safeTab);
-    const effectiveCustom = effectiveCustomWallpapersSite();
-    const allWps = [...effectiveCustom, ...WALLPAPERS];
-    const wp = effectiveCustom.find(x=>x.id===id) || WALLPAPERS.find(x=>x.id===id) || null;
-    let idx = -1;
-    try{ idx = wp ? allWps.findIndex(x=>x.id===id) : -1; }catch{}
-    const ok = !id || !wp || wallpaperUnlocked(wp, idx, effectiveCustom.length);
-
-    const layer = ensureWallpaperLayer();
-    const full = (id && ok) ? wallpaperFullUrl(id) : "";
-    const on = !!(id && ok && full);
-
-    setWallpaperLayerImage(layer, on ? full : "");
-    document.documentElement.style.setProperty("--bg_wall", "none");
-    document.body.classList.toggle("hasWallBg", on);
-    document.body.classList.toggle("has-wallpaper", on);
-  }
+  function applyWallpaper(tab){ return __gmxWpApply.applyWallpaper(tab); }
 
   
   function sanitizeI18nValue(lang, value, fallback){
@@ -1833,79 +1829,13 @@ const $ = __gmxChrome.$;
 
 
 
-  function setApiPillState(state){
-    const d = $("apiDot");
-    const tEl = $("apiText");
-    const active = state === "active";
-    if (d) d.classList.toggle("ok", active);
-    if (tEl) tEl.textContent = active ? "active" : (state === "offline" ? "offline" : "inactive");
-  }
+  function setApiPillState(state){ return __gmxHealth.setApiPillState(state); }
 
-  async function ping(){
-    const sessionLive = !!(getHandle() && getToken() && AUTH_OK);
-    if (!sessionLive){
-      setApiPillState("inactive");
-      return;
-    }
-    try{
-      const j = await api("/api/health");
-      setApiPillState(j && j.ok ? "active" : "offline");
-    }catch{
-      setApiPillState("offline");
-    }
-  }
+  async function ping(){ return __gmxHealth.ping(); }
 
-  // Expose a retry hook for the degraded bar (wired earlier).
-  window.__gmxRetryNow = async ()=>{
-    try{ await ping(); }catch{}
-    // If user already set a handle, try to refresh token silently.
-    try{ if (getHandle()) await initSession(true); }catch{}
-    // Refresh public panels when possible.
-    try{ if (CURRENT_TAB === "wallet"){ await loadPlans(); await loadBillingProof(); } }catch{}
-    try{ if (CURRENT_TAB === "referrals"){ scheduleRefStatsRefresh(120); } }catch{}
-    try{ if (getHandle()) await refreshUsage(); }catch{}
-  };
+  async function loadBuild(){ return __gmxHealth.loadBuild(); }
 
-  window.addEventListener("online", ()=>{ try{ setDegraded(false); window.__gmxRetryNow?.(); }catch{} });
-
-  let BUILD_ID = "";
-
-  async function loadBuild(){
-    try{
-      const j = await api("/api/version?x=1");
-      BUILD_ID = String(j.build || "");
-      const b = $("ui_build");
-      if (b) b.textContent = BUILD_ID ? ("build " + BUILD_ID) : "";
-      const link = document.querySelector('link[rel="stylesheet"]');
-      if (link && link.href.includes("BUILD")){
-        link.href = "/app.css?v=" + encodeURIComponent(j.build);
-      }
-    }catch{
-      AUTH_OK = false;
-      try{ applyAdminVisibility(); }catch{}
-    }
-  }
-
-  function watchBuildUpdates(){
-    // Helps when the wallet/extension updates and the page needs a clean reload.
-    let last = BUILD_ID;
-    let busy = false;
-    setInterval(async ()=>{
-      if (busy) return;
-      busy = true;
-      try{
-        const j = await api("/api/version?x=1");
-        const now = String(j.build || "");
-        if (last && now && now !== last){
-          toast("ok", "Update installed. Reloading...");
-          setTimeout(()=>{ try{ location.reload(); }catch{} }, 700);
-        }
-        if (now) last = now;
-      }catch(e){}
-      busy = false;
-    }, 5 * 60 * 1000);
-  }
-
+  function watchBuildUpdates(){ return __gmxHealth.watchBuildUpdates(); }
 
   function normLimitForUI(limit){ return __gmxUsage.normLimitForUI(limit); }
   function setMeter(valId, fillId, used, limit){ return __gmxUsage.setMeter(valId, fillId, used, limit); }

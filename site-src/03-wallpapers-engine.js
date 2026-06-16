@@ -173,25 +173,7 @@
   function ensureWallpaperLayer(){ return __gmxWp.ensureWallpaperLayer(); }
   function setWallpaperLayerImage(layer, url){ return __gmxWp.setWallpaperLayerImage(layer, url); }
 
-  function applyWallpaper(tab){
-    const safeTab = String(tab || currentTabName() || "home");
-    const id = getWallpaperForTab(safeTab);
-    const effectiveCustom = effectiveCustomWallpapersSite();
-    const allWps = [...effectiveCustom, ...WALLPAPERS];
-    const wp = effectiveCustom.find(x=>x.id===id) || WALLPAPERS.find(x=>x.id===id) || null;
-    let idx = -1;
-    try{ idx = wp ? allWps.findIndex(x=>x.id===id) : -1; }catch{}
-    const ok = !id || !wp || wallpaperUnlocked(wp, idx, effectiveCustom.length);
-
-    const layer = ensureWallpaperLayer();
-    const full = (id && ok) ? wallpaperFullUrl(id) : "";
-    const on = !!(id && ok && full);
-
-    setWallpaperLayerImage(layer, on ? full : "");
-    document.documentElement.style.setProperty("--bg_wall", "none");
-    document.body.classList.toggle("hasWallBg", on);
-    document.body.classList.toggle("has-wallpaper", on);
-  }
+  function applyWallpaper(tab){ return __gmxWpApply.applyWallpaper(tab); }
 
   
   function sanitizeI18nValue(lang, value, fallback){

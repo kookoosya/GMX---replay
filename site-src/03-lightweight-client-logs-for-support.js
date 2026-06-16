@@ -73,44 +73,7 @@
   async function compressImageToJpegDataURL(file, options){ return __gmxCbg.compressImageToJpegDataURL(file, options); }
   async function fitImageToCoverDataUrl(file, maxW, maxH, quality){ return __gmxCbg.fitImageToCoverDataUrl(file, maxW, maxH, quality); }
 
-  function applyUserBg(tab){
-    const target = tab || currentTabName();
-
-    if (document.body.classList.contains("hasWallBg")){
-      document.documentElement.style.setProperty("--bg_user", "none");
-      document.body.classList.remove("hasUserBg");
-      return;
-    }
-
-    // Priority: per-tab custom background.
-    let data = "";
-    try{ data = localStorage.getItem(customBgKeyForTab(target)) || ""; }catch{}
-
-    // Global custom background only applies when there is NO active (unlocked) wallpaper.
-    if (!data){
-      let wallOk = false;
-      try{
-        const wid = getWallpaperForTab(target);
-        if (wid){
-          const wp = WALLPAPERS.find(x=>x.id===wid) || null;
-          let idx = -1;
-          try{ idx = wp ? WALLPAPERS.findIndex(x=>x.id===wid) : -1; }catch{}
-          wallOk = wp ? wallpaperUnlocked(wp, idx) : false;
-        }
-      }catch{}
-      if (!wallOk){
-        try{ data = localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{}
-      }
-    }
-
-    const on = !!data;
-    if (on){
-      document.documentElement.style.setProperty("--bg_user", `url("${data}")`);
-    } else {
-      document.documentElement.style.setProperty("--bg_user", "none");
-    }
-    document.body.classList.toggle("hasUserBg", on);
-  }
+  function applyUserBg(tab){ return __gmxCbg.applyUserBg(tab); }
 
   function renderCustomBgUI(){ /* merged into wallpapers tab */ }
   function syncCustomBgUI(){ /* merged into wallpapers tab */ }

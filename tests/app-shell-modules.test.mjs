@@ -261,6 +261,98 @@ test("custombg: tab unlock helpers", () => {
   assert.equal(cbg.requiredRefsForCustomBgTab("gm"), 0);
 });
 
+test("custombg: applyUserBg toggles hasUserBg", () => {
+  const mem = new Map();
+  const storage = {
+    keys: { CUSTOM_BG_GLOBAL: "gmx_custom_bg_global", CUSTOM_BG_TAB_PREFIX: "gmx_custom_bg_tab_" },
+    lsGet(k, fb = "") { return mem.has(k) ? mem.get(k) : fb; },
+    lsSet(k, v) { mem.set(k, String(v)); },
+    lsRemove(k) { mem.delete(k); },
+  };
+  const flags = new Set();
+  const prevDoc = globalThis.document;
+  globalThis.document = {
+    documentElement: { style: { setProperty() {} } },
+    body: {
+      classList: {
+        contains: (c) => flags.has(c),
+        toggle(c, on) { if (on) flags.add(c); else flags.delete(c); },
+        remove(c) { flags.delete(c); },
+      },
+    },
+  };
+  try {
+    const cbg = loadFactory("app.custombg.js", "__GMXCustomBgFactory")({
+      storage,
+      isPro: () => false,
+      unlockedCountByRefs: (t) => t,
+      reqRefsForUnlockIndex: () => 0,
+      getCurrentTab: () => "home",
+      hasWallBg: () => false,
+      hasActiveUnlockedWallpaper: () => false,
+    });
+    storage.lsSet("gmx_custom_bg_global", "data:image/jpeg;base64,abc");
+    cbg.applyUserBg("home");
+    assert.equal(flags.has("hasUserBg"), true);
+  } finally {
+    globalThis.document = prevDoc;
+  }
+});
+
+test("wallpaperapply: applyWallpaper toggles hasWallBg", () => {
+  const prevDoc = globalThis.document;
+  const flags = new Set();
+  const layer = {
+    style: { display: "" },
+    replaceChildren() {},
+    setAttribute() {},
+    getAttribute: () => "",
+    querySelector: () => null,
+    appendChild() {},
+  };
+  globalThis.document = {
+    documentElement: { style: { setProperty() {} } },
+    body: {
+      classList: {
+        toggle(c, on) { if (on) flags.add(c); else flags.delete(c); },
+      },
+      prepend() {},
+    },
+    getElementById: () => null,
+    createElement: () => layer,
+  };
+  try {
+    const wpApply = loadFactory("app.wallpaperapply.js", "__GMXWallpaperApplyFactory")({
+      getCurrentTab: () => "home",
+      getWallpaperForTab: () => "v2_001",
+      getEffectiveCustomWallpapers: () => [],
+      getWallpapers: () => [{ id: "v2_001", tier: "free" }],
+      wallpaperUnlocked: () => true,
+      wallpaperFullUrl: () => "/assets/wallpapers/v2_001.webp",
+      ensureWallpaperLayer: () => layer,
+      setWallpaperLayerImage: (l, url) => {
+        layer.style.display = url ? "block" : "none";
+      },
+    });
+    wpApply.applyWallpaper("home");
+    assert.equal(flags.has("hasWallBg"), true);
+  } finally {
+    globalThis.document = prevDoc;
+  }
+});
+
+test("health: ping inactive without session", async () => {
+  const health = loadFactory("app.health.js", "__GMXHealthFactory")({
+    $: () => null,
+    api: async () => ({ ok: true }),
+    getHandle: () => "",
+    getToken: () => "",
+    getAuthOk: () => false,
+  });
+  await health.ping();
+  assert.equal(typeof health.setApiPillState, "function");
+});
+
 test("tabtheme: getTabBg returns gradient string", () => {
   const prevGcs = globalThis.getComputedStyle;
   const prevDoc = globalThis.document;

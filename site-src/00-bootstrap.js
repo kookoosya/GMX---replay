@@ -48,7 +48,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616q";
+const ASSET_REV = "20260616r";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -146,6 +146,19 @@ const __gmxCbg = window.__GMXCustomBgFactory({
   isPro,
   unlockedCountByRefs,
   reqRefsForUnlockIndex,
+  getCurrentTab: () => { try { return currentTabName(); } catch { return "home"; } },
+  hasWallBg: () => document.body.classList.contains("hasWallBg"),
+  hasActiveUnlockedWallpaper: (tab) => {
+    try {
+      const wid = getWallpaperForTab(tab);
+      if (!wid) return false;
+      const wp = WALLPAPERS.find((x) => x.id === wid) || null;
+      const idx = wp ? WALLPAPERS.findIndex((x) => x.id === wid) : -1;
+      return !!(wp && wallpaperUnlocked(wp, idx));
+    } catch {
+      return false;
+    }
+  },
 });
 __gmxCbg.migrateLegacy();
 __gmxToggles.bootstrap();
@@ -214,6 +227,44 @@ __gmxHelp = window.__GMXHelpFactory({
   normLimitForUI: (n) => __gmxUsage.normLimitForUI(n),
   onNavigateWallet: () => { try { tab("wallet"); } catch {} },
 });
+
+if (!window.__GMXWallpaperApplyFactory) throw new Error("GMX wallpaperapply factory missing");
+const __gmxWpApply = window.__GMXWallpaperApplyFactory({
+  getCurrentTab: () => { try { return currentTabName(); } catch { return "home"; } },
+  getWallpaperForTab: (tab) => getWallpaperForTab(tab),
+  getEffectiveCustomWallpapers: () => effectiveCustomWallpapersSite(),
+  getWallpapers: () => WALLPAPERS,
+  wallpaperUnlocked: (wp, idx, len) => wallpaperUnlocked(wp, idx, len),
+  wallpaperFullUrl: (id) => wallpaperFullUrl(id),
+  ensureWallpaperLayer: () => __gmxWp.ensureWallpaperLayer(),
+  setWallpaperLayerImage: (layer, url) => __gmxWp.setWallpaperLayerImage(layer, url),
+});
+
+if (!window.__GMXHealthFactory) throw new Error("GMX health factory missing");
+const __gmxHealth = window.__GMXHealthFactory({
+  $: __gmxChrome.$,
+  api: (path, method, body) => api(path, method, body),
+  getHandle: () => getHandle(),
+  getToken: () => getToken(),
+  getAuthOk: () => AUTH_OK,
+  setAuthOk: (v) => { AUTH_OK = v; },
+  applyAdminVisibility: () => { try { applyAdminVisibility(); } catch {} },
+  toast: (type, html, ms) => __gmxChrome.toast(type, html, ms),
+  setDegraded: (on, msg) => __gmxChrome.setDegraded(on, msg),
+  onRetrySession: async () => { try { if (getHandle()) await initSession(true); } catch {} },
+  onRetryWallet: async () => {
+    try {
+      if (CURRENT_TAB === "wallet") {
+        await loadPlans();
+        await loadBillingProof();
+      }
+    } catch {}
+  },
+  onRetryReferrals: () => { try { if (CURRENT_TAB === "referrals") scheduleRefStatsRefresh(120); } catch {} },
+  onRetryUsage: async () => { try { if (getHandle()) await refreshUsage(); } catch {} },
+});
+__gmxHealth.wireRetryNow();
+__gmxHealth.wireOnlineRetry();
 
 
 

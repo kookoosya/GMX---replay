@@ -169,6 +169,38 @@
       return canvas.toDataURL("image/jpeg", quality);
     }
 
+    const getCurrentTab =
+      typeof ctx.getCurrentTab === "function" ? ctx.getCurrentTab : () => "home";
+    const hasWallBg = typeof ctx.hasWallBg === "function" ? ctx.hasWallBg : () => false;
+    const hasActiveUnlockedWallpaper =
+      typeof ctx.hasActiveUnlockedWallpaper === "function"
+        ? ctx.hasActiveUnlockedWallpaper
+        : () => false;
+
+    function applyUserBg(tab) {
+      const target = tab || getCurrentTab();
+
+      if (hasWallBg()) {
+        document.documentElement.style.setProperty("--bg_user", "none");
+        document.body.classList.remove("hasUserBg");
+        return;
+      }
+
+      let data = storage.lsGet(customBgKeyForTab(target), "");
+
+      if (!data && !hasActiveUnlockedWallpaper(target)) {
+        data = storage.lsGet(keys.CUSTOM_BG_GLOBAL, "");
+      }
+
+      const on = !!data;
+      if (on) {
+        document.documentElement.style.setProperty("--bg_user", `url("${data}")`);
+      } else {
+        document.documentElement.style.setProperty("--bg_user", "none");
+      }
+      document.body.classList.toggle("hasUserBg", on);
+    }
+
     return {
       TABS,
       TABS_PUBLIC: TABS,
@@ -185,6 +217,7 @@
       loadImage,
       compressImageToJpegDataURL,
       fitImageToCoverDataUrl,
+      applyUserBg,
     };
   };
 })(window);

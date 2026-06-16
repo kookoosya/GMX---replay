@@ -165,6 +165,8 @@ export default defineConfig(({ command, mode }) => {
         "/app.paywall.js": { target: BACKEND, changeOrigin: true },
         "/app.help.js": { target: BACKEND, changeOrigin: true },
         "/app.usage.js": { target: BACKEND, changeOrigin: true },
+        "/app.wallpaperapply.js": { target: BACKEND, changeOrigin: true },
+        "/app.health.js": { target: BACKEND, changeOrigin: true },
         "/mode.js": { target: BACKEND, changeOrigin: true },
         "/entitlements.js": { target: BACKEND, changeOrigin: true },
         "/themes.json": { target: BACKEND, changeOrigin: true },

@@ -40,6 +40,8 @@ const shellModules = [
   "app.paywall.js",
   "app.help.js",
   "app.usage.js",
+  "app.wallpaperapply.js",
+  "app.health.js",
 ];
 for (const name of shellModules) {
   const modSrc = path.join(root, "public", name);
