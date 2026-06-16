@@ -52,6 +52,7 @@ const shellModules = [
   "app.help.js",
   "app.usage.js",
   "app.wallpaperapply.js",
+  "app.wallpaperui.js",
   "app.health.js",
   "app.setbg.js",
   "app.themesui.js",
@@ -64,6 +65,7 @@ const shellModules = [
   "app.tabwire.js",
   "app.extwallpaperui.js",
   "app.accountui.js",
+  "app.authwire.js",
 ];
 for (const name of shellModules) {
   const modSrc = path.join(root, "public", name);

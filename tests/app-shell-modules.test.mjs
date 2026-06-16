@@ -205,6 +205,31 @@ test("tabwire: normalizeTopLevelTab via tab helper", () => {
   assert.equal(shown, "wallet");
 });
 
+test("authwire: factory exports lazy auth helpers", () => {
+  let created = 0;
+  const code = readFileSync(path.join(root, "public", "app.authwire.js"), "utf8");
+  const win = {
+    __GMXAuthFactory: () => {
+      created++;
+      return {
+        getHandle: () => "@test",
+        getToken: () => "tok",
+        normalizeHandle: (s) => String(s || ""),
+        isConnected: () => true,
+        requireConnected: () => true,
+        isPublicApi: () => false,
+        initSession: async () => true,
+        api: async () => ({}),
+      };
+    },
+  };
+  new Function("window", `${code};`)(win);
+  const wire = win.__GMXAuthWireFactory({ buildAuthConfig: () => ({}) });
+  assert.equal(wire.getHandle(), "@test");
+  assert.equal(wire.getHandle(), "@test");
+  assert.equal(created, 1);
+});
+
 test("extview: normalizeExtViewValue and bindExtTabs", () => {
   const extview = loadFactory("app.extview.js", "__GMXExtViewFactory")({
     $: () => null,

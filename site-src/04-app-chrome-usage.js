@@ -48,9 +48,29 @@ const $ = __gmxChrome.$;
     onGoHome: () => { try { hideFatal(); tab("home"); } catch { location.href = "/"; } },
   });
 
-  function normalizeHandle(input){ return __getGMXAuth().normalizeHandle(input); }
-
-  function getHandle(){ return __getGMXAuth().getHandle(); }
+  if (!window.__GMXAuthWireFactory) throw new Error("GMX authwire factory missing");
+  const __gmxAuthWire = window.__GMXAuthWireFactory({
+    buildAuthConfig: () => ({
+      API,
+      LS_HANDLE,
+      LS_TOKEN,
+      LS_IS_ADMIN,
+      LS_ADMIN_CLAIMABLE,
+      isLocalDevHost,
+      getAdminToken,
+      setAuthOk: (v) => { AUTH_OK = !!v; },
+      $,
+      t,
+      toast,
+      escapeHtml: esc,
+      applyAdminVisibility,
+      ping,
+      setDegraded,
+    }),
+  });
+  function __getGMXAuth(){ return __gmxAuthWire.getAuth(); }
+  function normalizeHandle(input){ return __gmxAuthWire.normalizeHandle(input); }
+  function getHandle(){ return __gmxAuthWire.getHandle(); }
 
   function siteLang(){
     try{ return String(localStorage.getItem(LS_SITE_LANG) || "en").toLowerCase(); }catch(_e){ return "en"; }
@@ -75,44 +95,12 @@ const $ = __gmxChrome.$;
   function closePaySuccess(){ return __gmxPaywall.closePaySuccess(); }
   function bindPaySuccess(){ return __gmxPaywall.bindPaySuccess(); }
 
-  function getToken(){ return __getGMXAuth().getToken(); }
-
-  function isConnected(){ return __getGMXAuth().isConnected(); }
-  function requireConnected(target){ return __getGMXAuth().requireConnected(target); }
-
-  
-  function isPublicApi(path){ return __getGMXAuth().isPublicApi(path); }
-
-  async function initSession(force=false){ return await __getGMXAuth().initSession(force); }
-
-  async function api(path, method="GET", body, opts={}){ return await __getGMXAuth().api(path, method, body, opts); }
-
-  var __gmxAuthInstance;
-
-  function __getGMXAuth(){
-    if (__gmxAuthInstance) return __gmxAuthInstance;
-    if (!window.__GMXAuthFactory) throw new Error("GMX auth factory missing");
-    __gmxAuthInstance = window.__GMXAuthFactory({
-      API,
-      LS_HANDLE,
-      LS_TOKEN,
-      LS_IS_ADMIN,
-      LS_ADMIN_CLAIMABLE,
-      isLocalDevHost,
-      getAdminToken,
-      setAuthOk: (v)=>{ AUTH_OK = !!v; },
-      $,
-      t,
-      toast,
-      escapeHtml,
-      applyAdminVisibility,
-      ping,
-      setDegraded
-    });
-    return __gmxAuthInstance;
-  }
-
-
+  function getToken(){ return __gmxAuthWire.getToken(); }
+  function isConnected(){ return __gmxAuthWire.isConnected(); }
+  function requireConnected(target){ return __gmxAuthWire.requireConnected(target); }
+  function isPublicApi(path){ return __gmxAuthWire.isPublicApi(path); }
+  async function initSession(force=false){ return await __gmxAuthWire.initSession(force); }
+  async function api(path, method="GET", body, opts={}){ return await __gmxAuthWire.api(path, method, body, opts); }
 
   function setApiPillState(state){ return __gmxHealth.setApiPillState(state); }
 

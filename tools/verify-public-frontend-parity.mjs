@@ -62,6 +62,7 @@ const APP_FILES = [
   "app.tabwire.js",
   "app.extwallpaperui.js",
   "app.accountui.js",
+  "app.authwire.js",
   "arcade.html",
   "arcade.js",
   "entitlements.js",

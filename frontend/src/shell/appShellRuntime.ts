@@ -106,6 +106,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.tabwire.js", "gmx-legacy-tabwire");
     await injectAppShellRuntime("/app.extwallpaperui.js", "gmx-legacy-extwallpaperui");
     await injectAppShellRuntime("/app.accountui.js", "gmx-legacy-accountui");
+    await injectAppShellRuntime("/app.authwire.js", "gmx-legacy-authwire");
     await injectAppShellRuntime("/app.auth.js", "gmx-legacy-auth");
     await injectAppShellRuntime("/app.js", "gmx-app-shell-runtime");
     await waitForAppShellReady();

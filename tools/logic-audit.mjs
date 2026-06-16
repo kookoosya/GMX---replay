@@ -111,6 +111,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.tabwire\.js/, "app.tabwire.js script tag");
   mustMatch(rel, /app\.extwallpaperui\.js/, "app.extwallpaperui.js script tag");
   mustMatch(rel, /app\.accountui\.js/, "app.accountui.js script tag");
+  mustMatch(rel, /app\.authwire\.js/, "app.authwire.js script tag");
   mustMatch(rel, /app\.auth\.js/, "app.auth.js script tag");
   mustNotMatch(rel, /id="supportOut"/, "supportOut textarea removed");
   mustNotMatch(rel, /id="toolSupport"/, "toolSupport button removed from HTML");

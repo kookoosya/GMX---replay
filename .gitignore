@@ -59,3 +59,6 @@ tools/test-best*.mjs
 tools/diag-hook.mjs
 tools/print-gen-samples.mjs
 WORK_STATUS.md
+
+# Vite dev fallback only — canonical binaries live in assets/ (served at /assets)
+frontend/public/assets/
