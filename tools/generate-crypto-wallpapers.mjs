@@ -117,15 +117,8 @@ function makeCryptoSvg({ width, height, n, kind }) {
       )}" stroke-linecap="round"/>
     </g>`;
 
-  // Fonts: we don't want to rely on special fonts; SVG text will fallback.
-  const tag = svgEscape(motif.tag);
-  const sub = svgEscape(motif.sub);
-
-  const labelY = kind === "ext" ? height * 0.74 : height * 0.70;
-  const subY = kind === "ext" ? height * 0.80 : height * 0.78;
-
-  const fontA = Math.max(44, width * (kind === "ext" ? 0.055 : 0.07));
-  const fontB = Math.max(24, width * (kind === "ext" ? 0.03 : 0.04));
+  // No text inside SVG: site/extension already show names/labels.
+  // Here we only draw visuals (gradients/orbs/triangle/X).
 
   const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
@@ -160,13 +153,6 @@ function makeCryptoSvg({ width, height, n, kind }) {
     ${sol}
     ${xIcon}
   </g>
-
-  <text x="${width / 2}" y="${labelY}" text-anchor="middle"
-    fill="rgba(255,255,255,0.92)" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial"
-    font-size="${fontA}" font-weight="900" letter-spacing="0.6">${tag}</text>
-  <text x="${width / 2}" y="${subY}" text-anchor="middle"
-    fill="rgba(255,255,255,0.74)" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial"
-    font-size="${fontB}" font-weight="800" letter-spacing="0.9">${sub}</text>
 </svg>`;
 
   return svg;
@@ -202,8 +188,8 @@ async function main() {
       const svgFull = makeCryptoSvg({ width: 1920, height: 1080, n: i, kind: "site" });
       const svgThumb = makeCryptoSvg({ width: 480, height: 270, n: i, kind: "site" });
 
-      await renderWebp({ sharp, svg: svgFull, width: 1920, height: 1080, outPath: outFull, quality: 84 });
-      await renderWebp({ sharp, svg: svgThumb, width: 480, height: 270, outPath: outThumb, quality: 78 });
+      await renderWebp({ sharp, svg: svgFull, width: 1920, height: 1080, outPath: outFull, quality: 92 });
+      await renderWebp({ sharp, svg: svgThumb, width: 480, height: 270, outPath: outThumb, quality: 90 });
       changed++;
       if (changed % 8 === 0) process.stdout.write(".");
     }
@@ -220,8 +206,8 @@ async function main() {
       const svgFull = makeCryptoSvg({ width: 1080, height: 1920, n: i, kind: "ext" });
       const svgThumb = makeCryptoSvg({ width: 360, height: 640, n: i, kind: "ext" });
 
-      await renderWebp({ sharp, svg: svgFull, width: 1080, height: 1920, outPath: outFull, quality: 84 });
-      await renderWebp({ sharp, svg: svgThumb, width: 360, height: 640, outPath: outThumb, quality: 78 });
+      await renderWebp({ sharp, svg: svgFull, width: 1080, height: 1920, outPath: outFull, quality: 92 });
+      await renderWebp({ sharp, svg: svgThumb, width: 360, height: 640, outPath: outThumb, quality: 90 });
       changed++;
       if (changed % 8 === 0) process.stdout.write(".");
     }

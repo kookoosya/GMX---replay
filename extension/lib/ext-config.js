@@ -42,7 +42,7 @@
       enabled: "gmx_market_alerts_enabled_v1",
       interval: "gmx_market_alerts_interval_v1",
     },
-    ASSET_REV: "20260616c",
+    ASSET_REV: "20260616e",
     WALLPAPER_REFRESH_KEY: "gmx_ext_wp_refresh_20260323",
     LEGACY_KEYS: {
       base: "apiBase",
