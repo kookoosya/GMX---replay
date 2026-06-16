@@ -21,6 +21,7 @@ for (const dest of targets) {
 const shellModules = [
   "app.auth.js",
   "app.storage.js",
+  "app.format.js",
   "app.unlock.js",
   "app.wallpapers.js",
   "app.themes.js",

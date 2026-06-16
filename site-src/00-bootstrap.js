@@ -5,6 +5,9 @@
   const __gmxSt = window.__GMXStorageFactory();
   const K = __gmxSt.keys;
 
+  if (!window.__GMXFormatFactory) throw new Error("GMX format factory missing");
+  const __gmxFmt = window.__GMXFormatFactory();
+
   const ADMIN_HANDLE = "@Kristofer_Sol_";
   let SAVE_CAP_FREE = 50;
   const EMPTY = "__EMPTY__";
@@ -37,7 +40,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616k";
+const ASSET_REV = "20260616l";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });

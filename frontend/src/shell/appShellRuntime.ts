@@ -62,6 +62,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/mode.js", "gmx-legacy-mode");
     await injectAppShellRuntime("/entitlements.js", "gmx-legacy-entitlements");
     await injectAppShellRuntime("/app.storage.js", "gmx-legacy-storage");
+    await injectAppShellRuntime("/app.format.js", "gmx-legacy-format");
     await injectAppShellRuntime("/app.unlock.js", "gmx-legacy-unlock");
     await injectAppShellRuntime("/app.wallpapers.js", "gmx-legacy-wallpapers");
     await injectAppShellRuntime("/app.themes.js", "gmx-legacy-themes");

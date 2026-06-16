@@ -138,3 +138,11 @@ test("antirepeat: window map and ban filtering", () => {
   const kept = anti.filterLines("gm", "gmx_gm_bank", ["GM legend", "Fresh morning"], 2);
   assert.deepEqual(kept, ["Fresh morning"]);
 });
+
+test("format: escapeHtml and friendly errors", () => {
+  const fmt = loadFactory("app.format.js", "__GMXFormatFactory")();
+  assert.equal(fmt.escapeHtml(`a & b <c>`), "a &amp; b &lt;c&gt;");
+  assert.equal(fmt.friendlyUiErrorMessage("timeout", { scope: "generate" }), "Generation timed out. Try again.");
+  assert.equal(fmt.friendlyUiErrorMessage("not_connected"), "Connect first.");
+  assert.equal(fmt.isNetworkishErrorMessage("request_failed"), true);
+});

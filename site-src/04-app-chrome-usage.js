@@ -72,7 +72,7 @@ const $ = (id) => document.getElementById(id);
 
   
   let INIT_DONE = false;
-  const esc = (s)=>String(s??"").replace(/[&<>"']/g, (c)=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+  const esc = (s)=>__gmxFmt.escapeHtml(s);
 
   function showFatal(msg){
     const ov = $("fatalOverlay");
