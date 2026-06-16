@@ -39,74 +39,9 @@ const $ = __gmxChrome.$;
 
     function setBg(tab){ return __gmxSetBg.setBg(tab); }
 
-  function ensurePredictionTabVisible(){
-    try{
-      const tabs = document.querySelector(".tabs");
-      if (!tabs) return;
-      let btn = document.getElementById("t_prediction");
-      if (!btn){
-        btn = document.createElement("button");
-        btn.className = "tab";
-        btn.id = "t_prediction";
-        btn.dataset.tab = "prediction";
-        btn.textContent = "Prediction Market";
-        const before = document.getElementById("t_wallet");
-        if (before && before.parentNode === tabs) tabs.insertBefore(btn, before);
-        else tabs.appendChild(btn);
-      }
-      btn.classList.remove("hidden");
-      let pane = document.getElementById("tab-prediction");
-      if (!pane){
-        pane = document.createElement("div");
-        pane.id = "tab-prediction";
-        pane.className = "hidden";
-        pane.innerHTML = `<div class="card"><div class="title">Prediction Market</div><div class="note">Coming soon.</div></div>`;
-        tabs.insertAdjacentElement("afterend", pane);
-      }
-      pane.classList.add("hidden");
-    }catch{}
-  }
+  function ensurePredictionTabVisible(){ return __gmxNav.ensurePredictionTabVisible(); }
 
-    function showTab(name){
-    name = normalizeTopLevelTab(name);
-    CURRENT_TAB = name;
-    document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active", b.dataset.tab===name));
-    TOP_LEVEL_TABS.forEach(k=>{
-      const el = document.getElementById("tab-"+k);
-      if (el) el.classList.toggle("hidden", k!==name);
-    });
-    setBg(name);
-    try{ localStorage.setItem(LS_LAST_TAB, name); }catch(_e){}
-  
-    try{ applyLang(); }catch(e){}
-    try{ updateLangFlags(); }catch(e){}
-    try{ renderWallpaperUI(); }catch(e){}
-  
-    if (name === "referrals"){
-      try{ if (getHandle()) $("refLoad")?.click(); }catch(e){}
-    }
-    if (name === "leaderboard"){
-      try{ bindLeaderboardUI(); }catch(e){}
-      try{ loadLeaderboard(LB_DAYS||7); }catch(e){}
-    }
-    if (name === "prediction"){
-      try{ loadPredictionSignals({ force:true }); }catch(e){}
-    }
-    if (name === "extthemes") {
-      try{ renderExtThemes(); }catch(e){}
-      try{ renderExtWallpapers(); }catch(e){}
-      try{ renderExtCustomBgUI(); }catch(e){}
-      try{ setExtView(normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW)||"theme"), { force:true, silent:true }); }catch(e){}
-    }
-    if (name === "admin"){
-      try{ syncAdminUi(); }catch(e){}
-    }
-    if (name === "wallet"){
-      try{ loadPlans(); }catch(e){}
-      try{ loadBillingProof(); }catch(e){}
-      try{ setSfUi(); }catch(e){}
-    }
-}
+  function showTab(name){ return __gmxNav.showTab(name); }
 
 // Simple info modal (no dependencies)
   function showInfoModal(title, html){

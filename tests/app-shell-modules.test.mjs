@@ -78,6 +78,44 @@ test("ui: factory exports perf helpers", () => {
   assert.equal(typeof ui.chunkedRender, "function");
   assert.equal(typeof ui.yieldToUiFrame, "function");
   assert.equal(typeof ui.prefetchImage, "function");
+  assert.equal(typeof ui.observeLazyBg, "function");
+});
+
+test("nav: showTab toggles active tab", () => {
+  const flags = new Map();
+  const prevDoc = globalThis.document;
+  globalThis.document = {
+    querySelectorAll: (sel) => {
+      if (sel === ".tab") {
+        return [{ dataset: { tab: "home" }, classList: { toggle(c, on) { if (c === "active") flags.set("home", on); } } }];
+      }
+      return [];
+    },
+    getElementById: (id) => {
+      if (id === "tab-home") return { classList: { toggle(_c, on) { flags.set("pane", !on); } } };
+      return null;
+    },
+  };
+  try {
+    const nav = loadFactory("app.nav.js", "__GMXNavFactory")({
+      normalizeTopLevelTab: (n) => n,
+      setCurrentTab: () => {},
+      getTopLevelTabs: () => ["home"],
+      setBg: () => {},
+      persistLastTab: () => {},
+    });
+    nav.showTab("home");
+    assert.equal(flags.get("home"), true);
+  } finally {
+    globalThis.document = prevDoc;
+  }
+});
+
+test("extwallpaperui: factory exports render helper", () => {
+  const extWpUi = loadFactory("app.extwallpaperui.js", "__GMXExtWallpaperUiFactory")({
+    $: () => null,
+  });
+  assert.equal(typeof extWpUi.renderExtWallpapers, "function");
 });
 
 test("banks: read/write saved lines", () => {

@@ -48,7 +48,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616s";
+const ASSET_REV = "20260616t";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -305,7 +305,7 @@ const __gmxWpUi = window.__GMXWallpaperUiFactory({
   getWallpapers: () => WALLPAPERS,
   unlockedCountByRefs,
   freeVisibleWallpapers: FREE_VISIBLE_WALLPAPERS,
-  customWpFreeCount: CUSTOM_WP_FREE_COUNT,
+  customWpFreeCount: __gmxWp.CUSTOM_WP_FREE_COUNT,
   isPro,
   reqRefsForUnlockIndex,
   wallpaperUnlocked: (wp, idx, len) => wallpaperUnlocked(wp, idx, len),
@@ -313,11 +313,83 @@ const __gmxWpUi = window.__GMXWallpaperUiFactory({
   wallpaperFullUrl: (id) => wallpaperFullUrl(id),
   loadCustomWallpapers: () => loadCustomWallpapers(),
   chunkedRender: (grid, items, fn, opts) => __gmxUi.chunkedRender(grid, items, fn, opts),
-  observeLazyBg: (el) => observeLazyBg(el),
+  observeLazyBg: (el) => __gmxUi.observeLazyBg(el),
   prefetchImage: (url) => __gmxUi.prefetchImage(url),
   getCurrentTab: () => { try { return currentTabName(); } catch { return "home"; } },
   applyUserBg: (tab) => __gmxCbg.applyUserBg(tab),
   applyWallpaper: (tab) => __gmxWpApply.applyWallpaper(tab),
+});
+
+if (!window.__GMXNavFactory) throw new Error("GMX nav factory missing");
+const __gmxNav = window.__GMXNavFactory({
+  normalizeTopLevelTab: (n) => normalizeTopLevelTab(n),
+  setCurrentTab: (n) => { CURRENT_TAB = n; },
+  getTopLevelTabs: () => TOP_LEVEL_TABS,
+  setBg: (n) => __gmxSetBg.setBg(n),
+  persistLastTab: (n) => { try { __gmxSt.lsSet(K.LAST_TAB, n); } catch {} },
+  onTabActivated: (name) => {
+    try { applyLang(); } catch {}
+    try { updateLangFlags(); } catch {}
+    try { renderWallpaperUI(); } catch {}
+    if (name === "referrals") { try { if (getHandle()) $("refLoad")?.click(); } catch {} }
+    if (name === "leaderboard") {
+      try { bindLeaderboardUI(); } catch {}
+      try { loadLeaderboard(LB_DAYS || 7); } catch {}
+    }
+    if (name === "prediction") { try { loadPredictionSignals({ force: true }); } catch {} }
+    if (name === "extthemes") {
+      try { renderExtThemes(); } catch {}
+      try { renderExtWallpapers(); } catch {}
+      try { renderExtCustomBgUI(); } catch {}
+      try {
+        setExtView(normalizeExtViewValue(__gmxSt.lsGet(K.EXT_VIEW, "theme")), { force: true, silent: true });
+      } catch {}
+    }
+    if (name === "admin") { try { syncAdminUi(); } catch {} }
+    if (name === "wallet") {
+      try { loadPlans(); } catch {}
+      try { loadBillingProof(); } catch {}
+      try { setSfUi(); } catch {}
+    }
+  },
+});
+
+if (!window.__GMXExtWallpaperUiFactory) throw new Error("GMX extwallpaperui factory missing");
+const __gmxExtWpUi = window.__GMXExtWallpaperUiFactory({
+  $: __gmxChrome.$,
+  t: (key) => t(key),
+  toast: (type, html, ms) => __gmxChrome.toast(type, html, ms),
+  escapeHtml: (s) => __gmxFmt.escapeHtml(s),
+  initExtWallpaperControls: () => { try { initExtWallpaperControls(); } catch {} },
+  loadCustomWallpapers: () => loadCustomWallpapers(),
+  getEffectiveExtCustomWallpapers: () => {
+    const out = [...CUSTOM_WALLPAPERS_EXT];
+    try {
+      if (__gmxSt.lsGet(K.EXT_CUSTOM_BG_GLOBAL, "")) {
+        out.push({ id: __gmxWp.CUSTOM_UPLOAD_ID, name: "My upload", tier: "custom" });
+      }
+    } catch {}
+    return out;
+  },
+  getExtWallpapers: () => EXT_WALLPAPERS,
+  syncExtWallpaperTargetUI: (sel, pref) => syncExtWallpaperTargetUI(sel, pref),
+  getExtWallpaperForView: (view) => getExtWallpaperForView(view),
+  currentExtWallpaperTarget: () => currentExtWallpaperTarget(),
+  extWallpaperLabel: (view) => extWallpaperLabel(view),
+  unlockedCountByRefs,
+  freeVisibleExtWallpapers: FREE_VISIBLE_EXT_WALLPAPERS,
+  customWpFreeCount: __gmxWp.CUSTOM_WP_FREE_COUNT,
+  isPro,
+  reqRefsForUnlockIndex,
+  extWallpaperThumbUrl: (id) => extWallpaperThumbUrl(id),
+  extWallpaperFullUrl: (id) => extWallpaperFullUrl(id),
+  chunkedRender: (grid, items, fn, opts) => __gmxUi.chunkedRender(grid, items, fn, opts),
+  observeLazyBg: (el) => __gmxUi.observeLazyBg(el),
+  prefetchImage: (url) => __gmxUi.prefetchImage(url),
+  requireConnected: (label) => requireConnected(label),
+  applyExtWallpaper: (id, target) => applyExtWallpaper(id, target),
+  unlockTagText: (idx, unlocked, free) => unlockTagText(idx, unlocked, free),
+  formatUnlockMeter: (cur, total) => formatUnlockMeter(cur, total),
 });
 
 
@@ -336,34 +408,7 @@ const __gmxWpUi = window.__GMXWallpaperUiFactory({
     return __gmxUi.prefetchImage(url);
   }
 
-  let __LAZY_OBSERVER = null;
-  function observeLazyBg(el){
-    try{
-      if (!el) return;
-      const bg = el.getAttribute("data-bg");
-      if (!bg) return;
-      if (!('IntersectionObserver' in window)){
-        el.style.backgroundImage = `url('${bg}')`;
-        el.removeAttribute("data-bg");
-        return;
-      }
-      if (!__LAZY_OBSERVER){
-        __LAZY_OBSERVER = new IntersectionObserver((entries)=>{
-          for (const e of entries){
-            if (!e.isIntersecting) continue;
-            const node = e.target;
-            const url = node.getAttribute("data-bg");
-            if (url){
-              node.style.backgroundImage = `url('${url}')`;
-              node.removeAttribute("data-bg");
-            }
-            try{ __LAZY_OBSERVER.unobserve(node); }catch{}
-          }
-        }, { rootMargin: "240px" });
-      }
-      __LAZY_OBSERVER.observe(el);
-    }catch{}
-  }
+  function observeLazyBg(el){ return __gmxUi.observeLazyBg(el); }
 
 async function postEvent(type, meta){
   try{
@@ -1302,102 +1347,7 @@ function renderExtThemes(){
   st.innerHTML = `<span class="ok">Selected.</span> ${escapeHtml(chosenName)}.`;
 }
 
-function renderExtWallpapers(){
-  const grid = $("extWpGrid");
-  const st = $("extWpStatus");
-  const targetSel = $("extWpTarget");
-  if (!grid || !st) return;
-
-  initExtWallpaperControls();
-  loadCustomWallpapers().then((loaded)=>{
-    if (loaded && document.contains(grid)) renderExtWallpapers();
-  });
-  const effectiveExtCustom = (()=>{
-    const out = [...CUSTOM_WALLPAPERS_EXT];
-    try{ if (localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL)) out.push({ id: CUSTOM_UPLOAD_ID, name: "My upload", tier: "custom" }); }catch{}
-    return out;
-  })();
-  const allExtWps = [...EXT_WALLPAPERS, ...effectiveExtCustom];
-  const selectedTarget = syncExtWallpaperTargetUI(targetSel, targetSel?.value || currentExtWallpaperTarget());
-  const total = allExtWps.length;
-  const mainUnlockedExt = unlockedCountByRefs(EXT_WALLPAPERS.length, FREE_VISIBLE_EXT_WALLPAPERS);
-  const customUnlockedExt = Math.min(effectiveExtCustom.length, isPro() ? effectiveExtCustom.length : CUSTOM_WP_FREE_COUNT);
-  const unlocked = mainUnlockedExt + customUnlockedExt;
-  const chosenDirect = getExtWallpaperForView(selectedTarget);
-  const fallbackGlobal = selectedTarget === "all" ? "" : getExtWallpaperForView("all");
-  const chosen = chosenDirect || fallbackGlobal || "";
-  const wEl = $("extWpUnlocked");
-  if (wEl) wEl.textContent = formatUnlockMeter(Math.min(unlocked, total), total);
-
-  const items = allExtWps.map((wp, idx)=>({ wp, idx }));
-  chunkedRender(grid, items, ({ wp, idx })=>{
-    const isUnlocked = wp.tier === "custom" ? (idx - EXT_WALLPAPERS.length < CUSTOM_WP_FREE_COUNT || isPro()) : (isPro() || idx < mainUnlockedExt);
-    const card = document.createElement("button");
-    card.type = "button";
-    card.dataset.wpId = wp.id;
-    card.dataset.tier = wp.tier || (idx < FREE_VISIBLE_EXT_WALLPAPERS ? "free" : "premium");
-    card.className = "wpCard" + (wp.id === chosen ? " active" : "") + (!isUnlocked ? " mystery" : "");
-
-    const thumb = document.createElement("div");
-    thumb.className = "wpThumb";
-    const thumbUrl = extWallpaperThumbUrl(wp.id);
-    const fullUrl = extWallpaperFullUrl(wp.id);
-    if (thumbUrl){
-      thumb.setAttribute('data-bg', thumbUrl);
-      observeLazyBg(thumb);
-    }
-    if (isUnlocked && fullUrl){
-      card.addEventListener('pointerenter', ()=>{ try{ prefetchImage(fullUrl); }catch{} }, { passive:true });
-    }
-
-    const name = document.createElement("div");
-    name.className = "wpName";
-    name.textContent = wp.name || wp.id;
-
-    const meta = document.createElement("div");
-    meta.className = "wpMeta";
-    meta.textContent = (wp.tier === "custom") ? "Custom" : (wp.tier || "");
-
-    const tag = document.createElement("div");
-    tag.className = "wpTag";
-    tag.textContent = (wp.tier === "custom") ? "CUSTOM" : unlockTagText(idx, isUnlocked, FREE_VISIBLE_EXT_WALLPAPERS);
-
-    card.appendChild(thumb);
-    card.appendChild(name);
-    card.appendChild(meta);
-    card.appendChild(tag);
-
-    if (!isUnlocked){
-      const ov = document.createElement("div");
-      ov.className = "mysteryOverlay";
-      ov.textContent = (t("locked")||"LOCKED");
-      card.appendChild(ov);
-    }
-
-    card.addEventListener("click", ()=>{
-      if (!requireConnected("Extension themes")) return;
-      if (!isUnlocked){
-        const need = reqRefsForUnlockIndex(idx, FREE_VISIBLE_EXT_WALLPAPERS);
-        toast("warn", (t("locked_unlock_at") || "Locked. Unlock at {n} referrals (+1 every 3 refs at first, then +1 every 4) or Pro.").replace("{n}", String(need)));
-        return;
-      }
-      applyExtWallpaper(wp.id, selectedTarget);
-    });
-
-    return card;
-  }, { key: "extWpGrid", chunk: 12 });
-
-  if (!chosen){
-    st.innerHTML = `<span class="muted">None.</span> Pick a wallpaper for <b>${escapeHtml(extWallpaperLabel(selectedTarget))}</b>.`;
-    return;
-  }
-  const chosenName = EXT_WALLPAPERS.find(x=>x.id===chosen)?.name || effectiveExtCustom.find(x=>x.id===chosen)?.name || chosen;
-  if (chosenDirect){
-    st.innerHTML = `<span class="ok">Selected.</span> ${escapeHtml(chosenName)} for <b>${escapeHtml(extWallpaperLabel(selectedTarget))}</b>.`;
-  } else {
-    st.innerHTML = `<span class="ok">Using global.</span> ${escapeHtml(chosenName)} from <b>${escapeHtml(extWallpaperLabel("all"))}</b> is currently filling <b>${escapeHtml(extWallpaperLabel(selectedTarget))}</b>.`;
-  }
-}
+function renderExtWallpapers(){ return __gmxExtWpUi.renderExtWallpapers(); }
 
 function bindExtTabs(){
   if (bindExtTabs._done) return;
@@ -1506,74 +1456,9 @@ const $ = __gmxChrome.$;
 
     function setBg(tab){ return __gmxSetBg.setBg(tab); }
 
-  function ensurePredictionTabVisible(){
-    try{
-      const tabs = document.querySelector(".tabs");
-      if (!tabs) return;
-      let btn = document.getElementById("t_prediction");
-      if (!btn){
-        btn = document.createElement("button");
-        btn.className = "tab";
-        btn.id = "t_prediction";
-        btn.dataset.tab = "prediction";
-        btn.textContent = "Prediction Market";
-        const before = document.getElementById("t_wallet");
-        if (before && before.parentNode === tabs) tabs.insertBefore(btn, before);
-        else tabs.appendChild(btn);
-      }
-      btn.classList.remove("hidden");
-      let pane = document.getElementById("tab-prediction");
-      if (!pane){
-        pane = document.createElement("div");
-        pane.id = "tab-prediction";
-        pane.className = "hidden";
-        pane.innerHTML = `<div class="card"><div class="title">Prediction Market</div><div class="note">Coming soon.</div></div>`;
-        tabs.insertAdjacentElement("afterend", pane);
-      }
-      pane.classList.add("hidden");
-    }catch{}
-  }
+  function ensurePredictionTabVisible(){ return __gmxNav.ensurePredictionTabVisible(); }
 
-    function showTab(name){
-    name = normalizeTopLevelTab(name);
-    CURRENT_TAB = name;
-    document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active", b.dataset.tab===name));
-    TOP_LEVEL_TABS.forEach(k=>{
-      const el = document.getElementById("tab-"+k);
-      if (el) el.classList.toggle("hidden", k!==name);
-    });
-    setBg(name);
-    try{ localStorage.setItem(LS_LAST_TAB, name); }catch(_e){}
-  
-    try{ applyLang(); }catch(e){}
-    try{ updateLangFlags(); }catch(e){}
-    try{ renderWallpaperUI(); }catch(e){}
-  
-    if (name === "referrals"){
-      try{ if (getHandle()) $("refLoad")?.click(); }catch(e){}
-    }
-    if (name === "leaderboard"){
-      try{ bindLeaderboardUI(); }catch(e){}
-      try{ loadLeaderboard(LB_DAYS||7); }catch(e){}
-    }
-    if (name === "prediction"){
-      try{ loadPredictionSignals({ force:true }); }catch(e){}
-    }
-    if (name === "extthemes") {
-      try{ renderExtThemes(); }catch(e){}
-      try{ renderExtWallpapers(); }catch(e){}
-      try{ renderExtCustomBgUI(); }catch(e){}
-      try{ setExtView(normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW)||"theme"), { force:true, silent:true }); }catch(e){}
-    }
-    if (name === "admin"){
-      try{ syncAdminUi(); }catch(e){}
-    }
-    if (name === "wallet"){
-      try{ loadPlans(); }catch(e){}
-      try{ loadBillingProof(); }catch(e){}
-      try{ setSfUi(); }catch(e){}
-    }
-}
+  function showTab(name){ return __gmxNav.showTab(name); }
 
 // Simple info modal (no dependencies)
   function showInfoModal(title, html){

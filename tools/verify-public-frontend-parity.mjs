@@ -41,6 +41,8 @@ const APP_FILES = [
   "app.wallpaperapply.js",
   "app.health.js",
   "app.setbg.js",
+  "app.nav.js",
+  "app.extwallpaperui.js",
   "app.accountui.js",
   "arcade.html",
   "arcade.js",

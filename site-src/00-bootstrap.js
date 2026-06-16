@@ -48,7 +48,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616s";
+const ASSET_REV = "20260616t";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -305,7 +305,7 @@ const __gmxWpUi = window.__GMXWallpaperUiFactory({
   getWallpapers: () => WALLPAPERS,
   unlockedCountByRefs,
   freeVisibleWallpapers: FREE_VISIBLE_WALLPAPERS,
-  customWpFreeCount: CUSTOM_WP_FREE_COUNT,
+  customWpFreeCount: __gmxWp.CUSTOM_WP_FREE_COUNT,
   isPro,
   reqRefsForUnlockIndex,
   wallpaperUnlocked: (wp, idx, len) => wallpaperUnlocked(wp, idx, len),
@@ -313,11 +313,83 @@ const __gmxWpUi = window.__GMXWallpaperUiFactory({
   wallpaperFullUrl: (id) => wallpaperFullUrl(id),
   loadCustomWallpapers: () => loadCustomWallpapers(),
   chunkedRender: (grid, items, fn, opts) => __gmxUi.chunkedRender(grid, items, fn, opts),
-  observeLazyBg: (el) => observeLazyBg(el),
+  observeLazyBg: (el) => __gmxUi.observeLazyBg(el),
   prefetchImage: (url) => __gmxUi.prefetchImage(url),
   getCurrentTab: () => { try { return currentTabName(); } catch { return "home"; } },
   applyUserBg: (tab) => __gmxCbg.applyUserBg(tab),
   applyWallpaper: (tab) => __gmxWpApply.applyWallpaper(tab),
+});
+
+if (!window.__GMXNavFactory) throw new Error("GMX nav factory missing");
+const __gmxNav = window.__GMXNavFactory({
+  normalizeTopLevelTab: (n) => normalizeTopLevelTab(n),
+  setCurrentTab: (n) => { CURRENT_TAB = n; },
+  getTopLevelTabs: () => TOP_LEVEL_TABS,
+  setBg: (n) => __gmxSetBg.setBg(n),
+  persistLastTab: (n) => { try { __gmxSt.lsSet(K.LAST_TAB, n); } catch {} },
+  onTabActivated: (name) => {
+    try { applyLang(); } catch {}
+    try { updateLangFlags(); } catch {}
+    try { renderWallpaperUI(); } catch {}
+    if (name === "referrals") { try { if (getHandle()) $("refLoad")?.click(); } catch {} }
+    if (name === "leaderboard") {
+      try { bindLeaderboardUI(); } catch {}
+      try { loadLeaderboard(LB_DAYS || 7); } catch {}
+    }
+    if (name === "prediction") { try { loadPredictionSignals({ force: true }); } catch {} }
+    if (name === "extthemes") {
+      try { renderExtThemes(); } catch {}
+      try { renderExtWallpapers(); } catch {}
+      try { renderExtCustomBgUI(); } catch {}
+      try {
+        setExtView(normalizeExtViewValue(__gmxSt.lsGet(K.EXT_VIEW, "theme")), { force: true, silent: true });
+      } catch {}
+    }
+    if (name === "admin") { try { syncAdminUi(); } catch {} }
+    if (name === "wallet") {
+      try { loadPlans(); } catch {}
+      try { loadBillingProof(); } catch {}
+      try { setSfUi(); } catch {}
+    }
+  },
+});
+
+if (!window.__GMXExtWallpaperUiFactory) throw new Error("GMX extwallpaperui factory missing");
+const __gmxExtWpUi = window.__GMXExtWallpaperUiFactory({
+  $: __gmxChrome.$,
+  t: (key) => t(key),
+  toast: (type, html, ms) => __gmxChrome.toast(type, html, ms),
+  escapeHtml: (s) => __gmxFmt.escapeHtml(s),
+  initExtWallpaperControls: () => { try { initExtWallpaperControls(); } catch {} },
+  loadCustomWallpapers: () => loadCustomWallpapers(),
+  getEffectiveExtCustomWallpapers: () => {
+    const out = [...CUSTOM_WALLPAPERS_EXT];
+    try {
+      if (__gmxSt.lsGet(K.EXT_CUSTOM_BG_GLOBAL, "")) {
+        out.push({ id: __gmxWp.CUSTOM_UPLOAD_ID, name: "My upload", tier: "custom" });
+      }
+    } catch {}
+    return out;
+  },
+  getExtWallpapers: () => EXT_WALLPAPERS,
+  syncExtWallpaperTargetUI: (sel, pref) => syncExtWallpaperTargetUI(sel, pref),
+  getExtWallpaperForView: (view) => getExtWallpaperForView(view),
+  currentExtWallpaperTarget: () => currentExtWallpaperTarget(),
+  extWallpaperLabel: (view) => extWallpaperLabel(view),
+  unlockedCountByRefs,
+  freeVisibleExtWallpapers: FREE_VISIBLE_EXT_WALLPAPERS,
+  customWpFreeCount: __gmxWp.CUSTOM_WP_FREE_COUNT,
+  isPro,
+  reqRefsForUnlockIndex,
+  extWallpaperThumbUrl: (id) => extWallpaperThumbUrl(id),
+  extWallpaperFullUrl: (id) => extWallpaperFullUrl(id),
+  chunkedRender: (grid, items, fn, opts) => __gmxUi.chunkedRender(grid, items, fn, opts),
+  observeLazyBg: (el) => __gmxUi.observeLazyBg(el),
+  prefetchImage: (url) => __gmxUi.prefetchImage(url),
+  requireConnected: (label) => requireConnected(label),
+  applyExtWallpaper: (id, target) => applyExtWallpaper(id, target),
+  unlockTagText: (idx, unlocked, free) => unlockTagText(idx, unlocked, free),
+  formatUnlockMeter: (cur, total) => formatUnlockMeter(cur, total),
 });
 
 
