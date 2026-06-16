@@ -146,6 +146,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.css": { target: BACKEND, changeOrigin: true },
         "/app.auth.js": { target: BACKEND, changeOrigin: true },
         "/app.authwire.js": { target: BACKEND, changeOrigin: true },
+        "/app.connect.js": { target: BACKEND, changeOrigin: true },
         "/app.siteboot.js": { target: BACKEND, changeOrigin: true },
         "/app.siteinit.js": { target: BACKEND, changeOrigin: true },
         "/app.wallethelpers.js": { target: BACKEND, changeOrigin: true },

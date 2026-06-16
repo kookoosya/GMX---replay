@@ -1313,3 +1313,38 @@ test("prediction: bindPredictionMarketUI is idempotent", () => {
   pm.bindPredictionMarketUI();
   assert.equal(pm.bindPredictionMarketUI._done, true);
 });
+
+test("connect: bindConnect warns on invalid handle", async () => {
+  const els = {
+    btnConnect: { onclick: null },
+    connectMsg: { textContent: "x", innerHTML: "" },
+    xHandle: { value: "!!!" },
+  };
+  const connect = loadFactory("app.connect.js", "__GMXConnectFactory")({
+    $: (id) => els[id] || null,
+    normalizeHandle: () => "",
+  });
+  connect.bindConnect();
+  await els.btnConnect.onclick();
+  assert.match(els.connectMsg.innerHTML, /valid @handle/);
+});
+
+test("connect: reset clears session message", async () => {
+  const els = {
+    btnReset: { onclick: null },
+    connectMsg: { innerHTML: "" },
+    handlePill: { textContent: "@demo" },
+    xHandle: { focus: () => {} },
+  };
+  let authOk = true;
+  const connect = loadFactory("app.connect.js", "__GMXConnectFactory")({
+    $: (id) => els[id] || null,
+    setAuthOk: (v) => { authOk = v; },
+    keys: { handle: "gmx_handle", token: "gmx_token" },
+  });
+  connect.bindConnect();
+  await els.btnReset.onclick();
+  assert.equal(authOk, false);
+  assert.match(els.connectMsg.innerHTML, /Session cleared/);
+  assert.equal(els.handlePill.textContent, "not set");
+});

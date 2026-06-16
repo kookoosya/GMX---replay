@@ -80,6 +80,7 @@ const shellModules = [
   "app.redeem.js",
   "app.prediction.js",
   "app.authwire.js",
+  "app.connect.js",
   "app.siteboot.js",
   "app.siteinit.js",
   "app.wallethelpers.js",
