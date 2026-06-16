@@ -1164,3 +1164,29 @@ test("generateflow: blocks generate without session token", async () => {
   await flow.generate("gm", 1);
   assert.match(msg.innerHTML, /Session expired/);
 });
+
+test("admin: syncAdminUi reflects signed-out state", () => {
+  const els = {
+    adminHandle: { value: "" },
+    adminAuthState: { textContent: "" },
+  };
+  const admin = loadFactory("app.admin.js", "__GMXAdminFactory")({
+    $: (id) => els[id] || null,
+    getHandle: () => "@demo",
+    isAdminSignedIn: () => false,
+    adminHandle: "@Kristofer_Sol_",
+  });
+  admin.syncAdminUi();
+  assert.equal(els.adminHandle.value, "@demo");
+  assert.equal(els.adminAuthState.textContent, "signed out");
+});
+
+test("admin: requireAdminSignedIn blocks when unsigned", () => {
+  const els = { adminMsg: { innerHTML: "" } };
+  const admin = loadFactory("app.admin.js", "__GMXAdminFactory")({
+    $: (id) => els[id] || null,
+    isAdminSignedIn: () => false,
+  });
+  assert.equal(admin.requireAdminSignedIn(), false);
+  assert.match(els.adminMsg.innerHTML, /Sign in first/);
+});

@@ -117,6 +117,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.sitesync.js", "gmx-legacy-sitesync");
     await injectAppShellRuntime("/app.extwallpaperui.js", "gmx-legacy-extwallpaperui");
     await injectAppShellRuntime("/app.accountui.js", "gmx-legacy-accountui");
+    await injectAppShellRuntime("/app.admin.js", "gmx-legacy-admin");
     await injectAppShellRuntime("/app.authwire.js", "gmx-legacy-authwire");
     await injectAppShellRuntime("/app.siteboot.js", "gmx-legacy-siteboot");
     await injectAppShellRuntime("/app.siteinit.js", "gmx-legacy-siteinit");

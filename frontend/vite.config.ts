@@ -207,6 +207,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.sitesync.js": { target: BACKEND, changeOrigin: true },
         "/app.extwallpaperui.js": { target: BACKEND, changeOrigin: true },
         "/app.accountui.js": { target: BACKEND, changeOrigin: true },
+        "/app.admin.js": { target: BACKEND, changeOrigin: true },
         "/mode.js": { target: BACKEND, changeOrigin: true },
         "/entitlements.js": { target: BACKEND, changeOrigin: true },
         "/themes.json": { target: BACKEND, changeOrigin: true },

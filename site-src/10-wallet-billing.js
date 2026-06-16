@@ -111,11 +111,3 @@
   const renderWalletStatus = (sub) => __gmxWalletUi.renderWalletStatus(sub);
   const bindWalletTab = () => __gmxWalletUi.bindWalletTab();
 
-function requireAdminSignedIn(){
-  if (!isAdminSignedIn()){
-    const m = $("adminMsg");
-    if (m) m.innerHTML = '<span class="bad">Sign in first.</span>';
-    return false;
-  }
-  return true;
-}
