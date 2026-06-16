@@ -1084,3 +1084,16 @@ test("siteboot: restores handle pill and marks init done", () => {
   assert.equal(els.handlePill.textContent, "@demo");
   assert.equal(els.xHandle.value, "@demo");
 });
+
+test("wallethelpers: base58 and fmtSol", () => {
+  const wh = loadFactory("app.wallethelpers.js", "__GMXWalletHelpersFactory")();
+  assert.equal(wh.b58encode(new Uint8Array([0, 1, 2])), "15T");
+  assert.equal(wh.fmtSol(0.005), "0.0050");
+  assert.equal(wh.planPricePrimary({ usd: 9, solApprox: 0.05 }, "SOL"), "0.050 SOL");
+});
+
+test("wallethelpers: shortPk truncates long keys", () => {
+  const wh = loadFactory("app.wallethelpers.js", "__GMXWalletHelpersFactory")();
+  const pk = "AbCdEfGhIjKlMnOpQrStUvWxYz";
+  assert.equal(wh.shortPk(pk), "AbCd...WxYz");
+});

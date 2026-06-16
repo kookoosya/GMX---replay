@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260617h";
+const ASSET_REV = "20260617i";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -1032,6 +1032,31 @@ const $ = __gmxChrome.$;
   function applyAdminVisibility(){ return __gmxAccount.applyAdminVisibility(); }
 
 
+
+  // ---- UI Translation (site language) ----
+  // Source of truth: shared/i18n/locales/*.json → /public/i18n/siteI18n.js
+  const I18N = (globalThis.GMX_SITE_I18N && typeof globalThis.GMX_SITE_I18N.createSiteI18nCatalog === "function")
+    ? globalThis.GMX_SITE_I18N.createSiteI18nCatalog()
+    : { en: {} };
+
+  function siteTr(key, fallback = ""){ return __gmxSiteI18nUi.siteTr(key, fallback); }
+  function applyLang(){ return __gmxSiteI18nUi.applyLang(); }
+
+  function getReferralUiCopy(lang){ return __gmxSiteI18nDynamic.getReferralUiCopy(lang); }
+  function getGuideUiCopy(lang){ return __gmxSiteI18nDynamic.getGuideUiCopy(lang); }
+  function renderGuideRightCopy(lang){ return __gmxSiteI18nDynamic.renderGuideRightCopy(lang); }
+  function deriveReferralUnlocks(eligible, rawUnlocks){
+    return __gmxSiteI18nDynamic.deriveReferralUnlocks(eligible, rawUnlocks);
+  }
+  function nextReferralUnlockAt(eligible){ return __gmxSiteI18nDynamic.nextReferralUnlockAt(eligible); }
+  function nextReferralUnlockLabel(lang, step){
+    return __gmxSiteI18nDynamic.nextReferralUnlockLabel(lang, step);
+  }
+  function renderReferralRightCopy(lang){ return __gmxSiteI18nDynamic.renderReferralRightCopy(lang); }
+  function syncModePanelCopy(){ return __gmxSiteI18nDynamic.syncModePanelCopy(); }
+  function patchDynamicCopy(lang, merged){ return __gmxSiteI18nDynamic.patchDynamicCopy(lang, merged); }
+
+  function fillSelect(sel, arr){ return __gmxSiteLangMenu.fillSelect(sel, arr); }
 
   // ----- Lists (single saved bank per kind; legacy global/lang banks migrate once) -----
   function linesFromText(t){ return __gmxBanks.linesFromText(t); }
@@ -2354,9 +2379,16 @@ const msg = $("refMsg");
   let selectedPlanKey = "";
   let selectedPlan = null;
 
-  // Wallet discovery: Wallet Standard + legacy injected providers.
-  const WS_CHAIN = "solana:mainnet";
+  if (!window.__GMXWalletHelpersFactory) throw new Error("GMX wallethelpers factory missing");
+  const __gmxWh = window.__GMXWalletHelpersFactory();
+  const WS_CHAIN = __gmxWh.WS_CHAIN;
   const LS_WALLET_CHOICE = K.WALLET_CHOICE;
+  const b58encode = __gmxWh.b58encode;
+  const shortPk = __gmxWh.shortPk;
+  const walletNameKey = __gmxWh.walletNameKey;
+  const safeIconSrc = __gmxWh.safeIconSrc;
+  const defaultWalletIcon = __gmxWh.defaultWalletIcon;
+  const listWalletChoices = () => __gmxWh.listWalletChoices();
 
   const WALLET = {
     connected: false,
@@ -2369,71 +2401,8 @@ const msg = $("refMsg");
     publicKey: null        // solanaWeb3.PublicKey
   };
 
-  // Minimal base58 (for signatures)
-  const B58_ALPH = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-  const BILLING_MEMO_PROGRAM_ID = "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr";
-  function b58encode(bytes){
-    try{
-      const src = (bytes instanceof Uint8Array) ? bytes : new Uint8Array(bytes);
-      if (!src.length) return "";
-      let digits = [0];
-      for (let i=0;i<src.length;i++){
-        let carry = src[i];
-        for (let j=0;j<digits.length;j++){
-          const x = (digits[j] << 8) + carry;
-          digits[j] = x % 58;
-          carry = (x / 58) | 0;
-        }
-        while (carry){
-          digits.push(carry % 58);
-          carry = (carry / 58) | 0;
-        }
-      }
-      let str = "";
-      for (let k=0;k<src.length && src[k] === 0;k++) str += "1";
-      for (let q=digits.length-1;q>=0;q--) str += B58_ALPH[digits[q]];
-      return str;
-    }catch{ return ""; }
-  }
-
-  function walletSigBytes(out){
-    const raw = out?.signature || out?.signedMessage || out?.signatureBytes || out;
-    if (raw instanceof Uint8Array) return raw;
-    if (ArrayBuffer.isView(raw)) return new Uint8Array(raw.buffer.slice(raw.byteOffset, raw.byteOffset + raw.byteLength));
-    if (raw instanceof ArrayBuffer) return new Uint8Array(raw);
-    if (Array.isArray(raw)) return new Uint8Array(raw);
-    return null;
-  }
-
   async function walletSignMessageBytes(messageBytes){
-    const bytes = (messageBytes instanceof Uint8Array) ? messageBytes : new Uint8Array(messageBytes || []);
-    if (!bytes.length) throw new Error("wallet_bind_required");
-
-    if (WALLET.kind === "standard") {
-      const w = WALLET.wallet;
-      const acc = WALLET.account;
-      const feat = w?.features?.["solana:signMessage"]?.signMessage;
-      if (typeof feat !== "function") throw new Error("wallet_no_message_sign");
-      const out = await feat({ account: acc, message: bytes });
-      const sig = b58encode(walletSigBytes(out) || []);
-      if (!sig) throw new Error("wallet_bind_required");
-      return sig;
-    }
-
-    const p = WALLET.provider;
-    if (typeof p?.signMessage === "function") {
-      let out = null;
-      try {
-        out = await p.signMessage(bytes, "utf8");
-      } catch (_e) {
-        out = await p.signMessage(bytes);
-      }
-      const sig = b58encode(walletSigBytes(out) || []);
-      if (!sig) throw new Error("wallet_bind_required");
-      return sig;
-    }
-
-    throw new Error("wallet_no_message_sign");
+    return __gmxWh.signMessageBytes(WALLET, messageBytes);
   }
 
   async function bindWalletToIntent(intent){
@@ -2446,118 +2415,7 @@ const msg = $("refMsg");
   }
 
   function addIntentMemoInstruction(tx, intentId, web3){
-    const id = String(intentId || "").trim();
-    if (!tx || !id || !web3?.TransactionInstruction || !web3?.PublicKey) return;
-    tx.add(new web3.TransactionInstruction({
-      programId: new web3.PublicKey(BILLING_MEMO_PROGRAM_ID),
-      keys: [],
-      data: new TextEncoder().encode(`GMXReply|${id}`)
-    }));
-  }
-
-  function shortPk(pk){
-    try{
-      const s = String(pk?.toString?.() || pk || "");
-      if (!s) return "";
-      return s.slice(0,4) + "..." + s.slice(-4);
-    }catch{ return ""; }
-  }
-
-  function safeIconSrc(icon){
-    const s0 = String(icon || "").trim();
-    if (!s0) return "";
-    if (s0.startsWith("ipfs://")) return "https://ipfs.io/ipfs/" + s0.slice(7);
-    const ok = ["data:","https://","http://","/assets/","chrome-extension://","moz-extension://","safari-extension://","blob:"];
-    if (ok.some(p=>s0.startsWith(p))) return s0;
-    return "";
-  }
-function defaultWalletIcon(name){
-  const k = walletNameKey(name);
-  if (k === "solflare") return "/assets/wallets/solflare.svg";
-  if (k === "phantom") return "/assets/wallets/phantom.svg";
-  if (k === "backpack") return "/assets/wallets/backpack.svg";
-
-  // Fallback: simple letter avatar (data URL).
-  const txt = (String(name||"W").slice(0,1).toUpperCase());
-  const s = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect rx="18" ry="18" width="64" height="64" fill="rgba(14,165,233,1)"/><text x="32" y="40" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial" font-weight="800" font-size="22" fill="white">${txt}</text></svg>`;
-  return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(s);
-}
-
-  function walletNameKey(name){ return String(name || "").trim().toLowerCase(); }
-
-  function getWalletStandardWallets(){
-    try{
-      const w = window.navigator?.wallets;
-      if (!w) return [];
-      if (Array.isArray(w)) return w;
-      if (typeof w.get === "function") return w.get() || [];
-      if (typeof w.values === "function") return Array.from(w.values());
-      if (typeof w[Symbol.iterator] === "function") return Array.from(w);
-    }catch{}
-    return [];
-  }
-
-  function listWalletChoices(){
-    const out = [];
-
-    // Wallet Standard
-    try{
-      const ws = getWalletStandardWallets();
-      for (const w of ws){
-        if (!w?.features?.["standard:connect"]) continue;
-        const chains = w?.chains || [];
-        const isSol = chains.some(c => String(c||"").startsWith("solana:"));
-        if (!isSol) continue;
-        out.push({ kind:"standard", name: String(w.name || "Wallet"), icon: (safeIconSrc(w.icon) || defaultWalletIcon(w.name)), wallet: w });
-      }
-    }catch{}
-
-    // Legacy injected providers (still common)
-    try{
-      const p = window.solflare || (window.solana?.isSolflare ? window.solana : null);
-      if (p?.connect && (p?.signAndSendTransaction || p?.signTransaction)) out.push({ kind:"legacy", name:"Solflare", icon: defaultWalletIcon("Solflare"), provider:p });
-    }catch{}
-    try{
-      const p = window.solana;
-      if (p?.isPhantom && p?.connect && (p?.signAndSendTransaction || p?.signTransaction)) out.push({ kind:"legacy", name:"Phantom", icon: defaultWalletIcon("Phantom"), provider:p });
-    }catch{}
-    try{
-      const p = window.backpack?.solana || (window.solana?.isBackpack ? window.solana : null);
-      if (p?.connect && (p?.signAndSendTransaction || p?.signTransaction)) out.push({ kind:"legacy", name:"Backpack", icon: defaultWalletIcon("Backpack"), provider:p });
-    }catch{}
-    try{
-      const p = window.solana;
-      if (p?.connect && (p?.signAndSendTransaction || p?.signTransaction) && !p?.isPhantom && !p?.isSolflare && !p?.isBackpack){
-        const nm = String(p?.name || p?.walletName || "Injected Wallet");
-        out.push({ kind:"legacy", name:nm, icon: defaultWalletIcon(nm), provider:p });
-      }
-    }catch{}
-
-    // Deduplicate by name (prefer standard)
-    const byName = new Map();
-    for (const w of out){
-      const k = walletNameKey(w.name);
-      const prev = byName.get(k);
-      if (!prev || (prev.kind !== "standard" && w.kind === "standard")) byName.set(k, w);
-    }
-    const list = Array.from(byName.values());
-
-    // Sort: Solflare first, then Phantom, Backpack, then others
-    const order = ["solflare","phantom","backpack"];
-    list.sort((a,b)=>{
-      const ak = walletNameKey(a.name);
-      const bk = walletNameKey(b.name);
-      const ai = order.indexOf(ak);
-      const bi = order.indexOf(bk);
-      if (ai !== -1 || bi !== -1){
-        if (ai === -1) return 1;
-        if (bi === -1) return -1;
-        return ai - bi;
-      }
-      return String(a.name).localeCompare(String(b.name));
-    });
-
-    return list;
+    __gmxWh.addIntentMemoInstruction(tx, intentId, web3);
   }
 
   function readWalletChoice(){
@@ -2792,32 +2650,9 @@ if (src){
     setWalletUi();
   }
 
-  function getRpcUrl(){
-    const v = String(BILLING?.rpcPublic || "").trim();
-    if (v && /^https?:\/\//i.test(v)) return v;
-    try{
-      if (typeof window.solanaWeb3?.clusterApiUrl === "function") return window.solanaWeb3.clusterApiUrl("mainnet-beta");
-    }catch{}
-    return "https://api.mainnet-beta.solana.com";
-  }
-
-  function rpcCandidates(){
-    const out = [];
-    const push = (url)=>{
-      const v = String(url || "").trim();
-      if (!v || !/^https?:\/\//i.test(v)) return;
-      if (!out.includes(v)) out.push(v);
-    };
-    push(BILLING?.rpcPublic || "");
-    try{ if (typeof window.solanaWeb3?.clusterApiUrl === "function") push(window.solanaWeb3.clusterApiUrl("mainnet-beta")); }catch{}
-    push("https://api.mainnet-beta.solana.com");
-    return out;
-  }
-
-  function shouldRetryRpc(err){
-    const m = String(err?.message || err || "");
-    return /403|401|429|access forbidden|blockhash|failed to fetch|network request failed/i.test(m);
-  }
+  function getRpcUrl(){ return __gmxWh.getRpcUrl(BILLING); }
+  function rpcCandidates(){ return __gmxWh.rpcCandidates(BILLING); }
+  function shouldRetryRpc(err){ return __gmxWh.shouldRetryRpc(err); }
 
   async function getServerTxContext(){
     try{
@@ -2866,28 +2701,9 @@ if (src){
     throw lastErr || new Error("rpc_unavailable");
   }
 
-  function fmtSol(x){
-    const n = Number(x||0);
-    if (!Number.isFinite(n) || n<=0) return "";
-    if (n < 0.01) return n.toFixed(4);
-    if (n < 0.1) return n.toFixed(3);
-    return n.toFixed(2);
-  }
-
-  function planPricePrimary(plan, currency){
-    if (currency === "SOL"){
-      const sol = fmtSol(plan.solApprox || 0);
-      return sol ? `${sol} SOL` : "SOL quote unavailable";
-    }
-    return `$${plan.usd} ${currency}`;
-  }
-  function planPriceSecondary(plan, currency){
-    if (currency === "SOL"){
-      return `$${plan.usd}`;
-    }
-    const sol = fmtSol(plan.solApprox || 0);
-    return sol ? `≈ ${sol} SOL` : "";
-  }
+  const fmtSol = __gmxWh.fmtSol;
+  const planPricePrimary = __gmxWh.planPricePrimary;
+  const planPriceSecondary = __gmxWh.planPriceSecondary;
 
   function renderPlanGrid(){
     const grid = $("planGrid");
@@ -3675,184 +3491,129 @@ function pruneLegacyAdminPanels(){
     }
   };
 
-  // ---- UI Translation (site language) ----
-  // Important: Always apply the base catalog first, then override with the selected locale (fallback for all UI languages).
-    // ---- UI Translation (site language) ----
-  // Source of truth now lives in shared/i18n/locales/*.json and is generated into /public/i18n/siteI18n.js.
-  const I18N = (globalThis.GMX_SITE_I18N && typeof globalThis.GMX_SITE_I18N.createSiteI18nCatalog === "function")
-    ? globalThis.GMX_SITE_I18N.createSiteI18nCatalog()
-    : { en: {} };
-
-  function siteTr(key, fallback = ""){ return __gmxSiteI18nUi.siteTr(key, fallback); }
-  function applyLang(){ return __gmxSiteI18nUi.applyLang(); }
-
-  function getReferralUiCopy(lang){ return __gmxSiteI18nDynamic.getReferralUiCopy(lang); }
-  function getGuideUiCopy(lang){ return __gmxSiteI18nDynamic.getGuideUiCopy(lang); }
-  function renderGuideRightCopy(lang){ return __gmxSiteI18nDynamic.renderGuideRightCopy(lang); }
-  function deriveReferralUnlocks(eligible, rawUnlocks){
-    return __gmxSiteI18nDynamic.deriveReferralUnlocks(eligible, rawUnlocks);
-  }
-  function nextReferralUnlockAt(eligible){ return __gmxSiteI18nDynamic.nextReferralUnlockAt(eligible); }
-  function nextReferralUnlockLabel(lang, step){
-    return __gmxSiteI18nDynamic.nextReferralUnlockLabel(lang, step);
-  }
-  function renderReferralRightCopy(lang){ return __gmxSiteI18nDynamic.renderReferralRightCopy(lang); }
-  function syncModePanelCopy(){ return __gmxSiteI18nDynamic.syncModePanelCopy(); }
-  function patchDynamicCopy(lang, merged){ return __gmxSiteI18nDynamic.patchDynamicCopy(lang, merged); }
-
-
-  function fillSelect(sel, arr){ return __gmxSiteLangMenu.fillSelect(sel, arr); }
-
-  if (!window.__GMXSiteSyncFactory) throw new Error("GMX sitesync factory missing");
-  window.__GMXSiteSyncFactory({
+  if (!window.__GMXSiteInitFactory) throw new Error("GMX siteinit factory missing");
+  await window.__GMXSiteInitFactory({
     setBestMode,
     setCleanFillEnabled,
-  }).wire();
-
-  // --- init ---
-  const { siteLangSel } = await __gmxSiteLangMenu.bootstrapSiteLangUi();
-
-  applyLang();
-  try{ syncBestModeUi(); }catch(_e){}
-  try{ syncCleanFillUi(); }catch(_e){}
-  pruneLegacyAdminPanels();
-
-  __gmxSiteLangMenu.wireI18nObserver();
-
-  updateLangFlags();
-
-  __gmxSiteLangMenu.wireSiteLangSelectChange(siteLangSel);
-
-  const { gmLangSel, gnLangSel } = __gmxSiteLangMenu.fillReplyLangSelects();
-
-  // styles + theme (depend on SUB/REF_COUNT, but must exist before refreshUsage)
-  fillStyles();
-  try { __gmxStyles.wireStyleSelectors(); } catch (_e) {}
-      fillPacks();
-  applyTheme(localStorage.getItem("gmx_theme") || "classic");
-  renderThemes();
-  applyUserBg();
-  initWallpapers();
-
-  // initial language chips
-  renderLangChips("gm");
-  renderLangChips("gn");
-
-  // default reply langs (persist per tab)
-  if (!window.__GMXGmGnWireFactory) throw new Error("GMX gmgnwire factory missing");
-  const __gmxGmGnWire = window.__GMXGmGnWireFactory({
-    $,
-    requireConnected,
-    setView,
-    generate,
-    trackEvent,
-    getBestMode,
-    setBestMode,
-    getCleanFillEnabled,
-    setCleanFillEnabled,
-    doBestServer,
-    doBest,
-    commitNewLine,
-    oneClickCleanup,
-    clearView,
-    clearAll,
-    addPasted,
-    copyAll,
-    exportAll,
-    renderList,
-    saveDraft,
-    getHandle,
-    getReplyLangs: () => REPLY_LANGS,
-    lsGet: (k, d) => __gmxSt.lsGet(k, d),
-    lsSet: (k, v) => { try { __gmxSt.lsSet(k, v); } catch {} },
-    lsGmReplyLang: LS_GM_REPLY_LANG,
-    lsGnReplyLang: LS_GN_REPLY_LANG,
-    persistStyle: (kind, style) => { try { __gmxGp.persistStyle(kind, style); } catch {} },
-    lsKeyPack: (kind) => __gmxSt.lsKeyPack(kind),
-    getGmView: () => gmView,
-    getGnView: () => gnView,
-    ensureIndexed,
-    renderLangChips,
+    bootstrapSiteLangUi: () => __gmxSiteLangMenu.bootstrapSiteLangUi(),
+    applyLang,
+    syncBestModeUi,
+    syncCleanFillUi,
+    pruneLegacyAdminPanels,
+    wireI18nObserver: () => __gmxSiteLangMenu.wireI18nObserver(),
     updateLangFlags,
-  });
-  __gmxGmGnWire.wireReplyLangSelects({ gmLangSel, gnLangSel });
-  __gmxGmGnWire.wireGmGnPanels();
-
-  if (!window.__GMXWallpaperUploadFactory) throw new Error("GMX wallpaperupload factory missing");
-  window.__GMXWallpaperUploadFactory({
-    $,
-    requireConnected,
-    compressImageToJpegDataURL,
-    customUploadId: CUSTOM_UPLOAD_ID,
-    lsSet: (k, v) => { try { __gmxSt.lsSet(k, v); } catch {} },
-    customBgGlobalKey: LS_CUSTOM_BG_GLOBAL,
-    wpGlobalKey: LS_WP_GLOBAL,
-    setWallpaperForTab,
-    renderWallpaperUI,
-    currentTabName,
-    applyWallpaper,
+    wireSiteLangSelectChange: (sel) => __gmxSiteLangMenu.wireSiteLangSelectChange(sel),
+    fillReplyLangSelects: () => __gmxSiteLangMenu.fillReplyLangSelects(),
+    fillStyles,
+    wireStyleSelectors: () => __gmxStyles.wireStyleSelectors(),
+    fillPacks,
+    applyTheme,
+    renderThemes,
     applyUserBg,
-    toast,
-    t,
-  }).wire();
-
-  if (!window.__GMXProControlsFactory) throw new Error("GMX procontrols factory missing");
-  const __gmxProControls = window.__GMXProControlsFactory({
-    $,
-    isPro,
-    escapeHtml,
-    storage: __gmxSt,
-    packsForKind,
-    unlockedPacksCountFor,
-    applyPackDefaultsToUi,
-    logEvent,
+    initWallpapers,
+    renderLangChips,
+    getThemeKey: () => localStorage.getItem("gmx_theme") || "classic",
     getProToolsNote: () =>
       (I18N[localStorage.getItem(LS_SITE_LANG) || "en"]?.pro_tools_note) ||
       (I18N.en?.pro_tools_note) ||
       "Pro-only tools.",
-    readKey,
-    writeKey,
-    getBankKey,
-    allKeysForKind,
-    allLegacyKeysForKind,
-    getHandle,
-    dedupeLines,
-    normalizeLine,
-    cleanupKeyLines,
-    setLangIndex,
-    getBankMigrationKey,
-    trimKindToCap,
-    themeKey: "gmx_theme",
-    customBgKey: LS_CUSTOM_BG_GLOBAL,
-    gmReplyLangKey: LS_GM_REPLY_LANG,
-    gnReplyLangKey: LS_GN_REPLY_LANG,
-    onAfterImport: () => {
-      applyTheme(localStorage.getItem("gmx_theme") || "classic");
-      applyUserBg();
-      initWallpapers();
-      renderThemes();
-      fillStyles();
-      try { __gmxStyles.wireStyleSelectors(); } catch (_e) {}
-      fillPacks();
-      renderLangChips("gm");
-      renderLangChips("gn");
-      renderList("gm");
-      renderList("gn");
+    gmGnWireCtx: {
+      $,
+      requireConnected,
+      setView,
+      generate,
+      trackEvent,
+      getBestMode,
+      setBestMode,
+      getCleanFillEnabled,
+      setCleanFillEnabled,
+      doBestServer,
+      doBest,
+      commitNewLine,
+      oneClickCleanup,
+      clearView,
+      clearAll,
+      addPasted,
+      copyAll,
+      exportAll,
+      renderList,
+      saveDraft,
+      getHandle,
+      getReplyLangs: () => REPLY_LANGS,
+      lsGet: (k, d) => __gmxSt.lsGet(k, d),
+      lsSet: (k, v) => { try { __gmxSt.lsSet(k, v); } catch {} },
+      lsGmReplyLang: LS_GM_REPLY_LANG,
+      lsGnReplyLang: LS_GN_REPLY_LANG,
+      persistStyle: (kind, style) => { try { __gmxGp.persistStyle(kind, style); } catch {} },
+      lsKeyPack: (kind) => __gmxSt.lsKeyPack(kind),
+      getGmView: () => gmView,
+      getGnView: () => gnView,
+      ensureIndexed,
+      renderLangChips,
+      updateLangFlags,
     },
-  });
-
-  if (!window.__GMXSiteModeFactory) throw new Error("GMX sitemode factory missing");
-  const __gmxSiteMode = window.__GMXSiteModeFactory({
-    $,
-    siteModeKey: K.SITE_MODE,
-    lsGet: (k, d) => __gmxSt.lsGet(k, d),
-    lsSet: (k, v) => { try { __gmxSt.lsSet(k, v); } catch {} },
-  });
-
-  __gmxProControls.wire();
-
-  if (typeof window !== "undefined" && /^(127\.0\.0\.1|localhost)$/.test(location.hostname)) {
-    window.__GMX_TEST__ = Object.assign(window.__GMX_TEST__ || {}, {
+    wallpaperUploadCtx: {
+      $,
+      requireConnected,
+      compressImageToJpegDataURL,
+      customUploadId: CUSTOM_UPLOAD_ID,
+      lsSet: (k, v) => { try { __gmxSt.lsSet(k, v); } catch {} },
+      customBgGlobalKey: LS_CUSTOM_BG_GLOBAL,
+      wpGlobalKey: LS_WP_GLOBAL,
+      setWallpaperForTab,
+      renderWallpaperUI,
+      currentTabName,
+      applyWallpaper,
+      applyUserBg,
+      toast,
+      t,
+    },
+    proControlsCtx: {
+      $,
+      isPro,
+      escapeHtml,
+      storage: __gmxSt,
+      packsForKind,
+      unlockedPacksCountFor,
+      applyPackDefaultsToUi,
+      logEvent,
+      readKey,
+      writeKey,
+      getBankKey,
+      allKeysForKind,
+      allLegacyKeysForKind,
+      getHandle,
+      dedupeLines,
+      normalizeLine,
+      cleanupKeyLines,
+      setLangIndex,
+      getBankMigrationKey,
+      trimKindToCap,
+      themeKey: "gmx_theme",
+      customBgKey: LS_CUSTOM_BG_GLOBAL,
+      gmReplyLangKey: LS_GM_REPLY_LANG,
+      gnReplyLangKey: LS_GN_REPLY_LANG,
+      onAfterImport: () => {
+        applyTheme(localStorage.getItem("gmx_theme") || "classic");
+        applyUserBg();
+        initWallpapers();
+        renderThemes();
+        fillStyles();
+        try { __gmxStyles.wireStyleSelectors(); } catch {}
+        fillPacks();
+        renderLangChips("gm");
+        renderLangChips("gn");
+        renderList("gm");
+        renderList("gn");
+      },
+    },
+    siteModeCtx: {
+      $,
+      siteModeKey: K.SITE_MODE,
+      lsGet: (k, d) => __gmxSt.lsGet(k, d),
+      lsSet: (k, v) => { try { __gmxSt.lsSet(k, v); } catch {} },
+    },
+    testHarness: {
       activeKey,
       writeKey,
       readKey,
@@ -3863,62 +3624,57 @@ function pruneLegacyAdminPanels(){
       setCleanFillEnabled,
       getCleanFillEnabled,
       normalizeLine,
-      dedupeLines
-    });
-  }
-
-  if (!window.__GMXSiteBootFactory) throw new Error("GMX siteboot factory missing");
-  window.__GMXSiteBootFactory({
-    $,
-    getHandle,
-    getToken,
-    setAuthOk: (v) => { AUTH_OK = !!v; },
-    setInitDone: (v) => { INIT_DONE = !!v; },
-    applyAdminVisibility,
-    initModeToggle: () => __gmxSiteMode.initModeToggle(),
-    applyLang,
-    initThemeWallTabs,
-    bindExtTabs,
-    initExtWallpaperControls,
-    normalizeStoredExtWallpaperSelections,
-    migrateLegacyWallpaperSelectionOnce,
-    migrateLegacyExtWallpaperSelectionOnce,
-    renderExtThemes,
-    renderExtWallpapers,
-    renderExtCustomBgUI,
-    setExtView,
-    normalizeExtViewValue,
-    restoreDrafts,
-    normalizeTopLevelTab,
-    tab,
-    setCurrentTab: (n) => __gmxTabState.setCurrentTab(n),
-    setBg,
-    ping,
-    loadBuild,
-    bindWalletTab,
-    bindLimitModal,
-    bindPaySuccess,
-    loadPlans,
-    loadBillingProof,
-    bindHelpModal,
-    watchBuildUpdates,
-    initSession,
-    refreshUsage,
-    migrateLegacyBank,
-    renderList,
-    initProTabs,
-    lsGet: (k, d) => __gmxSt.lsGet(k, d),
-    lastTabKey: LS_LAST_TAB,
-    extViewKey: LS_EXT_VIEW,
+      dedupeLines,
+    },
+    siteBootCtx: {
+      $,
+      getHandle,
+      getToken,
+      setAuthOk: (v) => { AUTH_OK = !!v; },
+      setInitDone: (v) => { INIT_DONE = !!v; },
+      applyAdminVisibility,
+      applyLang,
+      initThemeWallTabs,
+      bindExtTabs,
+      initExtWallpaperControls,
+      normalizeStoredExtWallpaperSelections,
+      migrateLegacyWallpaperSelectionOnce,
+      migrateLegacyExtWallpaperSelectionOnce,
+      renderExtThemes,
+      renderExtWallpapers,
+      renderExtCustomBgUI,
+      setExtView,
+      normalizeExtViewValue,
+      restoreDrafts,
+      normalizeTopLevelTab,
+      tab,
+      setCurrentTab: (n) => __gmxTabState.setCurrentTab(n),
+      setBg,
+      ping,
+      loadBuild,
+      bindWalletTab,
+      bindLimitModal,
+      bindPaySuccess,
+      loadPlans,
+      loadBillingProof,
+      bindHelpModal,
+      watchBuildUpdates,
+      initSession,
+      refreshUsage,
+      migrateLegacyBank,
+      renderList,
+      initProTabs,
+      lsGet: (k, d) => __gmxSt.lsGet(k, d),
+      lastTabKey: LS_LAST_TAB,
+      extViewKey: LS_EXT_VIEW,
+    },
+    recoverCtx: {
+      toast,
+      setDegraded,
+      lsGet: (k, d) => __gmxSt.lsGet(k, d),
+      lsSet: (k, v) => { try { __gmxSt.lsSet(k, v); } catch {} },
+    },
   }).run();
-
-  if (!window.__GMXRecoverFactory) throw new Error("GMX recover factory missing");
-  window.__GMXRecoverFactory({
-    toast,
-    setDegraded,
-    lsGet: (k, d) => __gmxSt.lsGet(k, d),
-    lsSet: (k, v) => { try { __gmxSt.lsSet(k, v); } catch {} },
-  }).wire();
 
   // ----- Connect -----
   const connectBtn = $("btnConnect");

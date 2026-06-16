@@ -7,6 +7,7 @@
     "04-themes-catalog.js",
     "04-themes-render-ui.js",
     "04-app-chrome-usage.js",
+    "04-i18n-bridge.js",
     "05-lists-single-saved-bank-per-kind-legacy-global-l.js",
     "06-best-pick-a-strong-line-and-copy-it.js",
     "06-clean-fill-run.js",
