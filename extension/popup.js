@@ -60,6 +60,25 @@ function normalizeWallpaperOptionId(id){
   return canonicalExtWallpaperId(id);
 }
 
+function getExtensionSurface() {
+  try {
+    const view = String(document.body && document.body.getAttribute("data-view") || "").trim().toLowerCase();
+    return view === "quick" ? "quick" : "popup";
+  } catch {
+    return "popup";
+  }
+}
+
+// Per-view wallpaper keys synced from site: gmx_ext_wp_v2_popup, gmx_ext_wp_v2_quick
+function pickSyncedWallpaperId(data) {
+  const surface = getExtensionSurface();
+  const viewKey = surface === "quick" ? THEME_KEYS.extWallpaperQuick : THEME_KEYS.extWallpaperPopup;
+  const legacyViewKey = surface === "quick" ? LEGACY_THEME_KEYS.extWallpaperQuick : LEGACY_THEME_KEYS.extWallpaperPopup;
+  const perView = normalizeWallpaperOptionId(String(data[viewKey] || data[legacyViewKey] || ""));
+  const global = normalizeWallpaperOptionId(String(data[THEME_KEYS.extWallpaper] || data[LEGACY_THEME_KEYS.extWallpaper] || ""));
+  return perView || global;
+}
+
 function normalizeExtView(raw) {
   const value = String(raw || "").trim().toLowerCase();
   return ["theme", "wall", "custom"].includes(value) ? value : "theme";
@@ -281,68 +300,37 @@ function prefetchWallpaper(url){
 
 const WALL_CACHE = new Map();
 
-function svgDataUri(svg) {
-  return `data:image/svg+xml;utf8,${encodeURIComponent(String(svg || ""))}`;
-}
-
-const EXT_PACK_PALETTES = [
-  { tag: "GM", c1: "#9945ff", c2: "#14f195" },
-  { tag: "DEGEN", c1: "#ff6b35", c2: "#f7931a" },
-  { tag: "ALPHA", c1: "#00d4ff", c2: "#7c3aed" },
-  { tag: "WAGMI", c1: "#22c55e", c2: "#10b981" },
-  { tag: "NGMI", c1: "#ef4444", c2: "#f97316" },
-  { tag: "LFG", c1: "#8b5cf6", c2: "#ec4899" },
-  { tag: "SER", c1: "#06b6d4", c2: "#3b82f6" },
-  { tag: "APE", c1: "#eab308", c2: "#f59e0b" },
-  { tag: "MOON", c1: "#a855f7", c2: "#6366f1" },
-  { tag: "CHAD", c1: "#14b8a6", c2: "#0d9488" },
-  { tag: "SIZE", c1: "#f43f5e", c2: "#ec4899" },
-  { tag: "CT", c1: "#64748b", c2: "#94a3b8" }
-];
-
-function extPackWallpaperDataUri(id, thumb) {
-  const n = Math.max(1, Number(String(id || "").slice(6)) || 1);
-  const p = EXT_PACK_PALETTES[(n - 1) % EXT_PACK_PALETTES.length];
-  const w = thumb ? 360 : 1080;
-  const h = thumb ? 640 : 1920;
-  const blur = thumb ? 40 : 120;
-  const orbs = [
-    { cx: 0.2 + (n % 5) * 0.1, cy: 0.25, r: 0.5, c: p.c1, op: 0.2 },
-    { cx: 0.8 - (n % 4) * 0.1, cy: 0.7, r: 0.4, c: p.c2, op: 0.18 },
-    { cx: 0.5, cy: 0.5, r: 0.35, c: p.c1, op: 0.06 }
-  ];
-  const orbEls = orbs.map(o=>`<ellipse cx="${w*o.cx}" cy="${h*o.cy}" rx="${w*o.r}" ry="${h*o.r*0.8}" fill="${o.c}" opacity="${o.op}" filter="url(#blur)"/>`).join("");
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="bg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#070a12"/><stop offset="100%" stop-color="#050810"/></linearGradient><filter id="blur"><feGaussianBlur stdDeviation="${blur}"/></filter></defs><rect width="${w}" height="${h}" fill="url(#bg)"/>${orbEls}</svg>`;
-  return svgDataUri(svg);
-}
-
 function normalizeExtWallpaperId(raw) {
   return canonicalExtWallpaperId(raw);
 }
 
-let EXT_WP_EXT_MAP = null;
-async function loadExtWpMap() {
-  if (EXT_WP_EXT_MAP) return EXT_WP_EXT_MAP;
-  try {
-    const url = chrome.runtime.getURL("extbg/ext-map.json");
-    const r = await fetch(url);
-    if (r.ok) EXT_WP_EXT_MAP = await r.json();
-  } catch {}
-  return EXT_WP_EXT_MAP || {};
-}
-
 async function resolveWallpaperSource(base, wallpaperId) {
-  const id = normalizeExtWallpaperId(wallpaperId);
+  let id = normalizeExtWallpaperId(wallpaperId);
   if (!id) return "";
 
   const cacheKey = `${normalizeBase(base)}::${id}`;
   if (WALL_CACHE.has(cacheKey)) return WALL_CACHE.get(cacheKey) || "";
 
-  const bust = `?v=${ASSET_REV}`;
-  let extId = /^w\d{2}$/.test(id) ? `ext_${id}` : id;
-  const map = await loadExtWpMap();
-  const ext = map[extId] || "svg";
-  const localUrl = chrome.runtime.getURL(`extbg/${encodeURIComponent(extId)}.${ext}`) + bust;
+  const origin = normalizeBase(base);
+  if (id.startsWith("custom_")) {
+    const remote = `${origin}/assets/extbg/custom/${encodeURIComponent(id.slice(7))}?v=${ASSET_REV}`;
+    WALL_CACHE.set(cacheKey, remote);
+    try { prefetchWallpaper(remote); } catch {}
+    return remote;
+  }
+  const wMatch = id.match(/^w(\d{2})$/i);
+  if (wMatch) id = `extv3_${wMatch[1]}`;
+  const extMatch = id.match(/^ext_(\d{1,2})$/i);
+  if (extMatch) {
+    id = `extv3_${String(Math.max(1, Math.min(58, Number(extMatch[1]) || 1))).padStart(2, "0")}`;
+  }
+  if (id.startsWith("extv3_")) {
+    const remote = `${origin}/assets/extbg/${encodeURIComponent(id)}.webp?v=${ASSET_REV}`;
+    WALL_CACHE.set(cacheKey, remote);
+    try { prefetchWallpaper(remote); } catch {}
+    return remote;
+  }
+  const localUrl = chrome.runtime.getURL(`extbg/${encodeURIComponent(id)}.svg`) + `?v=${ASSET_REV}`;
   WALL_CACHE.set(cacheKey, localUrl);
   try { prefetchWallpaper(localUrl.split("?")[0]); } catch {}
   return localUrl;
@@ -426,6 +414,12 @@ function baseCandidates(preferred) {
   ]);
 }
 
+async function removeState(keys) {
+  const list = Array.isArray(keys) ? keys.filter(Boolean) : [keys].filter(Boolean);
+  if (!list.length) return;
+  try { await chrome.storage.local.remove(list); } catch {}
+}
+
 async function saveState(partial) {
   try {
     await chrome.storage.local.set(partial);
@@ -476,7 +470,7 @@ async function loadState() {
   const hadLegacyThemeValues = Boolean(data[LEGACY_THEME_KEYS.extTheme] || data[LEGACY_THEME_KEYS.extView] || data[LEGACY_THEME_KEYS.extWallpaper] || data[LEGACY_THEME_KEYS.extCustomBg]);
   state.extTheme = String(data[THEME_KEYS.extTheme] || data[LEGACY_THEME_KEYS.extTheme] || data[THEME_KEYS.siteTheme] || DEFAULT_THEME.id).trim() || DEFAULT_THEME.id;
   state.extView = normalizeExtView(data[THEME_KEYS.extView] || data[LEGACY_THEME_KEYS.extView] || "theme");
-  state.extWallpaper = normalizeWallpaperOptionId(String(data[THEME_KEYS.extWallpaper] || data[LEGACY_THEME_KEYS.extWallpaper] || "").trim());
+  state.extWallpaper = pickSyncedWallpaperId(data);
   state.extCustomBg = String(data[THEME_KEYS.extCustomBg] || data[LEGACY_THEME_KEYS.extCustomBg] || "").trim();
   if (state.extView === "wall" && !state.extWallpaper) state.extView = "theme";
   if (state.extView === "custom" && !state.extCustomBg) state.extView = "theme";
@@ -661,7 +655,7 @@ async function fetchBatch(kind, count = 6) {
   const safeKind = kind === "gn" ? "gn" : "gm";
   const safeMode = ["min", "mid", "max"].includes(state.mode) ? state.mode : "mid";
   const path = state.token
-    ? `/api/generate-bulk?kind=${safeKind}&mode=${safeMode}&count=${Math.max(1, Math.min(10, count))}`
+    ? `/api/random-bulk?kind=${safeKind}&mode=${safeMode}&count=${Math.max(1, Math.min(10, count))}`
     : `/api/public/random-bulk?kind=${safeKind}&mode=${safeMode}&count=${Math.max(1, Math.min(10, count))}`;
   const result = await apiRequest(path, { acceptStatuses: [401, 403] });
   if (!result.ok || !result.data) {
@@ -948,7 +942,10 @@ function bindEvents() {
       LEGACY_KEYS.handle,
       LEGACY_KEYS.token,
     ]);
-    const themeKeys = new Set(Object.values(THEME_KEYS));
+    const themeKeys = new Set([
+      ...Object.values(THEME_KEYS),
+      ...Object.values(LEGACY_THEME_KEYS),
+    ]);
     let needsAuthRefresh = false;
     let needsThemeRefresh = false;
     let needsPreviewRefresh = false;

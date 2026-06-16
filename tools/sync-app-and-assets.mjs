@@ -88,3 +88,11 @@ if (fs.existsSync(extbgSrc)) {
 }
 
 console.log(`[sync] Copied ${n} items: public + assets -> frontend/public`);
+
+// 5. Keep extension theme catalog aligned with site
+const themesSrc = path.join(PUBLIC, "themes.json");
+const themesExt = path.join(ROOT, "extension", "themes.json");
+if (fs.existsSync(themesSrc)) {
+  copyFile(themesSrc, themesExt);
+  console.log("  extension/themes.json");
+}

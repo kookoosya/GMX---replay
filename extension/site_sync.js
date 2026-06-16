@@ -11,6 +11,8 @@
   const LS_SITE_THEME = "gmx_theme";
   const LS_EXT_WP = "gmx_ext_wp_v2";
   const LS_EXT_WP_LEGACY = "gmx_ext_wp";
+  const LS_EXT_WP_VIEW_POPUP = "gmx_ext_wp_view_popup";
+  const LS_EXT_WP_VIEW_QUICK = "gmx_ext_wp_view_quick";
   const LS_EXT_VIEW = "gmx_ext_view_v2";
   const LS_EXT_VIEW_LEGACY = "gmx_ext_view";
   const LS_EXT_CUSTOM_BG = "gmx_ext_custom_bg_global_v2";
@@ -27,6 +29,8 @@
   const EXT_THEME_KEY = "gmx_ext_theme_v2";
   const SITE_THEME_KEY = "gmx_theme";
   const EXT_WP_KEY = "gmx_ext_wp_v2";
+  const EXT_WP_POPUP_KEY = "gmx_ext_wp_v2_popup";
+  const EXT_WP_QUICK_KEY = "gmx_ext_wp_v2_quick";
   const EXT_VIEW_KEY = "gmx_ext_view_v2";
   const EXT_CUSTOM_BG_KEY = "gmx_ext_custom_bg_global_v2";
 
@@ -96,6 +100,8 @@
     const siteExtTheme = normalizeText(localStorage.getItem(LS_EXT_THEME) || localStorage.getItem(LS_EXT_THEME_LEGACY));
     const siteTheme = normalizeText(localStorage.getItem(LS_SITE_THEME));
     const siteExtWallpaper = normalizeText(localStorage.getItem(LS_EXT_WP) || localStorage.getItem(LS_EXT_WP_LEGACY));
+    const siteExtWallpaperPopup = normalizeText(localStorage.getItem(LS_EXT_WP_VIEW_POPUP) || localStorage.getItem("gmx_ext_wp_v2_popup"));
+    const siteExtWallpaperQuick = normalizeText(localStorage.getItem(LS_EXT_WP_VIEW_QUICK) || localStorage.getItem("gmx_ext_wp_v2_quick"));
     const siteExtView = normalizeText(localStorage.getItem(LS_EXT_VIEW) || localStorage.getItem(LS_EXT_VIEW_LEGACY));
     const siteExtCustomBg = normalizeText(localStorage.getItem(LS_EXT_CUSTOM_BG) || localStorage.getItem(LS_EXT_CUSTOM_BG_LEGACY));
     const siteLang = (() => {
@@ -110,7 +116,7 @@
     const prev = await safeGet([
       V2_BASE, V2_HANDLE, V2_TOKEN,
       LEGACY_BASE, LEGACY_HANDLE, LEGACY_TOKEN,
-      EXT_THEME_KEY, SITE_THEME_KEY, EXT_WP_KEY, EXT_VIEW_KEY, EXT_CUSTOM_BG_KEY,
+      EXT_THEME_KEY, SITE_THEME_KEY, EXT_WP_KEY, EXT_WP_POPUP_KEY, EXT_WP_QUICK_KEY, EXT_VIEW_KEY, EXT_CUSTOM_BG_KEY,
       LS_EXT_THEME_LEGACY, LS_EXT_WP_LEGACY, LS_EXT_VIEW_LEGACY, LS_EXT_CUSTOM_BG_LEGACY,
       V2_SITE_LANG,
     ]);
@@ -138,6 +144,8 @@
     if (!isSame(prev[EXT_THEME_KEY], siteExtTheme)) payload[EXT_THEME_KEY] = siteExtTheme;
     if (!isSame(prev[SITE_THEME_KEY], siteTheme)) payload[SITE_THEME_KEY] = siteTheme;
     if (!isSame(prev[EXT_WP_KEY], siteExtWallpaper)) payload[EXT_WP_KEY] = siteExtWallpaper;
+    if (!isSame(prev[EXT_WP_POPUP_KEY], siteExtWallpaperPopup)) payload[EXT_WP_POPUP_KEY] = siteExtWallpaperPopup;
+    if (!isSame(prev[EXT_WP_QUICK_KEY], siteExtWallpaperQuick)) payload[EXT_WP_QUICK_KEY] = siteExtWallpaperQuick;
     if (!isSame(prev[EXT_VIEW_KEY], siteExtView)) payload[EXT_VIEW_KEY] = siteExtView;
     if (!isSame(prev[EXT_CUSTOM_BG_KEY], siteExtCustomBg)) payload[EXT_CUSTOM_BG_KEY] = siteExtCustomBg;
     if (!isSame(prev[V2_SITE_LANG], siteLang)) payload[V2_SITE_LANG] = siteLang;
@@ -162,14 +170,37 @@
       extTheme: siteExtTheme,
       siteTheme,
       extWallpaper: siteExtWallpaper,
+      extWallpaperPopup: siteExtWallpaperPopup,
+      extWallpaperQuick: siteExtWallpaperQuick,
       extView: siteExtView,
       extCustomBg: siteExtCustomBg,
       hasCustomBg: Boolean(siteExtCustomBg),
     };
   }
 
+  let syncRunning = false;
+  let syncPending = false;
+
+  async function runSyncOnce() {
+    if (syncRunning) {
+      syncPending = true;
+      return { ok: false, reason: "pending" };
+    }
+    syncRunning = true;
+    let lastResult = { ok: false };
+    try {
+      do {
+        syncPending = false;
+        lastResult = await syncOnce();
+      } while (syncPending);
+      return lastResult;
+    } finally {
+      syncRunning = false;
+    }
+  }
+
   function scheduleSync() {
-    void syncOnce();
+    void runSyncOnce();
   }
 
   window.addEventListener("message", (event) => {
@@ -182,7 +213,7 @@
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (!message || message.type !== "GMX_FORCE_SITE_SYNC") return undefined;
     (async () => {
-      const result = await syncOnce().catch((error) => ({ ok: false, error: String(error && error.message || error || 'sync_failed') }));
+      const result = await runSyncOnce().catch((error) => ({ ok: false, error: String(error && error.message || error || 'sync_failed') }));
       try {
         sendResponse(result || { ok: false, error: 'sync_failed' });
       } catch {}
@@ -218,6 +249,18 @@
         localStorage.setItem(LS_EXT_WP_LEGACY, v);
         updated = true;
       }
+      if (changes[EXT_WP_POPUP_KEY]) {
+        const v = String(changes[EXT_WP_POPUP_KEY].newValue || "").trim();
+        localStorage.setItem(LS_EXT_WP_VIEW_POPUP, v);
+        localStorage.setItem("gmx_ext_wp_v2_popup", v);
+        updated = true;
+      }
+      if (changes[EXT_WP_QUICK_KEY]) {
+        const v = String(changes[EXT_WP_QUICK_KEY].newValue || "").trim();
+        localStorage.setItem(LS_EXT_WP_VIEW_QUICK, v);
+        localStorage.setItem("gmx_ext_wp_v2_quick", v);
+        updated = true;
+      }
       if (changes[EXT_VIEW_KEY]) {
         const v = String(changes[EXT_VIEW_KEY].newValue || "").trim();
         if (v) localStorage.setItem(LS_EXT_VIEW, v);
@@ -239,12 +282,12 @@
   chrome.storage.onChanged.addListener((changes, areaName) => {
     try {
       if (areaName !== "local") return;
-      const keys = [EXT_THEME_KEY, SITE_THEME_KEY, EXT_WP_KEY, EXT_VIEW_KEY, EXT_CUSTOM_BG_KEY];
+      const keys = [EXT_THEME_KEY, SITE_THEME_KEY, EXT_WP_KEY, EXT_WP_POPUP_KEY, EXT_WP_QUICK_KEY, EXT_VIEW_KEY, EXT_CUSTOM_BG_KEY];
       if (keys.some((k) => changes[k])) pushExtToSite(changes);
     } catch (_e) {}
   });
 
-  void syncOnce();
+  void runSyncOnce();
   window.addEventListener("focus", scheduleSync, { passive: true });
   window.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") scheduleSync();
@@ -252,7 +295,7 @@
   window.addEventListener("storage", (event) => {
     try {
       const key = String(event && event.key || "");
-      if (!key || [LS_HANDLE, LS_TOKEN, LS_FORCE_LOGOUT, LS_FORCE_LOGOUT_LEGACY, LS_EXT_THEME, LS_EXT_THEME_LEGACY, LS_SITE_THEME, LS_EXT_WP, LS_EXT_WP_LEGACY, LS_EXT_VIEW, LS_EXT_VIEW_LEGACY, LS_EXT_CUSTOM_BG, LS_EXT_CUSTOM_BG_LEGACY, LS_SITE_LANG].includes(key)) {
+      if (!key || [LS_HANDLE, LS_TOKEN, LS_FORCE_LOGOUT, LS_FORCE_LOGOUT_LEGACY, LS_EXT_THEME, LS_EXT_THEME_LEGACY, LS_SITE_THEME, LS_EXT_WP, LS_EXT_WP_LEGACY, LS_EXT_WP_VIEW_POPUP, LS_EXT_WP_VIEW_QUICK, LS_EXT_VIEW, LS_EXT_VIEW_LEGACY, LS_EXT_CUSTOM_BG, LS_EXT_CUSTOM_BG_LEGACY, LS_SITE_LANG].includes(key)) {
         scheduleSync();
       }
     } catch {
