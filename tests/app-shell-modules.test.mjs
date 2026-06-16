@@ -89,6 +89,34 @@ test("chrome: showInfoModal factory export", () => {
   assert.equal(typeof chrome.showInfoModal, "function");
 });
 
+test("i18nui: tr and prettyError", () => {
+  const i18n = loadFactory("app.i18nui.js", "__GMXI18nUiFactory")({
+    getSiteLang: () => "en",
+    getI18n: () => ({
+      en: { hello: "Hello", err_unknown: "Unknown error" },
+    }),
+  });
+  assert.equal(i18n.t("hello"), "Hello");
+  assert.equal(i18n.prettyError(""), "Unknown error");
+  assert.equal(i18n.sanitizeI18nValue("en", "Привет", "Hello"), "Hello");
+});
+
+test("customwallpapers: effective site list", () => {
+  const mod = loadFactory("app.customwallpapers.js", "__GMXCustomWallpapersFactory")({
+    customUploadId: "custom_upload",
+    getSiteCustomUpload: () => "data:image/jpeg;base64,abc",
+    getExtCustomUpload: () => "",
+  });
+  assert.equal(mod.getEffectiveCustomWallpapersSite().length, 1);
+  assert.equal(mod.getEffectiveCustomWallpapersSite()[0].id, "custom_upload");
+});
+
+test("langui: flagEmoji helper", () => {
+  const lang = loadFactory("app.langui.js", "__GMXLangUiFactory")({ $: () => null });
+  assert.equal(lang.flagEmoji("us"), "US");
+  assert.equal(lang.flagEmoji(""), "GLB");
+});
+
 test("extview: normalizeExtViewValue and bindExtTabs", () => {
   const extview = loadFactory("app.extview.js", "__GMXExtViewFactory")({
     $: () => null,

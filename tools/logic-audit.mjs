@@ -68,10 +68,13 @@ for (const rel of appFiles) {
 for (const rel of htmlFiles) {
   mustMatch(rel, /app\.storage\.js/, "app.storage.js script tag");
   mustMatch(rel, /app\.format\.js/, "app.format.js script tag");
+  mustMatch(rel, /app\.i18nui\.js/, "app.i18nui.js script tag");
   mustMatch(rel, /app\.chrome\.js/, "app.chrome.js script tag");
+  mustMatch(rel, /app\.langui\.js/, "app.langui.js script tag");
   mustMatch(rel, /app\.unlock\.js/, "app.unlock.js script tag");
   mustMatch(rel, /app\.wallpapers\.js/, "app.wallpapers.js script tag");
   mustMatch(rel, /app\.wallpaperstore\.js/, "app.wallpaperstore.js script tag");
+  mustMatch(rel, /app\.customwallpapers\.js/, "app.customwallpapers.js script tag");
   mustMatch(rel, /app\.themes\.js/, "app.themes.js script tag");
   mustMatch(rel, /app\.themeapply\.js/, "app.themeapply.js script tag");
   mustMatch(rel, /app\.ui\.js/, "app.ui.js script tag");
