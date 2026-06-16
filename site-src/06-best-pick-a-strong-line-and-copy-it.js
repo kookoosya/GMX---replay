@@ -634,10 +634,10 @@ countEl.textContent = lines.length;
     setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 50);
   }
 
-  const LS_DRAFT_GM_NEW = "gmx_draft_gm_new";
-  const LS_DRAFT_GN_NEW = "gmx_draft_gn_new";
-  const LS_DRAFT_GM_PASTE = "gmx_draft_gm_paste";
-  const LS_DRAFT_GN_PASTE = "gmx_draft_gn_paste";
+  const LS_DRAFT_GM_NEW = K.DRAFT_GM_NEW;
+  const LS_DRAFT_GN_NEW = K.DRAFT_GN_NEW;
+  const LS_DRAFT_GM_PASTE = K.DRAFT_GM_PASTE;
+  const LS_DRAFT_GN_PASTE = K.DRAFT_GN_PASTE;
 
   function saveDraft(kind){
     try{

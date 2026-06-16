@@ -10,52 +10,41 @@
   const INFLIGHT = { gm:false, gn:false };
   const ABORT = { gm:null, gn:null };
 
-  const LS_HANDLE = "gmx_handle";
-  const LS_TOKEN  = "gmx_token";
+  const LS_HANDLE = K.HANDLE;
+  const LS_TOKEN  = K.TOKEN;
 
-  const SS_ADMIN_TOKEN = "gmx_admin_token";
+  function getAdminToken(){ return __gmxSt.getAdminToken(); }
+  function setAdminToken(t){ __gmxSt.setAdminToken(t); }
+  function isAdminSignedIn(){ return __gmxSt.isAdminSignedIn(); }
 
-function getAdminToken(){
-  try{ return String(sessionStorage.getItem(SS_ADMIN_TOKEN) || "").trim(); }catch(_e){ return ""; }
-}
-function setAdminToken(t){
-  try{
-    const v = String(t||"").trim();
-    if (v) sessionStorage.setItem(SS_ADMIN_TOKEN, v);
-    else sessionStorage.removeItem(SS_ADMIN_TOKEN);
-  }catch(_e){}
-}
-function isAdminSignedIn(){ return !!getAdminToken(); }
+  const LS_IS_ADMIN = K.IS_ADMIN;
+  const LS_ADMIN_CLAIMABLE = K.ADMIN_CLAIMABLE;
+  const LS_SITE_LANG = K.SITE_LANG;
+  const LS_LAST_TAB = K.LAST_TAB;
+  const LS_REF_PROMO_OPEN = K.REF_PROMO_OPEN;
+  const LS_GM_REPLY_LANG = K.GM_REPLY_LANG;
+  const LS_GN_REPLY_LANG = K.GN_REPLY_LANG;
+  const LS_BEST_ENABLED = K.BEST_ENABLED;
+  const LS_FORCE_LOGOUT = K.FORCE_LOGOUT;
+  const LS_FORCE_LOGOUT_V2 = K.FORCE_LOGOUT_V2;
+  const LS_TOGGLES_BOOTSTRAP_V2 = K.TOGGLES_BOOTSTRAP_V2;
 
-  const LS_IS_ADMIN = "gmx_is_admin";
-  const LS_ADMIN_CLAIMABLE = "gmx_admin_claimable";
-  const LS_SITE_LANG = "gmx_site_lang";
-  const LS_LAST_TAB = "gmx_last_tab";
-  const LS_REF_PROMO_OPEN = "gmx_ref_promo_open";
-  const LS_GM_REPLY_LANG = "gmx_gm_reply_lang";
-  const LS_GN_REPLY_LANG = "gmx_gn_reply_lang";
-  const LS_BEST_ENABLED = "gmx_best_enabled";
-  const LS_FORCE_LOGOUT = "gmx_ext_force_logout";
-  const LS_FORCE_LOGOUT_V2 = "gmx_ext_force_logout_v2";
-  const LS_TOGGLES_BOOTSTRAP_V2 = "gmx_toggles_bootstrap_v2";
+  const GM_GLOBAL = K.GM_GLOBAL;
+  const GN_GLOBAL = K.GN_GLOBAL;
+  const GM_LANGS  = K.GM_LANGS;
+  const GN_LANGS  = K.GN_LANGS;
 
+  const LS_CUSTOM_BG = K.CUSTOM_BG;
 
-  const GM_GLOBAL = "gmx_gm_global";
-  const GN_GLOBAL = "gmx_gn_global";
-  const GM_LANGS  = "gmx_gm_langs";
-  const GN_LANGS  = "gmx_gn_langs";
-
-  const LS_CUSTOM_BG = "gmx_custom_bg";
-
-  const LS_GM_PACK = "gmx_gm_pack";
-  const LS_GN_PACK = "gmx_gn_pack";
-  const LS_GM_ANTI = "gmx_gm_anti";
-  const LS_GN_ANTI = "gmx_gn_anti";
-  const LS_GM_CLEAN_FILL = "gmx_gm_clean_fill";
-  const LS_GN_CLEAN_FILL = "gmx_gn_clean_fill";
+  const LS_GM_PACK = K.GM_PACK;
+  const LS_GN_PACK = K.GN_PACK;
+  const LS_GM_ANTI = K.GM_ANTI;
+  const LS_GN_ANTI = K.GN_ANTI;
+  const LS_GM_CLEAN_FILL = K.GM_CLEAN_FILL;
+  const LS_GN_CLEAN_FILL = K.GN_CLEAN_FILL;
   const CLEAN_FILL_STRENGTH = 2;
-const LS_GM_RECENT = "gmx_gm_recent";
-  const LS_GN_RECENT = "gmx_gn_recent";
+  const LS_GM_RECENT = K.GM_RECENT;
+  const LS_GN_RECENT = K.GN_RECENT;
 
 
   // Legacy helper kept for compatibility with old code paths.
@@ -70,26 +59,15 @@ const LS_GM_RECENT = "gmx_gm_recent";
     return window.antiWindow(strength);
   }
 
-  function lsKeyCleanFill(kind){
-    return (kind === "gn") ? LS_GN_CLEAN_FILL : LS_GM_CLEAN_FILL;
-  }
-  const LS_CLEAN_FILL_BOOTSTRAP = "gmx_clean_fill_bootstrap_v5";
+  function lsKeyCleanFill(kind){ return __gmxSt.lsKeyCleanFill(kind); }
+  const LS_CLEAN_FILL_BOOTSTRAP = K.CLEAN_FILL_BOOTSTRAP;
 
-function bootstrapCleanFillDefaults(){
-  try{
-    if (localStorage.getItem(LS_CLEAN_FILL_BOOTSTRAP) === "1") return;
-    localStorage.setItem(LS_GM_CLEAN_FILL, "0");
-    localStorage.setItem(LS_GN_CLEAN_FILL, "0");
-    localStorage.setItem(LS_CLEAN_FILL_BOOTSTRAP, "1");
-  }catch(_e){}
-}
+  function bootstrapCleanFillDefaults(){ __gmxSt.bootstrapCleanFillDefaults(); }
 
-function getCleanFillEnabled(kind){
-    try{ return localStorage.getItem(lsKeyCleanFill(kind)) === "1"; }catch(_e){ return false; }
-  }
+  function getCleanFillEnabled(kind){ return __gmxSt.getCleanFillEnabled(kind); }
   function setCleanFillEnabled(kind, next, silent){
     const on = !!next;
-    try{ localStorage.setItem(lsKeyCleanFill(kind), on ? "1" : "0"); }catch(_e){}
+    __gmxSt.setCleanFillEnabledRaw(kind, on);
     try{ syncCleanFillUi(kind); }catch(_e){}
     if (!silent){
       try{ window.postMessage({ type: "GMX_CLEAN_FILL_SYNC", kind, value: on }, "*"); }catch(_e){}
@@ -138,16 +116,10 @@ function cleanFillCopy(kind){
   }
 
   // Helpers for LS key selection (used by Pro controls).
-  function lsKeyPack(kind){
-    return (kind === "gn") ? LS_GN_PACK : LS_GM_PACK;
-  }
-  function lsKeyAnti(kind){
-    return (kind === "gn") ? LS_GN_ANTI : LS_GM_ANTI;
-  }
+  function lsKeyPack(kind){ return __gmxSt.lsKeyPack(kind); }
+  function lsKeyAnti(kind){ return __gmxSt.lsKeyAnti(kind); }
 
-  function lsKeyRecent(kind){
-    return (kind === "gn") ? LS_GN_RECENT : LS_GM_RECENT;
-  }
+  function lsKeyRecent(kind){ return __gmxSt.lsKeyRecent(kind); }
   function getRecent(kind){
     try{
       const raw = localStorage.getItem(lsKeyRecent(kind));
@@ -162,8 +134,8 @@ function cleanFillCopy(kind){
   
   // ---- Custom background per tab (Themes) ----
   // Migration from old single-key storage:
-  const LS_CUSTOM_BG_GLOBAL = "gmx_custom_bg_global";
-  const LS_CUSTOM_BG_TAB_PREFIX = "gmx_custom_bg_tab_";
+  const LS_CUSTOM_BG_GLOBAL = K.CUSTOM_BG_GLOBAL;
+  const LS_CUSTOM_BG_TAB_PREFIX = K.CUSTOM_BG_TAB_PREFIX;
 
   (function migrateCustomBg(){
     try{

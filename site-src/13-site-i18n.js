@@ -1233,7 +1233,7 @@ function cleanupKeyLines(lines){
   }
 
   // Light/Dark mode (site-only)
-  const LS_SITE_MODE = "gmx_site_mode"; // "dark" | "light"
+  const LS_SITE_MODE = K.SITE_MODE;
   function applySiteMode(mode, persist){
     const m = (mode === "light") ? "light" : "dark";
     document.documentElement.classList.toggle("mode-light", m === "light");

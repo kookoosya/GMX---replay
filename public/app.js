@@ -1,15 +1,19 @@
 (async () => {
   const API = location.origin;
 
+  if (!window.__GMXStorageFactory) throw new Error("GMX storage factory missing");
+  const __gmxSt = window.__GMXStorageFactory();
+  const K = __gmxSt.keys;
+
   const ADMIN_HANDLE = "@Kristofer_Sol_";
   let SAVE_CAP_FREE = 50;
   const EMPTY = "__EMPTY__";
 
   let SUB = null;
   let REF_COUNT = 0;
-  const LS_REF_ELIGIBLE_CACHE = "gmx_ref_eligible_v1";
+  const LS_REF_ELIGIBLE_CACHE = K.REF_ELIGIBLE_CACHE;
   try{
-    const bootEligible = Number(localStorage.getItem(LS_REF_ELIGIBLE_CACHE) || 0) || 0;
+    const bootEligible = Number(__gmxSt.lsGet(LS_REF_ELIGIBLE_CACHE, "0") || 0) || 0;
     if (bootEligible > 0) REF_COUNT = bootEligible;
   }catch(_e){}
   let AUTH_OK = false;
@@ -39,7 +43,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260616e";
+const ASSET_REV = "20260616f";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -198,52 +202,41 @@ async function postEvent(type, meta){
   const INFLIGHT = { gm:false, gn:false };
   const ABORT = { gm:null, gn:null };
 
-  const LS_HANDLE = "gmx_handle";
-  const LS_TOKEN  = "gmx_token";
+  const LS_HANDLE = K.HANDLE;
+  const LS_TOKEN  = K.TOKEN;
 
-  const SS_ADMIN_TOKEN = "gmx_admin_token";
+  function getAdminToken(){ return __gmxSt.getAdminToken(); }
+  function setAdminToken(t){ __gmxSt.setAdminToken(t); }
+  function isAdminSignedIn(){ return __gmxSt.isAdminSignedIn(); }
 
-function getAdminToken(){
-  try{ return String(sessionStorage.getItem(SS_ADMIN_TOKEN) || "").trim(); }catch(_e){ return ""; }
-}
-function setAdminToken(t){
-  try{
-    const v = String(t||"").trim();
-    if (v) sessionStorage.setItem(SS_ADMIN_TOKEN, v);
-    else sessionStorage.removeItem(SS_ADMIN_TOKEN);
-  }catch(_e){}
-}
-function isAdminSignedIn(){ return !!getAdminToken(); }
+  const LS_IS_ADMIN = K.IS_ADMIN;
+  const LS_ADMIN_CLAIMABLE = K.ADMIN_CLAIMABLE;
+  const LS_SITE_LANG = K.SITE_LANG;
+  const LS_LAST_TAB = K.LAST_TAB;
+  const LS_REF_PROMO_OPEN = K.REF_PROMO_OPEN;
+  const LS_GM_REPLY_LANG = K.GM_REPLY_LANG;
+  const LS_GN_REPLY_LANG = K.GN_REPLY_LANG;
+  const LS_BEST_ENABLED = K.BEST_ENABLED;
+  const LS_FORCE_LOGOUT = K.FORCE_LOGOUT;
+  const LS_FORCE_LOGOUT_V2 = K.FORCE_LOGOUT_V2;
+  const LS_TOGGLES_BOOTSTRAP_V2 = K.TOGGLES_BOOTSTRAP_V2;
 
-  const LS_IS_ADMIN = "gmx_is_admin";
-  const LS_ADMIN_CLAIMABLE = "gmx_admin_claimable";
-  const LS_SITE_LANG = "gmx_site_lang";
-  const LS_LAST_TAB = "gmx_last_tab";
-  const LS_REF_PROMO_OPEN = "gmx_ref_promo_open";
-  const LS_GM_REPLY_LANG = "gmx_gm_reply_lang";
-  const LS_GN_REPLY_LANG = "gmx_gn_reply_lang";
-  const LS_BEST_ENABLED = "gmx_best_enabled";
-  const LS_FORCE_LOGOUT = "gmx_ext_force_logout";
-  const LS_FORCE_LOGOUT_V2 = "gmx_ext_force_logout_v2";
-  const LS_TOGGLES_BOOTSTRAP_V2 = "gmx_toggles_bootstrap_v2";
+  const GM_GLOBAL = K.GM_GLOBAL;
+  const GN_GLOBAL = K.GN_GLOBAL;
+  const GM_LANGS  = K.GM_LANGS;
+  const GN_LANGS  = K.GN_LANGS;
 
+  const LS_CUSTOM_BG = K.CUSTOM_BG;
 
-  const GM_GLOBAL = "gmx_gm_global";
-  const GN_GLOBAL = "gmx_gn_global";
-  const GM_LANGS  = "gmx_gm_langs";
-  const GN_LANGS  = "gmx_gn_langs";
-
-  const LS_CUSTOM_BG = "gmx_custom_bg";
-
-  const LS_GM_PACK = "gmx_gm_pack";
-  const LS_GN_PACK = "gmx_gn_pack";
-  const LS_GM_ANTI = "gmx_gm_anti";
-  const LS_GN_ANTI = "gmx_gn_anti";
-  const LS_GM_CLEAN_FILL = "gmx_gm_clean_fill";
-  const LS_GN_CLEAN_FILL = "gmx_gn_clean_fill";
+  const LS_GM_PACK = K.GM_PACK;
+  const LS_GN_PACK = K.GN_PACK;
+  const LS_GM_ANTI = K.GM_ANTI;
+  const LS_GN_ANTI = K.GN_ANTI;
+  const LS_GM_CLEAN_FILL = K.GM_CLEAN_FILL;
+  const LS_GN_CLEAN_FILL = K.GN_CLEAN_FILL;
   const CLEAN_FILL_STRENGTH = 2;
-const LS_GM_RECENT = "gmx_gm_recent";
-  const LS_GN_RECENT = "gmx_gn_recent";
+  const LS_GM_RECENT = K.GM_RECENT;
+  const LS_GN_RECENT = K.GN_RECENT;
 
 
   // Legacy helper kept for compatibility with old code paths.
@@ -258,26 +251,15 @@ const LS_GM_RECENT = "gmx_gm_recent";
     return window.antiWindow(strength);
   }
 
-  function lsKeyCleanFill(kind){
-    return (kind === "gn") ? LS_GN_CLEAN_FILL : LS_GM_CLEAN_FILL;
-  }
-  const LS_CLEAN_FILL_BOOTSTRAP = "gmx_clean_fill_bootstrap_v5";
+  function lsKeyCleanFill(kind){ return __gmxSt.lsKeyCleanFill(kind); }
+  const LS_CLEAN_FILL_BOOTSTRAP = K.CLEAN_FILL_BOOTSTRAP;
 
-function bootstrapCleanFillDefaults(){
-  try{
-    if (localStorage.getItem(LS_CLEAN_FILL_BOOTSTRAP) === "1") return;
-    localStorage.setItem(LS_GM_CLEAN_FILL, "0");
-    localStorage.setItem(LS_GN_CLEAN_FILL, "0");
-    localStorage.setItem(LS_CLEAN_FILL_BOOTSTRAP, "1");
-  }catch(_e){}
-}
+  function bootstrapCleanFillDefaults(){ __gmxSt.bootstrapCleanFillDefaults(); }
 
-function getCleanFillEnabled(kind){
-    try{ return localStorage.getItem(lsKeyCleanFill(kind)) === "1"; }catch(_e){ return false; }
-  }
+  function getCleanFillEnabled(kind){ return __gmxSt.getCleanFillEnabled(kind); }
   function setCleanFillEnabled(kind, next, silent){
     const on = !!next;
-    try{ localStorage.setItem(lsKeyCleanFill(kind), on ? "1" : "0"); }catch(_e){}
+    __gmxSt.setCleanFillEnabledRaw(kind, on);
     try{ syncCleanFillUi(kind); }catch(_e){}
     if (!silent){
       try{ window.postMessage({ type: "GMX_CLEAN_FILL_SYNC", kind, value: on }, "*"); }catch(_e){}
@@ -326,16 +308,10 @@ function cleanFillCopy(kind){
   }
 
   // Helpers for LS key selection (used by Pro controls).
-  function lsKeyPack(kind){
-    return (kind === "gn") ? LS_GN_PACK : LS_GM_PACK;
-  }
-  function lsKeyAnti(kind){
-    return (kind === "gn") ? LS_GN_ANTI : LS_GM_ANTI;
-  }
+  function lsKeyPack(kind){ return __gmxSt.lsKeyPack(kind); }
+  function lsKeyAnti(kind){ return __gmxSt.lsKeyAnti(kind); }
 
-  function lsKeyRecent(kind){
-    return (kind === "gn") ? LS_GN_RECENT : LS_GM_RECENT;
-  }
+  function lsKeyRecent(kind){ return __gmxSt.lsKeyRecent(kind); }
   function getRecent(kind){
     try{
       const raw = localStorage.getItem(lsKeyRecent(kind));
@@ -350,8 +326,8 @@ function cleanFillCopy(kind){
   
   // ---- Custom background per tab (Themes) ----
   // Migration from old single-key storage:
-  const LS_CUSTOM_BG_GLOBAL = "gmx_custom_bg_global";
-  const LS_CUSTOM_BG_TAB_PREFIX = "gmx_custom_bg_tab_";
+  const LS_CUSTOM_BG_GLOBAL = K.CUSTOM_BG_GLOBAL;
+  const LS_CUSTOM_BG_TAB_PREFIX = K.CUSTOM_BG_TAB_PREFIX;
 
   (function migrateCustomBg(){
     try{
@@ -655,8 +631,8 @@ function readFileAsDataURL(file){
 
 
   // Wallpapers — per-tab. Photo pack (webp under /assets/wallpapers/v2_*.webp).
-  const LS_WP_GLOBAL = "gmx_wp_all";
-  const LS_WP_TAB_PREFIX = "gmx_wp_tab_"; // + tab name
+  const LS_WP_GLOBAL = K.WP_GLOBAL;
+  const LS_WP_TAB_PREFIX = K.WP_TAB_PREFIX;
   const SITE_WALLPAPER_PACK_COUNT = 58;
   const SITE_WALLPAPER_FREE_PACK_COUNT = 10;
   const SITE_PACK_NAMES = [
@@ -734,7 +710,7 @@ function readFileAsDataURL(file){
     return out;
   }
   const WALLPAPERS = buildSiteWallpapers();
-  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_pexels_v2";
+  const WALLPAPER_REFRESH_MIGRATION_KEY = K.WALLPAPER_REFRESH_MIGRATION;
   function migrateLegacyWallpaperSelectionOnce(){
     try{
       if (localStorage.getItem(WALLPAPER_REFRESH_MIGRATION_KEY) === "1") return;
@@ -1306,7 +1282,7 @@ function renderWallpaperUI(){
     }, { key: "wpGrid", chunk: 12 });
   }
 // Theme / Wallpaper toggle inside Themes tab
-  const LS_THEMEWALL_VIEW = "gmx_themewall_view"; // "theme" | "wall" | "custom"
+  const LS_THEMEWALL_VIEW = K.THEMEWALL_VIEW;
 
   function setThemeWallView(view){
     const themeBtn  = $("tabTheme");
@@ -1755,37 +1731,17 @@ function applyTheme(id){
       if (typeof setBg === "function") setBg(tab);
     }catch(_e){}
   }
-const LS_EXT_VIEW = "gmx_ext_view"; // theme | wall | custom
-const LS_EXT_WP = "gmx_ext_wp"; // selected extension wallpaper id
-const EXT_LS_V2 = {
-  "gmx_ext_theme": "gmx_ext_theme_v2",
-  "gmx_ext_wp": "gmx_ext_wp_v2",
-  "gmx_ext_view": "gmx_ext_view_v2",
-  "gmx_ext_custom_bg_global": "gmx_ext_custom_bg_global_v2",
-  "gmx_ext_wp_view_popup": "gmx_ext_wp_v2_popup",
-  "gmx_ext_wp_view_quick": "gmx_ext_wp_v2_quick",
-};
-function extLsSet(key, value){
-  try{
-    const v2 = EXT_LS_V2[key];
-    if (value === undefined || value === null || value === ""){
-      localStorage.removeItem(key);
-      if (v2) localStorage.removeItem(v2);
-      return;
-    }
-    const text = String(value);
-    localStorage.setItem(key, text);
-    if (v2) localStorage.setItem(v2, text);
-  }catch(_e){}
-}
+const LS_EXT_VIEW = K.EXT_VIEW;
+const LS_EXT_WP = K.EXT_WP;
+function extLsSet(key, value){ __gmxSt.extLsSet(key, value); }
 
 
 // Custom background for extension popup (per-tab + global)
 // Note: this is stored on the site and later synced to the extension.
-const LS_EXT_CUSTOM_BG_GLOBAL = "gmx_ext_custom_bg_global"; // dataURL
-const LS_EXT_CUSTOM_BG_TAB_PREFIX = "gmx_ext_custom_bg_tab_"; // + tab
-const LS_EXT_CUSTOM_BG_TARGET = "gmx_ext_custom_bg_target"; // selected tab in UI
-const LS_EXT_CUSTOM_BG_LEGACY = "gmx_ext_custom_bg"; // legacy single key (migrated)
+const LS_EXT_CUSTOM_BG_GLOBAL = K.EXT_CUSTOM_BG_GLOBAL;
+const LS_EXT_CUSTOM_BG_TAB_PREFIX = K.EXT_CUSTOM_BG_TAB_PREFIX;
+const LS_EXT_CUSTOM_BG_TARGET = K.EXT_CUSTOM_BG_TARGET;
+const LS_EXT_CUSTOM_BG_LEGACY = K.EXT_CUSTOM_BG_LEGACY;
 
 const EXT_POPUP_TABS = [
   ["all","wp_apply_all"],
@@ -1796,8 +1752,8 @@ const EXT_POPUP_TABS = [
   ["themes","wp_apply_themes"],
   ["wallet","wp_apply_wallet"],
 ];
-const LS_EXT_WP_TARGET = "gmx_ext_wp_target"; // selected target inside extension wallpapers UI
-const LS_EXT_WP_VIEW_PREFIX = "gmx_ext_wp_view_"; // + popup | quick
+const LS_EXT_WP_TARGET = K.EXT_WP_TARGET;
+const LS_EXT_WP_VIEW_PREFIX = K.EXT_WP_VIEW_PREFIX;
 const EXT_WALLPAPER_VIEWS = [
   ["all", "All views"],
   ["popup", "Popup"],
@@ -3907,10 +3863,10 @@ countEl.textContent = lines.length;
     setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 50);
   }
 
-  const LS_DRAFT_GM_NEW = "gmx_draft_gm_new";
-  const LS_DRAFT_GN_NEW = "gmx_draft_gn_new";
-  const LS_DRAFT_GM_PASTE = "gmx_draft_gm_paste";
-  const LS_DRAFT_GN_PASTE = "gmx_draft_gn_paste";
+  const LS_DRAFT_GM_NEW = K.DRAFT_GM_NEW;
+  const LS_DRAFT_GN_NEW = K.DRAFT_GN_NEW;
+  const LS_DRAFT_GM_PASTE = K.DRAFT_GM_PASTE;
+  const LS_DRAFT_GN_PASTE = K.DRAFT_GN_PASTE;
 
   function saveDraft(kind){
     try{
@@ -4752,7 +4708,7 @@ const msg = $("refMsg");
 
   // Wallet discovery: Wallet Standard + legacy injected providers.
   const WS_CHAIN = "solana:mainnet";
-  const LS_WALLET_CHOICE = "gmx_wallet_choice_v2";
+  const LS_WALLET_CHOICE = K.WALLET_CHOICE;
 
   const WALLET = {
     connected: false,
@@ -7316,7 +7272,7 @@ function cleanupKeyLines(lines){
   }
 
   // Light/Dark mode (site-only)
-  const LS_SITE_MODE = "gmx_site_mode"; // "dark" | "light"
+  const LS_SITE_MODE = K.SITE_MODE;
   function applySiteMode(mode, persist){
     const m = (mode === "light") ? "light" : "dark";
     document.documentElement.classList.toggle("mode-light", m === "light");

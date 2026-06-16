@@ -1,6 +1,6 @@
   // Wallpapers — per-tab. Photo pack (webp under /assets/wallpapers/v2_*.webp).
-  const LS_WP_GLOBAL = "gmx_wp_all";
-  const LS_WP_TAB_PREFIX = "gmx_wp_tab_"; // + tab name
+  const LS_WP_GLOBAL = K.WP_GLOBAL;
+  const LS_WP_TAB_PREFIX = K.WP_TAB_PREFIX;
   const SITE_WALLPAPER_PACK_COUNT = 58;
   const SITE_WALLPAPER_FREE_PACK_COUNT = 10;
   const SITE_PACK_NAMES = [
@@ -78,7 +78,7 @@
     return out;
   }
   const WALLPAPERS = buildSiteWallpapers();
-  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_pexels_v2";
+  const WALLPAPER_REFRESH_MIGRATION_KEY = K.WALLPAPER_REFRESH_MIGRATION;
   function migrateLegacyWallpaperSelectionOnce(){
     try{
       if (localStorage.getItem(WALLPAPER_REFRESH_MIGRATION_KEY) === "1") return;
@@ -650,7 +650,7 @@ function renderWallpaperUI(){
     }, { key: "wpGrid", chunk: 12 });
   }
 // Theme / Wallpaper toggle inside Themes tab
-  const LS_THEMEWALL_VIEW = "gmx_themewall_view"; // "theme" | "wall" | "custom"
+  const LS_THEMEWALL_VIEW = K.THEMEWALL_VIEW;
 
   function setThemeWallView(view){
     const themeBtn  = $("tabTheme");

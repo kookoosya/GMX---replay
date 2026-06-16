@@ -23,37 +23,17 @@ function applyTheme(id){
       if (typeof setBg === "function") setBg(tab);
     }catch(_e){}
   }
-const LS_EXT_VIEW = "gmx_ext_view"; // theme | wall | custom
-const LS_EXT_WP = "gmx_ext_wp"; // selected extension wallpaper id
-const EXT_LS_V2 = {
-  "gmx_ext_theme": "gmx_ext_theme_v2",
-  "gmx_ext_wp": "gmx_ext_wp_v2",
-  "gmx_ext_view": "gmx_ext_view_v2",
-  "gmx_ext_custom_bg_global": "gmx_ext_custom_bg_global_v2",
-  "gmx_ext_wp_view_popup": "gmx_ext_wp_v2_popup",
-  "gmx_ext_wp_view_quick": "gmx_ext_wp_v2_quick",
-};
-function extLsSet(key, value){
-  try{
-    const v2 = EXT_LS_V2[key];
-    if (value === undefined || value === null || value === ""){
-      localStorage.removeItem(key);
-      if (v2) localStorage.removeItem(v2);
-      return;
-    }
-    const text = String(value);
-    localStorage.setItem(key, text);
-    if (v2) localStorage.setItem(v2, text);
-  }catch(_e){}
-}
+const LS_EXT_VIEW = K.EXT_VIEW;
+const LS_EXT_WP = K.EXT_WP;
+function extLsSet(key, value){ __gmxSt.extLsSet(key, value); }
 
 
 // Custom background for extension popup (per-tab + global)
 // Note: this is stored on the site and later synced to the extension.
-const LS_EXT_CUSTOM_BG_GLOBAL = "gmx_ext_custom_bg_global"; // dataURL
-const LS_EXT_CUSTOM_BG_TAB_PREFIX = "gmx_ext_custom_bg_tab_"; // + tab
-const LS_EXT_CUSTOM_BG_TARGET = "gmx_ext_custom_bg_target"; // selected tab in UI
-const LS_EXT_CUSTOM_BG_LEGACY = "gmx_ext_custom_bg"; // legacy single key (migrated)
+const LS_EXT_CUSTOM_BG_GLOBAL = K.EXT_CUSTOM_BG_GLOBAL;
+const LS_EXT_CUSTOM_BG_TAB_PREFIX = K.EXT_CUSTOM_BG_TAB_PREFIX;
+const LS_EXT_CUSTOM_BG_TARGET = K.EXT_CUSTOM_BG_TARGET;
+const LS_EXT_CUSTOM_BG_LEGACY = K.EXT_CUSTOM_BG_LEGACY;
 
 const EXT_POPUP_TABS = [
   ["all","wp_apply_all"],
@@ -64,8 +44,8 @@ const EXT_POPUP_TABS = [
   ["themes","wp_apply_themes"],
   ["wallet","wp_apply_wallet"],
 ];
-const LS_EXT_WP_TARGET = "gmx_ext_wp_target"; // selected target inside extension wallpapers UI
-const LS_EXT_WP_VIEW_PREFIX = "gmx_ext_wp_view_"; // + popup | quick
+const LS_EXT_WP_TARGET = K.EXT_WP_TARGET;
+const LS_EXT_WP_VIEW_PREFIX = K.EXT_WP_VIEW_PREFIX;
 const EXT_WALLPAPER_VIEWS = [
   ["all", "All views"],
   ["popup", "Popup"],

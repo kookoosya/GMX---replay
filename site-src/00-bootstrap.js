@@ -1,15 +1,19 @@
 (async () => {
   const API = location.origin;
 
+  if (!window.__GMXStorageFactory) throw new Error("GMX storage factory missing");
+  const __gmxSt = window.__GMXStorageFactory();
+  const K = __gmxSt.keys;
+
   const ADMIN_HANDLE = "@Kristofer_Sol_";
   let SAVE_CAP_FREE = 50;
   const EMPTY = "__EMPTY__";
 
   let SUB = null;
   let REF_COUNT = 0;
-  const LS_REF_ELIGIBLE_CACHE = "gmx_ref_eligible_v1";
+  const LS_REF_ELIGIBLE_CACHE = K.REF_ELIGIBLE_CACHE;
   try{
-    const bootEligible = Number(localStorage.getItem(LS_REF_ELIGIBLE_CACHE) || 0) || 0;
+    const bootEligible = Number(__gmxSt.lsGet(LS_REF_ELIGIBLE_CACHE, "0") || 0) || 0;
     if (bootEligible > 0) REF_COUNT = bootEligible;
   }catch(_e){}
   let AUTH_OK = false;
@@ -39,7 +43,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260616e";
+const ASSET_REV = "20260616f";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;

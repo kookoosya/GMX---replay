@@ -6,7 +6,7 @@
 
   // Wallet discovery: Wallet Standard + legacy injected providers.
   const WS_CHAIN = "solana:mainnet";
-  const LS_WALLET_CHOICE = "gmx_wallet_choice_v2";
+  const LS_WALLET_CHOICE = K.WALLET_CHOICE;
 
   const WALLET = {
     connected: false,
