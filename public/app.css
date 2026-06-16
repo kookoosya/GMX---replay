@@ -95,14 +95,35 @@ b{ font-weight:700; }
 .bg{
   position:fixed;
   inset:0;
-  background: var(--bg_user), var(--bg_wall), var(--bg);
-  background-size: cover, cover, cover;
-  background-position: center, center, center;
-  background-attachment: fixed, fixed, fixed;
-  background-repeat: no-repeat, no-repeat, no-repeat;
-  background-color: #050810;
+  z-index:0;
+  background: var(--bg_user), var(--bg);
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
   transform: translateZ(0);
   pointer-events:none;
+}
+body.hasWallBg .bg{
+  background: var(--bg);
+  background-size: cover;
+}
+.gmxWallLayer{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  overflow:hidden;
+  pointer-events:none;
+  display:none;
+}
+.gmxWallLayer .gmxWallImg{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  display:block;
+  user-select:none;
+  -webkit-user-drag:none;
+  transform:translateZ(0);
 }
 .bg::before{
   content:"";
@@ -112,21 +133,16 @@ b{ font-weight:700; }
   opacity:0;
   transition: opacity .25s ease;
 }
-body.hasUserBg .bg::before{ opacity:.4; }
-body.hasWallBg .bg::before{ opacity:0; }
-html.mode-light body.hasWallBg .bg::before{ opacity:0 !important; }
-html.mode-light body.hasUserBg .bg::before{ opacity:.35; }
-html.mode-light body.hasWallBg .bg::before{ opacity:0 !important; }
+body.hasUserBg .bg::before{ opacity:.92; }
+body.hasWallBg .bg::before{ opacity:.22; background: linear-gradient(180deg, rgba(5,7,15,.15) 0%, rgba(5,7,15,.45) 100%); }
+html.mode-light body.hasWallBg .bg::before{ opacity:.28 !important; }
+html.mode-light body.hasUserBg .bg::before{ opacity:.55; }
+html.mode-light body.hasWallBg .bg::before{ opacity:.28 !important; }
 
 .bg::after{
   content:"";
   position:absolute;
   inset:-60px;
-  background: transparent;
-  opacity:0;
-  animation: none;
-}
-body:not(.hasWallBg):not(.hasUserBg) .bg::after{
   background:
     radial-gradient(800px 450px at 15% 70%, rgba(255,255,255,.08), transparent 65%),
     radial-gradient(700px 420px at 85% 40%, rgba(255,255,255,.06), transparent 62%);
@@ -237,47 +253,42 @@ select:focus, input:focus, textarea:focus{
 }
 textarea{ min-height: 110px; resize: vertical; }
 
-/* Tab strip: no slab behind — only individual .tab pills (shows wallpaper through) */
 .tabs{
   display:flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 8px 0 16px;
+  gap:8px;
+  padding: 10px 10px;
   margin: 8px 0 16px;
-  width: 100%;
-  box-sizing: border-box;
-  border-radius: 0;
-  border: none;
-  background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  align-items: stretch;
-  justify-content: flex-start;
-  overflow-x: visible;
-  box-shadow: none;
+  border-radius: var(--r2);
+  border: 1px solid var(--stroke);
+  background: rgba(8,12,22,.72);
+  backdrop-filter: blur(14px) saturate(1.1);
+  flex-wrap:nowrap;
+  overflow-x:auto;
+  justify-content:flex-start;
+  box-shadow: 0 4px 24px rgba(0,0,0,.24);
+}
+.tabs::-webkit-scrollbar{ height: 6px; }
+.tabs::-webkit-scrollbar-thumb{ background: rgba(148,180,255,.18); border-radius: 999px; }
+
+@media (min-width: 900px){
+  .tabs{ overflow-x: visible; justify-content: space-between; gap: 6px; }
+  .tab{ flex: 1 1 auto; }
 }
 
 .tab{
   cursor:pointer;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.09);
-  color: rgba(239,244,252,.92);
-  padding: 10px 14px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: rgba(239,244,252,.82);
+  padding: 10px 16px;
   border-radius: 12px;
-  white-space: normal;
-  line-height: 1.25;
+  white-space:nowrap;
   transition: .18s ease;
-  flex: 1 1 9rem;
-  min-width: min(100%, 7.75rem);
-  max-width: 100%;
+  flex: 0 0 auto;
   text-align:center;
   text-decoration:none;
   font-weight: 600;
-  letter-spacing: .2px;
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  letter-spacing: .3px;
 }
 .tab:hover{
   background: rgba(153,69,255,.12);
@@ -516,36 +527,6 @@ html.mode-light .pasteBox{
 .lineRow .lineCell:focus .lineText,
 .lineRow.editing .lineText{ color: var(--text); }
 
-/* GM/GN rows on wallpaper: light strips + dark type (default row style is for dark chrome only) */
-body.hasWallBg .lineRow,
-body.hasUserBg .lineRow{
-  background: rgba(255,255,255,.62) !important;
-  border: 1px solid rgba(0,0,0,.08) !important;
-}
-body.hasWallBg .lineRow:hover,
-body.hasUserBg .lineRow:hover{
-  background: rgba(255,255,255,.78) !important;
-  border-color: rgba(0,0,0,.12) !important;
-}
-body.hasWallBg .lineRow .lineText,
-body.hasUserBg .lineRow .lineText{
-  color: #101820 !important;
-}
-body.hasWallBg .lineRow:hover .lineText,
-body.hasUserBg .lineRow:hover .lineText{
-  color: rgba(16,22,32,.78) !important;
-}
-body.hasWallBg .lineRow .lineCell:focus .lineText,
-body.hasUserBg .lineRow .lineCell:focus .lineText,
-body.hasWallBg .lineRow.editing .lineText,
-body.hasUserBg .lineRow.editing .lineText{
-  color: #0a1020 !important;
-}
-body.hasWallBg .lineRow .idx,
-body.hasUserBg .lineRow .idx{
-  color: rgba(16,22,32,.42) !important;
-}
-
 .pmList{
   display:grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -561,24 +542,6 @@ body.hasUserBg .lineRow .idx{
   background:
     linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)),
     rgba(11,14,24,.64);
-}
-/* Light / wallpaper UI: match frosted cards instead of charcoal grey */
-body.hasWallBg .pmSignalRow,
-body.hasUserBg .pmSignalRow{
-  background: linear-gradient(165deg, rgba(255,255,255,.52) 0%, rgba(255,255,255,.28) 100%) !important;
-  border: 1px solid rgba(0,0,0,.10) !important;
-  box-shadow: 0 6px 22px rgba(0,0,0,.08);
-  color: #101820 !important;
-}
-body.hasWallBg .pmSignalRow .muted,
-body.hasUserBg .pmSignalRow .muted,
-body.hasWallBg .pmSignalRow .small,
-body.hasUserBg .pmSignalRow .small{
-  color: rgba(16,22,32,.72) !important;
-}
-body.hasWallBg .pmSignalRow .pmThesis,
-body.hasUserBg .pmSignalRow .pmThesis{
-  color: rgba(16,22,32,.9) !important;
 }
 .pmSignalHead{
   justify-content:space-between;
@@ -811,12 +774,10 @@ body.hasUserBg .pmSignalRow .pmThesis{
 ul.clean{
   margin: 10px 0 0;
   padding-left: 18px;
-  /* Inherit panel color — do not use root --muted here or bullets turn near-white on light glass cards */
-  color: inherit;
+  color: var(--muted);
   line-height: 1.5;
-  opacity: 0.94;
 }
-ul.clean li{ margin: 6px 0; color: inherit; }
+ul.clean li{ margin: 6px 0; }
 
 .smallSpacer{ height: 10px; }
 
@@ -1075,12 +1036,10 @@ select option{background:#0b0e1a;color:#e9ecff}
 }
 
 /* --- Wallpapers --- */
-.wpLoading{ padding:2rem; text-align:center; color:var(--muted); }
 .wpGrid{
   display:grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
   gap: 12px;
-  overflow-anchor: none;
 }
 .wpCard{
   position:relative;
@@ -1111,30 +1070,20 @@ select option{background:#0b0e1a;color:#e9ecff}
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--accentA) 18%, transparent);
 }
 .wpThumb{
-  aspect-ratio: 16/9;
-  min-height: 100px;
+  height: 86px;
+  min-height: 86px;
   border-radius: 14px;
-  background: #0a0e18;
+  background-color: rgba(8,12,22,.85);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border: 1px solid rgba(255,255,255,.12);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.wpThumb img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
 }
 .wpName{
   margin-top: 10px;
   font-weight: 800;
   font-size: 13px;
   letter-spacing: .2px;
-  line-height: 1.25;
-  min-height: 1.25em;
 }
 .wpMeta{
   margin-top: 2px;
@@ -1511,26 +1460,6 @@ html.mode-light .walletTag{ border: 1px solid rgba(0,0,0,.14); }
     padding-right: 0;
   }
 }
-.sideCard{
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0,0,0,.28) rgba(0,0,0,.06);
-}
-.sideCard::-webkit-scrollbar{
-  width: 8px;
-}
-.sideCard::-webkit-scrollbar-track{
-  background: rgba(0,0,0,.04);
-  border-radius: 8px;
-}
-.sideCard::-webkit-scrollbar-thumb{
-  background: rgba(0,0,0,.22);
-  border-radius: 8px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-.sideCard::-webkit-scrollbar-thumb:hover{
-  background: rgba(0,0,0,.32);
-}
 
 
 /* --- Device stability: mobile / TV / touch --- */
@@ -1549,7 +1478,7 @@ html.mode-light .walletTag{ border: 1px solid rgba(0,0,0,.14); }
   .logo{ width:46px; height:46px; border-radius:14px; }
   .brand h1{ font-size: 18px; }
   .sub{ font-size: 12px; }
-  .tabs{ gap:8px; padding: 8px 0; }
+  .tabs{ gap:8px; padding: 8px; }
   .tab{ padding: 10px 12px; }
 }
 
@@ -1627,6 +1556,7 @@ html.mode-light .walletTag{ border: 1px solid rgba(0,0,0,.14); }
 @media (max-width: 980px){
   .pageGrid{grid-template-columns:1fr !important}
   .sideCard{position:static !important}
+  .tabs{flex-wrap:wrap}
 }
 
 @media (min-width: 1600px){
@@ -1714,13 +1644,13 @@ html.mode-light .seg button{ color: rgba(11,16,32,.84); }
 .refTopRow input{ min-width:0; }
 .refActions{ display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center; }
 
-html.mode-light .bar, html.mode-light .nav, html.mode-light .subnav{
+html.mode-light .bar, html.mode-light .nav, html.mode-light .tabs, html.mode-light .subnav{
   background: rgba(255,255,255,.72) !important;
   border-color: rgba(0,0,0,.10) !important;
   box-shadow: 0 10px 30px rgba(0,0,0,.10) !important;
 }
 
-html.mode-light body.hasWallBg .bg::before{ opacity:.14 !important; }
+html.mode-light body.hasWallBg .bg::before{ opacity:.28 !important; }
 
 /* Wallet/payment contrast improvements in light mode */
 html.mode-light .planCard{
@@ -1760,25 +1690,12 @@ html.mode-light .walletTag{ border: 1px solid rgba(0,0,0,.14); }
 .tableWrap{overflow:auto;max-width:100%}
 
 
-/* Light mode: floating tab pills — no bar behind the row */
-html.mode-light .tabs{
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
+/* Light mode: make top tabs readable */
+html.mode-light .tabs{ background: rgba(255,255,255,.72); border: 1px solid rgba(0,0,0,.10); }
 html.mode-light .tabs::-webkit-scrollbar-thumb{ background: rgba(0,0,0,.12); }
-html.mode-light .tab{
-  color: rgba(11,16,32,.88);
-  background: rgba(255,255,255,.78);
-  border: 1px solid rgba(0,0,0,.12);
-}
-html.mode-light .tab:hover{ background: rgba(255,255,255,.92); }
-html.mode-light .tab.active{ color: rgba(10,13,21,1); background: rgba(255,255,255,.96); }
-html.mode-light body.hasWallBg .tabs,
-html.mode-light body.hasUserBg .tabs{
-  background: transparent !important;
-  border: none !important;
-}
+html.mode-light .tab{ color: rgba(11,16,32,.78); }
+html.mode-light .tab:hover{ background: rgba(0,0,0,.05); }
+html.mode-light .tab.active{ color: rgba(10,13,21,1); }
 
 
 /* Dark-only: hide light/dark toggle */
@@ -1814,16 +1731,7 @@ html.mode-light body.hasUserBg .tabs{
 }
 
 
-/* R34: if .has-wallpaper is ever set, match frosted light glass (never charcoal over wallpaper) */
-body.has-wallpaper .card,
-body.has-wallpaper .panel,
-body.has-wallpaper .sideCard{
-  background: rgba(255,255,255,.72) !important;
-  border-color: rgba(0,0,0,.10) !important;
-  color: #101820 !important;
-  backdrop-filter: blur(12px) saturate(1.05) !important;
-  -webkit-backdrop-filter: blur(12px) saturate(1.05) !important;
-}
+/* R34 readability */
 
 /* R44: wallet / modal / light-mode polish */
 .modalBack{
@@ -1980,613 +1888,19 @@ html.mode-light #walletActions .pill{
   border:1px solid rgba(0,0,0,.10);
 }
 
-/* Wallpaper mode: same frosted glass everywhere as Themes tab — wallpaper stays visible */
-body.hasWallBg .card,
-body.hasUserBg .card,
-body.hasWallBg .panel,
-body.hasUserBg .panel,
-body.hasWallBg .sheet,
-body.hasUserBg .sheet,
-body.hasWallBg .modal .modalCard,
-body.hasUserBg .modal .modalCard,
-body.hasWallBg .hero,
-body.hasUserBg .hero,
-body.hasWallBg .drawer,
-body.hasUserBg .drawer,
-body.hasWallBg .colStack .card,
-body.hasUserBg .colStack .card,
-body.hasWallBg .grid .card,
-body.hasUserBg .grid .card,
-body.hasWallBg #themeWallCard,
-body.hasUserBg #themeWallCard,
-body.hasWallBg #themesRightCard,
-body.hasUserBg #themesRightCard{
-  background: rgba(255,255,255,.30) !important;
-  backdrop-filter: blur(10px) saturate(1.06) !important;
-  -webkit-backdrop-filter: blur(10px) saturate(1.06) !important;
-  box-shadow: 0 10px 36px rgba(0,0,0,.10) !important;
-  border-color: rgba(255,255,255,.40) !important;
-  color: #101820 !important;
-}
-body.hasWallBg .card *,
-body.hasUserBg .card *,
-body.hasWallBg .panel *,
-body.hasUserBg .panel *{
-  text-shadow: none;
-}
-body.hasWallBg .card .muted,
-body.hasUserBg .card .muted,
-body.hasWallBg .card .note,
-body.hasUserBg .card .note,
-body.hasWallBg .card .desc,
-body.hasUserBg .card .desc{
-  color: rgba(15,22,34,.9) !important;
-  text-shadow: none;
-}
-body.hasWallBg .card label,
-body.hasUserBg .card label,
-body.hasWallBg .panel label,
-body.hasUserBg .panel label{
-  color: rgba(15,22,34,.88) !important;
-}
-body.hasWallBg .card .title,
-body.hasUserBg .card .title,
-body.hasWallBg .panel .title,
-body.hasUserBg .panel .title{
-  color: #070d18 !important;
-}
-body.hasWallBg .card ul.clean,
-body.hasUserBg .card ul.clean,
-body.hasWallBg .card ul.clean li,
-body.hasUserBg .card ul.clean li{
-  color: rgba(15,22,34,.92) !important;
-}
-body.hasWallBg .card .table thead th,
-body.hasUserBg .card .table thead th{
-  color: rgba(15,22,34,.94) !important;
-}
-body.hasWallBg .card .table tbody td,
-body.hasUserBg .card .table tbody td{
-  color: rgba(15,22,34,.88) !important;
-}
-body.hasWallBg .card .table th,
-body.hasUserBg .card .table th,
-body.hasWallBg .card .table td,
-body.hasUserBg .card .table td{
-  border-bottom-color: rgba(0,0,0,.12) !important;
-}
-body.hasWallBg .modal .modalCard .table thead th,
-body.hasUserBg .modal .modalCard .table thead th{
-  color: rgba(15,22,34,.94) !important;
-}
-body.hasWallBg .modal .modalCard .table tbody td,
-body.hasUserBg .modal .modalCard .table tbody td{
-  color: rgba(15,22,34,.88) !important;
-}
-body.hasWallBg .modal .modalCard .table th,
-body.hasUserBg .modal .modalCard .table th,
-body.hasWallBg .modal .modalCard .table td,
-body.hasUserBg .modal .modalCard .table td{
-  border-bottom-color: rgba(0,0,0,.12) !important;
-}
-/* GM/GN + forms: secondary = frosted chip, not a white slab */
-body.hasWallBg .card .btn.secondary,
-body.hasUserBg .card .btn.secondary{
-  background: rgba(255,255,255,.36) !important;
-  color: #0f1624 !important;
-  border: 1px solid rgba(0,0,0,.14) !important;
-  box-shadow: 0 2px 12px rgba(0,0,0,.07) !important;
-  backdrop-filter: blur(8px) saturate(1.04) !important;
-  -webkit-backdrop-filter: blur(8px) saturate(1.04) !important;
-}
-body.hasWallBg .card .btn.secondary:hover,
-body.hasUserBg .card .btn.secondary:hover{
-  background: rgba(255,255,255,.5) !important;
-  border-color: rgba(153,69,255,.4) !important;
-}
-body.hasWallBg .card .btn.ghost:not(.mini),
-body.hasUserBg .card .btn.ghost:not(.mini){
-  background: rgba(0,0,0,.06) !important;
-  color: #0f1624 !important;
-  border: 1px dashed rgba(0,0,0,.22) !important;
-}
-body.hasWallBg .pasteBox,
-body.hasUserBg .pasteBox{
-  background: rgba(255,255,255,.44) !important;
-  color: #101820 !important;
-  border: 1px solid rgba(0,0,0,.14) !important;
-  backdrop-filter: blur(8px) saturate(1.04) !important;
-  -webkit-backdrop-filter: blur(8px) saturate(1.04) !important;
-}
-body.hasWallBg .replyText,
-body.hasUserBg .replyText{
-  color: rgba(15,22,34,.92) !important;
-}
-
-/* Wallpaper: light frosted pills everywhere — readable on dark AND bright photos (dark HUD failed on coffee/forest) */
-body.hasWallBg .pill,
-body.hasUserBg .pill{
-  background: rgba(252,253,255,.88) !important;
-  border: 1px solid rgba(0,0,0,.11) !important;
-  backdrop-filter: blur(12px) saturate(1.05) !important;
-  -webkit-backdrop-filter: blur(12px) saturate(1.05) !important;
-  box-shadow: 0 4px 16px rgba(0,0,0,.12) !important;
-  color: #0a1020 !important;
-}
-body.hasWallBg .pill strong,
-body.hasUserBg .pill strong{
-  color: #070d18 !important;
-  text-shadow: none !important;
-}
-body.hasWallBg .pill .muted,
-body.hasUserBg .pill .muted{
-  color: rgba(15,22,34,.74) !important;
-  text-shadow: none !important;
-}
-
-body.hasWallBg.wallLight .pill,
-body.hasUserBg.wallLight .pill{
-  background: rgba(255,255,255,.82) !important;
-  border: 1px solid rgba(0,0,0,.12) !important;
-  box-shadow: 0 3px 14px rgba(0,0,0,.1) !important;
-  color: #0b1020 !important;
-}
-body.hasWallBg.wallLight .pill strong,
-body.hasUserBg.wallLight .pill strong{
-  color: #070b14 !important;
-  text-shadow: none !important;
-}
-body.hasWallBg.wallLight .pill .muted,
-body.hasUserBg.wallLight .pill .muted{
-  color: rgba(12,18,28,.78) !important;
-  text-shadow: none !important;
-}
-
-/* Wallpaper: main nav — no container slab; tabs = outline / dark glass (active = gradient) */
-body.hasWallBg .tabs,
-body.hasUserBg .tabs{
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-body.hasWallBg .tab:not(.active),
-body.hasUserBg .tab:not(.active){
-  background: rgba(0,0,0,.28) !important;
-  color: rgba(248,250,255,.96) !important;
-  border: 1px solid rgba(255,255,255,.32) !important;
-  text-shadow: 0 1px 2px rgba(0,0,0,.65) !important;
-  backdrop-filter: blur(10px) saturate(1.05) !important;
-  -webkit-backdrop-filter: blur(10px) saturate(1.05) !important;
-  box-shadow: 0 3px 14px rgba(0,0,0,.25) !important;
-}
-body.hasWallBg .tab:not(.active):hover,
-body.hasUserBg .tab:not(.active):hover{
-  background: rgba(0,0,0,.4) !important;
-}
-body.hasWallBg .tab.active,
-body.hasUserBg .tab.active{
-  background: linear-gradient(135deg, #9945ff 0%, #14f195 100%) !important;
-  color: var(--accentOn) !important;
-  border-color: rgba(20,241,149,.35) !important;
-  text-shadow: none !important;
-  box-shadow: 0 8px 28px rgba(153,69,255,.38) !important;
-}
-body.hasWallBg.wallLight .tab:not(.active),
-body.hasUserBg.wallLight .tab:not(.active){
-  background: rgba(255,255,255,.14) !important;
-  color: #0a1020 !important;
-  border: 1px solid rgba(0,0,0,.22) !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,.5) !important;
-  box-shadow: 0 2px 12px rgba(0,0,0,.1) !important;
-}
-body.hasWallBg.wallLight .tab:not(.active):hover,
-body.hasUserBg.wallLight .tab:not(.active):hover{
-  background: rgba(255,255,255,.26) !important;
-}
-
-body.hasWallBg .toolgroup,
-body.hasUserBg .toolgroup{
-  background: rgba(0,0,0,.22) !important;
-  border: 1px solid rgba(255,255,255,.22) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-}
-body.hasWallBg.wallLight .toolgroup,
-body.hasUserBg.wallLight .toolgroup{
-  background: rgba(0,0,0,.08) !important;
-  border: 1px solid rgba(0,0,0,.12) !important;
-}
-body.hasWallBg .tabsHead,
-body.hasUserBg .tabsHead{
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-body.hasWallBg .seg,
-body.hasUserBg .seg{
-  background: rgba(0,0,0,.24) !important;
-  border: 1px solid rgba(255,255,255,.26) !important;
-}
-body.hasWallBg .seg button:not(.active),
-body.hasUserBg .seg button:not(.active){
-  color: rgba(248,250,255,.94) !important;
-  text-shadow: 0 1px 2px rgba(0,0,0,.45);
-}
-body.hasWallBg .seg button.active,
-body.hasUserBg .seg button.active{
-  color: var(--accentOn) !important;
-  text-shadow: none !important;
-  background: linear-gradient(135deg, var(--accentA) 0%, var(--accentB) 100%) !important;
-}
-body.hasWallBg.wallLight .seg,
-body.hasUserBg.wallLight .seg{
-  background: rgba(0,0,0,.08) !important;
-  border: 1px solid rgba(0,0,0,.14) !important;
-}
-body.hasWallBg.wallLight .seg button:not(.active),
-body.hasUserBg.wallLight .seg button:not(.active){
-  color: #0a1020 !important;
-  text-shadow: none !important;
-}
-body.hasWallBg select,
-body.hasUserBg select,
-body.hasWallBg input,
-body.hasUserBg input,
-body.hasWallBg textarea,
-body.hasUserBg textarea{
-  background: rgba(255,255,255,.55) !important;
-  color: #101820 !important;
-  border: 1px solid rgba(0,0,0,.14) !important;
-  text-shadow: none !important;
-  backdrop-filter: blur(6px) saturate(1.02) !important;
-  -webkit-backdrop-filter: blur(6px) saturate(1.02) !important;
-}
-body.hasWallBg .brand h1,
-body.hasUserBg .brand h1{ color: #0a1020 !important; text-shadow: 0 1px 2px rgba(255,255,255,.85); }
-body.hasWallBg .sub,
-body.hasUserBg .sub{ color: rgba(16,22,32,.82) !important; text-shadow: 0 1px 2px rgba(255,255,255,.75); }
-
-body.hasWallBg .langBtn,
-body.hasUserBg .langBtn{
-  background: rgba(252,253,255,.88) !important;
-  color: #0a1020 !important;
-  border: 1px solid rgba(0,0,0,.12) !important;
-  text-shadow: none !important;
-  backdrop-filter: blur(10px) saturate(1.04) !important;
-  -webkit-backdrop-filter: blur(10px) saturate(1.04) !important;
-  box-shadow: 0 2px 10px rgba(0,0,0,.08) !important;
-}
-body.hasWallBg .langBtn:hover,
-body.hasUserBg .langBtn:hover{ border-color: rgba(0,0,0,.2) !important; }
-body.hasWallBg.wallLight .langBtn,
-body.hasUserBg.wallLight .langBtn{
-  background: rgba(255,255,255,.86) !important;
-  color: #0a1020 !important;
-  border: 1px solid rgba(0,0,0,.14) !important;
-  text-shadow: none !important;
-}
-body.hasWallBg .pill .btn.ghost,
-body.hasUserBg .pill .btn.ghost{
-  background: transparent !important;
-  color: #0a1020 !important;
-  border: 1px dashed rgba(0,0,0,.28) !important;
-  box-shadow: none !important;
-  text-shadow: none !important;
-}
-body.hasWallBg.wallLight .pill .btn.ghost,
-body.hasUserBg.wallLight .pill .btn.ghost{
-  color: #0a1020 !important;
-  border: 1px dashed rgba(0,0,0,.34) !important;
-  text-shadow: none !important;
-}
-
-/* GM/GN list shell on wallpaper: match frosted cards */
-body.hasWallBg .listWrap,
-body.hasUserBg .listWrap{
-  background: rgba(255,255,255,.32) !important;
-  border: 1px solid rgba(255,255,255,.34) !important;
-  backdrop-filter: blur(8px) saturate(1.04) !important;
-  -webkit-backdrop-filter: blur(8px) saturate(1.04) !important;
-}
-body.hasWallBg .listTop,
-body.hasUserBg .listTop{
-  border-bottom-color: rgba(0,0,0,.1) !important;
-}
-body.hasWallBg .helperRow,
-body.hasUserBg .helperRow{
-  border-top-color: rgba(0,0,0,.1) !important;
-}
-
-/* Light wallpaper: same glass recipe as Themes (slightly softer than default) */
-body.hasWallBg.wallLight .card,
-body.hasUserBg.wallLight .card,
-body.hasWallBg.wallLight .panel,
-body.hasUserBg.wallLight .panel,
-body.hasWallBg.wallLight .sheet,
-body.hasUserBg.wallLight .sheet,
-body.hasWallBg.wallLight .modal .modalCard,
-body.hasUserBg.wallLight .modal .modalCard,
-body.hasWallBg.wallLight .hero,
-body.hasUserBg.wallLight .hero,
-body.hasWallBg.wallLight .drawer,
-body.hasUserBg.wallLight .drawer,
-body.hasWallBg.wallLight .colStack .card,
-body.hasUserBg.wallLight .colStack .card,
-body.hasWallBg.wallLight .grid .card,
-body.hasUserBg.wallLight .grid .card,
-body.hasWallBg.wallLight #themeWallCard,
-body.hasUserBg.wallLight #themeWallCard,
-body.hasWallBg.wallLight #themesRightCard,
-body.hasUserBg.wallLight #themesRightCard{
-  background: rgba(255, 255, 255, 0.24) !important;
-  backdrop-filter: blur(8px) saturate(1.05) !important;
-  -webkit-backdrop-filter: blur(8px) saturate(1.05) !important;
-  border-color: rgba(0, 0, 0, 0.14) !important;
-  box-shadow: 0 10px 34px rgba(0,0,0,.1) !important;
-}
-body.hasWallBg.wallLight #themesRightCard .title,
-body.hasUserBg.wallLight #themesRightCard .title,
-body.hasWallBg.wallLight #themesRightCard .desc,
-body.hasUserBg.wallLight #themesRightCard .desc,
-body.hasWallBg.wallLight #themesRightCard .note,
-body.hasUserBg.wallLight #themesRightCard .note,
-body.hasWallBg.wallLight #themesRightCard li,
-body.hasUserBg.wallLight #themesRightCard li{
-  text-shadow: none !important;
-}
-body.hasWallBg.wallLight .listWrap,
-body.hasUserBg.wallLight .listWrap{
-  background: rgba(255,255,255,.26) !important;
-  border-color: rgba(0,0,0,.12) !important;
-}
-
-/* Wallpaper is light: dark text without white halo (halo made copy invisible on bright photos) */
-body.hasWallBg.wallLight,
-body.hasUserBg.wallLight{ color: #0B1020 !important; }
-body.hasWallBg.wallLight .wrap,
-body.hasUserBg.wallLight .wrap{
-  color: #0a1020 !important;
-}
-body.hasWallBg.wallLight .wrap .card,
-body.hasUserBg.wallLight .wrap .card,
-body.hasWallBg.wallLight .wrap .sideCard,
-body.hasUserBg.wallLight .wrap .sideCard,
-body.hasWallBg.wallLight .wrap .tabs .tab,
-body.hasUserBg.wallLight .wrap .tabs .tab{
-  color: #0a1020 !important;
-  text-shadow: none !important;
-}
-body.hasWallBg.wallLight .wrap .tab.active,
-body.hasUserBg.wallLight .wrap .tab.active{
-  color: var(--accentOn) !important;
-  text-shadow: none !important;
-}
-body.hasWallBg.wallLight .muted,
-body.hasUserBg.wallLight .muted,
-body.hasWallBg.wallLight .desc,
-body.hasUserBg.wallLight .desc,
-body.hasWallBg.wallLight .note,
-body.hasUserBg.wallLight .note{ color: rgba(11,16,32,.82) !important; }
-body.hasWallBg.wallLight select,
-body.hasWallBg.wallLight input,
-body.hasWallBg.wallLight textarea,
-body.hasUserBg.wallLight select,
-body.hasUserBg.wallLight input,
-body.hasUserBg.wallLight textarea{
-  color: #0B1020 !important;
-  background: rgba(255,255,255,.62) !important;
-}
-body.hasWallBg.wallLight select option,
-body.hasUserBg.wallLight select option{ background: #fff !important; color: #0B1020 !important; }
-body.hasWallBg.wallLight .seg button.active,
-body.hasUserBg.wallLight .seg button.active{ background: linear-gradient(135deg, var(--accentA) 0%, var(--accentB) 100%) !important; color: var(--accentOn) !important; }
-
-/* .wrap * forces dark text — restore gradient tab + primary buttons */
-body.hasWallBg.wallLight .wrap .tab.active,
-body.hasUserBg.wallLight .wrap .tab.active{
-  color: var(--accentOn) !important;
-  text-shadow: none !important;
-}
-body.hasWallBg.wallLight .wrap .btn.primary,
-body.hasUserBg.wallLight .wrap .btn.primary,
-body.hasWallBg.wallLight .wrap button.primary,
-body.hasUserBg.wallLight .wrap button.primary{
-  color: var(--accentOn) !important;
-}
-
-/* KPI tiles: frosted like the rest (not opaque chips) */
-body.hasWallBg .kpi,
-body.hasUserBg .kpi{
-  background: rgba(255,255,255,.38) !important;
-  border: 1px solid rgba(255,255,255,.34) !important;
-  backdrop-filter: blur(12px) saturate(1.05) !important;
-  -webkit-backdrop-filter: blur(12px) saturate(1.05) !important;
-  box-shadow: 0 4px 18px rgba(0,0,0,.08) !important;
-}
-body.hasWallBg .kpi .k,
-body.hasUserBg .kpi .k{ color: rgba(16,22,32,.72) !important; }
-body.hasWallBg .kpi .v,
-body.hasUserBg .kpi .v{ color: #0f1624 !important; }
-
-body.hasWallBg .themeCard,
-body.hasUserBg .themeCard{
-  background: rgba(255,255,255,.42) !important;
-  border: 1px solid rgba(255,255,255,.38) !important;
-  color: #101820 !important;
-  backdrop-filter: blur(12px) saturate(1.06) !important;
-  -webkit-backdrop-filter: blur(12px) saturate(1.06) !important;
-  box-shadow: 0 8px 26px rgba(0,0,0,.09) !important;
-}
-body.hasWallBg .themeCard:hover,
-body.hasUserBg .themeCard:hover{
-  border-color: rgba(0,0,0,.16) !important;
-}
-body.hasWallBg .themeCard .tname,
-body.hasUserBg .themeCard .tname{ color: #0a1020 !important; }
-body.hasWallBg .themeCard .tnote,
-body.hasUserBg .themeCard .tnote{ color: rgba(16,22,32,.76) !important; }
-body.hasWallBg .themeCard .lockTag,
-body.hasUserBg .themeCard .lockTag{
-  background: rgba(255,255,255,.88) !important;
-  color: #101820 !important;
-  border: 1px solid rgba(0,0,0,.12) !important;
-}
-
-body.hasWallBg .tabsHead .tabBtn:not(.active),
-body.hasUserBg .tabsHead .tabBtn:not(.active){
-  background: rgba(0,0,0,.26) !important;
-  border: 1px solid rgba(255,255,255,.28) !important;
-  color: rgba(248,250,255,.95) !important;
-  text-shadow: 0 1px 2px rgba(0,0,0,.5);
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-}
-body.hasWallBg .tabsHead .tabBtn:not(.active):hover,
-body.hasUserBg .tabsHead .tabBtn:not(.active):hover{ background: rgba(0,0,0,.38) !important; }
-body.hasWallBg .tabsHead .tabBtn.active,
-body.hasUserBg .tabsHead .tabBtn.active{
-  background: linear-gradient(135deg, #9945ff 0%, #14f195 100%) !important;
-  border-color: transparent !important;
-  color: var(--accentOn) !important;
-  text-shadow: none !important;
-  box-shadow: 0 6px 20px rgba(153,69,255,.28) !important;
-}
-body.hasWallBg.wallLight .tabsHead .tabBtn:not(.active),
-body.hasUserBg.wallLight .tabsHead .tabBtn:not(.active){
-  background: rgba(255,255,255,.14) !important;
-  border: 1px solid rgba(0,0,0,.2) !important;
-  color: #0a1020 !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,.45);
-}
-body.hasWallBg.wallLight .tabsHead .tabBtn:not(.active):hover,
-body.hasUserBg.wallLight .tabsHead .tabBtn:not(.active):hover{
-  background: rgba(255,255,255,.26) !important;
-}
-
-body.hasWallBg .wpCard,
-body.hasUserBg .wpCard{
-  background: rgba(255,255,255,.14) !important;
-  backdrop-filter: blur(8px) saturate(1.04) !important;
-  -webkit-backdrop-filter: blur(8px) saturate(1.04) !important;
-  color: #101820 !important;
-}
-body.hasWallBg .wpCard[data-tier="free"],
-body.hasUserBg .wpCard[data-tier="free"]{
-  background: linear-gradient(180deg, rgba(20,241,149,.12), rgba(255,255,255,.18)) !important;
-  border-color: rgba(20,241,149,.42) !important;
-}
-body.hasWallBg .wpCard[data-tier="premium"],
-body.hasUserBg .wpCard[data-tier="premium"]{
-  background: linear-gradient(180deg, rgba(153,69,255,.10), rgba(255,255,255,.16)) !important;
-  border-color: rgba(153,69,255,.38) !important;
-}
-body.hasWallBg .wpCard[data-tier="custom"],
-body.hasUserBg .wpCard[data-tier="custom"]{
-  background: linear-gradient(180deg, rgba(247,147,26,.10), rgba(255,255,255,.16)) !important;
-}
-body.hasWallBg .wpName,
-body.hasUserBg .wpName{ color: #0f1624 !important; }
-body.hasWallBg .wpMeta,
-body.hasUserBg .wpMeta{ color: rgba(16,22,32,.72) !important; }
-body.hasWallBg .wpTag,
-body.hasUserBg .wpTag{
-  background: rgba(255,255,255,.92) !important;
-  color: #101820 !important;
-  border: 1px solid rgba(0,0,0,.12) !important;
-}
-/* Do NOT set background on .wpThumb — previews use inline background-image / <img>; !important would hide thumbnails */
-body.hasWallBg .wpThumb,
-body.hasUserBg .wpThumb{
-  border-color: rgba(0,0,0,.16) !important;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
-}
-body.hasWallBg .wpThumb img,
-body.hasUserBg .wpThumb img{
-  opacity: 1 !important;
-  mix-blend-mode: normal !important;
-}
-
-body.hasWallBg .meter,
-body.hasUserBg .meter{
-  background: rgba(0,0,0,.07) !important;
-  border-color: rgba(0,0,0,.12) !important;
-}
-body.hasWallBg .ach,
-body.hasUserBg .ach{
-  background: rgba(255,255,255,.45) !important;
-  border-color: rgba(0,0,0,.10) !important;
-  color: #121a28 !important;
-}
-
-body.hasWallBg.wallLight .kpi,
-body.hasUserBg.wallLight .kpi,
-body.hasWallBg.wallLight .themeCard,
-body.hasUserBg.wallLight .themeCard{
-  background: rgba(255,255,255,.34) !important;
-}
-body.hasWallBg.wallLight .wpCard,
-body.hasUserBg.wallLight .wpCard{
-  background: rgba(255,255,255,.12) !important;
-}
-
-/* Wallet / billing: nested controls stay readable on shared frosted shell (same glass as rest of site) */
-body.hasWallBg .card .planCard,
-body.hasUserBg .card .planCard{
-  background: rgba(255,255,255,.46) !important;
-  border-color: rgba(0,0,0,.12) !important;
-  color: #0f1624 !important;
-  backdrop-filter: blur(10px) saturate(1.04) !important;
-  -webkit-backdrop-filter: blur(10px) saturate(1.04) !important;
-}
-body.hasWallBg .card .planCard:hover,
-body.hasUserBg .card .planCard:hover{
-  background: rgba(255,255,255,.56) !important;
-}
-body.hasWallBg .card .planCard .planSub,
-body.hasUserBg .card .planCard .planSub,
-body.hasWallBg .card .planCard .muted,
-body.hasUserBg .card .planCard .muted,
-body.hasWallBg .card .planCard .planName,
-body.hasUserBg .card .planCard .planName{
-  color: rgba(15,22,34,.88) !important;
-}
-body.hasWallBg .card .planCard.active,
-body.hasUserBg .card .planCard.active{
-  background: rgba(255,255,255,.62) !important;
-  border-color: rgba(153,69,255,.42) !important;
-}
-body.hasWallBg .card .planBadge,
-body.hasUserBg .card .planBadge{
-  background: rgba(255,255,255,.5) !important;
-  color: #0f1624 !important;
-  border-color: rgba(0,0,0,.12) !important;
-}
-body.hasWallBg.wallLight .card .planCard,
-body.hasUserBg.wallLight .card .planCard{
-  background: rgba(255,255,255,.42) !important;
-}
-body.hasWallBg.wallLight .card .planCard.active,
-body.hasUserBg.wallLight .card .planCard.active{
-  background: rgba(255,255,255,.55) !important;
-}
-body.hasWallBg #wallet .tokenBtn:not(.active),
-body.hasUserBg #wallet .tokenBtn:not(.active){
-  background: rgba(255,255,255,.4) !important;
-  border-color: rgba(0,0,0,.14) !important;
-  color: #0f1624 !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-}
-body.hasWallBg #wallet .tokenBtn:not(.active) span,
-body.hasUserBg #wallet .tokenBtn:not(.active) span{
-  color: rgba(15,22,34,.92) !important;
-}
-body.hasWallBg #pay_state_box,
-body.hasUserBg #pay_state_box{
-  background: rgba(255,255,255,.32) !important;
-  border-color: rgba(0,0,0,.12) !important;
+/* Theme-adaptive surfaces (wallpaper-friendly) */
+html.theme-applied .card,
+html.theme-applied .sideCard,
+html.theme-applied .panel {
+  border-color: color-mix(in srgb, var(--accentA) 28%, var(--stroke));
+}
+html.theme-applied .tabs .tab.active {
+  border-color: color-mix(in srgb, var(--accentA) 45%, transparent);
+}
+html.theme-applied body.hasWallBg .bg::before { opacity: 0.18; }
+html.theme-applied body.hasWallBg .card,
+html.theme-applied body.hasWallBg .panel,
+html.theme-applied body.hasWallBg .sideCard {
+  background: rgba(10,14,24,.24) !important;
+  backdrop-filter: blur(5px);
 }

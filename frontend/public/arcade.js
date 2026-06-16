@@ -607,7 +607,10 @@
     const label = (game && game.categoryKey ? String(game.categoryKey) : arcadeT("arcade_cover_fallback")).toUpperCase().slice(0, 12);
     return categoryCoverSvgDataUri(label, colors[0], colors[1]);
   }
-  const LOCAL_GAME_COVERS = new Set([]);
+  const LOCAL_GAME_COVERS = new Set([
+    "obby-vs-zombies", "plane-chase", "sniper-team-3", "snow-rider-obby-parkour",
+    "time-walker-survive", "tripeaks-solitaire-escapes", "zombie-redemption",
+  ]);
   function localGameCover(game) {
     const slug = game && (game.id || game.slug || "");
     if (!slug || !LOCAL_GAME_COVERS.has(slug)) return "";
@@ -645,9 +648,23 @@
       return "";
     }
   }
-  function preferredCover(game) {
+  function categoryCoverWebp(game) {
+    const raw = String(game && game.category || "").toLowerCase().trim();
+    const key = raw.replace(/[^a-z]+/g, "") || "generic";
+    const allowed = new Set(["action","arcade","crypto","idle","platformer","puzzle","racing","shooter","simulation","sports","strategy","survivor","generic"]);
+    const slug = allowed.has(key) ? key : "generic";
+    return `/assets/arcade/covers/${slug}.webp`;
+  }
+  function coverSrc(game) {
+    const remote = remoteCoverUrl(game);
+    if (remote) return remote;
+    const local = localGameCover(game);
+    if (local) return local;
+    return categoryCoverWebp(game);
+  }
+  function coverSrc(game) {
     // Use live screenshot from game page when no explicit imageUrl (grab from site).
-    return localGameCover(game) || remoteCoverUrl(game) || liveScreenshotCover(game) || categoryCover(game);
+    return localGameCover(game) || remoteCoverUrl(game) || categoryCover(game);
   }
   function upgradeTileCovers(scope) {
     try {
@@ -808,7 +825,7 @@
       return `
         <article class="tile tileGotd" data-game-id="${esc(g.id)}">
           <div class="tileMedia">
-            <img src="${esc(preferredCover(g))}" data-fallback-cover="${esc(fallbackCover(g))}" alt="${esc(g.name)}" loading="eager" referrerpolicy="no-referrer"/>
+            <img src="${esc(coverSrc(g))}" data-fallback-cover="${esc(fallbackCover(g))}" alt="${esc(g.name)}" loading="lazy" decoding="async" referrerpolicy="no-referrer"/>
             <div class="tileOverlay"></div>
             <div class="tileTop">
               <div class="tileBadge" style="background:linear-gradient(135deg,rgba(251,191,36,.4),rgba(244,63,94,.4))">${esc(arcadeT("arcade_gotd_badge"))}</div>
@@ -925,7 +942,7 @@
           return `
             <article class="tile" data-game-id="${esc(game.id)}">
               <div class="tileMedia">
-                <img src="${esc(preferredCover(game))}" data-fallback-cover="${esc(fallbackCover(game))}" alt="${esc(game.name)}" loading="lazy" referrerpolicy="no-referrer"/>
+                <img src="${esc(coverSrc(game))}" data-fallback-cover="${esc(fallbackCover(game))}" alt="${esc(game.name)}" loading="lazy" referrerpolicy="no-referrer"/>
                 <div class="tileOverlay"></div>
                 <div class="tileTop">
                   <div class="tileIcon">${esc(game.icon)}</div>

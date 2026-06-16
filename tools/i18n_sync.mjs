@@ -12,6 +12,7 @@ const TS_OUT = path.join(ROOT, 'frontend', 'src', 'legacy', 'siteI18nCatalog.ts'
 const JS_OUT = path.join(ROOT, 'public', 'i18n', 'siteI18n.js');
 const FRONTEND_PUBLIC_JS_OUT = path.join(ROOT, 'frontend', 'public', 'i18n', 'siteI18n.js');
 const EXTENSION_I18N_OUT = path.join(ROOT, 'extension', 'i18n-bundle.js');
+const BRIDGE_JS_OUT = path.join(ROOT, 'public', 'bridge', 'i18n', 'siteI18n.js');
 const REPORT_OUT = path.join(ROOT, 'docs', 'I18N_SYNC_REPORT.txt');
 
 const DEFAULT_ORDER = ['en','de','fr','es','pt','it','nl','tr','pl','id','ru','uk','hi','ja','zh'];
@@ -128,6 +129,8 @@ function main() {
   fs.writeFileSync(FRONTEND_PUBLIC_JS_OUT, jsPayload, 'utf8');
   fs.mkdirSync(path.dirname(EXTENSION_I18N_OUT), { recursive: true });
   fs.writeFileSync(EXTENSION_I18N_OUT, jsPayload, 'utf8');
+  fs.mkdirSync(path.dirname(BRIDGE_JS_OUT), { recursive: true });
+  fs.writeFileSync(BRIDGE_JS_OUT, jsPayload, 'utf8');
   fs.mkdirSync(path.dirname(REPORT_OUT), { recursive: true });
   fs.writeFileSync(REPORT_OUT, reportLines.join('\n') + '\n', 'utf8');
 
@@ -136,6 +139,7 @@ function main() {
   console.log(`Wrote ${JS_OUT}`);
   console.log(`Wrote ${FRONTEND_PUBLIC_JS_OUT}`);
   console.log(`Wrote ${EXTENSION_I18N_OUT}`);
+  console.log(`Wrote ${BRIDGE_JS_OUT}`);
 }
 
 main();

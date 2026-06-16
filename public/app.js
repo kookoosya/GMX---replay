@@ -7,7 +7,13 @@
 
   let SUB = null;
   let REF_COUNT = 0;
+  const LS_REF_ELIGIBLE_CACHE = "gmx_ref_eligible_v1";
+  try{
+    const bootEligible = Number(localStorage.getItem(LS_REF_ELIGIBLE_CACHE) || 0) || 0;
+    if (bootEligible > 0) REF_COUNT = bootEligible;
+  }catch(_e){}
   let AUTH_OK = false;
+  let LAST_USAGE_COSMETIC_SIG = "";
   let LAST_USAGE = { gm:{ used:0, limit:0 }, gn:{ used:0, limit:0 }, resetAt:null };
   let LAST_SAVED = { gm:0, gn:0 };
   function isPro(){ return !!(SUB && SUB.active); }
@@ -33,7 +39,7 @@ const FREE_VISIBLE_PACKS = 2;
 const FREE_VISIBLE_WALLPAPERS = 8;
 const FREE_VISIBLE_EXT_THEMES = 4;
 const FREE_VISIBLE_EXT_WALLPAPERS = 6;
-const ASSET_REV = "20260324d";
+const ASSET_REV = "20260531d";
 
 function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (idx < freeCount) return 0;
@@ -41,6 +47,15 @@ function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
   if (k <= 8) return k * 3;
   return 24 + (k - 8) * 4;
 }
+
+function formatUnlockMeter(cur, total){
+  const c = Math.max(0, Number(cur) || 0);
+  const t = Math.max(0, Number(total) || 0);
+  if (isPro() || (t > 0 && c >= t)) return "All";
+  if (!t) return "0";
+  return `${Math.min(c, t)}/${t}`;
+}
+
 function unlockedCountByRefs(total, freeCount=FREE_VISIBLE_THEMES){
   if (isPro()) return total;
   const r = Number(REF_COUNT||0);
@@ -126,7 +141,7 @@ function unlockedCountByRefs(total, freeCount=FREE_VISIBLE_THEMES){
             }
             try{ __LAZY_OBSERVER.unobserve(node); }catch{}
           }
-        }, { rootMargin: "600px" });
+        }, { rootMargin: "240px" });
       }
       __LAZY_OBSERVER.observe(el);
     }catch{}
@@ -209,6 +224,7 @@ function isAdminSignedIn(){ return !!getAdminToken(); }
   const LS_GN_REPLY_LANG = "gmx_gn_reply_lang";
   const LS_BEST_ENABLED = "gmx_best_enabled";
   const LS_FORCE_LOGOUT = "gmx_ext_force_logout";
+  const LS_FORCE_LOGOUT_V2 = "gmx_ext_force_logout_v2";
   const LS_TOGGLES_BOOTSTRAP_V2 = "gmx_toggles_bootstrap_v2";
 
 
@@ -229,12 +245,6 @@ function isAdminSignedIn(){ return !!getAdminToken(); }
 const LS_GM_RECENT = "gmx_gm_recent";
   const LS_GN_RECENT = "gmx_gn_recent";
 
-
-  // Hidden repeat guard stays off in the normal flow.
-  // Best pass uses its own fixed internal shape pass only when the user turns it on.
-  function getAntiStrength(kind){
-    return 0;
-  }
 
   // Legacy helper kept for compatibility with old code paths.
   if (typeof window.antiWindow !== "function"){
@@ -452,6 +462,12 @@ function listCustomBgUsedTabs(){
   function applyUserBg(tab){
     const target = tab || currentTabName();
 
+    if (document.body.classList.contains("hasWallBg")){
+      document.documentElement.style.setProperty("--bg_user", "none");
+      document.body.classList.remove("hasUserBg");
+      return;
+    }
+
     // Priority: per-tab custom background.
     let data = "";
     try{ data = localStorage.getItem(customBgKeyForTab(target)) || ""; }catch{}
@@ -480,29 +496,6 @@ function listCustomBgUsedTabs(){
       document.documentElement.style.setProperty("--bg_user", "none");
     }
     document.body.classList.toggle("hasUserBg", on);
-    if (on && data) {
-      document.body.classList.remove("wallLight");
-      maybeResetWallLightManual(target);
-      let manual = false;
-      try{ manual = localStorage.getItem(LS_WALL_LIGHT_MANUAL) === "1"; }catch{}
-      const sample = siteBackgroundSampleForLightness(target) || data;
-      if (!manual){
-        detectWallpaperLightness(sample).then(isLight=>{
-          try{
-            localStorage.setItem(LS_WALL_LIGHT, isLight ? "1" : "0");
-            syncWallLight();
-          }catch(_e){}
-        }).catch(()=>{
-          try{
-            localStorage.setItem(LS_WALL_LIGHT, "1");
-            syncWallLight();
-          }catch(_e){}
-        });
-      } else {
-        try{ if (typeof syncWallLight === "function") syncWallLight(); }catch(_e){}
-      }
-    }
-    try{ if (typeof syncWallLight === "function") syncWallLight(); }catch(_e){}
   }
 
   async function fitImageToCoverDataUrl(file, maxW=2560, maxH=1440, quality=0.88){
@@ -544,7 +537,10 @@ function listCustomBgUsedTabs(){
   }
 
 
-  function readFileAsDataURL(file){
+  function renderCustomBgUI(){ /* merged into wallpapers tab */ }
+  function syncCustomBgUI(){ /* merged into wallpapers tab */ }
+
+function readFileAsDataURL(file){
     return new Promise((resolve, reject)=>{
       const r = new FileReader();
       r.onload = ()=>resolve(String(r.result||""));
@@ -658,34 +654,103 @@ function listCustomBgUsedTabs(){
   })();
 
 
-  // Wallpapers — 2 free + w01–w158 (160 presets). Paths from preset-manifest.json; built-in fallback if fetch lags.
+  // Wallpapers — per-tab. Photo pack (webp under /assets/wallpapers/v2_*.webp).
   const LS_WP_GLOBAL = "gmx_wp_all";
   const LS_WP_TAB_PREFIX = "gmx_wp_tab_"; // + tab name
-  const LS_WALL_LIGHT = "gmx_wall_light"; // "1" = wallpaper is light (readable text)
-  const LS_WALL_LIGHT_MANUAL = "gmx_wall_light_manual"; // "1" = user toggled checkbox; cleared when wallpaper/custom bg changes
-  const LS_WALL_LIGHT_CTX = "gmx_wall_light_ctx"; // last visual context key (invalidates manual when it changes)
-  const SITE_WALLPAPER_FREE = [
-    ["free01", "Free 1"],
-    ["free02", "Free 2"],
+  const SITE_WALLPAPER_PACK_COUNT = 58;
+  const SITE_WALLPAPER_FREE_PACK_COUNT = 10;
+  const SITE_PACK_NAMES = [
+    "Coastal Dawn",
+    "Forest Mist",
+    "Mountain Lake",
+    "City Sunset",
+    "Desert Dunes",
+    "Ocean Horizon",
+    "Nordic Fjord",
+    "Rainy Street",
+    "Cherry Blossom",
+    "Golden Hour",
+    "Misty Pines",
+    "Alpine Meadow",
+    "River Bend",
+    "Cliff Coast",
+    "Lavender Field",
+    "Autumn Trail",
+    "Snow Peak",
+    "Bamboo Grove",
+    "Harbor Lights",
+    "Vineyard Hills",
+    "Canyon View",
+    "Tropical Cove",
+    "Urban Night",
+    "Meadow Bloom",
+    "Glacier Bay",
+    "Sandstone Arch",
+    "Waterfall Glen",
+    "Prairie Wind",
+    "Island Palm",
+    "Moonlit Bay",
+    "Cedar Forest",
+    "Rose Garden",
+    "Stone Bridge",
+    "Lighthouse Shore",
+    "Wildflower Hill",
+    "Cloud Valley",
+    "Emerald Coast",
+    "Silver Lake",
+    "Amber Woods",
+    "Coral Reef",
+    "Indigo Sky",
+    "Morning Fog",
+    "Twilight Pier",
+    "Bamboo Path",
+    "Rocky Shore",
+    "Savanna Gold",
+    "Maple Lane",
+    "Crystal Cave",
+    "Dunescape",
+    "Orchid Green",
+    "Vineyard Dawn",
+    "Ice Lagoon",
+    "Red Rock",
+    "Moss Garden",
+    "Delta Mirror",
+    "Panorama Ridge",
+    "Silk Clouds",
+    "Cedar Sunset"
   ];
-  const SITE_WALLPAPER_PACK_COUNT = 158;
-  const SITE_WALLPAPER_FREE_PACK_COUNT = 6;
-  const SITE_WALLPAPER_NAMES = ["Grid", "Mist", "Pulse", "Flow", "Bloom", "Drift", "Nebula", "Shift", "Haze", "Glow", "Prism", "Vapor", "Crystal", "Aura", "Frost", "Ember", "Storm", "Dawn", "Dusk", "Luna", "Cosmos", "Signal", "Node", "Chain", "Peak", "Valley", "Ridge", "Wave", "Spark", "Flux", "Beam", "Ray", "Core", "Edge", "Lens", "Phase", "Echo", "Trace", "Silk", "Mesh", "Weave", "Braid", "Knot", "Rift", "Void", "Scope", "Lane", "Path", "Route", "Arch", "Gate", "Port", "Hub", "Zone", "Field", "Realm", "Span"];
+  const CRYPTO_SITE_WALL_SOURCES = [];
   function buildSiteWallpapers(){
-    const out = SITE_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
+    const out = [];
     for (let i=1; i<=SITE_WALLPAPER_PACK_COUNT; i++){
-      const n = String(i).padStart(2, "0");
-      const wid = `w${n}`;
-      const name = SITE_WALLPAPER_NAMES[(i-1) % SITE_WALLPAPER_NAMES.length] || `Wall ${i}`;
-      out.push({ id: wid, name, tier: i <= SITE_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium" });
+      const n = String(i).padStart(3, "0");
+      out.push({
+        id: `v2_${n}`,
+        name: SITE_PACK_NAMES[i - 1] || `Scene ${i}`,
+        tier: i <= SITE_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
+      });
     }
     return out;
   }
   const WALLPAPERS = buildSiteWallpapers();
-  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_refresh_20260323";
+  const WALLPAPER_REFRESH_MIGRATION_KEY = "gmx_wallpaper_pexels_v2";
   function migrateLegacyWallpaperSelectionOnce(){
     try{
       if (localStorage.getItem(WALLPAPER_REFRESH_MIGRATION_KEY) === "1") return;
+      const mapLegacy = (id) => {
+        const v = String(id || "").trim();
+        if (!v) return "";
+        if (/^free0[12]$/i.test(v) || /^w\d+$/i.test(v) || /^v3_\d+$/i.test(v) || /^lux_/i.test(v)) return "v2_001";
+        if (v.startsWith("v2_")) return v;
+        return "v2_001";
+      };
+      const g = mapLegacy(localStorage.getItem(LS_WP_GLOBAL));
+      if (g) localStorage.setItem(LS_WP_GLOBAL, g); else localStorage.removeItem(LS_WP_GLOBAL);
+      for (const [tab] of WALLPAPER_TABS){
+        const k = wallpaperKeyForTab(tab);
+        const norm = mapLegacy(localStorage.getItem(k));
+        if (norm) localStorage.setItem(k, norm); else localStorage.removeItem(k);
+      }
       localStorage.setItem(WALLPAPER_REFRESH_MIGRATION_KEY, "1");
     }catch{}
   }
@@ -695,45 +760,24 @@ function listCustomBgUsedTabs(){
     ["home","wp_apply_home"],
     ["gm","wp_apply_gm"],
     ["gn","wp_apply_gn"],
+    ["prediction","wp_apply_prediction"],
+    ["studio","wp_apply_studio"],
+    ["packs","wp_apply_packs"],
+    ["bulk","wp_apply_bulk"],
+    ["history","wp_apply_history"],
+    ["favorites","wp_apply_favorites"],
+    ["referrals","wp_apply_referrals"],
     ["themes","wp_apply_themes"],
     ["extthemes","wp_apply_extthemes"],
     ["wallet","wp_apply_wallet"]
   ];
 
   const CUSTOM_WP_RE = /^custom_[a-zA-Z0-9_.-]+\.(png|jpg|jpeg|webp)$/i;
-  const CUSTOM_WP_FREE_COUNT = 0;
+  const CUSTOM_WP_FREE_COUNT = 5;
   const CUSTOM_UPLOAD_ID = "custom_upload";
   let CUSTOM_WALLPAPERS_SITE = [];
   let CUSTOM_WALLPAPERS_EXT = [];
   let CUSTOM_WALLPAPERS_LOADED = false;
-  function buildBuiltinPresetWallpaperManifest(){
-    const o = Object.create(null);
-    o.free01 = "free01.png";
-    o.free02 = "free02.jpg";
-    for (let i = 1; i <= 158; i++) {
-      const id = "w" + String(i).padStart(2, "0");
-      o[id] = id + ".jpg";
-    }
-    return o;
-  }
-  const BUILTIN_PRESET_WP_MANIFEST = buildBuiltinPresetWallpaperManifest();
-  let PRESET_WP_MANIFEST = { ...BUILTIN_PRESET_WP_MANIFEST };
-  let PRESET_WP_NAMES = {};
-  let _presetManifestPromise = null;
-  function ensurePresetManifest(){ if (!_presetManifestPromise) _presetManifestPromise = loadPresetManifest(); return _presetManifestPromise; }
-  async function loadPresetManifest(){
-    try{
-      const r = await fetch(`/assets/wallpapers/preset-manifest.json?v=${ASSET_REV}`, { cache:"no-store" });
-      if (r.ok){
-        const j = await r.json();
-        if (j && typeof j === "object") PRESET_WP_MANIFEST = { ...BUILTIN_PRESET_WP_MANIFEST, ...j };
-      }
-    }catch{}
-    try{
-      const r2 = await fetch(`/assets/wallpapers/preset-names.json?v=${ASSET_REV}`, { cache:"no-store" });
-      if (r2.ok){ const j = await r2.json(); if (j && typeof j==="object") PRESET_WP_NAMES = j; }
-    }catch{}
-  }
   async function loadCustomWallpapers(){
     if (CUSTOM_WALLPAPERS_LOADED) return false;
     try{
@@ -750,19 +794,15 @@ function listCustomBgUsedTabs(){
   }
 
   // ---- Wallpaper migration / validation (keeps old saved ids from breaking the UI)
-  // Local: old custom_* presets removed; reset to free01.
   function normalizeWallpaperId(id){
     const v = String(id||"").trim();
     if (!v) return "";
     if (WALLPAPERS.some(x=>x.id===v)) return v;
     if (v === CUSTOM_UPLOAD_ID) return v;
-    if (CUSTOM_WP_RE.test(v)) return "free01";
-    if (/^w\d+$/i.test(v) || /^v3_\d+$/i.test(v) || /^v2_\d+$/i.test(v)) {
-      const num = parseInt((v.match(/\d+/)||["1"])[0], 10);
-      const wid = "w" + String(Math.min(158, Math.max(1, num))).padStart(2, "0");
-      return WALLPAPERS.some(x=>x.id===wid) ? wid : "w01";
-    }
-    return "free01";
+    if (CUSTOM_WP_RE.test(v)) return v;
+    // migrate legacy svg ids (w01..w99) or removed v3 ids to a safe default
+    if (/^w\d+$/i.test(v) || /^v3_\d+$/i.test(v) || /^free\d+$/i.test(v) || /^lux_/i.test(v)) return "v2_001";
+    return "v2_001";
   }
 
   function normalizeAllWallpapers(){
@@ -789,100 +829,35 @@ function listCustomBgUsedTabs(){
     if (EXT_WALLPAPERS.some(x=>String(x.id||"").toLowerCase()===v.toLowerCase())) return v;
     if (v === CUSTOM_UPLOAD_ID) return v;
     if (CUSTOM_WP_RE.test(v)) return v;
-    const m = v.match(/^(?:extv3_|w)(\d{1,2})$/i) || v.match(/^ext_(\d{1,2})$/i);
+    let m = v.match(/^extv3_(\d{1,2})$/i);
     if (m){
-      const num = Math.max(1, Math.min(58, Number(m[1]) || 1));
-      return "w" + String(num).padStart(2, "0");
+      const n = String(Math.max(1, Math.min(58, Number(m[1]) || 1))).padStart(2, "0");
+      return `extv3_${n}`;
     }
-    if (v.match(/^ext_free_(\d{1,2})$/i)){
-      const n = String(Math.max(1, Math.min(2, Number((v.match(/\d+/)||["1"])[0]) || 1))).padStart(2, "0");
+    m = v.match(/^ext_free_(\d{1,2})$/i);
+    if (m){
+      const n = String(Math.max(1, Math.min(2, Number(m[1]) || 1))).padStart(2, "0");
       return `ext_free_${n}`;
     }
-    return "ext_free_01";
+    m = v.match(/^ext_(\d{1,2})$/i);
+    if (m){
+      const num = Math.max(1, Math.min(58, Number(m[1]) || 1));
+      return `extv3_${String(num).padStart(2, "0")}`;
+    }
+    if (/^lux_ext_/i.test(v) || /^ext_free_/i.test(v)) return "extv3_01";
+    return "extv3_01";
   }
 
   function svgDataUri(svg){
     return `data:image/svg+xml;utf8,${encodeURIComponent(String(svg || ""))}`;
   }
 
-  const SITE_PACK_PALETTES = [
-    { coin: "BTC", c1: "#f7931a", c2: "#ffb347", vibe: "Bitcoin orange" },
-    { coin: "ETH", c1: "#627eea", c2: "#c2d9ff", vibe: "Ethereum blue" },
-    { coin: "SOL", c1: "#9945ff", c2: "#14f195", vibe: "Solana gradient" },
-    { coin: "AVAX", c1: "#e84142", c2: "#ff6b6b", vibe: "Avalanche red" },
-    { coin: "ARB", c1: "#28a0f0", c2: "#00d4ff", vibe: "Arbitrum cyan" },
-    { coin: "OP", c1: "#ff0420", c2: "#ff6b7a", vibe: "Optimism red" },
-    { coin: "SUI", c1: "#6fbcf0", c2: "#00b4d8", vibe: "Sui blue" },
-    { coin: "BNB", c1: "#f3ba2f", c2: "#fcd535", vibe: "BNB gold" },
-    { coin: "DOGE", c1: "#c2a633", c2: "#e8d44d", vibe: "Dogecoin" },
-    { coin: "XRP", c1: "#23292f", c2: "#00aae4", vibe: "XRP ripple" },
-    { coin: "LINK", c1: "#2a5ada", c2: "#375bd2", vibe: "Chainlink" },
-    { coin: "APT", c1: "#12b3a8", c2: "#00ffdd", vibe: "Aptos teal" }
-  ];
 
-  function sitePackWallpaperDataUri(id, thumb){
-    const n = Math.max(1, Number(String(id || "").slice(3)) || 1);
-    const p = SITE_PACK_PALETTES[(n - 1) % SITE_PACK_PALETTES.length];
-    const w = thumb ? 480 : 1920;
-    const h = thumb ? 270 : 1080;
-    const blur = thumb ? 60 : 180;
-    const orbs = [
-      { cx: 0.15 + (n % 7) * 0.1, cy: 0.2, r: 0.4, c: p.c1, op: 0.22 },
-      { cx: 0.85 - (n % 5) * 0.08, cy: 0.75, r: 0.35, c: p.c2, op: 0.18 },
-      { cx: 0.5 + (n % 3) * 0.15, cy: 0.5, r: 0.3, c: p.c1, op: 0.08 },
-      { cx: 0.3, cy: 0.9, r: 0.25, c: p.c2, op: 0.12 },
-      { cx: 0.7, cy: 0.1, r: 0.2, c: p.c1, op: 0.1 }
-    ];
-    const orbEls = orbs.map((o,i)=>`<ellipse cx="${w*o.cx}" cy="${h*o.cy}" rx="${w*o.r}" ry="${h*o.r*0.6}" fill="${o.c}" opacity="${o.op}" filter="url(#blur)"/>`).join("");
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#070a12"/><stop offset="50%" stop-color="#0a0e18"/><stop offset="100%" stop-color="#050810"/></linearGradient><radialGradient id="top" cx="0.5" cy="0" r="1"><stop offset="0%" stop-color="${p.c1}" stop-opacity="0.15"/><stop offset="100%" stop-color="transparent"/></radialGradient><filter id="blur"><feGaussianBlur stdDeviation="${blur}"/></filter></defs><rect width="${w}" height="${h}" fill="url(#bg)"/>${orbEls}<rect width="${w}" height="${h}" fill="url(#top)" opacity="0.6"/></svg>`;
-    return svgDataUri(svg);
-  }
-
-  const EXT_PACK_PALETTES = [
-    { tag: "GM", c1: "#9945ff", c2: "#14f195" },
-    { tag: "DEGEN", c1: "#ff6b35", c2: "#f7931a" },
-    { tag: "ALPHA", c1: "#00d4ff", c2: "#7c3aed" },
-    { tag: "WAGMI", c1: "#22c55e", c2: "#10b981" },
-    { tag: "NGMI", c1: "#ef4444", c2: "#f97316" },
-    { tag: "LFG", c1: "#8b5cf6", c2: "#ec4899" },
-    { tag: "SER", c1: "#06b6d4", c2: "#3b82f6" },
-    { tag: "APE", c1: "#eab308", c2: "#f59e0b" },
-    { tag: "MOON", c1: "#a855f7", c2: "#6366f1" },
-    { tag: "CHAD", c1: "#14b8a6", c2: "#0d9488" },
-    { tag: "SIZE", c1: "#f43f5e", c2: "#ec4899" },
-    { tag: "CT", c1: "#64748b", c2: "#94a3b8" }
-  ];
-
-  function extPackWallpaperDataUri(id, thumb){
-    const n = Math.max(1, Number(String(id || "").slice(6)) || 1);
-    const p = EXT_PACK_PALETTES[(n - 1) % EXT_PACK_PALETTES.length];
-    const w = thumb ? 360 : 1080;
-    const h = thumb ? 640 : 1920;
-    const blur = thumb ? 40 : 120;
-    const orbs = [
-      { cx: 0.2 + (n % 5) * 0.1, cy: 0.25, r: 0.5, c: p.c1, op: 0.2 },
-      { cx: 0.8 - (n % 4) * 0.1, cy: 0.7, r: 0.4, c: p.c2, op: 0.18 },
-      { cx: 0.5, cy: 0.5, r: 0.35, c: p.c1, op: 0.06 }
-    ];
-    const orbEls = orbs.map(o=>`<ellipse cx="${w*o.cx}" cy="${h*o.cy}" rx="${w*o.r}" ry="${h*o.r*0.8}" fill="${o.c}" opacity="${o.op}" filter="url(#blur)"/>`).join("");
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="bg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#070a12"/><stop offset="100%" stop-color="#050810"/></linearGradient><filter id="blur"><feGaussianBlur stdDeviation="${blur}"/></filter></defs><rect width="${w}" height="${h}" fill="url(#bg)"/>${orbEls}</svg>`;
-    return svgDataUri(svg);
-  }
 
   function extWallpaperAssetPath(id){
     const norm = normalizeExtWallpaperIdLocal(id);
     if (!norm) return "";
-    if (/^w\d{2}$/.test(norm)){
-      const siteFile = PRESET_WP_MANIFEST[norm];
-      if (siteFile) return "ext_" + norm + siteFile.slice(norm.length);
-      return `ext_${norm}.svg`;
-    }
-    if (/^ext_free_0[12]$/.test(norm)){
-      const freeId = "free0" + norm.slice(-1);
-      const siteFile = PRESET_WP_MANIFEST[freeId];
-      if (siteFile){ const ext = siteFile.slice(siteFile.lastIndexOf(".")); return norm + ext; }
-      return norm + ".svg";
-    }
+    if (norm.startsWith("extv3_")) return norm + ".webp";
     return norm + ".svg";
   }
 
@@ -893,7 +868,7 @@ function listCustomBgUsedTabs(){
       try{ return localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (norm.startsWith("ext_free_") || norm.startsWith("lux_ext_")) return `/assets/extbg/${norm}.svg?v=${ASSET_REV}`;
+    if (norm.startsWith("extv3_")) return `/assets/extbg/${norm}.webp?v=${ASSET_REV}`;
     const p = extWallpaperAssetPath(norm);
     return p ? `/assets/extbg/${p}?v=${ASSET_REV}` : "";
   }
@@ -905,11 +880,8 @@ function listCustomBgUsedTabs(){
       try{ return localStorage.getItem(LS_EXT_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}?v=${ASSET_REV}`;
-    if (/^ext_free_0[12]$/.test(norm) && PRESET_WP_MANIFEST["free0" + norm.slice(-1)]) return `/assets/extbg/thumbs/${norm}.jpg?v=${ASSET_REV}`;
-    if (/^w\d{2}$/.test(norm) && PRESET_WP_MANIFEST[norm]) return `/assets/extbg/thumbs/ext_${norm}.jpg?v=${ASSET_REV}`;
-    if (norm.startsWith("ext_free_") || norm.startsWith("lux_ext_")) return `/assets/extbg/${norm}.svg?v=${ASSET_REV}`;
-    const p = extWallpaperAssetPath(norm);
-    return p ? `/assets/extbg/${p}?v=${ASSET_REV}` : "";
+    if (norm.startsWith("extv3_")) return `/assets/extbg/thumbs/${norm}.webp?v=${ASSET_REV}`;
+    return `/assets/extbg/thumbs/extv3_01.webp?v=${ASSET_REV}`;
   }
   try{
     const cur = localStorage.getItem(LS_EXT_WP);
@@ -918,7 +890,7 @@ function listCustomBgUsedTabs(){
     else localStorage.removeItem(LS_EXT_WP);
   }catch{}
 
-  const TOP_LEVEL_TABS = ["home","gm","gn","referrals","leaderboard","themes","extthemes","prediction","wallet","admin"];
+  const TOP_LEVEL_TABS = ["home","gm","gn","prediction","referrals","leaderboard","themes","extthemes","wallet","admin"];
   function normalizeTopLevelTab(raw){
     const name = String(raw || "").trim().toLowerCase();
     if (name === "upgrade") return "wallet";
@@ -947,31 +919,10 @@ function listCustomBgUsedTabs(){
     else localStorage.setItem(k, id);
   }
 
-  function wallLightContext(tab){
-    const t = tab || currentTabName() || "home";
-    let wid = "";
-    try{ wid = getWallpaperForTab(t) || ""; }catch{}
-    let cust = "";
-    try{ cust = localStorage.getItem(customBgKeyForTab(t)) || ""; }catch{}
-    if (!cust) try{ cust = localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{}
-    return String(wid) + "\x1f" + String(cust ? cust.length : 0) + "\x1f" + String(cust ? cust.slice(0, 48) : "");
-  }
-  function maybeResetWallLightManual(tab){
-    try{
-      const ctx = wallLightContext(tab);
-      const prev = localStorage.getItem(LS_WALL_LIGHT_CTX) || "";
-      if (ctx !== prev){
-        localStorage.setItem(LS_WALL_LIGHT_CTX, ctx);
-        localStorage.removeItem(LS_WALL_LIGHT_MANUAL);
-      }
-    }catch(_e){}
-  }
-
   function wallpaperAssetPath(id){
     if (!id) return "";
-    const s = String(id);
-    if (PRESET_WP_MANIFEST[s]) return PRESET_WP_MANIFEST[s];
-    return s + ".svg";
+    if (String(id).startsWith("v2_")) return String(id) + ".webp";
+    return String(id) + ".svg";
   }
 
   function wallpaperFullUrl(id){
@@ -981,33 +932,20 @@ function listCustomBgUsedTabs(){
       try{ return localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
     if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
+    if (norm.startsWith("v2_")) return `/assets/wallpapers/${norm}.webp?v=${ASSET_REV}`;
     const p = wallpaperAssetPath(norm);
     return p ? `/assets/wallpapers/${p}?v=${ASSET_REV}` : "";
   }
 
-  /** Image URL/data URL to sample for auto-contrast (matches visible stack: custom overlay wins over preset wallpaper). */
-  function siteBackgroundSampleForLightness(tab){
-    const target = tab || currentTabName();
-    let data = "";
-    try{ data = localStorage.getItem(customBgKeyForTab(target)) || ""; }catch{}
-    if (!data){
-      let wallOk = false;
-      try{
-        const wid = getWallpaperForTab(target);
-        if (wid){
-          const wp = WALLPAPERS.find(x=>x.id===wid) || null;
-          let idx = -1;
-          try{ idx = wp ? WALLPAPERS.findIndex(x=>x.id===wid) : -1; }catch{}
-          wallOk = wp ? wallpaperUnlocked(wp, idx) : false;
-        }
-      }catch{}
-      if (!wallOk){
-        try{ data = localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{}
-      }
+  function wallpaperThumbUrl(id){
+    const norm = normalizeWallpaperId(id);
+    if (!norm) return "";
+    if (norm === CUSTOM_UPLOAD_ID){
+      try{ return localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{ return ""; }
     }
-    if (data) return data;
-    const id = getWallpaperForTab(target);
-    return id ? wallpaperFullUrl(id) : "";
+    if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}?v=${ASSET_REV}`;
+    if (norm.startsWith("v2_")) return `/assets/wallpapers/thumbs/${norm}.webp?v=${ASSET_REV}`;
+    return `/assets/wallpapers/thumbs/v2_001.webp?v=${ASSET_REV}`;
   }
 
   function wallpaperUrl(id){
@@ -1030,137 +968,68 @@ function listCustomBgUsedTabs(){
     try{ if (localStorage.getItem(LS_CUSTOM_BG_GLOBAL)) out.push({ id: CUSTOM_UPLOAD_ID, name: "My upload", tier: "custom" }); }catch{}
     return out;
   }
+
+  function ensureWallpaperLayer(){
+    let layer = document.getElementById("gmxWallLayer");
+    if (!layer){
+      layer = document.createElement("div");
+      layer.id = "gmxWallLayer";
+      layer.className = "gmxWallLayer";
+      layer.setAttribute("aria-hidden", "true");
+      document.body.prepend(layer);
+    }
+    return layer;
+  }
+
+  function setWallpaperLayerImage(layer, url){
+    if (!layer) return;
+    if (!url){
+      layer.replaceChildren();
+      layer.style.display = "none";
+      layer.removeAttribute("data-wall-url");
+      return;
+    }
+    const safe = String(url).replace(/"/g, "%22");
+    if (layer.getAttribute("data-wall-url") === url && layer.querySelector("img")){
+      layer.style.display = "block";
+      return;
+    }
+    layer.setAttribute("data-wall-url", url);
+    layer.replaceChildren();
+    const img = document.createElement("img");
+    img.className = "gmxWallImg";
+    img.alt = "";
+    img.decoding = "async";
+    img.loading = "eager";
+    img.draggable = false;
+    img.src = url;
+    layer.appendChild(img);
+    layer.style.display = "block";
+  }
+
   function applyWallpaper(tab){
-    const id = getWallpaperForTab(tab);
+    const safeTab = String(tab || currentTabName() || "home");
+    const id = getWallpaperForTab(safeTab);
     const effectiveCustom = effectiveCustomWallpapersSite();
     const allWps = [...effectiveCustom, ...WALLPAPERS];
     const wp = effectiveCustom.find(x=>x.id===id) || WALLPAPERS.find(x=>x.id===id) || null;
     let idx = -1;
     try{ idx = wp ? allWps.findIndex(x=>x.id===id) : -1; }catch{}
-    const ok = wp ? wallpaperUnlocked(wp, idx, effectiveCustom.length) : true;
+    const ok = !id || !wp || wallpaperUnlocked(wp, idx, effectiveCustom.length);
 
-    const css = (id && ok) ? wallpaperUrl(id) : "none";
-    document.documentElement.style.setProperty("--bg_wall", css);
-    document.body.classList.toggle("hasWallBg", css !== "none");
-    maybeResetWallLightManual(tab);
-    let manual = false;
-    try{ manual = localStorage.getItem(LS_WALL_LIGHT_MANUAL) === "1"; }catch{}
-    const sample = siteBackgroundSampleForLightness(tab);
-    if (css !== "none" && id && sample) {
-      document.body.classList.remove("wallLight");
-      if (!manual){
-        detectWallpaperLightness(sample).then(isLight=>{
-          try{
-            localStorage.setItem(LS_WALL_LIGHT, isLight ? "1" : "0");
-            syncWallLight();
-          }catch(_e){}
-        }).catch(()=>{
-          try{
-            localStorage.setItem(LS_WALL_LIGHT, "1");
-            syncWallLight();
-          }catch(_e){}
-        });
-      } else {
-        syncWallLight();
-      }
-    } else {
-      try{
-        const s = siteBackgroundSampleForLightness(tab);
-        if (!s) localStorage.setItem(LS_WALL_LIGHT, "0");
-      }catch(_e){}
-      syncWallLight();
-    }
-  }
+    const layer = ensureWallpaperLayer();
+    const full = (id && ok) ? wallpaperFullUrl(id) : "";
+    const on = !!(id && ok && full);
 
-  function avgLuminanceFromImageData(d){
-    let sum = 0;
-    const n = d.data.length / 4;
-    for (let i = 0; i < d.data.length; i += 4) {
-      const L = 0.2126 * d.data[i] + 0.7152 * d.data[i + 1] + 0.0722 * d.data[i + 2];
-      sum += L;
-    }
-    return n > 0 ? sum / n : 0;
-  }
-
-  function detectWallpaperLightness(imgUrl){
-    return new Promise((resolve)=>{
-      try{
-        const url = (imgUrl || "").trim();
-        if (!url) { resolve(false); return; }
-        const img = new Image();
-        const finish = ()=>{
-          try{
-            const nw = Math.max(1, img.naturalWidth || img.width || 1);
-            const nh = Math.max(1, img.naturalHeight || img.height || 1);
-            const c = document.createElement("canvas");
-            const sample = 96;
-            c.width = sample;
-            c.height = sample;
-            const ctx = c.getContext("2d", { willReadFrequently: true });
-            if (!ctx) { resolve(false); return; }
-            const sx = nw * 0.2;
-            const sy = nh * 0.2;
-            const sw = nw * 0.6;
-            const sh = nh * 0.6;
-            ctx.drawImage(img, sx, sy, sw, sh, 0, 0, sample, sample);
-            const d1 = ctx.getImageData(0, 0, sample, sample);
-            const centerL = avgLuminanceFromImageData(d1);
-            const c2 = document.createElement("canvas");
-            c2.width = 48;
-            c2.height = 48;
-            const x2 = c2.getContext("2d", { willReadFrequently: true });
-            let globalL = centerL;
-            if (x2){
-              x2.drawImage(img, 0, 0, nw, nh, 0, 0, 48, 48);
-              const d2 = x2.getImageData(0, 0, 48, 48);
-              globalL = avgLuminanceFromImageData(d2);
-            }
-            const mix = 0.62 * centerL + 0.38 * globalL;
-            resolve(mix > 132);
-          }catch{
-            resolve(false);
-          }
-        };
-        if (url.startsWith("data:image")){
-          img.onload = finish;
-          img.onerror = ()=> resolve(false);
-          img.src = url;
-          return;
-        }
-        const fullUrl = url.startsWith("/") ? (location.origin + url) : url;
-        img.onload = finish;
-        img.onerror = ()=> resolve(false);
-        img.src = fullUrl;
-      }catch{
-        resolve(false);
-      }
-    });
-  }
-
-  function syncWallLight(){
-    try{
-      const on = localStorage.getItem(LS_WALL_LIGHT) === "1";
-      document.body.classList.toggle("wallLight", on);
-      const chk = $("wpLightChk");
-      if (chk){
-        chk.checked = !!on;
-        chk.title = String(t("wpLightHint") || "").trim();
-        chk.removeAttribute("disabled");
-      }
-      const st = $("wpLightStatus");
-      if (st){
-        const manual = localStorage.getItem(LS_WALL_LIGHT_MANUAL) === "1";
-        st.textContent = manual
-          ? String(t("wp_light_manual_status") || "").trim()
-          : (on ? String(t("wp_light_detected_light") || "").trim() : String(t("wp_light_detected_dark") || "").trim());
-      }
-    }catch(_e){}
+    setWallpaperLayerImage(layer, on ? full : "");
+    document.documentElement.style.setProperty("--bg_wall", "none");
+    document.body.classList.toggle("hasWallBg", on);
+    document.body.classList.toggle("has-wallpaper", on);
   }
 
   
   function sanitizeI18nValue(lang, value, fallback){
     const allowCyr = (lang === "ru" || lang === "uk");
-    const allowDeva = (lang === "hi");
     if (Array.isArray(value)){
       const fb = Array.isArray(fallback) ? fallback : [];
       const out = value.map((item, idx)=>sanitizeI18nValue(lang, item, fb[idx])).filter(v=>v !== undefined && v !== null && v !== "");
@@ -1171,73 +1040,24 @@ function listCustomBgUsedTabs(){
       const txt = value.trim();
       if (!txt) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
       if (!allowCyr && /[\u0400-\u04FF]/.test(value)) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
-      if (!allowDeva && /[\u0900-\u097F]/.test(value)) return (typeof fallback === "string" && fallback.trim()) ? fallback : undefined;
       return value;
     }
     if (value === undefined || value === null) return fallback;
     return value;
   }
 
-  /** Prefer visible #siteLang value (synced with UI), then localStorage; validate against SITE_LANGS when available. */
-  function getResolvedSiteLang(){
-    try{
-      const sel = typeof $ === "function" ? $("siteLang") : null;
-      if (sel && sel.value) {
-        const v = String(sel.value).trim().toLowerCase();
-        if (typeof SITE_LANGS !== "undefined" && Array.isArray(SITE_LANGS) && SITE_LANGS.some(([c])=>c===v)) return v;
-        if (typeof SITE_LANGS === "undefined" || !Array.isArray(SITE_LANGS)) return v;
-      }
-    }catch(_e){}
-    try{
-      let v = String(localStorage.getItem(LS_SITE_LANG) || "en").trim().toLowerCase();
-      if (typeof SITE_LANGS !== "undefined" && Array.isArray(SITE_LANGS) && SITE_LANGS.length){
-        if (SITE_LANGS.some(([c])=>c===v)) return v;
-        return "en";
-      }
-      return v;
-    }catch(_e){
-      return "en";
-    }
-  }
-
   function trWp(k){
-    try{
-      if (typeof I18N === "undefined" || !I18N || !I18N.en) return k;
-      const lang = getResolvedSiteLang();
-      const base = I18N.en || {};
-      const dict = I18N[lang] || {};
-      const v = sanitizeI18nValue(lang, dict[k], base[k]);
-      return (v ?? base[k] ?? k);
-    }catch(_e){
-      return k;
-    }
+    let lang = "en";
+    try{ lang = localStorage.getItem(LS_SITE_LANG) || "en"; }catch{}
+    let base = {}, dict = {};
+    try{ base = I18N.en || {}; dict = I18N[lang] || {}; }catch{}
+    const v = sanitizeI18nValue(lang, dict[k], base[k]);
+    return (v ?? base[k] ?? k);
   }
 
   // i18n helper (global)
   function t(k){
     return trWp(k);
-  }
-
-  /** Rebuild #wpTab option labels (fixes stale language + uses merged catalog when provided). */
-  function fillWallpaperTabOptions(merged){
-    const tabSel = $("wpTab");
-    if (!tabSel) return;
-    const prev = tabSel.value || "all";
-    tabSel.innerHTML = "";
-    const pick = (key)=>{
-      if (merged && merged[key] != null && String(merged[key]).trim() !== "") return String(merged[key]);
-      return String(t(key));
-    };
-    for (const [v, lk] of WALLPAPER_TABS){
-      const o = document.createElement("option");
-      o.value = v;
-      o.textContent = pick(lk);
-      tabSel.appendChild(o);
-    }
-    try{
-      const ok = Array.from(tabSel.options).some(x=>x.value===prev);
-      tabSel.value = ok ? prev : "all";
-    }catch{}
   }
 
   function prettyError(code){
@@ -1266,63 +1086,77 @@ function renderWallpaperUI(){
     const st = $("wpStatus");
     if (!tabSel || !grid || !st) return;
 
-    if (Object.keys(PRESET_WP_MANIFEST).length === 0){
-      grid.innerHTML = '<div class="wpLoading">' + escapeHtml(t("wp_loading") || "Loading wallpapers…") + '</div>';
-      ensurePresetManifest().then(()=>{ if (grid && document.contains(grid)) renderWallpaperUI(); });
-      return;
+    // fill select (keep value across re-render; re-renders on UI language changes)
+    const prev = tabSel.value || "all";
+    tabSel.innerHTML = "";
+    for (const [v,l] of WALLPAPER_TABS){
+      const o = document.createElement("option");
+      o.value = v;
+      o.textContent = trWp(l);
+      tabSel.appendChild(o);
     }
-
-    fillWallpaperTabOptions(null);
+    // restore previous selection if still present
+    try{
+      const ok = Array.from(tabSel.options).some(o=>o.value===prev);
+      tabSel.value = ok ? prev : "all";
+    }catch{}
 
     const targetTab = tabSel.value || "all";
     const activeId = (targetTab === "all")
       ? (localStorage.getItem(LS_WP_GLOBAL) || "")
       : (localStorage.getItem(wallpaperKeyForTab(targetTab)) || "");
 
-    // Local: only 60 presets, no old custom wallpapers.
-    const effectiveCustom = [];
-    const allWps = [...WALLPAPERS];
+    const effectiveCustom = effectiveCustomWallpapersSite();
+    const allWps = [...effectiveCustom, ...WALLPAPERS];
     const mainUnlocked = unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS);
-    const customUnlocked = 0;
+    const customUnlocked = Math.min(effectiveCustom.length, isPro() ? effectiveCustom.length : CUSTOM_WP_FREE_COUNT);
     const unlocked = mainUnlocked + customUnlocked;
     const unlockedAll = isPro() || unlocked >= allWps.length;
     const nextReq = reqRefsForUnlockIndex(unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS), FREE_VISIBLE_WALLPAPERS);
     st.innerHTML = unlockedAll
-      ? (t("wp_status_unlocked_html") || `<span class="ok">Unlocked.</span> All wallpapers available.`)
-      : (t("wp_status_locked_html") || `<span class="warn">Locked.</span> First {n} free. Next at <b>{r} ref</b>.`)
-          .replace("{n}", String(FREE_VISIBLE_WALLPAPERS))
-          .replace("{r}", String(nextReq));
+      ? `<span class="ok">Unlocked.</span> All wallpapers available. First ${CUSTOM_WP_FREE_COUNT} custom free, rest Pro.`
+      : `<span class="warn">Locked.</span> First ${FREE_VISIBLE_WALLPAPERS} main + ${CUSTOM_WP_FREE_COUNT} custom free. Next unlock at <b>${nextReq} ref</b>.`;
 
-    grid.innerHTML = "";
-    const frag = document.createDocumentFragment();
-    allWps.forEach((wp, idx)=>{
+    loadCustomWallpapers().then((loaded)=>{
+      if (loaded && document.contains(grid)) renderWallpaperUI();
+    });
+
+    const items = allWps.map((wp, idx)=>({ wp, idx }));
+    chunkedRender(grid, items, ({ wp, idx })=>{
       const isUnlocked = wallpaperUnlocked(wp, idx, effectiveCustom.length);
-      const card = document.createElement("div");
-      card.role = "button";
+      const card = document.createElement("button");
+      card.type = "button";
       card.dataset.wpId = wp.id;
-      const mainIdx = idx;
-      card.role = "button";
-      card.tabIndex = -1;
-      card.dataset.tier = mainIdx < FREE_VISIBLE_WALLPAPERS ? "free" : "premium";
+      const mainIdx = wp.tier === "custom" ? -1 : (idx - effectiveCustom.length);
+      card.dataset.tier = wp.tier || (mainIdx >= 0 && mainIdx < FREE_VISIBLE_WALLPAPERS ? "free" : "premium");
       card.className = "wpCard" + (isUnlocked ? "" : " mystery") + (wp.id===activeId ? " active" : "");
 
-      const fullUrl = wallpaperFullUrl(wp.id);
       const thumb = document.createElement("div");
       thumb.className = "wpThumb";
-      if (fullUrl){
-        const im = document.createElement("img");
-        im.alt = "";
-        im.loading = "lazy";
-        im.decoding = "async";
-        im.src = fullUrl;
-        thumb.appendChild(im);
+      const thumbUrl = wallpaperThumbUrl(wp.id);
+      const fullUrl = wallpaperFullUrl(wp.id);
+      if (thumbUrl) thumb.setAttribute('data-bg', thumbUrl);
+      observeLazyBg(thumb);
+      // Warm cache for instant apply.
+      if (isUnlocked && fullUrl){
+        card.addEventListener('pointerenter', ()=>{ try{ prefetchImage(fullUrl); }catch{} }, { passive:true });
       }
+
+      const name = document.createElement("div");
+      name.className = "wpName";
+      name.textContent = wp.name;
+
+      const meta = document.createElement("div");
+      meta.className = "wpMeta";
+      meta.textContent = (wp.tier === "custom") ? "Custom" : ((mainIdx >= 0 && mainIdx < FREE_VISIBLE_WALLPAPERS) ? "Free" : (isPro() ? "Pro" : "Locked"));
 
       const tag = document.createElement("div");
       tag.className = "wpTag";
-      tag.textContent = unlockTagText(mainIdx, isUnlocked, FREE_VISIBLE_WALLPAPERS);
+      tag.textContent = (wp.tier === "custom") ? "CUSTOM" : ((mainIdx >= 0 && mainIdx < FREE_VISIBLE_WALLPAPERS) ? "FREE" : (isUnlocked ? "UNLOCKED" : (reqRefsForUnlockIndex(mainIdx, FREE_VISIBLE_WALLPAPERS) + " ref")));
 
       card.appendChild(thumb);
+      card.appendChild(name);
+      card.appendChild(meta);
       card.appendChild(tag);
 
       if (!isUnlocked){
@@ -1332,53 +1166,84 @@ function renderWallpaperUI(){
         card.appendChild(ov);
       }
 
-      card.addEventListener("mousedown", (e)=>{
-        e.preventDefault();
-        e.stopPropagation();
-        const scrollY = window.scrollY;
-        const scrollTops = [];
-        let el = grid.parentElement;
-        while (el && el !== document.body){
-          if (el.scrollHeight > el.clientHeight) scrollTops.push({ el, top: el.scrollTop });
-          el = el.parentElement;
-        }
+      card.addEventListener("click", ()=>{
         if (!isUnlocked){
-          toast("warn", (t("locked_unlock_at") || "Locked.").replace("{n}", String(reqRefsForUnlockIndex(idx, FREE_VISIBLE_WALLPAPERS))));
+          const reqIdx = wp.tier === "custom" ? idx : (idx - effectiveCustom.length);
+          toast("warn", (t("locked_unlock_at") || "Locked. Unlock at {n} referrals (+1 every 3 refs at first, then +1 every 4) or Pro.").replace("{n}", String(reqRefsForUnlockIndex(reqIdx, FREE_VISIBLE_WALLPAPERS))));
           return;
         }
-        if (targetTab === "all"){ localStorage.setItem(LS_WP_GLOBAL, wp.id); }
-        else { setWallpaperForTab(targetTab, wp.id); }
-        const newActive = (targetTab === 'all') ? (localStorage.getItem(LS_WP_GLOBAL) || '') : (localStorage.getItem(wallpaperKeyForTab(targetTab)) || '');
-        markWallpaperSelection(newActive);
-        const previewTab = (targetTab === "all") ? currentTabName() : targetTab;
-        applyUserBg(previewTab);
-        applyWallpaper(previewTab);
-        requestAnimationFrame(()=>{
-          window.scrollTo(0, scrollY);
-          scrollTops.forEach(({ el: x, top })=>{ try{ x.scrollTop = top; }catch{} });
-        });
-      });
-      card.addEventListener("click", (e)=>{ e.preventDefault(); e.stopPropagation(); });
 
-      frag.appendChild(card);
-    });
-    grid.appendChild(frag);
+        if (targetTab === "all"){
+          localStorage.setItem(LS_WP_GLOBAL, wp.id);
+        } else {
+          setWallpaperForTab(targetTab, wp.id);
+        }
+
+        // Avoid full grid re-render (prevents UI freeze).
+        const newActive = (targetTab === 'all')
+          ? (localStorage.getItem(LS_WP_GLOBAL) || '')
+          : (localStorage.getItem(wallpaperKeyForTab(targetTab)) || '');
+        markWallpaperSelection(newActive);
+
+        // Preview: apply to selected tab (not to the Themes tab).
+        const previewTab = (targetTab === "all") ? currentTabName() : targetTab;
+        // Preload before applying (smooth, avoids jank on first paint).
+        const _full = wallpaperFullUrl(wp.id);
+        if (_full){
+          prefetchImage(_full).finally(()=>{
+            applyUserBg(previewTab);
+            applyWallpaper(previewTab);
+          });
+        } else {
+          applyUserBg(previewTab);
+          applyWallpaper(previewTab);
+        }
+      });
+
+      return card;
+    }, { key: "wpGrid", chunk: 12 });
   }
 // Theme / Wallpaper toggle inside Themes tab
   const LS_THEMEWALL_VIEW = "gmx_themewall_view"; // "theme" | "wall" | "custom"
 
-  /** Site Themes tab: only the wallpaper pane (no separate “Pick a theme” sub-tab). */
-  function setThemeWallView(_view){
-    try{ localStorage.setItem(LS_THEMEWALL_VIEW, "wall"); }catch(_e){}
-    const wallPane = $("wallPane");
+  function setThemeWallView(view){
+    const themeBtn  = $("tabTheme");
+    const wallBtn   = $("tabWall");
+    const themePane  = $("themePane");
+    const wallPane   = $("wallPane");
     const wpNote = $("wp_note");
-    if (wallPane) wallPane.classList.remove("hidden");
-    if (wpNote) wpNote.classList.remove("hidden");
-    try{ renderWallpaperUI(); }catch(_e){}
+    if (!themeBtn || !wallBtn || !themePane || !wallPane) return;
+
+    const v = (view === "wall") ? "wall" : "theme";
+    localStorage.setItem(LS_THEMEWALL_VIEW, v);
+
+    const themeOn  = (v === "theme");
+    const wallOn   = (v === "wall");
+
+    themeBtn.classList.toggle("active", themeOn);
+    wallBtn.classList.toggle("active", wallOn);
+
+    themeBtn.setAttribute("aria-selected", themeOn ? "true" : "false");
+    wallBtn.setAttribute("aria-selected", wallOn ? "true" : "false");
+
+    themePane.classList.toggle("hidden", !themeOn);
+    wallPane.classList.toggle("hidden", !wallOn);
+
+    if (wpNote) wpNote.classList.toggle("hidden", !wallOn);
+
+    if (wallOn){
+      try{ renderWallpaperUI(); }catch{}
+    }
   }
 
   function initThemeWallTabs(){
-    setThemeWallView("wall");
+    const themeBtn  = $("tabTheme");
+    const wallBtn   = $("tabWall");
+    if (themeBtn)  themeBtn.addEventListener("click", ()=>setThemeWallView("theme"));
+    if (wallBtn)   wallBtn.addEventListener("click",  ()=>setThemeWallView("wall"));
+
+    const saved = localStorage.getItem(LS_THEMEWALL_VIEW) || "theme";
+    setThemeWallView(saved === "custom" ? "wall" : saved);
   }
 
 
@@ -1404,7 +1269,6 @@ function renderWallpaperUI(){
         toast("ok", (t("toast_wallpaper_cleared")||"Wallpaper cleared."));
       });
     }
-    syncWallLight();
     renderWallpaperUI();
   }
   let SITE_LANGS = [["en","English"]];
@@ -1432,6 +1296,7 @@ function renderWallpaperUI(){
     if (wrap) wrap.style.display = "none";
     if (box) box.innerHTML = "";
   }
+
   // ----- Themes + Writing Styles (gating) -----
 // Free: first 10 items
 // Referrals: unlock 1 item at 10 refs, then +1 per +5 refs
@@ -1462,24 +1327,24 @@ function renderWallpaperUI(){
     { id:"mono",     name:"Mono",          note:"Minimal gray",      a:"rgba(220,220,225,1)", b:"rgba(160,160,170,1)" },
 
     // Premium pack (80)
-    { id:"p01", name:"Solana Aurora", note:"Solana neon aurora", a:"rgba(0,229,255,1)", b:"rgba(124,92,255,1)" },
-    { id:"p02", name:"Degen Neon", note:"Loud degen glow", a:"rgba(255,75,145,1)", b:"rgba(0,229,255,1)" },
-    { id:"p03", name:"Validator Night", note:"Deep infra vibes", a:"rgba(24,33,68,1)", b:"rgba(124,92,255,1)" },
-    { id:"p04", name:"Meme Mint", note:"Playful mint pop", a:"rgba(0,229,125,1)", b:"rgba(255,75,145,1)" },
-    { id:"p05", name:"Liquidity Pool", note:"Blue-green flow", a:"rgba(0,200,255,1)", b:"rgba(0,229,125,1)" },
-    { id:"p06", name:"Airdrop Pink", note:"Candy airdrop", a:"rgba(255,75,145,1)", b:"rgba(255,210,77,1)" },
-    { id:"p07", name:"MEV Shadow", note:"Dark purple edge", a:"rgba(70,29,132,1)", b:"rgba(0,200,255,1)" },
-    { id:"p08", name:"Onchain Gold", note:"Premium chain shine", a:"rgba(255,210,77,1)", b:"rgba(124,92,255,1)" },
-    { id:"p09", name:"Laser Grid", note:"Sharp grid glow", a:"rgba(0,229,255,1)", b:"rgba(255,122,0,1)" },
-    { id:"p10", name:"Hodl Forest", note:"Calm green depth", a:"rgba(0,229,125,1)", b:"rgba(26,132,86,1)" },
-    { id:"p11", name:"Alpha Crimson", note:"Aggressive red alpha", a:"rgba(220,38,38,1)", b:"rgba(124,92,255,1)" },
-    { id:"p12", name:"Frogwave", note:"Meme wave", a:"rgba(34,197,94,1)", b:"rgba(0,229,255,1)" },
-    { id:"p13", name:"NFT Chrome", note:"Chrome highlights", a:"rgba(229,231,235,1)", b:"rgba(124,92,255,1)" },
-    { id:"p14", name:"ZK Mist", note:"Soft zk haze", a:"rgba(167,139,250,1)", b:"rgba(0,229,255,1)" },
-    { id:"p15", name:"Gas Plasma", note:"Hot plasma", a:"rgba(255,122,0,1)", b:"rgba(255,75,145,1)" },
+    { id:"p01", name:"Aurora Glass", note:"Cool violet cyan glass", a:"rgba(0,229,255,1)", b:"rgba(124,92,255,1)" },
+    { id:"p02", name:"Neon Pulse", note:"Bright magenta cyan", a:"rgba(255,75,145,1)", b:"rgba(0,229,255,1)" },
+    { id:"p03", name:"Night Indigo", note:"Deep blue purple", a:"rgba(24,33,68,1)", b:"rgba(124,92,255,1)" },
+    { id:"p04", name:"Mint Pop", note:"Playful mint accent", a:"rgba(0,229,125,1)", b:"rgba(255,75,145,1)" },
+    { id:"p05", name:"Pool Teal", note:"Blue-green flow", a:"rgba(0,200,255,1)", b:"rgba(0,229,125,1)" },
+    { id:"p06", name:"Candy Pink", note:"Warm pink gold", a:"rgba(255,75,145,1)", b:"rgba(255,210,77,1)" },
+    { id:"p07", name:"Shadow Violet", note:"Dark purple edge", a:"rgba(70,29,132,1)", b:"rgba(0,200,255,1)" },
+    { id:"p08", name:"Golden Gleam", note:"Gold purple shine", a:"rgba(255,210,77,1)", b:"rgba(124,92,255,1)" },
+    { id:"p09", name:"Laser Ember", note:"Cyan orange glow", a:"rgba(0,229,255,1)", b:"rgba(255,122,0,1)" },
+    { id:"p10", name:"Forest Calm", note:"Calm green depth", a:"rgba(0,229,125,1)", b:"rgba(26,132,86,1)" },
+    { id:"p11", name:"Crimson Edge", note:"Bold red violet", a:"rgba(220,38,38,1)", b:"rgba(124,92,255,1)" },
+    { id:"p12", name:"Wave Green", note:"Fresh green cyan", a:"rgba(34,197,94,1)", b:"rgba(0,229,255,1)" },
+    { id:"p13", name:"Chrome Sheen", note:"Silver violet", a:"rgba(229,231,235,1)", b:"rgba(124,92,255,1)" },
+    { id:"p14", name:"Mist Lavender", note:"Soft lavender haze", a:"rgba(167,139,250,1)", b:"rgba(0,229,255,1)" },
+    { id:"p15", name:"Plasma Heat", note:"Hot orange pink", a:"rgba(255,122,0,1)", b:"rgba(255,75,145,1)" },
     { id:"p16", name:"Builder Steel", note:"Clean steel", a:"rgba(148,163,184,1)", b:"rgba(59,130,246,1)" },
     { id:"p17", name:"Iceberg", note:"Cold minimal", a:"rgba(186,230,253,1)", b:"rgba(124,92,255,1)" },
-    { id:"p18", name:"Sunset DEX", note:"Warm dex sunset", a:"rgba(255,122,0,1)", b:"rgba(0,200,255,1)" },
+    { id:"p18", name:"Sunset Blaze", note:"Warm orange cyan", a:"rgba(255,122,0,1)", b:"rgba(0,200,255,1)" },
     { id:"p19", name:"Orbit", note:"Cosmic orbit", a:"rgba(17,24,39,1)", b:"rgba(0,200,255,1)" },
     { id:"p20", name:"Photon", note:"Bright photon", a:"rgba(250,250,250,1)", b:"rgba(0,229,255,1)" },
     { id:"p21", name:"Cyber Lime", note:"Cyber lime", a:"rgba(163,230,53,1)", b:"rgba(0,200,255,1)" },
@@ -1524,7 +1389,7 @@ function renderWallpaperUI(){
     { id:"p58", name:"Turbo Garden", note:"Muted pro tone", a:"rgba(238,43,88,1)", b:"rgba(244,120,37,1)" },
     { id:"p59", name:"Quantum Storm", note:"Bright accent", a:"rgba(238,117,43,1)", b:"rgba(116,244,37,1)" },
     { id:"p60", name:"Iridescent Bridge", note:"Deep space vibe", a:"rgba(238,238,43,1)", b:"rgba(37,244,209,1)" },
-    { id:"p61", name:"Onchain Deck", note:"Clean neon gradient", a:"rgba(117,238,43,1)", b:"rgba(47,37,244,1)" },
+    { id:"p61", name:"Deck Neon", note:"Clean neon gradient", a:"rgba(117,238,43,1)", b:"rgba(47,37,244,1)" },
     { id:"p62", name:"Night Node", note:"Dark pro glow", a:"rgba(43,238,88,1)", b:"rgba(244,37,188,1)" },
     { id:"p63", name:"Dawn Tape", note:"Cold glass shine", a:"rgba(43,238,209,1)", b:"rgba(244,137,37,1)" },
     { id:"p64", name:"Dusk Portal", note:"Warm premium glow", a:"rgba(43,147,238,1)", b:"rgba(99,244,37,1)" },
@@ -1534,50 +1399,97 @@ function renderWallpaperUI(){
     { id:"p68", name:"Ion Crown", note:"Muted pro tone", a:"rgba(238,43,56,1)", b:"rgba(244,154,37,1)" },
     { id:"p69", name:"Reactor Rise", note:"Bright accent", a:"rgba(238,150,43,1)", b:"rgba(82,244,37,1)" },
     { id:"p70", name:"Zen Shade", note:"Deep space vibe", a:"rgba(205,238,43,1)", b:"rgba(37,244,244,1)" },
-    { id:"p71", name:"Neon Bloom Bloom", note:"Clean neon gradient", a:"rgba(85,238,43,1)", b:"rgba(82,37,244,1)" },
-    { id:"p72", name:"Chrome Circuit Edge", note:"Dark pro glow", a:"rgba(43,238,121,1)", b:"rgba(244,37,154,1)" },
-    { id:"p73", name:"Prism Wave Runway", note:"Cold glass shine", a:"rgba(43,235,238,1)", b:"rgba(244,171,37,1)" },
-    { id:"p74", name:"Aurora Grid Beacon", note:"Warm premium glow", a:"rgba(43,114,238,1)", b:"rgba(65,244,37,1)" },
-    { id:"p75", name:"Void Flux Storm", note:"Cyber pop", a:"rgba(91,43,238,1)", b:"rgba(37,226,244,1)" },
-    { id:"p76", name:"Laser Drive Valley", note:"Soft haze", a:"rgba(212,43,238,1)", b:"rgba(99,37,244,1)" },
-    { id:"p77", name:"Cosmic Mist Wave", note:"High-contrast UI", a:"rgba(238,43,144,1)", b:"rgba(244,37,137,1)" },
-    { id:"p78", name:"Glitch Edge Orbit", note:"Muted pro tone", a:"rgba(238,62,43,1)", b:"rgba(244,188,37,1)" },
-    { id:"p79", name:"Titan Engine Forge", note:"Bright accent", a:"rgba(238,183,43,1)", b:"rgba(47,244,37,1)" },
-    { id:"p80", name:"Sakura Orbit Vista", note:"Deep space vibe", a:"rgba(173,238,43,1)", b:"rgba(37,209,244,1)" },
+    { id:"p71", name:"Neon Bloom", note:"Clean neon gradient", a:"rgba(85,238,43,1)", b:"rgba(82,37,244,1)" },
+    { id:"p72", name:"Chrome Circuit", note:"Dark pro glow", a:"rgba(43,238,121,1)", b:"rgba(244,37,154,1)" },
+    { id:"p73", name:"Prism Runway", note:"Cold glass shine", a:"rgba(43,235,238,1)", b:"rgba(244,171,37,1)" },
+    { id:"p74", name:"Aurora Beacon", note:"Warm premium glow", a:"rgba(43,114,238,1)", b:"rgba(65,244,37,1)" },
+    { id:"p75", name:"Void Storm", note:"Cyber pop", a:"rgba(91,43,238,1)", b:"rgba(37,226,244,1)" },
+    { id:"p76", name:"Laser Valley", note:"Soft haze", a:"rgba(212,43,238,1)", b:"rgba(99,37,244,1)" },
+    { id:"p77", name:"Cosmic Wave", note:"High-contrast UI", a:"rgba(238,43,144,1)", b:"rgba(244,37,137,1)" },
+    { id:"p78", name:"Glitch Orbit", note:"Muted pro tone", a:"rgba(238,62,43,1)", b:"rgba(244,188,37,1)" },
+    { id:"p79", name:"Titan Forge", note:"Bright accent", a:"rgba(238,183,43,1)", b:"rgba(47,244,37,1)" },
+    { id:"p80", name:"Sakura Vista", note:"Deep space vibe", a:"rgba(173,238,43,1)", b:"rgba(37,209,244,1)" },
   ].slice(0, 60);
 
   const EXT_THEMES = THEMES.map(t=>({ id:t.id, name:t.name, note:t.note, a:t.a, b:t.b }));
-  const EXT_WALLPAPER_FREE = [
-    ["ext_free_01", "Mempool Grid"],
-    ["ext_free_02", "Solana Glass"],
-  ];
   const EXT_WALLPAPER_PACK_COUNT = 58;
   const EXT_WALLPAPER_FREE_PACK_COUNT = 4;
-  const EXT_WALLPAPER_NAMES = ["Grid", "Mist", "Pulse", "Flow", "Bloom", "Drift", "Nebula", "Shift", "Haze", "Glow", "Prism", "Vapor", "Crystal", "Aura", "Frost", "Ember", "Storm", "Dawn", "Dusk", "Luna", "Cosmos", "Signal", "Node", "Chain", "Peak", "Valley", "Ridge", "Wave", "Spark", "Flux", "Beam", "Ray", "Core", "Edge", "Lens", "Phase", "Echo", "Trace", "Silk", "Mesh", "Weave", "Braid", "Knot", "Rift", "Void", "Scope", "Lane", "Path", "Route", "Arch", "Gate", "Port", "Hub", "Zone", "Field", "Realm", "Span"];
-  const CRYPTO_EXT_WALL_SOURCES = [
-    "https://source.unsplash.com/1080x1920/?bitcoin,crypto,vertical,neon",
-    "https://source.unsplash.com/1080x1920/?ethereum,blockchain,vertical,dark",
-    "https://source.unsplash.com/1080x1920/?solana,crypto,vertical,gradient",
-    "https://source.unsplash.com/1080x1920/?dogecoin,meme,crypto,vertical",
-    "https://source.unsplash.com/1080x1920/?bonk,crypto,vertical,market",
-    "https://source.unsplash.com/1080x1920/?x,finance,vertical,chart",
-    "https://source.unsplash.com/1080x1920/?trading,terminal,vertical",
-    "https://source.unsplash.com/1080x1920/?blockchain,network,vertical"
+  const EXT_PACK_NAMES = [
+    "Coastal Dawn",
+    "Forest Mist",
+    "Mountain Lake",
+    "City Sunset",
+    "Desert Dunes",
+    "Ocean Horizon",
+    "Nordic Fjord",
+    "Rainy Street",
+    "Cherry Blossom",
+    "Golden Hour",
+    "Misty Pines",
+    "Alpine Meadow",
+    "River Bend",
+    "Cliff Coast",
+    "Lavender Field",
+    "Autumn Trail",
+    "Snow Peak",
+    "Bamboo Grove",
+    "Harbor Lights",
+    "Vineyard Hills",
+    "Canyon View",
+    "Tropical Cove",
+    "Urban Night",
+    "Meadow Bloom",
+    "Glacier Bay",
+    "Sandstone Arch",
+    "Waterfall Glen",
+    "Prairie Wind",
+    "Island Palm",
+    "Moonlit Bay",
+    "Cedar Forest",
+    "Rose Garden",
+    "Stone Bridge",
+    "Lighthouse Shore",
+    "Wildflower Hill",
+    "Cloud Valley",
+    "Emerald Coast",
+    "Silver Lake",
+    "Amber Woods",
+    "Coral Reef",
+    "Indigo Sky",
+    "Morning Fog",
+    "Twilight Pier",
+    "Bamboo Path",
+    "Rocky Shore",
+    "Savanna Gold",
+    "Maple Lane",
+    "Crystal Cave",
+    "Dunescape",
+    "Orchid Green",
+    "Vineyard Dawn",
+    "Ice Lagoon",
+    "Red Rock",
+    "Moss Garden",
+    "Delta Mirror",
+    "Panorama Ridge",
+    "Silk Clouds",
+    "Cedar Sunset"
   ];
+  const CRYPTO_EXT_WALL_SOURCES = [];
   function buildExtWallpapers(){
-    const out = EXT_WALLPAPER_FREE.map(([id, name])=>({ id, name, tier:"free" }));
+    const out = [];
     for (let i=1; i<=EXT_WALLPAPER_PACK_COUNT; i++){
-      const n = String(i).padStart(2, "0");
-      const wid = `w${n}`;
-      const name = EXT_WALLPAPER_NAMES[(i-1) % EXT_WALLPAPER_NAMES.length] || `Wall ${i}`;
-      out.push({ id: wid, name, tier: i <= EXT_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium" });
+      out.push({
+        id: `extv3_${String(i).padStart(2, "0")}`,
+        name: EXT_PACK_NAMES[i - 1] || `Scene ${i}`,
+        tier: i <= EXT_WALLPAPER_FREE_PACK_COUNT ? "free" : "premium"
+      });
     }
     return out;
   }
   const EXT_WALLPAPERS = buildExtWallpapers();
   function migrateLegacyExtWallpaperSelectionOnce(){
     try{
-      const done = "gmx_ext_wallpaper_refresh_20260318";
+      const done = "gmx_ext_wallpaper_pexels_v2";
       if (localStorage.getItem(done) === "1") return;
       // keep IDs stable; visual refresh now happens in URL resolver
       localStorage.setItem(done, "1");
@@ -1602,25 +1514,79 @@ function renderWallpaperUI(){
   ];
 
 
-  const PACKS = [
-    { id:"classic", name:"Balanced",         pro:false, style:"classic", mode:null, anti:2, clean:true  },
-    { id:"king",    name:"Market Read",      pro:false, style:"alpha",   mode:"mid", anti:2, clean:true  },
-    { id:"degen",   name:"CT Market",        pro:true,  style:"degen",   mode:"mid", anti:4, clean:true  },
-    { id:"minimal", name:"Tight Minimal",    pro:true,  style:"minimal", mode:"min", anti:4, clean:true  },
-    { id:"builder", name:"Builder Clean",    pro:true,  style:"builder", mode:"mid", anti:4, clean:true  },
-    { id:"kind",    name:"Soft Close",       pro:true,  style:"calm",    mode:"mid", anti:4, clean:true  },
-    { id:"aggro",   name:"Alpha Push",       pro:true,  style:"alpha",   mode:"max", anti:3, clean:true  },
+  const GM_PACKS = [
+    { id:"classic", name:"Morning Balanced", pro:false, style:"classic", mode:null, anti:2, clean:true },
+    { id:"king",    name:"Market Read AM",   pro:false, style:"alpha",   mode:"mid", anti:2, clean:true },
+    { id:"degen",   name:"CT Morning",       pro:true,  style:"degen",   mode:"mid", anti:4, clean:true },
+    { id:"minimal", name:"Tight GM",         pro:true,  style:"minimal", mode:"min", anti:4, clean:true },
+    { id:"builder", name:"Builder AM",       pro:true,  style:"builder", mode:"mid", anti:4, clean:true },
+    { id:"kind",    name:"Warm Morning",     pro:true,  style:"calm",    mode:"mid", anti:4, clean:true },
+    { id:"aggro",   name:"Alpha Push AM",    pro:true,  style:"alpha",   mode:"max", anti:3, clean:true },
   ];
+  const GN_PACKS = [
+    { id:"classic", name:"Night Balanced",   pro:false, style:"classic", mode:null, anti:2, clean:true },
+    { id:"king",    name:"Market Read PM",   pro:false, style:"alpha",   mode:"mid", anti:2, clean:true },
+    { id:"degen",   name:"CT Night",         pro:true,  style:"degen",   mode:"mid", anti:4, clean:true },
+    { id:"minimal", name:"Tight GN",         pro:true,  style:"minimal", mode:"min", anti:4, clean:true },
+    { id:"builder", name:"Builder PM",       pro:true,  style:"builder", mode:"mid", anti:4, clean:true },
+    { id:"kind",    name:"Soft Close",       pro:true,  style:"calm",    mode:"mid", anti:4, clean:true },
+    { id:"aggro",   name:"Alpha Push PM",    pro:true,  style:"alpha",   mode:"max", anti:3, clean:true },
+  ];
+  const PACKS = GM_PACKS;
 
-  function unlockedPacksCount(){ return unlockedCountByRefs(PACKS.length, FREE_VISIBLE_PACKS); }
+  function packsForKind(kind){
+    return kind === "gn" ? GN_PACKS : GM_PACKS;
+  }
+
+  function getAntiStrength(kind){
+    try{
+      const raw = localStorage.getItem(lsKeyAnti(kind));
+      if (raw !== null && raw !== ""){
+        const n = Math.trunc(Number(raw));
+        if (Number.isFinite(n)) return Math.max(0, Math.min(5, n));
+      }
+    }catch(_e){}
+    const packEl = kind === "gn" ? $("gnPack") : $("gmPack");
+    const pid = packEl ? (packEl.value || "classic") : "classic";
+    const packs = packsForKind(kind);
+    const pack = packs.find((p)=>p.id === pid) || packs[0];
+    const anti = pack && Number.isFinite(pack.anti) ? pack.anti : 2;
+    return Math.max(0, Math.min(5, anti));
+  }
+
+
+  function readGenParams(kind){
+    const modeEl = kind === "gm" ? $("gmMode") : $("gnMode");
+    const styleEl = kind === "gm" ? $("gmStyle") : $("gnStyle");
+    const mode = modeEl ? modeEl.value : "mid";
+    const lang = currentLang(kind);
+    const style = styleEl ? styleEl.value : "classic";
+    const strength = getAntiStrength(kind);
+    const antiN = antiWindow(strength);
+    return { mode, lang, style, antiN };
+  }
+
+  function applyPackDefaultsToUi(kind, pack){
+    if (!pack) return;
+    const styleSel = kind === "gm" ? $("gmStyle") : $("gnStyle");
+    const modeSel  = kind === "gm" ? $("gmMode")  : $("gnMode");
+    if (styleSel && pack.style) styleSel.value = pack.style;
+    if (modeSel && pack.mode) modeSel.value = pack.mode;
+    try{ syncModePanelCopy(); }catch(_e){}
+  }
+
+  function unlockedPacksCountFor(kind){
+    return unlockedCountByRefs(packsForKind(kind).length, FREE_VISIBLE_PACKS);
+  }
 
   function fillPacks(){
-    const unlocked = unlockedPacksCount();
-    const fill = (sel, lsKey)=>{
+    const fill = (kind, sel, lsKey)=>{
       if (!sel) return;
+      const packs = packsForKind(kind);
+      const unlocked = unlockedPacksCountFor(kind);
       const prev = localStorage.getItem(lsKey) || "classic";
       sel.innerHTML = "";
-      PACKS.forEach((p, idx)=>{
+      packs.forEach((p, idx)=>{
         const o = document.createElement("option");
         o.value = p.id;
         const locked = (!isPro() && idx >= unlocked);
@@ -1632,8 +1598,8 @@ function renderWallpaperUI(){
       if ([...sel.options].some(o=>o.value===prev && !o.disabled)) sel.value = prev;
       else sel.value = "classic";
     };
-    fill($("gmPack"), LS_GM_PACK);
-    fill($("gnPack"), LS_GN_PACK);
+    fill("gm", $("gmPack"), LS_GM_PACK);
+    fill("gn", $("gnPack"), LS_GN_PACK);
   }
 
   function unlockedThemesCount(){ return unlockedCountByRefs(THEMES.length, FREE_VISIBLE_THEMES); }
@@ -1661,17 +1627,56 @@ function renderWallpaperUI(){
     return (lum > 0.62) ? "#0A0D15" : "#FFFFFF";
   }
 
+
 function applyTheme(id){
     const t = THEMES.find(x=>x.id===id) || THEMES[0];
     // persist selected site theme
     try { localStorage.setItem("gmx_theme", String(t.id || id)); } catch(e) {}
     // CSS uses both --accentA and --accentB across gradients.
-    document.documentElement.style.setProperty("--accentA", t.a);
-    document.documentElement.style.setProperty("--accentB", t.b);
-    document.documentElement.style.setProperty("--accentOn", pickAccentOn(t.a, t.b));
+    const a = t.a || "rgba(124,92,255,1)";
+    const b = t.b || "rgba(0,229,255,1)";
+    const root = document.documentElement;
+    root.style.setProperty("--accentA", a);
+    root.style.setProperty("--accentB", b);
+    root.style.setProperty("--accentOn", pickAccentOn(a, b));
+    root.classList.add("theme-applied");
+    root.dataset.themeId = String(t.id || id);
+    const isLight = root.classList.contains("mode-light");
+    const glassBase = isLight ? "rgba(255,255,255,.88)" : "rgba(10,14,24,.72)";
+    const glass2Base = isLight ? "rgba(255,255,255,.94)" : "rgba(8,12,22,.82)";
+    root.style.setProperty("--glass", `color-mix(in srgb, ${glassBase} 84%, ${a} 16%)`);
+    root.style.setProperty("--glass2", `color-mix(in srgb, ${glass2Base} 82%, ${b} 18%)`);
+    root.style.setProperty("--stroke", `color-mix(in srgb, ${a} 30%, ${isLight ? "rgba(0,0,0,.10)" : "rgba(148,180,255,.14)"})`);
+    root.style.setProperty("--stroke2", `color-mix(in srgb, ${b} 34%, ${isLight ? "rgba(0,0,0,.14)" : "rgba(148,180,255,.22)"})`);
+    try{
+      const tab = (typeof CURRENT_TAB === "string" && CURRENT_TAB) ? CURRENT_TAB : "home";
+      if (typeof setBg === "function") setBg(tab);
+    }catch(_e){}
   }
 const LS_EXT_VIEW = "gmx_ext_view"; // theme | wall | custom
 const LS_EXT_WP = "gmx_ext_wp"; // selected extension wallpaper id
+const EXT_LS_V2 = {
+  "gmx_ext_theme": "gmx_ext_theme_v2",
+  "gmx_ext_wp": "gmx_ext_wp_v2",
+  "gmx_ext_view": "gmx_ext_view_v2",
+  "gmx_ext_custom_bg_global": "gmx_ext_custom_bg_global_v2",
+  "gmx_ext_wp_view_popup": "gmx_ext_wp_v2_popup",
+  "gmx_ext_wp_view_quick": "gmx_ext_wp_v2_quick",
+};
+function extLsSet(key, value){
+  try{
+    const v2 = EXT_LS_V2[key];
+    if (value === undefined || value === null || value === ""){
+      localStorage.removeItem(key);
+      if (v2) localStorage.removeItem(v2);
+      return;
+    }
+    const text = String(value);
+    localStorage.setItem(key, text);
+    if (v2) localStorage.setItem(v2, text);
+  }catch(_e){}
+}
+
 
 // Custom background for extension popup (per-tab + global)
 // Note: this is stored on the site and later synced to the extension.
@@ -1721,26 +1726,21 @@ function setExtWallpaperForView(view, id){
     const safeView = normalizeExtWallpaperView(view);
     const key = extWallpaperKeyForView(safeView);
     const safeId = normalizeExtWallpaperIdLocal(id);
-    if (safeId) localStorage.setItem(key, safeId);
-    else localStorage.removeItem(key);
+    extLsSet(key, safeId || "");
   }catch(_e){}
 }
 function syncExtWallpaperTargetUI(sel, preferred){
-  const current = normalizeExtWallpaperView(preferred || (sel && sel.value) || localStorage.getItem(LS_EXT_WP_TARGET) || "all");
-  try{ localStorage.setItem(LS_EXT_WP_TARGET, current); }catch(_e){}
-  if (!sel) return current;
-  if (sel.tagName === "SELECT"){
-    sel.innerHTML = "";
-    for (const [value, label] of EXT_WALLPAPER_VIEWS){
-      const opt = document.createElement("option");
-      opt.value = value;
-      opt.textContent = label;
-      sel.appendChild(opt);
-    }
-    sel.value = current;
-  } else {
-    sel.value = current;
+  if (!sel) return "all";
+  const current = normalizeExtWallpaperView(preferred || sel.value || localStorage.getItem(LS_EXT_WP_TARGET) || "all");
+  sel.innerHTML = "";
+  for (const [value, label] of EXT_WALLPAPER_VIEWS){
+    const opt = document.createElement("option");
+    opt.value = value;
+    opt.textContent = label;
+    sel.appendChild(opt);
   }
+  sel.value = current;
+  try{ localStorage.setItem(LS_EXT_WP_TARGET, current); }catch(_e){}
   return current;
 }
 function currentExtWallpaperTarget(){
@@ -1851,18 +1851,17 @@ function renderExtCustomBgUI(){
   const isAllowed = canSetExtCustomBgOnTab(target);
   const needRefs = requiredRefsForExtCustomBgTab(target);
 
-  if (nm) nm.textContent = cur ? (t("ext_custom_saved_badge") || "saved") : "";
+  if (nm) nm.textContent = cur ? "saved" : "";
 
-  const tabLabel = escapeHtml(t(EXT_POPUP_TABS.find(x=>x[0]===target)?.[1]||"wp_apply_all"));
   let msg = cur
-    ? (t("ext_custom_active_html") || `<span class="ok">Active.</span> Custom background is set for <b>{target}</b>.`).replace("{target}", tabLabel)
-    : (t("ext_custom_none_html") || `<span class="muted">None.</span> Upload an image to set a custom background.`);
+    ? `<span class="ok">Active.</span> Custom background is set for <b>${escapeHtml(t(EXT_POPUP_TABS.find(x=>x[0]===target)?.[1]||"wp_apply_all"))}</b>.`
+    : `<span class="muted">None.</span> Upload an image to set a custom background.`;
 
   if (!isPro()){
-    msg += ` <span class="muted">${escapeHtml(t("ext_custom_slots_label") || "Slots:")}</span> ${Math.min(usedCount, slots)}/${slots}.`;
+    msg += ` <span class="muted">Slots:</span> ${Math.min(usedCount, slots)}/${slots}.`;
   }
   if (!isAllowed){
-    msg += ` <span class="warn">${escapeHtml(t("ext_custom_locked_label") || "Locked:")}</span> ${escapeHtml((t("ext_custom_need_refs") || "need {refs} referrals for this tab (or upgrade to Pro).").replace("{refs}", String(needRefs)))}`;
+    msg += ` <span class="warn">Locked:</span> need ${needRefs} referrals for this tab (or upgrade to Pro).`;
   }
   st.innerHTML = msg;
 
@@ -1911,10 +1910,10 @@ function renderExtCustomBgUI(){
         extSyncNow();
 
         renderExtCustomBgUI();
-        if (st) st.innerHTML = (t("ext_custom_saved_inline_html") || `<span class="ok">Saved.</span> Auto-fitted for extension popup ratio.`);
+        if (st) st.innerHTML = `<span class="ok">Saved.</span> Auto-fitted for extension popup ratio.`;
         toast("ok", (t("toast_custom_bg_saved")||"Custom background saved."));
       }catch(e){
-        st.innerHTML = (t("ext_custom_error_inline_html") || `<span class="bad">Error.</span> Could not save background.`);
+        st.innerHTML = `<span class="bad">Error.</span> Could not save background.`;
       }finally{
         inp.value = "";
       }
@@ -1933,13 +1932,14 @@ function renderExtCustomBgUI(){
 
 function normalizeExtViewValue(view){
   const v = String(view || "").trim().toLowerCase();
-  return (v === "wall") ? "wall" : "theme";
+  if (v === "wall" || v === "custom") return v;
+  return "theme";
 }
 
 function setExtView(view, opts){
   const safeView = normalizeExtViewValue(view);
   const prev = normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW) || "theme");
-  localStorage.setItem(LS_EXT_VIEW, safeView);
+  extLsSet(LS_EXT_VIEW, safeView);
   const options = opts || {};
   if (!options.silent && prev !== safeView) extSyncNow("ext_view");
   const btnTheme = $("extTabTheme");
@@ -2012,13 +2012,12 @@ function markExtWallpaperSelection(id){
     const unlocked = unlockedExtThemesCount();
     const idx = EXT_THEMES.findIndex(x=>x.id===id);
     if (!isPro() && (idx<0 || idx >= unlocked)) return;
-    try { localStorage.setItem("gmx_ext_theme_v2", id); } catch(e){}
-    try { localStorage.setItem("gmx_ext_theme", id); } catch(e){}
+    extLsSet("gmx_ext_theme", id);
     markExtThemeSelection(id);
     if (normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW) || "theme") !== "theme") setExtView("theme");
     extSyncNow("ext_theme");
     const st = $("extThemeStatus");
-    if (st) st.innerHTML = (t("ext_theme_status_selected_html") || '<span class="ok">Selected.</span>');
+    if (st) st.innerHTML = '<span class="ok">Selected.</span>';
   }
 
   function applyExtWallpaper(id, targetView){
@@ -2043,16 +2042,40 @@ function themePreviewBg(th){
   return `linear-gradient(135deg, ${a}, ${b})`;
 }
 
+
+function syncThemesUnlockMeters(curThemes, totalThemes, curWps, totalWps){
+  const label = formatUnlockMeter(curThemes, totalThemes);
+  const wpLabel = formatUnlockMeter(curWps, totalWps);
+  for (const id of ["themesUnlocked", "themesUnlockedVal"]) {
+    const el = $(id);
+    if (el) el.textContent = label;
+  }
+  for (const id of ["wpUnlocked", "wpUnlockedVal"]) {
+    const el = $(id);
+    if (el) el.textContent = wpLabel;
+  }
+  try{ setMeter("themesUnlockedVal", "themesUnlockedFill", curThemes, totalThemes); }catch{}
+  try{ setMeter("wpUnlockedVal", "wpUnlockedFill", curWps, totalWps); }catch{}
+  const refKpi = $("themes_k_ref")?.closest?.(".kpi");
+  if (refKpi) refKpi.style.display = isPro() ? "none" : "";
+  const freeTip = $("themes_free_tip");
+  if (freeTip) {
+    freeTip.textContent = isPro()
+      ? (t("themes_pro_tip") || "Pro unlocks the full theme and wallpaper library.")
+      : (t("themes_free_tip") || "On Free, referrals increase your cosmetic room. On Pro, the full set is already open.");
+  }
+}
+
 function unlockTagText(idx, unlocked, freeCount){
-  if (idx < freeCount) return (typeof t === "function" ? (t("ui_tag_free") || "FREE") : "FREE");
-  if (unlocked) return (typeof t === "function" ? (t("ui_tag_unlocked") || "UNLOCKED") : "UNLOCKED");
+  if (idx < freeCount) return "FREE";
+  if (unlocked) return "UNLOCKED";
   const need = reqRefsForUnlockIndex(idx, freeCount);
-  const pat = typeof t === "function" ? (t("ui_tag_refs") || "{n} ref") : "{n} ref";
-  return pat.replace(/\{n\}/g, String(need));
+  return `${need} ref`;
 }
 
 function renderThemes(){
   const grid = $("themeGrid");
+  if (!grid) return;
 
   const total = THEMES.length;
   const unlocked = unlockedThemesCount();
@@ -2061,13 +2084,7 @@ function renderThemes(){
   const curThemes = Math.min(unlocked, total);
   const curWps = Math.min(unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS), WALLPAPERS.length);
 
-  const wpEl = $("wpUnlocked");
-  if (wpEl) wpEl.textContent = `${curWps}/${WALLPAPERS.length}`;
-  const wpVal = $("wpUnlockedVal");
-  if (wpVal) wpVal.textContent = `${curWps}/${WALLPAPERS.length}`;
-  try{ setMeter("wpUnlockedVal", "wpUnlockedFill", curWps, WALLPAPERS.length); }catch{}
-
-  if (!grid) return;
+  syncThemesUnlockMeters(curThemes, total, curWps, WALLPAPERS.length);
 
   const items = THEMES.map((th, idx)=>({ th, idx }));
   chunkedRender(grid, items, ({ th, idx })=>{
@@ -2127,12 +2144,12 @@ function renderExtThemes(){
 
   const total = EXT_THEMES.length;
   const unlocked = unlockedCountByRefs(total, FREE_VISIBLE_EXT_THEMES);
-  const chosen = localStorage.getItem("gmx_ext_theme_v2") || localStorage.getItem("gmx_ext_theme") || "classic";
+  const chosen = localStorage.getItem("gmx_ext_theme") || "classic";
 
   const el = $("extThemesUnlocked");
-  if (el) el.textContent = `${Math.min(unlocked,total)}/${total}`;
+  if (el) el.textContent = formatUnlockMeter(Math.min(unlocked, total), total);
   const wEl = $("extWpUnlocked");
-  if (wEl) wEl.textContent = `${Math.min(unlockedCountByRefs(EXT_WALLPAPERS.length, FREE_VISIBLE_EXT_WALLPAPERS), EXT_WALLPAPERS.length)}/${EXT_WALLPAPERS.length}`;
+  if (wEl) wEl.textContent = formatUnlockMeter(Math.min(unlockedCountByRefs(EXT_WALLPAPERS.length, FREE_VISIBLE_EXT_WALLPAPERS), EXT_WALLPAPERS.length), EXT_WALLPAPERS.length);
 
   const items = EXT_THEMES.map((th, idx)=>({ th, idx }));
   chunkedRender(grid, items, ({ th, idx })=>{
@@ -2183,7 +2200,7 @@ function renderExtThemes(){
   }, { key: "extThemeGrid", chunk: 12 });
 
   const chosenName = EXT_THEMES.find(x=>x.id===chosen)?.name || chosen;
-  st.innerHTML = (t("ext_theme_status_selected_name_html") || `<span class="ok">Selected.</span> {name}.`).replace("{name}", escapeHtml(chosenName));
+  st.innerHTML = `<span class="ok">Selected.</span> ${escapeHtml(chosenName)}.`;
 }
 
 function renderExtWallpapers(){
@@ -2211,7 +2228,7 @@ function renderExtWallpapers(){
   const fallbackGlobal = selectedTarget === "all" ? "" : getExtWallpaperForView("all");
   const chosen = chosenDirect || fallbackGlobal || "";
   const wEl = $("extWpUnlocked");
-  if (wEl) wEl.textContent = `${Math.min(unlocked, EXT_WALLPAPERS.length)}/${EXT_WALLPAPERS.length}`;
+  if (wEl) wEl.textContent = formatUnlockMeter(Math.min(unlocked, total), total);
 
   const items = allExtWps.map((wp, idx)=>({ wp, idx }));
   chunkedRender(grid, items, ({ wp, idx })=>{
@@ -2222,26 +2239,33 @@ function renderExtWallpapers(){
     card.dataset.tier = wp.tier || (idx < FREE_VISIBLE_EXT_WALLPAPERS ? "free" : "premium");
     card.className = "wpCard" + (wp.id === chosen ? " active" : "") + (!isUnlocked ? " mystery" : "");
 
-    const fullUrl = extWallpaperFullUrl(wp.id);
     const thumb = document.createElement("div");
     thumb.className = "wpThumb";
-    if (fullUrl){
-      const im = document.createElement("img");
-      im.alt = "";
-      im.loading = "lazy";
-      im.decoding = "async";
-      im.src = fullUrl;
-      thumb.appendChild(im);
+    const thumbUrl = extWallpaperThumbUrl(wp.id);
+    const fullUrl = extWallpaperFullUrl(wp.id);
+    if (thumbUrl){
+      thumb.setAttribute('data-bg', thumbUrl);
+      observeLazyBg(thumb);
     }
     if (isUnlocked && fullUrl){
       card.addEventListener('pointerenter', ()=>{ try{ prefetchImage(fullUrl); }catch{} }, { passive:true });
     }
+
+    const name = document.createElement("div");
+    name.className = "wpName";
+    name.textContent = wp.name || wp.id;
+
+    const meta = document.createElement("div");
+    meta.className = "wpMeta";
+    meta.textContent = (wp.tier === "custom") ? "Custom" : (wp.tier || "");
 
     const tag = document.createElement("div");
     tag.className = "wpTag";
     tag.textContent = (wp.tier === "custom") ? "CUSTOM" : unlockTagText(idx, isUnlocked, FREE_VISIBLE_EXT_WALLPAPERS);
 
     card.appendChild(thumb);
+    card.appendChild(name);
+    card.appendChild(meta);
     card.appendChild(tag);
 
     if (!isUnlocked){
@@ -2265,20 +2289,14 @@ function renderExtWallpapers(){
   }, { key: "extWpGrid", chunk: 12 });
 
   if (!chosen){
-    st.innerHTML = (t("ext_wp_status_none_html") || `<span class="muted">None.</span> Pick a wallpaper for <b>{target}</b>.`)
-      .replace("{target}", escapeHtml(extWallpaperLabel(selectedTarget)));
+    st.innerHTML = `<span class="muted">None.</span> Pick a wallpaper for <b>${escapeHtml(extWallpaperLabel(selectedTarget))}</b>.`;
     return;
   }
   const chosenName = EXT_WALLPAPERS.find(x=>x.id===chosen)?.name || effectiveExtCustom.find(x=>x.id===chosen)?.name || chosen;
   if (chosenDirect){
-    st.innerHTML = (t("ext_wp_status_selected_html") || `<span class="ok">Selected.</span> {name} for <b>{target}</b>.`)
-      .replace("{name}", escapeHtml(chosenName))
-      .replace("{target}", escapeHtml(extWallpaperLabel(selectedTarget)));
+    st.innerHTML = `<span class="ok">Selected.</span> ${escapeHtml(chosenName)} for <b>${escapeHtml(extWallpaperLabel(selectedTarget))}</b>.`;
   } else {
-    st.innerHTML = (t("ext_wp_status_global_html") || `<span class="ok">Using global.</span> {name} from <b>{global}</b> is currently filling <b>{target}</b>.`)
-      .replace("{name}", escapeHtml(chosenName))
-      .replace("{global}", escapeHtml(extWallpaperLabel("all")))
-      .replace("{target}", escapeHtml(extWallpaperLabel(selectedTarget)));
+    st.innerHTML = `<span class="ok">Using global.</span> ${escapeHtml(chosenName)} from <b>${escapeHtml(extWallpaperLabel("all"))}</b> is currently filling <b>${escapeHtml(extWallpaperLabel(selectedTarget))}</b>.`;
   }
 }
 
@@ -2300,21 +2318,8 @@ function initExtWallpaperControls(){
   const clearBtn = $("extWpClear");
   const addBtn = $("extWpAddCustom");
   const addFile = $("extWpAddFile");
-  if (sel){
-    syncExtWallpaperTargetUI(sel, "all");
-    if (sel.tagName === "SELECT"){
-      sel.addEventListener("change", ()=>{
-        const target = syncExtWallpaperTargetUI(sel, sel.value || "all");
-        try{ localStorage.setItem(LS_EXT_WP_TARGET, target); }catch(_e){}
-        renderExtWallpapers();
-      });
-    }
-  }
   if (addBtn && addFile){
-    addBtn.onclick = ()=>{
-      if (!isPro()){ toast("warn", (t("custom_upload_pro_only")||"Custom wallpaper upload requires Pro subscription.")); return; }
-      if (requireConnected("Extension themes")) addFile.click();
-    };
+    addBtn.onclick = ()=>{ if (requireConnected("Extension themes")) addFile.click(); };
   }
   if (addFile){
     addFile.addEventListener("change", async ()=>{
@@ -2323,40 +2328,25 @@ function initExtWallpaperControls(){
         const f = addFile.files && addFile.files[0];
         if (!f) return;
         const data = await compressImageToJpegDataURL(f, { profile: "ext" });
-        const tok = String(localStorage.getItem(LS_TOKEN) || "").trim();
-        let uploadedId = null;
-        if (tok) {
-          try {
-            const r = await fetch("/api/wallpapers/custom", {
-              method: "POST",
-              headers: { "Content-Type": "application/json", "Authorization": "Bearer " + tok },
-              body: JSON.stringify({ image: data, target: "ext" })
-            });
-            const j = await r.json();
-            if (j?.ok && j?.id) { uploadedId = j.id; }
-          } catch (_e) {}
-        }
-        if (uploadedId) {
-          CUSTOM_WALLPAPERS_LOADED = false;
-          await loadCustomWallpapers();
-          const target = ($("extWpTarget")?.value || "all");
-          setExtWallpaperForView(normalizeExtWallpaperView(target), uploadedId);
-          extSyncNow("ext_wallpaper");
-          try{ renderExtWallpapers(); }catch{}
-          toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved and synced."));
-        } else {
-          localStorage.setItem(LS_EXT_CUSTOM_BG_GLOBAL, data);
-          const target = ($("extWpTarget")?.value || "all");
-          setExtWallpaperForView(normalizeExtWallpaperView(target), CUSTOM_UPLOAD_ID);
-          extSyncNow("ext_wallpaper");
-          try{ renderExtWallpapers(); }catch{}
-          toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved (local)."));
-        }
+        extLsSet(LS_EXT_CUSTOM_BG_GLOBAL, data);
+        const target = ($("extWpTarget")?.value || "all");
+        setExtWallpaperForView(normalizeExtWallpaperView(target), CUSTOM_UPLOAD_ID);
+        extSyncNow("ext_wallpaper");
+        try{ renderExtWallpapers(); }catch{}
+        toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved."));
       }catch(e){
         toast("warn", (t("err_custom_wp_save")||"Could not save image."));
       }finally{
         addFile.value = "";
       }
+    });
+  }
+  if (sel){
+    syncExtWallpaperTargetUI(sel);
+    sel.addEventListener("change", ()=>{
+      const target = syncExtWallpaperTargetUI(sel, sel.value || "all");
+      try{ localStorage.setItem(LS_EXT_WP_TARGET, target); }catch(_e){}
+      renderExtWallpapers();
     });
   }
   if (clearBtn){
@@ -2370,6 +2360,7 @@ function initExtWallpaperControls(){
     });
   }
 }
+
 
 
 
@@ -2445,7 +2436,7 @@ const $ = (id) => document.getElementById(id);
   const dHide = $("degradedHide");
   if (dHide) dHide.onclick = ()=>{ DEGRADED_HIDDEN = true; $("degradedBar")?.classList.add("hidden"); };
 
-  window.addEventListener("offline", ()=>setDegraded(true, (t("ui_offline_browser") || "Browser reports offline. Check your connection.")));
+  window.addEventListener("offline", ()=>setDegraded(true, "Browser reports offline. Check your connection."));
 
   
   let INIT_DONE = false;
@@ -2476,7 +2467,7 @@ const $ = (id) => document.getElementById(id);
     try{
       const msg = (e?.message || "Unexpected error");
       const net = String(msg).includes("Failed to fetch") || String(msg).includes("NetworkError") || String(msg).includes("request_failed") || String(msg).includes("timeout");
-      if (net){ setDegraded(true, (t("ui_degraded_network") || "Network/API error. You can still edit lists locally.")); return; }
+      if (net){ setDegraded(true, "Network/API error. You can still edit lists locally."); return; }
       toast("bad", `<b>Error:</b> ${esc(msg)} <span class="muted small">(try Reload)</span>`);
       if (!INIT_DONE) showFatal(msg);
     }catch{}
@@ -2486,7 +2477,7 @@ const $ = (id) => document.getElementById(id);
     try{
       const msg = (e?.reason && (e.reason.message || String(e.reason))) || "Unhandled promise rejection";
       const net = String(msg).includes("Failed to fetch") || String(msg).includes("NetworkError") || String(msg).includes("request_failed") || String(msg).includes("timeout") || String(msg).includes("not_connected");
-      if (net){ setDegraded(true, (t("ui_degraded_network") || "Network/API error. You can still edit lists locally.")); return; }
+      if (net){ setDegraded(true, "Network/API error. You can still edit lists locally."); return; }
       toast("bad", `<b>Error:</b> ${esc(msg)} <span class="muted small">(try Reload)</span>`);
       if (!INIT_DONE) showFatal(msg);
     }catch{}
@@ -2508,7 +2499,7 @@ const $ = (id) => document.getElementById(id);
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
     if (msgEl){
       if (on){
-        msgEl.innerHTML = `<span class="spinner"></span> <span class="muted">${escapeHtml(label||(t("ui_working")||"Working..."))}</span>`;
+        msgEl.innerHTML = `<span class="spinner"></span> <span class="muted">${escapeHtml(label||"Working...")}</span>`;
       } else {
         // keep whatever message was set by the action; do not overwrite
       }
@@ -2517,11 +2508,17 @@ const $ = (id) => document.getElementById(id);
 
 
     function setBg(tab){
-    const theme = TAB_THEME[tab] || TAB_THEME.home;
-    const bg = (typeof theme === "function") ? theme() : theme;
-    document.documentElement.style.setProperty("--bg", bg);
-    applyWallpaper(tab);
-    applyUserBg(tab);
+    const safeTab = String(tab || "home");
+    const hasWall = document.body.classList.contains("hasWallBg");
+    if (hasWall){
+      document.documentElement.style.setProperty("--bg", "linear-gradient(180deg, rgba(5,7,15,.12) 0%, rgba(5,7,15,.32) 100%)");
+    } else {
+      const theme = TAB_THEME[safeTab] || TAB_THEME.home;
+      const bg = (typeof theme === "function") ? theme() : theme;
+      document.documentElement.style.setProperty("--bg", bg);
+    }
+    applyWallpaper(safeTab);
+    applyUserBg(safeTab);
   }
 
   function ensurePredictionTabVisible(){
@@ -2534,8 +2531,8 @@ const $ = (id) => document.getElementById(id);
         btn.className = "tab";
         btn.id = "t_prediction";
         btn.dataset.tab = "prediction";
-        btn.textContent = (t("ui_prediction_title") || "Prediction Market");
-        const before = document.getElementById("t_admin");
+        btn.textContent = "Prediction Market";
+        const before = document.getElementById("t_wallet");
         if (before && before.parentNode === tabs) tabs.insertBefore(btn, before);
         else tabs.appendChild(btn);
       }
@@ -2545,7 +2542,7 @@ const $ = (id) => document.getElementById(id);
         pane = document.createElement("div");
         pane.id = "tab-prediction";
         pane.className = "hidden";
-        pane.innerHTML = `<div class="card"><div class="title">${escapeHtml(t("ui_prediction_title") || "Prediction Market")}</div><div class="note">${escapeHtml(t("ui_coming_soon") || "Coming soon.")}</div></div>`;
+        pane.innerHTML = `<div class="card"><div class="title">Prediction Market</div><div class="note">Coming soon.</div></div>`;
         tabs.insertAdjacentElement("afterend", pane);
       }
       pane.classList.add("hidden");
@@ -2585,7 +2582,6 @@ const $ = (id) => document.getElementById(id);
     }
     if (name === "admin"){
       try{ syncAdminUi(); }catch(e){}
-      try{ if (isAdminSignedIn()) adminLoadStats(); }catch(e){}
     }
     if (name === "wallet"){
       try{ loadPlans(); }catch(e){}
@@ -2997,6 +2993,30 @@ function bindHelpModal(){
   });
 }
 
+function applyRefCountEligible(eligible, { renderUnlockUi = false } = {}){
+    const num = Math.max(0, Number(eligible || 0) || 0);
+    const changed = REF_COUNT !== num;
+    REF_COUNT = num;
+    try{ localStorage.setItem(LS_REF_ELIGIBLE_CACHE, String(num)); }catch(_e){}
+    if ($("refCountPill")) $("refCountPill").textContent = String(num);
+    if ($("refCountRight")) $("refCountRight").textContent = String(num);
+    if ($("refCountInline")) $("refCountInline").textContent = String(num);
+    if ($("refEligibleInline")) $("refEligibleInline").textContent = String(num);
+    if (!renderUnlockUi || !changed) return changed;
+    try{ renderThemes(); }catch(_e){}
+    try{ renderExtThemes(); }catch(_e){}
+    try{ fillStyles(); }catch(_e){}
+    try{ fillPacks(); }catch(_e){}
+    return changed;
+  }
+
+  function usageCosmeticSignature(j){
+    const eligible = Number(j?.limits?.referralUnlocks?.eligible ?? 0) || 0;
+    const tier = String(j?.sub?.tier || j?.sub?.plan || "");
+    const active = j?.sub?.active ? "1" : "0";
+    return `${active}|${tier}|${eligible}|${SAVE_CAP_FREE}`;
+  }
+
 async function refreshUsage(){
     if (!getToken()){ return; }
     const h = getHandle();
@@ -3017,6 +3037,8 @@ async function refreshUsage(){
 
       SUB = j.sub || null;
       renderWalletStatus(j.sub);
+
+      applyRefCountEligible(Number(j?.limits?.referralUnlocks?.eligible ?? 0) || 0, { renderUnlockUi: true });
 
       const gmCapUI = normLimitForUI(gm.limit);
       const gnCapUI = normLimitForUI(gn.limit);
@@ -3048,25 +3070,23 @@ async function refreshUsage(){
       const ra = $("kResetAt");
       if (ra) ra.textContent = j.resetAt || "-";
 
+      const cosmeticSig = usageCosmeticSignature(j);
+      if (cosmeticSig !== LAST_USAGE_COSMETIC_SIG){
+        LAST_USAGE_COSMETIC_SIG = cosmeticSig;
+        fillStyles();
+        fillPacks();
+        try{ window.__syncProControls && window.__syncProControls(); }catch(e){}
+        applyUserBg();
+        initWallpapers();
+        renderThemes();
+        initExtWallpaperControls();
+        normalizeStoredExtWallpaperSelections();
+        renderExtThemes();
+        renderExtWallpapers();
+        renderExtCustomBgUI();
+        setExtView(normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW)||"theme"), { force:true, silent:true });
+      }
 
-      // refresh UI that depends on subscription / limits
-      fillStyles();
-      fillPacks();
-      try{ window.__syncProControls && window.__syncProControls(); }catch(e){}
-
-      applyUserBg();
-      initWallpapers();
-
-      // themes + view
-      renderThemes();
-      initExtWallpaperControls();
-      normalizeStoredExtWallpaperSelections();
-      renderExtThemes();
-      renderExtWallpapers();
-      renderExtCustomBgUI();
-      setExtView(normalizeExtViewValue(localStorage.getItem(LS_EXT_VIEW)||"theme"), { force:true, silent:true });
-
-      // also refresh referral count for unlocks
       try{ scheduleRefStatsRefresh(120); }catch(e){}
 
       try{ if (!$("help_modal")?.classList.contains("hidden")) renderHelpModal(); }catch(_e){}
@@ -3085,6 +3105,7 @@ async function refreshUsage(){
     if (ta) ta.classList.toggle("hidden", !isAdmin);
     if (!isAdmin) document.getElementById("tab-admin")?.classList.add("hidden");
   }
+
 
 
   // ----- Lists (single saved bank per kind; legacy global/lang banks migrate once) -----
@@ -3128,12 +3149,14 @@ async function refreshUsage(){
     }
 
     const merged = [];
+    const mergeCap = 5000;
     for (const key of allLegacyKeysForKind(kind)){
-      merged.push(...readKey(key));
+      if (merged.length >= mergeCap) break;
+      merged.push(...readKey(key).slice(0, mergeCap - merged.length));
     }
-    merged.push(...bankNow);
+    if (merged.length < mergeCap) merged.push(...bankNow.slice(0, mergeCap - merged.length));
 
-    const finalBank = dedupeLines(merged);
+    const finalBank = dedupeLines(merged).slice(0, mergeCap);
     writeKey(bankKey, finalBank);
 
     for (const key of allLegacyKeysForKind(kind)){
@@ -3337,31 +3360,21 @@ async function doBestServer(kind){
   const packEl  = kind==="gm" ? $("gmPack") : $("gnPack");
   const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
 
-  const mode = modeEl ? modeEl.value : "mid";
-  const lang = currentLang(kind);
-  let style = styleEl ? styleEl.value : "classic";
-  const packId = packEl ? (packEl.value || "classic") : "classic";
-  const packIdx = PACKS.findIndex(p=>p.id===packId);
-  const packLocked = (!isPro() && packIdx >= unlockedPacksCount());
-  const pack = PACKS.find(p=>p.id===packId) || PACKS[0];
-  if (!packLocked && pack && pack.style) style = pack.style;
-
-  const strength = getAntiStrength(kind);
-  const antiN = antiWindow(strength);
+  const { mode, lang, style, antiN } = readGenParams(kind);
   const keyActive = activeKey(kind);
 
-  setBusy(kind, true, (t("gen_picking_best") || "Picking the best reply..."));
+  setBusy(kind, true, "Picking the best reply...");
   try{
     const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}&count=5`, "GET", null, { timeoutMs: 30000 });
     const candidates = dedupeLines((bulk && bulk.list) ? bulk.list : []).map(x=>String(x||"").trim()).filter(Boolean);
     if (!candidates.length){
-      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml(t("gen_no_fresh_candidates") || "No fresh candidates returned")}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml("No fresh candidates returned")}</span>`;
       return;
     }
 
     const best = String(pickBestLine(kind, candidates) || "").trim();
     if (!best){
-      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml(t("gen_best_pick_failed") || "Could not choose the best reply")}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml("Could not choose the best reply")}</span>`;
       return;
     }
 
@@ -3389,8 +3402,8 @@ async function doBestServer(kind){
     renderList(kind);
     if (msgEl){
       const head = already
-        ? (t("gen_best_head_already") || "Best already saved")
-        : (saved ? (t("gen_best_head_saved") || "Best saved") : (t("gen_best_head_copied") || "Best copied"));
+        ? "Best already saved"
+        : (saved ? "Best saved" : "Best copied");
       msgEl.innerHTML = `<span class="ok">${escapeHtml(head)}</span> <span class="muted small">${escapeHtml(best)}</span>`;
     }
     try{ await refreshUsage(); }catch(_e){}
@@ -3455,7 +3468,7 @@ function replaceRandomSavedLine(kind, newLine){
     if (capEl) capEl.textContent = isPro() ? 'unlimited' : String(SAVE_CAP_FREE);
     const brEl = kind==='gm' ? $('gmSavedBreakdown') : $('gnSavedBreakdown');
     if (brEl){
-      brEl.textContent = (t("bank_saved_breakdown") || "Saved bank: {n}").replace("{n}", String(totalSaved(kind)));
+      brEl.textContent = 'Saved bank: ' + totalSaved(kind);
     }
 
     try{
@@ -3466,7 +3479,7 @@ function replaceRandomSavedLine(kind, newLine){
       const fillId = (kind==="gm") ? "gmSavedFill" : "gnSavedFill";
       const v = $(valId);
       const f = $(fillId);
-      if (v) v.textContent = isPro() ? `${used}/${t("ui_saved_unlimited") || "unlimited"}` : `${used}/${cap}`;
+      if (v) v.textContent = isPro() ? `${used}/unlimited` : `${used}/${cap}`;
       if (f) f.style.width = isPro() ? "100%" : (Math.min(100, Math.round((used/cap)*100)) + "%");
 
       if (!$("help_modal")?.classList.contains("hidden")) renderHelpModal();
@@ -3532,18 +3545,22 @@ function replaceRandomSavedLine(kind, newLine){
   function friendlyUiErrorMessage(msg, opts){
     const m = String(msg || "").trim();
     const scope = String(opts && opts.scope || "").trim();
-    if (!m) return scope === "connect" ? (t("ui_err_connect_failed") || "Connection failed. Try again.") : (t("ui_err_request_failed") || "Request failed. Try again.");
-    if (m === "timeout") return scope === "generate" ? (t("ui_err_gen_timeout") || "Generation timed out. Try again.") : (t("ui_err_network_timeout") || "Network timeout. Try again.");
-    if (m === "unauthorized") return t("ui_err_unauthorized_reconnect") || "Unauthorized. Re-connect your handle.";
+    if (!m) return scope === "connect" ? "Connection failed. Try again." : "Request failed. Try again.";
+    if (m === "timeout") return scope === "generate" ? "Generation timed out. Try again." : "Network timeout. Try again.";
+    if (m === "unauthorized") return "Unauthorized. Re-connect your handle.";
     if (m === "request_failed"){
-      if (scope === "generate") return t("ui_err_gen_failed") || "Generation request failed. Check the backend and try again.";
-      if (scope === "connect") return t("ui_err_connect_backend") || "Connection failed. Check the backend/runtime and try again.";
-      return t("ui_err_request_backend") || "Request failed. Check the backend/runtime and try again.";
+      if (scope === "generate") return "Generation request failed. Check the backend and try again.";
+      if (scope === "connect") return "Connection failed. Check the backend/runtime and try again.";
+      return "Request failed. Check the backend/runtime and try again.";
     }
-    if (m === "not_connected") return t("connectFirst") || "Connect first.";
-    if (m === "rpc_unavailable") return t("ui_err_rpc_unavailable") || "Solana RPC is unavailable right now. Try again in a moment.";
-    if (m === "wallet_bind_required") return t("ui_err_wallet_bind") || "Wallet binding is required before verify. Sign the wallet message and try again.";
-    if (isNetworkishErrorMessage(m)) return t("ui_err_network_api") || "Network/API error. Try again.";
+    if (m === "not_connected") return "Connect first.";
+    if (m === "not_found" || m.includes("not_found")) {
+      if (scope === "generate") return "Generation API is unavailable. Hard-refresh the page; if it persists, the server needs redeploying.";
+      return "API route not found. Hard-refresh and try again.";
+    }
+    if (m === "rpc_unavailable") return "Solana RPC is unavailable right now. Try again in a moment.";
+    if (m === "wallet_bind_required") return "Wallet binding is required before verify. Sign the wallet message and try again.";
+    if (isNetworkishErrorMessage(m)) return "Network/API error. Try again.";
     return m;
   }
 
@@ -3564,7 +3581,7 @@ countEl.textContent = lines.length;
     container.innerHTML = "";
 
     if (!getHandle()){
-      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml(t("connectFirst") || "Connect first.")}</span>`;
+      if (msgEl) msgEl.innerHTML = '<span class="warn">Connect first.</span>';
       return;
     }
 
@@ -3575,20 +3592,19 @@ countEl.textContent = lines.length;
       : lines.map((val, idx)=>({ idx, val }));
 
     if (!lines.length){
-      if (msgEl) msgEl.textContent = (t("bank_empty") || "Saved bank is empty.");
+      if (msgEl) msgEl.textContent = "Saved bank is empty.";
       return;
     }
 
     if (q && msgEl){
-      const bf = (t("bank_filtered") || "Filtered: showing {cur} / {total}");
-      msgEl.innerHTML = `<span class="muted">${bf.replace("{cur}", String(items.length)).replace("{total}", String(lines.length))}</span>`;
+      msgEl.innerHTML = `<span class="muted">Filtered: showing <b>${items.length}</b> / ${lines.length}</span>`;
     }
 
     if (q && items.length === 0){
       const row = document.createElement("div");
       row.className = "muted";
       row.style.padding = "8px 2px";
-      row.textContent = (t("bank_no_matches") || "No matches.");
+      row.textContent = "No matches.";
       container.appendChild(row);
       return;
     }
@@ -3695,7 +3711,7 @@ countEl.textContent = lines.length;
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
     const rem = remainingSlots(kind);
     if (rem <= 0){
-      msgEl.innerHTML = `<span class="warn">${escapeHtml((t("bank_save_limit_edit") || "Free save limit reached ({cap} lines). You can still edit existing lines. Upgrade for more.").replace("{cap}", String(saveCap())))}</span>`;
+      msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()} lines). You can still edit existing lines. Upgrade for more.</span>`;
       try{ openLimitModal({ reason:"save_cap", kind }); }catch{}
       trackEvent("limit_hit", { kind, reason:"save_cap" });
       return;
@@ -3705,7 +3721,7 @@ countEl.textContent = lines.length;
       input.focus();
       try{ input.scrollIntoView({ block:"center", behavior:"smooth" }); }catch{}
     }
-    msgEl.innerHTML = `<span class="muted">${escapeHtml(t("bank_hint_type_add") || "Type your line below and click Add.")}</span>`;
+    msgEl.innerHTML = `<span class="muted">Type your line below and click Add.</span>`;
   }
 
 
@@ -3714,18 +3730,18 @@ countEl.textContent = lines.length;
     try{ if (ABORT[kind]) ABORT[kind].abort(); }catch{}
     const key = activeKey(kind);
     const cur = readKey(key);
-    if (cur.length && !confirm(t("bank_confirm_clear") || "Clear this saved bank? This cannot be undone.")) return;
+    if (cur.length && !confirm("Clear this saved bank? This cannot be undone.")) return;
     writeKey(key, []);
     renderList(kind);
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
-    if (msgEl) msgEl.innerHTML = `<span class="ok">${escapeHtml(t("bank_cleared_ok") || "Saved bank cleared.")}</span>`;
+    if (msgEl) msgEl.innerHTML = `<span class="ok">Saved bank cleared.</span>`;
   }
 
   function clearAll(kind){
     if (!requireConnected(kind==="gm"?"GM":"GN")) return;
     try{ if (ABORT[kind]) ABORT[kind].abort(); }catch{}
     const total = totalSaved(kind);
-    if (total && !confirm(t("bank_confirm_clear_all") || "Clear all saved lines in this bank? This cannot be undone.")) return;
+    if (total && !confirm("Clear all saved lines in this bank? This cannot be undone.")) return;
     for (const k of Array.from(new Set([...allLegacyKeysForKind(kind), getBankKey(kind)]))) localStorage.removeItem(k);
     setLangIndex(kind, []);
     writeKey(getBankKey(kind), []);
@@ -3835,7 +3851,7 @@ countEl.textContent = lines.length;
 
     const v = input.value.trim();
     if (!v){
-      if (msgEl) msgEl.innerHTML = `<span class="muted">${escapeHtml(t("bank_type_first") || "Type something first.")}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="muted">Type something first.</span>`;
       return;
     }
 
@@ -3845,7 +3861,7 @@ countEl.textContent = lines.length;
 
     const rem = remainingSlots(kind);
     if (rem <= 0){
-      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((t("bank_save_limit_edit") || "Free save limit reached ({cap} lines). You can still edit existing lines. Upgrade for more.").replace("{cap}", String(saveCap())))}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()} lines). You can still edit existing lines. Upgrade for more.</span>`;
       return;
     }
 
@@ -3853,7 +3869,7 @@ countEl.textContent = lines.length;
     const cur = readKey(key);
     const exists = cur.some(s => String(s||"").trim().toLowerCase() === v.toLowerCase());
     if (exists){
-      if (msgEl) msgEl.innerHTML = `<span class="muted">${escapeHtml(t("bank_dup_ignore") || "Already saved (duplicate ignored).")}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="muted">Already saved (duplicate ignored).</span>`;
       return;
     }
     cur.push(v);
@@ -3863,7 +3879,7 @@ countEl.textContent = lines.length;
     clearDraft(kind);
     renderList(kind);
 
-    if (msgEl) msgEl.innerHTML = `<span class="ok">${escapeHtml(t("bank_added_one") || "Added 1")}</span>`;
+    if (msgEl) msgEl.innerHTML = `<span class="ok">Added 1</span>`;
   }
 
 
@@ -3880,7 +3896,7 @@ countEl.textContent = lines.length;
 
     const rem = remainingSlots(kind);
     if (rem <= 0){
-      if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((t("bank_save_limit_edit") || "Free save limit reached ({cap} lines). You can still edit existing lines. Upgrade for more.").replace("{cap}", String(saveCap())))}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()}). You can still edit existing lines. Upgrade for more.</span>`;
       return;
     }
 
@@ -3901,17 +3917,17 @@ countEl.textContent = lines.length;
 
     if (msgEl){
       if (pasted.length < pastedAll.length){
-        msgEl.innerHTML = `<span class="warn">${escapeHtml((t("bank_added_partial") || "Added {added}/{total} (cap reached)").replace("{added}", String(added)).replace("{total}", String(pastedAll.length)))}</span>`;
+        msgEl.innerHTML = `<span class="warn">Added ${added}/${pastedAll.length} (cap reached)</span>`;
       } else if (skippedDup > 0){
-        const sk = (t("bank_skipped_dups") || "(skipped {n} duplicates)").replace("{n}", String(skippedDup));
-        msgEl.innerHTML = `<span class="ok">${escapeHtml((t("bank_added_count") || "Added {n}").replace("{n}", String(added)))}</span> <span class="muted small">${escapeHtml(sk)}</span>`;
+        msgEl.innerHTML = `<span class="ok">Added ${added}</span> <span class="muted small">(skipped ${skippedDup} duplicates)</span>`;
       } else {
-        msgEl.innerHTML = `<span class="ok">${escapeHtml((t("bank_added_count") || "Added {n}").replace("{n}", String(added)))}</span>`;
+        msgEl.innerHTML = `<span class="ok">Added ${added}</span>`;
       }
     }
   }
   // Keep existing order, append only truly-new unique lines.
   // Important: duplicates MUST NOT be moved to the top.
+
   function mergeAppendUnique(existing, newLines){
     const out = (existing||[]).map(s=>String(s||"").trim()).filter(Boolean);
     const seen = new Set(out.map(s=>s.toLowerCase()));
@@ -3927,6 +3943,14 @@ countEl.textContent = lines.length;
   }
 async function generate(kind, count){
     if (!requireConnected(kind==="gm"?"GM":"GN")) return;
+    const msgElEarly = kind==="gm" ? $("gmMsg") : $("gnMsg");
+    if (!getToken() && getHandle()){
+      try{ await initSession(true); }catch(_e){}
+    }
+    if (!getToken()){
+      if (msgElEarly) msgElEarly.innerHTML = `<span class="warn">${escapeHtml(siteTr("gen_session_expired", "Session expired — reconnect your @handle, then retry."))}</span>`;
+      return;
+    }
     const h = getHandle();
 
     const modeEl  = kind==="gm" ? $("gmMode") : $("gnMode");
@@ -3937,21 +3961,23 @@ async function generate(kind, count){
     const lang = currentLang(kind);
 
     let style = styleEl ? styleEl.value : "classic";
+    const packs = (typeof packsForKind === "function") ? packsForKind(kind) : (PACKS || []);
     const packId = packEl ? (packEl.value || "classic") : "classic";
-    const packIdx = PACKS.findIndex(p=>p.id===packId);
-    const packLocked = (!isPro() && packIdx >= unlockedPacksCount());
-    const pack = PACKS.find(p=>p.id===packId) || PACKS[0];
+    const packIdx = packs.findIndex(p=>p.id===packId);
+    const packLocked = (!isPro() && packIdx >= unlockedPacksCountFor(kind));
+    const pack = packs.find(p=>p.id===packId) || packs[0] || null;
 
     const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
 
     const strength = getAntiStrength(kind);
-    const antiN = 0;
+    const antiN = antiWindow(strength);
     const autoClean = (count <= 1) ? getCleanFillEnabled(kind) : false;
 
     if ((kind==="gm" ? gmView : gnView) === "lang") ensureIndexed(kind, lang);
 
-    // Pack influences the effective style for generation (without locking manual style).
-    if (!packLocked && pack && pack.style) style = pack.style;
+    // Reply tone + Size use the live dropdowns (pack preset applies via UI / pack change).
+    if (!styleEl) style = pack && pack.style ? pack.style : style;
+    if (!modeEl && pack && pack.mode) mode = pack.mode;
 
     const keyActive = activeKey(kind);
     const keyGlobal = getGlobalKey(kind);
@@ -3962,18 +3988,19 @@ async function generate(kind, count){
     const effCount = (remSlots === Infinity) ? count : Math.max(0, Math.min(count, remSlots));
     
 if (effCount <= 0){
-  if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((t("bank_save_limit_replace") || "Free save limit reached ({cap}). You can still copy lines, but no saved line will be replaced automatically.").replace("{cap}", String(saveCap())))}</span>`;
+  if (msgEl) msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()}). You can still copy lines, but no saved line will be replaced automatically.</span>`;
   postEvent('limit_hit', { where:'save_cap', kind });
   renderList(kind);
   return;
 }
 
       if (INFLIGHT[kind]){
-      if (msgEl) msgEl.innerHTML = `<span class="muted">${escapeHtml(t("ui_working") || "Working...")}</span>`;
+      if (msgEl) msgEl.innerHTML = '<span class="muted">Working...</span>';
       return;
     }
     INFLIGHT[kind] = true;
-    setBusy(kind, true);
+    try{ window.__i18nPause = true; }catch{}
+    setBusy(kind, true, count > 1 ? `Adding ${effCount}…` : "Working...");
     try{ if (ABORT[kind]) ABORT[kind].abort(); }catch{}
     const ctrl = new AbortController();
     ABORT[kind] = ctrl;
@@ -4000,6 +4027,11 @@ if (effCount <= 0){
           reply = j.reply || "";
         }
 
+        if (!String(reply || "").trim()){
+          if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml(t("gen_empty_reply") || "Server returned an empty line. Try another tone or preset.")}</span>`;
+          return;
+        }
+
         const cur = readKey(keyActive);
         const r = String(reply||"").trim();
         const exactKey = r.toLowerCase();
@@ -4014,11 +4046,11 @@ if (effCount <= 0){
         if (already){
           renderList(kind);
           didRender = true;
-          if (msgEl) msgEl.innerHTML = `<span class="muted">${escapeHtml(t("bank_dup_ignored_short") || "Duplicate ignored.")}</span>`;
+          if (msgEl) msgEl.innerHTML = `<span class="muted">Duplicate ignored.</span>`;
           return;
         }
         if (remainingSlots(kind) <= 0){
-  if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml((t("bank_save_limit_replace") || "Free save limit reached ({cap}). You can still copy lines, but no saved line will be replaced automatically.").replace("{cap}", String(saveCap())))}</span>`;
+  if (msgEl) msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()} lines). You can still copy lines, but no saved line will be replaced automatically.</span>`;
   postEvent('limit_hit', { where:'save_cap', kind });
   renderList(kind);
   return;
@@ -4031,7 +4063,7 @@ if (effCount <= 0){
           renderList(kind);
           didRender = true;
         }
-        msgEl.innerHTML = `<span class="ok">${escapeHtml(t("bank_added_one") || "Added 1")}</span>`;
+        msgEl.innerHTML = `<span class="ok">Added 1</span>`;
         logEvent("gen_one", { kind, lang, style, pack: packId, view: (kind==="gm"?gmView:gnView) });
         try{ await refreshUsage(); }catch{}
       } else {
@@ -4053,15 +4085,16 @@ if (effCount <= 0){
           }
         };
 
-        const buffer = 24;
-        const genDeadline = Date.now() + 45000;
+        const buffer = 12;
+        const genDeadline = Date.now() + 22000;
         let attempts = 0;
-        while (accepted.length < effCount && attempts < 1){
+        while (accepted.length < effCount && attempts < 4){
           if (Date.now() > genDeadline) break;
           attempts++;
           const missing = effCount - accepted.length;
-          const reqCount = Math.min(140, missing + buffer);
-          const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=0&count=${reqCount}`, "GET", null, { signal: ctrl.signal, timeoutMs: 12000 });
+          const reqCount = Math.min(48, missing + buffer);
+          const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}&count=${reqCount}`, "GET", null, { signal: ctrl.signal, timeoutMs: 15000 })
+          await yieldToUiFrame();;
           takeLines(bulk.list || []);
           if (!Array.isArray(bulk.list) || bulk.list.length === 0) break;
         }
@@ -4110,25 +4143,14 @@ if (effCount <= 0){
 
         if (autoClean && cleanRes){
           if (cleanRes.finalCount >= cleanRes.targetCount){
-            const note = (t("bank_best_cleanup_note") || "(Best pass removed {removed}, refilled {refilled})")
-              .replace("{removed}", String(cleanRes.removed)).replace("{refilled}", String(cleanRes.refilled));
-            msgEl.innerHTML = `<span class="ok">${escapeHtml((t("bank_added_count") || "Added {n}").replace("{n}", String(added)))}</span> <span class="muted small">${escapeHtml(note)}</span>`;
+            msgEl.innerHTML = `<span class="ok">Added ${added}</span> <span class="muted small">(Best pass removed ${cleanRes.removed}, refilled ${cleanRes.refilled})</span>`;
           } else {
-            const w = (t("bank_best_cleanup_warn") || "Added {added}. Best pass removed {removed}, refilled {refilled}, final {final}/{target}. Try another tone or preset for a wider pool.")
-              .replace("{added}", String(added))
-              .replace("{removed}", String(cleanRes.removed))
-              .replace("{refilled}", String(cleanRes.refilled))
-              .replace("{final}", String(cleanRes.finalCount))
-              .replace("{target}", String(cleanRes.targetCount));
-            msgEl.innerHTML = `<span class="warn">${escapeHtml(w)}</span>`;
+            msgEl.innerHTML = `<span class="warn">Added ${added}. Best pass removed ${cleanRes.removed}, refilled ${cleanRes.refilled}, final ${cleanRes.finalCount}/${cleanRes.targetCount}. Try another tone or preset for a wider pool.</span>`;
           }
         } else if (added < effCount){
-          const nw = (t("bank_pool_narrow") || "Added {added}/{total}. Random fill stopped early because the pool got too narrow. Change tone or preset for a wider pull.")
-            .replace("{added}", String(added)).replace("{total}", String(effCount));
-          msgEl.innerHTML = `<span class="warn">${escapeHtml(nw)}</span>`;
+          msgEl.innerHTML = `<span class="warn">Added ${added}/${effCount}. Random fill stopped early because the pool got too narrow. Change tone or preset for a wider pull.</span>`;
         } else {
-          const hint = t("bank_run_best_hint") || "Run Best pass manually if you want cleanup/refill.";
-          msgEl.innerHTML = `<span class="ok">${escapeHtml((t("bank_added_count") || "Added {n}").replace("{n}", String(added)))}</span> <span class="muted small">${escapeHtml(hint)}</span>`;
+          msgEl.innerHTML = `<span class="ok">Added ${added}</span> <span class="muted small">Run Best pass manually if you want cleanup/refill.</span>`;
         }
         logEvent("gen_bulk", { kind, lang, style, pack: packId, count: effCount, view: (kind==="gm"?gmView:gnView), cleanFill: autoClean });
         try{ await refreshUsage(); }catch{}
@@ -4136,10 +4158,12 @@ if (effCount <= 0){
     } catch(e){
       const m = (e && e.message) ? e.message : "failed";
       const friendly = friendlyUiErrorMessage(m, { scope:"generate" });
-      msgEl.innerHTML = `<span class="bad">${escapeHtml(friendly)}</span>`;
+      if (msgEl) msgEl.innerHTML = `<span class="bad">${escapeHtml(friendly)}</span>`;
+      try{ toast("bad", `<b>Generate failed:</b> ${escapeHtml(friendly)}`); }catch(_e){}
       logEvent("gen_error", { kind, err: m, friendly });
     } finally {
       INFLIGHT[kind] = false;
+      try{ window.__i18nPause = false; }catch{}
       try{ ABORT[kind] = null; }catch{}
       setBusy(kind, false);
       if (!didRender){
@@ -4192,16 +4216,10 @@ async function refreshRefStats(force=false){
     try{ renderReferralRightCopy(lang); }catch{}
     try{ renderGuideRightCopy(lang); }catch{}
 
-    REF_COUNT = eligible;
-
-    if ($("refCountPill")) $("refCountPill").textContent = String(eligible);
-    if ($("refCountRight")) $("refCountRight").textContent = String(eligible);
-    if ($("refCountInline")) $("refCountInline").textContent = String(eligible);
+    applyRefCountEligible(eligible);
 
     if ($("refConfirmedInline")) $("refConfirmedInline").textContent = String(confirmed);
     if ($("refActiveInline")) $("refActiveInline").textContent = String(active);
-    if ($("refEligibleInline")) $("refEligibleInline").textContent = String(eligible);
-
     const link = $("refLink");
     if (link) link.value = j.refLink || "";
     revealReferralLinkUi();
@@ -4270,7 +4288,6 @@ async function loadLeaderboard(days){
   try{
     LB_DAYS = Number(days||7) || 7;
     const st = $("lb_status");
-    if (st)     try{ initWpLazyLoad(); }catch(_e){}
 
     st.textContent = "";
     const body = $("lb_body");
@@ -4454,12 +4471,12 @@ async function loadPredictionSignals(opts){
       title: "Polymarket Direction Signal",
       source: "Polymarket",
       confidencePct: 90,
-      cadence: t("pm_headline_cadence") || "Planned: a few cards per day after launch",
-      thesis: t("pm_headline_thesis") || "Preview only: live bot feed and external market data are not connected yet."
+      cadence: "3-5 signals per day",
+      thesis: "Coming soon for public feed. Signals are generated by a bot and can be wrong."
     };
     fillPredictionAssetFilter([]);
     renderPredictionSignals([]);
-    if (status) status.textContent = t("pm_status_preview") || "No live feed yet — external signal source is not connected. Refresh only checks the server.";
+    if (status) status.textContent = "Coming soon for everyone. Live private API feed runs 3-5 bot cards/day.";
     if (locked) locked.textContent = t("pm_locked_note") || "Bot signals are informational only. They may be inaccurate and are not guaranteed outcomes.";
     return;
   }
@@ -4494,6 +4511,7 @@ async function loadPredictionSignals(opts){
     if (status) status.textContent = msg;
   }
 }
+
 // ----- Referrals -----
 
   function escHtml(s){
@@ -4568,12 +4586,9 @@ async function loadRefLeaderboard(days=90){
       const confirmed = Number(j.confirmedRefs ?? 0) || 0;
       const active = Number(j.activeRefs ?? 0) || 0;
       const eligible = Number(j.eligibleRefs ?? j.referrals ?? j.count ?? 0) || 0;
-      REF_COUNT = eligible;
-      if ($("refCountPill")) $("refCountPill").textContent = String(eligible);
-      if ($("refCountRight")) $("refCountRight").textContent = String(eligible);
+      applyRefCountEligible(eligible);
       if ($("refConfirmedInline")) $("refConfirmedInline").textContent = String(confirmed);
       if ($("refActiveInline")) $("refActiveInline").textContent = String(active);
-      if ($("refEligibleInline")) $("refEligibleInline").textContent = String(eligible);
       try{ renderThemes(); }catch(e){}
       try{ renderExtThemes(); }catch(e){}
       try{ initWallpapers(); }catch(e){}
@@ -4855,10 +4870,10 @@ function defaultWalletIcon(name){
     const hint = $("sf_hint");
 
     if (addr){
-      addr.textContent = (!WALLET.connected || !WALLET.publicKey) ? (t("wallet_ui_not_connected") || "not connected") : shortPk(WALLET.publicKey);
+      addr.textContent = (!WALLET.connected || !WALLET.publicKey) ? "not connected" : shortPk(WALLET.publicKey);
     }
     if (label){
-      label.textContent = WALLET.connected ? (WALLET.name || (t("wallet_label_default") || "Wallet")) : (t("wallet_label_default") || "Wallet");
+      label.textContent = WALLET.connected ? (WALLET.name || "Wallet") : "Wallet";
     }
 
     if (btnConnect) btnConnect.classList.toggle("hidden", !!WALLET.connected);
@@ -4868,9 +4883,9 @@ function defaultWalletIcon(name){
     if (payBtn) payBtn.disabled = !canPay;
 
     if (hint){
-      if (!selectedPlan) hint.innerHTML = `<span class="muted">${escapeHtml(t("wallet_hint_pick_plan") || "Select a plan above to continue.")}</span>`;
-      else if (!WALLET.connected) hint.innerHTML = `<span class="muted">${escapeHtml((t("wallet_hint_connect_pay") || "Now connect a wallet to pay in {currency}.").replace("{currency}", String(selectedCurrency || "")))}</span>`;
-      else hint.innerHTML = `<span class="ok">${escapeHtml(t("wallet_hint_ready") || "Ready.")}</span>`;
+      if (!selectedPlan) hint.innerHTML = `<span class="muted">Select a plan above to continue.</span>`;
+      else if (!WALLET.connected) hint.innerHTML = `<span class="muted">Now connect a wallet to pay in ${escapeHtml(selectedCurrency)}.</span>`;
+      else hint.innerHTML = `<span class="ok">Ready.</span>`;
     }
   }
 
@@ -4913,12 +4928,12 @@ function openWalletModal(){
     listEl.innerHTML = "";
 
     if (!choices.length){
-      if (hintEl) hintEl.innerHTML = `<span class="muted">${escapeHtml(t("wallet_hint_install") || "No wallet detected. Install Solflare / Phantom / Backpack.")}</span>`;
+      if (hintEl) hintEl.innerHTML = `<span class="muted">No wallet detected. Install Solflare / Phantom / Backpack.</span>`;
       if (connectBtn) connectBtn.disabled = true;
       return;
     }
 
-    if (hintEl) hintEl.innerHTML = `<span class="muted">${escapeHtml(t("wallet_hint_choose") || "Choose a wallet and click Connect.")}</span>`;
+    if (hintEl) hintEl.innerHTML = `<span class="muted">Choose a wallet and click Connect.</span>`;
 
     const saved = readWalletChoice();
     let picked = choices.find(x => walletNameKey(x.name) === walletNameKey(saved)) || choices[0];
@@ -4974,11 +4989,11 @@ if (src){
         const msg = $("sf_modal_msg");
         try{
           connectBtn.disabled = true;
-          if (msg) msg.textContent = (t("wallet_opening") || "Opening wallet...");
+          if (msg) msg.textContent = "Opening wallet...";
           await connectWalletByChoice(picked);
           closeWalletModal();
           const out = $("w_msg");
-          if (out) out.innerHTML = `<span class="ok">${escapeHtml(t("wallet_connected_ok") || "Wallet connected.")}</span>`;
+          if (out) out.innerHTML = `<span class="ok">Wallet connected.</span>`;
         }catch(e){
           if (msg) msg.innerHTML = `<span class="bad">${escapeHtml(String(e?.message || "wallet_connect_failed"))}</span>`;
         }finally{
@@ -5027,7 +5042,7 @@ if (src){
         if (typeof ev === "function"){
           ev("disconnect", ()=>{
             disconnectWallet();
-            toast("warn", (t("wallet_toast_disconnected") || "Wallet disconnected."));
+            toast("warn", "Wallet disconnected.");
           });
           ev("change", ({ accounts })=>{
             try{
@@ -5108,6 +5123,16 @@ if (src){
     try{
       const j = await api("/api/billing/tx-context");
       if (j?.ok && j?.blockhash) return j;
+      const alt = await api("/api/solana/latest-blockhash");
+      if (alt?.ok && alt?.blockhash) return alt;
+      const v = alt?.value;
+      if (alt?.ok && v?.blockhash) {
+        return {
+          ok: true,
+          blockhash: String(v.blockhash),
+          lastValidBlockHeight: Number(v.lastValidBlockHeight || 0) || undefined,
+        };
+      }
     }catch(_e){}
     return null;
   }
@@ -5247,11 +5272,11 @@ if (src){
       const items = j?.recent || [];
       list.innerHTML = "";
       if (!items.length){
-        list.innerHTML = `<div class="muted">${escapeHtml(t("billing_no_receipts") || "No receipts yet.")}</div>`;
+        list.innerHTML = `<div class="muted">No receipts yet.</div>`;
         stats.textContent = "—";
         return;
       }
-      stats.textContent = (t("billing_receipt_stats") || "{n} receipt(s)").replace("{n}", String(items.length));
+      stats.textContent = `${items.length} receipt${items.length===1?"":"s"}`;
       for (const it of items){
         const row = document.createElement("div");
         row.className = "proofItem";
@@ -5269,7 +5294,7 @@ if (src){
         list.appendChild(row);
       }
     }catch(e){
-      list.innerHTML = `<div class="muted">${escapeHtml(t("billing_receipts_unavailable") || "Receipts unavailable.")}</div>`;
+      list.innerHTML = `<div class="muted">Receipts unavailable.</div>`;
       stats.textContent = "—";
     }
   }
@@ -5597,13 +5622,13 @@ function billingErrMsg(code){
 
 async function payNow(){
     const msg = $("w_msg");
-      if (!selectedPlan){
-      if (msg) msg.innerHTML = `<span class="warn">${escapeHtml(t("pay_select_plan_first") || "Select a plan first.")}</span>`;
+    if (!selectedPlan){
+      if (msg) msg.innerHTML = `<span class="warn">Select a plan first.</span>`;
       return;
     }
     if (!WALLET.connected){
       openWalletModal();
-      if (msg) msg.innerHTML = `<span class="warn">${escapeHtml(t("pay_connect_wallet_continue") || "Connect a wallet to continue.")}</span>`;
+      if (msg) msg.innerHTML = `<span class="warn">Connect a wallet to continue.</span>`;
       return;
     }
 
@@ -5639,7 +5664,7 @@ async function payNow(){
       const j = await verifyIntentWithRetry(intent.id, sig, payer);
 
       setPayState("verified", "Verified. Pro activated.");
-      if (msg) msg.innerHTML = `<span class="ok">${escapeHtml(t("pay_paid_verified") || "Paid & verified.")}</span>`;
+      if (msg) msg.innerHTML = `<span class="ok">Paid & verified.</span>`;
       trackEvent("pay_success", { v, plan: selectedPlan.key, cur });
 
       try{ await refreshUsage(); }catch{}
@@ -5664,14 +5689,14 @@ async function payNow(){
     const el = $("w_status_desc");
     if (!el) return;
     if (!sub){
-      el.innerHTML = `<span class="muted">${escapeHtml(t("wallet_status_unknown") || "Status unknown.")}</span>`;
+      el.innerHTML = `<span class="muted">Status unknown.</span>`;
       return;
     }
     if (sub.active){
       const until = sub.paidUntil ? ` (until ${escapeHtml(String(sub.paidUntil))})` : "";
-      el.innerHTML = `<span class="ok">${escapeHtml(t("wallet_pro_active") || "Pro active")}</span>${until}`;
+      el.innerHTML = `<span class="ok">Pro active</span>${until}`;
     } else {
-      el.innerHTML = `<span class="muted">${escapeHtml(t("wallet_plan_free") || "Free")}</span>`;
+      el.innerHTML = `<span class="muted">Free</span>`;
     }
   }
 
@@ -5728,7 +5753,7 @@ async function payNow(){
           const stillThere = choices.some(x => walletNameKey(x.name) === walletNameKey(WALLET.name));
           if (!stillThere){
             disconnectWallet();
-            toast("warn", (t("wallet_reconnect_toast") || "Wallet was updated/restarted. Please reconnect."));
+            toast("warn", "Wallet was updated/restarted. Please reconnect.");
           }
         }
       };
@@ -5791,11 +5816,7 @@ if (adminLoginBtn) adminLoginBtn.onclick = async ()=>{
       $("adminMsg").innerHTML = '<span class="bad">Login failed.</span>';
     }
   }catch(e){
-    const m = String(e?.message || e || "Login failed");
-    const hint = (m === "unauthorized")
-      ? (t("admin_login_bad_password") || "Wrong password. Set ADMIN_PASSWORD on the server (e.g. Render env) to match what you type.")
-      : m;
-    $("adminMsg").innerHTML = '<span class="bad">' + escapeHtml(hint) + '</span>';
+    $("adminMsg").innerHTML = '<span class="bad">' + escapeHtml(e?.message||"Login failed") + '</span>';
   }
 };
 
@@ -5834,63 +5855,11 @@ if (adminLogoutBtn) adminLogoutBtn.onclick = async ()=>{
     if (!requireAdminSignedIn()) return;
     try{
       const j =      await api("/api/admin/codes");
-      $("adminOut").value = (j.rows || []).map(r => `${r.code} (${r.days || 0}d) ${(r.note||"").trim()} ${r.created_at||""}`.trim()).join("\n");
+      $("adminOut").value = (j.rows || []).map(r => `${r.code} (${r.days || 0}d) ${(r.note||"").trim()} ${r.created_at||""}`.trim()).join("\\n");
     }catch(e){
       $("adminOut").value = "Error: " + (e.message||"failed");
     }
-  };
-
-  async function adminLoadStats(){
-    if (!requireAdminSignedIn()) return;
-    try{
-      const j = await api("/api/admin/stats");
-      const u = $("adminStatUsers"); if (u) u.textContent = j.totalUsers ?? "-";
-      const o = $("adminStatOnline"); if (o) o.textContent = j.onlineUsers10m ?? "-";
-      const i = $("adminStatInserts"); if (i) i.textContent = j.totalInsertsToday ?? "-";
-    }catch(e){}
-  }
-  const adminStatsRefresh = $("adminStatsRefresh");
-  if (adminStatsRefresh) adminStatsRefresh.onclick = adminLoadStats;
-
-  async function adminLoadUsers(){
-    if (!requireAdminSignedIn()) return;
-    const q = ($("adminUsersFilter")?.value || "").trim();
-    try{
-      const j = await api("/api/admin/users?limit=100" + (q ? "&q=" + encodeURIComponent(q) : ""));
-      const tb = $("adminUsersTable")?.querySelector("tbody");
-      if (!tb) return;
-      tb.innerHTML = (j.rows || []).map(r => `<tr><td><span class="kbd">@${escapeHtml(r.handle||"")}</span></td><td>${escapeHtml((r.created_at||"").slice(0,19))}</td><td>${escapeHtml((r.last_seen||"").slice(0,19))}</td><td>${escapeHtml(r.tier||"free")}</td></tr>`).join("") || "<tr><td colspan=\"4\" class=\"muted\">No users</td></tr>";
-    }catch(e){ const tb = $("adminUsersTable")?.querySelector("tbody"); if (tb) tb.innerHTML = "<tr><td colspan=\"4\" class=\"bad\">Error</td></tr>"; }
-  }
-  const adminUsersLoad = $("adminUsersLoad");
-  if (adminUsersLoad) adminUsersLoad.onclick = adminLoadUsers;
-
-  async function adminLoadPayments(){
-    if (!requireAdminSignedIn()) return;
-    try{
-      const j = await api("/api/admin/payments");
-      const tb = $("adminPaymentsTable")?.querySelector("tbody");
-      if (!tb) return;
-      tb.innerHTML = (j.rows || []).map(r => `<tr><td><span class="kbd">@${escapeHtml(r.handle||"")}</span></td><td>${escapeHtml(r.plan||"")}</td><td>${escapeHtml(String(r.amount||""))}</td><td>${escapeHtml(r.currency||"")}</td><td>${escapeHtml((r.created_at||"").slice(0,19))}</td></tr>`).join("") || "<tr><td colspan=\"5\" class=\"muted\">No payments</td></tr>";
-    }catch(e){ const tb = $("adminPaymentsTable")?.querySelector("tbody"); if (tb) tb.innerHTML = "<tr><td colspan=\"5\" class=\"bad\">Error</td></tr>"; }
-  }
-  const adminPaymentsLoad = $("adminPaymentsLoad");
-  if (adminPaymentsLoad) adminPaymentsLoad.onclick = adminLoadPayments;
-
-  async function adminLoadRedemptions(){
-    if (!requireAdminSignedIn()) return;
-    const q = ($("adminRedeemFilter")?.value || "").trim();
-    try{
-      const j = await api("/api/admin/redemptions?limit=100" + (q ? "&q=" + encodeURIComponent(q) : ""));
-      const tb = $("adminRedemptionsTable")?.querySelector("tbody");
-      if (!tb) return;
-      tb.innerHTML = (j.rows || []).map(r => `<tr><td><span class="kbd">${escapeHtml((r.code||"").slice(0,12))}…</span></td><td>@${escapeHtml(r.handle||"")}</td><td>${escapeHtml(r.tier||"")}</td><td>${escapeHtml(String(r.days||""))}</td><td>${escapeHtml((r.created_at||"").slice(0,19))}</td></tr>`).join("") || "<tr><td colspan=\"5\" class=\"muted\">No redemptions</td></tr>";
-    }catch(e){ const tb = $("adminRedemptionsTable")?.querySelector("tbody"); if (tb) tb.innerHTML = "<tr><td colspan=\"5\" class=\"bad\">Error</td></tr>"; }
-  }
-  const adminRedemptionsLoad = $("adminRedemptionsLoad");
-  if (adminRedemptionsLoad) adminRedemptionsLoad.onclick = adminLoadRedemptions;
-
-  // --- Admin: leaderboard rewards ---
+  };// --- Admin: leaderboard rewards ---
 async function adminLoadLb(days){
   if (!requireConnected("Admin")) return;
   if (!requireAdminSignedIn()) return;
@@ -5973,7 +5942,7 @@ function pruneLegacyAdminPanels(){
 
     const firstNote = adminRoot.querySelector(".card .note");
     if (firstNote){
-      firstNote.textContent = "Sign in once, then use access, code, and leaderboard tools. Rules: Admin handle must match your connected @handle. Leaderboard rewards: only eligible referrals (≥5 inserts, ≥3 active days) count. Fraud-flagged invites excluded.";
+      firstNote.textContent = "Sign in once, then use access, code, and leaderboard tools only. Retired admin experiments are removed from this admin workspace.";
     }
 
     adminRoot.querySelectorAll(".card .title").forEach((node)=>{
@@ -5997,88 +5966,16 @@ function pruneLegacyAdminPanels(){
     if (!h){ tab("home"); return; }
     const code = $("redeemCode").value.trim();
     if (!code){
-      $("connectMsg").innerHTML = `<span class="warn">${escapeHtml(t("redeem_paste_first") || "Paste a code first.")}</span>`;
+      $("connectMsg").innerHTML = `<span class="warn">Paste a code first.</span>`;
       return;
     }
     try{
       const j = await api("/api/billing/redeem", "POST", { handle: h, code });
-      $("connectMsg").innerHTML = `<span class="ok">${escapeHtml(t("redeem_activated") || "Activated.")}</span>`;
+      $("connectMsg").innerHTML = `<span class="ok">Activated.</span>`;
       renderWalletStatus(j.sub);
       await refreshUsage();
     }catch(e){
       $("connectMsg").innerHTML = `<span class="bad">${e.message || "redeem_failed"}</span>`;
-    }
-  };
-
-  // ----- Connect -----
-  const connectBtn = $("btnConnect");
-  if (connectBtn) connectBtn.onclick = async ()=>{
-    const cm = $("connectMsg");
-    if (cm) cm.textContent = "";
-    const xh = $("xHandle");
-    const handle = normalizeHandle(xh?.value);
-    if (!handle){
-      if (cm) cm.innerHTML = `<span class="bad">${escapeHtml(t("connect_invalid_handle_html") || "Enter a valid @handle")}</span>`;
-      return;
-    }
-
-    const params = new URLSearchParams(location.search);
-    const ref = params.get("ref") || "";
-
-    try{
-      const devReset = (typeof isLocalDevHost === "function" && isLocalDevHost()) ? 1 : 0;
-      const j = await api("/api/user/init", "POST", { handle, ref, devReset });
-      localStorage.setItem(LS_HANDLE, j.handle);
-      localStorage.setItem(LS_TOKEN, j.token);
-      try{ localStorage.setItem(LS_IS_ADMIN, j.isAdmin ? "1" : "0"); }catch{}
-      try{ localStorage.setItem(LS_ADMIN_CLAIMABLE, j.adminClaimable ? "1" : "0"); }catch{}
-
-      const hp = $("handlePill");
-      if (hp) hp.textContent = j.handle;
-      const rl = $("refLink");
-      if (rl) rl.value = j.refLink || "";
-      if (cm) cm.innerHTML = '';
-      try{ localStorage.removeItem(LS_FORCE_LOGOUT); }catch{}
-      try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "site_connect" }, "*"); }catch(_e){}
-      AUTH_OK = true;
-      try{ ping(); }catch{}
-
-      applyAdminVisibility();
-      await refreshUsage();
-      await loadPlans();
-
-      const code = params.get("code");
-      if (code){
-        const rc = $("redeemCode");
-        if (rc) rc.value = code;
-      }
-    }catch(e){
-      if (cm) cm.innerHTML = '<span class="bad">Connect error: ' + escapeHtml(friendlyUiErrorMessage(e.message || "request_failed", { scope:"connect" })) + '</span>';
-    }
-  };
-
-  const resetBtn = $("btnReset");
-  if (resetBtn) resetBtn.onclick = async ()=>{
-    const xh = $("xHandle");
-    try{ localStorage.removeItem(LS_HANDLE); }catch{}
-    try{ localStorage.removeItem(LS_TOKEN); }catch{}
-    try{ localStorage.removeItem(LS_IS_ADMIN); }catch{}
-    try{ localStorage.removeItem(LS_ADMIN_CLAIMABLE); }catch{}
-    try{ localStorage.removeItem("gmx_ui_tmp"); }catch{}
-
-    const hp = $("handlePill");
-    if (hp) hp.textContent = "not set";
-    const cm = $("connectMsg");
-    if (cm) cm.innerHTML = '<span class="ok">Session cleared.</span>';
-    AUTH_OK = false;
-    try{ localStorage.setItem(LS_FORCE_LOGOUT, String(Date.now())); }catch{}
-    try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "site_reset" }, "*"); }catch(_e){}
-    try{ ping(); }catch{}
-    applyAdminVisibility();
-    try{ refreshUsage(); }catch{}
-    try{ loadPlans(); }catch{}
-    if (xh){
-      try{ xh.focus(); }catch{}
     }
   };
 
@@ -6090,7 +5987,15 @@ function pruneLegacyAdminPanels(){
     ? globalThis.GMX_SITE_I18N.createSiteI18nCatalog()
     : { en: {} };
 
-
+  function siteTr(key, fallback = ""){
+    const lang = localStorage.getItem(LS_SITE_LANG) || "en";
+    const base = I18N.en || {};
+    const dict = I18N[lang] || {};
+    const v = sanitizeI18nValue(lang, dict[key], base[key]);
+    const resolved = v ?? base[key];
+    if (resolved !== undefined && resolved !== null && String(resolved).trim() && String(resolved) !== key) return String(resolved);
+    return fallback || String(key);
+  }
 
   function setPh(id, key, merged){
     try{
@@ -6152,8 +6057,7 @@ function pruneLegacyAdminPanels(){
   const FORCE_EN_KEYS = new Set([]);
 
   function applyLang(){
-    const lang = getResolvedSiteLang();
-    try{ localStorage.setItem(LS_SITE_LANG, lang); }catch(_e){}
+    const lang = localStorage.getItem(LS_SITE_LANG) || "en";
     const base = I18N.en || {};
     const d = I18N[lang] || {};
 
@@ -6163,6 +6067,9 @@ function pruneLegacyAdminPanels(){
       if (safe === "" || safe === null || safe === undefined) continue;
       merged[k] = safe;
     }
+
+    if (merged.gm_size_label) merged.gm_size = merged.gm_size_label;
+    if (merged.gn_size_label) merged.gn_size = merged.gn_size_label;
 
     for (const k of Object.keys(merged)){
       const v = (lang !== "en" && FORCE_EN_KEYS.has(k)) ? (base[k] ?? merged[k]) : merged[k];
@@ -6183,13 +6090,10 @@ function pruneLegacyAdminPanels(){
     setPh("w_payer","w_payer_ph",merged);
     setPh("adminSecret","adminSecret_ph",merged);
     setPh("adminOut","adminOut_ph",merged);
-    setPh("supportOut","supportOut_ph",merged);
 
     // Referral link placeholder depends on auth state
     try{ const rl=$("refLink"); if(rl) rl.placeholder = merged["connectFirst"] || ""; }catch{}
     try{ patchDynamicCopy(lang, merged); }catch(e){}
-    try{ fillWallpaperTabOptions(merged); }catch(_e){}
-    try{ syncWallLight(); }catch(_e){}
   }
 
 function getReferralUiCopy(_lang){
@@ -6242,28 +6146,28 @@ function getReferralUiCopy(_lang){
     items,
     promoterTitle: t("ref_promoter_details") || fallback.promoterTitle,
     baseDaily: t("ref_daily_limit_title") || fallback.baseDaily,
-    unlocksNow: t("ref_unlocks_now") || fallback.unlocksNow,
-    nextUnlock: t("ref_next_unlock") || fallback.nextUnlock,
-    allUnlocked: t("ref_all_unlocked") || fallback.allUnlocked,
+    unlocksNow: fallback.unlocksNow,
+    nextUnlock: fallback.nextUnlock,
+    allUnlocked: fallback.allUnlocked,
     antiAbuse: t("ref_abuse_note") || fallback.antiAbuse,
     confirmed: t("ref_k_confirmed") || fallback.confirmed,
     active: t("ref_k_active") || fallback.active,
     eligible: t("ref_k_eligible") || fallback.eligible,
     legacy: t("ref_k_legacy") || fallback.legacy,
-    clicks: t("ref_metric_clicks") || fallback.clicks,
-    bgSlots: t("ref_metric_bg_slots") || fallback.bgSlots,
-    saveCap: t("ref_metric_save_cap") || fallback.saveCap,
-    unlimited: t("ui_saved_unlimited") || fallback.unlimited,
-    onePack: t("ref_reward_one_pack") || fallback.onePack,
-    allPacks: t("ref_reward_all_packs") || fallback.allPacks,
-    proTrial: t("ref_reward_pro_trial") || fallback.proTrial,
-    discount: t("ref_reward_discount") || fallback.discount,
-    toolkit: t("ref_reward_toolkit") || fallback.toolkit,
+    clicks: fallback.clicks,
+    bgSlots: fallback.bgSlots,
+    saveCap: fallback.saveCap,
+    unlimited: fallback.unlimited,
+    onePack: fallback.onePack,
+    allPacks: fallback.allPacks,
+    proTrial: fallback.proTrial,
+    discount: fallback.discount,
+    toolkit: fallback.toolkit,
     copied: t("toast_copied") || fallback.copied,
     leaderboardLoading: t("r_loading") || fallback.leaderboardLoading,
     leaderboardEmpty: t("lb_empty") || fallback.leaderboardEmpty,
     youLabel: t("lb_you") || fallback.youLabel,
-    rulesLabel: t("ref_rules_word") || fallback.rulesLabel,
+    rulesLabel: fallback.rulesLabel,
     invitedNote: t("r_invited_note") || fallback.invitedNote
   };
 }
@@ -6377,6 +6281,35 @@ function renderReferralRightCopy(lang){
   if (list) {
     list.innerHTML = ui.items.map((line, i)=>`<li id="r_li${i + 1}">${line}</li>`).join("");
   }
+  }
+
+  function syncModePanelCopy(){
+    const bind = (kind)=>{
+      const sizeLbl = $(kind === "gm" ? "gm_size" : "gn_size");
+      const sel = $(kind === "gm" ? "gmMode" : "gnMode");
+      const fallbacks = {
+        min: "Fast · short",
+        mid: "Balanced · default",
+        max: "Full · richer",
+      };
+      if (sizeLbl) {
+        const k = kind === "gm" ? "gm_size_label" : "gn_size_label";
+        sizeLbl.textContent = siteTr(k, "Size");
+      }
+      if (!sel) return;
+      const labels = {
+        min: siteTr(kind === "gm" ? "gm_mode_min" : "gn_mode_min", fallbacks.min),
+        mid: siteTr(kind === "gm" ? "gm_mode_mid" : "gn_mode_mid", fallbacks.mid),
+        max: siteTr(kind === "gm" ? "gm_mode_max" : "gn_mode_max", fallbacks.max),
+      };
+      for (const opt of sel.options){
+        const v = String(opt.value || "").toLowerCase();
+        const label = labels[v];
+        if (label) opt.textContent = label;
+      }
+    };
+    bind("gm");
+    bind("gn");
   }
 
   function patchDynamicCopy(lang, merged){
@@ -6560,8 +6493,9 @@ function closeLangMenu(){
     (function(){
       let t=null;
       function kick(){
+        if (window.__i18nPause) return;
         if(t) clearTimeout(t);
-        t=setTimeout(()=>{ try{ applyLang(); }catch{} try{ syncBestModeUi(); }catch{} try{ syncCleanFillUi(); }catch{} }, 30);
+        t=setTimeout(()=>{ if (window.__i18nPause) return; try{ applyLang(); }catch{} try{ syncBestModeUi(); }catch{} try{ syncCleanFillUi(); }catch{} }, 120);
       }
       try{
         const obs = new MutationObserver(()=>kick());
@@ -6589,16 +6523,6 @@ function closeLangMenu(){
       }
       if (e.data.type === "GMX_CLEAN_FILL_SYNC"){
         if (e.data.kind === "gm" || e.data.kind === "gn") setCleanFillEnabled(e.data.kind, e.data.value === true, true);
-      }
-      if (e.data.type === "GMX_APPLY_THEME_FROM_EXTENSION"){
-        try{
-          const siteTheme = localStorage.getItem("gmx_theme") || "classic";
-          applyTheme(siteTheme);
-          if (typeof renderThemes === "function") renderThemes();
-          if (typeof renderExtThemes === "function") renderExtThemes();
-          if (typeof renderExtWallpapers === "function") renderExtWallpapers();
-          if (typeof renderWallpaperUI === "function") renderWallpaperUI();
-        }catch(_err){}
       }
     }catch(_e){}
   });
@@ -6776,10 +6700,7 @@ function closeLangMenu(){
   const wpAddCustom = $("wpAddCustom");
   const wpAddFile = $("wpAddFile");
   if (wpAddCustom && wpAddFile){
-    wpAddCustom.onclick = ()=>{
-      if (!isPro()){ toast("warn", (t("custom_upload_pro_only")||"Custom wallpaper upload requires Pro subscription.")); return; }
-      if (requireConnected("Themes")) wpAddFile.click();
-    };
+    wpAddCustom.onclick = ()=>{ if (requireConnected("Themes")) wpAddFile.click(); };
   }
   if (wpAddFile){
     wpAddFile.addEventListener("change", async ()=>{
@@ -6788,57 +6709,20 @@ function closeLangMenu(){
         const f = wpAddFile.files && wpAddFile.files[0];
         if (!f) return;
         const data = await compressImageToJpegDataURL(f, { profile: "site" });
-        const tok = String(localStorage.getItem(LS_TOKEN) || "").trim();
-        let uploadedId = null;
-        if (tok) {
-          try {
-            const r = await fetch("/api/wallpapers/custom", {
-              method: "POST",
-              headers: { "Content-Type": "application/json", "Authorization": "Bearer " + tok },
-              body: JSON.stringify({ image: data, target: "site" })
-            });
-            const j = await r.json();
-            if (j?.ok && j?.id) { uploadedId = j.id; }
-          } catch (_e) {}
-        }
-        if (uploadedId) {
-          CUSTOM_WALLPAPERS_LOADED = false;
-          await loadCustomWallpapers();
-          const targetTab = ($("wpTab")?.value || "all");
-          if (targetTab === "all") localStorage.setItem(LS_WP_GLOBAL, uploadedId);
-          else setWallpaperForTab(targetTab, uploadedId);
-          try{ renderWallpaperUI(); }catch{}
-          const previewTab = (targetTab === "all") ? currentTabName() : targetTab;
-          applyWallpaper(previewTab);
-          applyUserBg(previewTab);
-          toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved and synced."));
-        } else {
-          localStorage.setItem(LS_CUSTOM_BG_GLOBAL, data);
-          const targetTab = ($("wpTab")?.value || "all");
-          if (targetTab === "all") localStorage.setItem(LS_WP_GLOBAL, CUSTOM_UPLOAD_ID);
-          else setWallpaperForTab(targetTab, CUSTOM_UPLOAD_ID);
-          try{ renderWallpaperUI(); }catch{}
-          const previewTab = (targetTab === "all") ? currentTabName() : targetTab;
-          applyWallpaper(previewTab);
-          applyUserBg(previewTab);
-          toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved (local)."));
-        }
+        localStorage.setItem(LS_CUSTOM_BG_GLOBAL, data);
+        const targetTab = ($("wpTab")?.value || "all");
+        if (targetTab === "all") localStorage.setItem(LS_WP_GLOBAL, CUSTOM_UPLOAD_ID);
+        else setWallpaperForTab(targetTab, CUSTOM_UPLOAD_ID);
+        try{ renderWallpaperUI(); }catch{}
+        const previewTab = (targetTab === "all") ? currentTabName() : targetTab;
+        applyWallpaper(previewTab);
+        applyUserBg(previewTab);
+        toast("ok", (t("toast_custom_bg_saved")||"Custom wallpaper saved."));
       }catch(e){
         toast("warn", (t("err_custom_wp_save")||"Could not save image (too large or blocked)."));
       }finally{
         wpAddFile.value = "";
       }
-    });
-  }
-  const wpLightChk = $("wpLightChk");
-  if (wpLightChk){
-    wpLightChk.addEventListener("change", ()=>{
-      try{
-        localStorage.setItem(LS_WALL_LIGHT, wpLightChk.checked ? "1" : "0");
-        localStorage.setItem(LS_WALL_LIGHT_MANUAL, "1");
-        syncWallLight();
-        toast("ok", (t("toast_wall_light") || "Readability updated."));
-      }catch(_e){}
     });
   }
   function pushRecent(kind, keys){
@@ -6971,17 +6855,7 @@ function closeLangMenu(){
 
   async function refillCleanFill(kind, targetCount, opts){
     const key = activeKey(kind);
-    const modeEl  = kind==="gm" ? $("gmMode") : $("gnMode");
-    const styleEl = kind==="gm" ? $("gmStyle") : $("gnStyle");
-    const packEl  = kind==="gm" ? $("gmPack") : $("gnPack");
-    const mode = modeEl ? modeEl.value : "mid";
-    const lang = currentLang(kind);
-    let style = styleEl ? styleEl.value : "classic";
-    const packId = packEl ? (packEl.value || "classic") : "classic";
-    const packIdx = PACKS.findIndex(p=>p.id===packId);
-    const packLocked = (!isPro() && packIdx >= unlockedPacksCount());
-    const pack = PACKS.find(p=>p.id===packId) || PACKS[0];
-    if (!packLocked && pack && pack.style) style = pack.style;
+    const { mode, lang, style, antiN } = readGenParams(kind);
 
     const before = readKey(key);
     const cleaned = await dedupeLinesByShapeAsync(before, CLEAN_FILL_STRENGTH, 200);
@@ -7009,7 +6883,7 @@ function closeLangMenu(){
       attempts++;
       const missing = desiredTotal - cur.length;
       const reqCount = Math.min(180, missing + 50 + (stalled * 20));
-      const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=0&count=${reqCount}`, "GET", null, { signal: opts?.signal, timeoutMs: 12000 });
+      const bulk = await api(`/api/generate-bulk?kind=${kind}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&style=${encodeURIComponent(style)}&anti_last_n=${encodeURIComponent(antiN)}&count=${reqCount}`, "GET", null, { signal: opts?.signal, timeoutMs: 12000 });
       const list = Array.isArray(bulk?.list) ? bulk.list : [];
       if (!list.length) {
         stalled++;
@@ -7061,26 +6935,20 @@ function closeLangMenu(){
     const cur = readKey(key);
     const targetCount = Number.isFinite(opts?.targetCount) ? Math.max(0, Math.trunc(opts.targetCount)) : cur.length;
     if (!cur.length && targetCount <= 0){
-      if (msgEl && !opts?.silent) msgEl.innerHTML = `<span class="muted">${escapeHtml(t("bank_nothing_saved") || "Nothing saved yet.")}</span>`;
+      if (msgEl && !opts?.silent) msgEl.innerHTML = `<span class="muted">Nothing saved yet.</span>`;
       return { removed:0, refilled:0, finalCount:0, targetCount:0 };
     }
 
     CLEAN_FILL_INFLIGHT[kind] = true;
     try{
-      if (msgEl && !opts?.silent) msgEl.innerHTML = `<span class="muted">${escapeHtml(t("bank_best_pass_running") || "Best pass...")}</span>`;
+      if (msgEl && !opts?.silent) msgEl.innerHTML = `<span class="muted">Best pass...</span>`;
       const res = await refillCleanFill(kind, targetCount, opts || {});
       renderList(kind);
       if (msgEl && !opts?.keepMessage){
         if (res.finalCount >= res.targetCount){
-          const okMsg = (t("bank_best_done_ok") || "Best pass removed {removed} and refilled {refilled}. Bank now has {final}/{target}.")
-            .replace("{removed}", String(res.removed)).replace("{refilled}", String(res.refilled))
-            .replace("{final}", String(res.finalCount)).replace("{target}", String(res.targetCount));
-          msgEl.innerHTML = `<span class="ok">${escapeHtml(okMsg)}</span>`;
+          msgEl.innerHTML = `<span class="ok">Best pass removed ${res.removed} and refilled ${res.refilled}. Bank now has ${res.finalCount}/${res.targetCount}.</span>`;
         } else {
-          const wMsg = (t("bank_best_done_warn") || "Best pass removed {removed} and refilled {refilled}. Bank finished at {final}/{target}. Try another tone or preset for a wider pool.")
-            .replace("{removed}", String(res.removed)).replace("{refilled}", String(res.refilled))
-            .replace("{final}", String(res.finalCount)).replace("{target}", String(res.targetCount));
-          msgEl.innerHTML = `<span class="warn">${escapeHtml(wMsg)}</span>`;
+          msgEl.innerHTML = `<span class="warn">Best pass removed ${res.removed} and refilled ${res.refilled}. Bank finished at ${res.finalCount}/${res.targetCount}. Try another tone or preset for a wider pool.</span>`;
         }
       }
       return res;
@@ -7207,6 +7075,9 @@ function cleanupKeyLines(lines){
 
     mergeImportedBank("gm", data.gm);
     mergeImportedBank("gn", data.gn);
+    if (!isPro()){
+      try{ trimKindToCap("gm"); trimKindToCap("gn"); }catch(_e){}
+    }
 
     applyTheme(localStorage.getItem("gmx_theme") || "classic");
     applyUserBg();
@@ -7233,32 +7104,6 @@ function cleanupKeyLines(lines){
       return true;
     }
   }
-
-  function supportBundle(){
-    const bundle = {
-      product: "GMXReply",
-      build: $("ui_build") ? $("ui_build").textContent : "",
-      handle: getHandle(),
-      uiLang: localStorage.getItem(LS_SITE_LANG) || "en",
-      gm: { total: totalSaved("gm"), langs: getLangIndex("gm") },
-      gn: { total: totalSaved("gn"), langs: getLangIndex("gn") },
-      sub: SUB ? { active:true, tier: SUB.tier || SUB.plan || "", until: SUB.until || SUB.expires || "" } : { active:false },
-      theme: localStorage.getItem("gmx_theme") || "classic",
-      hasCustomBg: !!localStorage.getItem(LS_CUSTOM_BG_GLOBAL),
-      ua: navigator.userAgent
-    };
-    return JSON.stringify(bundle, null, 2);
-  }
-
-  function logsBundle(){
-    const out = {
-      ts: new Date().toISOString(),
-      handle: getHandle(),
-      logs: LOGS.slice(-120)
-    };
-    return JSON.stringify(out, null, 2);
-  }
-
 
   function bindProTools(){
     const note = $("pro_tools_note");
@@ -7311,26 +7156,6 @@ function cleanupKeyLines(lines){
         }
       });
     }
-    const supBtn = $("toolSupport");
-    if (supBtn){
-      supBtn.addEventListener("click", async ()=>{
-        const data = supportBundle();
-        await copyToClipboard(data);
-        if (note) note.textContent = "Support bundle copied. Send it only if support asks for it.";
-      });
-    }
-
-    const logsBtn = $("toolLogs");
-    if (logsBtn){
-      logsBtn.addEventListener("click", async ()=>{
-        const out = logsBundle();
-        const ta = $("supportOut");
-        if (ta) ta.value = out;
-        await copyToClipboard(out);
-        if (note) note.textContent = (t("support_logs_copied_note") || "Logs copied. Send them only if support asks for them.");
-        logEvent("support_logs", { size: out.length });
-      });
-    }
   }
 
 
@@ -7342,27 +7167,32 @@ function cleanupKeyLines(lines){
       const msgEl = kind==="gm" ? $("gmMsg") : $("gnMsg");
       if (sel){
         sel.addEventListener("change", ()=>{
-          localStorage.setItem(lsKeyPack(kind), sel.value);
-          logEvent("pack_change", { kind, pack: sel.value });
+          const pid = sel.value || "classic";
+          localStorage.setItem(lsKeyPack(kind), pid);
+          logEvent("pack_change", { kind, pack: pid });
+          const packs = packsForKind(kind);
+          const idx = packs.findIndex(x=>x.id===pid);
+          const locked = (!isPro() && idx >= unlockedPacksCountFor(kind));
+          if (!locked){
+            const packRow = packs.find(x=>x.id===pid) || packs[0];
+            applyPackDefaultsToUi(kind, packRow);
+          }
         });
       }
       if (btn){
         btn.addEventListener("click", ()=>{
           const pid = sel ? (sel.value || "classic") : "classic";
-          const p = PACKS.find(x=>x.id===pid) || PACKS[0];
-          const idx = PACKS.findIndex(x=>x.id===pid);
-          const locked = (!isPro() && idx >= unlockedPacksCount());
+          const packs = packsForKind(kind);
+          const p = packs.find(x=>x.id===pid) || packs[0];
+          const idx = packs.findIndex(x=>x.id===pid);
+          const locked = (!isPro() && idx >= unlockedPacksCountFor(kind));
           if (locked){
-            if (msgEl) msgEl.innerHTML = `<span class="warn">${escapeHtml(t("pack_locked_msg") || "Pack is locked. Upgrade to Pro or unlock via referrals.")}</span>`;
+            if (msgEl) msgEl.innerHTML = `<span class="warn">Pack is locked. Upgrade to Pro or unlock via referrals.</span>`;
             return;
           }
-          // apply preset defaults
-          const styleSel = kind==="gm" ? $("gmStyle") : $("gnStyle");
-          const modeSel  = kind==="gm" ? $("gmMode")  : $("gnMode");
-          if (styleSel && p.style) styleSel.value = p.style;
-          if (modeSel && p.mode) modeSel.value = p.mode;
+          applyPackDefaultsToUi(kind, p);
 
-          if (msgEl) msgEl.innerHTML = `<span class="ok">${escapeHtml((t("pack_applied") || "Applied pack: {name}").replace("{name}", String(p.name || "")))}</span>`;
+          if (msgEl) msgEl.innerHTML = `<span class="ok">Applied pack: ${escapeHtml(p.name)}</span>`;
           logEvent("pack_apply", { kind, pack: pid });
         });
       }
@@ -7452,10 +7282,7 @@ function cleanupKeyLines(lines){
   }catch{}
   tab(bootTab);
   CURRENT_TAB = bootTab;
-  (async ()=>{
-    await loadPresetManifest();
-    setBg(bootTab);
-  })();
+  setBg(bootTab);
 
   ping();
   loadBuild();
@@ -7521,7 +7348,7 @@ INIT_DONE = true;
     if (msg.includes("ResizeObserver") || msg.includes("Non-Error promise rejection")) return;
     // Never auto-reload on expected network/API errors (we show degraded mode instead)
     if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("request_failed") || msg.includes("timeout")){
-      try{ if (typeof setDegraded === "function") setDegraded(true, (t("ui_degraded_api") || "API/network issue. You can still edit lists locally.")); }catch{}
+      try{ if (typeof setDegraded === "function") setDegraded(true, "API/network issue. You can still edit lists locally."); }catch{}
       return;
     }
     scheduleReload();
@@ -7530,12 +7357,84 @@ INIT_DONE = true;
     const msg = String(e?.reason?.message || e?.reason || "");
     if (msg.includes("ResizeObserver")) return;
     if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("request_failed") || msg.includes("timeout") || msg.includes("not_connected")){
-      try{ if (typeof setDegraded === "function") setDegraded(true, (t("ui_degraded_api") || "API/network issue. You can still edit lists locally.")); }catch{}
+      try{ if (typeof setDegraded === "function") setDegraded(true, "API/network issue. You can still edit lists locally."); }catch{}
       return;
     }
     scheduleReload();
   });
 })();
 
+  // ----- Connect -----
+  const connectBtn = $("btnConnect");
+  if (connectBtn) connectBtn.onclick = async ()=>{
+    const cm = $("connectMsg");
+    if (cm) cm.textContent = "";
+    const xh = $("xHandle");
+    const handle = normalizeHandle(xh?.value);
+    if (!handle){
+      if (cm) cm.innerHTML = '<span class="bad">Enter a valid @handle</span>';
+      return;
+    }
+
+    const params = new URLSearchParams(location.search);
+    const ref = params.get("ref") || "";
+
+    try{
+      const j = await api("/api/user/init", "POST", { handle, ref });
+      localStorage.setItem(LS_HANDLE, j.handle);
+      localStorage.setItem(LS_TOKEN, j.token);
+      try{ localStorage.setItem(LS_IS_ADMIN, j.isAdmin ? "1" : "0"); }catch{}
+      try{ localStorage.setItem(LS_ADMIN_CLAIMABLE, j.adminClaimable ? "1" : "0"); }catch{}
+
+      const hp = $("handlePill");
+      if (hp) hp.textContent = j.handle;
+      const rl = $("refLink");
+      if (rl) rl.value = j.refLink || "";
+      if (cm) cm.innerHTML = '';
+      try{ localStorage.removeItem(LS_FORCE_LOGOUT); }catch{}
+      try{ localStorage.removeItem(LS_FORCE_LOGOUT_V2); }catch{}
+      try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "site_connect" }, "*"); }catch(_e){}
+      AUTH_OK = true;
+      try{ ping(); }catch{}
+
+      applyAdminVisibility();
+      await refreshUsage();
+      await loadPlans();
+
+      const code = params.get("code");
+      if (code){
+        const rc = $("redeemCode");
+        if (rc) rc.value = code;
+      }
+    }catch(e){
+      if (cm) cm.innerHTML = '<span class="bad">Connect error: ' + escapeHtml(friendlyUiErrorMessage(e.message || "request_failed", { scope:"connect" })) + '</span>';
+    }
+  };
+
+  const resetBtn = $("btnReset");
+  if (resetBtn) resetBtn.onclick = async ()=>{
+    const xh = $("xHandle");
+    try{ localStorage.removeItem(LS_HANDLE); }catch{}
+    try{ localStorage.removeItem(LS_TOKEN); }catch{}
+    try{ localStorage.removeItem(LS_IS_ADMIN); }catch{}
+    try{ localStorage.removeItem(LS_ADMIN_CLAIMABLE); }catch{}
+    try{ localStorage.removeItem("gmx_ui_tmp"); }catch{}
+
+    const hp = $("handlePill");
+    if (hp) hp.textContent = "not set";
+    const cm = $("connectMsg");
+    if (cm) cm.innerHTML = '<span class="ok">Session cleared.</span>';
+    AUTH_OK = false;
+    try{ localStorage.setItem(LS_FORCE_LOGOUT, String(Date.now())); }catch{}
+    try{ localStorage.setItem(LS_FORCE_LOGOUT_V2, String(Date.now())); }catch{}
+    try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "site_reset" }, "*"); }catch(_e){}
+    try{ ping(); }catch{}
+    applyAdminVisibility();
+    try{ refreshUsage(); }catch{}
+    try{ loadPlans(); }catch{}
+    if (xh){
+      try{ xh.focus(); }catch{}
+    }
+  };
 
 })();

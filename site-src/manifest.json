@@ -1,0 +1,23 @@
+{
+  "parts": [
+    "00-bootstrap.js",
+    "02-ui-performance-helpers.js",
+    "03-lightweight-client-logs-for-support.js",
+    "03-wallpapers-engine.js",
+    "04-themes-catalog.js",
+    "04-themes-render-ui.js",
+    "04-app-chrome-usage.js",
+    "05-lists-single-saved-bank-per-kind-legacy-global-l.js",
+    "06-best-pick-a-strong-line-and-copy-it.js",
+    "06-generate-engine.js",
+    "07-leaderboard.js",
+    "08-prediction-market.js",
+    "09-referrals.js",
+    "10-wallet-billing.js",
+    "11-admin.js",
+    "12-redeem-code.js",
+    "13-site-i18n.js",
+    "13-connect.js"
+  ],
+  "generatedAt": "2026-05-31T12:40:00.000Z"
+}

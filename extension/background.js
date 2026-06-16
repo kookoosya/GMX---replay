@@ -43,11 +43,15 @@ async function openQuickPanel() {
   }
 }
 
+const ALLOWED_API_HOSTS = new Set(["www.gmxreply.com", "gmxreply.com", "localhost", "127.0.0.1"]);
+
 function normalizeBase(raw) {
   const value = String(raw || "").trim();
   if (!value) return "https://www.gmxreply.com";
   try {
     const url = new URL(value);
+    const host = String(url.hostname || "").toLowerCase();
+    if (!ALLOWED_API_HOSTS.has(host)) return "https://www.gmxreply.com";
     return String(url.origin || "https://www.gmxreply.com").replace(/\/$/, "");
   } catch {
     return "https://www.gmxreply.com";

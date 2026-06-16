@@ -1,0 +1,467 @@
+  // ----- Lightweight client logs (for support) -----
+  const LOGS = [];
+  function logEvent(type, data){
+    try{
+      LOGS.push({ ts: Date.now(), type, data: data || null });
+      if (LOGS.length > 200) LOGS.shift();
+    } catch {}
+  }
+
+  const INFLIGHT = { gm:false, gn:false };
+  const ABORT = { gm:null, gn:null };
+
+  const LS_HANDLE = "gmx_handle";
+  const LS_TOKEN  = "gmx_token";
+
+  const SS_ADMIN_TOKEN = "gmx_admin_token";
+
+function getAdminToken(){
+  try{ return String(sessionStorage.getItem(SS_ADMIN_TOKEN) || "").trim(); }catch(_e){ return ""; }
+}
+function setAdminToken(t){
+  try{
+    const v = String(t||"").trim();
+    if (v) sessionStorage.setItem(SS_ADMIN_TOKEN, v);
+    else sessionStorage.removeItem(SS_ADMIN_TOKEN);
+  }catch(_e){}
+}
+function isAdminSignedIn(){ return !!getAdminToken(); }
+
+  const LS_IS_ADMIN = "gmx_is_admin";
+  const LS_ADMIN_CLAIMABLE = "gmx_admin_claimable";
+  const LS_SITE_LANG = "gmx_site_lang";
+  const LS_LAST_TAB = "gmx_last_tab";
+  const LS_REF_PROMO_OPEN = "gmx_ref_promo_open";
+  const LS_GM_REPLY_LANG = "gmx_gm_reply_lang";
+  const LS_GN_REPLY_LANG = "gmx_gn_reply_lang";
+  const LS_BEST_ENABLED = "gmx_best_enabled";
+  const LS_FORCE_LOGOUT = "gmx_ext_force_logout";
+  const LS_FORCE_LOGOUT_V2 = "gmx_ext_force_logout_v2";
+  const LS_TOGGLES_BOOTSTRAP_V2 = "gmx_toggles_bootstrap_v2";
+
+
+  const GM_GLOBAL = "gmx_gm_global";
+  const GN_GLOBAL = "gmx_gn_global";
+  const GM_LANGS  = "gmx_gm_langs";
+  const GN_LANGS  = "gmx_gn_langs";
+
+  const LS_CUSTOM_BG = "gmx_custom_bg";
+
+  const LS_GM_PACK = "gmx_gm_pack";
+  const LS_GN_PACK = "gmx_gn_pack";
+  const LS_GM_ANTI = "gmx_gm_anti";
+  const LS_GN_ANTI = "gmx_gn_anti";
+  const LS_GM_CLEAN_FILL = "gmx_gm_clean_fill";
+  const LS_GN_CLEAN_FILL = "gmx_gn_clean_fill";
+  const CLEAN_FILL_STRENGTH = 2;
+const LS_GM_RECENT = "gmx_gm_recent";
+  const LS_GN_RECENT = "gmx_gn_recent";
+
+
+  // Legacy helper kept for compatibility with old code paths.
+  if (typeof window.antiWindow !== "function"){
+    window.antiWindow = function(strength){
+      const s = Math.max(0, Math.min(5, Math.trunc(Number(strength) || 0)));
+      const map = [0, 10, 20, 30, 40, 50];
+      return map[s] ?? 0;
+    };
+  }
+  function antiWindow(strength){
+    return window.antiWindow(strength);
+  }
+
+  function lsKeyCleanFill(kind){
+    return (kind === "gn") ? LS_GN_CLEAN_FILL : LS_GM_CLEAN_FILL;
+  }
+  const LS_CLEAN_FILL_BOOTSTRAP = "gmx_clean_fill_bootstrap_v5";
+
+function bootstrapCleanFillDefaults(){
+  try{
+    if (localStorage.getItem(LS_CLEAN_FILL_BOOTSTRAP) === "1") return;
+    localStorage.setItem(LS_GM_CLEAN_FILL, "0");
+    localStorage.setItem(LS_GN_CLEAN_FILL, "0");
+    localStorage.setItem(LS_CLEAN_FILL_BOOTSTRAP, "1");
+  }catch(_e){}
+}
+
+function getCleanFillEnabled(kind){
+    try{ return localStorage.getItem(lsKeyCleanFill(kind)) === "1"; }catch(_e){ return false; }
+  }
+  function setCleanFillEnabled(kind, next, silent){
+    const on = !!next;
+    try{ localStorage.setItem(lsKeyCleanFill(kind), on ? "1" : "0"); }catch(_e){}
+    try{ syncCleanFillUi(kind); }catch(_e){}
+    if (!silent){
+      try{ window.postMessage({ type: "GMX_CLEAN_FILL_SYNC", kind, value: on }, "*"); }catch(_e){}
+      try{ window.postMessage({ type: "GMX_SYNC_NOW", reason: "clean_fill_change", kind, value: on }, "*"); }catch(_e){}
+    }
+    return on;
+  }
+  bootstrapCleanFillDefaults();
+
+function cleanFillCopy(kind){
+    const ru = siteLang() === "ru";
+    const on = getCleanFillEnabled(kind);
+    return {
+      label: ru ? "Best pass" : "Best pass",
+      button: on ? (ru ? "Best pass: on" : "Best pass: on") : (ru ? "Best pass: off" : "Best pass: off"),
+      hint: on
+        ? (ru
+            ? "Включено: Best pass после запуска режет shape-дубли в сохранённом списке и добивает недостающее обратно до текущей цели."
+            : "On: Best pass prunes shape-level near-duplicates from the saved list, then refills the missing slots back to your current target.")
+        : (ru
+            ? "Выключено: сначала идёт loose random fill. Если первая пачка слишком узкая, Batch автоматически добирает недостающее. Включай Best pass, когда хочешь ещё и чистить сохранённый банк после запуска."
+            : "Off: generation starts as loose random fill. If the first batch comes back too thin, Batch auto-refills the missing slots. Turn Best pass on when you also want the saved bank cleaned after the run."),
+      action: ru ? "Run best pass" : "Run best pass"
+    };
+  }
+  function syncCleanFillUi(kind){
+    const kinds = kind ? [kind] : ["gm","gn"];
+    kinds.forEach((k)=>{
+      const copy = cleanFillCopy(k);
+      const label = $(k === "gm" ? "gm_anti_label" : "gn_anti_label");
+      if (label) label.textContent = copy.label;
+      const note = $(k === "gm" ? "gm_repeat_note" : "gn_repeat_note");
+      if (note) note.textContent = copy.hint;
+      const toggle = $(k + "CleanFillToggle");
+      if (toggle){
+        toggle.textContent = copy.button;
+        toggle.classList.toggle("active", getCleanFillEnabled(k));
+        toggle.setAttribute("aria-pressed", getCleanFillEnabled(k) ? "true" : "false");
+      }
+      const cleanupBtn = $(k + "Cleanup");
+      if (cleanupBtn){
+        cleanupBtn.style.display = "";
+        cleanupBtn.textContent = copy.action;
+      }
+    });
+  }
+
+  // Helpers for LS key selection (used by Pro controls).
+  function lsKeyPack(kind){
+    return (kind === "gn") ? LS_GN_PACK : LS_GM_PACK;
+  }
+  function lsKeyAnti(kind){
+    return (kind === "gn") ? LS_GN_ANTI : LS_GM_ANTI;
+  }
+
+  function lsKeyRecent(kind){
+    return (kind === "gn") ? LS_GN_RECENT : LS_GM_RECENT;
+  }
+  function getRecent(kind){
+    try{
+      const raw = localStorage.getItem(lsKeyRecent(kind));
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr.filter(x=>typeof x==="string") : [];
+    } catch {
+      return [];
+    }
+  }
+
+
+  
+  // ---- Custom background per tab (Themes) ----
+  // Migration from old single-key storage:
+  const LS_CUSTOM_BG_GLOBAL = "gmx_custom_bg_global";
+  const LS_CUSTOM_BG_TAB_PREFIX = "gmx_custom_bg_tab_";
+
+  (function migrateCustomBg(){
+    try{
+      const legacy = localStorage.getItem(LS_CUSTOM_BG);
+      if (legacy && !localStorage.getItem(LS_CUSTOM_BG_GLOBAL)){
+        localStorage.setItem(LS_CUSTOM_BG_GLOBAL, legacy);
+      }
+      if (legacy) localStorage.removeItem(LS_CUSTOM_BG);
+    }catch{}
+  })();
+
+  function customBgKeyForTab(tab){
+    if (!tab || tab === "all") return LS_CUSTOM_BG_GLOBAL;
+    return LS_CUSTOM_BG_TAB_PREFIX + tab;
+  }
+  function getCustomBgForTab(tab){
+    const direct = localStorage.getItem(customBgKeyForTab(tab)) || "";
+    if (direct) return direct;
+    const global = localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || "";
+    return global;
+  }
+  
+function clearCustomBgForTab(tab){
+  if (!tab) return;
+  if (tab === "all"){
+    try{ localStorage.removeItem(LS_CUSTOM_BG_GLOBAL); }catch{}
+    return;
+  }
+  try{ localStorage.removeItem(customBgKeyForTab(tab)); }catch{}
+}
+
+function setCustomBgForTab(tab, dataUrl){
+    const k = customBgKeyForTab(tab);
+    if (!dataUrl){
+      localStorage.removeItem(k);
+    } else {
+      localStorage.setItem(k, String(dataUrl));
+    }
+  }
+
+  
+  // Tabs used by Wallpapers / Custom background "Apply to" selectors.
+// Must match main nav data-tab values.
+const TABS = [
+  ["all","wp_apply_all"],
+  ["home","wp_apply_home"],
+  ["gm","wp_apply_gm"],
+  ["gn","wp_apply_gn"],
+  ["prediction","wp_apply_prediction"],
+  ["referrals","wp_apply_referrals"],
+  ["leaderboard","wp_apply_leaderboard"],
+  ["themes","wp_apply_themes"],
+  ["extthemes","wp_apply_extthemes"],
+  ["wallet","wp_apply_wallet"]
+];
+
+// Tabs for apply-to selectors visible to all users (no Admin)
+const TABS_PUBLIC = TABS;
+function listCustomBgUsedTabs(){
+    const used = [];
+    try{
+      // tabs excluding "all"
+      TABS.forEach(([k], idx)=>{
+        if (k === "all") return;
+        const v = localStorage.getItem(customBgKeyForTab(k)) || "";
+        if (v) used.push(k);
+      });
+    }catch{}
+    return used;
+  }
+
+  function customBgUnlockedTabCount(){
+    // How many per-tab targets are eligible (excluding "all") for NEW backgrounds.
+    // Free: 3 tabs of choice, then unlock by refs: 10 / 15 / 20 / ... (+5)
+    const tabsOnly = TABS.filter(t=>t[0]!=="all");
+    if (isPro()) return tabsOnly.length;
+    // reuse generic unlock logic with freeCount=3
+    return unlockedCountByRefs(tabsOnly.length, 3);
+  }
+
+  function canSetCustomBgOnTab(tab){
+    if (tab === "all") return true;
+    if (isPro()) return true;
+
+    const used = listCustomBgUsedTabs();
+    if (used.includes(tab)) return true; // existing slot can always be edited/cleared
+
+    // free: up to 3 tabs of choice
+    if (used.length < 3) return true;
+
+    // beyond 3: only if unlocked by refs (Variant A)
+    const tabsOnly = TABS.filter(t=>t[0]!=="all").map(t=>t[0]);
+    const idx = tabsOnly.indexOf(tab);
+    if (idx < 0) return false;
+    const unlocked = customBgUnlockedTabCount(); // count of unlocked tabs in ordered list
+    return idx < unlocked;
+  }
+
+  function requiredRefsForCustomBgTab(tab){
+    if (tab === "all") return 0;
+    const tabsOnly = TABS.filter(t=>t[0]!=="all").map(t=>t[0]);
+    const idx = tabsOnly.indexOf(tab);
+    if (idx < 0) return 0;
+    // freeCount=3
+    return reqRefsForUnlockIndex(idx, 3);
+  }
+
+  function applyUserBg(tab){
+    const target = tab || currentTabName();
+
+    if (document.body.classList.contains("hasWallBg")){
+      document.documentElement.style.setProperty("--bg_user", "none");
+      document.body.classList.remove("hasUserBg");
+      return;
+    }
+
+    // Priority: per-tab custom background.
+    let data = "";
+    try{ data = localStorage.getItem(customBgKeyForTab(target)) || ""; }catch{}
+
+    // Global custom background only applies when there is NO active (unlocked) wallpaper.
+    if (!data){
+      let wallOk = false;
+      try{
+        const wid = getWallpaperForTab(target);
+        if (wid){
+          const wp = WALLPAPERS.find(x=>x.id===wid) || null;
+          let idx = -1;
+          try{ idx = wp ? WALLPAPERS.findIndex(x=>x.id===wid) : -1; }catch{}
+          wallOk = wp ? wallpaperUnlocked(wp, idx) : false;
+        }
+      }catch{}
+      if (!wallOk){
+        try{ data = localStorage.getItem(LS_CUSTOM_BG_GLOBAL) || ""; }catch{}
+      }
+    }
+
+    const on = !!data;
+    if (on){
+      document.documentElement.style.setProperty("--bg_user", `url("${data}")`);
+    } else {
+      document.documentElement.style.setProperty("--bg_user", "none");
+    }
+    document.body.classList.toggle("hasUserBg", on);
+  }
+
+  async function fitImageToCoverDataUrl(file, maxW=2560, maxH=1440, quality=0.88){
+    // Downscale + crop-to-cover to keep localStorage small and ensure it fits the page.
+    // Output: JPEG data URL.
+    return new Promise((resolve, reject)=>{
+      try{
+        const fr = new FileReader();
+        fr.onerror = ()=>reject(new Error("read_failed"));
+        fr.onload = ()=>{
+          const img = new Image();
+          img.onerror = ()=>reject(new Error("image_decode_failed"));
+          img.onload = ()=>{
+            try{
+              const iw = img.naturalWidth || img.width || 1;
+              const ih = img.naturalHeight || img.height || 1;
+              const targetW = Math.min(maxW, iw);
+              const targetH = Math.min(maxH, ih);
+              const canvas = document.createElement("canvas");
+              canvas.width = targetW;
+              canvas.height = targetH;
+              const ctx = canvas.getContext("2d", { alpha:false });
+              // cover crop
+              const scale = Math.max(targetW/iw, targetH/ih);
+              const sw = targetW/scale;
+              const sh = targetH/scale;
+              const sx = (iw - sw)/2;
+              const sy = (ih - sh)/2;
+              ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH);
+              const out = canvas.toDataURL("image/jpeg", quality);
+              resolve(out);
+            }catch(e){ reject(e); }
+          };
+          img.src = String(fr.result||"");
+        };
+        fr.readAsDataURL(file);
+      }catch(e){ reject(e); }
+    });
+  }
+
+
+  function renderCustomBgUI(){ /* merged into wallpapers tab */ }
+  function syncCustomBgUI(){ /* merged into wallpapers tab */ }
+
+function readFileAsDataURL(file){
+    return new Promise((resolve, reject)=>{
+      const r = new FileReader();
+      r.onload = ()=>resolve(String(r.result||""));
+      r.onerror = ()=>reject(r.error||new Error("read failed"));
+      r.readAsDataURL(file);
+    });
+  }
+
+  function loadImage(src){
+    return new Promise((resolve, reject)=>{
+      const img = new Image();
+      img.onload = ()=>resolve(img);
+      img.onerror = ()=>reject(new Error("image load failed"));
+      img.src = src;
+    });
+  }
+
+  async function compressImageToJpegDataURL(file, options){
+    const src = await readFileAsDataURL(file);
+    const img = await loadImage(src);
+    const opts = options || {};
+    const profile = String(opts.profile || "generic").toLowerCase();
+    const MAX = profile === "site" ? 2560 : (profile === "ext" ? 1600 : 2200);
+    const targetRatio = profile === "site" ? (16 / 9) : (profile === "ext" ? (9 / 16) : 0);
+    let w = img.naturalWidth || img.width;
+    let h = img.naturalHeight || img.height;
+    if (!w || !h) return src;
+    let sx = 0;
+    let sy = 0;
+    let sw = w;
+    let sh = h;
+    if (targetRatio > 0){
+      const srcRatio = w / h;
+      if (srcRatio > targetRatio){
+        sw = Math.max(1, Math.round(h * targetRatio));
+        sx = Math.max(0, Math.round((w - sw) / 2));
+      } else if (srcRatio < targetRatio){
+        sh = Math.max(1, Math.round(w / targetRatio));
+        sy = Math.max(0, Math.round((h - sh) / 2));
+      }
+    }
+    const scale = Math.min(1, MAX / Math.max(sw, sh));
+    const tw = Math.max(1, Math.round(sw * scale));
+    const th = Math.max(1, Math.round(sh * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = tw;
+    canvas.height = th;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, tw, th);
+    return canvas.toDataURL("image/jpeg", 0.88);
+  }
+
+  // Background themes per tab (CSS-only, no assets)
+  const TAB_THEME = (function(){
+    const base = "linear-gradient(180deg, rgba(10,12,18,1) 0%, rgba(8,10,14,1) 100%)";
+    const readVar = (name, fallback)=> (getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback);
+    const parseRGB = (s)=>{
+      // accepts rgb(...) / rgba(...)
+      const m = String(s||"").match(/rgba?\((\s*\d+\s*),\s*(\d+)\s*,\s*(\d+)/i);
+      if (m) return { r:+m[1], g:+m[2], b:+m[3] };
+      return { r:124, g:92, b:255 };
+    };
+    const tint = (s, a)=>{
+      const c = parseRGB(s);
+      return `rgba(${c.r},${c.g},${c.b},${a})`;
+    };
+    const A = (a)=> tint(readVar("--accentA","rgba(124,92,255,1)"), a);
+    const B = (a)=> tint(readVar("--accentB","rgba(0,229,255,1)"), a);
+
+    function mk(aX,aY,bX,bY, extra=""){
+      const layers = [
+        `radial-gradient(1200px 620px at ${aX}% ${aY}%, ${A(.22)}, transparent 60%)`,
+        `radial-gradient(900px 520px at ${bX}% ${bY}%, ${B(.18)}, transparent 58%)`,
+        `radial-gradient(760px 440px at 60% 100%, ${A(.10)}, transparent 62%)`,
+        `radial-gradient(720px 420px at 10% 92%, ${B(.08)}, transparent 65%)`,
+        base
+      ];
+      if (extra) layers.unshift(extra);
+      return layers.join(", ");
+    }
+
+    const stripe135 = "repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 2px, transparent 2px 10px)";
+    const stripe90  = "repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 2px, transparent 2px 12px)";
+    const sheen45   = `linear-gradient(135deg, rgba(255,255,255,.04), transparent 55%)`;
+    const sheen225  = `linear-gradient(225deg, rgba(255,255,255,.04), transparent 60%)`;
+    const sheenA    = ()=> `linear-gradient(135deg, ${A(.10)}, transparent 55%)`;
+    const sheenB    = ()=> `linear-gradient(135deg, ${B(.10)}, transparent 60%)`;
+    const conicGM   = ()=> `conic-gradient(from 210deg at 18% 22%, ${A(.12)}, transparent 35%, ${B(.10)}, transparent 70%)`;
+    const conicGN   = ()=> `conic-gradient(from 180deg at 80% 20%, ${B(.12)}, transparent 40%, ${A(.10)}, transparent 75%)`;
+    const conicPay  = "conic-gradient(from 230deg at 50% 10%, rgba(255,255,255,.05), transparent 25%, rgba(255,255,255,.04), transparent 60%)";
+    const topSoft   = "linear-gradient(0deg, rgba(255,255,255,.03), transparent 45%)";
+    const topSoft2  = "linear-gradient(180deg, rgba(255,255,255,.03), transparent 60%)";
+
+    return {
+      home:      ()=> mk(20,10,80,20),
+      gm:        ()=> mk(22,12,76,18, conicGM()),
+      gn:        ()=> mk(18,18,82,14, conicGN()),
+
+      studio:    ()=> mk(18,12,82,24, sheenA()),
+      packs:     ()=> mk(24,14,78,26, sheenB()),
+      bulk:      ()=> mk(20,16,86,18, stripe135),
+      history:   ()=> mk(16,16,84,22, topSoft),
+      favorites: ()=> mk(24,10,78,20, topSoft2),
+
+      referrals: ()=> mk(20,14,86,22, stripe90),
+      prediction:()=> mk(18,12,82,22, conicPay),
+      themes:    ()=> mk(18,10,84,20, sheen45),
+      extthemes: ()=> mk(18,12,82,22, sheen225),
+      wallet:    ()=> mk(22,12,76,22, conicPay)
+    };
+  })();
+

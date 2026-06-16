@@ -18,12 +18,14 @@
     "test:unit": "node --test tests/i18n-locales.test.mjs tests/public-frontend-parity.test.mjs tests/i18n-strict-progress.test.mjs tests/i18n-strict.test.mjs tests/extension-manifest.test.mjs tests/extension-i18n-bundle.test.mjs",
     "test:i18n:strict": "node --test tests/i18n-strict.test.mjs",
     "test:smoke": "node smoke.js",
+    "test:suite": "node tools/run-tests.mjs",
+    "test:e2e": "node tools/tests/e2e-app.mjs",
     "verify:parity": "node tools/verify-public-frontend-parity.mjs",
     "dev:backend": "node index.js",
     "dev:frontend": "node tools/vite-dev.mjs",
     "dev": "node tools/i18n_sync.mjs && node tools/sync-app-and-assets.mjs && node tools/dev-run.mjs",
     "build:frontend": "npm --prefix frontend run build",
-    "build": "node tools/i18n_sync.mjs && node tools/sync-app-and-assets.mjs && npm run build:frontend && node tools/sync-frontend-build.mjs && npm run verify:parity",
+    "build": "node tools/i18n_sync.mjs && npm run build:all && npm run build:frontend && node tools/sync-frontend-build.mjs && npm run verify:parity",
     "install:all": "npm install && npm --prefix frontend install",
     "pm2:start": "pm2 start ecosystem.config.cjs",
     "pm2:restart": "pm2 restart ecosystem.config.cjs",
@@ -44,7 +46,21 @@
     "i18n:backfill:strict": "node tools/i18n_backfill_strict.mjs",
     "i18n:apply-critical": "node tools/i18n_apply_critical_fixes.mjs",
     "i18n:apply-batch2b": "node tools/apply-batch2b-i18n-fixes.mjs",
-    "i18n:apply-batch2c": "node tools/apply-batch2c-i18n-fixes.mjs"
+    "i18n:apply-batch2c": "node tools/apply-batch2c-i18n-fixes.mjs",
+    "audit:logic": "node tools/logic-audit.mjs --strict",
+    "audit:runtime": "node tools/runtime_audit.mjs --strict",
+    "build:site": "node tools/build-site-app.mjs && node tools/sync-site-public.mjs",
+    "sync:site": "node tools/sync-site-public.mjs",
+    "audit:all": "npm run audit:logic && npm run audit:runtime",
+    "build:server": "node tools/build-server.mjs",
+    "build:all": "npm run build:site && npm run build:server",
+    "test:full": "npm run build:all && npm run verify:site && npm run verify:wallpapers && npm test && npm run test:suite && npm run audit:all",
+    "verify:prod": "node tools/prod-verify.mjs",
+    "release:check": "npm run test:full && npm run verify:prod && npm run test:e2e",
+    "wallpapers:fetch": "node tools/fetch-wallpapers-pexels.mjs",
+    "wallpapers:ideal": "npm run wallpapers:fetch && npm run build:site",
+    "verify:site": "node tools/verify-site-build.mjs",
+    "verify:wallpapers": "node tools/check-wallpaper-assets.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.97.0",
@@ -58,6 +74,6 @@
   "devDependencies": {
     "image-size": "^2.0.2",
     "playwright": "^1.58.2",
-    "sharp": "^0.34.5"
+    "sharp": "^0.33.5"
   }
 }

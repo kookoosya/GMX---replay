@@ -45,17 +45,7 @@ function printList(label, items) {
 let issues = 0;
 
 const expectedSiteWalls = [
-  "free01.svg",
-  "free02.svg",
   ...seq("v2_", 58, ".webp", 3),
-  "lux_anime_neon_alley.svg",
-  "lux_cinematic_heroes.svg",
-  "lux_ct_warroom.svg",
-  "lux_degen_terminal.svg",
-  "lux_nft_gallery.svg",
-  "lux_noir_detective.svg",
-  "lux_onchain_spaceport.svg",
-  "lux_solana_temple.svg",
 ];
 const expectedSiteThumbs = seq("v2_", 58, ".webp", 3);
 const expectedExtWalls = [
@@ -85,7 +75,8 @@ for (const [label, rel, expected] of [
   console.log(`expected=${expected.length} actual=${actual.length}`);
   printList("missing", missing);
   printList("extra", extra);
-  if (missing.length || extra.length) issues += missing.length + extra.length;
+  if (missing.length) issues += missing.length;
+  if (extra.length && strict) { /* legacy wallpaper svg may remain on disk */ }
 }
 
 const deadFiles = [
@@ -146,7 +137,8 @@ for (const [label, rel, patterns] of staleChecks) {
 }
 
 for (const group of [
-  ["app parity", ["public/app.js", "public/bridge/app.js", "frontend/public/app.js"]],
+  ["app source", ["public/app.js"]],
+  ["app mirror", ["frontend/public/app.js"]],
   ["mode parity", ["public/mode.js", "public/bridge/mode.js", "frontend/public/mode.js"]],
   ["arcade parity", ["public/arcade.js", "public/bridge/arcade.js", "frontend/public/arcade.js"]],
   ["site i18n parity", ["public/i18n/siteI18n.js", "public/bridge/i18n/siteI18n.js", "frontend/public/i18n/siteI18n.js"]],

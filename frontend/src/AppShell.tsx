@@ -52,7 +52,10 @@ export default function AppShell() {
     const isLocalBackendEnv = /^https?:\/\/(?:localhost|127\.0\.0\.1):10000$/i.test(rawApiOrigin);
     // Dev rule: when Vite runs locally, prefer relative /api via Vite proxy.
     // This keeps auth/session on the same origin and avoids localhost vs 127.0.0.1 drift.
-    (window as any).__GMX_API_ORIGIN = (isLocalFrontend && isLocalBackendEnv) ? "" : rawApiOrigin;
+    const prodOrigin = String(window.location.origin || "").replace(/\/$/, "");
+    (window as any).__GMX_API_ORIGIN = (isLocalFrontend && isLocalBackendEnv)
+      ? ""
+      : (rawApiOrigin || prodOrigin);
 
     // Keep the old Wallet UI working (it expects window.solanaWeb3 from the IIFE build).
     injectScript(

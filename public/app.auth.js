@@ -112,12 +112,16 @@
         }
     
         const timeoutMs = Number(opts.timeoutMs || 20000);
+
+        if (!getToken() && getHandle() && path.startsWith("/api/") && !isPublicApi(path)){
+          try{ await initSession(true); }catch(_e){}
+        }
     
         let lastErr = null;
     
         for (let attempt = 0; attempt < 2; attempt++){
           const headers = { "Content-Type":"application/json" };
-          const tok = getToken();
+          let tok = getToken();
           if (tok) headers["Authorization"] = "Bearer " + tok;
           // Allow caller-specified extra headers
           if (opts.headers && typeof opts.headers === "object"){
