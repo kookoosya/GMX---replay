@@ -1272,3 +1272,44 @@ test("redeem: bindRedeem warns on empty code", () => {
   els.btnRedeem.onclick();
   assert.match(els.connectMsg.innerHTML, /Paste a code first/);
 });
+
+test("prediction: syncPredictionFilterCopy builds bias options", () => {
+  const els = {
+    pm_bias: { value: "all", innerHTML: "" },
+    pm_conf: { value: "0", innerHTML: "" },
+  };
+  const pm = loadFactory("app.prediction.js", "__GMXPredictionFactory")({
+    $: (id) => els[id] || null,
+    escapeHtml: (s) => s,
+    t: (_k, fb) => fb,
+  });
+  pm.syncPredictionFilterCopy();
+  assert.match(els.pm_bias.innerHTML, /bullish/);
+  assert.match(els.pm_conf.innerHTML, /70%/);
+});
+
+test("prediction: loadPredictionSignals shows public teaser without session", async () => {
+  const els = {
+    pmList: { innerHTML: "", classList: { add: () => {} } },
+    pm_status: { textContent: "" },
+    pm_locked_note: { textContent: "" },
+    pm_asset: { value: "all", innerHTML: "" },
+  };
+  const pm = loadFactory("app.prediction.js", "__GMXPredictionFactory")({
+    $: (id) => els[id] || null,
+    escapeHtml: (s) => s,
+    t: (_k, fb) => fb,
+    getHandle: () => "",
+    getToken: () => "",
+  });
+  await pm.loadPredictionSignals({ force: true });
+  assert.match(els.pmList.innerHTML, /Polymarket Direction Signal/);
+  assert.match(els.pm_status.textContent, /Coming soon for everyone/);
+});
+
+test("prediction: bindPredictionMarketUI is idempotent", () => {
+  const pm = loadFactory("app.prediction.js", "__GMXPredictionFactory")({ $: () => null });
+  pm.bindPredictionMarketUI();
+  pm.bindPredictionMarketUI();
+  assert.equal(pm.bindPredictionMarketUI._done, true);
+});

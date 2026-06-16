@@ -212,6 +212,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.leaderboard.js": { target: BACKEND, changeOrigin: true },
         "/app.referrals.js": { target: BACKEND, changeOrigin: true },
         "/app.redeem.js": { target: BACKEND, changeOrigin: true },
+        "/app.prediction.js": { target: BACKEND, changeOrigin: true },
         "/mode.js": { target: BACKEND, changeOrigin: true },
         "/entitlements.js": { target: BACKEND, changeOrigin: true },
         "/themes.json": { target: BACKEND, changeOrigin: true },
