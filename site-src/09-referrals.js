@@ -124,6 +124,6 @@ const msg = $("refMsg");
   });
   setInterval(()=>{
     try{
-      if (CURRENT_TAB === "prediction") loadPredictionSignals({ force:false });
+      if (__gmxTabState.getCurrentTab() === "prediction") loadPredictionSignals({ force:false });
     }catch{}
   }, 60000);

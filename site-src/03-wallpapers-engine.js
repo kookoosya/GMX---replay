@@ -11,69 +11,30 @@
 
   async function loadCustomWallpapers(){ return __gmxCustomWp.loadCustomWallpapers(); }
 
-  function normalizeWallpaperId(id){
-    return __gmxWp.normalizeWallpaperId(id, WALLPAPERS);
-  }
+  function normalizeWallpaperId(id){ return __gmxWpHelpers.normalizeWallpaperId(id); }
 
   __gmxWpStore.normalizeAllWallpapers();
 
-  function normalizeExtWallpaperIdLocal(id){
-    return __gmxWp.normalizeExtWallpaperIdLocal(id, EXT_WALLPAPERS);
-  }
-
-  function extWallpaperAssetPath(id){
-    return __gmxWp.extWallpaperAssetPath(id, EXT_WALLPAPERS);
-  }
-
-  function extWallpaperFullUrl(id){
-    return __gmxWp.extWallpaperFullUrl(id, EXT_WALLPAPERS);
-  }
-
-  function extWallpaperThumbUrl(id){
-    return __gmxWp.extWallpaperThumbUrl(id, EXT_WALLPAPERS);
-  }
+  function normalizeExtWallpaperIdLocal(id){ return __gmxWpHelpers.normalizeExtWallpaperIdLocal(id); }
+  function extWallpaperAssetPath(id){ return __gmxWpHelpers.extWallpaperAssetPath(id); }
+  function extWallpaperFullUrl(id){ return __gmxWpHelpers.extWallpaperFullUrl(id); }
+  function extWallpaperThumbUrl(id){ return __gmxWpHelpers.extWallpaperThumbUrl(id); }
   try{ __gmxExtWpStore.normalizeStoredExtWallpaperSelections(); }catch{}
 
-  const TOP_LEVEL_TABS = ["home","gm","gn","prediction","referrals","leaderboard","themes","extthemes","wallet","admin"];
-  function normalizeTopLevelTab(raw){
-    const name = String(raw || "").trim().toLowerCase();
-    if (name === "upgrade") return "wallet";
-    if (name === "extension-themes" || name === "extthemes") return "extthemes";
-    return TOP_LEVEL_TABS.includes(name) ? name : "home";
-  }
-
-  let CURRENT_TAB = "home";
-  function currentTabName(){ return CURRENT_TAB; }
+  function normalizeTopLevelTab(raw){ return __gmxTabState.normalizeTopLevelTab(raw); }
+  function currentTabName(){ return __gmxTabState.getCurrentTab(); }
 
   function wallpaperKeyForTab(tab){ return __gmxWpStore.wallpaperKeyForTab(tab); }
   function getWallpaperForTab(tab){ return __gmxWpStore.getWallpaperForTab(tab); }
   function setWallpaperForTab(tab, id){ return __gmxWpStore.setWallpaperForTab(tab, id); }
   function migrateLegacyWallpaperSelectionOnce(){ return __gmxWpStore.migrateLegacyWallpaperSelectionOnce(); }
 
-  function wallpaperAssetPath(id){
-    return __gmxWp.wallpaperAssetPath(id);
-  }
-
-  function wallpaperFullUrl(id){
-    return __gmxWp.wallpaperFullUrl(id, WALLPAPERS);
-  }
-
-  function wallpaperThumbUrl(id){
-    return __gmxWp.wallpaperThumbUrl(id, WALLPAPERS);
-  }
-
-  function wallpaperUrl(id){
-    return __gmxWp.wallpaperUrl(id, WALLPAPERS);
-  }
-
+  function wallpaperAssetPath(id){ return __gmxWpHelpers.wallpaperAssetPath(id); }
+  function wallpaperFullUrl(id){ return __gmxWpHelpers.wallpaperFullUrl(id); }
+  function wallpaperThumbUrl(id){ return __gmxWpHelpers.wallpaperThumbUrl(id); }
+  function wallpaperUrl(id){ return __gmxWpHelpers.wallpaperUrl(id); }
   function wallpaperUnlocked(wp, idx, effectiveCustomLen){
-    if (!wp) return false;
-    if (wp.tier === "custom"){
-      const customIdx = idx;
-      return isPro() || customIdx < CUSTOM_WP_FREE_COUNT;
-    }
-    const mainIdx = idx - (effectiveCustomLen || 0);
-    return isPro() || (mainIdx < unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS));
+    return __gmxWpHelpers.wallpaperUnlocked(wp, idx, effectiveCustomLen);
   }
 
   function effectiveCustomWallpapersSite(){ return __gmxCustomWp.getEffectiveCustomWallpapersSite(); }

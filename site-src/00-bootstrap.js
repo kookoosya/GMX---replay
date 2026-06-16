@@ -36,6 +36,32 @@ const __gmxI18nUi = window.__GMXI18nUiFactory({
   },
 });
 
+if (!window.__GMXTabStateFactory) throw new Error("GMX tabstate factory missing");
+const __gmxTabState = window.__GMXTabStateFactory();
+
+if (!window.__GMXSiteI18nUiFactory) throw new Error("GMX sitei18nui factory missing");
+const __gmxSiteI18nUi = window.__GMXSiteI18nUiFactory({
+  getSiteLang: () => __gmxSt.lsGet(K.SITE_LANG, "en"),
+  getI18n: () => {
+    try {
+      if (
+        globalThis.GMX_SITE_I18N &&
+        typeof globalThis.GMX_SITE_I18N.createSiteI18nCatalog === "function"
+      ) {
+        return globalThis.GMX_SITE_I18N.createSiteI18nCatalog();
+      }
+    } catch (_e) {}
+    return { en: {} };
+  },
+  sanitizeI18nValue: (lang, value, fallback) =>
+    __gmxI18nUi.sanitizeI18nValue(lang, value, fallback),
+  onPatchDynamicCopy: (lang, merged) => {
+    try {
+      patchDynamicCopy(lang, merged);
+    } catch (_e) {}
+  },
+});
+
 if (!window.__GMXLangUiFactory) throw new Error("GMX langui factory missing");
 const __gmxLangUi = window.__GMXLangUiFactory({
   $: __gmxChrome.$,
@@ -69,7 +95,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616x";
+const ASSET_REV = "20260616y";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -150,6 +176,17 @@ const FREE_VISIBLE_THEMES = __gmxUnlock.FREE_VISIBLE_THEMES;
 const FREE_VISIBLE_STYLES = __gmxUnlock.FREE_VISIBLE_STYLES;
 const FREE_VISIBLE_PACKS = __gmxUnlock.FREE_VISIBLE_PACKS;
 const FREE_VISIBLE_WALLPAPERS = __gmxUnlock.FREE_VISIBLE_WALLPAPERS;
+
+if (!window.__GMXWallpaperHelpersFactory) throw new Error("GMX wallpaperhelpers factory missing");
+const __gmxWpHelpers = window.__GMXWallpaperHelpersFactory({
+  wp: __gmxWp,
+  getWallpapers: () => WALLPAPERS,
+  getExtWallpapers: () => EXT_WALLPAPERS,
+  isPro,
+  unlockedCountByRefs,
+  freeVisibleWallpapers: FREE_VISIBLE_WALLPAPERS,
+  customWpFreeCount: __gmxWp.CUSTOM_WP_FREE_COUNT,
+});
 const FREE_VISIBLE_EXT_THEMES = __gmxUnlock.FREE_VISIBLE_EXT_THEMES;
 const FREE_VISIBLE_EXT_WALLPAPERS = __gmxUnlock.FREE_VISIBLE_EXT_WALLPAPERS;
 
@@ -320,13 +357,13 @@ const __gmxHealth = window.__GMXHealthFactory({
   onRetrySession: async () => { try { if (getHandle()) await initSession(true); } catch {} },
   onRetryWallet: async () => {
     try {
-      if (CURRENT_TAB === "wallet") {
+      if (__gmxTabState.getCurrentTab() === "wallet") {
         await loadPlans();
         await loadBillingProof();
       }
     } catch {}
   },
-  onRetryReferrals: () => { try { if (CURRENT_TAB === "referrals") scheduleRefStatsRefresh(120); } catch {} },
+  onRetryReferrals: () => { try { if (__gmxTabState.getCurrentTab() === "referrals") scheduleRefStatsRefresh(120); } catch {} },
   onRetryUsage: async () => { try { if (getHandle()) await refreshUsage(); } catch {} },
 });
 __gmxHealth.wireRetryNow();
@@ -504,9 +541,9 @@ const __gmxExtThemesUi = window.__GMXExtThemesUiFactory({
 
 if (!window.__GMXNavFactory) throw new Error("GMX nav factory missing");
 const __gmxNav = window.__GMXNavFactory({
-  normalizeTopLevelTab: (n) => normalizeTopLevelTab(n),
-  setCurrentTab: (n) => { CURRENT_TAB = n; },
-  getTopLevelTabs: () => TOP_LEVEL_TABS,
+  normalizeTopLevelTab: (n) => __gmxTabState.normalizeTopLevelTab(n),
+  setCurrentTab: (n) => __gmxTabState.setCurrentTab(n),
+  getTopLevelTabs: () => __gmxTabState.TOP_LEVEL_TABS,
   setBg: (n) => __gmxSetBg.setBg(n),
   persistLastTab: (n) => { try { __gmxSt.lsSet(K.LAST_TAB, n); } catch {} },
   onTabActivated: (name) => {

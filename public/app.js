@@ -36,6 +36,32 @@ const __gmxI18nUi = window.__GMXI18nUiFactory({
   },
 });
 
+if (!window.__GMXTabStateFactory) throw new Error("GMX tabstate factory missing");
+const __gmxTabState = window.__GMXTabStateFactory();
+
+if (!window.__GMXSiteI18nUiFactory) throw new Error("GMX sitei18nui factory missing");
+const __gmxSiteI18nUi = window.__GMXSiteI18nUiFactory({
+  getSiteLang: () => __gmxSt.lsGet(K.SITE_LANG, "en"),
+  getI18n: () => {
+    try {
+      if (
+        globalThis.GMX_SITE_I18N &&
+        typeof globalThis.GMX_SITE_I18N.createSiteI18nCatalog === "function"
+      ) {
+        return globalThis.GMX_SITE_I18N.createSiteI18nCatalog();
+      }
+    } catch (_e) {}
+    return { en: {} };
+  },
+  sanitizeI18nValue: (lang, value, fallback) =>
+    __gmxI18nUi.sanitizeI18nValue(lang, value, fallback),
+  onPatchDynamicCopy: (lang, merged) => {
+    try {
+      patchDynamicCopy(lang, merged);
+    } catch (_e) {}
+  },
+});
+
 if (!window.__GMXLangUiFactory) throw new Error("GMX langui factory missing");
 const __gmxLangUi = window.__GMXLangUiFactory({
   $: __gmxChrome.$,
@@ -69,7 +95,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260616x";
+const ASSET_REV = "20260616y";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -150,6 +176,17 @@ const FREE_VISIBLE_THEMES = __gmxUnlock.FREE_VISIBLE_THEMES;
 const FREE_VISIBLE_STYLES = __gmxUnlock.FREE_VISIBLE_STYLES;
 const FREE_VISIBLE_PACKS = __gmxUnlock.FREE_VISIBLE_PACKS;
 const FREE_VISIBLE_WALLPAPERS = __gmxUnlock.FREE_VISIBLE_WALLPAPERS;
+
+if (!window.__GMXWallpaperHelpersFactory) throw new Error("GMX wallpaperhelpers factory missing");
+const __gmxWpHelpers = window.__GMXWallpaperHelpersFactory({
+  wp: __gmxWp,
+  getWallpapers: () => WALLPAPERS,
+  getExtWallpapers: () => EXT_WALLPAPERS,
+  isPro,
+  unlockedCountByRefs,
+  freeVisibleWallpapers: FREE_VISIBLE_WALLPAPERS,
+  customWpFreeCount: __gmxWp.CUSTOM_WP_FREE_COUNT,
+});
 const FREE_VISIBLE_EXT_THEMES = __gmxUnlock.FREE_VISIBLE_EXT_THEMES;
 const FREE_VISIBLE_EXT_WALLPAPERS = __gmxUnlock.FREE_VISIBLE_EXT_WALLPAPERS;
 
@@ -320,13 +357,13 @@ const __gmxHealth = window.__GMXHealthFactory({
   onRetrySession: async () => { try { if (getHandle()) await initSession(true); } catch {} },
   onRetryWallet: async () => {
     try {
-      if (CURRENT_TAB === "wallet") {
+      if (__gmxTabState.getCurrentTab() === "wallet") {
         await loadPlans();
         await loadBillingProof();
       }
     } catch {}
   },
-  onRetryReferrals: () => { try { if (CURRENT_TAB === "referrals") scheduleRefStatsRefresh(120); } catch {} },
+  onRetryReferrals: () => { try { if (__gmxTabState.getCurrentTab() === "referrals") scheduleRefStatsRefresh(120); } catch {} },
   onRetryUsage: async () => { try { if (getHandle()) await refreshUsage(); } catch {} },
 });
 __gmxHealth.wireRetryNow();
@@ -504,9 +541,9 @@ const __gmxExtThemesUi = window.__GMXExtThemesUiFactory({
 
 if (!window.__GMXNavFactory) throw new Error("GMX nav factory missing");
 const __gmxNav = window.__GMXNavFactory({
-  normalizeTopLevelTab: (n) => normalizeTopLevelTab(n),
-  setCurrentTab: (n) => { CURRENT_TAB = n; },
-  getTopLevelTabs: () => TOP_LEVEL_TABS,
+  normalizeTopLevelTab: (n) => __gmxTabState.normalizeTopLevelTab(n),
+  setCurrentTab: (n) => __gmxTabState.setCurrentTab(n),
+  getTopLevelTabs: () => __gmxTabState.TOP_LEVEL_TABS,
   setBg: (n) => __gmxSetBg.setBg(n),
   persistLastTab: (n) => { try { __gmxSt.lsSet(K.LAST_TAB, n); } catch {} },
   onTabActivated: (name) => {
@@ -690,69 +727,30 @@ async function postEvent(type, meta){
 
   async function loadCustomWallpapers(){ return __gmxCustomWp.loadCustomWallpapers(); }
 
-  function normalizeWallpaperId(id){
-    return __gmxWp.normalizeWallpaperId(id, WALLPAPERS);
-  }
+  function normalizeWallpaperId(id){ return __gmxWpHelpers.normalizeWallpaperId(id); }
 
   __gmxWpStore.normalizeAllWallpapers();
 
-  function normalizeExtWallpaperIdLocal(id){
-    return __gmxWp.normalizeExtWallpaperIdLocal(id, EXT_WALLPAPERS);
-  }
-
-  function extWallpaperAssetPath(id){
-    return __gmxWp.extWallpaperAssetPath(id, EXT_WALLPAPERS);
-  }
-
-  function extWallpaperFullUrl(id){
-    return __gmxWp.extWallpaperFullUrl(id, EXT_WALLPAPERS);
-  }
-
-  function extWallpaperThumbUrl(id){
-    return __gmxWp.extWallpaperThumbUrl(id, EXT_WALLPAPERS);
-  }
+  function normalizeExtWallpaperIdLocal(id){ return __gmxWpHelpers.normalizeExtWallpaperIdLocal(id); }
+  function extWallpaperAssetPath(id){ return __gmxWpHelpers.extWallpaperAssetPath(id); }
+  function extWallpaperFullUrl(id){ return __gmxWpHelpers.extWallpaperFullUrl(id); }
+  function extWallpaperThumbUrl(id){ return __gmxWpHelpers.extWallpaperThumbUrl(id); }
   try{ __gmxExtWpStore.normalizeStoredExtWallpaperSelections(); }catch{}
 
-  const TOP_LEVEL_TABS = ["home","gm","gn","prediction","referrals","leaderboard","themes","extthemes","wallet","admin"];
-  function normalizeTopLevelTab(raw){
-    const name = String(raw || "").trim().toLowerCase();
-    if (name === "upgrade") return "wallet";
-    if (name === "extension-themes" || name === "extthemes") return "extthemes";
-    return TOP_LEVEL_TABS.includes(name) ? name : "home";
-  }
-
-  let CURRENT_TAB = "home";
-  function currentTabName(){ return CURRENT_TAB; }
+  function normalizeTopLevelTab(raw){ return __gmxTabState.normalizeTopLevelTab(raw); }
+  function currentTabName(){ return __gmxTabState.getCurrentTab(); }
 
   function wallpaperKeyForTab(tab){ return __gmxWpStore.wallpaperKeyForTab(tab); }
   function getWallpaperForTab(tab){ return __gmxWpStore.getWallpaperForTab(tab); }
   function setWallpaperForTab(tab, id){ return __gmxWpStore.setWallpaperForTab(tab, id); }
   function migrateLegacyWallpaperSelectionOnce(){ return __gmxWpStore.migrateLegacyWallpaperSelectionOnce(); }
 
-  function wallpaperAssetPath(id){
-    return __gmxWp.wallpaperAssetPath(id);
-  }
-
-  function wallpaperFullUrl(id){
-    return __gmxWp.wallpaperFullUrl(id, WALLPAPERS);
-  }
-
-  function wallpaperThumbUrl(id){
-    return __gmxWp.wallpaperThumbUrl(id, WALLPAPERS);
-  }
-
-  function wallpaperUrl(id){
-    return __gmxWp.wallpaperUrl(id, WALLPAPERS);
-  }
-
+  function wallpaperAssetPath(id){ return __gmxWpHelpers.wallpaperAssetPath(id); }
+  function wallpaperFullUrl(id){ return __gmxWpHelpers.wallpaperFullUrl(id); }
+  function wallpaperThumbUrl(id){ return __gmxWpHelpers.wallpaperThumbUrl(id); }
+  function wallpaperUrl(id){ return __gmxWpHelpers.wallpaperUrl(id); }
   function wallpaperUnlocked(wp, idx, effectiveCustomLen){
-    if (!wp) return false;
-    if (wp.tier === "custom"){
-      const customIdx = idx;
-      return isPro() || customIdx < CUSTOM_WP_FREE_COUNT;
-    }
-    const mainIdx = idx - (effectiveCustomLen || 0);
-    return isPro() || (mainIdx < unlockedCountByRefs(WALLPAPERS.length, FREE_VISIBLE_WALLPAPERS));
+    return __gmxWpHelpers.wallpaperUnlocked(wp, idx, effectiveCustomLen);
   }
 
   function effectiveCustomWallpapersSite(){ return __gmxCustomWp.getEffectiveCustomWallpapersSite(); }
@@ -2281,7 +2279,7 @@ const msg = $("refMsg");
   });
   setInterval(()=>{
     try{
-      if (CURRENT_TAB === "prediction") loadPredictionSignals({ force:false });
+      if (__gmxTabState.getCurrentTab() === "prediction") loadPredictionSignals({ force:false });
     }catch{}
   }, 60000);
 
@@ -3630,114 +3628,8 @@ function pruneLegacyAdminPanels(){
     ? globalThis.GMX_SITE_I18N.createSiteI18nCatalog()
     : { en: {} };
 
-  function siteTr(key, fallback = ""){
-    const lang = localStorage.getItem(LS_SITE_LANG) || "en";
-    const base = I18N.en || {};
-    const dict = I18N[lang] || {};
-    const v = sanitizeI18nValue(lang, dict[key], base[key]);
-    const resolved = v ?? base[key];
-    if (resolved !== undefined && resolved !== null && String(resolved).trim() && String(resolved) !== key) return String(resolved);
-    return fallback || String(key);
-  }
-
-  function setPh(id, key, merged){
-    try{
-      const el = document.getElementById(id);
-      if (!el) return;
-      const v = merged[key];
-      if (v !== undefined && v !== null) el.placeholder = String(v);
-    }catch{}
-  }
-
-  function sanitizeMiniHTML(input){
-    // Very small HTML allowlist for translated bullet points.
-    // Allowed tags: b, strong, em, br, span, kbd, code. No attributes.
-    const tpl = document.createElement("template");
-    tpl.innerHTML = String(input ?? "");
-    const ALLOWED = new Set(["B","STRONG","EM","BR","SPAN","KBD","CODE"]);
-    const nodes = tpl.content.querySelectorAll("*");
-    nodes.forEach(node=>{
-      if (!ALLOWED.has(node.tagName)){
-        node.replaceWith(document.createTextNode(node.textContent || ""));
-        return;
-      }
-      [...node.attributes].forEach(a=>node.removeAttribute(a.name));
-    });
-    tpl.content.querySelectorAll("script,style,iframe,object,embed,link,meta").forEach(n=>n.remove());
-    return tpl.innerHTML;
-  }
-
-  function setText(id, val){
-    const el = document.getElementById(id);
-    if (!el || val === undefined || val === null) return;
-
-    // Allow UL translation via array-of-items
-    if (Array.isArray(val) && el.tagName === "UL"){
-      el.innerHTML = val.map(x => `<li>${sanitizeMiniHTML(x)}</li>`).join("");
-      return;
-    }
-
-    const raw = String(val);
-
-    // Explicit HTML prefix stays supported.
-    if (raw.startsWith("HTML:")){
-      el.innerHTML = sanitizeMiniHTML(raw.slice(5));
-      return;
-    }
-
-    // Many locale strings already contain small safe tags like <b>/<span class="kbd">.
-    // Render those through the allowlist instead of showing literal markup in the UI.
-    if (/<\/?[a-z][^>]*>/i.test(raw)){
-      el.innerHTML = sanitizeMiniHTML(raw);
-      return;
-    }
-
-    el.textContent = raw;
-  }
-
-
-
-  const FORCE_EN_KEYS = new Set([]);
-
-  function applyLang(){
-    const lang = localStorage.getItem(LS_SITE_LANG) || "en";
-    const base = I18N.en || {};
-    const d = I18N[lang] || {};
-
-    const merged = Object.assign({}, base);
-    for (const [k,v] of Object.entries(d)){
-      const safe = sanitizeI18nValue(lang, v, base[k]);
-      if (safe === "" || safe === null || safe === undefined) continue;
-      merged[k] = safe;
-    }
-
-    if (merged.gm_size_label) merged.gm_size = merged.gm_size_label;
-    if (merged.gn_size_label) merged.gn_size = merged.gn_size_label;
-
-    for (const k of Object.keys(merged)){
-      const v = (lang !== "en" && FORCE_EN_KEYS.has(k)) ? (base[k] ?? merged[k]) : merged[k];
-      setText(k, v);
-    }
-
-    // Placeholders
-    setPh("xHandle","xHandle_ph",merged);
-    setPh("redeemCode","redeemCode_ph",merged);
-    setPh("gmNewLine","gmNewLine_ph",merged);
-    setPh("gmFilter","gmFilter_ph",merged);
-    setPh("gmPaste","gmPaste_ph",merged);
-    setPh("gnNewLine","gnNewLine_ph",merged);
-    setPh("gnFilter","gnFilter_ph",merged);
-    setPh("gnPaste","gnPaste_ph",merged);
-    setPh("w_wallet","w_wallet_ph",merged);
-    setPh("w_sig","w_sig_ph",merged);
-    setPh("w_payer","w_payer_ph",merged);
-    setPh("adminSecret","adminSecret_ph",merged);
-    setPh("adminOut","adminOut_ph",merged);
-
-    // Referral link placeholder depends on auth state
-    try{ const rl=$("refLink"); if(rl) rl.placeholder = merged["connectFirst"] || ""; }catch{}
-    try{ patchDynamicCopy(lang, merged); }catch(e){}
-  }
+  function siteTr(key, fallback = ""){ return __gmxSiteI18nUi.siteTr(key, fallback); }
+  function applyLang(){ return __gmxSiteI18nUi.applyLang(); }
 
 function getReferralUiCopy(_lang){
   const fallback = {
@@ -3969,7 +3861,7 @@ function renderReferralRightCopy(lang){
     try{ syncReferralCardCopy(); }catch{}
     try{ initReferralPromoDetailsState(); }catch{}
     try{
-      if (CURRENT_TAB === "referrals" && getHandle()){
+      if (__gmxTabState.getCurrentTab() === "referrals" && getHandle()){
         scheduleRefStatsRefresh(220);
       }
     }catch{}
@@ -4826,7 +4718,7 @@ function cleanupKeyLines(lines){
     bootTab = normalizeTopLevelTab(storedTab || "home");
   }catch{}
   tab(bootTab);
-  CURRENT_TAB = bootTab;
+  __gmxTabState.setCurrentTab(bootTab);
   setBg(bootTab);
 
   ping();

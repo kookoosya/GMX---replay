@@ -6,114 +6,8 @@
     ? globalThis.GMX_SITE_I18N.createSiteI18nCatalog()
     : { en: {} };
 
-  function siteTr(key, fallback = ""){
-    const lang = localStorage.getItem(LS_SITE_LANG) || "en";
-    const base = I18N.en || {};
-    const dict = I18N[lang] || {};
-    const v = sanitizeI18nValue(lang, dict[key], base[key]);
-    const resolved = v ?? base[key];
-    if (resolved !== undefined && resolved !== null && String(resolved).trim() && String(resolved) !== key) return String(resolved);
-    return fallback || String(key);
-  }
-
-  function setPh(id, key, merged){
-    try{
-      const el = document.getElementById(id);
-      if (!el) return;
-      const v = merged[key];
-      if (v !== undefined && v !== null) el.placeholder = String(v);
-    }catch{}
-  }
-
-  function sanitizeMiniHTML(input){
-    // Very small HTML allowlist for translated bullet points.
-    // Allowed tags: b, strong, em, br, span, kbd, code. No attributes.
-    const tpl = document.createElement("template");
-    tpl.innerHTML = String(input ?? "");
-    const ALLOWED = new Set(["B","STRONG","EM","BR","SPAN","KBD","CODE"]);
-    const nodes = tpl.content.querySelectorAll("*");
-    nodes.forEach(node=>{
-      if (!ALLOWED.has(node.tagName)){
-        node.replaceWith(document.createTextNode(node.textContent || ""));
-        return;
-      }
-      [...node.attributes].forEach(a=>node.removeAttribute(a.name));
-    });
-    tpl.content.querySelectorAll("script,style,iframe,object,embed,link,meta").forEach(n=>n.remove());
-    return tpl.innerHTML;
-  }
-
-  function setText(id, val){
-    const el = document.getElementById(id);
-    if (!el || val === undefined || val === null) return;
-
-    // Allow UL translation via array-of-items
-    if (Array.isArray(val) && el.tagName === "UL"){
-      el.innerHTML = val.map(x => `<li>${sanitizeMiniHTML(x)}</li>`).join("");
-      return;
-    }
-
-    const raw = String(val);
-
-    // Explicit HTML prefix stays supported.
-    if (raw.startsWith("HTML:")){
-      el.innerHTML = sanitizeMiniHTML(raw.slice(5));
-      return;
-    }
-
-    // Many locale strings already contain small safe tags like <b>/<span class="kbd">.
-    // Render those through the allowlist instead of showing literal markup in the UI.
-    if (/<\/?[a-z][^>]*>/i.test(raw)){
-      el.innerHTML = sanitizeMiniHTML(raw);
-      return;
-    }
-
-    el.textContent = raw;
-  }
-
-
-
-  const FORCE_EN_KEYS = new Set([]);
-
-  function applyLang(){
-    const lang = localStorage.getItem(LS_SITE_LANG) || "en";
-    const base = I18N.en || {};
-    const d = I18N[lang] || {};
-
-    const merged = Object.assign({}, base);
-    for (const [k,v] of Object.entries(d)){
-      const safe = sanitizeI18nValue(lang, v, base[k]);
-      if (safe === "" || safe === null || safe === undefined) continue;
-      merged[k] = safe;
-    }
-
-    if (merged.gm_size_label) merged.gm_size = merged.gm_size_label;
-    if (merged.gn_size_label) merged.gn_size = merged.gn_size_label;
-
-    for (const k of Object.keys(merged)){
-      const v = (lang !== "en" && FORCE_EN_KEYS.has(k)) ? (base[k] ?? merged[k]) : merged[k];
-      setText(k, v);
-    }
-
-    // Placeholders
-    setPh("xHandle","xHandle_ph",merged);
-    setPh("redeemCode","redeemCode_ph",merged);
-    setPh("gmNewLine","gmNewLine_ph",merged);
-    setPh("gmFilter","gmFilter_ph",merged);
-    setPh("gmPaste","gmPaste_ph",merged);
-    setPh("gnNewLine","gnNewLine_ph",merged);
-    setPh("gnFilter","gnFilter_ph",merged);
-    setPh("gnPaste","gnPaste_ph",merged);
-    setPh("w_wallet","w_wallet_ph",merged);
-    setPh("w_sig","w_sig_ph",merged);
-    setPh("w_payer","w_payer_ph",merged);
-    setPh("adminSecret","adminSecret_ph",merged);
-    setPh("adminOut","adminOut_ph",merged);
-
-    // Referral link placeholder depends on auth state
-    try{ const rl=$("refLink"); if(rl) rl.placeholder = merged["connectFirst"] || ""; }catch{}
-    try{ patchDynamicCopy(lang, merged); }catch(e){}
-  }
+  function siteTr(key, fallback = ""){ return __gmxSiteI18nUi.siteTr(key, fallback); }
+  function applyLang(){ return __gmxSiteI18nUi.applyLang(); }
 
 function getReferralUiCopy(_lang){
   const fallback = {
@@ -345,7 +239,7 @@ function renderReferralRightCopy(lang){
     try{ syncReferralCardCopy(); }catch{}
     try{ initReferralPromoDetailsState(); }catch{}
     try{
-      if (CURRENT_TAB === "referrals" && getHandle()){
+      if (__gmxTabState.getCurrentTab() === "referrals" && getHandle()){
         scheduleRefStatsRefresh(220);
       }
     }catch{}
@@ -1202,7 +1096,7 @@ function cleanupKeyLines(lines){
     bootTab = normalizeTopLevelTab(storedTab || "home");
   }catch{}
   tab(bootTab);
-  CURRENT_TAB = bootTab;
+  __gmxTabState.setCurrentTab(bootTab);
   setBg(bootTab);
 
   ping();

@@ -117,6 +117,45 @@ test("langui: flagEmoji helper", () => {
   assert.equal(lang.flagEmoji(""), "GLB");
 });
 
+test("tabstate: normalizeTopLevelTab aliases", () => {
+  const tab = loadFactory("app.tabstate.js", "__GMXTabStateFactory")();
+  assert.equal(tab.normalizeTopLevelTab("upgrade"), "wallet");
+  assert.equal(tab.normalizeTopLevelTab("extension-themes"), "extthemes");
+  assert.equal(tab.normalizeTopLevelTab("bogus"), "home");
+  tab.setCurrentTab("gm");
+  assert.equal(tab.getCurrentTab(), "gm");
+});
+
+test("wallpaperhelpers: wallpaperUnlocked free tier", () => {
+  const wpMod = loadFactory("app.wallpapers.js", "__GMXWallpapersFactory")({
+    getAssetRev: () => "test",
+    getSiteCustomUpload: () => "",
+    getExtCustomUpload: () => "",
+  });
+  const helpers = loadFactory("app.wallpaperhelpers.js", "__GMXWallpaperHelpersFactory")({
+    wp: wpMod,
+    getWallpapers: () => [{ id: "a", tier: "pack" }, { id: "b", tier: "pack" }],
+    getExtWallpapers: () => [],
+    isPro: () => false,
+    unlockedCountByRefs: (total, free) => free,
+    freeVisibleWallpapers: 1,
+    customWpFreeCount: 2,
+  });
+  assert.equal(helpers.wallpaperUnlocked({ tier: "pack" }, 0, 0), true);
+  assert.equal(helpers.wallpaperUnlocked({ tier: "pack" }, 1, 0), false);
+  assert.equal(helpers.wallpaperUnlocked({ tier: "custom" }, 1, 0), true);
+});
+
+test("sitei18nui: siteTr fallback", () => {
+  const ui = loadFactory("app.sitei18nui.js", "__GMXSiteI18nUiFactory")({
+    getSiteLang: () => "en",
+    getI18n: () => ({ en: { hello: "Hello" } }),
+    sanitizeI18nValue: (_l, v) => v,
+  });
+  assert.equal(ui.siteTr("hello"), "Hello");
+  assert.equal(ui.siteTr("missing", "Fallback"), "Fallback");
+});
+
 test("extview: normalizeExtViewValue and bindExtTabs", () => {
   const extview = loadFactory("app.extview.js", "__GMXExtViewFactory")({
     $: () => null,
