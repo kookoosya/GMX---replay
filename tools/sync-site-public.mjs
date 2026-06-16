@@ -43,6 +43,7 @@ const shellModules = [
   "app.ui.js",
   "app.generate.js",
   "app.banks.js",
+  "app.bankui.js",
   "app.antirepeat.js",
   "app.genparams.js",
   "app.cleanfill.js",

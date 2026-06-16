@@ -1190,3 +1190,46 @@ test("admin: requireAdminSignedIn blocks when unsigned", () => {
   assert.equal(admin.requireAdminSignedIn(), false);
   assert.match(els.adminMsg.innerHTML, /Sign in first/);
 });
+
+test("bankui: remainingSlots respects free cap", () => {
+  const storage = { data: { gmx_gm_bank: "a\nb\nc" } };
+  const bankui = loadFactory("app.bankui.js", "__GMXBankUiFactory")({
+    saveCap: () => 50,
+    saveCapFree: 50,
+    getBankKey: (kind) => (kind === "gm" ? "gmx_gm_bank" : "gmx_gn_bank"),
+    readKey: (key) =>
+      String(storage.data[key] || "")
+        .split(/\r?\n/)
+        .map((x) => x.trim())
+        .filter(Boolean),
+    writeKey: () => {},
+  });
+  assert.equal(bankui.totalSaved("gm"), 3);
+  assert.equal(bankui.remainingSlots("gm"), 47);
+});
+
+test("bankui: renderList warns when disconnected", () => {
+  const els = {
+    gmList: { innerHTML: "" },
+    gmCount: { textContent: "" },
+    gmMsg: { innerHTML: "" },
+    gmTotal: { textContent: "" },
+    gmCap: { textContent: "" },
+    gmSavedVal: { textContent: "" },
+    gmSavedFill: { style: { width: "" } },
+  };
+  const bankui = loadFactory("app.bankui.js", "__GMXBankUiFactory")({
+    $: (id) => els[id] || null,
+    getHandle: () => "",
+    getBankKey: () => "gmx_gm_bank",
+    readKey: () => [],
+    writeKey: () => {},
+    dedupeLines: (lines) => lines,
+    normalizeLine: (s) => String(s || "").trim(),
+    lastSaved: { gm: 0, gn: 0 },
+    saveCapFree: 50,
+    isPro: () => false,
+  });
+  bankui.renderList("gm");
+  assert.match(els.gmMsg.innerHTML, /Connect first/);
+});
