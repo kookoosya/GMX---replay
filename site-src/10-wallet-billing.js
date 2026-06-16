@@ -43,238 +43,6 @@
     __gmxWh.addIntentMemoInstruction(tx, intentId, web3);
   }
 
-  function readWalletChoice(){
-    try{ return localStorage.getItem(LS_WALLET_CHOICE) || ""; }catch{ return ""; }
-  }
-  function saveWalletChoice(name){
-    try{ localStorage.setItem(LS_WALLET_CHOICE, String(name||"")); }catch{}
-  }
-
-  function setWalletUi(){
-    const addr = $("sf_addr");
-    const label = $("sf_label");
-    const btnConnect = $("sf_connect");
-    const btnDisconnect = $("sf_disconnect");
-    const payBtn = $("sf_pay");
-    const hint = $("sf_hint");
-
-    if (addr){
-      addr.textContent = (!WALLET.connected || !WALLET.publicKey) ? "not connected" : shortPk(WALLET.publicKey);
-    }
-    if (label){
-      label.textContent = WALLET.connected ? (WALLET.name || "Wallet") : "Wallet";
-    }
-
-    if (btnConnect) btnConnect.classList.toggle("hidden", !!WALLET.connected);
-    if (btnDisconnect) btnDisconnect.classList.toggle("hidden", !WALLET.connected);
-
-    const canPay = !!(selectedPlan && WALLET.connected && WALLET.publicKey);
-    if (payBtn) payBtn.disabled = !canPay;
-
-    if (hint){
-      if (!selectedPlan) hint.innerHTML = `<span class="muted">Select a plan above to continue.</span>`;
-      else if (!WALLET.connected) hint.innerHTML = `<span class="muted">Now connect a wallet to pay in ${escapeHtml(selectedCurrency)}.</span>`;
-      else hint.innerHTML = `<span class="ok">Ready.</span>`;
-    }
-  }
-
-  
-  function openPlanModal(){
-    __gmxModals.openModal("plan_modal");
-  }
-  function closePlanModal(){
-    __gmxModals.closeModal("plan_modal");
-  }
-
-function openWalletModal(){
-    __gmxModals.openModal("sf_modal", {
-      onOpen: () => {
-        renderWalletList();
-        const r = $("sf_modal_receiver");
-        if (r) r.textContent = BILLING?.receiver ? shortPk(BILLING.receiver) : "—";
-        const hm = $("sf_modal_msg");
-        if (hm) hm.textContent = "";
-      },
-    });
-  }
-  function closeWalletModal(){
-    __gmxModals.closeModal("sf_modal");
-  }
-
-  function renderWalletList(){
-    const listEl = $("walletPick");
-    const hintEl = $("walletPickHint");
-    const connectBtn = $("sf_modal_connect");
-    if (!listEl) return;
-
-    const choices = listWalletChoices();
-    listEl.innerHTML = "";
-
-    if (!choices.length){
-      if (hintEl) hintEl.innerHTML = `<span class="muted">No wallet detected. Install Solflare / Phantom / Backpack.</span>`;
-      if (connectBtn) connectBtn.disabled = true;
-      return;
-    }
-
-    if (hintEl) hintEl.innerHTML = `<span class="muted">Choose a wallet and click Connect.</span>`;
-
-    const saved = readWalletChoice();
-    let picked = choices.find(x => walletNameKey(x.name) === walletNameKey(saved)) || choices[0];
-    saveWalletChoice(picked.name);
-
-    for (const c of choices){
-      const row = document.createElement("div");
-      row.className = "walletItem";
-      row.dataset.name = c.name;
-      row.classList.toggle("active", walletNameKey(c.name) === walletNameKey(picked.name));
-
-      const icon = document.createElement("div");
-      icon.className = "walletIcon";
-      const src = safeIconSrc(c.icon) || defaultWalletIcon(c.name);
-if (src){
-  const img = document.createElement("img");
-  img.alt = c.name;
-  img.src = src;
-  icon.appendChild(img);
-} else {
-  icon.textContent = (c.name || "W").slice(0,1).toUpperCase();
-}
-
-      const mid = document.createElement("div");
-      mid.style.display = "flex";
-      mid.style.flexDirection = "column";
-      const nm = document.createElement("div");
-      nm.className = "walletName";
-      nm.textContent = c.name;
-      const sub = document.createElement("div");
-      sub.className = "walletSub";
-      sub.textContent = (c.kind === "standard") ? "Wallet Standard" : "";
-      mid.appendChild(nm);
-      mid.appendChild(sub);
-
-      row.appendChild(icon);
-      row.appendChild(mid);
-
-      row.onclick = ()=>{
-        picked = c;
-        saveWalletChoice(picked.name);
-        Array.from(listEl.children).forEach(ch=>{
-          try{ ch.classList.toggle("active", walletNameKey(ch.dataset.name) === walletNameKey(picked.name)); }catch{}
-        });
-      };
-
-      listEl.appendChild(row);
-    }
-
-    if (connectBtn){
-      connectBtn.disabled = false;
-      connectBtn.onclick = async ()=>{
-        const msg = $("sf_modal_msg");
-        try{
-          connectBtn.disabled = true;
-          if (msg) msg.textContent = "Opening wallet...";
-          await connectWalletByChoice(picked);
-          closeWalletModal();
-          const out = $("w_msg");
-          if (out) out.innerHTML = `<span class="ok">Wallet connected.</span>`;
-        }catch(e){
-          if (msg) msg.innerHTML = `<span class="bad">${escapeHtml(String(e?.message || "wallet_connect_failed"))}</span>`;
-        }finally{
-          connectBtn.disabled = false;
-          setWalletUi();
-        }
-      };
-    }
-  }
-
-  async function connectWalletByChoice(choice){
-    if (!choice) throw new Error("wallet_not_selected");
-    const web3 = window.solanaWeb3;
-    if (!web3?.PublicKey) throw new Error("web3_unavailable");
-
-    // reset
-    WALLET.connected = false;
-    WALLET.kind = null;
-    WALLET.name = "";
-    WALLET.icon = "";
-    WALLET.wallet = null;
-    WALLET.account = null;
-    WALLET.provider = null;
-    WALLET.publicKey = null;
-
-    if (choice.kind === "standard"){
-      const w = choice.wallet;
-      const connect = w?.features?.["standard:connect"]?.connect;
-      if (typeof connect !== "function") throw new Error("wallet_connect_unavailable");
-      const res = await connect();
-      const accounts = res?.accounts || [];
-      const acc = accounts.find(a => (a?.chains || []).includes(WS_CHAIN)) || accounts.find(a => (a?.chains || []).some(c=>String(c||"").startsWith("solana:"))) || accounts[0];
-      if (!acc?.address) throw new Error("wallet_no_account");
-
-      WALLET.connected = true;
-      WALLET.kind = "standard";
-      WALLET.name = choice.name;
-      WALLET.icon = choice.icon;
-      WALLET.wallet = w;
-      WALLET.account = acc;
-      WALLET.publicKey = new web3.PublicKey(acc.address);
-
-      // auto-update on changes
-      try{
-        const ev = w?.features?.["standard:events"]?.on;
-        if (typeof ev === "function"){
-          ev("disconnect", ()=>{
-            disconnectWallet();
-            toast("warn", "Wallet disconnected.");
-          });
-          ev("change", ({ accounts })=>{
-            try{
-              const accs = accounts || [];
-              const next = accs.find(a => (a?.chains || []).includes(WS_CHAIN)) || accs[0];
-              if (!next?.address){ disconnectWallet(); return; }
-              WALLET.account = next;
-              WALLET.publicKey = new web3.PublicKey(next.address);
-              setWalletUi();
-            }catch{}
-          });
-        }
-      }catch{}
-      return;
-    }
-
-    // legacy
-    const p = choice.provider;
-    if (!p?.connect) throw new Error("wallet_connect_unavailable");
-    const r = await p.connect();
-    const pk = p.publicKey || r?.publicKey;
-    if (!pk) throw new Error("wallet_no_account");
-
-    WALLET.connected = true;
-    WALLET.kind = "legacy";
-    WALLET.name = choice.name;
-    WALLET.provider = p;
-    WALLET.publicKey = pk?.toBase58 ? pk : new web3.PublicKey(String(pk));
-  }
-
-  async function disconnectWallet(){
-    try{
-      if (WALLET.kind === "standard" && WALLET.wallet?.features?.["standard:disconnect"]?.disconnect){
-        await WALLET.wallet.features["standard:disconnect"].disconnect();
-      } else if (WALLET.kind === "legacy" && WALLET.provider?.disconnect){
-        await WALLET.provider.disconnect();
-      }
-    }catch{}
-    WALLET.connected = false;
-    WALLET.kind = null;
-    WALLET.name = "";
-    WALLET.icon = "";
-    WALLET.wallet = null;
-    WALLET.account = null;
-    WALLET.provider = null;
-    WALLET.publicKey = null;
-    setWalletUi();
-  }
-
   function getRpcUrl(){ return __gmxWh.getRpcUrl(BILLING); }
   function rpcCandidates(){ return __gmxWh.rpcCandidates(BILLING); }
   function shouldRetryRpc(err){ return __gmxWh.shouldRetryRpc(err); }
@@ -329,116 +97,6 @@ if (src){
   const fmtSol = __gmxWh.fmtSol;
   const planPricePrimary = __gmxWh.planPricePrimary;
   const planPriceSecondary = __gmxWh.planPriceSecondary;
-
-  function renderPlanGrid(){
-    const grid = $("planGrid");
-    if (!grid) return;
-    grid.innerHTML = "";
-
-    const plans = BILLING?.plans || [];
-    for (const p of plans){
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "planCard";
-      btn.dataset.key = p.key;
-      btn.classList.toggle("active", p.key === selectedPlanKey);
-
-      const primary = planPricePrimary(p, selectedCurrency);
-      const secondary = planPriceSecondary(p, selectedCurrency);
-
-      // simple badges
-      p.badge = (Number(p.days||0) >= 365) ? "2 mo free" : (Number(p.days||0) >= 180 ? "Popular" : "");
-      if (!p.badge) p.badge = "";
-
-      btn.innerHTML = `
-        <div class="planTop">
-          <div>
-            <div class="planName">${escapeHtml(p.label || p.key)}</div>
-            ${p.badge ? `<div class="planBadge" style="margin-top:6px">${escapeHtml(p.badge)}</div>` : ``}
-          </div>
-          <div class="planPrice">${escapeHtml(primary)}</div>
-        </div>
-        <div class="planSub">${secondary ? escapeHtml(secondary) : ""}</div>
-        <div class="planMeta">Unlock Pro for ${escapeHtml(String(p.days||0))} days</div>
-      `;
-
-      btn.onclick = ()=>{
-        selectedPlanKey = p.key;
-        selectedPlan = p;
-        try{ $("walletActions")?.classList.remove("hidden"); }catch{}
-        renderPlanGrid();
-        setWalletUi();
-      };
-
-      grid.appendChild(btn);
-    }
-  }
-
-  function setCurrency(cur){
-    selectedCurrency = cur;
-    // buttons
-    ["SOL","USDC","USDT"].forEach(c=>{
-      const el = $("token_" + c);
-      if (el) el.classList.toggle("active", c === selectedCurrency);
-    });
-    renderPlanGrid();
-    setWalletUi();
-  }
-
-  async function loadPlans(){
-    try{
-      const j = await api("/api/billing/plans");
-      BILLING = j || BILLING;
-      const plans = BILLING?.plans || [];
-      if (selectedPlanKey && !plans.some(p=>p.key === selectedPlanKey)){
-        selectedPlanKey = "";
-        selectedPlan = null;
-      }
-      if (selectedPlanKey){
-        selectedPlan = plans.find(p=>p.key === selectedPlanKey) || null;
-      }
-      renderPlanGrid();
-      setWalletUi();
-    }catch(e){
-      // silent
-    }
-  }
-
-  async function loadBillingProof(){
-    const list = $("w_proof_list");
-    const stats = $("w_proof_stats");
-    if (!list || !stats) return;
-    try{
-      const j = await api("/api/billing/proof");
-      const items = j?.recent || [];
-      list.innerHTML = "";
-      if (!items.length){
-        list.innerHTML = `<div class="muted">No receipts yet.</div>`;
-        stats.textContent = "—";
-        return;
-      }
-      stats.textContent = `${items.length} receipt${items.length===1?"":"s"}`;
-      for (const it of items){
-        const row = document.createElement("div");
-        row.className = "proofItem";
-        const amt = `${it.amount} ${it.currency || "SOL"}`;
-        const when = it.createdAt ? new Date(it.createdAt).toLocaleString() : "";
-        row.innerHTML = `
-          <div class="proofTop">
-            <div class="proofLeft">
-              <div class="proofPlan">${escapeHtml(String(it.plan||"Pro"))}</div>
-              <div class="proofMeta">${when ? escapeHtml(when) : ""}</div>
-            </div>
-            <div class="proofAmt">${escapeHtml(amt)}</div>
-          </div>
-        `;
-        list.appendChild(row);
-      }
-    }catch(e){
-      list.innerHTML = `<div class="muted">Receipts unavailable.</div>`;
-      stats.textContent = "—";
-    }
-  }
 
   let BUFFER_READY = null;
 
@@ -693,212 +351,50 @@ if (src){
     throw last || new Error("verify_failed");
   }
 
-  
+  if (!window.__GMXWalletUiFactory) throw new Error("GMX walletui factory missing");
+  const __gmxWalletUi = window.__GMXWalletUiFactory({
+    $,
+    escapeHtml,
+    api,
+    modals: __gmxModals,
+    toast,
+    trackEvent,
+    abVariant,
+    friendlyUiErrorMessage,
+    setPayState,
+    openPaySuccess,
+    getHandle,
+    refreshUsage,
+    walletChoiceKey: LS_WALLET_CHOICE,
+    wsChain: WS_CHAIN,
+    listWalletChoices,
+    walletNameKey,
+    safeIconSrc,
+    defaultWalletIcon,
+    shortPk,
+    planPricePrimary,
+    planPriceSecondary,
+    getBilling: () => BILLING,
+    setBilling: (v) => { BILLING = v; },
+    getSelectedCurrency: () => selectedCurrency,
+    setSelectedCurrency: (v) => { selectedCurrency = v; },
+    getSelectedPlanKey: () => selectedPlanKey,
+    setSelectedPlanKey: (v) => { selectedPlanKey = v; },
+    getSelectedPlan: () => selectedPlan,
+    setSelectedPlan: (v) => { selectedPlan = v; },
+    getWallet: () => WALLET,
+    bindWalletToIntent,
+    buildPaymentTx,
+    walletSendTransaction,
+    verifyIntentWithRetry,
+  });
 
-  async function loadActivity(){
-    const list = $("w_activity_list");
-    const msg = $("w_activity_msg");
-    if (msg) msg.textContent = "";
-    if (list) list.innerHTML = '<div class="muted">Loading...</div>';
-    try{
-      if (!getHandle()){
-        if (list) list.innerHTML = '<div class="muted">Sign in to see activity.</div>';
-        return;
-      }
-      const j = await api('/api/activity?limit=50');
-      const items = Array.isArray(j.items) ? j.items : [];
-      if (!items.length){
-        if (list) list.innerHTML = '<div class="muted">No activity yet.</div>';
-        return;
-      }
-      const label = (t)=>{
-        const x = String(t||'');
-        if (x === 'payment_verified') return 'Payment verified';
-        if (x === 'billing_intent_created') return 'Checkout started';
-        if (x === 'referral_confirmed') return 'Referral confirmed';
-        if (x === 'referral_used') return 'Referral used';
-        if (x === 'code_redeemed') return 'Promo code redeemed';
-        if (x === 'feature_flag_set') return 'Feature flag changed';
-        return x.replace(/_/g,' ');
-      };
-      const rows = items.slice(0, 50).map(it=>{
-        const meta = it && typeof it.meta === 'object' && it.meta ? it.meta : null;
-        const metaTxt = meta ? escapeHtml(JSON.stringify(meta)) : '';
-        const when = it.createdAt ? escapeHtml(String(it.createdAt)) : '';
-        return `<div class="pill" style="justify-content:space-between;gap:10px;flex-wrap:wrap"><strong>${escapeHtml(label(it.type))}</strong><span class="muted">${when}</span></div>` +
-               (metaTxt ? `<div class="muted small" style="margin:-6px 0 10px 0">${metaTxt}</div>` : `<div style="height:8px"></div>`);
-      }).join('');
-      if (list) list.innerHTML = rows;
-    }catch(e){
-      if (list) list.innerHTML = "";
-      if (msg) msg.innerHTML = `<span class="bad">${escapeHtml(friendlyUiErrorMessage(e.message||'failed'))}</span>`;
-    }
-  }
-
-function billingErrMsg(code){
-    const m = String(code || "");
-    if (m.includes("rejected") || m.includes("Rejected") || m.includes("User rejected")) return "Transaction was cancelled in the wallet.";
-    if (m === "spl_token_unavailable") return "USDC/USDT helper is unavailable in this build. Hard refresh the page once.";
-    if (m === "insufficient_sol_funds") return "The connected wallet does not have enough SOL for this payment plus network fee.";
-    if (m === "insufficient_token_funds") return "The connected wallet does not have enough token balance for this payment.";
-    if (m === "payer_token_account_missing") return "The connected wallet does not have that token account. Switch token or fund the wallet first.";
-    if (m === "web3_unavailable") return "Solana web3 library is not available. Refresh the page and try again.";
-    if (m === "buffer_unavailable" || /buffer is not defined/i.test(m)) return "Browser Buffer helper did not load. Refresh once and try again.";
-    if (m === "wallet_no_send_feature") return "This wallet can't send transactions from the browser. Try Solflare/Phantom/Backpack.";
-    if (m === "wallet_no_message_sign") return "This wallet can't sign the checkout message. Try Solflare/Phantom/Backpack.";
-    if (m === "wallet_bind_required") return "Wallet binding is required before payment verify. Sign the wallet message and try again.";
-    if (m === "invalid_nonce_sig") return "Wallet binding signature was invalid. Sign the wallet message again.";
-    if (m === "rpc_unavailable") return "Solana RPC is unavailable right now. Try again in a moment.";
-    if (/403|401|429|access forbidden|blockhash/i.test(m)) return "RPC refused the payment request. Refresh once and try again.";
-    if (m === "payment_not_verified") return "Payment not found or not confirmed yet. Wait a moment and it will auto-verify.";
-    if (m === "invalid_sig") return "Invalid transaction signature.";
-    if (m === "payment_intent_mismatch") return "This transaction does not match the current checkout intent.";
-    if (m === "intent_expired") return "This checkout expired. Start a new payment.";
-    if (m === "sig_already_used") return "This transaction signature was already used.";
-    if (m === "invalid_plan") return "Invalid plan.";
-    return m || "billing_failed";
-  }
-
-    let PAY_INFLIGHT = false;
-
-async function payNow(){
-    const msg = $("w_msg");
-    if (!selectedPlan){
-      if (msg) msg.innerHTML = `<span class="warn">Select a plan first.</span>`;
-      return;
-    }
-    if (!WALLET.connected){
-      openWalletModal();
-      if (msg) msg.innerHTML = `<span class="warn">Connect a wallet to continue.</span>`;
-      return;
-    }
-
-    const payBtn = $("sf_pay");
-    const cur = selectedCurrency;
-    const v = abVariant();
-
-    try{
-      PAY_INFLIGHT = true;
-      if (payBtn) payBtn.disabled = true;
-
-      setPayState("processing", "Creating checkout...");
-      if (msg) msg.textContent = "Creating payment...";
-      trackEvent("pay_click", { v, plan: selectedPlan.key, cur, source:"wallet_tab" });
-
-      const intent = await api("/api/billing/intent", "POST", { planKey: selectedPlan.key, currency: cur });
-
-      setPayState("processing", "Binding wallet...");
-      if (msg) msg.textContent = "Sign the wallet message to bind this checkout...";
-      await bindWalletToIntent(intent);
-
-      setPayState("processing", "Building transaction...");
-      if (msg) msg.textContent = "Building transaction...";
-      const built = await buildPaymentTx(intent);
-
-      setPayState("processing", "Approve in wallet...");
-      if (msg) msg.textContent = "Approve the transaction in your wallet...";
-      const payer = String(WALLET.publicKey?.toString?.() || "");
-      const sig = await walletSendTransaction(built.tx, built.connection);
-
-      setPayState("confirming", "Confirming on-chain...");
-      if (msg) msg.textContent = "Confirming & verifying on-chain...";
-      const j = await verifyIntentWithRetry(intent.id, sig, payer);
-
-      setPayState("verified", "Verified. Pro activated.");
-      if (msg) msg.innerHTML = `<span class="ok">Paid & verified.</span>`;
-      trackEvent("pay_success", { v, plan: selectedPlan.key, cur });
-
-      try{ await refreshUsage(); }catch{}
-      try{ await loadBillingProof(); }catch{}
-      try{ await loadActivity(); }catch{}
-      renderWalletStatus(j.sub);
-
-      openPaySuccess();
-    }catch(e){
-      const m = String(e?.message || "billing_failed");
-      setPayState("failed", billingErrMsg(m));
-      if (msg) msg.innerHTML = `<span class="bad">${escapeHtml(billingErrMsg(m))}</span>`;
-      trackEvent("pay_fail", { v, code: m, plan: selectedPlan?.key || "", cur: selectedCurrency });
-    }finally{
-      PAY_INFLIGHT = false;
-      if (payBtn) payBtn.disabled = !(selectedPlan && WALLET.connected) || PAY_INFLIGHT;
-      setWalletUi();
-    }
-  }
-
-  function renderWalletStatus(sub){
-    const el = $("w_status_desc");
-    if (!el) return;
-    if (!sub){
-      el.innerHTML = `<span class="muted">Status unknown.</span>`;
-      return;
-    }
-    if (sub.active){
-      const until = sub.paidUntil ? ` (until ${escapeHtml(String(sub.paidUntil))})` : "";
-      el.innerHTML = `<span class="ok">Pro active</span>${until}`;
-    } else {
-      el.innerHTML = `<span class="muted">Free</span>`;
-    }
-  }
-
-  function bindWalletTab(){
-    // currency buttons
-    const bSol = $("token_SOL");
-    const bUsdc = $("token_USDC");
-    const bUsdt = $("token_USDT");
-    if (bSol) bSol.onclick = ()=>setCurrency("SOL");
-    if (bUsdc) bUsdc.onclick = ()=>setCurrency("USDC");
-    if (bUsdt) bUsdt.onclick = ()=>setCurrency("USDT");
-
-    // modal
-    __gmxModals.bindBackdrop("sf_modal", closeWalletModal);
-    const close = $("sf_modal_close");
-    if (close) close.onclick = ()=>closeWalletModal();
-
-
-    // plan compare modal
-    const pc = $("plan_compare_btn");
-    const pmClose = $("plan_modal_close");
-    if (pc) pc.onclick = ()=>openPlanModal();
-    __gmxModals.bindBackdrop("plan_modal", closePlanModal);
-    if (pmClose) pmClose.onclick = ()=>closePlanModal();
-
-    // connect/disconnect
-    const btnConnect = $("sf_connect");
-    const btnDisconnect = $("sf_disconnect");
-    if (btnConnect) btnConnect.onclick = ()=>openWalletModal();
-    if (btnDisconnect) btnDisconnect.onclick = ()=>disconnectWallet();
-
-    // pay
-    const payBtn = $("sf_pay");
-    if (payBtn) payBtn.onclick = ()=>payNow();
-
-
-    // activity
-    const actBtn = $("w_activity_refresh");
-    if (actBtn) actBtn.onclick = ()=>loadActivity();
-
-    // initial
-    setCurrency(selectedCurrency);
-    setWalletUi();
-
-    // refresh wallet list on focus (wallet extensions sometimes restart)
-    try{
-      const check = ()=>{
-        if (WALLET.connected){
-          const choices = listWalletChoices();
-          const stillThere = choices.some(x => walletNameKey(x.name) === walletNameKey(WALLET.name));
-          if (!stillThere){
-            disconnectWallet();
-            toast("warn", "Wallet was updated/restarted. Please reconnect.");
-          }
-        }
-      };
-      window.addEventListener("focus", check);
-      document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState === "visible") check(); });
-    }catch{}
-  }
-
+  const setWalletUi = () => __gmxWalletUi.setWalletUi();
+  const loadPlans = () => __gmxWalletUi.loadPlans();
+  const loadBillingProof = () => __gmxWalletUi.loadBillingProof();
+  const loadActivity = () => __gmxWalletUi.loadActivity();
+  const renderWalletStatus = (sub) => __gmxWalletUi.renderWalletStatus(sub);
+  const bindWalletTab = () => __gmxWalletUi.bindWalletTab();
 
 function requireAdminSignedIn(){
   if (!isAdminSignedIn()){

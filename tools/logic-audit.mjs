@@ -123,6 +123,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.siteboot\.js/, "app.siteboot.js script tag");
   mustMatch(rel, /app\.siteinit\.js/, "app.siteinit.js script tag");
   mustMatch(rel, /app\.wallethelpers\.js/, "app.wallethelpers.js script tag");
+  mustMatch(rel, /app\.walletui\.js/, "app.walletui.js script tag");
   mustMatch(rel, /app\.auth\.js/, "app.auth.js script tag");
   mustNotMatch(rel, /id="supportOut"/, "supportOut textarea removed");
   mustNotMatch(rel, /id="toolSupport"/, "toolSupport button removed from HTML");

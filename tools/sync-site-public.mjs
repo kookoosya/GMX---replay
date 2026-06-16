@@ -77,6 +77,7 @@ const shellModules = [
   "app.siteboot.js",
   "app.siteinit.js",
   "app.wallethelpers.js",
+  "app.walletui.js",
 ];
 for (const name of shellModules) {
   const modSrc = path.join(root, "public", name);

@@ -1097,3 +1097,18 @@ test("wallethelpers: shortPk truncates long keys", () => {
   const pk = "AbCdEfGhIjKlMnOpQrStUvWxYz";
   assert.equal(wh.shortPk(pk), "AbCd...WxYz");
 });
+
+test("walletui: billingErrMsg maps known codes", () => {
+  const ui = loadFactory("app.walletui.js", "__GMXWalletUiFactory")({});
+  assert.equal(ui.billingErrMsg("insufficient_sol_funds").includes("SOL"), true);
+  assert.equal(ui.billingErrMsg("invalid_plan"), "Invalid plan.");
+});
+
+test("walletui: renderWalletStatus shows Pro active", () => {
+  const els = { w_status_desc: { innerHTML: "" } };
+  const ui = loadFactory("app.walletui.js", "__GMXWalletUiFactory")({
+    $: (id) => els[id] || null,
+  });
+  ui.renderWalletStatus({ active: true, paidUntil: "2026-12-01" });
+  assert.match(els.w_status_desc.innerHTML, /Pro active/);
+});
