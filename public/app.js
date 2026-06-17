@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260617x";
+const ASSET_REV = "20260617y";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -669,24 +669,21 @@ const __gmxExtWpUi = window.__GMXExtWallpaperUiFactory({
 
 
 
-  // ----- UI performance helpers -----
+  if (!window.__GMXUiWireFactory) throw new Error("GMX uiwire factory missing");
+  const __gmxUiWire = window.__GMXUiWireFactory({ ui: __gmxUi });
   function chunkedRender(grid, items, renderItem, opts){
-    return __gmxUi.chunkedRender(grid, items, renderItem, opts);
+    return __gmxUiWire.chunkedRender(grid, items, renderItem, opts);
   }
-
   async function yieldToUiFrame(){
-    return await __gmxUi.yieldToUiFrame();
+    return await __gmxUiWire.yieldToUiFrame();
   }
-
   function prefetchImage(url){
-    return __gmxUi.prefetchImage(url);
+    return __gmxUiWire.prefetchImage(url);
   }
-
-  function observeLazyBg(el){ return __gmxUi.observeLazyBg(el); }
-
-async function postEvent(type, meta){
-  return __gmxUi.postEvent(type, meta);
-}
+  function observeLazyBg(el){ return __gmxUiWire.observeLazyBg(el); }
+  async function postEvent(type, meta){
+    return __gmxUiWire.postEvent(type, meta);
+  }
 
   if (!window.__GMXShellDepsFactory) throw new Error("GMX shelldeps factory missing");
   const {

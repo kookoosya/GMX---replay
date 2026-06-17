@@ -83,6 +83,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.themes.js", "gmx-legacy-themes");
     await injectAppShellRuntime("/app.themeapply.js", "gmx-legacy-themeapply");
     await injectAppShellRuntime("/app.ui.js", "gmx-legacy-ui");
+    await injectAppShellRuntime("/app.uiwire.js", "gmx-legacy-uiwire");
     await injectAppShellRuntime("/app.generate.js", "gmx-legacy-generate");
     await injectAppShellRuntime("/app.bestpick.js", "gmx-legacy-bestpick");
     await injectAppShellRuntime("/app.refstats.js", "gmx-legacy-refstats");

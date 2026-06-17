@@ -99,6 +99,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.themes\.js/, "app.themes.js script tag");
   mustMatch(rel, /app\.themeapply\.js/, "app.themeapply.js script tag");
   mustMatch(rel, /app\.ui\.js/, "app.ui.js script tag");
+  mustMatch(rel, /app\.uiwire\.js/, "app.uiwire.js script tag");
   mustMatch(rel, /app\.generate\.js/, "app.generate.js script tag");
   mustMatch(rel, /app\.bestpick\.js/, "app.bestpick.js script tag");
   mustMatch(rel, /app\.refstats\.js/, "app.refstats.js script tag");

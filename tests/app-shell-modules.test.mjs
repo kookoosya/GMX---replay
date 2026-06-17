@@ -1573,3 +1573,23 @@ test("themescatalogwire: exports theme catalogs and genparam delegates", () => {
     globalThis.localStorage = prevLs;
   }
 });
+
+test("uiwire: delegates performance helpers to ui module", () => {
+  let yielded = false;
+  const wire = loadFactory("app.uiwire.js", "__GMXUiWireFactory")({
+    ui: {
+      chunkedRender: (grid, items, renderItem, opts) => ({ grid, n: items.length, opts }),
+      yieldToUiFrame: async () => { yielded = true; },
+      prefetchImage: (url) => url,
+      observeLazyBg: (el) => el,
+      postEvent: async (type, meta) => ({ type, meta }),
+    },
+  });
+  assert.deepEqual(wire.chunkedRender("g", [1, 2], null, { chunk: 1 }), { grid: "g", n: 2, opts: { chunk: 1 } });
+  return wire.yieldToUiFrame().then(() => {
+    assert.equal(yielded, true);
+    assert.equal(wire.prefetchImage("/x.png"), "/x.png");
+    assert.equal(wire.observeLazyBg("el"), "el");
+    return wire.postEvent("click", { a: 1 }).then((r) => assert.deepEqual(r, { type: "click", meta: { a: 1 } }));
+  });
+});

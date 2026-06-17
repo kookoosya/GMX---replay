@@ -179,6 +179,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.themes.js": { target: BACKEND, changeOrigin: true },
         "/app.themeapply.js": { target: BACKEND, changeOrigin: true },
         "/app.ui.js": { target: BACKEND, changeOrigin: true },
+        "/app.uiwire.js": { target: BACKEND, changeOrigin: true },
         "/app.generate.js": { target: BACKEND, changeOrigin: true },
         "/app.banks.js": { target: BACKEND, changeOrigin: true },
         "/app.bankui.js": { target: BACKEND, changeOrigin: true },

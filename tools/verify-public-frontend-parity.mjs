@@ -40,6 +40,7 @@ const APP_FILES = [
   "app.themes.js",
   "app.themeapply.js",
   "app.ui.js",
+  "app.uiwire.js",
   "app.generate.js",
   "app.banks.js",
   "app.bankui.js",
