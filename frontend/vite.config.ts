@@ -162,6 +162,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.refstats.js": { target: BACKEND, changeOrigin: true },
         "/app.generateflow.js": { target: BACKEND, changeOrigin: true },
         "/app.generatewire.js": { target: BACKEND, changeOrigin: true },
+        "/app.generaterunwire.js": { target: BACKEND, changeOrigin: true },
         "/app.storage.js": { target: BACKEND, changeOrigin: true },
         "/app.format.js": { target: BACKEND, changeOrigin: true },
         "/app.i18nui.js": { target: BACKEND, changeOrigin: true },

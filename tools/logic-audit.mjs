@@ -116,6 +116,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.refstats\.js/, "app.refstats.js script tag");
   mustMatch(rel, /app\.generateflow\.js/, "app.generateflow.js script tag");
   mustMatch(rel, /app\.generatewire\.js/, "app.generatewire.js script tag");
+  mustMatch(rel, /app\.generaterunwire\.js/, "app.generaterunwire.js script tag");
   mustMatch(rel, /app\.banks\.js/, "app.banks.js script tag");
   mustMatch(rel, /app\.bankswire\.js/, "app.bankswire.js script tag");
   mustMatch(rel, /app\.bankui\.js/, "app.bankui.js script tag");
@@ -188,6 +189,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.refstats\.js/, "app.refstats.js script tag");
   mustMatch(rel, /app\.generateflow\.js/, "app.generateflow.js script tag");
   mustMatch(rel, /app\.generatewire\.js/, "app.generatewire.js script tag");
+  mustMatch(rel, /app\.generaterunwire\.js/, "app.generaterunwire.js script tag");
   mustMatch(rel, /app\.auth\.js/, "app.auth.js script tag");
   mustNotMatch(rel, /id="supportOut"/, "supportOut textarea removed");
   mustNotMatch(rel, /id="toolSupport"/, "toolSupport button removed from HTML");

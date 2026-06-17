@@ -116,6 +116,7 @@ const shellModules = [
   "app.refstats.js",
   "app.generateflow.js",
   "app.generatewire.js",
+  "app.generaterunwire.js",
 ];
 for (const name of shellModules) {
   const modSrc = path.join(root, "public", name);

@@ -1874,6 +1874,31 @@ test("generatewire: wires refstats and generateflow delegates", async () => {
   assert.match(msg.innerHTML, /Session expired/);
 });
 
+test("generaterunwire: builds generate ctx and delegates run", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.generatewire.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.generaterunwire.js"), "utf8")};`)(win);
+  let captured = null;
+  win.__GMXGenerateWireFactory = (cfg) => {
+    captured = cfg;
+    return { generate: async () => {}, mergeAppendUnique: () => [] };
+  };
+  const runWire = win.__GMXGenerateRunWireFactory({
+    core: { $: () => null, api: async () => ({}), gen: {}, bankUi: {} },
+    auth: { getHandle: () => "@demo", requireConnected: () => true, getToken: () => "", initSession: async () => true },
+    ui: { renderList: () => {}, setBusy: () => {}, refreshUsage: async () => {}, toast: () => {} },
+    params: { readGenParams: () => ({}), getAntiStrength: () => 1, cleanFillStrength: 2 },
+    data: { siteLangKey: "gmx_site_lang", refPromoOpenKey: "gmx_ref_promo", remainingSlots: () => 1 },
+    text: { t: (k) => k },
+    perf: { logEvent: () => {}, yieldToUiFrame: async () => {} },
+    state: { inflight: { gm: false, gn: false }, abort: { gm: null, gn: null } },
+  });
+  runWire.run();
+  assert.equal(captured.getHandle(), "@demo");
+  assert.equal(captured.siteLangKey, "gmx_site_lang");
+  assert.equal(captured.cleanFillStrength, 2);
+});
+
 test("walletwire: wires wallet helpers, pay, and ui delegates", () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.wallethelpers.js"), "utf8")};`)(win);

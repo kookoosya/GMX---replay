@@ -113,6 +113,7 @@ const APP_FILES = [
   "app.refstats.js",
   "app.generateflow.js",
   "app.generatewire.js",
+  "app.generaterunwire.js",
   "arcade.html",
   "arcade.js",
   "entitlements.js",
