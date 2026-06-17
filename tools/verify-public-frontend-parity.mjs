@@ -72,6 +72,7 @@ const APP_FILES = [
   "app.extwallpaperstore.js",
   "app.bootstrapunlockwire.js",
   "app.bootstrapgenwire.js",
+  "app.bootstrapusagewire.js",
   "app.extapply.js",
   "app.extthemesui.js",
   "app.extcustombgui.js",

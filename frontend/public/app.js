@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618n";
+const ASSET_REV = "20260618o";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {
@@ -233,35 +233,42 @@ const {
   },
 });
 
-if (!window.__GMXPaywallFactory) throw new Error("GMX paywall factory missing");
-const __gmxPaywall = window.__GMXPaywallFactory({
-  $: __gmxChrome.$,
-  modals: __gmxModals,
+if (!window.__GMXBootstrapUsageWireFactory) throw new Error("GMX bootstrapusagewire factory missing");
+const {
+  __gmxPaywall,
+  __gmxUsage,
+  __gmxHelp,
+  __gmxWpApply,
+  __gmxHealth,
+} = window.__GMXBootstrapUsageWireFactory({
   storage: __gmxSt,
-  getHandle: () => getHandle(),
-  trackEvent: (type, meta) => trackEvent(type, meta),
-  onNavigateWallet: () => { try { tab("wallet"); } catch {} },
-});
-
-let __gmxHelp;
-if (!window.__GMXUsageFactory) throw new Error("GMX usage factory missing");
-const __gmxUsage = window.__GMXUsageFactory({
-  $: __gmxChrome.$,
-  getToken: () => getToken(),
-  getHandle: () => getHandle(),
-  api: (path, method, body) => api(path, method, body),
+  keys: K,
+  chrome: __gmxChrome,
+  modals: __gmxModals,
+  tabState: __gmxTabState,
+  wp: __gmxWp,
+  wpStore: __gmxWpStore,
+  customWp: __gmxCustomWp,
+  extWpStore: __gmxExtWpStore,
   isPro,
   getSaveCapFree: () => SAVE_CAP_FREE,
   setSaveCapFree: (v) => { SAVE_CAP_FREE = v; },
-  setAuthOk: (v) => { AUTH_OK = v; },
-  applyAdminVisibility: () => { try { applyAdminVisibility(); } catch {} },
-  setLastUsage: (u) => { LAST_USAGE = u; },
   getLastUsage: () => LAST_USAGE,
-  setSub: (s) => { SUB = s; },
-  renderWalletStatus: (sub) => { try { renderWalletStatus(sub); } catch {} },
-  applyRefCountEligible: (n, opts) => applyRefCountEligible(n, opts),
+  setLastUsage: (u) => { LAST_USAGE = u; },
+  getLastSaved: () => LAST_SAVED,
   getLastUsageCosmeticSig: () => LAST_USAGE_COSMETIC_SIG,
   setLastUsageCosmeticSig: (s) => { LAST_USAGE_COSMETIC_SIG = s; },
+  setSub: (s) => { SUB = s; },
+  getAuthOk: () => AUTH_OK,
+  setAuthOk: (v) => { AUTH_OK = v; },
+  getToken: () => getToken(),
+  getHandle: () => getHandle(),
+  api: (path, method, body) => api(path, method, body),
+  trackEvent: (type, meta) => trackEvent(type, meta),
+  onNavigateWallet: () => { try { tab("wallet"); } catch {} },
+  applyAdminVisibility: () => { try { applyAdminVisibility(); } catch {} },
+  renderWalletStatus: (sub) => { try { renderWalletStatus(sub); } catch {} },
+  applyRefCountEligible: (n, opts) => applyRefCountEligible(n, opts),
   onCosmeticRefresh: () => {
     fillStyles();
     fillPacks();
@@ -279,58 +286,20 @@ const __gmxUsage = window.__GMXUsageFactory({
     } catch {}
   },
   scheduleRefStatsRefresh: (ms) => { try { scheduleRefStatsRefresh(ms); } catch {} },
-  renderHelpIfOpen: () => { try { __gmxHelp.renderHelpIfOpen(); } catch {} },
-});
-
-if (!window.__GMXHelpFactory) throw new Error("GMX help factory missing");
-__gmxHelp = window.__GMXHelpFactory({
-  $: __gmxChrome.$,
-  modals: __gmxModals,
-  isPro,
-  getSaveCapFree: () => SAVE_CAP_FREE,
-  getLastUsage: () => LAST_USAGE,
-  getLastSaved: () => LAST_SAVED,
-  normLimitForUI: (n) => __gmxUsage.normLimitForUI(n),
-  onNavigateWallet: () => { try { tab("wallet"); } catch {} },
-});
-
-if (!window.__GMXWallpaperApplyFactory) throw new Error("GMX wallpaperapply factory missing");
-const __gmxWpApply = window.__GMXWallpaperApplyFactory({
   getCurrentTab: () => { try { return currentTabName(); } catch { return "home"; } },
-  getWallpaperForTab: (tab) => __gmxWpStore.getWallpaperForTab(tab),
-  getEffectiveCustomWallpapers: () => __gmxCustomWp.getEffectiveCustomWallpapersSite(),
   getWallpapers: () => WALLPAPERS,
   wallpaperUnlocked: (wp, idx, len) => wallpaperUnlocked(wp, idx, len),
   wallpaperFullUrl: (id) => wallpaperFullUrl(id),
-  ensureWallpaperLayer: () => __gmxWp.ensureWallpaperLayer(),
-  setWallpaperLayerImage: (layer, url) => __gmxWp.setWallpaperLayerImage(layer, url),
-});
-
-if (!window.__GMXHealthFactory) throw new Error("GMX health factory missing");
-const __gmxHealth = window.__GMXHealthFactory({
-  $: __gmxChrome.$,
-  api: (path, method, body) => api(path, method, body),
-  getHandle: () => getHandle(),
-  getToken: () => getToken(),
-  getAuthOk: () => AUTH_OK,
-  setAuthOk: (v) => { AUTH_OK = v; },
-  applyAdminVisibility: () => { try { applyAdminVisibility(); } catch {} },
-  toast: (type, html, ms) => __gmxChrome.toast(type, html, ms),
-  setDegraded: (on, msg) => __gmxChrome.setDegraded(on, msg),
   onRetrySession: async () => { try { if (getHandle()) await initSession(true); } catch {} },
   onRetryWallet: async () => {
     try {
-      if (__gmxTabState.getCurrentTab() === "wallet") {
-        await loadPlans();
-        await loadBillingProof();
-      }
+      await loadPlans();
+      await loadBillingProof();
     } catch {}
   },
-  onRetryReferrals: () => { try { if (__gmxTabState.getCurrentTab() === "referrals") scheduleRefStatsRefresh(120); } catch {} },
+  onRetryReferrals: () => { try { scheduleRefStatsRefresh(120); } catch {} },
   onRetryUsage: async () => { try { if (getHandle()) await refreshUsage(); } catch {} },
 });
-__gmxHealth.wireRetryNow();
-__gmxHealth.wireOnlineRetry();
 
 if (!window.__GMXSetBgFactory) throw new Error("GMX setbg factory missing");
 const __gmxSetBg = window.__GMXSetBgFactory({

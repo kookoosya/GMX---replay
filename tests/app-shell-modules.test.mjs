@@ -2115,3 +2115,48 @@ test("bootstrapgenwire: wires genparams styles toggles and custombg delegates", 
   assert.equal(typeof wire.__gmxTabTheme.getTabBg, "function");
   assert.equal(typeof wire.__gmxLogs.logEvent, "function");
 });
+
+test("bootstrapusagewire: wires paywall usage help and health delegates", () => {
+  const win = {
+    document: { body: { classList: { contains: () => false, add: () => {}, remove: () => {} } } },
+    localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} },
+    addEventListener: () => {},
+  };
+  const scripts = [
+    "app.paywall.js",
+    "app.help.js",
+    "app.usage.js",
+    "app.wallpaperapply.js",
+    "app.health.js",
+    "app.bootstrapusagewire.js",
+  ];
+  for (const file of scripts) {
+    new Function("window", `${readFileSync(path.join(root, "public", file), "utf8")};`)(win);
+  }
+  const wire = win.__GMXBootstrapUsageWireFactory({
+    storage: { lsGet: () => "", lsSet: () => {} },
+    chrome: { $: () => null, toast: () => {}, setDegraded: () => {} },
+    modals: { initModalsShell: () => {} },
+    tabState: { getCurrentTab: () => "home" },
+    wp: { ensureWallpaperLayer: () => null, setWallpaperLayerImage: () => {} },
+    wpStore: { getWallpaperForTab: () => "" },
+    customWp: { getEffectiveCustomWallpapersSite: () => [] },
+    isPro: () => false,
+    getSaveCapFree: () => 50,
+    getLastUsage: () => ({ gm: { used: 0, limit: 0 }, gn: { used: 0, limit: 0 }, resetAt: null }),
+    getLastSaved: () => ({ gm: 0, gn: 0 }),
+    getAuthOk: () => false,
+    getToken: () => "",
+    getHandle: () => "",
+    api: async () => ({}),
+    getWallpapers: () => [],
+    wallpaperUnlocked: () => true,
+    wallpaperFullUrl: (id) => id,
+    getCurrentTab: () => "home",
+  });
+  assert.equal(typeof wire.__gmxPaywall.abVariant, "function");
+  assert.equal(typeof wire.__gmxUsage.normLimitForUI, "function");
+  assert.equal(typeof wire.__gmxHelp.renderHelpIfOpen, "function");
+  assert.equal(typeof wire.__gmxWpApply.applyWallpaper, "function");
+  assert.equal(typeof wire.__gmxHealth.ping, "function");
+});
