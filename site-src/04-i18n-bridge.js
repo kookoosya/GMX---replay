@@ -25,3 +25,4 @@ function syncReferralCardCopy() {
   } catch {}
 }
 function initReferralPromoDetailsState() {}
+function initProTabs() {}

@@ -65,7 +65,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260619h";
+const ASSET_REV = "20260619i";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {
@@ -662,6 +662,7 @@ function syncReferralCardCopy() {
   } catch {}
 }
 function initReferralPromoDetailsState() {}
+function initProTabs() {}
 
   if (!window.__GMXBanksWireFactory) throw new Error("GMX bankswire factory missing");
   const {
