@@ -8,6 +8,8 @@
 - **Scoring + anti-repeat + fingerprint dedupe** — ответы сильнее различаются между пользователями
 - **Emoji по тону**: утренние для GM (☀️☕✨🌅), ночные для GN (🌙😴💤✨)
 
+**Сделано (2026-06):** расширены warm/calmer/builder/meme банки; scoring штрафует diary-tone и повтор `we move`; unit-тесты на все style families.
+
 ### 1b. Сайт — лаги / глюки (частично в работе)
 **Исправлено (2026-06):**
 - `onTabActivated` больше не перерисовывает wallpaper grid на каждой вкладке
