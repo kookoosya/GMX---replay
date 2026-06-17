@@ -4,42 +4,55 @@ function pickBestLine(kind, lines){ return __gmxBestPick.pickBestLine(kind, line
 async function doBest(kind){ return __gmxBestPick.doBest(kind); }
 async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
 
-  const __gmxBankUiWireCtx = {
-    $,
-    fmt: __gmxFmt,
-    gen: __gmxGen,
-    keys: K,
-    requireConnected,
-    getHandle,
-    isPro,
-    saveCap,
-    saveCapFree: SAVE_CAP_FREE,
-    lastSaved: LAST_SAVED,
-    getBankKey,
-    allLegacyKeysForKind,
-    setLangIndex,
-    getBankMigrationKey,
-    readKey,
-    writeKey,
-    dedupeLines: __gmxGen.dedupeLines,
-    linesFromText,
-    chunkedRender,
-    renderHelpModal,
-    openLimitModal,
-    trackEvent,
-    toast,
-    t,
-    updateLangFlags,
-    renderLangChips,
-    abort: ABORT,
-    api,
-    readGenParams,
-    getAntiStrength,
-    refreshUsage,
-    setBusy,
-  };
-  if (!window.__GMXBankUiWireFactory) throw new Error("GMX bankuiwire factory missing");
-  const __gmxBankUiWire = window.__GMXBankUiWireFactory(__gmxBankUiWireCtx);
+  if (!window.__GMXBankUiRunWireFactory) throw new Error("GMX bankuirunwire factory missing");
+  const __gmxBankUiWire = window.__GMXBankUiRunWireFactory({
+    core: {
+      $,
+      fmt: __gmxFmt,
+      gen: __gmxGen,
+      dedupeLines: __gmxGen.dedupeLines,
+      api,
+    },
+    auth: {
+      requireConnected,
+      getHandle,
+      isPro,
+    },
+    data: {
+      keys: K,
+      saveCap,
+      saveCapFree: SAVE_CAP_FREE,
+      lastSaved: LAST_SAVED,
+      getBankKey,
+      allLegacyKeysForKind,
+      setLangIndex,
+      getBankMigrationKey,
+      readKey,
+      writeKey,
+      linesFromText,
+    },
+    ui: {
+      chunkedRender,
+      renderHelpModal,
+      openLimitModal,
+      toast,
+      t,
+      updateLangFlags,
+      renderLangChips,
+      refreshUsage,
+      setBusy,
+    },
+    perf: {
+      trackEvent,
+    },
+    params: {
+      readGenParams,
+      getAntiStrength,
+    },
+    state: {
+      abort: ABORT,
+    },
+  }).run();
   __gmxBestPick = __gmxBankUiWire.bestPick;
   const __gmxBankUi = __gmxBankUiWire.bankUi;
   const {

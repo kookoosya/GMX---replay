@@ -48,6 +48,7 @@ const shellModules = [
   "app.bankswire.js",
   "app.bankui.js",
   "app.bankuiwire.js",
+  "app.bankuirunwire.js",
   "app.antirepeat.js",
   "app.genparams.js",
   "app.cleanfill.js",

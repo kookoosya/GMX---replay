@@ -1833,6 +1833,29 @@ test("bankuiwire: wires bankui and bestpick modules", () => {
   }
 });
 
+test("bankuirunwire: builds grouped ctx and delegates to bankuiwire", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.bankuiwire.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.bankuirunwire.js"), "utf8")};`)(win);
+  let captured = null;
+  win.__GMXBankUiWireFactory = (cfg) => {
+    captured = cfg;
+    return { bankUi: {}, bestPick: {} };
+  };
+  const wire = win.__GMXBankUiRunWireFactory({
+    core: { $: () => null, fmt: {}, gen: {}, dedupeLines: (x) => x, api: async () => ({}) },
+    auth: { requireConnected: () => true, getHandle: () => "@x", isPro: () => false },
+    data: { keys: { DRAFT_GM_NEW: "d1" }, saveCap: () => 1, saveCapFree: 1, lastSaved: {}, getBankKey: () => "k" },
+    ui: { toast: () => {}, t: (k) => k },
+    perf: { trackEvent: () => {} },
+    params: { readGenParams: () => ({}), getAntiStrength: () => 1 },
+    state: { abort: { gm: null, gn: null } },
+  });
+  wire.run();
+  assert.equal(captured.getHandle(), "@x");
+  assert.equal(captured.keys.DRAFT_GM_NEW, "d1");
+});
+
 test("generatewire: wires refstats and generateflow delegates", async () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.refstats.js"), "utf8")};`)(win);
