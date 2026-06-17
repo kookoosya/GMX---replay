@@ -114,6 +114,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.custombg\.js/, "app.custombg.js script tag");
   mustMatch(rel, /app\.tabtheme\.js/, "app.tabtheme.js script tag");
   mustMatch(rel, /app\.logs\.js/, "app.logs.js script tag");
+  mustMatch(rel, /app\.shelldeps\.js/, "app.shelldeps.js script tag");
   mustMatch(rel, /app\.paywall\.js/, "app.paywall.js script tag");
   mustMatch(rel, /app\.help\.js/, "app.help.js script tag");
   mustMatch(rel, /app\.usage\.js/, "app.usage.js script tag");

@@ -52,6 +52,7 @@ const APP_FILES = [
   "app.custombg.js",
   "app.tabtheme.js",
   "app.logs.js",
+  "app.shelldeps.js",
   "app.paywall.js",
   "app.help.js",
   "app.usage.js",

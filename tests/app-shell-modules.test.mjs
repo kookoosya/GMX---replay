@@ -1424,3 +1424,39 @@ test("siteinitwire: builds nested siteinit ctx and delegates run", async () => {
     globalThis.localStorage = prevLs;
   }
 });
+
+test("shelldeps: exports storage keys and delegates helpers", () => {
+  const deps = loadFactory("app.shelldeps.js", "__GMXShellDepsFactory")({
+    K: { HANDLE: "gmx_handle", TOKEN: "gmx_token", SITE_LANG: "gmx_site_lang" },
+    logs: { logEvent: (type, data) => ({ type, data }) },
+    storage: {
+      getAdminToken: () => "adm",
+      setAdminToken: () => {},
+      isAdminSignedIn: () => true,
+      lsKeyPack: () => "pack",
+      lsKeyAnti: () => "anti",
+      lsKeyRecent: () => "recent",
+      lsKeyCleanFill: () => "clean",
+    },
+    cleanfill: {
+      CLEAN_FILL_STRENGTH: 3,
+      getEnabled: () => true,
+      setEnabled: () => {},
+      copyForKind: () => "copy",
+      syncUi: () => {},
+    },
+    antirepeat: { antiWindow: (s) => s * 2, getRecent: () => ["a"] },
+    custombg: {
+      TABS: ["home"],
+      TABS_PUBLIC: ["home"],
+      customBgKeyForTab: (tab) => `bg_${tab}`,
+      applyUserBg: () => true,
+    },
+    tabtheme: { TAB_THEME: { home: "grad" } },
+  });
+  assert.equal(deps.LS_HANDLE, "gmx_handle");
+  assert.deepEqual(deps.logEvent("ping", { ok: 1 }), { type: "ping", data: { ok: 1 } });
+  assert.equal(deps.antiWindow(4), 8);
+  assert.equal(deps.customBgKeyForTab("home"), "bg_home");
+  assert.equal(deps.TAB_THEME.home, "grad");
+});
