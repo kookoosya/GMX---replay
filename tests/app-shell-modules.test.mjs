@@ -1581,6 +1581,24 @@ test("themeswire: delegates theme and extension UI helpers", () => {
   assert.equal(wire.bindExtTabs(), true);
 });
 
+test("themesrunwire: groups deps and delegates to themeswire", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.themeswire.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.themesrunwire.js"), "utf8")};`)(win);
+  let captured = null;
+  win.__GMXThemesWireFactory = (cfg) => {
+    captured = cfg;
+    return { renderThemes: () => 1 };
+  };
+  win.__GMXThemesRunWireFactory({
+    keys: { extViewKey: "gmx_ext_view" },
+    mod: { themeApply: {}, themesUi: { renderThemes: () => 3 } },
+    catalog: { unlockedCountByRefs: () => 2, extThemesLength: 10, freeVisibleExtThemes: 2 },
+  }).run();
+  assert.equal(captured.extViewKey, "gmx_ext_view");
+  assert.equal(captured.extThemesLength, 10);
+});
+
 test("i18nbridge: exports catalog and delegates site i18n helpers", () => {
   const prev = globalThis.GMX_SITE_I18N;
   globalThis.GMX_SITE_I18N = {

@@ -65,7 +65,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618w";
+const ASSET_REV = "20260618x";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {
@@ -501,7 +501,7 @@ const {
   function readGenParams(kind){ return __gmxThemesCatalogWire.readGenParams(kind); }
   function unlockedPacksCountFor(kind){ return __gmxThemesCatalogWire.unlockedPacksCountFor(kind); }
 
-if (!window.__GMXThemesWireFactory) throw new Error("GMX themeswire factory missing");
+if (!window.__GMXThemesRunWireFactory) throw new Error("GMX themesrunwire factory missing");
 const {
   LS_EXT_VIEW,
   applyTheme,
@@ -527,21 +527,25 @@ const {
   renderExtWallpapers,
   bindExtTabs,
   initExtWallpaperControls,
-} = window.__GMXThemesWireFactory({
-  extViewKey: K.EXT_VIEW,
-  themeApply: __gmxThemeApply,
-  extWpStore: __gmxExtWpStore,
-  extView: __gmxExtView,
-  wpUi: __gmxWpUi,
-  themesUi: __gmxThemesUi,
-  extApply: __gmxExtApply,
-  extCbgUi: __gmxExtCbgUi,
-  extThemesUi: __gmxExtThemesUi,
-  extWpUi: __gmxExtWpUi,
-  unlockedCountByRefs,
-  extThemesLength: EXT_THEMES.length,
-  freeVisibleExtThemes: FREE_VISIBLE_EXT_THEMES,
-});
+} = window.__GMXThemesRunWireFactory({
+  keys: { extViewKey: K.EXT_VIEW },
+  mod: {
+    themeApply: __gmxThemeApply,
+    extWpStore: __gmxExtWpStore,
+    extView: __gmxExtView,
+    wpUi: __gmxWpUi,
+    themesUi: __gmxThemesUi,
+    extApply: __gmxExtApply,
+    extCbgUi: __gmxExtCbgUi,
+    extThemesUi: __gmxExtThemesUi,
+    extWpUi: __gmxExtWpUi,
+  },
+  catalog: {
+    unlockedCountByRefs,
+    extThemesLength: EXT_THEMES.length,
+    freeVisibleExtThemes: FREE_VISIBLE_EXT_THEMES,
+  },
+}).run();
 
   let INIT_DONE = false;
   if (!window.__GMXChromeRunWireFactory) throw new Error("GMX chromerunwire factory missing");

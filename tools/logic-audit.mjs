@@ -164,6 +164,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.wallpaperswire\.js/, "app.wallpaperswire.js script tag");
   mustMatch(rel, /app\.wallpapersrunwire\.js/, "app.wallpapersrunwire.js script tag");
   mustMatch(rel, /app\.themeswire\.js/, "app.themeswire.js script tag");
+  mustMatch(rel, /app\.themesrunwire\.js/, "app.themesrunwire.js script tag");
   mustMatch(rel, /app\.accountui\.js/, "app.accountui.js script tag");
   mustMatch(rel, /app\.admin\.js/, "app.admin.js script tag");
   mustMatch(rel, /app\.adminwire\.js/, "app.adminwire.js script tag");

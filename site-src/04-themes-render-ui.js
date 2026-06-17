@@ -1,4 +1,4 @@
-if (!window.__GMXThemesWireFactory) throw new Error("GMX themeswire factory missing");
+if (!window.__GMXThemesRunWireFactory) throw new Error("GMX themesrunwire factory missing");
 const {
   LS_EXT_VIEW,
   applyTheme,
@@ -24,18 +24,22 @@ const {
   renderExtWallpapers,
   bindExtTabs,
   initExtWallpaperControls,
-} = window.__GMXThemesWireFactory({
-  extViewKey: K.EXT_VIEW,
-  themeApply: __gmxThemeApply,
-  extWpStore: __gmxExtWpStore,
-  extView: __gmxExtView,
-  wpUi: __gmxWpUi,
-  themesUi: __gmxThemesUi,
-  extApply: __gmxExtApply,
-  extCbgUi: __gmxExtCbgUi,
-  extThemesUi: __gmxExtThemesUi,
-  extWpUi: __gmxExtWpUi,
-  unlockedCountByRefs,
-  extThemesLength: EXT_THEMES.length,
-  freeVisibleExtThemes: FREE_VISIBLE_EXT_THEMES,
-});
+} = window.__GMXThemesRunWireFactory({
+  keys: { extViewKey: K.EXT_VIEW },
+  mod: {
+    themeApply: __gmxThemeApply,
+    extWpStore: __gmxExtWpStore,
+    extView: __gmxExtView,
+    wpUi: __gmxWpUi,
+    themesUi: __gmxThemesUi,
+    extApply: __gmxExtApply,
+    extCbgUi: __gmxExtCbgUi,
+    extThemesUi: __gmxExtThemesUi,
+    extWpUi: __gmxExtWpUi,
+  },
+  catalog: {
+    unlockedCountByRefs,
+    extThemesLength: EXT_THEMES.length,
+    freeVisibleExtThemes: FREE_VISIBLE_EXT_THEMES,
+  },
+}).run();

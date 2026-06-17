@@ -235,6 +235,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.wallpaperswire.js": { target: BACKEND, changeOrigin: true },
         "/app.wallpapersrunwire.js": { target: BACKEND, changeOrigin: true },
         "/app.themeswire.js": { target: BACKEND, changeOrigin: true },
+        "/app.themesrunwire.js": { target: BACKEND, changeOrigin: true },
         "/app.accountui.js": { target: BACKEND, changeOrigin: true },
         "/app.admin.js": { target: BACKEND, changeOrigin: true },
         "/app.adminwire.js": { target: BACKEND, changeOrigin: true },

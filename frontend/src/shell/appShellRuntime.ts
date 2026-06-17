@@ -137,6 +137,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.wallpaperswire.js", "gmx-legacy-wallpaperswire");
     await injectAppShellRuntime("/app.wallpapersrunwire.js", "gmx-legacy-wallpapersrunwire");
     await injectAppShellRuntime("/app.themeswire.js", "gmx-legacy-themeswire");
+    await injectAppShellRuntime("/app.themesrunwire.js", "gmx-legacy-themesrunwire");
     await injectAppShellRuntime("/app.accountui.js", "gmx-legacy-accountui");
     await injectAppShellRuntime("/app.admin.js", "gmx-legacy-admin");
     await injectAppShellRuntime("/app.adminwire.js", "gmx-legacy-adminwire");
