@@ -65,7 +65,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618y";
+const ASSET_REV = "20260618z";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {
@@ -918,22 +918,16 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
   }).run();
 
 // ----- Wallet / Billing -----
-  if (!window.__GMXWalletWireFactory) throw new Error("GMX walletwire factory missing");
-  const __gmxWalletWire = window.__GMXWalletWireFactory({
-    $,
-    api,
-    K,
-    modals: __gmxModals,
-    escapeHtml,
-    toast,
-    trackEvent,
-    abVariant,
-    friendlyUiErrorMessage,
-    setPayState,
-    openPaySuccess,
-    getHandle,
-    refreshUsage,
-  });
+  if (!window.__GMXWalletRunWireFactory) throw new Error("GMX walletrunwire factory missing");
+  const __gmxWalletWire = window.__GMXWalletRunWireFactory({
+    core: { $, api, K },
+    mod: { modals: __gmxModals },
+    text: { escapeHtml, friendlyUiErrorMessage },
+    ui: { toast },
+    perf: { trackEvent, abVariant },
+    pay: { setPayState, openPaySuccess },
+    session: { getHandle, refreshUsage },
+  }).run();
   const setWalletUi = () => __gmxWalletWire.setWalletUi();
   const loadPlans = () => __gmxWalletWire.loadPlans();
   const loadBillingProof = () => __gmxWalletWire.loadBillingProof();

@@ -118,6 +118,7 @@ const shellModules = [
   "app.walletpay.js",
   "app.walletui.js",
   "app.walletwire.js",
+  "app.walletrunwire.js",
   "app.bestpick.js",
   "app.refstats.js",
   "app.generateflow.js",

@@ -2027,6 +2027,28 @@ test("walletwire: wires wallet helpers, pay, and ui delegates", () => {
   assert.equal(typeof wire.bindWalletTab, "function");
 });
 
+test("walletrunwire: groups deps and delegates to walletwire", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.walletwire.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.walletrunwire.js"), "utf8")};`)(win);
+  let captured = null;
+  win.__GMXWalletWireFactory = (cfg) => {
+    captured = cfg;
+    return { bindWalletTab: () => {} };
+  };
+  win.__GMXWalletRunWireFactory({
+    core: { $: () => null, api: async () => ({}), K: { WALLET_CHOICE: "gmx_wallet_choice" } },
+    mod: { modals: {} },
+    text: { escapeHtml: (s) => s, friendlyUiErrorMessage: (m) => m },
+    ui: { toast: () => {} },
+    perf: { trackEvent: () => {}, abVariant: () => "a" },
+    pay: { setPayState: () => {}, openPaySuccess: () => {} },
+    session: { getHandle: () => "@demo", refreshUsage: async () => {} },
+  }).run();
+  assert.equal(captured.K.WALLET_CHOICE, "gmx_wallet_choice");
+  assert.equal(captured.getHandle(), "@demo");
+});
+
 test("referralswire: wires referrals factory delegates", async () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.referrals.js"), "utf8")};`)(win);

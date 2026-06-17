@@ -159,6 +159,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.walletpay.js": { target: BACKEND, changeOrigin: true },
         "/app.walletui.js": { target: BACKEND, changeOrigin: true },
         "/app.walletwire.js": { target: BACKEND, changeOrigin: true },
+        "/app.walletrunwire.js": { target: BACKEND, changeOrigin: true },
         "/app.bestpick.js": { target: BACKEND, changeOrigin: true },
         "/app.refstats.js": { target: BACKEND, changeOrigin: true },
         "/app.generateflow.js": { target: BACKEND, changeOrigin: true },

@@ -164,6 +164,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.walletpay.js", "gmx-legacy-walletpay");
     await injectAppShellRuntime("/app.walletui.js", "gmx-legacy-walletui");
     await injectAppShellRuntime("/app.walletwire.js", "gmx-legacy-walletwire");
+    await injectAppShellRuntime("/app.walletrunwire.js", "gmx-legacy-walletrunwire");
     await injectAppShellRuntime("/app.auth.js", "gmx-legacy-auth");
     await injectAppShellRuntime("/app.js", "gmx-app-shell-runtime");
     await waitForAppShellReady();
