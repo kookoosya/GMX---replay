@@ -1653,3 +1653,74 @@ test("bankswire: delegates bank storage helpers", () => {
   assert.deepEqual(wire.writeKey("k", ["x"]), { key: "k", lines: ["x"] });
   assert.equal(wire.migrateLegacyBank("gm"), true);
 });
+
+test("chromewire: wires chrome shell helpers and shellwire auth", () => {
+  const prevDoc = globalThis.document;
+  globalThis.document = {
+    getElementById: () => null,
+    querySelectorAll: () => [],
+    addEventListener: () => {},
+  };
+  const win = { addEventListener: () => {} };
+  try {
+    new Function("window", `${readFileSync(path.join(root, "public", "app.shellerrors.js"), "utf8")};`)(win);
+    new Function("window", `${readFileSync(path.join(root, "public", "app.tabwire.js"), "utf8")};`)(win);
+    new Function("window", `${readFileSync(path.join(root, "public", "app.authwire.js"), "utf8")};`)(win);
+    win.__GMXAuthFactory = () => ({
+      getHandle: () => "@demo",
+      getToken: () => "tok",
+      normalizeHandle: (s) => String(s || "").trim(),
+      isConnected: () => true,
+      requireConnected: () => true,
+      isPublicApi: () => false,
+      initSession: async () => true,
+      api: async () => ({}),
+    });
+    new Function("window", `${readFileSync(path.join(root, "public", "app.shellwire.js"), "utf8")};`)(win);
+    new Function("window", `${readFileSync(path.join(root, "public", "app.chromewire.js"), "utf8")};`)(win);
+    const wire = win.__GMXChromeWireFactory({
+      chrome: {
+        $: (id) => ({ id }),
+        toast: (type, html) => ({ type, html }),
+        setDegraded: () => {},
+        showFatal: () => {},
+        hideFatal: () => {},
+        setBusy: () => {},
+        wireDegradedBar: () => {},
+        wireFatalBar: () => {},
+      },
+      fmt: { escapeHtml: (s) => `e:${s}` },
+      styles: { fillStyles: () => true },
+      nav: { showTab: (n) => n, ensurePredictionTabVisible: () => {} },
+      setBg: { setBg: (tab) => tab },
+      modals: { showInfoModal: (t, h) => ({ t, h }) },
+      toggles: { getBestMode: () => "on", setBestMode: () => {}, syncBestModeUi: () => {} },
+      paywall: { abVariant: () => "a", openLimitModal: () => {}, closeLimitModal: () => {}, bindLimitModal: () => {}, setPayState: () => {}, openPaySuccess: () => {}, closePaySuccess: () => {}, bindPaySuccess: () => {} },
+      health: { setApiPillState: () => {}, ping: async () => "ok", loadBuild: async () => ({}), watchBuildUpdates: () => {} },
+      usage: { normLimitForUI: (n) => n, setMeter: () => {}, usageCosmeticSignature: () => "", refreshUsage: async () => {} },
+      help: { renderHelpModal: () => {}, openHelpModal: () => {}, closeHelpModal: () => {}, bindHelpModal: () => {} },
+      account: { applyRefCountEligible: (e) => e, applyAdminVisibility: () => {} },
+      getInitDone: () => false,
+      normalizeTopLevelTab: (n) => n,
+      LS_SITE_LANG: "gmx_site_lang",
+      API: "http://test",
+      LS_HANDLE: "h",
+      LS_TOKEN: "t",
+      LS_IS_ADMIN: "a",
+      LS_ADMIN_CLAIMABLE: "c",
+      isLocalDevHost: () => true,
+      getAdminToken: () => "admin",
+      setAuthOk: () => {},
+      t: (k) => k,
+    });
+    assert.equal(wire.fillStyles(), true);
+    assert.equal(wire.$("x").id, "x");
+    assert.equal(wire.esc("<b>"), "e:<b>");
+    wire.tab("home");
+    assert.equal(wire.getToken(), "tok");
+    assert.equal(wire.applyRefCountEligible(3), 3);
+    assert.equal(wire.siteLang(), "en");
+  } finally {
+    globalThis.document = prevDoc;
+  }
+});

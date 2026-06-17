@@ -133,6 +133,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.prediction.js", "gmx-legacy-prediction");
     await injectAppShellRuntime("/app.authwire.js", "gmx-legacy-authwire");
     await injectAppShellRuntime("/app.shellwire.js", "gmx-legacy-shellwire");
+    await injectAppShellRuntime("/app.chromewire.js", "gmx-legacy-chromewire");
     await injectAppShellRuntime("/app.connect.js", "gmx-legacy-connect");
     await injectAppShellRuntime("/app.siteboot.js", "gmx-legacy-siteboot");
     await injectAppShellRuntime("/app.siteinit.js", "gmx-legacy-siteinit");

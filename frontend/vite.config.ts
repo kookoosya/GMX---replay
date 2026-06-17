@@ -147,6 +147,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.auth.js": { target: BACKEND, changeOrigin: true },
         "/app.authwire.js": { target: BACKEND, changeOrigin: true },
         "/app.shellwire.js": { target: BACKEND, changeOrigin: true },
+        "/app.chromewire.js": { target: BACKEND, changeOrigin: true },
         "/app.connect.js": { target: BACKEND, changeOrigin: true },
         "/app.siteboot.js": { target: BACKEND, changeOrigin: true },
         "/app.siteinit.js": { target: BACKEND, changeOrigin: true },

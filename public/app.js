@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618a";
+const ASSET_REV = "20260618b";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -894,115 +894,85 @@ const {
   freeVisibleExtThemes: FREE_VISIBLE_EXT_THEMES,
 });
 
-function fillStyles(){ return __gmxStyles.fillStyles(); }
-
-const $ = __gmxChrome.$;
-
-  function toast(type, html, ms=4500){ return __gmxChrome.toast(type, html, ms); }
-  function setDegraded(on, msg){ return __gmxChrome.setDegraded(on, msg); }
-  function showFatal(msg){ return __gmxChrome.showFatal(msg); }
-  function hideFatal(){ return __gmxChrome.hideFatal(); }
-  function setBusy(kind, on, label){ return __gmxChrome.setBusy(kind, on, label); }
-
   let INIT_DONE = false;
-  const esc = (s)=>__gmxFmt.escapeHtml(s);
-
-  if (!window.__GMXShellWireFactory) throw new Error("GMX shellwire factory missing");
-  const __gmxShellWire = window.__GMXShellWireFactory({
+  if (!window.__GMXChromeWireFactory) throw new Error("GMX chromewire factory missing");
+  const __gmxChromeWire = window.__GMXChromeWireFactory({
     chrome: __gmxChrome,
+    fmt: __gmxFmt,
+    styles: __gmxStyles,
+    nav: __gmxNav,
+    setBg: __gmxSetBg,
+    modals: __gmxModals,
+    toggles: __gmxToggles,
+    paywall: __gmxPaywall,
+    health: __gmxHealth,
+    usage: __gmxUsage,
+    help: __gmxHelp,
+    account: __gmxAccount,
+    getInitDone: () => INIT_DONE,
+    normalizeTopLevelTab: (n) => normalizeTopLevelTab(n),
+    LS_SITE_LANG,
+    API,
+    LS_HANDLE,
+    LS_TOKEN,
+    LS_IS_ADMIN,
+    LS_ADMIN_CLAIMABLE,
+    isLocalDevHost,
+    getAdminToken,
+    setAuthOk: (v) => { AUTH_OK = !!v; },
+    t,
+  });
+  const {
     $,
     toast,
     setDegraded,
     showFatal,
     hideFatal,
-    escapeHtml: esc,
-    isInitDone: () => INIT_DONE,
-    normalizeTopLevelTab: (n) => normalizeTopLevelTab(n),
-    showTab: (n) => __gmxNav.showTab(n),
-    ensurePredictionTabVisible: () => __gmxNav.ensurePredictionTabVisible(),
-    buildAuthConfig: () => ({
-      API,
-      LS_HANDLE,
-      LS_TOKEN,
-      LS_IS_ADMIN,
-      LS_ADMIN_CLAIMABLE,
-      isLocalDevHost,
-      getAdminToken,
-      setAuthOk: (v) => { AUTH_OK = !!v; },
-      $,
-      t,
-      toast,
-      escapeHtml: esc,
-      applyAdminVisibility,
-      ping,
-      setDegraded,
-    }),
-  });
-
-  function setBg(tab){ return __gmxSetBg.setBg(tab); }
-
-  function ensurePredictionTabVisible(){ return __gmxNav.ensurePredictionTabVisible(); }
-
-  function showTab(name){ return __gmxNav.showTab(name); }
-
-// Simple info modal (shared shell layer)
-  function showInfoModal(title, html){
-    return __gmxModals.showInfoModal(title, html);
-  }
-
-  function tab(name){ return __gmxShellWire.tab(name); }
-  function __getGMXAuth(){ return __gmxShellWire.getAuth(); }
-  function normalizeHandle(input){ return __gmxShellWire.normalizeHandle(input); }
-  function getHandle(){ return __gmxShellWire.getHandle(); }
-
-  function siteLang(){
-    try{ return String(localStorage.getItem(LS_SITE_LANG) || "en").toLowerCase(); }catch(_e){ return "en"; }
-  }
-  function getBestMode(){ return __gmxToggles.getBestMode(); }
-  function setBestMode(next, silent){ return __gmxToggles.setBestMode(next, silent); }
-  function syncBestModeUi(){ return __gmxToggles.syncBestModeUi(); }
-
-  function abVariant(){ return __gmxPaywall.abVariant(); }
-  async function trackEvent(type, meta){ return __gmxShellWire.trackEvent(type, meta); }
-  function openLimitModal(payload){ return __gmxPaywall.openLimitModal(payload); }
-  function closeLimitModal(){ return __gmxPaywall.closeLimitModal(); }
-  function bindLimitModal(){ return __gmxPaywall.bindLimitModal(); }
-  function setPayState(state, hint){ return __gmxPaywall.setPayState(state, hint); }
-  function openPaySuccess(){ return __gmxPaywall.openPaySuccess(); }
-  function closePaySuccess(){ return __gmxPaywall.closePaySuccess(); }
-  function bindPaySuccess(){ return __gmxPaywall.bindPaySuccess(); }
-
-  function getToken(){ return __gmxShellWire.getToken(); }
-  function isConnected(){ return __gmxShellWire.isConnected(); }
-  function requireConnected(target){ return __gmxShellWire.requireConnected(target); }
-  function isPublicApi(path){ return __gmxShellWire.isPublicApi(path); }
-  async function initSession(force=false){ return await __gmxShellWire.initSession(force); }
-  async function api(path, method="GET", body, opts={}){ return await __gmxShellWire.api(path, method, body, opts); }
-
-  function setApiPillState(state){ return __gmxHealth.setApiPillState(state); }
-
-  async function ping(){ return __gmxHealth.ping(); }
-
-  async function loadBuild(){ return __gmxHealth.loadBuild(); }
-
-  function watchBuildUpdates(){ return __gmxHealth.watchBuildUpdates(); }
-
-  function normLimitForUI(limit){ return __gmxUsage.normLimitForUI(limit); }
-  function setMeter(valId, fillId, used, limit){ return __gmxUsage.setMeter(valId, fillId, used, limit); }
-
-  function renderHelpModal(){ return __gmxHelp.renderHelpModal(); }
-  function openHelpModal(){ return __gmxHelp.openHelpModal(); }
-  function closeHelpModal(){ return __gmxHelp.closeHelpModal(); }
-  function bindHelpModal(){ return __gmxHelp.bindHelpModal(); }
-
-  function applyRefCountEligible(eligible, opts){ return __gmxAccount.applyRefCountEligible(eligible, opts); }
-
-  function usageCosmeticSignature(j){ return __gmxUsage.usageCosmeticSignature(j); }
-
-  async function refreshUsage(){ return __gmxUsage.refreshUsage(); }
-
-  function applyAdminVisibility(){ return __gmxAccount.applyAdminVisibility(); }
-
+    setBusy,
+    esc,
+    setBg,
+    ensurePredictionTabVisible,
+    showTab,
+    showInfoModal,
+    tab,
+    __getGMXAuth,
+    normalizeHandle,
+    getHandle,
+    siteLang,
+    getBestMode,
+    setBestMode,
+    syncBestModeUi,
+    abVariant,
+    trackEvent,
+    openLimitModal,
+    closeLimitModal,
+    bindLimitModal,
+    setPayState,
+    openPaySuccess,
+    closePaySuccess,
+    bindPaySuccess,
+    getToken,
+    isConnected,
+    requireConnected,
+    isPublicApi,
+    initSession,
+    api,
+    setApiPillState,
+    ping,
+    loadBuild,
+    watchBuildUpdates,
+    normLimitForUI,
+    setMeter,
+    renderHelpModal,
+    openHelpModal,
+    closeHelpModal,
+    bindHelpModal,
+    usageCosmeticSignature,
+    refreshUsage,
+    applyAdminVisibility,
+  } = __gmxChromeWire;
+  function fillStyles(){ return __gmxChromeWire.fillStyles(); }
+  function applyRefCountEligible(eligible, opts){ return __gmxChromeWire.applyRefCountEligible(eligible, opts); }
 
   if (!window.__GMXI18nBridgeFactory) throw new Error("GMX i18nbridge factory missing");
   const {
