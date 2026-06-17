@@ -147,46 +147,39 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618l";
+const ASSET_REV = "20260618m";
 
-if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
-const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
-
-if (!window.__GMXWallpapersFactory) throw new Error("GMX wallpapers factory missing");
-const __gmxWp = window.__GMXWallpapersFactory({
+if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
+const {
+  __gmxUnlock,
+  __gmxWp,
+  __gmxCustomWp,
+  __gmxThemes,
+  __gmxGen,
+  __gmxBanks,
+  __gmxAnti,
+  __gmxUi,
+  __gmxWpStore,
+  __gmxExtWpStore,
+  __gmxWpHelpers,
+  FREE_VISIBLE_THEMES,
+  FREE_VISIBLE_STYLES,
+  FREE_VISIBLE_PACKS,
+  FREE_VISIBLE_WALLPAPERS,
+  FREE_VISIBLE_EXT_THEMES,
+  FREE_VISIBLE_EXT_WALLPAPERS,
+  reqRefsForUnlockIndex,
+  formatUnlockMeter,
+  unlockedCountByRefs,
+} = window.__GMXBootstrapUnlockWireFactory({
   getAssetRev: () => ASSET_REV,
-  getSiteCustomUpload: () => __gmxSt.lsGet(K.CUSTOM_BG_GLOBAL),
-  getExtCustomUpload: () => __gmxSt.lsGet(K.EXT_CUSTOM_BG_GLOBAL),
-});
-
-if (!window.__GMXCustomWallpapersFactory) throw new Error("GMX customwallpapers factory missing");
-const __gmxCustomWp = window.__GMXCustomWallpapersFactory({
-  apiPath: "/api/wallpapers/custom",
-  customUploadId: __gmxWp.CUSTOM_UPLOAD_ID,
-  getSiteCustomUpload: () => __gmxSt.lsGet(K.CUSTOM_BG_GLOBAL, ""),
-  getExtCustomUpload: () => __gmxSt.lsGet(K.EXT_CUSTOM_BG_GLOBAL, ""),
-});
-
-if (!window.__GMXThemesFactory) throw new Error("GMX themes factory missing");
-const __gmxThemes = window.__GMXThemesFactory();
-
-if (!window.__GMXGenerateFactory) throw new Error("GMX generate factory missing");
-const __gmxGen = window.__GMXGenerateFactory();
-
-if (!window.__GMXBanksFactory) throw new Error("GMX banks factory missing");
-const __gmxBanks = window.__GMXBanksFactory({ storage: __gmxSt, dedupeLines: __gmxGen.dedupeLines, EMPTY });
-
-if (!window.__GMXAntiRepeatFactory) throw new Error("GMX anti-repeat factory missing");
-const __gmxAnti = window.__GMXAntiRepeatFactory({
   storage: __gmxSt,
-  repeatKey: __gmxGen.repeatKey,
-  readKey: __gmxBanks.readKey,
-  filterLinesByBan: __gmxGen.filterLinesByBan,
-});
-
-if (!window.__GMXUiFactory) throw new Error("GMX ui factory missing");
-const __gmxUi = window.__GMXUiFactory({
+  keys: K,
+  chrome: __gmxChrome,
   api: API,
+  empty: EMPTY,
+  isPro,
+  getRefCount: () => REF_COUNT,
   getToken: () => {
     try {
       return String(__gmxSt.lsGet(K.TOKEN, "") || "").trim();
@@ -194,65 +187,12 @@ const __gmxUi = window.__GMXUiFactory({
       return "";
     }
   },
-});
-
-if (!window.__GMXWallpaperStoreFactory) throw new Error("GMX wallpaperstore factory missing");
-const __gmxWpStore = window.__GMXWallpaperStoreFactory({
-  keys: {
-    wpGlobal: K.WP_GLOBAL,
-    wpTabPrefix: K.WP_TAB_PREFIX,
-    wallpaperRefreshMigration: K.WALLPAPER_REFRESH_MIGRATION,
-  },
-  lsGet: (key, def) => __gmxSt.lsGet(key, def),
-  lsSet: (key, val) => __gmxSt.lsSet(key, val),
-  lsRemove: (key) => { try { localStorage.removeItem(key); } catch {} },
   normalizeWallpaperId: (id) => normalizeWallpaperId(id),
   getWallpaperTabs: () => WALLPAPER_TABS,
-});
-
-if (!window.__GMXExtWallpaperStoreFactory) throw new Error("GMX extwallpaperstore factory missing");
-const __gmxExtWpStore = window.__GMXExtWallpaperStoreFactory({
-  keys: {
-    extWp: K.EXT_WP,
-    extWpTarget: K.EXT_WP_TARGET,
-    extWpViewPrefix: K.EXT_WP_VIEW_PREFIX,
-  },
-  extLsSet: (key, value) => __gmxSt.extLsSet(key, value),
-  lsGet: (key, def) => __gmxSt.lsGet(key, def),
-  lsSet: (key, val) => __gmxSt.lsSet(key, val),
-  lsRemove: (key) => { try { localStorage.removeItem(key); } catch {} },
-  normalizeExtWallpaperId: (id) => normalizeExtWallpaperIdLocal(id),
-});
-
-const FREE_VISIBLE_THEMES = __gmxUnlock.FREE_VISIBLE_THEMES;
-const FREE_VISIBLE_STYLES = __gmxUnlock.FREE_VISIBLE_STYLES;
-const FREE_VISIBLE_PACKS = __gmxUnlock.FREE_VISIBLE_PACKS;
-const FREE_VISIBLE_WALLPAPERS = __gmxUnlock.FREE_VISIBLE_WALLPAPERS;
-
-if (!window.__GMXWallpaperHelpersFactory) throw new Error("GMX wallpaperhelpers factory missing");
-const __gmxWpHelpers = window.__GMXWallpaperHelpersFactory({
-  wp: __gmxWp,
+  normalizeExtWallpaperIdLocal: (id) => normalizeExtWallpaperIdLocal(id),
   getWallpapers: () => WALLPAPERS,
   getExtWallpapers: () => EXT_WALLPAPERS,
-  isPro,
-  unlockedCountByRefs,
-  freeVisibleWallpapers: FREE_VISIBLE_WALLPAPERS,
-  customWpFreeCount: __gmxWp.CUSTOM_WP_FREE_COUNT,
 });
-const FREE_VISIBLE_EXT_THEMES = __gmxUnlock.FREE_VISIBLE_EXT_THEMES;
-const FREE_VISIBLE_EXT_WALLPAPERS = __gmxUnlock.FREE_VISIBLE_EXT_WALLPAPERS;
-
-function reqRefsForUnlockIndex(idx, freeCount=FREE_VISIBLE_THEMES){
-  return __gmxUnlock.reqRefsForUnlockIndex(idx, freeCount);
-}
-
-function formatUnlockMeter(cur, total){
-  return __gmxUnlock.formatUnlockMeter(cur, total);
-}
-
-function unlockedCountByRefs(total, freeCount=FREE_VISIBLE_THEMES){
-  return __gmxUnlock.unlockedCountByRefs(total, freeCount);
-}
 
 if (!window.__GMXGenParamsFactory) throw new Error("GMX genparams factory missing");
 const __gmxGp = window.__GMXGenParamsFactory({

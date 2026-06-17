@@ -73,6 +73,7 @@ const shellModules = [
   "app.themesui.js",
   "app.extview.js",
   "app.extwallpaperstore.js",
+  "app.bootstrapunlockwire.js",
   "app.extapply.js",
   "app.extthemesui.js",
   "app.extcustombgui.js",

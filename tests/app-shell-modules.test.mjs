@@ -2013,3 +2013,57 @@ test("connectwire: wires connect factory and binds UI", async () => {
   await els.btnConnect.onclick?.();
   assert.match(els.connectMsg.innerHTML, /valid @handle/);
 });
+
+test("bootstrapunlockwire: wires unlock catalog and storage delegates", () => {
+  const win = {};
+  const scripts = [
+    "app.unlock.js",
+    "app.wallpapers.js",
+    "app.customwallpapers.js",
+    "app.themes.js",
+    "app.generate.js",
+    "app.banks.js",
+    "app.antirepeat.js",
+    "app.ui.js",
+    "app.wallpaperstore.js",
+    "app.extwallpaperstore.js",
+    "app.wallpaperhelpers.js",
+    "app.bootstrapunlockwire.js",
+  ];
+  for (const file of scripts) {
+    new Function("window", `${readFileSync(path.join(root, "public", file), "utf8")};`)(win);
+  }
+  const wire = win.__GMXBootstrapUnlockWireFactory({
+    getAssetRev: () => "rev1",
+    storage: {
+      lsGet: () => "",
+      lsSet: () => {},
+      extLsSet: () => {},
+    },
+    keys: {
+      CUSTOM_BG_GLOBAL: "gmx_custom_bg_global",
+      EXT_CUSTOM_BG_GLOBAL: "gmx_ext_custom_bg_global",
+      WP_GLOBAL: "gmx_wp_global",
+      WP_TAB_PREFIX: "gmx_wp_tab_",
+      WALLPAPER_REFRESH_MIGRATION: "gmx_wp_refresh_mig",
+      EXT_WP: "gmx_ext_wp",
+      EXT_WP_TARGET: "gmx_ext_wp_target",
+      EXT_WP_VIEW_PREFIX: "gmx_ext_wp_view_",
+      TOKEN: "gmx_token",
+    },
+    api: "http://127.0.0.1:10000",
+    empty: "__EMPTY__",
+    isPro: () => false,
+    getRefCount: () => 0,
+    getToken: () => "",
+    normalizeWallpaperId: (id) => id,
+    getWallpaperTabs: () => ["home"],
+    normalizeExtWallpaperIdLocal: (id) => id,
+    getWallpapers: () => [],
+    getExtWallpapers: () => [],
+  });
+  assert.equal(wire.FREE_VISIBLE_THEMES > 0, true);
+  assert.equal(typeof wire.unlockedCountByRefs, "function");
+  assert.equal(typeof wire.__gmxBanks.readKey, "function");
+  assert.equal(typeof wire.__gmxUi.observeLazyBg, "function");
+});

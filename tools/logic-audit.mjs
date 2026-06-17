@@ -44,8 +44,14 @@ if (fs.existsSync(path.join(root, wallpaperModule))) {
 
 for (const rel of appFiles) {
   if (!fs.existsSync(path.join(root, rel))) continue;
+  const appText = fs.readFileSync(path.join(root, rel), "utf8");
+  const unlockWireRel = rel.replace(/app\.js$/, "app.bootstrapunlockwire.js");
+  const unlockWireText = read(unlockWireRel);
   mustMatch(rel, /SITE_WALLPAPER_PACK_COUNT = __gmxWp\.SITE_PACK_COUNT/, "wallpaper pack count wired from module");
-  mustMatch(rel, /__GMXWallpapersFactory/, "wallpapers module factory wired");
+  if (!/__GMXWallpapersFactory/.test(appText) && !/__GMXWallpapersFactory/.test(unlockWireText)) {
+    fail(`wallpapers module factory wired (${rel})`);
+  }
+  mustMatch(rel, /__GMXBootstrapUnlockWireFactory/, "bootstrap unlock wire wired");
   mustNotMatch(rel, /source\.unsplash\.com/, "unsplash URLs forbidden");
   mustNotMatch(rel, /sitePackWallpaperDataUri/, "chart SVG data-uri wallpapers forbidden");
   mustNotMatch(rel, /SITE_WALLPAPER_LUX/, "lux SVG wallpaper catalog removed");
@@ -60,7 +66,6 @@ for (const rel of appFiles) {
     : "";
   const bulkCap = /attempts < 4/;
   const readGenPat = /\{ mode, lang, style, antiN \} = readGenParams\(kind\)/;
-  const appText = fs.readFileSync(path.join(root, rel), "utf8");
   if (!bulkCap.test(appText) && !bulkCap.test(genFlowText)) {
     fail(`${rel}: bulk generate retry cap`);
   }
@@ -69,7 +74,9 @@ for (const rel of appFiles) {
   }
   mustNotMatch(rel, /const antiN = 0;/, "antiN must not be hardcoded 0");
   mustMatch(rel, /function packsForKind\(/, "packsForKind helper");
-  mustMatch(rel, /__GMXThemesFactory/, "themes module factory wired");
+  if (!/__GMXThemesFactory/.test(appText) && !/__GMXThemesFactory/.test(unlockWireText)) {
+    fail(`themes module factory wired (${rel})`);
+  }
   mustMatch(rel, /function readGenParams\(/, "readGenParams helper");
   mustMatch(rel, /function setWallpaperLayerImage\(/, "wallpaper img layer");
   mustMatch(rel, /unlockedPacksCountFor\(/, "per-kind pack unlock count");
@@ -134,6 +141,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.setbg\.js/, "app.setbg.js script tag");
   mustMatch(rel, /app\.extview\.js/, "app.extview.js script tag");
   mustMatch(rel, /app\.extwallpaperstore\.js/, "app.extwallpaperstore.js script tag");
+  mustMatch(rel, /app\.bootstrapunlockwire\.js/, "app.bootstrapunlockwire.js script tag");
   mustMatch(rel, /app\.extapply\.js/, "app.extapply.js script tag");
   mustMatch(rel, /app\.extthemesui\.js/, "app.extthemesui.js script tag");
   mustMatch(rel, /app\.extcustombgui\.js/, "app.extcustombgui.js script tag");
