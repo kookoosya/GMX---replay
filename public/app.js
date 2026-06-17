@@ -65,7 +65,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618s";
+const ASSET_REV = "20260618t";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {
@@ -330,7 +330,7 @@ const {
     return __gmxUiWire.postEvent(type, meta);
   }
 
-  if (!window.__GMXShellDepsWireFactory) throw new Error("GMX shelldepswire factory missing");
+  if (!window.__GMXShellDepsRunWireFactory) throw new Error("GMX shelldepsrunwire factory missing");
   const {
     logEvent,
     LS_HANDLE,
@@ -393,15 +393,17 @@ const {
     renderCustomBgUI,
     syncCustomBgUI,
     TAB_THEME,
-  } = window.__GMXShellDepsWireFactory({
-    K,
-    storage: __gmxSt,
-    logs: __gmxLogs,
-    cleanfill: __gmxCf,
-    antirepeat: __gmxAnti,
-    custombg: __gmxCbg,
-    tabtheme: __gmxTabTheme,
-  });
+  } = window.__GMXShellDepsRunWireFactory({
+    keys: { K },
+    mod: {
+      storage: __gmxSt,
+      logs: __gmxLogs,
+      cleanfill: __gmxCf,
+      antirepeat: __gmxAnti,
+      custombg: __gmxCbg,
+      tabtheme: __gmxTabTheme,
+    },
+  }).run();
 
   if (!window.__GMXWallpapersWireFactory) throw new Error("GMX wallpaperswire factory missing");
   const SITE_WALLPAPER_PACK_COUNT = __gmxWp.SITE_PACK_COUNT;

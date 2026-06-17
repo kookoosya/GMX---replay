@@ -60,6 +60,7 @@ const APP_FILES = [
   "app.logs.js",
   "app.shelldeps.js",
   "app.shelldepswire.js",
+  "app.shelldepsrunwire.js",
   "app.paywall.js",
   "app.help.js",
   "app.usage.js",

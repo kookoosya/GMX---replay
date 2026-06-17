@@ -1507,6 +1507,26 @@ test("shelldepswire: delegates to shelldeps factory", () => {
   assert.equal(deps.logEvent("evt"), "evt");
 });
 
+test("shelldepsrunwire: groups deps and delegates to shelldepswire", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.shelldepswire.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.shelldepsrunwire.js"), "utf8")};`)(win);
+  let captured = null;
+  win.__GMXShellDepsWireFactory = (cfg) => {
+    captured = cfg;
+    return { ok: true };
+  };
+  const wire = win.__GMXShellDepsRunWireFactory({
+    keys: { K: { HANDLE: "gmx_handle" } },
+    mod: { storage: { x: 1 }, logs: { y: 1 }, cleanfill: {}, antirepeat: {}, custombg: {}, tabtheme: {} },
+  });
+  const out = wire.run();
+  assert.equal(captured.K.HANDLE, "gmx_handle");
+  assert.equal(captured.storage.x, 1);
+  assert.equal(captured.logs.y, 1);
+  assert.equal(out.ok, true);
+});
+
 test("cleanfillrunwire: wires cleanfillrun and gen helpers", () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.cleanfillrun.js"), "utf8")};`)(win);
