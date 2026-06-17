@@ -3,6 +3,7 @@ import { createDb } from "./server/db.mjs";
 
 const {
   DB_MODE,
+  SUPABASE_CONFIGURED,
   getSupabaseAdmin,
   supabaseActive,
   sbEnsureUser,

@@ -213,6 +213,7 @@ export function createDb(deps) {
 
   return {
     DB_MODE,
+    SUPABASE_CONFIGURED,
     getSupabaseAdmin,
     supabaseActive,
     sbEnsureUser,
