@@ -121,6 +121,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.bootstrapunlockwire.js", "gmx-legacy-bootstrapunlockwire");
     await injectAppShellRuntime("/app.bootstrapgenwire.js", "gmx-legacy-bootstrapgenwire");
     await injectAppShellRuntime("/app.bootstrapusagewire.js", "gmx-legacy-bootstrapusagewire");
+    await injectAppShellRuntime("/app.bootstrapuiwire.js", "gmx-legacy-bootstrapuiwire");
     await injectAppShellRuntime("/app.extapply.js", "gmx-legacy-extapply");
     await injectAppShellRuntime("/app.extthemesui.js", "gmx-legacy-extthemesui");
     await injectAppShellRuntime("/app.extcustombgui.js", "gmx-legacy-extcustombgui");

@@ -54,6 +54,7 @@ for (const rel of appFiles) {
   mustMatch(rel, /__GMXBootstrapUnlockWireFactory/, "bootstrap unlock wire wired");
   mustMatch(rel, /__GMXBootstrapGenWireFactory/, "bootstrap gen wire wired");
   mustMatch(rel, /__GMXBootstrapUsageWireFactory/, "bootstrap usage wire wired");
+  mustMatch(rel, /__GMXBootstrapUiWireFactory/, "bootstrap ui wire wired");
   mustNotMatch(rel, /source\.unsplash\.com/, "unsplash URLs forbidden");
   mustNotMatch(rel, /sitePackWallpaperDataUri/, "chart SVG data-uri wallpapers forbidden");
   mustNotMatch(rel, /SITE_WALLPAPER_LUX/, "lux SVG wallpaper catalog removed");
@@ -146,6 +147,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.bootstrapunlockwire\.js/, "app.bootstrapunlockwire.js script tag");
   mustMatch(rel, /app\.bootstrapgenwire\.js/, "app.bootstrapgenwire.js script tag");
   mustMatch(rel, /app\.bootstrapusagewire\.js/, "app.bootstrapusagewire.js script tag");
+  mustMatch(rel, /app\.bootstrapuiwire\.js/, "app.bootstrapuiwire.js script tag");
   mustMatch(rel, /app\.extapply\.js/, "app.extapply.js script tag");
   mustMatch(rel, /app\.extthemesui\.js/, "app.extthemesui.js script tag");
   mustMatch(rel, /app\.extcustombgui\.js/, "app.extcustombgui.js script tag");

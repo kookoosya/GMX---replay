@@ -2160,3 +2160,104 @@ test("bootstrapusagewire: wires paywall usage help and health delegates", () => 
   assert.equal(typeof wire.__gmxWpApply.applyWallpaper, "function");
   assert.equal(typeof wire.__gmxHealth.ping, "function");
 });
+
+test("bootstrapuiwire: wires setbg themesui nav and extension UI delegates", () => {
+  const win = {
+    document: {
+      body: { classList: { contains: () => false, add: () => {}, remove: () => {} } },
+      querySelectorAll: () => [],
+      getElementById: () => null,
+    },
+    localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} },
+  };
+  const scripts = [
+    "app.setbg.js",
+    "app.themeapply.js",
+    "app.accountui.js",
+    "app.wallpaperui.js",
+    "app.themesui.js",
+    "app.extview.js",
+    "app.extapply.js",
+    "app.extcustombgui.js",
+    "app.extthemesui.js",
+    "app.nav.js",
+    "app.extwallpaperui.js",
+    "app.bootstrapuiwire.js",
+  ];
+  for (const file of scripts) {
+    new Function("window", `${readFileSync(path.join(root, "public", file), "utf8")};`)(win);
+  }
+  const wire = win.__GMXBootstrapUiWireFactory({
+    storage: { lsGet: () => "", lsSet: () => {}, extLsSet: () => {} },
+    keys: {
+      REF_ELIGIBLE_CACHE: "gmx_ref_eligible",
+      IS_ADMIN: "gmx_is_admin",
+      WP_GLOBAL: "gmx_wp_global",
+      THEMEWALL_VIEW: "gmx_themewall_view",
+      EXT_VIEW: "gmx_ext_view",
+      LAST_TAB: "gmx_last_tab",
+      EXT_CUSTOM_BG_GLOBAL: "gmx_ext_custom_bg_global",
+      EXT_CUSTOM_BG_TAB_PREFIX: "gmx_ext_custom_bg_tab_",
+      EXT_CUSTOM_BG_TARGET: "gmx_ext_custom_bg_target",
+      EXT_CUSTOM_BG_LEGACY: "gmx_ext_custom_bg_legacy",
+      EXT_WP_TARGET: "gmx_ext_wp_target",
+    },
+    chrome: { $: () => null, toast: () => {} },
+    fmt: { escapeHtml: (s) => s },
+    tabState: { normalizeTopLevelTab: (n) => n, setCurrentTab: () => {}, TOP_LEVEL_TABS: ["home"] },
+    themes: { pickAccentOn: () => "#000" },
+    wp: { CUSTOM_UPLOAD_ID: "custom" },
+    wpStore: { wallpaperKeyForTab: () => "", setWallpaperForTab: () => {} },
+    customWp: {
+      getEffectiveCustomWallpapersSite: () => [],
+      loadCustomWallpapers: async () => {},
+      getEffectiveExtCustomWallpapers: () => [],
+    },
+    extWpStore: {
+      normalizeExtWallpaperView: (v) => v,
+      currentExtWallpaperTarget: () => "popup",
+      setExtWallpaperForView: () => {},
+      syncExtWallpaperTargetUI: () => {},
+      getExtWallpaperForView: () => "",
+      extWallpaperLabel: () => "",
+    },
+    ui: { chunkedRender: () => {}, observeLazyBg: () => {}, prefetchImage: () => {} },
+    tabTheme: { getTabBg: () => "linear-gradient(#000,#111)" },
+    cbg: { applyUserBg: () => {} },
+    wpApply: { applyWallpaper: () => {} },
+    isPro: () => false,
+    unlockedCountByRefs: () => 0,
+    reqRefsForUnlockIndex: () => 0,
+    formatUnlockMeter: () => "",
+    freeVisibleThemes: 2,
+    freeVisibleWallpapers: 2,
+    freeVisibleExtThemes: 2,
+    freeVisibleExtWallpapers: 2,
+    t: (k) => k,
+    trWp: (k) => k,
+    getRefCount: () => 0,
+    setRefCount: () => {},
+    getAuthOk: () => false,
+    getThemes: () => [{ id: "classic", name: "Classic" }],
+    getWallpapers: () => [],
+    getExtThemes: () => [{ id: "classic", name: "Classic" }],
+    getExtWallpapers: () => [],
+    getWallpaperTabs: () => ["home"],
+    getCurrentTab: () => "home",
+    wallpaperUnlocked: () => true,
+    wallpaperThumbUrl: (id) => id,
+    wallpaperFullUrl: (id) => id,
+    extWallpaperThumbUrl: (id) => id,
+    extWallpaperFullUrl: (id) => id,
+    normalizeExtWallpaperId: (id) => id,
+    unlockedThemesCount: () => 1,
+    requireConnected: () => true,
+    onTabActivated: () => {},
+    onUnlockUiRefresh: () => {},
+  });
+  assert.equal(typeof wire.__gmxSetBg.setBg, "function");
+  assert.equal(typeof wire.__gmxThemeApply.applyTheme, "function");
+  assert.equal(typeof wire.__gmxThemesUi.renderThemes, "function");
+  assert.equal(typeof wire.__gmxNav.showTab, "function");
+  assert.equal(typeof wire.__gmxExtWpUi.renderExtWallpapers, "function");
+});

@@ -217,6 +217,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.bootstrapunlockwire.js": { target: BACKEND, changeOrigin: true },
         "/app.bootstrapgenwire.js": { target: BACKEND, changeOrigin: true },
         "/app.bootstrapusagewire.js": { target: BACKEND, changeOrigin: true },
+        "/app.bootstrapuiwire.js": { target: BACKEND, changeOrigin: true },
         "/app.extapply.js": { target: BACKEND, changeOrigin: true },
         "/app.extthemesui.js": { target: BACKEND, changeOrigin: true },
         "/app.extcustombgui.js": { target: BACKEND, changeOrigin: true },
