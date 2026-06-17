@@ -68,7 +68,7 @@ ok(`composeReply ${styles.length} styles`);
 
 const BANNED_CRYPTO_RE = /\b(?:wagmi|lfg|hodl|ath|moon|ape|aping)\b|diamond\s+hands?/i;
 
-for (const style of ["degen", "alpha"]) {
+for (const style of ["degen", "alpha", "classy", "cheer", "calm", "builder", "focus"]) {
   for (let i = 0; i < 8; i++) {
     const line = gen.composeReply("gm", "mid", "en", style);
     if (BANNED_CRYPTO_RE.test(line)) fail(`composeReply crypto hype for style=${style}: ${line}`);

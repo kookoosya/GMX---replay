@@ -4,6 +4,8 @@
  *
  * Usage:
  *   DEPLOY_SSH_HOST=root@192.210.213.135 DEPLOY_SSH_PASSWORD=*** node tools/deploy-vps.mjs probe
+ *
+ * NOTE: Production is Render-only (gmxreply.com). Do not deploy to VPS unless explicitly migrating.
  *   DEPLOY_SSH_HOST=root@192.210.213.135 DEPLOY_SSH_PASSWORD=*** node tools/deploy-vps.mjs setup
  *   DEPLOY_SSH_HOST=root@192.210.213.135 DEPLOY_SSH_PASSWORD=*** node tools/deploy-vps.mjs deploy
  *

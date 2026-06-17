@@ -3,6 +3,7 @@
  * Post-deploy verification against production (or PROD_BASE URL).
  * Run: npm run verify:prod
  */
+import { execSync } from "node:child_process";
 import { fail, ok, freshSmokeHandle } from "./tests/_helpers.mjs";
 
 const BASE = String(process.env.PROD_BASE || "https://www.gmxreply.com").replace(/\/$/, "");
@@ -21,7 +22,25 @@ console.log(`Prod verify: ${BASE}\n`);
 
 const health = await get("/api/health");
 if (!health.json?.ok) fail(`health: ${health.text.slice(0, 200)}`);
-ok(`health build=${String(health.json.build || "").slice(0, 8)}`);
+const prodBuild = String(health.json.build || "");
+ok(`health build=${prodBuild.slice(0, 8)}`);
+
+try {
+  const localHead = execSync("git rev-parse HEAD", {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "ignore"],
+  }).trim();
+  const localShort = localHead.slice(0, 8);
+  const prodShort = prodBuild.slice(0, 8);
+  if (localShort && prodShort && localShort !== prodShort) {
+    fail(
+      `Render prod build ${prodShort} != local HEAD ${localShort} — wait for Render deploy or push main`
+    );
+  }
+  if (localShort) ok(`prod commit matches local ${localShort}`);
+} catch {
+  ok("prod commit check skipped (not a git checkout)");
+}
 
 const appJs = await get("/app.js");
 if (appJs.status !== 200) fail(`app.js status ${appJs.status}`);

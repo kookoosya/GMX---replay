@@ -73,7 +73,7 @@ npm run i18n:sync
 
 Locales live in `shared/i18n/locales/*.json` (same pipeline for every language).
 
-## Push workflow
+## Push workflow (production = Render)
 
 ```bash
 git add -A
@@ -81,4 +81,14 @@ git commit -m "fix: …"
 git push origin main
 ```
 
-GitHub Actions runs build on push. Render deploys `main`.
+GitHub Actions runs build on push. **Render auto-deploys `main`** (`render.yaml`).
+
+Confirm prod caught up after push:
+
+```bash
+npm run verify:prod
+```
+
+This checks `https://www.gmxreply.com` and that health `build` matches local `git rev-parse HEAD`.
+
+**Production stays on Render** — do not use `deploy:vps`.
