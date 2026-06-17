@@ -1995,3 +1995,21 @@ test("redeemwire: wires redeem factory and binds UI", async () => {
   await els.btnRedeem.onclick?.();
   assert.match(els.connectMsg.innerHTML, /Paste a code first/);
 });
+
+test("connectwire: wires connect factory and binds UI", async () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.connect.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.connectwire.js"), "utf8")};`)(win);
+  const els = {
+    btnConnect: { onclick: null },
+    connectMsg: { textContent: "x", innerHTML: "" },
+    xHandle: { value: "!!!" },
+  };
+  const wire = win.__GMXConnectWireFactory({
+    $: (id) => els[id] || null,
+    normalizeHandle: () => "",
+  });
+  assert.equal(typeof wire.bindConnect, "function");
+  await els.btnConnect.onclick?.();
+  assert.match(els.connectMsg.innerHTML, /valid @handle/);
+});

@@ -149,6 +149,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.shellwire.js": { target: BACKEND, changeOrigin: true },
         "/app.chromewire.js": { target: BACKEND, changeOrigin: true },
         "/app.connect.js": { target: BACKEND, changeOrigin: true },
+        "/app.connectwire.js": { target: BACKEND, changeOrigin: true },
         "/app.siteboot.js": { target: BACKEND, changeOrigin: true },
         "/app.siteinit.js": { target: BACKEND, changeOrigin: true },
         "/app.siteinitwire.js": { target: BACKEND, changeOrigin: true },

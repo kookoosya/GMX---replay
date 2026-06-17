@@ -159,6 +159,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.shellwire\.js/, "app.shellwire.js script tag");
   mustMatch(rel, /app\.chromewire\.js/, "app.chromewire.js script tag");
   mustMatch(rel, /app\.connect\.js/, "app.connect.js script tag");
+  mustMatch(rel, /app\.connectwire\.js/, "app.connectwire.js script tag");
   mustMatch(rel, /app\.siteboot\.js/, "app.siteboot.js script tag");
   mustMatch(rel, /app\.siteinit\.js/, "app.siteinit.js script tag");
   mustMatch(rel, /app\.siteinitwire\.js/, "app.siteinitwire.js script tag");

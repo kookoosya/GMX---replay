@@ -92,6 +92,7 @@ const APP_FILES = [
   "app.prediction.js",
   "app.predictionwire.js",
   "app.connect.js",
+  "app.connectwire.js",
   "app.shellwire.js",
   "app.chromewire.js",
   "app.authwire.js",

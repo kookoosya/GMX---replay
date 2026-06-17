@@ -1,6 +1,6 @@
   // ----- Connect -----
-  if (!window.__GMXConnectFactory) throw new Error("GMX connect factory missing");
-  const __gmxConnect = window.__GMXConnectFactory({
+  if (!window.__GMXConnectWireFactory) throw new Error("GMX connectwire factory missing");
+  window.__GMXConnectWireFactory({
     $,
     api,
     escapeHtml,
@@ -20,6 +20,5 @@
       forceLogoutV2: LS_FORCE_LOGOUT_V2,
     },
   });
-  __gmxConnect.bindConnect();
 
 })();

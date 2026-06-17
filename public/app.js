@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618k";
+const ASSET_REV = "20260618l";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -1393,8 +1393,8 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
   }).run();
 
   // ----- Connect -----
-  if (!window.__GMXConnectFactory) throw new Error("GMX connect factory missing");
-  const __gmxConnect = window.__GMXConnectFactory({
+  if (!window.__GMXConnectWireFactory) throw new Error("GMX connectwire factory missing");
+  window.__GMXConnectWireFactory({
     $,
     api,
     escapeHtml,
@@ -1414,6 +1414,5 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
       forceLogoutV2: LS_FORCE_LOGOUT_V2,
     },
   });
-  __gmxConnect.bindConnect();
 
 })();

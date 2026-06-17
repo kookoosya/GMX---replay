@@ -98,6 +98,7 @@ const shellModules = [
   "app.shellwire.js",
   "app.chromewire.js",
   "app.connect.js",
+  "app.connectwire.js",
   "app.siteboot.js",
   "app.siteinit.js",
   "app.siteinitwire.js",
