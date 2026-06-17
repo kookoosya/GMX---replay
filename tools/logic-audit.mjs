@@ -171,6 +171,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.adminrunwire\.js/, "app.adminrunwire.js script tag");
   mustMatch(rel, /app\.leaderboard\.js/, "app.leaderboard.js script tag");
   mustMatch(rel, /app\.leaderboardwire\.js/, "app.leaderboardwire.js script tag");
+  mustMatch(rel, /app\.leaderboardrunwire\.js/, "app.leaderboardrunwire.js script tag");
   mustMatch(rel, /app\.referrals\.js/, "app.referrals.js script tag");
   mustMatch(rel, /app\.referralswire\.js/, "app.referralswire.js script tag");
   mustMatch(rel, /app\.referralsrunwire\.js/, "app.referralsrunwire.js script tag");

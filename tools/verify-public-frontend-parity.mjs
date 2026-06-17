@@ -95,6 +95,7 @@ const APP_FILES = [
   "app.adminrunwire.js",
   "app.leaderboard.js",
   "app.leaderboardwire.js",
+  "app.leaderboardrunwire.js",
   "app.referrals.js",
   "app.referralswire.js",
   "app.referralsrunwire.js",

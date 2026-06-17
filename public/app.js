@@ -65,7 +65,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260619b";
+const ASSET_REV = "20260619c";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {
@@ -864,15 +864,12 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
 
 // ----- Leaderboard -----
 let LB_DAYS = 7;
-if (!window.__GMXLeaderboardWireFactory) throw new Error("GMX leaderboardwire factory missing");
-const __gmxLeaderboardWire = window.__GMXLeaderboardWireFactory({
-  $,
-  escapeHtml,
-  t,
-  getToken,
-  getHandle,
-  setLbDays: (v) => { LB_DAYS = v; },
-});
+if (!window.__GMXLeaderboardRunWireFactory) throw new Error("GMX leaderboardrunwire factory missing");
+const __gmxLeaderboardWire = window.__GMXLeaderboardRunWireFactory({
+  core: { $, escapeHtml, t },
+  auth: { getToken, getHandle },
+  lb: { setLbDays: (v) => { LB_DAYS = v; } },
+}).run();
 async function loadLeaderboard(days) {
   return __gmxLeaderboardWire.loadLeaderboard(days);
 }

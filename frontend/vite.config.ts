@@ -243,6 +243,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.adminrunwire.js": { target: BACKEND, changeOrigin: true },
         "/app.leaderboard.js": { target: BACKEND, changeOrigin: true },
         "/app.leaderboardwire.js": { target: BACKEND, changeOrigin: true },
+        "/app.leaderboardrunwire.js": { target: BACKEND, changeOrigin: true },
         "/app.referrals.js": { target: BACKEND, changeOrigin: true },
         "/app.referralswire.js": { target: BACKEND, changeOrigin: true },
         "/app.referralsrunwire.js": { target: BACKEND, changeOrigin: true },

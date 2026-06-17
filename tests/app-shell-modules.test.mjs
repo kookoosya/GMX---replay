@@ -2113,6 +2113,25 @@ test("leaderboardwire: wires leaderboard factory delegates", () => {
   assert.equal(lbDays, 7);
 });
 
+test("leaderboardrunwire: groups deps and delegates to leaderboardwire", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.leaderboardwire.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.leaderboardrunwire.js"), "utf8")};`)(win);
+  let captured = null;
+  win.__GMXLeaderboardWireFactory = (cfg) => {
+    captured = cfg;
+    return { loadLeaderboard: async () => ({}), bindLeaderboardUI: () => {}, getLbDays: () => 7 };
+  };
+  win.__GMXLeaderboardRunWireFactory({
+    core: { $: () => null, escapeHtml: (s) => s, t: (_k, fb) => fb },
+    auth: { getToken: () => "tok", getHandle: () => "@demo" },
+    lb: { setLbDays: () => {} },
+  }).run();
+  assert.equal(captured.getHandle(), "@demo");
+  assert.equal(captured.getToken(), "tok");
+  assert.equal(typeof captured.setLbDays, "function");
+});
+
 test("predictionwire: wires prediction factory delegates", async () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.prediction.js"), "utf8")};`)(win);
