@@ -1844,3 +1844,31 @@ test("generatewire: wires refstats and generateflow delegates", async () => {
   await wire.generate("gm", 1);
   assert.match(msg.innerHTML, /Session expired/);
 });
+
+test("walletwire: wires wallet helpers, pay, and ui delegates", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.wallethelpers.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.walletpay.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.walletui.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.walletwire.js"), "utf8")};`)(win);
+  const els = { w_status_desc: { innerHTML: "" } };
+  const wire = win.__GMXWalletWireFactory({
+    $: (id) => els[id] || null,
+    api: async () => ({}),
+    K: { WALLET_CHOICE: "gmx_wallet_choice" },
+    modals: {},
+    escapeHtml: (s) => s,
+    toast: () => {},
+    trackEvent: () => {},
+    abVariant: () => "a",
+    friendlyUiErrorMessage: (m) => m,
+    setPayState: () => {},
+    openPaySuccess: () => {},
+    getHandle: () => "@demo",
+    refreshUsage: async () => {},
+  });
+  wire.renderWalletStatus({ active: true, paidUntil: "2026-12-01" });
+  assert.match(els.w_status_desc.innerHTML, /Pro active/);
+  assert.equal(typeof wire.loadPlans, "function");
+  assert.equal(typeof wire.bindWalletTab, "function");
+});

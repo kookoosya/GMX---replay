@@ -160,6 +160,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.wallethelpers\.js/, "app.wallethelpers.js script tag");
   mustMatch(rel, /app\.walletpay\.js/, "app.walletpay.js script tag");
   mustMatch(rel, /app\.walletui\.js/, "app.walletui.js script tag");
+  mustMatch(rel, /app\.walletwire\.js/, "app.walletwire.js script tag");
   mustMatch(rel, /app\.bestpick\.js/, "app.bestpick.js script tag");
   mustMatch(rel, /app\.refstats\.js/, "app.refstats.js script tag");
   mustMatch(rel, /app\.generateflow\.js/, "app.generateflow.js script tag");
