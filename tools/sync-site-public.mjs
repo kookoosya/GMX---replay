@@ -91,6 +91,7 @@ const shellModules = [
   "app.referrals.js",
   "app.referralswire.js",
   "app.redeem.js",
+  "app.redeemwire.js",
   "app.prediction.js",
   "app.predictionwire.js",
   "app.authwire.js",

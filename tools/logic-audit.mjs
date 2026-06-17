@@ -152,6 +152,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.referrals\.js/, "app.referrals.js script tag");
   mustMatch(rel, /app\.referralswire\.js/, "app.referralswire.js script tag");
   mustMatch(rel, /app\.redeem\.js/, "app.redeem.js script tag");
+  mustMatch(rel, /app\.redeemwire\.js/, "app.redeemwire.js script tag");
   mustMatch(rel, /app\.prediction\.js/, "app.prediction.js script tag");
   mustMatch(rel, /app\.predictionwire\.js/, "app.predictionwire.js script tag");
   mustMatch(rel, /app\.authwire\.js/, "app.authwire.js script tag");

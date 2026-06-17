@@ -1,6 +1,6 @@
   // ----- Redeem code -----
-  if (!window.__GMXRedeemFactory) throw new Error("GMX redeem factory missing");
-  const __gmxRedeem = window.__GMXRedeemFactory({
+  if (!window.__GMXRedeemWireFactory) throw new Error("GMX redeemwire factory missing");
+  window.__GMXRedeemWireFactory({
     $,
     api,
     requireConnected,
@@ -9,4 +9,3 @@
     renderWalletStatus,
     refreshUsage,
   });
-  __gmxRedeem.bindRedeem();

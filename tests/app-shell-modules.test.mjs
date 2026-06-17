@@ -1972,3 +1972,26 @@ test("adminwire: wires admin factory delegates", () => {
   assert.equal(els.adminAuthState.textContent, "signed out");
   assert.equal(typeof wire.pruneLegacyAdminPanels, "function");
 });
+
+test("redeemwire: wires redeem factory and binds UI", async () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.redeem.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.redeemwire.js"), "utf8")};`)(win);
+  const els = {
+    btnRedeem: { onclick: null },
+    redeemCode: { value: "" },
+    connectMsg: { innerHTML: "" },
+  };
+  const wire = win.__GMXRedeemWireFactory({
+    $: (id) => els[id] || null,
+    requireConnected: () => true,
+    getHandle: () => "@demo",
+    api: async () => ({}),
+    tab: () => {},
+    renderWalletStatus: () => {},
+    refreshUsage: async () => {},
+  });
+  assert.equal(typeof wire.bindRedeem, "function");
+  await els.btnRedeem.onclick?.();
+  assert.match(els.connectMsg.innerHTML, /Paste a code first/);
+});
