@@ -1,16 +1,15 @@
 // ----- Leaderboard -----
 let LB_DAYS = 7;
-if (!window.__GMXLeaderboardFactory) throw new Error("GMX leaderboard factory missing");
-const __gmxLeaderboard = window.__GMXLeaderboardFactory({
+if (!window.__GMXLeaderboardWireFactory) throw new Error("GMX leaderboardwire factory missing");
+const __gmxLeaderboardWire = window.__GMXLeaderboardWireFactory({
   $,
   escapeHtml,
   t,
   getToken,
   getHandle,
+  setLbDays: (v) => { LB_DAYS = v; },
 });
-async function loadLeaderboard(days){
-  const j = await __gmxLeaderboard.loadLeaderboard(days);
-  LB_DAYS = __gmxLeaderboard.getLbDays();
-  return j;
+async function loadLeaderboard(days) {
+  return __gmxLeaderboardWire.loadLeaderboard(days);
 }
-const bindLeaderboardUI = () => __gmxLeaderboard.bindLeaderboardUI();
+const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();

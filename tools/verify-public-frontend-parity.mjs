@@ -83,6 +83,7 @@ const APP_FILES = [
   "app.accountui.js",
   "app.admin.js",
   "app.leaderboard.js",
+  "app.leaderboardwire.js",
   "app.referrals.js",
   "app.referralswire.js",
   "app.redeem.js",

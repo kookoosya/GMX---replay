@@ -226,6 +226,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.accountui.js": { target: BACKEND, changeOrigin: true },
         "/app.admin.js": { target: BACKEND, changeOrigin: true },
         "/app.leaderboard.js": { target: BACKEND, changeOrigin: true },
+        "/app.leaderboardwire.js": { target: BACKEND, changeOrigin: true },
         "/app.referrals.js": { target: BACKEND, changeOrigin: true },
         "/app.referralswire.js": { target: BACKEND, changeOrigin: true },
         "/app.redeem.js": { target: BACKEND, changeOrigin: true },

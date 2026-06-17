@@ -1901,3 +1901,18 @@ test("referralswire: wires referrals factory delegates", async () => {
   assert.match(els.refInvitedBody.innerHTML, /No invited users yet/);
   assert.equal(typeof wire.loadRefLeaderboard, "function");
 });
+
+test("leaderboardwire: wires leaderboard factory delegates", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.leaderboard.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.leaderboardwire.js"), "utf8")};`)(win);
+  let lbDays = 7;
+  const wire = win.__GMXLeaderboardWireFactory({
+    $: () => null,
+    setLbDays: (v) => { lbDays = v; },
+  });
+  wire.bindLeaderboardUI();
+  wire.bindLeaderboardUI();
+  assert.equal(wire.getLbDays(), 7);
+  assert.equal(lbDays, 7);
+});
