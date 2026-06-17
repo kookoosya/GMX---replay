@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import os from "node:os";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -62,6 +63,22 @@ const strayAppJs = path.join(targetDir, "app.js");
 if (fs.existsSync(strayAppJs)) {
   fs.unlinkSync(strayAppJs);
 }
+
+function pruneObsoleteBridgeShellFiles(bridgeDir) {
+  if (!fs.existsSync(bridgeDir)) return;
+  let removed = 0;
+  for (const name of fs.readdirSync(bridgeDir)) {
+    if (name === "app.html" || name === "app.css" || (name.startsWith("app.") && name !== "app.js")) {
+      fs.unlinkSync(path.join(bridgeDir, name));
+      removed++;
+    }
+  }
+  if (removed) {
+    console.log(`[build] removed ${removed} obsolete shell file(s) from public/bridge`);
+  }
+}
+
+pruneObsoleteBridgeShellFiles(targetDir);
 
 console.log(
   `[build] React bridge synced: ${path.relative(repoRoot, sourceDir)} -> ${path.relative(repoRoot, targetDir)} (${bundleNames.length} bundles)`

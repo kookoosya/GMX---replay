@@ -134,7 +134,7 @@ for (const name of shellModules) {
   const modSrc = path.join(root, "public", name);
   if (!fs.existsSync(modSrc)) continue;
   const modBody = fs.readFileSync(modSrc, "utf8");
-  for (const destRoot of ["frontend/public", "public/bridge"]) {
+  for (const destRoot of ["frontend/public"]) {
     const dest = path.join(root, destRoot, name);
     fs.mkdirSync(path.dirname(dest), { recursive: true });
     const prev = fs.existsSync(dest) ? fs.readFileSync(dest, "utf8") : "";
@@ -146,7 +146,21 @@ for (const name of shellModules) {
 }
 
 // bridge loads /app.js from site root — no bridge/app.js copy needed
-const bridgeCopy = path.join(root, "public/bridge/app.js");
+function pruneObsoleteBridgeShellFiles(bridgeDir) {
+  if (!fs.existsSync(bridgeDir)) return;
+  let removed = 0;
+  for (const name of fs.readdirSync(bridgeDir)) {
+    if (name === "app.js" || name === "app.html" || name === "app.css" || name.startsWith("app.")) {
+      fs.unlinkSync(path.join(bridgeDir, name));
+      removed++;
+    }
+  }
+  if (removed) console.log(`removed ${removed} obsolete file(s) from public/bridge`);
+}
+
+const bridgeDir = path.join(root, "public/bridge");
+pruneObsoleteBridgeShellFiles(bridgeDir);
+const bridgeCopy = path.join(bridgeDir, "app.js");
 if (fs.existsSync(bridgeCopy)) {
   fs.unlinkSync(bridgeCopy);
   console.log("removed obsolete public/bridge/app.js");

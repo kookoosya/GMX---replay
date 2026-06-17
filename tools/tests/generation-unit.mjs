@@ -12,6 +12,14 @@ db.exec(`
     reply TEXT,
     created_at TEXT
   );
+  CREATE TABLE IF NOT EXISTS recent_reply_shapes (
+    kind TEXT,
+    mode TEXT,
+    family TEXT,
+    reply_hash TEXT,
+    shape TEXT,
+    created_at TEXT
+  );
 `);
 
 function safeDb(fn) {
@@ -57,6 +65,25 @@ for (const style of styles) {
   if (!String(line || "").trim()) fail(`composeReply empty for style=${style}`);
 }
 ok(`composeReply ${styles.length} styles`);
+
+const BANNED_CRYPTO_RE = /\b(?:wagmi|lfg|hodl|ath|moon|ape|aping)\b|diamond\s+hands?/i;
+
+for (const style of ["degen", "alpha"]) {
+  for (let i = 0; i < 8; i++) {
+    const line = gen.composeReply("gm", "mid", "en", style);
+    if (BANNED_CRYPTO_RE.test(line)) fail(`composeReply crypto hype for style=${style}: ${line}`);
+    if (/\b(ser|legend|mate|dear)\b/i.test(line)) fail(`composeReply legacy vocative for style=${style}: ${line}`);
+  }
+}
+ok("crypto styles avoid hype and legacy vocatives");
+
+const antiHandle = "@unittest02";
+db.exec("DELETE FROM recent_replies WHERE handle='@unittest02'");
+const first = gen.generateUnique(antiHandle, "gm", "mid", "en", "classic", 0);
+gen.saveRecent(antiHandle, "gm", first, "mid", "classic");
+const second = gen.generateUnique(antiHandle, "gm", "mid", "en", "classic", 20);
+if (!second || second === first) fail("generateUnique should avoid immediate repeat after saveRecent");
+ok("generateUnique anti-repeat");
 
 const unique = gen.generateUnique("@unittest01", "gm", "mid", "en", "classic", 0);
 if (!String(unique || "").trim()) fail("generateUnique returned empty");

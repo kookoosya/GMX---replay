@@ -29,8 +29,8 @@ function mustMatch(rel, pattern, label) {
   if (!pattern.test(text)) fail(`${label} (${rel})`);
 }
 
-const appFiles = ["public/app.js", "public/bridge/app.js", "frontend/public/app.js"];
-const htmlFiles = ["public/app.html", "public/bridge/app.html", "frontend/public/app.html"];
+const appFiles = ["public/app.js", "frontend/public/app.js"];
+const htmlFiles = ["public/app.html", "frontend/public/app.html"];
 const wallpaperModule = "public/app.wallpapers.js";
 
 if (fs.existsSync(path.join(root, wallpaperModule))) {

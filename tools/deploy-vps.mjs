@@ -225,6 +225,31 @@ echo "DEPLOY_OK"
   await exec(conn, script, { timeoutMs: 900_000 });
 }
 
+async function ssl(conn) {
+  const vpsIp = process.env.DEPLOY_VPS_IP || "192.210.213.135";
+  const email = String(process.env.DEPLOY_SSL_EMAIL || "").trim();
+  console.log(`\n[ssl] checking DNS for gmxreply.com -> ${vpsIp}\n`);
+  const certbotEmail = email
+    ? `-m ${email}`
+    : "--register-unsafely-without-email";
+  const script = `
+set -e
+apt-get install -y certbot python3-certbot-nginx 2>/dev/null || true
+DNS_IP=$(dig +short gmxreply.com A 2>/dev/null | head -1 || true)
+if [ -z "$DNS_IP" ]; then
+  echo "DNS_NOT_READY: no A record for gmxreply.com"
+  exit 2
+fi
+if [ "$DNS_IP" != "${vpsIp}" ]; then
+  echo "DNS_NOT_READY: gmxreply.com -> $DNS_IP (need ${vpsIp})"
+  exit 2
+fi
+certbot --nginx -d gmxreply.com -d www.gmxreply.com --non-interactive --agree-tos ${certbotEmail} --redirect
+echo "SSL_OK"
+`.trim();
+  await exec(conn, script, { timeoutMs: 300_000 });
+}
+
 const conn = await connect();
 try {
   if (action === "probe") {
@@ -233,8 +258,10 @@ try {
     await setup(conn);
   } else if (action === "deploy") {
     await deploy(conn);
+  } else if (action === "ssl") {
+    await ssl(conn);
   } else {
-    console.error(`Unknown action: ${action} (use probe|setup|deploy)`);
+    console.error(`Unknown action: ${action} (use probe|setup|deploy|ssl)`);
     process.exit(1);
   }
 } finally {

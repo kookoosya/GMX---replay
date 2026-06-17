@@ -60,6 +60,7 @@
     "deploy:probe": "node tools/deploy-vps.mjs probe",
     "deploy:setup": "node tools/deploy-vps.mjs setup",
     "deploy:vps": "node tools/deploy-vps.mjs deploy",
+    "deploy:ssl": "node tools/deploy-vps.mjs ssl",
     "release:check": "npm run test:full && npm run verify:prod && npm run test:e2e:prod",
     "wallpapers:fetch": "node tools/fetch-wallpapers-pexels.mjs",
     "wallpapers:ideal": "npm run wallpapers:fetch && npm run build:site",

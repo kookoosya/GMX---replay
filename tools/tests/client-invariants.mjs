@@ -3,7 +3,7 @@
 import fs from "node:fs";
 import { fail, ok } from "./_helpers.mjs";
 
-const appPaths = ["public/app.js", "public/bridge/app.js", "frontend/public/app.js"];
+const appPaths = ["public/app.js", "frontend/public/app.js"];
 
 for (const rel of appPaths) {
   if (!fs.existsSync(rel)) continue;
