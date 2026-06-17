@@ -89,6 +89,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.recover\.js/, "app.recover.js script tag");
   mustMatch(rel, /app\.langui\.js/, "app.langui.js script tag");
   mustMatch(rel, /app\.sitelangmenu\.js/, "app.sitelangmenu.js script tag");
+  mustMatch(rel, /app\.i18nbridge\.js/, "app.i18nbridge.js script tag");
   mustMatch(rel, /app\.tabstate\.js/, "app.tabstate.js script tag");
   mustMatch(rel, /app\.unlock\.js/, "app.unlock.js script tag");
   mustMatch(rel, /app\.wallpapers\.js/, "app.wallpapers.js script tag");

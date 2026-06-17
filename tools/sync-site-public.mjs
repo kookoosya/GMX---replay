@@ -32,6 +32,7 @@ const shellModules = [
   "app.recover.js",
   "app.langui.js",
   "app.sitelangmenu.js",
+  "app.i18nbridge.js",
   "app.tabstate.js",
   "app.unlock.js",
   "app.wallpapers.js",

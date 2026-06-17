@@ -1514,3 +1514,28 @@ test("themeswire: delegates theme and extension UI helpers", () => {
   assert.equal(wire.renderExtWallpapers(), 5);
   assert.equal(wire.bindExtTabs(), true);
 });
+
+test("i18nbridge: exports catalog and delegates site i18n helpers", () => {
+  const prev = globalThis.GMX_SITE_I18N;
+  globalThis.GMX_SITE_I18N = {
+    createSiteI18nCatalog: () => ({ en: { hello: "Hello" } }),
+  };
+  try {
+    const bridge = loadFactory("app.i18nbridge.js", "__GMXI18nBridgeFactory")({
+      siteI18nUi: { siteTr: (k, fb) => (k === "hello" ? "Hi" : fb), applyLang: () => true },
+      siteI18nDynamic: {
+        nextReferralUnlockAt: (n) => n + 3,
+        syncModePanelCopy: () => "synced",
+      },
+      siteLangMenu: { fillSelect: (sel, arr) => arr.length },
+    });
+    assert.equal(bridge.I18N.en.hello, "Hello");
+    assert.equal(bridge.siteTr("hello", "x"), "Hi");
+    assert.equal(bridge.applyLang(), true);
+    assert.equal(bridge.nextReferralUnlockAt(5), 8);
+    assert.equal(bridge.syncModePanelCopy(), "synced");
+    assert.equal(bridge.fillSelect(null, [1, 2]), 2);
+  } finally {
+    globalThis.GMX_SITE_I18N = prev;
+  }
+});

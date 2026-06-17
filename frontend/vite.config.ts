@@ -169,6 +169,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.recover.js": { target: BACKEND, changeOrigin: true },
         "/app.langui.js": { target: BACKEND, changeOrigin: true },
         "/app.sitelangmenu.js": { target: BACKEND, changeOrigin: true },
+        "/app.i18nbridge.js": { target: BACKEND, changeOrigin: true },
         "/app.tabstate.js": { target: BACKEND, changeOrigin: true },
         "/app.unlock.js": { target: BACKEND, changeOrigin: true },
         "/app.wallpapers.js": { target: BACKEND, changeOrigin: true },
