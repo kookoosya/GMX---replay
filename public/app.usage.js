@@ -116,17 +116,14 @@
         }
 
         try {
-          scheduleRefStatsRefresh(120);
+          scheduleRefStatsRefresh(280);
         } catch {}
 
         try {
           renderHelpIfOpen();
         } catch {}
       } catch {
-        setAuthOk(false);
-        try {
-          applyAdminVisibility();
-        } catch {}
+        // Transient usage fetch failure should not flip auth off.
       }
     }
 

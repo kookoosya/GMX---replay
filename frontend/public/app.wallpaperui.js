@@ -55,6 +55,8 @@
       typeof ctx.applyWallpaper === "function" ? ctx.applyWallpaper : () => {};
 
     let initDone = false;
+    let wpRenderGen = 0;
+    let lastCustomWpCount = -1;
 
     function markWallpaperSelection(activeId) {
       try {
@@ -73,6 +75,8 @@
       const grid = $("wpGrid");
       const st = $("wpStatus");
       if (!tabSel || !grid || !st) return;
+
+      const renderGen = ++wpRenderGen;
 
       const wallpaperTabs = getWallpaperTabs();
       const prev = tabSel.value || "all";
@@ -95,6 +99,7 @@
           : storage.lsGet(wallpaperKeyForTab(targetTab), "");
 
       const effectiveCustom = getEffectiveCustomWallpapers();
+      const customCountBefore = effectiveCustom.length;
       const wallpapers = getWallpapers();
       const allWps = [...effectiveCustom, ...wallpapers];
       const mainUnlocked = unlockedCountByRefs(wallpapers.length, freeVisibleWallpapers);
@@ -113,7 +118,11 @@
         : `<span class="warn">Locked.</span> First ${freeVisibleWallpapers} main + ${customWpFreeCount} custom free. Next unlock at <b>${nextReq} ref</b>.`;
 
       loadCustomWallpapers().then((loaded) => {
-        if (loaded && document.contains(grid)) renderWallpaperUI();
+        if (!loaded || !document.contains(grid) || renderGen !== wpRenderGen) return;
+        const customCountAfter = getEffectiveCustomWallpapers().length;
+        if (customCountAfter <= customCountBefore && customCountAfter === lastCustomWpCount) return;
+        lastCustomWpCount = customCountAfter;
+        renderWallpaperUI();
       });
 
       const items = allWps.map((wp, idx) => ({ wp, idx }));

@@ -58,10 +58,9 @@
           link.href = "/app.css?v=" + encodeURIComponent(j.build);
         }
       } catch {
-        setAuthOk(false);
-        try {
-          applyAdminVisibility();
-        } catch {}
+        // Version fetch failure is not an auth failure — keep session UI stable.
+        const b = $("ui_build");
+        if (b && !BUILD_ID) b.textContent = "build offline";
       }
     }
 

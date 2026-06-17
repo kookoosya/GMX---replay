@@ -32,7 +32,13 @@
 
     function isIgnoredMessage(msg) {
       const s = String(msg || "");
-      return s.includes("ResizeObserver") || s.includes("Non-Error promise rejection");
+      return (
+        s.includes("ResizeObserver") ||
+        s.includes("Non-Error promise rejection") ||
+        s === "Script error." ||
+        s.includes("Loading chunk") ||
+        s.includes("ChunkLoadError")
+      );
     }
 
     function isNetworkMessage(msg) {

@@ -27,7 +27,19 @@ for (const rel of appPaths) {
   if (!/SITE_WALLPAPER_PACK_COUNT = (?:58|__gmxWp\.SITE_PACK_COUNT)/.test(text)) {
     fail(`${rel}: wallpaper count must be 58`);
   }
+  if (!text.includes('if (name === "themes" || name === "extthemes")')) {
+    fail(`${rel}: onTabActivated must lazy-render wallpapers only on themes tabs`);
+  }
   ok(rel);
+}
+
+for (const rel of ["public/app.health.js", "frontend/public/app.health.js"]) {
+  if (!fs.existsSync(rel)) continue;
+  const text = fs.readFileSync(rel, "utf8");
+  const loadBuildCatch = text.match(/async function loadBuild\(\)[\s\S]*?\n    \}/);
+  if (loadBuildCatch && /setAuthOk\(false\)/.test(loadBuildCatch[0])) {
+    fail(`${rel}: loadBuild must not clear auth on version fetch failure`);
+  }
 }
 
 const billingRoute = fs.readFileSync("server/routes/billing.mjs", "utf8");

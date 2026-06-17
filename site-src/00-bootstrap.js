@@ -286,9 +286,10 @@ const {
     try { fillPacks(); } catch {}
   },
   onTabActivated: (name) => {
-    try { applyLang(); } catch {}
     try { __gmxLangUi.updateLangFlags(); } catch {}
-    try { renderWallpaperUI(); } catch {}
+    if (name === "themes" || name === "extthemes") {
+      try { renderWallpaperUI(); } catch {}
+    }
     if (name === "referrals") { try { if (getHandle()) $("refLoad")?.click(); } catch {} }
     if (name === "leaderboard") {
       try { bindLeaderboardUI(); } catch {}
