@@ -99,6 +99,7 @@ const APP_FILES = [
   "app.bestpick.js",
   "app.refstats.js",
   "app.generateflow.js",
+  "app.generatewire.js",
   "arcade.html",
   "arcade.js",
   "entitlements.js",

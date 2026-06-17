@@ -1,14 +1,14 @@
-  function mergeAppendUnique(existing, newLines){
-    return __gmxGen.mergeAppendUnique(existing, newLines);
-  }
-
-  if (!window.__GMXRefStatsFactory) throw new Error("GMX refstats factory missing");
-  const __gmxRefStats = window.__GMXRefStatsFactory({
+  if (!window.__GMXGenerateWireFactory) throw new Error("GMX generatewire factory missing");
+  const __gmxGenerateWire = window.__GMXGenerateWireFactory({
     $,
     api,
-    getHandle,
+    gen: __gmxGen,
+    bankUi: __gmxBankUi,
+    inflight: INFLIGHT,
+    abort: ABORT,
     siteLangKey: LS_SITE_LANG,
     refPromoOpenKey: LS_REF_PROMO_OPEN,
+    getHandle,
     renderReferralRightCopy,
     renderGuideRightCopy,
     applyRefCountEligible,
@@ -17,25 +17,13 @@
     renderExtThemes,
     fillStyles,
     fillPacks,
-  });
-  const revealReferralLinkUi = () => __gmxRefStats.revealReferralLinkUi();
-  const scheduleRefStatsRefresh = (delay) => __gmxRefStats.scheduleRefStatsRefresh(delay);
-  const refreshRefStats = (force) => __gmxRefStats.refreshRefStats(force);
-
-  if (!window.__GMXGenerateFlowFactory) throw new Error("GMX generateflow factory missing");
-  const __gmxGenFlow = window.__GMXGenerateFlowFactory({
-    $,
-    api,
     requireConnected,
     getToken,
-    getHandle,
     initSession,
     readGenParams,
     getAntiStrength,
     getCleanFillEnabled,
     getBestMode,
-    getGmView: () => __gmxBankUi.getGmView(),
-    getGnView: () => __gmxBankUi.getGnView(),
     ensureIndexed,
     activeKey,
     getGlobalKey,
@@ -46,8 +34,6 @@
     renderList,
     postEvent,
     setBusy,
-    inflight: INFLIGHT,
-    abort: ABORT,
     filterAntiRepeat,
     pushRecent,
     repeatKey,
@@ -61,9 +47,11 @@
     toast,
     yieldToUiFrame,
     cleanFillStrength: CLEAN_FILL_STRENGTH,
-    gen: __gmxGen,
-    mergeAppendUnique,
   });
-  async function generate(kind, count){
-    return __gmxGenFlow.generate(kind, count);
-  }
+  const {
+    mergeAppendUnique,
+    revealReferralLinkUi,
+    scheduleRefStatsRefresh,
+    refreshRefStats,
+  } = __gmxGenerateWire;
+  async function generate(kind, count){ return __gmxGenerateWire.generate(kind, count); }

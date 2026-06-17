@@ -1783,3 +1783,64 @@ test("bankuiwire: wires bankui and bestpick modules", () => {
     globalThis.localStorage = prevLs;
   }
 });
+
+test("generatewire: wires refstats and generateflow delegates", async () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.refstats.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.generateflow.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.generatewire.js"), "utf8")};`)(win);
+  const msg = { innerHTML: "" };
+  const wire = win.__GMXGenerateWireFactory({
+    $: (id) => (id === "refLinkRow" ? { classList: { remove: () => {} }, style: {} } : id === "gmMsg" ? msg : null),
+    api: async () => ({}),
+    gen: { mergeAppendUnique: (a, b) => [...a, ...b] },
+    bankUi: { getGmView: () => "gm", getGnView: () => "gn" },
+    inflight: { gm: false, gn: false },
+    abort: { gm: null, gn: null },
+    siteLangKey: "gmx_site_lang",
+    refPromoOpenKey: "gmx_ref_promo",
+    getHandle: () => "@demo",
+    renderReferralRightCopy: () => {},
+    renderGuideRightCopy: () => {},
+    applyRefCountEligible: () => {},
+    nextReferralUnlockAt: () => 0,
+    renderThemes: () => {},
+    renderExtThemes: () => {},
+    fillStyles: () => {},
+    fillPacks: () => {},
+    requireConnected: () => true,
+    getToken: () => "",
+    initSession: async () => true,
+    readGenParams: () => ({ mode: "min", lang: "en", style: "warm", antiN: 1 }),
+    getAntiStrength: () => 1,
+    getCleanFillEnabled: () => false,
+    getBestMode: () => false,
+    ensureIndexed: () => {},
+    activeKey: () => "k",
+    getGlobalKey: () => "g",
+    readKey: () => [],
+    writeKey: () => {},
+    remainingSlots: () => 1,
+    saveCap: () => 50,
+    renderList: () => {},
+    postEvent: async () => {},
+    setBusy: () => {},
+    filterAntiRepeat: (_k, _key, lines) => lines,
+    pushRecent: () => {},
+    repeatKey: () => "",
+    oneClickCleanup: async () => {},
+    refreshUsage: async () => {},
+    logEvent: () => {},
+    escapeHtml: (s) => s,
+    siteTr: (_k, fb) => fb,
+    t: (k) => k,
+    friendlyUiErrorMessage: (m) => m,
+    toast: () => {},
+    yieldToUiFrame: async () => {},
+    cleanFillStrength: 2,
+  });
+  assert.deepEqual(wire.mergeAppendUnique(["a"], ["b"]), ["a", "b"]);
+  wire.revealReferralLinkUi();
+  await wire.generate("gm", 1);
+  assert.match(msg.innerHTML, /Session expired/);
+});
