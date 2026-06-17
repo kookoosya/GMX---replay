@@ -122,6 +122,17 @@ const bulkShapes = new Set(bulk.map((x) => gen.shapeFingerprint(x, "gm")));
 if (bulkShapes.size < Math.min(4, bulk.length)) fail("generateRankedCandidates should diversify shapes");
 ok("generateRankedCandidates diversity");
 
+for (const style of ["cheer", "calm", "builder", "focus", "meme", "classy"]) {
+  for (const mode of ["min", "mid"]) {
+    for (let i = 0; i < 6; i++) {
+      const line = gen.composeReply("gn", mode, "en", style);
+      if (!String(line || "").trim()) fail(`composeReply gn/${mode}/${style} empty`);
+      if (!gen.passesModeProfile(line, mode)) fail(`passesModeProfile gn/${mode}/${style}: ${line}`);
+    }
+  }
+}
+ok("style families pass mode profile");
+
 const antiHandle = "@unittest02";
 db.exec("DELETE FROM recent_replies WHERE handle='@unittest02'");
 const first = gen.generateUnique(antiHandle, "gm", "mid", "en", "classic", 0);

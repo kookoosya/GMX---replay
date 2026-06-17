@@ -236,6 +236,11 @@ const BANKS = {
         "{greet} {voc}, good energy {emoji}",
         "{greet} {voc}, nice one {emoji}",
         "{greet}, warm one {emoji}",
+        "{greet}, gentle start {emoji}",
+        "{greet} {voc}, soft morning {emoji}",
+        "{greet}, kind one {emoji}",
+        "{greet} {voc}, good morning back {emoji}",
+        "{greet}, light and warm {emoji}",
       ],
       mid: [
         "{greet} {voc}, hope today is kind to you {emoji}",
@@ -243,6 +248,9 @@ const BANKS = {
         "{greet}, warm start on this one {emoji}",
         "{greet} {voc}, hope the day lands easy {emoji}",
         "{greet} {voc}, good energy here and I hope it stays with you {emoji}",
+        "{greet}, gentle morning energy on this one {emoji}",
+        "{greet} {voc}, hope the day opens soft for you {emoji}",
+        "{greet}, warm read and a nice way to start {emoji}",
       ],
       max: [
         "{greet} {voc}, good energy on this one and I hope the day stays kind to you {emoji}",
@@ -259,6 +267,9 @@ const BANKS = {
         "{greet} {voc}, sleep well {emoji}",
         "{greet}, soft night {emoji}",
         "{greet}, calm one {emoji}",
+        "{greet}, gentle close {emoji}",
+        "{greet} {voc}, soft landing {emoji}",
+        "{greet}, warm night {emoji}",
       ],
       mid: [
         "{greet} {voc}, sleep easy tonight {emoji}",
@@ -266,6 +277,8 @@ const BANKS = {
         "{greet}, soft close and good rest {emoji}",
         "{greet} {voc}, wishing you a calm night {emoji}",
         "{greet}, warm night energy on this one {emoji}",
+        "{greet} {voc}, hope you get a gentle close tonight {emoji}",
+        "{greet}, calm energy here, rest well {emoji}",
       ],
       max: [
         "{greet} {voc}, good rest tonight and a softer morning tomorrow {emoji}",
@@ -284,6 +297,10 @@ const BANKS = {
         "{greet}, quiet good one {emoji}",
         "{greet} {voc}, easy morning {emoji}",
         "{greet}, nice and simple {emoji}",
+        "{greet}, light start {emoji}",
+        "{greet} {voc}, slow morning {emoji}",
+        "{greet}, unhurried one {emoji}",
+        "{greet}, soft open {emoji}",
       ],
       mid: [
         "{greet}, easy start on this one {emoji}",
@@ -291,6 +308,8 @@ const BANKS = {
         "{greet}, quiet good post for the morning {emoji}",
         "{greet} {voc}, hoping for an easy day on your side {emoji}",
         "{greet}, simple morning energy and I like it {emoji}",
+        "{greet}, light start and a clean read {emoji}",
+        "{greet} {voc}, hope the morning stays unhurried {emoji}",
       ],
       max: [
         "{greet}, calm way to start the day, hope it stays easy for you {emoji}",
@@ -307,6 +326,9 @@ const BANKS = {
         "{greet}, quiet close {emoji}",
         "{greet} {voc}, sleep easy {emoji}",
         "{greet}, soft one tonight {emoji}",
+        "{greet}, gentle close {emoji}",
+        "{greet} {voc}, slow night {emoji}",
+        "{greet}, light close {emoji}",
       ],
       mid: [
         "{greet}, easy night on your side {emoji}",
@@ -314,6 +336,8 @@ const BANKS = {
         "{greet}, quiet good way to end the day {emoji}",
         "{greet} {voc}, hope you sleep easy tonight {emoji}",
         "{greet}, simple night energy and good rest {emoji}",
+        "{greet}, soft landing tonight {emoji}",
+        "{greet} {voc}, hope the night stays quiet {emoji}",
       ],
       max: [
         "{greet}, calm close tonight and a good reset for tomorrow {emoji}",
@@ -332,6 +356,10 @@ const BANKS = {
         "{greet} {voc}, good luck building {emoji}",
         "{greet} {voc}, good build energy {emoji}",
         "{greet}, ship something good {emoji}",
+        "{greet}, good work day {emoji}",
+        "{greet} {voc}, useful morning {emoji}",
+        "{greet}, clean session ahead {emoji}",
+        "{greet} {voc}, solid start {emoji}",
       ],
       mid: [
         "{greet} {voc}, hope the build flows today {emoji}",
@@ -339,6 +367,8 @@ const BANKS = {
         "{greet} {voc}, good energy for a solid build day {emoji}",
         "{greet} {voc}, hope you ship something good today {emoji}",
         "{greet}, strong start for a builder morning {emoji}",
+        "{greet} {voc}, useful morning and a clean work session {emoji}",
+        "{greet}, good post to start building from {emoji}",
       ],
       max: [
         "{greet} {voc}, hope the build flows and the ship goes clean today {emoji}",
@@ -380,6 +410,10 @@ const BANKS = {
         "{greet}, we move {emoji}",
         "{greet}, still here {emoji}",
         "{greet}, good vibes {emoji}",
+        "{greet}, locked in {emoji}",
+        "{greet}, here early {emoji}",
+        "{greet}, same energy {emoji}",
+        "{greet}, back again {emoji}",
       ],
       mid: [
         "{greet}, we move — good energy on this one {emoji}",
@@ -387,6 +421,9 @@ const BANKS = {
         "{greet}, clean post, good vibes back {emoji}",
         "{greet}, the timeline needed this energy {emoji}",
         "{greet}, hope your day stays kind {emoji}",
+        "{greet}, good post, same energy back {emoji}",
+        "{greet}, early and locked in on this one {emoji}",
+        "{greet}, timeline approved, good read {emoji}",
       ],
       max: [
         "{greet}, clean post — good vibes back and a smooth day ahead {emoji}",
@@ -403,6 +440,9 @@ const BANKS = {
         "{greet}, we rest {emoji}",
         "{greet}, log off time {emoji}",
         "{greet}, sleep easy {emoji}",
+        "{greet}, offline mode {emoji}",
+        "{greet}, reset time {emoji}",
+        "{greet}, close the tab {emoji}",
       ],
       mid: [
         "{greet}, log off time — rest easy tonight {emoji}",
@@ -410,6 +450,8 @@ const BANKS = {
         "{greet}, good night and a clean reset {emoji}",
         "{greet}, sleep easy and come back fresh {emoji}",
         "{greet}, soft close — the rest can wait {emoji}",
+        "{greet}, good close, now log off for real {emoji}",
+        "{greet}, reset time — rest easy tonight {emoji}",
       ],
       max: [
         "{greet}, calm close — rest easy tonight and come back fresh tomorrow {emoji}",
@@ -816,6 +858,8 @@ function replyQualityScore(text, kind, mode) {
   if (/\b(feed|open|room|brain|lane|soldier|army|frens|goat|boss|pepe|wojak)\b/i.test(t)) score -= 20;
   if (/\b(king\s+dear|dear\s+king|king\s+king|morning\s+king\s+king)\b/i.test(t)) score -= 80;
   if (/\b(big\s+gm|grand\s+rising|g\s+to\s+the\s+m)\s+(dear|lovely|mate|ser|legend)\b/i.test(t)) score -= 45;
+  if (/\b(keeping the|calling it a little|closing it out|mood slips|worth forcing tonight|natural start|open light today)\b/i.test(t)) score -= 35;
+  if (/\bwe move\b/gi.test(t) && (t.match(/\bwe move\b/gi) || []).length > 1) score -= 12;
 
   const uniq = new Set(words.map((w) => w.toLowerCase()));
   score += Math.min(8, uniq.size);
