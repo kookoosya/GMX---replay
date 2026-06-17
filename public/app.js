@@ -65,7 +65,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260619a";
+const ASSET_REV = "20260619b";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {
@@ -879,17 +879,12 @@ async function loadLeaderboard(days) {
 const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
 
 // ----- Prediction market -----
-  if (!window.__GMXPredictionWireFactory) throw new Error("GMX predictionwire factory missing");
-  const __gmxPredictionWire = window.__GMXPredictionWireFactory({
-    $,
-    escapeHtml,
-    t,
-    api,
-    getHandle,
-    getToken,
-    friendlyUiErrorMessage,
-    tabState: __gmxTabState,
-  });
+  if (!window.__GMXPredictionRunWireFactory) throw new Error("GMX predictionrunwire factory missing");
+  const __gmxPredictionWire = window.__GMXPredictionRunWireFactory({
+    core: { $, escapeHtml, t, api, friendlyUiErrorMessage },
+    auth: { getHandle, getToken },
+    tab: { tabState: __gmxTabState },
+  }).run();
   const syncPredictionFilterCopy = () => __gmxPredictionWire.syncPredictionFilterCopy();
   const loadPredictionSignals = (opts) => __gmxPredictionWire.loadPredictionSignals(opts);
 

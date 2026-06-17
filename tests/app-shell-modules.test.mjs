@@ -2145,6 +2145,25 @@ test("predictionwire: wires prediction factory delegates", async () => {
   assert.match(els.pmList.innerHTML, /Polymarket Direction Signal/);
 });
 
+test("predictionrunwire: groups deps and delegates to predictionwire", async () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.predictionwire.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.predictionrunwire.js"), "utf8")};`)(win);
+  let captured = null;
+  win.__GMXPredictionWireFactory = (cfg) => {
+    captured = cfg;
+    return { syncPredictionFilterCopy: () => {}, loadPredictionSignals: async () => {} };
+  };
+  win.__GMXPredictionRunWireFactory({
+    core: { $: () => null, escapeHtml: (s) => s, t: (_k, fb) => fb, api: async () => ({}), friendlyUiErrorMessage: (m) => m },
+    auth: { getHandle: () => "@demo", getToken: () => "tok" },
+    tab: { tabState: { getCurrentTab: () => "prediction" } },
+  }).run();
+  assert.equal(captured.getHandle(), "@demo");
+  assert.equal(captured.getToken(), "tok");
+  assert.equal(captured.tabState.getCurrentTab(), "prediction");
+});
+
 test("adminwire: wires admin factory delegates", () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.admin.js"), "utf8")};`)(win);

@@ -250,6 +250,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.redeemwire.js": { target: BACKEND, changeOrigin: true },
         "/app.prediction.js": { target: BACKEND, changeOrigin: true },
         "/app.predictionwire.js": { target: BACKEND, changeOrigin: true },
+        "/app.predictionrunwire.js": { target: BACKEND, changeOrigin: true },
         "/mode.js": { target: BACKEND, changeOrigin: true },
         "/entitlements.js": { target: BACKEND, changeOrigin: true },
         "/themes.json": { target: BACKEND, changeOrigin: true },

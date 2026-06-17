@@ -105,6 +105,7 @@ const shellModules = [
   "app.redeemwire.js",
   "app.prediction.js",
   "app.predictionwire.js",
+  "app.predictionrunwire.js",
   "app.authwire.js",
   "app.shellwire.js",
   "app.chromewire.js",
