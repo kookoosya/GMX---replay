@@ -1948,3 +1948,27 @@ test("predictionwire: wires prediction factory delegates", async () => {
   await wire.loadPredictionSignals({ force: true });
   assert.match(els.pmList.innerHTML, /Polymarket Direction Signal/);
 });
+
+test("adminwire: wires admin factory delegates", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.admin.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.adminwire.js"), "utf8")};`)(win);
+  const els = {
+    adminHandle: { value: "" },
+    adminAuthState: { textContent: "" },
+  };
+  const wire = win.__GMXAdminWireFactory({
+    $: (id) => els[id] || null,
+    escapeHtml: (s) => s,
+    api: async () => ({}),
+    getHandle: () => "@demo",
+    requireConnected: () => true,
+    setAdminToken: () => {},
+    isAdminSignedIn: () => false,
+    adminHandle: "@Kristofer_Sol_",
+  });
+  wire.syncAdminUi();
+  assert.equal(els.adminHandle.value, "@demo");
+  assert.equal(els.adminAuthState.textContent, "signed out");
+  assert.equal(typeof wire.pruneLegacyAdminPanels, "function");
+});

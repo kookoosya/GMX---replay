@@ -1,6 +1,6 @@
 // ----- Admin -----
-  if (!window.__GMXAdminFactory) throw new Error("GMX admin factory missing");
-  const __gmxAdmin = window.__GMXAdminFactory({
+  if (!window.__GMXAdminWireFactory) throw new Error("GMX adminwire factory missing");
+  const __gmxAdminWire = window.__GMXAdminWireFactory({
     $,
     escapeHtml,
     api,
@@ -10,7 +10,6 @@
     isAdminSignedIn,
     adminHandle: ADMIN_HANDLE,
   });
-  const syncAdminUi = () => __gmxAdmin.syncAdminUi();
-  const requireAdminSignedIn = () => __gmxAdmin.requireAdminSignedIn();
-  const pruneLegacyAdminPanels = () => __gmxAdmin.pruneLegacyAdminPanels();
-  __gmxAdmin.bindAdmin();
+  const syncAdminUi = () => __gmxAdminWire.syncAdminUi();
+  const requireAdminSignedIn = () => __gmxAdminWire.requireAdminSignedIn();
+  const pruneLegacyAdminPanels = () => __gmxAdminWire.pruneLegacyAdminPanels();

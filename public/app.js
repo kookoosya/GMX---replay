@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618i";
+const ASSET_REV = "20260618j";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -1251,8 +1251,8 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
   const bindWalletTab = () => __gmxWalletWire.bindWalletTab();
 
 // ----- Admin -----
-  if (!window.__GMXAdminFactory) throw new Error("GMX admin factory missing");
-  const __gmxAdmin = window.__GMXAdminFactory({
+  if (!window.__GMXAdminWireFactory) throw new Error("GMX adminwire factory missing");
+  const __gmxAdminWire = window.__GMXAdminWireFactory({
     $,
     escapeHtml,
     api,
@@ -1262,10 +1262,9 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
     isAdminSignedIn,
     adminHandle: ADMIN_HANDLE,
   });
-  const syncAdminUi = () => __gmxAdmin.syncAdminUi();
-  const requireAdminSignedIn = () => __gmxAdmin.requireAdminSignedIn();
-  const pruneLegacyAdminPanels = () => __gmxAdmin.pruneLegacyAdminPanels();
-  __gmxAdmin.bindAdmin();
+  const syncAdminUi = () => __gmxAdminWire.syncAdminUi();
+  const requireAdminSignedIn = () => __gmxAdminWire.requireAdminSignedIn();
+  const pruneLegacyAdminPanels = () => __gmxAdminWire.pruneLegacyAdminPanels();
 
   // ----- Redeem code -----
   if (!window.__GMXRedeemFactory) throw new Error("GMX redeem factory missing");

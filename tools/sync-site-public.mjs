@@ -85,6 +85,7 @@ const shellModules = [
   "app.themeswire.js",
   "app.accountui.js",
   "app.admin.js",
+  "app.adminwire.js",
   "app.leaderboard.js",
   "app.leaderboardwire.js",
   "app.referrals.js",
