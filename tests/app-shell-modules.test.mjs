@@ -2169,6 +2169,24 @@ test("adminwire: wires admin factory delegates", () => {
   assert.equal(typeof wire.pruneLegacyAdminPanels, "function");
 });
 
+test("adminrunwire: groups deps and delegates to adminwire", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.adminwire.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.adminrunwire.js"), "utf8")};`)(win);
+  let captured = null;
+  win.__GMXAdminWireFactory = (cfg) => {
+    captured = cfg;
+    return { syncAdminUi: () => {}, requireAdminSignedIn: () => {}, pruneLegacyAdminPanels: () => {} };
+  };
+  win.__GMXAdminRunWireFactory({
+    core: { $: () => null, escapeHtml: (s) => s, api: async () => ({}) },
+    auth: { getHandle: () => "@demo", requireConnected: () => true },
+    admin: { setAdminToken: () => {}, isAdminSignedIn: () => false, adminHandle: "@Kristofer_Sol_" },
+  }).run();
+  assert.equal(captured.adminHandle, "@Kristofer_Sol_");
+  assert.equal(captured.getHandle(), "@demo");
+});
+
 test("redeemwire: wires redeem factory and binds UI", async () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.redeem.js"), "utf8")};`)(win);

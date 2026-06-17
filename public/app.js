@@ -65,7 +65,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618z";
+const ASSET_REV = "20260619a";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {
@@ -936,17 +936,12 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
   const bindWalletTab = () => __gmxWalletWire.bindWalletTab();
 
 // ----- Admin -----
-  if (!window.__GMXAdminWireFactory) throw new Error("GMX adminwire factory missing");
-  const __gmxAdminWire = window.__GMXAdminWireFactory({
-    $,
-    escapeHtml,
-    api,
-    getHandle,
-    requireConnected,
-    setAdminToken,
-    isAdminSignedIn,
-    adminHandle: ADMIN_HANDLE,
-  });
+  if (!window.__GMXAdminRunWireFactory) throw new Error("GMX adminrunwire factory missing");
+  const __gmxAdminWire = window.__GMXAdminRunWireFactory({
+    core: { $, escapeHtml, api },
+    auth: { getHandle, requireConnected },
+    admin: { setAdminToken, isAdminSignedIn, adminHandle: ADMIN_HANDLE },
+  }).run();
   const syncAdminUi = () => __gmxAdminWire.syncAdminUi();
   const requireAdminSignedIn = () => __gmxAdminWire.requireAdminSignedIn();
   const pruneLegacyAdminPanels = () => __gmxAdminWire.pruneLegacyAdminPanels();
