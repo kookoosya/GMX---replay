@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { SITE_I18N } from "./legacy/siteI18nCatalog";
 
 type CopyValue = string | readonly string[];
 type CopyMap = Record<string, CopyValue>;
 
 function normalizeLang(raw: unknown): string {
   const base = String(raw || "en").trim().toLowerCase().replace(/_/g, "-").split("-")[0] || "en";
-  return Object.prototype.hasOwnProperty.call(SITE_I18N, base) ? base : "en";
+  return Object.prototype.hasOwnProperty.call(BRIDGE_COPY, base) ? base : "en";
 }
 
 function resolveBridgeLang(): string {
@@ -63,6 +62,22 @@ const BRIDGE_COPY: Record<string, CopyMap> = {
     effective: "Unlock total",
     dailyLimit: "Daily limit",
     referralLink: "Referral link",
+    toast_copied: "Copied.",
+    toast_copy_failed: "Copy failed.",
+    t_ref: "Referrals",
+    refCopy: "Copy link",
+    ref_k_confirmed: "Confirmed",
+    ref_k_active: "Active",
+    ref_k_legacy: "Carry-over",
+    ref_k_eligible: "Eligible",
+    ref_def_confirmed: "users who registered via your link.",
+    ref_def_active: "confirmed users with at least one recorded usage.",
+    ref_def_eligible: "max(active, carry-over).",
+    r_no_invited: "No invited users yet",
+    r_col_handle: "Handle",
+    r_col_status: "Status",
+    r_col_active: "Active days",
+    r_col_inserts: "Used",
     countingRule: "Counting rule",
     ownerActive: "Owner active",
     yes: "yes",
@@ -1311,12 +1326,6 @@ export function useBridgeCopy() {
     };
   }, []);
 
-  const site = useMemo<CopyMap>(() => {
-    const base = (SITE_I18N.en || {}) as CopyMap;
-    const scoped = ((SITE_I18N as Record<string, CopyMap>)[lang] || {}) as CopyMap;
-    return { ...base, ...scoped };
-  }, [lang]);
-
   const bridge = useMemo<CopyMap>(() => {
     const base = BRIDGE_COPY.en || {};
     const scoped = BRIDGE_COPY[lang] || {};
@@ -1330,13 +1339,7 @@ export function useBridgeCopy() {
     return typeof value === "string" ? value : (fallback || key);
   }, [bridge]);
 
-  const siteText = useCallback((key: string, fallback = "") => {
-    const value = site[key];
-    if (typeof value !== "string") return fallback;
-    return value.startsWith("HTML:") ? value.slice(5) : value;
-  }, [site]);
-
-  return { lang, copy, siteText };
+  return { lang, copy };
 }
 
 

@@ -397,212 +397,33 @@ const consumeLimiter = rateLimit({
 
 
 // ---------- DB ----------
-const DB_MODE = (String(process.env.DB_MODE || "sqlite").trim().toLowerCase() === "supabase") ? "supabase" : "sqlite";
-const SUPABASE_URL = String(process.env.SUPABASE_URL || "").trim();
-const SUPABASE_SERVICE_ROLE_KEY = String(process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim();
-const SUPABASE_CONFIGURED = Boolean(SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY);
+import { createDb } from "./server/db.mjs";
 
-let SUPABASE_ADMIN = null;
-function getSupabaseAdmin() {
-  if (DB_MODE !== "supabase") return null;
-  if (SUPABASE_ADMIN) return SUPABASE_ADMIN;
-  if (!SUPABASE_CONFIGURED) {
-    console.warn("[supabase] DB_MODE=supabase but env missing; supabase disabled (sqlite fallback stays on)");
-    return null;
-  }
-  SUPABASE_ADMIN = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
-  });
-  return SUPABASE_ADMIN;
-}
-
-
-function supabaseActive() {
-  return DB_MODE === "supabase" && SUPABASE_CONFIGURED && !!getSupabaseAdmin();
-}
-
-async function sbEnsureUser(handle) {
-  const sb = getSupabaseAdmin();
-  if (!sb) return { ok: false, error: "supabase_inactive" };
-  const h = String(handle || "").trim();
-  if (!h) return { ok: false, error: "missing_handle" };
-
-  const r = await sb.from("users").upsert({ handle: h }, { onConflict: "handle" });
-  if (r.error) throw r.error;
-  return { ok: true };
-}
-
-async function sbCloudListsGet(handle) {
-  const sb = getSupabaseAdmin();
-  if (!sb) return { ok: false, error: "supabase_inactive" };
-  const h = String(handle || "").trim();
-  const r = await sb
-    .from("cloud_lists")
-    .select("kind, scope, lang, content, updated_at")
-    .eq("handle", h)
-    .order("updated_at", { ascending: false });
-  if (r.error) throw r.error;
-  return { ok: true, rows: r.data || [] };
-}
-
-async function sbCloudListsUpsert(handle, items) {
-  const sb = getSupabaseAdmin();
-  if (!sb) return { ok: false, error: "supabase_inactive" };
-  const h = String(handle || "").trim();
-  const now = nowIso();
-  const rows = [];
-  for (const it of Array.isArray(items) ? items : []) {
-    const kind = String(it?.kind || "").toLowerCase();
-    const scope = String(it?.scope || "").toLowerCase();
-    const lang = String(it?.lang || "*").toLowerCase();
-    const content = String(it?.content || "");
-    if (kind !== "gm" && kind !== "gn") continue;
-    if (scope !== "global" && scope !== "lang") continue;
-    if (!lang) continue;
-    if (content.length > 200000) continue; // hard cap
-    rows.push({ handle: h, kind, scope, lang, content, updated_at: now });
-  }
-  if (!rows.length) return { ok: true, saved: 0, updated_at: now };
-  const r = await sb.from("cloud_lists").upsert(rows, { onConflict: "handle,kind,scope,lang" });
-  if (r.error) throw r.error;
-  return { ok: true, saved: rows.length, updated_at: now };
-}
-
-async function sbFavoritesGet(handle, kind, limit) {
-  const sb = getSupabaseAdmin();
-  if (!sb) return { ok: false, error: "supabase_inactive" };
-  const h = String(handle || "").trim();
-  let q = sb.from("favorites").select("kind, reply, created_at").eq("handle", h);
-  if (kind === "gm" || kind === "gn") q = q.eq("kind", kind);
-  const r = await q.order("created_at", { ascending: false }).limit(limit);
-  if (r.error) throw r.error;
-  return { ok: true, rows: r.data || [] };
-}
-
-async function sbFavoritesCount(handle) {
-  const sb = getSupabaseAdmin();
-  if (!sb) return { ok: false, error: "supabase_inactive" };
-  const h = String(handle || "").trim();
-  const r = await sb.from("favorites").select("reply_hash", { count: "exact", head: true }).eq("handle", h);
-  if (r.error) throw r.error;
-  return { ok: true, count: r.count || 0 };
-}
-
-async function sbFavoritesHas(handle, kind, reply_hash) {
-  const sb = getSupabaseAdmin();
-  if (!sb) return { ok: false, error: "supabase_inactive" };
-  const h = String(handle || "").trim();
-  const r = await sb
-    .from("favorites")
-    .select("reply_hash")
-    .eq("handle", h)
-    .eq("kind", String(kind || "").toLowerCase())
-    .eq("reply_hash", String(reply_hash || ""))
-    .maybeSingle();
-  if (r.error) throw r.error;
-  return { ok: true, exists: Boolean(r.data) };
-}
-
-async function sbFavoritesDelete(handle, kind, reply_hash) {
-  const sb = getSupabaseAdmin();
-  if (!sb) return { ok: false, error: "supabase_inactive" };
-  const h = String(handle || "").trim();
-  const r = await sb
-    .from("favorites")
-    .delete()
-    .eq("handle", h)
-    .eq("kind", String(kind || "").toLowerCase())
-    .eq("reply_hash", String(reply_hash || ""));
-  if (r.error) throw r.error;
-  return { ok: true };
-}
-
-async function sbFavoritesUpsert(handle, kind, reply_hash, reply) {
-  const sb = getSupabaseAdmin();
-  if (!sb) return { ok: false, error: "supabase_inactive" };
-  const h = String(handle || "").trim();
-  const row = {
-    handle: h,
-    kind: String(kind || "").toLowerCase(),
-    reply_hash: String(reply_hash || ""),
-    reply: String(reply || ""),
-    created_at: nowIso(),
-  };
-  const r = await sb.from("favorites").upsert(row, { onConflict: "handle,kind,reply_hash" });
-  if (r.error) throw r.error;
-  return { ok: true };
-}
-
-
-async function sbGetDailyUsed(handle, day, kind) {
-  const sb = getSupabaseAdmin();
-  if (!sb) return 0;
-
-  const k = String(kind || "").toLowerCase();
-  const col = k === "gn" ? "gn_used" : "gm_used";
-
-  const r = await sb
-    .from("usage_daily")
-    .select(col)
-    .eq("handle", String(handle))
-    .eq("day", String(day))
-    .maybeSingle();
-
-  if (r.error) {
-    // Keep service alive; fall back to sqlite if needed
-    console.warn("SB_GET_DAILY_USED_ERROR", r.error?.message || r.error);
-    return 0;
-  }
-  return Number(r.data?.[col] ?? 0);
-}
-
-async function sbConsumeDailyAtomic(handle, day, kind, limit, by = 1, plan = "free") {
-  const sb = getSupabaseAdmin();
-  if (!sb) return { ok: false, used: 0, limit, plan, error: "supabase_inactive", _sb_error: "supabase_inactive" };
-
-  await sbEnsureUser(handle);
-
-  const rpc = await sb.rpc("usage_daily_consume", {
-    p_handle: String(handle),
-    p_day: String(day),
-    p_kind: String(kind).toLowerCase(),
-    p_by: Number(by) || 1,
-    p_limit: Number(limit) || 0,
-    p_plan: String(plan || "free"),
-  });
-
-  if (rpc.error) {
-    console.warn("SB_CONSUME_RPC_ERROR", rpc.error?.message || rpc.error);
-    // Try to read current usage to return a stable payload
-    const used = await sbGetDailyUsed(handle, day, kind);
-    return { ok: false, used, limit, plan, error: "supabase_error", _sb_error: rpc.error?.message || String(rpc.error) };
-  }
-
-  const row = Array.isArray(rpc.data) ? rpc.data[0] : rpc.data;
-  const out = {
-    ok: !!row?.ok,
-    used: Number(row?.used ?? 0),
-    limit: Number(row?.limit ?? limit),
-    plan: String(row?.plan ?? plan),
-  };
-
-  // Mirror usage into sqlite usage_daily so legacy referral logic stays correct in supabase mode
-  // (without changing the externally visible quota which comes from Supabase).
-  if (out.ok) {
-    try { mirrorSupabaseUsageToSqlite(handle, day, kind, out.used); } catch (_e) {}
-    try { await sbReferralsMarkFirstUse(handle); } catch (_e) {}
-  }
-
-  return out;
-}
-
-const DB_PATH = process.env.DB_PATH || path.join(__dirname, "data.sqlite");
-const db = new Database(DB_PATH);
-db.pragma("journal_mode = WAL");
-db.pragma("synchronous = NORMAL");
-db.pragma("busy_timeout = 5000");
-db.pragma("foreign_keys = ON");
-
+const {
+  DB_MODE,
+  getSupabaseAdmin,
+  supabaseActive,
+  sbEnsureUser,
+  sbCloudListsGet,
+  sbCloudListsUpsert,
+  sbFavoritesGet,
+  sbFavoritesCount,
+  sbFavoritesHas,
+  sbFavoritesDelete,
+  sbFavoritesUpsert,
+  sbGetDailyUsed,
+  sbConsumeDailyAtomic,
+  DB_PATH,
+  db,
+} = createDb({
+  createClient,
+  path,
+  dirname: __dirname,
+  Database,
+  nowIso,
+  mirrorSupabaseUsageToSqlite,
+  sbReferralsMarkFirstUse,
+});
 
 // ---------- Concurrency guard (protects server during spikes) ----------
 function createSemaphore(max){
@@ -1519,479 +1340,56 @@ function referralCountActive(handle){
 
 
 // ---------- AUTH ----------
-const AUTH_COOKIE_NAME = (() => {
-  const v = String(process.env.AUTH_COOKIE_NAME || "").trim();
-  return v || "gmx_token";
-})();
+import { createAuth } from "./server/auth.mjs";
 
-const AUTH_COOKIE_MAX_AGE_SEC = (() => {
-  const raw = Number(process.env.AUTH_COOKIE_MAX_AGE_SEC || "");
-  const def = 60 * 60 * 24 * 180; // 180 days
-  const v = Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : def;
-  return Math.max(60, Math.min(60 * 60 * 24 * 365, v));
-})();
-
-function parseCookieHeader(cookieHeader) {
-  const out = {};
-  const h = String(cookieHeader || "").trim();
-  if (!h) return out;
-  const parts = h.split(";");
-  for (const part of parts) {
-    const s = part.trim();
-    if (!s) continue;
-    const eq = s.indexOf("=");
-    if (eq <= 0) continue;
-    const k = s.slice(0, eq).trim();
-    let v = s.slice(eq + 1).trim();
-    if (!k) continue;
-    try { v = decodeURIComponent(v); } catch {}
-    out[k] = v;
-  }
-  return out;
-}
-
-function getAuthToken(req) {
-  // 1) Authorization: Bearer <token>
-  const h = req.headers.authorization || "";
-  const m = String(h).match(/^Bearer\s+(.+)$/i);
-  if (m && m[1]) return String(m[1]).trim();
-
-  // 2) Back-compat / alt headers
-  const x =
-    req.headers["x-gmx-token"] ||
-    req.headers["x-session-token"] ||
-    req.headers["x-access-token"] ||
-    req.headers["x-token"] ||
-    req.headers["X-GMX-TOKEN"] ||
-    req.headers["X-SESSION-TOKEN"] ||
-    req.headers["X-ACCESS-TOKEN"] ||
-    req.headers["X-TOKEN"];
-  if (x) return String(x).trim();
-
-  // 3) Cookie
-  const cookies = parseCookieHeader(req.headers.cookie || "");
-  const candidates = [
-    AUTH_COOKIE_NAME,
-    "gmx_token",
-    "gmx_session",
-    "gmxToken",
-    "gmxSession",
-    "access_token",
-    "token",
-  ];
-  for (const name of candidates) {
-    const v = cookies[name];
-    if (v) return String(v).trim();
-  }
-
-  return "";
-}
-
-function setAuthCookie(req, res, token) {
-  const t = String(token || "").trim();
-  if (!t) return;
-
-  const xfProto = String(req.headers["x-forwarded-proto"] || "").toLowerCase();
-  const isSecure = !!(req.secure || xfProto === "https");
-
-  const parts = [
-    `${AUTH_COOKIE_NAME}=${encodeURIComponent(t)}`,
-    "Path=/",
-    `Max-Age=${AUTH_COOKIE_MAX_AGE_SEC}`,
-    "HttpOnly",
-    "SameSite=Lax",
-  ];
-  if (isSecure) parts.push("Secure");
-
-  const cookieStr = parts.join("; ");
-
-  const prev = res.getHeader("Set-Cookie");
-  if (!prev) {
-    res.setHeader("Set-Cookie", cookieStr);
-  } else if (Array.isArray(prev)) {
-    res.setHeader("Set-Cookie", [...prev, cookieStr]);
-  } else {
-    res.setHeader("Set-Cookie", [String(prev), cookieStr]);
-  }
-}
-
-// Back-compat name used across the codebase
-function getBearer(req) {
-  return getAuthToken(req);
-}
-
-function userByHandle(handle) {
-  return safeDb(() =>
-    db
-      .prepare(
-        "SELECT handle, access_token, tier, paid_until, ref_code, daily_bonus, last_seen FROM users WHERE handle=?"
-      )
-      .get(handle)
-  );
-}
-
-function userByToken(token) {
-  if (!token) return null;
-  return safeDb(() =>
-    db
-      .prepare(
-        "SELECT handle, access_token, tier, paid_until, ref_code, daily_bonus, last_seen FROM users WHERE access_token=?"
-      )
-      .get(token)
-  );
-}
-
-function requireAuth(req, res, next) {
-  try {
-    const token = getBearer(req);
-    if (!token) return res.status(401).json({ ok: false, error: "unauthorized" });
-
-    // Prefer token-based auth (more robust for clients).
-    // If handle is provided, it must match the token owner.
-    const tokenUser = userByToken(token);
-    if (!tokenUser) return res.status(401).json({ ok: false, error: "unauthorized" });
-
-    const handleParam = normalizeHandle(req.query.handle || req.body?.handle);
-    const handle = handleParam && validHandle(handleParam) ? handleParam : tokenUser.handle;
-    if (!validHandle(handle)) {
-      return res.status(400).json({ ok: false, error: "invalid_handle" });
-    }
-    if (String(handle).toLowerCase() !== String(tokenUser.handle).toLowerCase()) {
-      return res.status(401).json({ ok: false, error: "unauthorized" });
-    }
-
-    safeDb(() =>
-      db.prepare("UPDATE users SET last_seen=? WHERE handle=?").run(nowIso(), handle)
-    );
-
-    req.user = tokenUser;
-    req.user.handle = handle;
-    next();
-  } catch (e) {
-    console.error("AUTH_ERROR", e);
-    sendError(res, 500, ERROR_CODES.SERVER_ERROR);
-  }
-}
-
-// Optional auth: attaches req.user when a valid token is present.
-// Never responds with 401; callers can treat unauthenticated as "free".
-function maybeAuth(req, _res, next){
-  try{
-    const token = getBearer(req);
-    if (!token){ req.user = null; return next(); }
-    const tokenUser = userByToken(token);
-    if (!tokenUser){ req.user = null; return next(); }
-
-    const handleParam = normalizeHandle(req.query.handle || req.body?.handle);
-    const handle = handleParam && validHandle(handleParam) ? handleParam : tokenUser.handle;
-    if (!validHandle(handle)) { req.user = null; return next(); }
-    if (String(handle).toLowerCase() !== String(tokenUser.handle).toLowerCase()){
-      req.user = null; return next();
-    }
-
-    safeDb(() => db.prepare("UPDATE users SET last_seen=? WHERE handle=?").run(nowIso(), handle));
-    req.user = tokenUser;
-    req.user.handle = handle;
-    return next();
-  }catch(e){
-    console.error("MAYBE_AUTH_ERROR", e);
-    req.user = null;
-    return next();
-  }
-}
-
-function ensureUser(handle) {
-  safeDb(() => {
-    const row = db
-      .prepare("SELECT handle FROM users WHERE handle=?")
-      .get(handle);
-
-    if (row) {
-      db.prepare("UPDATE users SET last_seen=? WHERE handle=?").run(nowIso(), handle);
-      return;
-    }
-
-    // Auto-bootstrap admin on first user (out-of-the-box local deploy)
-    const usersCount = db.prepare("SELECT COUNT(*) AS c FROM users").get()?.c || 0;
-    const adminRow = db.prepare("SELECT value FROM settings WHERE key=\'admin_handle\'").get();
-    const adminNow = adminRow?.value ? String(adminRow.value) : "";
-
-    let code = randHex(6);
-    for (let i = 0; i < 12; i++) {
-      const taken = db.prepare("SELECT 1 FROM users WHERE ref_code=?").get(code);
-      if (!taken) break;
-      code = randHex(6);
-    }
-
-    const token = randHex(20);
-    db.prepare(
-      `INSERT INTO users(handle, created_at, last_seen, access_token, ref_code, tier, paid_until, daily_bonus)
-       VALUES(?,?,?,?,?,'free',NULL,0)`
-    ).run(handle, nowIso(), nowIso(), token, code);
-
-    // Claim admin automatically for the very first user if none is configured.
-    if (usersCount === 0 && !adminNow){
-      const targetAdmin = (ADMIN_HANDLE_ENV && validHandle(ADMIN_HANDLE_ENV)) ? ADMIN_HANDLE_ENV : handle;
-      db.prepare("INSERT OR REPLACE INTO settings(key, value, updated_at) VALUES('admin_handle', ?, ?)")
-        .run(targetAdmin, nowIso());
-      ADMIN_HANDLE_CACHE = targetAdmin;
-    }
-  });
-}
-
-function rotateToken(handle) {
-  const token = randHex(20);
-  safeDb(() =>
-    db
-      .prepare("UPDATE users SET access_token=?, last_seen=? WHERE handle=?")
-      .run(token, nowIso(), handle)
-  );
-  return token;
-}
-
-function referralFingerprint(req) {
-  const deviceId = String(req.headers["x-gmx-device-id"] || req.headers["X-GMX-Device-Id"] || "").trim();
-  if (deviceId) return sha256("device|" + deviceId).slice(0, 24);
-  const ip = clientIp(req);
-  const ua = (req.headers["user-agent"] || "").toString();
-  return sha256(ip + "|" + ua).slice(0, 24);
-}
-
-function bonusPer20ForCount(cnt){
-  // Promoters (50+ eligible/confirmed referrals) get a slightly higher bonus step.
-  return (Number(cnt||0) >= 50) ? 12 : 10;
-}
-
-function nextBonusAtForChunks(chunks, reachedCap = false){
-  if (reachedCap) return null;
-  const c = Math.max(0, Number(chunks || 0) || 0);
-  return (c + 1) * 20;
-}
-
-async function getReferralPromoterSummary(ownerHandle, opts = {}) {
-  const handle = String(ownerHandle || '').trim();
-  const userRow = opts && typeof opts === 'object' ? opts.userRow : null;
-  const explicitClicks = Object.prototype.hasOwnProperty.call(opts || {}, 'clicks') ? Number(opts.clicks || 0) || 0 : null;
-  const refCode = String((opts && opts.refCode) || userRow?.ref_code || userByHandle(handle)?.ref_code || '').trim();
-  if (!handle) {
-    return {
-      confirmedRefs: 0,
-      activeRefs: 0,
-      strictEligibleRefs: 0,
-      eligibleRefs: 0,
-      legacyReferrals: 0,
-      clicks: explicitClicks ?? 0,
-      bonusPer20: bonusPer20ForCount(0),
-      bonusChunks: 0,
-      rawDailyBonus: 0,
-      dailyBonus: 0,
-      dailyLimit: CONFIG.FREE_DAILY_BASE,
-      nextBonusAt: 20,
-      promoter: false,
-      capReached: false,
-      tierBasis: 0,
-    };
-  }
-
-  let legacyReferrals = Object.prototype.hasOwnProperty.call(opts || {}, 'legacyReferrals') ? Number(opts.legacyReferrals || 0) || 0 : null;
-  let confirmedRefs = Object.prototype.hasOwnProperty.call(opts || {}, 'confirmedRefs') ? Number(opts.confirmedRefs || 0) || 0 : null;
-  let activeRefs = Object.prototype.hasOwnProperty.call(opts || {}, 'activeRefs') ? Number(opts.activeRefs || 0) || 0 : null;
-  let clicks = explicitClicks;
-
-  if (legacyReferrals === null || confirmedRefs === null || activeRefs === null || clicks === null) {
-    if (supabaseActive()) {
-      if (legacyReferrals === null) {
-        try { legacyReferrals = (await sbReferralsCount(handle, 'legacy')).count || 0; } catch { legacyReferrals = 0; }
-      }
-      if (confirmedRefs === null) {
-        try { confirmedRefs = (await sbReferralsCount(handle, 'confirmed')).count || 0; } catch { confirmedRefs = 0; }
-      }
-      if (activeRefs === null) {
-        try { activeRefs = (await sbReferralsCount(handle, 'active')).count || 0; } catch { activeRefs = 0; }
-      }
-      if (clicks === null) {
-        if (refCode) {
-          try { clicks = (await sbRefClicksCount(refCode)).count || 0; } catch { clicks = 0; }
-        } else {
-          clicks = 0;
-        }
-      }
-    } else {
-      if (legacyReferrals === null) {
-        legacyReferrals = refCode
-          ? (safeDb(() => db.prepare('SELECT COUNT(*) AS c FROM referrals WHERE code=?').get(refCode)?.c || 0) || 0)
-          : 0;
-      }
-      if (confirmedRefs === null) confirmedRefs = referralCountConfirmed(handle);
-      if (activeRefs === null) activeRefs = referralCountActive(handle);
-      if (clicks === null) {
-        clicks = refCode
-          ? (safeDb(() => db.prepare('SELECT COUNT(*) AS c FROM ref_clicks WHERE code=?').get(refCode)?.c || 0) || 0)
-          : 0;
-      }
-    }
-  }
-
-  legacyReferrals = Math.max(0, Number(legacyReferrals || 0) || 0);
-  confirmedRefs = Math.max(0, Number(confirmedRefs || 0) || 0);
-  activeRefs = Math.max(0, Number(activeRefs || 0) || 0);
-  clicks = Math.max(0, Number(clicks || 0) || 0);
-
-  const strictEligibleRefs = activeRefs;
-  const eligibleRefs = Math.max(strictEligibleRefs, legacyReferrals);
-  const bonusChunks = Math.max(0, Math.floor(eligibleRefs / 20));
-  const tierBasis = Math.max(eligibleRefs, confirmedRefs);
-  const bonusPer20 = bonusPer20ForCount(tierBasis);
-  const rawDailyBonus = bonusChunks * bonusPer20;
-  const dailyBonus = Math.max(0, Math.min(CONFIG.REF_BONUS_CAP, rawDailyBonus));
-  const capReached = CONFIG.REF_BONUS_CAP > 0 && rawDailyBonus >= CONFIG.REF_BONUS_CAP;
-  const dailyLimit = CONFIG.FREE_DAILY_BASE + dailyBonus;
-  return {
-    confirmedRefs,
-    activeRefs,
-    strictEligibleRefs,
-    eligibleRefs,
-    legacyReferrals,
-    clicks,
-    bonusPer20,
-    bonusChunks,
-    rawDailyBonus,
-    dailyBonus,
-    dailyLimit,
-    nextBonusAt: nextBonusAtForChunks(bonusChunks, capReached),
-    promoter: bonusChunks > 0,
-    capReached,
-    tierBasis,
-  };
-}
-
-function awardReferralBonus(ownerHandle) {
-  const handle = String(ownerHandle || '').trim();
-  return safeDb(() => {
-    if (!handle) return 0;
-    const user = userByHandle(handle) || { handle };
-    const refCode = String(user?.ref_code || '').trim();
-    const legacyReferrals = refCode
-      ? (safeDb(() => db.prepare('SELECT COUNT(*) AS c FROM referrals WHERE code=?').get(refCode)?.c || 0) || 0)
-      : 0;
-    const confirmedRefs = referralCountConfirmed(handle);
-    const activeRefs = referralCountActive(handle);
-    const eligibleRefs = Math.max(activeRefs, legacyReferrals);
-    const bonusChunks = Math.max(0, Math.floor(eligibleRefs / 20));
-    const bonusPer20 = bonusPer20ForCount(Math.max(eligibleRefs, confirmedRefs));
-    const nextBonus = Math.max(0, Math.min(CONFIG.REF_BONUS_CAP, bonusChunks * bonusPer20));
-    try { db.prepare('UPDATE users SET daily_bonus=? WHERE handle=?').run(nextBonus, handle); } catch {}
-    return nextBonus;
-  });
-}
-
-async function getDailyLimit(handle, opts = {}) {
-  const summary = await getReferralPromoterSummary(handle, opts);
-  return Number(summary?.dailyLimit || 0) || CONFIG.FREE_DAILY_BASE;
-}
-
-function referralRewardTotal(handle, rewardType) {
-  return safeDb(() => Number(db.prepare("SELECT COALESCE(SUM(amount),0) AS s FROM referral_rewards WHERE handle=? AND reward_type=?").get(handle, rewardType)?.s || 0) || 0) || 0;
-}
-
-function hasReferralReward(handle, rewardType) {
-  return !!safeDb(() => db.prepare("SELECT 1 FROM referral_rewards WHERE handle=? AND reward_type=? LIMIT 1").get(handle, rewardType));
-}
-
-function grantReferralReward(handle, rewardType, amount = 0, source = 'system', code = null, meta = null) {
-  const h = String(handle || '').trim();
-  const rt = String(rewardType || '').trim();
-  if (!h || !rt) return false;
-  return !!safeDb(() => {
-    if (code) {
-      const exists = db.prepare("SELECT 1 FROM referral_rewards WHERE handle=? AND reward_type=? AND code=? LIMIT 1").get(h, rt, code);
-      if (exists) return false;
-    }
-    const info = meta && typeof meta === 'object' ? JSON.stringify(meta) : (meta == null ? null : String(meta));
-    const out = db.prepare("INSERT INTO referral_rewards(handle, reward_type, amount, meta_json, code, source, created_at) VALUES(?,?,?,?,?,?,?)").run(h, rt, Number(amount || 0) || 0, info, code, source || 'system', nowIso());
-    return !!(out && out.changes === 1);
-  });
-}
-
-function maybeAwardStarterReward(handle) {
-  const h = String(handle || '').trim();
-  if (!h || hasReferralReward(h, 'starter_bg_slot')) return false;
-  const everUsed = (safeDb(() => db.prepare("SELECT COALESCE(SUM(used),0) AS s FROM usage_daily WHERE handle=? AND used>0").get(h)?.s || 0) || 0) > 0;
-  if (!everUsed) return false;
-  const invite = safeDb(() => db.prepare("SELECT fraud_flag, fraud_reason FROM referral_invites WHERE invited_handle=? AND status='confirmed' LIMIT 1").get(h));
-  if (!invite || Number(invite.fraud_flag || 0)) return false;
-  return grantReferralReward(h, 'starter_bg_slot', 1, 'starter', null, { reason: 'eligible_referred_user' });
-}
-
-function mapReferralNotCountedReason(fraudReason, activeDays, inserts, hasActivity) {
-  if (!hasActivity) return 'NO_ACTIVITY_YET';
-  const fr = String(fraudReason || '').trim();
-  if (fr === 'fingerprint_dup') return 'DEVICE_DUPLICATE';
-  if (fr === 'ip_burst') return 'BURST_FLAG';
-  if (fr) return 'SUSPICIOUS_PATTERN';
-  if (Number(activeDays || 0) < REF_MIN_ACTIVE_DAYS || Number(inserts || 0) < REF_MIN_ACTIVE_USES) return 'LOW_ACTIVITY';
-  return null;
-}
-
-function classifyReferralEntry({ activeDays = 0, inserts = 0, fraud = false, fraudReason = null, hasActivity = false }) {
-  if (!hasActivity) return { status: 'confirmed', eligible: false, notCountedReason: 'NO_ACTIVITY_YET' };
-  if (fraud) return { status: 'active', eligible: false, notCountedReason: mapReferralNotCountedReason(fraudReason, activeDays, inserts, true) };
-  if (Number(activeDays || 0) < REF_MIN_ACTIVE_DAYS || Number(inserts || 0) < REF_MIN_ACTIVE_USES) {
-    return { status: 'active', eligible: false, notCountedReason: 'LOW_ACTIVITY' };
-  }
-  return { status: 'eligible', eligible: true, notCountedReason: null };
-}
-
-function computeReferralUnlocks(totalEligible, starterSlots = 0) {
-  const eligible = Math.max(0, Number(totalEligible || 0) || 0);
-  const starter = Math.max(0, Number(starterSlots || 0) || 0);
-  let bgSlots = 3;
-  if (eligible >= 1) bgSlots = 5;
-  if (eligible >= 3) bgSlots = 8;
-  if (eligible >= 7) bgSlots = 12;
-  if (eligible >= 15) bgSlots = 9999;
-  const unlimitedBg = bgSlots >= 9999;
-  const bgSlotsTotal = unlimitedBg ? bgSlots : (bgSlots + starter);
-  return {
-    eligible,
-    bgSlotsBase: bgSlots,
-    starterBgSlots: starter,
-    bgSlots: bgSlotsTotal,
-    unlimitedBg,
-    cosmeticsOnePack: eligible >= 3,
-    cosmeticsAllPacks: eligible >= 15,
-    saveCapBonus: eligible >= 7 ? 50 : 0,
-    proTrial7dUnlocked: eligible >= 30,
-    discount50Unlocked: eligible >= 50,
-    toolkitUnlocked: eligible >= 100,
-    nextUnlockAt: eligible < 1 ? 1 : eligible < 3 ? 3 : eligible < 7 ? 7 : eligible < 15 ? 15 : eligible < 30 ? 30 : eligible < 50 ? 50 : eligible < 100 ? 100 : null,
-  };
-}
-
-function subscriptionInfo(u) {
-  const tier = u?.tier || "free";
-  const until = u?.paid_until ? new Date(u.paid_until) : null;
-  const now = new Date();
-
-  // Owner override: always unlimited for the admin handle
-  if (isAdminHandle(u?.handle)) {
-    return { active: true, tier: "unlimited", daysLeft: 9999, paidUntil: null, isUnlimited: true };
-  }
-
-  if (tier === "unlimited") return { active: true, tier: "unlimited", daysLeft: 9999, paidUntil: u?.paid_until || null, isUnlimited: true };
-  if (tier === "paid" && until && until > now) {
-    const daysLeft = Math.ceil((until - now) / (24 * 3600 * 1000));
-    return { active: true, tier: "paid", daysLeft, paidUntil: u.paid_until, isUnlimited: false };
-  }
-  return { active: false, tier: "free", daysLeft: 0, paidUntil: u?.paid_until || null, isUnlimited: false };
-}
-
-async function insertLimitForUser(u, opts = {}) {
-  const sub = subscriptionInfo(u);
-  if (sub.active) return CONFIG.PRO_DAILY_SENTINEL;
-  return getDailyLimit(u?.handle, opts);
-}
-
+const {
+  AUTH_COOKIE_NAME,
+  AUTH_COOKIE_MAX_AGE_SEC,
+  getAuthToken,
+  setAuthCookie,
+  getBearer,
+  userByHandle,
+  userByToken,
+  requireAuth,
+  maybeAuth,
+  ensureUser,
+  rotateToken,
+  referralFingerprint,
+  getReferralPromoterSummary,
+  awardReferralBonus,
+  getDailyLimit,
+  referralRewardTotal,
+  hasReferralReward,
+  grantReferralReward,
+  maybeAwardStarterReward,
+  mapReferralNotCountedReason,
+  classifyReferralEntry,
+  computeReferralUnlocks,
+  subscriptionInfo,
+  insertLimitForUser,
+} = createAuth({
+  safeDb,
+  db,
+  nowIso,
+  sendError,
+  ERROR_CODES,
+  normalizeHandle,
+  validHandle,
+  randHex,
+  ADMIN_HANDLE_ENV,
+  setAdminHandleCache: (value) => { ADMIN_HANDLE_CACHE = value; },
+  CONFIG,
+  supabaseActive,
+  sbReferralsCount,
+  sbRefClicksCount,
+  referralCountConfirmed,
+  referralCountActive,
+  REF_MIN_ACTIVE_DAYS,
+  REF_MIN_ACTIVE_USES,
+  clientIp,
+  sha256,
+  isAdminHandle,
+});
 
 // ---------- SUPABASE REFERRALS (public.referrals + public.ref_clicks) ----------
 

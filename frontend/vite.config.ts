@@ -42,14 +42,6 @@ export default defineConfig(({ command, mode }) => {
               return "vendor";
             }
 
-            if (normalized.includes("/legacy/siteI18nCatalog")) {
-              return "i18n-catalog";
-            }
-
-            if (normalized.includes("/src/AppShell.tsx") || normalized.includes("/src/legacy/") || normalized.includes("/src/shell/")) {
-              return "app-shell";
-            }
-
             if (normalized.includes("/src/pages/AccessPage")) {
               return "page-access";
             }
@@ -75,7 +67,7 @@ export default defineConfig(({ command, mode }) => {
           const url = rawUrl.split("?")[0];
           const accept = String(req.headers.accept || "");
           const secFetchDest = String(req.headers["sec-fetch-dest"] || "");
-          // Navigation must never fall through to Vite's index.html (React AppShell ≠ public/app.html).
+          // Navigation must never fall through to Vite's index.html (React bridge ≠ public/app.html).
           // Some clients send Accept: */* without "text/html" — that used to skip this middleware.
           const wantsHtml =
             req.method === "GET" &&
@@ -85,7 +77,7 @@ export default defineConfig(({ command, mode }) => {
               accept.trim() === "*/*");
           const isAppRoute =
             url === "/" || url === "/app" || url === "/app.html" || url.startsWith("/app/");
-          // Match backend: /arcade → arcade.html (not Vite's React ArcadePage — same canon as :10000).
+          // Match backend: /arcade → arcade.html (same canon as :10000).
           const isArcadeRoute =
             url === "/arcade" || url === "/arcade.html" || url.startsWith("/arcade/");
           if (wantsHtml && (isAppRoute || isArcadeRoute)) {

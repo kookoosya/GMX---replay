@@ -1,54 +1,27 @@
-import { type ComponentType, type ReactNode } from "react";
 import ReactDOM from "react-dom/client";
+import App from "./App";
 import "./styles.css";
 
-type RootModule = {
-  default: ComponentType;
-};
+const path = String(window.location.pathname || "/");
 
-async function resolveRoot(): Promise<ComponentType> {
-  const path = String(window.location.pathname || "/");
-  const module: RootModule = path.startsWith("/bridge")
-    ? await import("./App")
-    : path.startsWith("/arcade")
-      ? await import("./pages/ArcadePage")
-      : await import("./AppShell");
+if (!path.startsWith("/bridge")) {
+  const target = path.startsWith("/arcade") ? "/arcade" : "/app";
+  window.location.replace(`${target}${window.location.search}${window.location.hash}`);
+} else {
+  const rootEl = document.getElementById("root");
+  if (!rootEl) {
+    throw new Error("Root element #root not found");
+  }
 
-  return module.default;
-}
-
-const rootEl = document.getElementById("root");
-if (!rootEl) {
-  throw new Error("Root element #root not found");
-}
-
-const root = ReactDOM.createRoot(rootEl);
-
-function renderFrame(node: ReactNode) {
-  root.render(node);
-}
-
-renderFrame(
-  <div className="bootWrap">
-    <div className="bootCard">
-      <div className="bootTitle">GMXReply</div>
-      <div className="bootText">Loading UI shell…</div>
-    </div>
-  </div>
-);
-
-void resolveRoot()
-  .then((Root) => {
-    renderFrame(<Root />);
-  })
-  .catch((error: unknown) => {
-    const message = error instanceof Error ? error.message : String(error || "boot_failed");
-    renderFrame(
-      <div className="bootWrap">
-        <div className="bootCard">
-          <div className="bootTitle">GMXReply boot failed</div>
-          <div className="err" style={{ marginTop: 10 }}>{message}</div>
-        </div>
+  const root = ReactDOM.createRoot(rootEl);
+  root.render(
+    <div className="bootWrap">
+      <div className="bootCard">
+        <div className="bootTitle">GMXReply</div>
+        <div className="bootText">Loading Account Center…</div>
       </div>
-    );
-  });
+    </div>
+  );
+
+  root.render(<App />);
+}

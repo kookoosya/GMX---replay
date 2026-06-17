@@ -114,7 +114,7 @@ export function ReferralsPage({ token, refreshKey = 0 }: { token: string; refres
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [copied, setCopied] = useState("");
-  const { copy, siteText } = useBridgeCopy();
+  const { copy } = useBridgeCopy();
   const inflightRef = useRef(false);
   const lastKeyRef = useRef("");
   const lastAtRef = useRef(0);
@@ -222,14 +222,14 @@ export function ReferralsPage({ token, refreshKey = 0 }: { token: string; refres
 
   async function onCopy() {
     const ok = await copyText(String(stats?.refLink || ""));
-    setCopied(ok ? siteText("toast_copied", "Copied.") : siteText("toast_copy_failed", "Copy failed."));
+    setCopied(ok ? copy("toast_copied", "Copied.") : copy("toast_copy_failed", "Copy failed."));
     window.setTimeout(() => setCopied(""), 1800);
   }
 
   if (!token) {
     return (
       <div className="card">
-        <div className="h1" style={{ fontSize: 18 }}>{siteText("t_ref", "Referrals")}</div>
+        <div className="h1" style={{ fontSize: 18 }}>{copy("t_ref", "Referrals")}</div>
         <div className="hint" style={{ marginTop: 8 }}>{copy("referralsConnectFirst", "Connect first to load your referral stats.")}</div>
       </div>
     );
@@ -240,7 +240,7 @@ export function ReferralsPage({ token, refreshKey = 0 }: { token: string; refres
       <div className="card">
         <div className="row" style={{ marginBottom: 10 }}>
           <div>
-            <div className="h1" style={{ fontSize: 18 }}>{siteText("t_ref", "Referrals")}</div>
+            <div className="h1" style={{ fontSize: 18 }}>{copy("t_ref", "Referrals")}</div>
             <div className="hint">{copy("referralsIntro", "This page shows the real referral counters and unlock path. Free stays {free} / {free} until you unlock more.").replace(/\{free\}/g, String(freeDaily))}</div>
           </div>
           <div className="spacer" />
@@ -262,10 +262,10 @@ export function ReferralsPage({ token, refreshKey = 0 }: { token: string; refres
         {err ? <div className="err">{err}</div> : null}
 
         <div className="statGrid" style={{ marginTop: 10 }}>
-          <div className="miniStat"><span>{siteText("ref_k_confirmed", "Confirmed")}</span><strong>{confirmed}</strong></div>
-          <div className="miniStat"><span>{siteText("ref_k_active", "Active")}</span><strong>{active}</strong></div>
+          <div className="miniStat"><span>{copy("ref_k_confirmed", "Confirmed")}</span><strong>{confirmed}</strong></div>
+          <div className="miniStat"><span>{copy("ref_k_active", "Active")}</span><strong>{active}</strong></div>
           <div className="miniStat"><span>{copy("strictEligible", "Strict eligible")}</span><strong>{strictEligible}</strong></div>
-          <div className="miniStat"><span>{siteText("ref_k_legacy", "Carry-over")}</span><strong>{legacy}</strong></div>
+          <div className="miniStat"><span>{copy("ref_k_legacy", "Carry-over")}</span><strong>{legacy}</strong></div>
           <div className="miniStat"><span>{copy("adminCredits", "Admin credits")}</span><strong>{adminCredits}</strong></div>
           <div className="miniStat"><span>{copy("effective", "Unlock total")}</span><strong>{effective}</strong></div>
           <div className="miniStat"><span>{copy("clicks", "Clicks")}</span><strong>{clicks}</strong></div>
@@ -281,7 +281,7 @@ export function ReferralsPage({ token, refreshKey = 0 }: { token: string; refres
           <div className="k"><div className="kv">{copy("ownerActive", "Owner active")}</div><div className="mono">{stats?.ownerActive ? copy("yes", "yes") : copy("no", "no")}</div></div>
           <textarea className="area" readOnly value={String(stats?.refLink || "")} style={{ minHeight: 86, marginTop: 10 }} />
           <div className="row" style={{ marginTop: 10 }}>
-            <button className="btn btnPrimary" onClick={() => void onCopy()} disabled={!stats?.refLink}>{siteText("refCopy", "Copy link")}</button>
+            <button className="btn btnPrimary" onClick={() => void onCopy()} disabled={!stats?.refLink}>{copy("refCopy", "Copy link")}</button>
             {copied ? <div className="hint">{copied}</div> : null}
           </div>
         </div>
@@ -330,10 +330,10 @@ export function ReferralsPage({ token, refreshKey = 0 }: { token: string; refres
       <div className="card">
         <div className="h1" style={{ fontSize: 18, marginBottom: 10 }}>{copy("countingRules", "Counting rules")}</div>
         <div className="ladderList">
-          <div className="ladderItem"><span className="dot ok" /><span>{siteText("ref_k_confirmed", "Confirmed")} = {siteText("ref_def_confirmed", "users who registered via your link.")}</span></div>
-          <div className="ladderItem"><span className="dot ok" /><span>{siteText("ref_k_active", "Active")} = {siteText("ref_def_active", "confirmed users with at least one recorded usage.")}</span></div>
+          <div className="ladderItem"><span className="dot ok" /><span>{copy("ref_k_confirmed", "Confirmed")} = {copy("ref_def_confirmed", "users who registered via your link.")}</span></div>
+          <div className="ladderItem"><span className="dot ok" /><span>{copy("ref_k_active", "Active")} = {copy("ref_def_active", "confirmed users with at least one recorded usage.")}</span></div>
           <div className="ladderItem"><span className="dot ok" /><span>{copy("strictEligible", "Strict eligible")} = active only</span></div>
-          <div className="ladderItem"><span className="dot ok" /><span>{siteText("ref_k_eligible", "Eligible")} = {siteText("ref_def_eligible", "max(active, carry-over).")}</span></div>
+          <div className="ladderItem"><span className="dot ok" /><span>{copy("ref_k_eligible", "Eligible")} = {copy("ref_def_eligible", "max(active, carry-over).")}</span></div>
           <div className="ladderItem"><span className="dot ok" /><span>{copy("effective", "Unlock total")} = eligible + admin credits</span></div>
           <div className="ladderItem"><span className="dot warn" /><span>{copy("windowNow", "Window now")}: {listMeta.days}d · thresholds: {listMeta.thresholds.minDays} active day(s), {listMeta.thresholds.minUses} use(s)</span></div>
         </div>
@@ -342,17 +342,17 @@ export function ReferralsPage({ token, refreshKey = 0 }: { token: string; refres
       <div className="card">
         <div className="h1" style={{ fontSize: 18, marginBottom: 10 }}>{copy("invitesInWindow", "Invites in window")}</div>
         {!rows.length ? (
-          <div className="hint">{siteText("r_no_invited", "No invited users yet")}</div>
+          <div className="hint">{copy("r_no_invited", "No invited users yet")}</div>
         ) : (
           <div className="tableWrap">
             <table className="table">
               <thead>
                 <tr>
-                  <th>{siteText("r_col_handle", "Handle")}</th>
-                  <th>{siteText("r_col_status", "Status")}</th>
-                  <th>{siteText("ref_k_confirmed", "Confirmed")}</th>
-                  <th>{siteText("r_col_active", "Active days")}</th>
-                  <th>{siteText("r_col_inserts", "Used")}</th>
+                  <th>{copy("r_col_handle", "Handle")}</th>
+                  <th>{copy("r_col_status", "Status")}</th>
+                  <th>{copy("ref_k_confirmed", "Confirmed")}</th>
+                  <th>{copy("r_col_active", "Active days")}</th>
+                  <th>{copy("r_col_inserts", "Used")}</th>
                   <th>{copy("lastInsert", "Last activity")}</th>
                   <th>{copy("lastSeen", "Last seen")}</th>
                   <th>{copy("reason", "Reason")}</th>
