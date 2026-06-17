@@ -65,7 +65,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260619f";
+const ASSET_REV = "20260619g";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {
@@ -655,6 +655,13 @@ const {
     siteI18nDynamic: __gmxSiteI18nDynamic,
     siteLangMenu: __gmxSiteLangMenu,
   });
+
+function syncReferralCardCopy() {
+  try {
+    renderReferralRightCopy(__gmxSt.lsGet(K.SITE_LANG, "en"));
+  } catch {}
+}
+function initReferralPromoDetailsState() {}
 
   if (!window.__GMXBanksWireFactory) throw new Error("GMX bankswire factory missing");
   const {

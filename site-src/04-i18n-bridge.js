@@ -18,3 +18,10 @@
     siteI18nDynamic: __gmxSiteI18nDynamic,
     siteLangMenu: __gmxSiteLangMenu,
   });
+
+function syncReferralCardCopy() {
+  try {
+    renderReferralRightCopy(__gmxSt.lsGet(K.SITE_LANG, "en"));
+  } catch {}
+}
+function initReferralPromoDetailsState() {}
