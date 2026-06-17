@@ -55,7 +55,7 @@
     "audit:all": "npm run audit:logic && npm run audit:runtime",
     "build:server": "node tools/build-server.mjs",
     "build:all": "npm run build:site && npm run build:server",
-    "test:full": "npm run verify:lock && npm run build:all && npm run verify:site && npm run verify:server && npm run verify:wallpapers && npm test && npm run test:suite && npm run audit:all",
+    "test:full": "npm run verify:lock && npm run build:all && npm run verify:site && npm run verify:server && npm run verify:manifest && npm run verify:wallpapers && npm test && npm run test:suite && npm run audit:all",
     "verify:prod": "node tools/prod-verify.mjs",
     "deploy:probe": "node tools/deploy-vps.mjs probe",
     "deploy:setup": "node tools/deploy-vps.mjs setup",
@@ -66,6 +66,8 @@
     "verify:lock": "npm ci --dry-run && npm ci --prefix frontend --dry-run",
     "verify:site": "node tools/verify-site-build.mjs",
     "verify:server": "node tools/verify-server-build.mjs",
+    "verify:manifest": "node tools/verify-client-manifest.mjs",
+    "manifest:generate": "node tools/generate-client-manifest.mjs",
     "verify:wallpapers": "node tools/check-wallpaper-assets.mjs"
   },
   "dependencies": {
