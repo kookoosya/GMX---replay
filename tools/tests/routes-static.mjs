@@ -10,6 +10,11 @@ const mustHave = {
   "random.mjs": ["/api/random", "/api/random-bulk"],
   "billing.mjs": ["/api/billing/plans", "/api/billing/tx-context", "/api/solana/latest-blockhash"],
   "user.mjs": ["/api/user/init"],
+  "meta.mjs": ["/api/health", "/api/version", "/api/config"],
+  "public.mjs": ["/api/public/random"],
+  "ext.mjs": ["/api/ext/selectors", "/api/ext/event"],
+  "cloud.mjs": ["/api/cloud/lists"],
+  "admin.mjs": ["/api/admin/stats", "/api/admin/diag"],
 };
 
 for (const [file, paths] of Object.entries(mustHave)) {

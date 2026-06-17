@@ -1,5 +1,6 @@
 import { registerGenerateRoutes } from "./server/routes/generate.mjs";
 import { registerProToolsRoutes } from "./server/routes/pro-tools.mjs";
+import { registerPublicRoutes } from "./server/routes/public.mjs";
 
 // ---------- GENERATOR (see server/generation.mjs) ----------
 let normLang, generateRankedCandidates, generateUnique, saveRecent;
@@ -87,5 +88,13 @@ function initGenerator() {
     isAdminHandle,
     setFeatureFlag,
     sbRefClicksUpsert,
+  });
+  registerPublicRoutes({
+    app,
+    sendError,
+    normLang,
+    generateRankedCandidates,
+    composeReply,
+    sanitizeSingle,
   });
 }

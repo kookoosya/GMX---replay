@@ -2223,6 +2223,7 @@ import { createGenerator } from "./server/generation.mjs";
 
 import { registerGenerateRoutes } from "./server/routes/generate.mjs";
 import { registerProToolsRoutes } from "./server/routes/pro-tools.mjs";
+import { registerPublicRoutes } from "./server/routes/public.mjs";
 
 // ---------- GENERATOR (see server/generation.mjs) ----------
 let normLang, generateRankedCandidates, generateUnique, saveRecent;
@@ -2311,345 +2312,51 @@ function initGenerator() {
     setFeatureFlag,
     sbRefClicksUpsert,
   });
+  registerPublicRoutes({
+    app,
+    sendError,
+    normLang,
+    generateRankedCandidates,
+    composeReply,
+    sanitizeSingle,
+  });
 }
 
-// ---------- API ----------
-app.get("/api/health", async (req, res) => {
-  const force = String(req.query.force || "").trim() === "1";
-  const payload = await getHealthSnapshot(force);
-  res.status(payload.ok ? 200 : 503).json(payload);
+import { registerMetaRoutes } from "./server/routes/meta.mjs";
+
+registerMetaRoutes({
+  app,
+  getHealthSnapshot,
+  BUILD_ID,
+  STARTED_AT,
+  DEV_RUN_TOKEN,
+  nowIso,
+  CONFIG,
+  PLANS,
+  SOL_RECEIVER,
+  BILLING_TOKENS,
+  BILLING_PLANS,
+  EXTENSION_STORE_URL,
 });
 
-app.get("/api/version", (req, res) => {
-  res.json({
-    ok: true,
-    build: BUILD_ID,
-    startedAt: STARTED_AT,
-    ...(DEV_RUN_TOKEN ? { devRunToken: DEV_RUN_TOKEN } : {}),
-  });
-});
-
-app.get("/api/config", (req, res) => {
-  // Single source of truth for plans/limits/flags. UI should not hardcode numbers.
-  res.json({
-    ok: true,
-    build: BUILD_ID,
-    startedAt: STARTED_AT,
-    serverTime: nowIso(),
-    limits: {
-      freeDaily: CONFIG.FREE_DAILY_BASE,
-      saveCapFree: CONFIG.SAVE_CAP_FREE,
-    },
-    plans: PLANS,
-    billing: {
-      receiver: SOL_RECEIVER,
-      tokens: BILLING_TOKENS.map((t) => ({ key: t.key, label: t.label, kind: t.kind, decimals: t.decimals })),
-      plans: BILLING_PLANS,
-    },
-    extension: {
-      storeUrl: EXTENSION_STORE_URL,
-    },
-  });
-});
-
-app.get("/status", (req, res) => {
-  // Lightweight status/health endpoint (HTML or JSON)
-  const payload = {
-    ok: true,
-    build: BUILD_ID,
-    startedAt: STARTED_AT,
-    serverTime: nowIso(),
-    uptimeSec: Math.round(process.uptime()),
-    db: "ok",
-  };
-  const accept = String(req.headers.accept || "");
-  if (accept.includes("text/html")) {
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-    return res.end(`<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Status</title><style>body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;margin:24px}code{background:#f3f3f3;padding:2px 6px;border-radius:6px}</style></head><body><h1>GMXReply status</h1><p><strong>OK</strong></p><p>Build: <code>${payload.build}</code></p><p>Started: <code>${payload.startedAt}</code></p><p>Server time: <code>${payload.serverTime}</code></p><p>Uptime: <code>${payload.uptimeSec}s</code></p></body></html>`);
-  }
-  res.json(payload);
-});
-
-
-// ---------- PUBLIC TRY (no auth) ----------
-app.get("/api/public/random", (req, res) => {
-  try {
-    const kind = String(req.query.kind || "").toLowerCase();
-    const mode = String(req.query.mode || "min").toLowerCase();
-    const lang = normLang(req.query.lang);
-    const style = String(req.query.style || "classic").toLowerCase();
-
-    if (kind !== "gm" && kind !== "gn") return sendError(res, 400, "invalid_kind");
-    if (!["min","mid","max"].includes(mode)) return sendError(res, 400, "invalid_mode");
-
-    // Public try: rank a small candidate pool first so even guest mode gets stronger lines.
-    const list = generateRankedCandidates(null, kind, mode, lang, style, 1, 0, true);
-    const reply = String((list && list[0]) || sanitizeSingle(composeReply(kind, mode, lang, style), mode, kind) || "").trim();
-    res.json({ ok:true, kind, mode, lang, reply });
-  } catch (e) {
-    console.error("PUBLIC_RANDOM_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-app.get("/api/public/random-bulk", (req, res) => {
-  try {
-    const kind = String(req.query.kind || "").toLowerCase();
-    const mode = String(req.query.mode || "min").toLowerCase();
-    const lang = normLang(req.query.lang);
-    const style = String(req.query.style || "classic").toLowerCase();
-    // Support multiple param names for convenience/compat with older clients.
-    // count is canonical; n/limit are accepted aliases.
-    let count = Number((req.query.count ?? req.query.n ?? req.query.limit) ?? 5);
-    if (!Number.isFinite(count)) count = 5;
-    count = Math.max(1, Math.min(10, Math.floor(count)));
-
-    if (kind !== "gm" && kind !== "gn") return sendError(res, 400, "invalid_kind");
-    if (!["min","mid","max"].includes(mode)) return sendError(res, 400, "invalid_mode");
-
-    const list = generateRankedCandidates(null, kind, mode, lang, style, count, 0, true);
-    res.json({ ok:true, kind, mode, lang, count: list.length, list });
-  } catch (e) {
-    console.error("PUBLIC_RANDOM_BULK_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
+// Public try routes registered in initGenerator() via server/routes/public.mjs
 
 import { registerUserRoutes } from "./server/routes/user.mjs";
+import { createExtSelectors } from "./server/ext-selectors.mjs";
+import { registerExtRoutes } from "./server/routes/ext.mjs";
 
-// ---------- EXTENSION RECOVERY (public) ----------
-const EXT_SELECTORS = {
-  version: 1,
-  // Keep selectors broad: X changes often; we prefer multiple fallbacks.
-  composer: [
-    'div[data-testid^="tweetTextarea_"] div[role="textbox"]',
-    'div[role="dialog"] div[role="textbox"]',
-    'div[role="textbox"][data-testid*="tweetTextarea"]',
-    'div[role="textbox"][contenteditable="true"]',
-    'div[role="textbox"]'
-  ],
-  tweetText: [
-    'article div[data-testid="tweetText"]',
-    'div[data-testid="tweetText"]',
-    'article [lang]'
-  ],
-  anchors: [
-    'div[data-testid="toolBar"]',
-    'div[data-testid="tweetButtonInline"]',
-    'div[role="group"]'
-  ]
-};
+const extSelectors = createExtSelectors({ safeDb, db, nowIso, sha256, randHex });
 
-function normalizeSelectorsPayload(obj){
-  if (!obj || typeof obj !== "object") return null;
-  const pickArr = (v, max = 60) =>
-    (Array.isArray(v) ? v : [])
-      .map(s => String(s || "").trim())
-      .filter(Boolean)
-      .slice(0, max);
-
-  const payload = {
-    version: Number(obj.version || EXT_SELECTORS.version || 1),
-    composer: pickArr(obj.composer, 80),
-    tweetText: pickArr(obj.tweetText, 80),
-    anchors: pickArr(obj.anchors, 80),
-  };
-  if (!Number.isFinite(payload.version) || payload.version <= 0) payload.version = 1;
-  return payload;
-}
-
-function getExtSelectorsOverride(){
-  const row = safeDb(() =>
-    db.prepare("SELECT json, updated_at FROM ext_selectors WHERE id=1").get()
-  );
-  if (!row?.json) return null;
-  try{
-    const parsed = JSON.parse(row.json);
-    const norm = normalizeSelectorsPayload(parsed);
-    if (!norm) return null;
-    return { ...norm, updated_at: row.updated_at };
-  }catch(_e){
-    return null;
-  }
-}
-
-function setExtSelectorsOverride(payload){
-  const norm = normalizeSelectorsPayload(payload);
-  if (!norm) return null;
-  safeDb(() =>
-    db.prepare(
-      `INSERT INTO ext_selectors(id, json, updated_at)
-       VALUES(1, ?, ?)
-       ON CONFLICT(id) DO UPDATE SET json=excluded.json, updated_at=excluded.updated_at`
-    ).run(JSON.stringify(norm), nowIso())
-  );
-  return norm;
-}
-
-function resetExtSelectorsOverride(){
-  safeDb(() => db.prepare("DELETE FROM ext_selectors WHERE id=1").run());
-}
-
-function getExtSelectorsRollout(){
-  // Singleton row id=1
-  let row = safeDb(() => db.prepare("SELECT rollout_percent, rollout_salt, updated_at FROM ext_selectors_meta WHERE id=1").get());
-  if (!row){
-    // Safety: create if missing
-    const salt = randHex(8);
-    safeDb(() => db.prepare("INSERT OR IGNORE INTO ext_selectors_meta(id, rollout_percent, rollout_salt, updated_at) VALUES(1, 100, ?, ?)").run(salt, nowIso()));
-    row = { rollout_percent: 100, rollout_salt: salt, updated_at: nowIso() };
-  }
-  const p = Math.max(0, Math.min(100, Number(row.rollout_percent ?? 100)));
-  return {
-    rollout_percent: Number.isFinite(p) ? p : 100,
-    rollout_salt: String(row.rollout_salt || ""),
-    updated_at: String(row.updated_at || "")
-  };
-}
-
-function setExtSelectorsRolloutMeta({ rollout_percent, rollout_salt }){
-  const p0 = Number(rollout_percent);
-  const p = Math.max(0, Math.min(100, Number.isFinite(p0) ? Math.floor(p0) : 100));
-  const salt = String(rollout_salt || "").trim() || randHex(8);
-  safeDb(() =>
-    db.prepare(
-      `INSERT INTO ext_selectors_meta(id, rollout_percent, rollout_salt, updated_at)
-       VALUES(1, ?, ?, ?)
-       ON CONFLICT(id) DO UPDATE SET rollout_percent=excluded.rollout_percent, rollout_salt=excluded.rollout_salt, updated_at=excluded.updated_at`
-    ).run(p, salt, nowIso())
-  );
-  return { rollout_percent: p, rollout_salt: salt, updated_at: nowIso() };
-}
-
-function inRolloutForClient(clientId, rolloutPercent, rolloutSalt){
-  const p = Math.max(0, Math.min(100, Number(rolloutPercent ?? 100)));
-  if (p >= 100) return true;
-  if (p <= 0) return false;
-  const cid = String(clientId || "").trim();
-  if (!cid) return false;
-  const salt = String(rolloutSalt || "");
-  const h = sha256(cid + "|" + salt);
-  const n = parseInt(h.slice(0, 8), 16);
-  const bucket = (Number.isFinite(n) ? n : 0) % 100;
-  return bucket < p;
-}
-
-function getEffectiveExtSelectorsForClient(clientId){
-  const rollout = getExtSelectorsRollout();
-  const o = getExtSelectorsOverride();
-  const hasOverride = !!o;
-
-  const inRollout = hasOverride ? inRolloutForClient(clientId, rollout.rollout_percent, rollout.rollout_salt) : false;
-
-  if (!hasOverride || !inRollout){
-    return { selectors: EXT_SELECTORS, overrideUpdatedAt: o?.updated_at || null, override: o || null, rollout, inRollout };
-  }
-
-  // Override replaces only selector arrays; keep default keys stable.
-  const eff = {
-    version: o.version || EXT_SELECTORS.version || 1,
-    composer: (o.composer && o.composer.length) ? o.composer : EXT_SELECTORS.composer,
-    tweetText: (o.tweetText && o.tweetText.length) ? o.tweetText : EXT_SELECTORS.tweetText,
-    anchors: (o.anchors && o.anchors.length) ? o.anchors : EXT_SELECTORS.anchors,
-  };
-
-  return { selectors: eff, overrideUpdatedAt: o.updated_at || null, override: o, rollout, inRollout };
-}
-
-// For admin/debug views: show the effective override without rollout gating.
-function getEffectiveExtSelectors(){
-  const o = getExtSelectorsOverride();
-  if (!o) return { selectors: EXT_SELECTORS, overrideUpdatedAt: null, override: null };
-  const eff = {
-    version: o.version || EXT_SELECTORS.version || 1,
-    composer: (o.composer && o.composer.length) ? o.composer : EXT_SELECTORS.composer,
-    tweetText: (o.tweetText && o.tweetText.length) ? o.tweetText : EXT_SELECTORS.tweetText,
-    anchors: (o.anchors && o.anchors.length) ? o.anchors : EXT_SELECTORS.anchors,
-  };
-  return { selectors: eff, overrideUpdatedAt: o.updated_at || null, override: o };
-}
-
-app.get("/api/ext/selectors", (req, res) => {
-  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
-  res.setHeader("Pragma", "no-cache");
-  res.setHeader("Expires", "0");
-
-  // meta=1 returns a small payload for quick polling (used by the extension to detect selector updates)
-  const metaOnly = String(req.query?.meta || "").toLowerCase() === "1" || String(req.query?.meta || "").toLowerCase() === "true";
-  const clientId = String(req.query?.client_id || "").trim();
-
-  const { selectors, overrideUpdatedAt, rollout, inRollout } = getEffectiveExtSelectorsForClient(clientId);
-  const baseMeta = {
-    ok: true,
-    build: BUILD_ID,
-    overrideUpdatedAt,
-    rolloutUpdatedAt: rollout?.updated_at || null,
-    rolloutPercent: rollout?.rollout_percent ?? 100,
-    inRollout,
-    version: selectors?.version || 1
-  };
-
-  if (metaOnly){
-    return res.json(baseMeta);
-  }
-
-  res.json({ ...baseMeta, ...selectors });
+registerExtRoutes({
+  app,
+  BUILD_ID,
+  safeDb,
+  db,
+  nowIso,
+  sha256,
+  referralFingerprint,
+  getEffectiveExtSelectorsForClient: extSelectors.getEffectiveExtSelectorsForClient,
 });
-
-// Extension diagnostics / health pings.
-// IMPORTANT: do not store tweet text or generated replies here. Only coarse error codes + metadata.
-app.post("/api/ext/event", (req, res) => {
-  try{
-    const body = (req.body && typeof req.body === "object") ? req.body : {};
-    const clientId = String(body.client_id || req.headers["x-gmx-client"] || "").trim();
-    const client_hash = sha256(clientId || referralFingerprint(req)).slice(0, 24);
-    const event_type = String(body.event_type || body.type || "").toLowerCase().trim();
-    const ok = (body.ok === true || body.ok === 1 || body.ok === "1");
-    const error_code = String(body.error_code || body.error || "").trim().slice(0, 64) || null;
-    const ext_version = String(body.ext_version || body.version || "").trim().slice(0, 32) || null;
-
-    if (!/^[a-z0-9_]{1,32}$/.test(event_type)){
-      return res.status(400).json({ ok:false, error:"invalid_event_type" });
-    }
-
-    let meta_json = null;
-    if (body.meta && typeof body.meta === "object"){
-      try{
-        const s = JSON.stringify(body.meta);
-        meta_json = s.length <= 2048 ? s : s.slice(0, 2048);
-      }catch{}
-    }
-
-    safeDb(() => {
-      db.prepare(
-        "INSERT INTO ext_events(created_at, client_hash, ext_version, event_type, ok, error_code, meta_json) VALUES(?,?,?,?,?,?,?)"
-      ).run(nowIso(), client_hash, ext_version, event_type, ok ? 1 : 0, error_code, meta_json);
-    });
-    res.json({ ok:true });
-  }catch(e){
-    console.error("EXT_EVENT_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-function getExtFaq(){
-  const row = safeDb(() => db.prepare("SELECT json, updated_at FROM ext_faq WHERE id=1").get());
-  if (!row?.json) return { version: 1, items: [] };
-  try{ return JSON.parse(row.json); }catch{ return { version: 1, items: [] }; }
-}
-
-app.get("/api/ext/faq", (req, res) => {
-  try{
-    const row = safeDb(() => db.prepare("SELECT json, updated_at FROM ext_faq WHERE id=1").get());
-    const json = row?.json ? JSON.parse(row.json) : { version: 1, items: [] };
-    return res.json({ ok:true, updated_at: row?.updated_at || null, faq: json });
-  }catch(e){
-    console.error("EXT_FAQ_GET_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
 
 registerUserRoutes({
   app,
@@ -2696,85 +2403,22 @@ registerUserRoutes({
   logActivity,
 });
 
+// Expose for admin routes (server/routes/admin.mjs)
+var __GMX_EXT_SELECTORS = extSelectors;
 
+import { registerCloudRoutes } from "./server/routes/cloud.mjs";
 
-
-// ---------- CLOUD SYNC (Pro; server-side gated) ----------
-function requirePro(req, res, next){
-  const handle = req.user?.handle || null;
-  const u0 = req.user && req.user.handle ? req.user : null;
-  const u = u0 || userByHandle(handle);
-  const sub = subscriptionInfo({ ...(u||{}), handle });
-  if (sub?.active) return next();
-  return res.status(402).json({ ok:false, error:"upgrade_required", feature:"cloud_sync" });
-}
-
-
-app.get("/api/cloud/lists", requireAuth, requirePro, async (req, res) => {
-  try{
-    const handle = req.user?.handle || null;
-
-    const sb = getSupabaseAdmin();
-    if (sb){
-      const r = await sbCloudListsGet(handle);
-      return res.json({ ok:true, handle, rows: r.rows });
-    }
-
-    // sqlite fallback
-    const rows = safeDb(() => db.prepare(`
-      SELECT kind, scope, lang, content, updated_at
-      FROM cloud_lists
-      WHERE handle=?
-      ORDER BY updated_at DESC
-    `).all(handle));
-    res.json({ ok:true, handle, rows });
-  }catch(e){
-    console.error("CLOUD_LISTS_GET_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-app.post("/api/cloud/lists", requireAuth, requirePro, async (req, res) => {
-  try{
-    const handle = req.user?.handle || null;
-    const items = Array.isArray(req.body?.items) ? req.body.items : [];
-    if (!items.length) return res.status(400).json({ ok:false, error:"no_items" });
-
-    const sb = getSupabaseAdmin();
-    if (sb){
-      const r = await sbCloudListsUpsert(handle, items);
-      return res.json({ ok:true, handle, saved: r.saved, updated_at: r.updated_at });
-    }
-
-    // sqlite fallback
-    const now = nowIso();
-    safeDb(() => {
-      const st = db.prepare(`
-        INSERT INTO cloud_lists(handle, kind, scope, lang, content, updated_at)
-        VALUES(?,?,?,?,?,?)
-        ON CONFLICT(handle, kind, scope, lang)
-        DO UPDATE SET content=excluded.content, updated_at=excluded.updated_at
-      `);
-      const tx = db.transaction((arr) => {
-        for (const it of arr){
-          const kind = String(it?.kind||"").toLowerCase();
-          const scope = String(it?.scope||"").toLowerCase();
-          const lang = String(it?.lang||"*").toLowerCase();
-          const content = String(it?.content||"");
-          if (kind!=="gm" && kind!=="gn") continue;
-          if (scope!=="global" && scope!=="lang") continue;
-          if (content.length > 200000) continue; // hard cap
-          st.run(handle, kind, scope, lang, content, now);
-        }
-      });
-      tx(items);
-    });
-
-    res.json({ ok:true, handle, saved: items.length, updated_at: now });
-  }catch(e){
-    console.error("CLOUD_LISTS_POST_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
+registerCloudRoutes({
+  app,
+  requireAuth,
+  userByHandle,
+  subscriptionInfo,
+  getSupabaseAdmin,
+  sbCloudListsGet,
+  sbCloudListsUpsert,
+  safeDb,
+  db,
+  nowIso,
 });
 
 
@@ -2797,904 +2441,66 @@ const {
   adminSessionDelete,
 } = createAdminSessionHelpers({ db, crypto, adminSessionHours: ADMIN_SESSION_HOURS });
 
-// ---------- ADMIN ----------
-function requireAdmin(req, res, next) {
-  try {
-    // First: allow admin session token without user auth only for local loopback dev traffic.
-    const at0 = getAdminToken(req);
-    if (at0 && canUseDevAdminSession(req)){
-      const s0 = adminSessionGet(at0);
-      if (!s0) return res.status(401).json({ ok:false, error:"unauthorized", hint:"invalid_admin_session" });
-      req.admin = { by: "admin_session", handle: String(s0.handle || "@admin") };
-      return next();
-    }
+import { createAdminGrants } from "./server/admin/grants.mjs";
+import { registerAdminRoutes } from "./server/routes/admin.mjs";
 
-    // Otherwise require a valid user bearer token and admin handle.
-    const tok = getBearer(req);
-    const u = userByToken(tok);
-    if (!u) return res.status(401).json({ ok:false, error:"unauthorized" });
-    if (!isAdminHandle(u.handle)) return res.status(403).json({ ok:false, error:"forbidden" });
-
-    // Preferred: admin session token (handle + password login)
-    const at = getAdminToken(req);
-    if (at){
-      const s = adminSessionGet(at);
-      if (!s) return res.status(401).json({ ok:false, error:"unauthorized", hint:"invalid_admin_session" });
-      if (String(s.handle) !== String(u.handle)) return res.status(403).json({ ok:false, error:"forbidden", hint:"session_handle_mismatch" });
-      req.admin = { by: "token+admin_session", handle: u.handle };
-      return next();
-    }
-
-    // Legacy: admin secret header (backwards compatibility)
-    const key = getAdminKey(req);
-    if (key){
-      if (!ADMIN_SECRET || ADMIN_SECRET === "CHANGE_ME_ADMIN_SECRET") {
-        return res.status(500).json({ ok:false, error:"server_error", hint:"admin_secret_not_configured" });
-      }
-      if (key !== ADMIN_SECRET) return res.status(401).json({ ok:false, error:"unauthorized" });
-      req.admin = { by: "admin_secret", handle: u.handle };
-      return next();
-    }
-
-    return res.status(401).json({ ok:false, error:"unauthorized" });
-  } catch (e) {
-    return res.status(500).json({ ok:false, error:"server_error" });
-  }
-}
-
-
-
-function recordExtSelectorsHistory({ action, note, selectors_json, version, rollout_percent, rollout_salt }){
-  safeDb(() => {
-    db.prepare(
-      "INSERT INTO ext_selectors_history(action, note, created_at, selectors_json, version, rollout_percent, rollout_salt) VALUES(?,?,?,?,?,?,?)"
-    ).run(
-      String(action||""),
-      (note ? String(note) : null),
-      nowIso(),
-      (selectors_json ? String(selectors_json) : null),
-      (Number.isFinite(Number(version)) ? Number(version) : null),
-      (Number.isFinite(Number(rollout_percent)) ? Number(rollout_percent) : null),
-      (rollout_salt ? String(rollout_salt) : null)
-    );
-  });
-}
-
-function listExtSelectorsHistory(limit=15){
-  const lim = Math.max(1, Math.min(50, Math.floor(Number(limit)||15)));
-  return safeDb(() =>
-    db.prepare(
-      "SELECT id, action, note, created_at, version, rollout_percent, rollout_salt FROM ext_selectors_history ORDER BY id DESC LIMIT ?"
-    ).all(lim)
-  ) || [];
-}
-
-function adminSelectorsPayload(){
-  const { selectors, overrideUpdatedAt, override } = getEffectiveExtSelectors();
-  const rollout = getExtSelectorsRollout();
-  return {
-    ok: true,
-    build: BUILD_ID,
-    default: EXT_SELECTORS,
-    override: override ? { version: override.version, composer: override.composer, tweetText: override.tweetText, anchors: override.anchors, updated_at: override.updated_at } : null,
-    overrideUpdatedAt,
-    effective: selectors,
-    rollout,
-    preview: override ? { version: override.version, composer: override.composer, tweetText: override.tweetText, anchors: override.anchors } : EXT_SELECTORS,
-    history: listExtSelectorsHistory(15)
-  };
-}
-
-
-app.get("/api/admin/ext/selectors", requireAdmin, (req, res) => {
-  try{
-    res.json(adminSelectorsPayload());
-  }catch(e){
-    console.error("ADMIN_EXT_SELECTORS_GET_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
+const adminGrants = createAdminGrants({
+  crypto,
+  safeDb,
+  db,
+  nowIso,
+  randHex,
+  normalizeHandle,
+  validHandle,
+  ensureUser,
+  userByHandle,
+  subscriptionInfo,
+  referralCountActive,
+  referralRewardTotal,
+  computeReferralUnlocks,
+  grantReferralReward,
+  logActivity,
 });
 
-app.post("/api/admin/ext/selectors", requireAdmin, (req, res) => {
-  try{
-    const action = String(req.body?.action || "").toLowerCase().trim() || "save";
-
-    // Rollout actions affect canary bucket assignment.
-    if (action === "rollout"){
-      const p = Number(req.body?.rollout_percent ?? 100);
-      const meta = setExtSelectorsRolloutMeta({ rollout_percent: p, rollout_salt: getExtSelectorsRollout().rollout_salt });
-      recordExtSelectorsHistory({ action:"rollout", note: req.body?.note, selectors_json: null, version: null, rollout_percent: meta.rollout_percent, rollout_salt: meta.rollout_salt });
-      return res.json(adminSelectorsPayload());
-    }
-
-    if (action === "rotate_salt"){
-      const p = Number(req.body?.rollout_percent ?? getExtSelectorsRollout().rollout_percent ?? 100);
-      const meta = setExtSelectorsRolloutMeta({ rollout_percent: p, rollout_salt: randHex(8) });
-      recordExtSelectorsHistory({ action:"rotate_salt", note: req.body?.note, selectors_json: null, version: null, rollout_percent: meta.rollout_percent, rollout_salt: meta.rollout_salt });
-      return res.json(adminSelectorsPayload());
-    }
-
-    if (action === "rollback"){
-      const hid = Number(req.body?.historyId || req.body?.id || 0);
-      if (!hid) return res.status(400).json({ ok:false, error:"missing_historyId" });
-      const row = safeDb(() => db.prepare("SELECT selectors_json, rollout_percent, rollout_salt FROM ext_selectors_history WHERE id=?").get(hid));
-      if (!row) return res.status(404).json({ ok:false, error:"history_not_found" });
-
-      if (row.selectors_json){
-        try{
-          const parsed = JSON.parse(row.selectors_json);
-          setExtSelectorsOverride(parsed);
-        }catch{
-          // If history JSON is corrupted, reset override.
-          resetExtSelectorsOverride();
-        }
-      }else{
-        resetExtSelectorsOverride();
-      }
-
-      const meta = setExtSelectorsRolloutMeta({
-        rollout_percent: (row.rollout_percent !== null && row.rollout_percent !== undefined) ? row.rollout_percent : getExtSelectorsRollout().rollout_percent,
-        rollout_salt: row.rollout_salt ? String(row.rollout_salt) : getExtSelectorsRollout().rollout_salt
-      });
-
-      recordExtSelectorsHistory({ action:"rollback", note: req.body?.note, selectors_json: row.selectors_json || null, version: null, rollout_percent: meta.rollout_percent, rollout_salt: meta.rollout_salt });
-      return res.json(adminSelectorsPayload());
-    }
-
-    if (action === "reset" || action === "default"){
-      resetExtSelectorsOverride();
-      recordExtSelectorsHistory({ action:"reset", note: req.body?.note, selectors_json: null, version: null, rollout_percent: getExtSelectorsRollout().rollout_percent, rollout_salt: getExtSelectorsRollout().rollout_salt });
-      return res.json(adminSelectorsPayload());
-    }
-
-    // Touch = bump version + updated_at, so extensions can pick up a refresh without changing arrays.
-    if (action === "touch" || action === "refresh" || action === "bump"){
-      const existing = getExtSelectorsOverride();
-      const base = existing ? existing : { ...EXT_SELECTORS, updated_at: null };
-      const bumped = {
-        version: Number(base.version || 1) + 1,
-        composer: Array.isArray(base.composer) ? base.composer : EXT_SELECTORS.composer,
-        tweetText: Array.isArray(base.tweetText) ? base.tweetText : EXT_SELECTORS.tweetText,
-        anchors: Array.isArray(base.anchors) ? base.anchors : EXT_SELECTORS.anchors,
-      };
-      setExtSelectorsOverride(bumped);
-      recordExtSelectorsHistory({ action:"touch", note: req.body?.note, selectors_json: JSON.stringify(bumped), version: bumped.version, rollout_percent: getExtSelectorsRollout().rollout_percent, rollout_salt: getExtSelectorsRollout().rollout_salt });
-      return res.json(adminSelectorsPayload());
-    }
-
-    let payload = req.body?.selectors ?? req.body?.json ?? req.body?.payload ?? req.body;
-    if (typeof payload === "string"){
-      payload = payload.trim();
-      payload = payload ? JSON.parse(payload) : null;
-    }
-
-    const norm = normalizeSelectorsPayload(payload);
-    if (!norm || !norm.composer?.length || !norm.anchors?.length){
-      return res.status(400).json({ ok:false, error:"invalid_selectors_payload" });
-    }
-
-    setExtSelectorsOverride(norm);
-    recordExtSelectorsHistory({ action:"save", note: req.body?.note, selectors_json: JSON.stringify(norm), version: norm.version, rollout_percent: getExtSelectorsRollout().rollout_percent, rollout_salt: getExtSelectorsRollout().rollout_salt });
-    return res.json(adminSelectorsPayload());
-  }catch(e){
-    const msg = String(e?.message || "");
-    if (/json/i.test(msg)){
-      return res.status(400).json({ ok:false, error:"invalid_json" });
-    }
-    console.error("ADMIN_EXT_SELECTORS_POST_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-app.get("/api/admin/stats", requireAdmin, (req, res) => {
-  try {
-    const tenMinAgo = new Date(Date.now() - 10*60*1000).toISOString();
-
-    const totalUsers =
-      safeDb(() => db.prepare("SELECT COUNT(*) AS c FROM users").get()?.c || 0);
-
-    const onlineUsers10m =
-      safeDb(() => db.prepare("SELECT COUNT(*) AS c FROM users WHERE last_seen >= ?").get(tenMinAgo)?.c || 0);
-
-    const day = todayKeyUTC();
-    const totalInsertsToday =
-      safeDb(() =>
-        db.prepare("SELECT COALESCE(SUM(used),0) AS s FROM usage_daily WHERE day=?").get(day)?.s || 0
-      );
-
-    const extensionUsers =
-      safeDb(() =>
-        db.prepare("SELECT COUNT(DISTINCT handle) AS c FROM usage_daily WHERE used > 0").get()?.c || 0
-      );
-
-    res.json({
-      ok:true,
-      onlineUsers10m,
-      totalUsers,
-      extensionUsers,
-      totalInsertsToday,
-      build: BUILD_ID,
-    });
-  } catch (e) {
-    console.error("ADMIN_STATS_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-// ---- Admin: business / conversion metrics ----
-app.get("/api/admin/metrics", requireAdmin, (req, res) => {
-  try{
-    let hours = Number(req.query?.hours ?? 24);
-    if (!Number.isFinite(hours)) hours = 24;
-    hours = Math.max(1, Math.min(720, Math.floor(hours))); // up to 30 days
-    const sinceIso = new Date(Date.now() - hours * 3600 * 1000).toISOString();
-
-    // Usage-based active users (DAU / MAU)
-    const day = todayKeyUTC();
-    const dau =
-      safeDb(() => db.prepare("SELECT COUNT(DISTINCT handle) AS c FROM usage_daily WHERE day=? AND used>0").get(day)?.c || 0);
-
-    const start = new Date();
-    start.setUTCDate(start.getUTCDate() - 29);
-    const startDay = start.toISOString().slice(0,10);
-    const mau =
-      safeDb(() => db.prepare("SELECT COUNT(DISTINCT handle) AS c FROM usage_daily WHERE day>=? AND used>0").get(startDay)?.c || 0);
-
-    const proActive =
-      safeDb(() => db.prepare("SELECT COUNT(*) AS c FROM users WHERE sub_status='active'").get()?.c || 0);
-
-    // Event funnel (from activity_log)
-    const byType = safeDb(() =>
-      db.prepare(
-        "SELECT event_type, COUNT(*) AS total, COUNT(DISTINCT handle) AS users FROM activity_log WHERE created_at>=? GROUP BY event_type"
-      ).all(sinceIso)
-    ) || [];
-
-    const asMap = {};
-    for (const r of byType){
-      asMap[String(r.event_type)] = { total: Number(r.total||0), users: Number(r.users||0) };
-    }
-
-    const get = (k)=> asMap[k] || { total:0, users:0 };
-
-    const funnel = {
-      limit_hit: get("limit_hit"),
-      upgrade_modal_open: get("upgrade_modal_open"),
-      pay_click: get("pay_click"),
-      pay_success: get("pay_success"),
-      pay_fail: get("pay_fail"),
-      busy_try_again: get("busy_try_again"),
-    };
-
-    // Derived conversion rates (user-based)
-    const opened = funnel.upgrade_modal_open.users || 0;
-    const clicked = funnel.pay_click.users || 0;
-    const success = funnel.pay_success.users || 0;
-
-    const rates = {
-      open_to_click: opened ? (clicked / opened) : 0,
-      click_to_success: clicked ? (success / clicked) : 0,
-      open_to_success: opened ? (success / opened) : 0,
-    };
-
-    res.json({
-      ok:true,
-      windowHours: hours,
-      since: sinceIso,
-      dau,
-      mau,
-      proActive,
-      funnel,
-      rates,
-      build: BUILD_ID,
-    });
-  }catch(e){
-    console.error("ADMIN_METRICS_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-
-// ---- Admin: extension health dashboard ----
-app.get("/api/admin/ext/health", requireAdmin, (req, res) => {
-  try{
-    let hours = Number(req.query?.hours ?? 24);
-    if (!Number.isFinite(hours)) hours = 24;
-    hours = Math.max(1, Math.min(168, Math.floor(hours)));
-    const sinceIso = new Date(Date.now() - hours * 3600 * 1000).toISOString();
-
-    const totals = safeDb(() => {
-      const r = db.prepare(
-        "SELECT COUNT(*) AS total, SUM(CASE WHEN ok=1 THEN 1 ELSE 0 END) AS okCnt FROM ext_events WHERE created_at >= ?"
-      ).get(sinceIso);
-      const total = Number(r?.total || 0);
-      const ok = Number(r?.okCnt || 0);
-      return { total, ok, fail: Math.max(0, total - ok) };
-    }) || { total: 0, ok: 0, fail: 0 };
-
-    const byType = safeDb(() =>
-      db.prepare(
-        "SELECT event_type, COUNT(*) AS total, SUM(CASE WHEN ok=1 THEN 1 ELSE 0 END) AS okCnt FROM ext_events WHERE created_at >= ? GROUP BY event_type ORDER BY total DESC"
-      ).all(sinceIso)
-    ) || [];
-
-    const topErrors = safeDb(() =>
-      db.prepare(
-        "SELECT error_code, COUNT(*) AS c FROM ext_events WHERE created_at >= ? AND ok=0 AND error_code IS NOT NULL AND error_code <> '' GROUP BY error_code ORDER BY c DESC LIMIT 12"
-      ).all(sinceIso)
-    ) || [];
-
-    const versions = safeDb(() =>
-      db.prepare(
-        "SELECT ext_version, COUNT(*) AS c FROM ext_events WHERE created_at >= ? AND ext_version IS NOT NULL AND ext_version <> '' GROUP BY ext_version ORDER BY c DESC LIMIT 12"
-      ).all(sinceIso)
-    ) || [];
-
-    const last = safeDb(() =>
-      db.prepare(
-        "SELECT created_at, event_type, ok, error_code, ext_version FROM ext_events WHERE created_at >= ? ORDER BY id DESC LIMIT 30"
-      ).all(sinceIso)
-    ) || [];
-
-    res.json({
-      ok:true,
-      hours,
-      sinceIso,
-      totals,
-      byType: byType.map(r => ({ event_type: r.event_type, total: Number(r.total||0), ok: Number(r.okCnt||0), fail: Math.max(0, Number(r.total||0) - Number(r.okCnt||0)) })),
-      topErrors: topErrors.map(r => ({ error_code: r.error_code, count: Number(r.c||0) })),
-      versions: versions.map(r => ({ ext_version: r.ext_version, count: Number(r.c||0) })),
-      last,
-      build: BUILD_ID,
-    });
-  }catch(e){
-    console.error("ADMIN_EXT_HEALTH_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-// ---- Admin: FAQ content (retired) ----
-app.get("/api/admin/faq", requireAdmin, (_req, res) => {
-  res.status(410).json({ ok:false, error:"admin_faq_retired" });
-});
-
-app.post("/api/admin/faq", requireAdmin, (_req, res) => {
-  res.status(410).json({ ok:false, error:"admin_faq_retired" });
-});
-
-
-app.post("/api/admin/codes", requireAdmin, (req, res) => {
-  try {
-    let n = Number(req.body?.n || 5);
-    if (!Number.isFinite(n)) n = 5;
-    n = Math.max(1, Math.min(50, Math.floor(n)));
-
-    const note = String(req.body?.note || "promo").slice(0, 64);
-    const grantTypeInput = String(req.body?.grantType || '').trim().toLowerCase();
-
-    let grantType = 'subscription';
-    let grantValue = 0;
-    let days = Number(req.body?.days || 0);
-    if (!Number.isFinite(days)) days = 0;
-    days = Math.max(0, Math.min(3650, Math.floor(days)));
-
-    if (grantTypeInput === 'eligible_credit') {
-      const allowed = new Set([1, 3, 5, 7, 15, 30]);
-      const value = Math.floor(Number(req.body?.grantValue || 0) || 0);
-      if (!allowed.has(value)) return res.status(400).json({ ok:false, error:'invalid_grant_value' });
-      grantType = 'eligible_credit';
-      grantValue = value;
-      days = 0;
-    } else {
-      grantType = 'subscription';
-      grantValue = 0;
-    }
-
-    const tier = grantType === 'subscription' ? (days === 0 ? "unlimited" : "paid") : 'grant';
-
-    const codes = [];
-    safeDb(() => {
-      for (let i = 0; i < n; i++) {
-        let code = randHex(6);
-        for (let t = 0; t < 12; t++) {
-          const exists = db.prepare("SELECT 1 FROM admin_codes WHERE code=?").get(code);
-          if (!exists) break;
-          code = randHex(6);
-        }
-        db.prepare(
-          "INSERT INTO admin_codes(code, note, tier, days, grant_type, grant_value, created_at) VALUES(?,?,?,?,?,?,?)"
-        ).run(code, note, tier, days, grantType, grantValue, nowIso());
-        codes.push(code);
-      }
-    });
-
-    res.json({ ok:true, codes, tier, days, grantType, grantValue });
-  } catch (e) {
-    console.error("ADMIN_CODES_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-app.get("/api/admin/codes", requireAdmin, (req, res) => {
-  try {
-    const limit = Math.max(20, Math.min(200, Number(req.query?.limit || 100) || 100));
-    const rows = safeDb(() =>
-      db
-        .prepare("SELECT code, note, tier, days, grant_type, grant_value, created_at FROM admin_codes ORDER BY created_at DESC LIMIT ?")
-        .all(limit)
-    );
-    res.json({ ok:true, rows, presets: { eligibleCredits: [1,3,5,7,15,30], paidDays: [90,180,365], batchSizes: [1,5,10,25], notes: ["promo","giveaway","partner","lb_7d","lb_30d"] } });
-  } catch (e) {
-    console.error("ADMIN_CODES_LIST_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-app.post("/api/admin/grant", requireAdmin, (req, res) => {
-  try {
-    const handle = normalizeHandle(req.body?.handle);
-    if (!validHandle(handle)) return res.status(400).json({ ok:false, error:"invalid_request", hint:"invalid_handle" });
-
-    const note = String(req.body?.note || "manual").trim().slice(0, 64) || "manual";
-    const grantType = String(req.body?.grantType || "subscription").trim().toLowerCase();
-    const adminHandle = String(req.admin?.handle || req.user?.handle || "").trim() || null;
-
-    if (grantType === "eligible_credit") {
-      const rawValue = req.body?.grantValue;
-      if (rawValue == null || String(rawValue).trim() === "") {
-        return res.status(400).json({ ok:false, error:"invalid_request", hint:"grant_value_required" });
-      }
-      const value = Math.floor(Number(rawValue) || 0);
-      const allowed = new Set([1, 3, 5, 7, 15, 30]);
-      if (!allowed.has(value)) return res.status(400).json({ ok:false, error:"invalid_grant_value" });
-
-      const h = ensureGrantTarget(handle);
-      const refKey = `AGRANT_${randHex(8)}`;
-      const granted = grantReferralReward(h, 'eligible_credit', value, 'admin_manual', refKey, { adminHandle, note, grantType, grantValue: value });
-      if (!granted) return res.status(409).json({ ok:false, error:"conflict", hint:"grant_not_applied" });
-
-      const row = recordAdminGrant({ handle: h, grantType: 'eligible_credit', grantValue: value, note, adminHandle });
-      const sub = subscriptionInfo({ ...(userByHandle(h) || {}), handle: h });
-      const unlocks = accessUnlocksForHandle(h);
-      logActivity(h, 'admin_manual_grant', { grantType: 'eligible_credit', grantValue: value, note, adminHandle });
-      return res.json({ ok:true, handle: h, grantType: 'eligible_credit', grantValue: value, note, row, sub, unlocks });
-    }
-
-    if (grantType !== "subscription") {
-      return res.status(400).json({ ok:false, error:"invalid_request", hint:"invalid_grant_type" });
-    }
-
-    const rawDays = req.body?.days;
-    if (rawDays == null || String(rawDays).trim() === "") {
-      return res.status(400).json({ ok:false, error:"invalid_request", hint:"days_required" });
-    }
-    let days = Number(rawDays);
-    if (!Number.isFinite(days)) return res.status(400).json({ ok:false, error:"invalid_grant_value" });
-    days = Math.max(0, Math.min(3650, Math.floor(days)));
-
-    const sub = subscriptionGrantToHandle({ handle, days });
-    const h = String(handle || '').trim();
-    const row = recordAdminGrant({ handle: h, grantType: 'subscription', grantValue: days, note, adminHandle });
-    logActivity(h, 'admin_manual_grant', { grantType: 'subscription', grantValue: days, note, adminHandle });
-    return res.json({ ok:true, handle: h, grantType: 'subscription', grantValue: days, note, row, sub });
-  } catch (e) {
-    console.error("ADMIN_GRANT_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-app.get("/api/admin/grants", requireAdmin, (req, res) => {
-  try {
-    const limit = Math.max(20, Math.min(200, Number(req.query?.limit || 50) || 50));
-    const q = String(req.query?.q || "").trim().toLowerCase();
-
-    let sql = "SELECT id, handle, grant_type, grant_value, note, admin_handle, created_at FROM admin_grants WHERE 1=1";
-    const args = [];
-    if (q) {
-      sql += " AND (LOWER(handle) LIKE ? OR LOWER(COALESCE(note,'')) LIKE ? OR LOWER(COALESCE(admin_handle,'')) LIKE ?)";
-      const like = `%${q}%`;
-      args.push(like, like, like);
-    }
-    sql += " ORDER BY created_at DESC LIMIT ?";
-    args.push(limit);
-
-    const rows = safeDb(() => db.prepare(sql).all(...args)) || [];
-    res.json({ ok:true, rows });
-  } catch (e) {
-    console.error("ADMIN_GRANTS_LIST_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-
-/**
- * Admin: Leaderboard winners + awards.
- * - Loads top list for a period (7d / 30d).
- * - Awards Pro to top 3 by generating an admin code and applying it immediately.
- */
-app.get("/api/admin/leaderboard/referrals", requireAdmin, (req, res) => {
-  try{
-    const days = Math.max(7, Math.min(180, Number(req.query.days || 7) || 7));
-    const sinceIso = new Date(Date.now() - days*24*60*60*1000).toISOString();
-
-    const top = safeDb(() => db.prepare(`
-      SELECT
-        ri.inviter_handle AS handle,
-        COUNT(1) AS confirmed,
-        SUM(CASE WHEN EXISTS (
-          SELECT 1 FROM usage_daily ud
-          WHERE ud.handle = ri.invited_handle AND ud.used > 0
-          LIMIT 1
-        ) THEN 1 ELSE 0 END) AS active
-      FROM referral_invites ri
-      WHERE ri.status='confirmed'
-        AND ri.created_at >= ?
-        AND (ri.fraud_flag IS NULL OR ri.fraud_flag=0)
-      GROUP BY ri.inviter_handle
-      HAVING active > 0
-      ORDER BY active DESC, handle ASC
-      LIMIT 50
-    `).all(sinceIso)) || [];
-
-    res.json({
-      ok:true,
-      days,
-      since: sinceIso,
-      top: top.map((r,i)=>({
-        rank: i+1,
-        handle: r.handle,
-        confirmed: Number(r.confirmed||0)||0,
-        active: Number(r.active||0)||0,
-        eligible: Number(r.active||0)||0
-      }))
-    });
-  }catch(e){
-    console.error("ADMIN_LEADERBOARD_GET_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-function adminCodeCreate({ note, tier, days, grantType = 'subscription', grantValue = 0 }){
-  const code = ("GMX" + crypto.randomBytes(5).toString("hex")).toUpperCase();
-  safeDb(() => db.prepare(
-    "INSERT INTO admin_codes(code, note, tier, days, grant_type, grant_value, created_at) VALUES(?,?,?,?,?,?,?)"
-  ).run(code, note ? String(note) : null, String(tier||"paid"), Number(days||0)||0, String(grantType || 'subscription'), Number(grantValue || 0) || 0, nowIso()));
-  return code;
-}
-
-function ensureGrantTarget(handle){
-  const h = normalizeHandle(handle);
-  if (!validHandle(h)) return "";
-  ensureUser(h);
-  return h;
-}
-
-function subscriptionGrantToHandle({ handle, days }){
-  const h = ensureGrantTarget(handle);
-  if (!h) return subscriptionInfo({ handle: "" });
-
-  const grantDays = Math.max(0, Math.min(3650, Math.floor(Number(days || 0) || 0)));
-  safeDb(() => {
-    if (grantDays === 0) {
-      db.prepare("UPDATE users SET tier='unlimited', paid_until=NULL, sub_status='active', grace_until=NULL, blocked_reason=NULL, sub_updated_at=? WHERE handle=?")
-        .run(nowIso(), h);
-      return;
-    }
-
-    const row = db.prepare("SELECT paid_until FROM users WHERE handle=?").get(h);
-    const base = row?.paid_until ? new Date(row.paid_until) : new Date(0);
-    const start = (base.getTime() > Date.now()) ? base : new Date();
-    const next = new Date(start.getTime() + grantDays*24*60*60*1000);
-    db.prepare("UPDATE users SET tier='paid', paid_until=?, sub_status='active', grace_until=NULL, blocked_reason=NULL, sub_updated_at=? WHERE handle=?")
-      .run(next.toISOString(), nowIso(), h);
-  });
-
-  const u2 = userByHandle(h);
-  return subscriptionInfo({ ...(u2 || {}), handle: h });
-}
-
-function accessUnlocksForHandle(handle){
-  const h = String(handle || '').trim();
-  if (!h) return computeReferralUnlocks(0, 0);
-  const u = userByHandle(h) || { handle: h };
-  const ownerRefCode = String(u?.ref_code || '').trim();
-  const legacyEligible = ownerRefCode ? (safeDb(() => db.prepare("SELECT COUNT(*) AS c FROM referrals WHERE code=?").get(ownerRefCode)?.c || 0) || 0) : 0;
-  const earnedEligible = Math.max(referralCountActive(h), legacyEligible);
-  const manualEligibleCredits = referralRewardTotal(h, 'eligible_credit');
-  const starterBgSlots = referralRewardTotal(h, 'starter_bg_slot');
-  return computeReferralUnlocks(earnedEligible + manualEligibleCredits, starterBgSlots);
-}
-
-function recordAdminGrant({ handle, grantType, grantValue, note = null, adminHandle = null }){
-  const h = String(handle || '').trim();
-  if (!h) return null;
-  const row = {
-    handle: h,
-    grant_type: String(grantType || 'subscription'),
-    grant_value: Math.max(0, Math.floor(Number(grantValue || 0) || 0)),
-    note: note ? String(note).slice(0, 64) : null,
-    admin_handle: adminHandle ? String(adminHandle).trim().slice(0, 32) : null,
-    created_at: nowIso(),
-  };
-  const out = safeDb(() => db.prepare(
-    "INSERT INTO admin_grants(handle, grant_type, grant_value, note, admin_handle, created_at) VALUES(?,?,?,?,?,?)"
-  ).run(row.handle, row.grant_type, row.grant_value, row.note, row.admin_handle, row.created_at));
-  return out && out.changes === 1 ? row : null;
-}
-
-function applyAdminCodeToHandle({ handle, code, days }){
-  const h = ensureGrantTarget(handle);
-  if (!h) return subscriptionInfo({ handle: "" });
-
-  safeDb(() => db.prepare(
-    "INSERT OR IGNORE INTO code_redemptions(code, handle, created_at) VALUES(?,?,?)"
-  ).run(code, h, nowIso()));
-
-  const sub = subscriptionGrantToHandle({ handle: h, days });
-  logActivity(h, 'admin_award', { code, days: Number(days||0)||0 });
-  return sub;
-}
-
-app.post("/api/admin/leaderboard/award", requireAdmin, (req, res) => {
-  try{
-    const windowDays = Math.max(7, Math.min(180, Number(req.body?.days || 7) || 7));
-    const place = Math.max(1, Math.min(3, Number(req.body?.place || 1) || 1));
-
-    // Award size (days of paid access) can be different from the leaderboard window.
-    const awardDays = Math.max(1, Math.min(365, Number(req.body?.awardDays || 0) || 0)) || (()=>{
-      if (windowDays >= 30) return place === 1 ? 30 : (place === 2 ? 7 : 3);
-      return place === 1 ? 7 : 3;
-    })();
-
-    const sinceIso = new Date(Date.now() - windowDays*24*60*60*1000).toISOString();
-
-    // Load top 3 to ensure we award real winners.
-    const top3 = safeDb(() => db.prepare(`
-      SELECT
-        ri.inviter_handle AS handle,
-        SUM(CASE WHEN EXISTS (
-          SELECT 1 FROM usage_daily ud
-          WHERE ud.handle = ri.invited_handle AND ud.used > 0
-          LIMIT 1
-        ) THEN 1 ELSE 0 END) AS active
-      FROM referral_invites ri
-      WHERE ri.status='confirmed'
-        AND ri.created_at >= ?
-        AND (ri.fraud_flag IS NULL OR ri.fraud_flag=0)
-      GROUP BY ri.inviter_handle
-      HAVING active > 0
-      ORDER BY active DESC, handle ASC
-      LIMIT 3
-    `).all(sinceIso)) || [];
-
-    const winner = top3[place-1];
-    const override = !!req.body?.override;
-    const requestedHandle = String(req.body?.handle || "").trim();
-    if (!winner && !override){
-      return res.status(409).json({ ok:false, error:"conflict", hint:"no_current_winner_for_place" });
-    }
-    if (override && !requestedHandle){
-      return res.status(400).json({ ok:false, error:"invalid_request", hint:"handle_required_for_override" });
-    }
-
-    const handle = String(requestedHandle || winner?.handle || "").trim();
-    if (!validHandle(handle)) return res.status(400).json({ ok:false, error:"invalid_request", hint:"invalid_handle" });
-
-    // Require handle match winner unless admin explicitly sets override=true.
-    if (!override && winner && handle !== winner.handle){
-      return res.status(409).json({ ok:false, error:"conflict", hint:"handle_not_current_winner", winner: winner.handle });
-    }
-
-    const today = new Date().toISOString().slice(0,10);
-    const requestedCycleKey = String(req.body?.cycleKey || "").trim();
-    const cycleKey = requestedCycleKey || `manual_${today}`;
-    const note = `lb_${windowDays}d_place${place}_${cycleKey}`;
-
-    const code = adminCodeCreate({ note, tier:"paid", days: awardDays });
-
-    const ins = safeDb(() => db.prepare(`
-      INSERT OR IGNORE INTO leaderboard_awards(period_days, cycle_key, place, handle, award_days, code, created_at)
-      VALUES(?,?,?,?,?,?,?)
-    `).run(windowDays, cycleKey, place, handle, awardDays, code, nowIso()));
-
-    if (!ins || ins.changes !== 1){
-      return res.status(409).json({ ok:false, error:"conflict", hint:"already_awarded_for_cycle_place" });
-    }
-
-    const sub = applyAdminCodeToHandle({ handle, code, days: awardDays });
-
-return res.json({ ok:true, windowDays, awardDays, place, handle, code, sub });
-  }catch(e){
-    console.error("ADMIN_LEADERBOARD_AWARD_ERROR", e);
-    return res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-app.get("/api/admin/leaderboard/awards", requireAdmin, (req, res) => {
-  try{
-    const days = Math.max(7, Math.min(180, Number(req.query?.days || 0) || 0));
-    const limit = Math.max(10, Math.min(500, Number(req.query?.limit || 200) || 200));
-    const rows = safeDb(() => db.prepare(`
-      SELECT period_days, cycle_key, place, handle, award_days, code, created_at
-      FROM leaderboard_awards
-      WHERE (?=0 OR period_days=?)
-      ORDER BY created_at DESC
-      LIMIT ?
-    `).all(days ? days : 0, days ? days : 0, limit)) || [];
-    return res.json({ ok:true, rows });
-  }catch(e){
-    console.error("ADMIN_LEADERBOARD_AWARDS_ERROR", e);
-    return res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-
-
-// ---------- AUTO LEADERBOARD PRIZES (7d / 30d) ----------
-const AUTO_AWARDS_ENABLED = String(process.env.AUTO_AWARDS || "1").trim() !== "0";
-let __AUTO_AWARD_LOCK = false;
-
-function utcDateParts(d){
-  return { y: d.getUTCFullYear(), m: d.getUTCMonth(), day: d.getUTCDate() };
-}
-function startOfUtcWeek(d){
-  // Monday 00:00 UTC of current week
-  const dt = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 0,0,0,0));
-  const dow = dt.getUTCDay(); // 0 Sun ... 6 Sat
-  const delta = (dow === 0) ? 6 : (dow - 1);
-  dt.setUTCDate(dt.getUTCDate() - delta);
-  return dt;
-}
-function startOfUtcMonth(d){
-  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1, 0,0,0,0));
-}
-function awardDaysFor(periodDays, place){
-  const p = Math.max(1, Math.min(3, Number(place)||1));
-  if (Number(periodDays) >= 30) return p === 1 ? 30 : (p === 2 ? 7 : 3);
-  return p === 1 ? 7 : 3;
-}
-function getTopReferrersBetween({ sinceIso, untilIso, limit=3 }){
-  return safeDb(() => db.prepare(`
-    SELECT
-      ri.inviter_handle AS handle,
-      SUM(CASE WHEN EXISTS (
-        SELECT 1 FROM usage_daily ud
-        WHERE ud.handle = ri.invited_handle AND ud.used > 0
-        LIMIT 1
-      ) THEN 1 ELSE 0 END) AS active
-    FROM referral_invites ri
-    WHERE ri.status='confirmed'
-      AND ri.created_at >= ?
-      AND ri.created_at < ?
-      AND (ri.fraud_flag IS NULL OR ri.fraud_flag=0)
-    GROUP BY ri.inviter_handle
-    HAVING active > 0
-    ORDER BY active DESC, handle ASC
-    LIMIT ?
-  `).all(sinceIso, untilIso, limit)) || [];
-}
-function awardsCount({ periodDays, cycleKey }){
-  return safeDb(() => db.prepare(`
-    SELECT COUNT(*) AS c
-    FROM leaderboard_awards
-    WHERE period_days=? AND cycle_key=?
-  `).get(periodDays, cycleKey))?.c || 0;
-}
-function awardExists({ periodDays, cycleKey, place }){
-  return !!safeDb(() => db.prepare(`
-    SELECT 1 FROM leaderboard_awards
-    WHERE period_days=? AND cycle_key=? AND place=?
-    LIMIT 1
-  `).get(periodDays, cycleKey, place));
-}
-
-async function runAutoLeaderboardAwards(){
-  if (!AUTO_AWARDS_ENABLED) return;
-  if (__AUTO_AWARD_LOCK) return;
-  __AUTO_AWARD_LOCK = true;
-  try{
-    const now = new Date();
-
-    const cycles = [
-      { periodDays: 7, until: startOfUtcWeek(now) },
-      { periodDays: 30, until: startOfUtcMonth(now) },
-    ];
-
-    for (const c of cycles){
-      const untilIso = c.until.toISOString();
-      const sinceIso = new Date(c.until.getTime() - c.periodDays*24*60*60*1000).toISOString();
-      const cycleKey = `${c.periodDays}d_${untilIso.slice(0,10)}`;
-
-      // If already fully awarded, skip.
-      if (awardsCount({ periodDays: c.periodDays, cycleKey }) >= 3) continue;
-
-      const top = getTopReferrersBetween({ sinceIso, untilIso, limit: 3 });
-      if (!top || !top.length) continue;
-
-      for (let i=0; i<3; i++){
-        const place = i+1;
-        const winner = top[i];
-        if (!winner || !winner.handle) continue;
-        if (awardExists({ periodDays: c.periodDays, cycleKey, place })) continue;
-
-        const handle = String(winner.handle).trim();
-        if (!validHandle(handle)) continue;
-
-        const awardDays = awardDaysFor(c.periodDays, place);
-        const note = `lb_auto_${cycleKey}_p${place}`;
-
-        const code = adminCodeCreate({ note, tier:"paid", days: awardDays });
-
-        const ins = safeDb(() => db.prepare(`
-          INSERT OR IGNORE INTO leaderboard_awards(period_days, cycle_key, place, handle, award_days, code, created_at)
-          VALUES(?,?,?,?,?,?,?)
-        `).run(c.periodDays, cycleKey, place, handle, awardDays, code, nowIso()));
-
-        // Apply prize only if we won the race for this cycle+place (important if multiple instances run).
-        if (ins && ins.changes === 1){
-          applyAdminCodeToHandle({ handle, code, days: awardDays });
-        }
-      }
-    }
-  }catch(e){
-    console.error("AUTO_LEADERBOARD_AWARDS_ERROR", e);
-  }finally{
-    __AUTO_AWARD_LOCK = false;
-  }
-}
-
-function startAutoAwardsLoop(){
-  if (!AUTO_AWARDS_ENABLED) return;
-  // Run once on boot, then keep checking. Idempotent because we record awards per cycle+place.
-  try{ runAutoLeaderboardAwards(); }catch(_e){}
-  setInterval(()=>{ runAutoLeaderboardAwards(); }, 10*60*1000);
-}
-
-app.get("/api/admin/redemptions", requireAdmin, (req, res) => {
-  try {
-    const limit = Math.max(20, Math.min(500, Number(req.query?.limit || 200) || 200));
-    const q = String(req.query?.q || "").trim().toLowerCase();
-    const grantKind = String(req.query?.grantKind || "all").trim().toLowerCase();
-
-    let sql = `
-        SELECT r.code, r.handle, r.created_at, c.tier, c.days, c.note, c.grant_type, c.grant_value
-        FROM code_redemptions r
-        LEFT JOIN admin_codes c ON c.code = r.code
-        WHERE 1=1
-      `;
-    const args = [];
-
-    if (grantKind === "eligible_credit") {
-      sql += " AND c.grant_type='eligible_credit'";
-    } else if (grantKind === "subscription") {
-      sql += " AND (c.grant_type IS NULL OR c.grant_type='subscription')";
-    }
-
-    if (q) {
-      sql += " AND (LOWER(r.code) LIKE ? OR LOWER(COALESCE(r.handle,'')) LIKE ? OR LOWER(COALESCE(c.note,'')) LIKE ?)";
-      const like = `%${q}%`;
-      args.push(like, like, like);
-    }
-
-    sql += " ORDER BY r.created_at DESC LIMIT ?";
-    args.push(limit);
-
-    const rows = safeDb(() => db.prepare(sql).all(...args)) || [];
-    res.json({ ok:true, rows });
-  } catch (e) {
-    console.error("ADMIN_REDEMPTIONS_ERROR", e);
-    res.status(500).json({ ok:false, error:"server_error" });
-  }
-});
-
-app.get("/api/admin/diag", requireAdmin, (req, res) => {
-  res.json({
-    ok:true,
-    build: BUILD_ID,
-    db: path.basename(String(DB_PATH || "")) || "data.sqlite",
-    startedAt: STARTED_AT
-  });
-});
+var startAutoAwardsLoop;
+({ startAutoAwardsLoop } = registerAdminRoutes({
+  app,
+  crypto,
+  path,
+  DB_PATH,
+  BUILD_ID,
+  STARTED_AT,
+  ADMIN_SECRET,
+  safeDb,
+  db,
+  nowIso,
+  todayKeyUTC,
+  randHex,
+  getBearer,
+  getAdminKey,
+  getAdminToken,
+  canUseDevAdminSession,
+  adminSessionGet,
+  userByToken,
+  userByHandle,
+  isAdminHandle,
+  normalizeHandle,
+  validHandle,
+  ensureUser,
+  subscriptionInfo,
+  grantReferralReward,
+  logActivity,
+  ext: __GMX_EXT_SELECTORS,
+  grants: adminGrants,
+}));
+
+// merged into server/routes/admin.mjs (registerAdminRoutes in 16-admin.js)
+
+// merged into server/routes/admin.mjs
+
+// merged into server/routes/admin.mjs
+
+// auto awards loop: startAutoAwardsLoop from registerAdminRoutes (16-admin.js)
 
 // ---------- STATIC SITE ----------
 const PUBLIC_DIR = path.join(__dirname, "public");
