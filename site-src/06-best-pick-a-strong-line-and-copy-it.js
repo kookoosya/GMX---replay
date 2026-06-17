@@ -5,7 +5,7 @@ async function doBest(kind){ return __gmxBestPick.doBest(kind); }
 async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
 
   if (!window.__GMXBankUiRunWireFactory) throw new Error("GMX bankuirunwire factory missing");
-  const __gmxBankUiWire = window.__GMXBankUiRunWireFactory({
+  const __gmxBankUiRunWire = window.__GMXBankUiRunWireFactory({
     core: {
       $,
       fmt: __gmxFmt,
@@ -52,7 +52,9 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
     state: {
       abort: ABORT,
     },
-  }).run();
+  });
+  const __gmxBankUiWireCtx = __gmxBankUiRunWire.buildWireCtx();
+  const __gmxBankUiWire = window.__GMXBankUiWireFactory(__gmxBankUiWireCtx);
   __gmxBestPick = __gmxBankUiWire.bestPick;
   const __gmxBankUi = __gmxBankUiWire.bankUi;
   const {
