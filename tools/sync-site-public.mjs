@@ -87,6 +87,7 @@ const shellModules = [
   "app.admin.js",
   "app.leaderboard.js",
   "app.referrals.js",
+  "app.referralswire.js",
   "app.redeem.js",
   "app.prediction.js",
   "app.authwire.js",

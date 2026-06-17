@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618f";
+const ASSET_REV = "20260618g";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -1206,8 +1206,8 @@ const bindLeaderboardUI = () => __gmxLeaderboard.bindLeaderboardUI();
   __gmxPrediction.bindPredictionMarketUI();
 
 // ----- Referrals -----
-  if (!window.__GMXReferralsFactory) throw new Error("GMX referrals factory missing");
-  const __gmxReferrals = window.__GMXReferralsFactory({
+  if (!window.__GMXReferralsWireFactory) throw new Error("GMX referralswire factory missing");
+  const { loadRefInvited, loadRefLeaderboard } = window.__GMXReferralsWireFactory({
     $,
     escapeHtml,
     api,
@@ -1227,9 +1227,6 @@ const bindLeaderboardUI = () => __gmxLeaderboard.bindLeaderboardUI();
     refreshUsage,
     initReferralPromoDetailsState,
   });
-  const loadRefInvited = (days) => __gmxReferrals.loadRefInvited(days);
-  const loadRefLeaderboard = (days) => __gmxReferrals.loadRefLeaderboard(days);
-  __gmxReferrals.bindReferrals();
 
 // ----- Wallet / Billing -----
   if (!window.__GMXWalletWireFactory) throw new Error("GMX walletwire factory missing");

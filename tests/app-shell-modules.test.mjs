@@ -1872,3 +1872,32 @@ test("walletwire: wires wallet helpers, pay, and ui delegates", () => {
   assert.equal(typeof wire.loadPlans, "function");
   assert.equal(typeof wire.bindWalletTab, "function");
 });
+
+test("referralswire: wires referrals factory delegates", async () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.referrals.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.referralswire.js"), "utf8")};`)(win);
+  const els = { refInvitedBody: { innerHTML: "" } };
+  const wire = win.__GMXReferralsWireFactory({
+    $: (id) => els[id] || null,
+    api: async () => ({ ok: true, list: [] }),
+    t: (_k, fb) => fb,
+    requireConnected: () => true,
+    getReferralUiCopy: () => ({}),
+    siteLangKey: "gmx_site_lang",
+    refreshRefStats: async () => null,
+    revealReferralLinkUi: () => {},
+    applyRefCountEligible: () => {},
+    renderThemes: () => {},
+    renderExtThemes: () => {},
+    initWallpapers: () => {},
+    renderExtWallpapers: () => {},
+    fillStyles: () => {},
+    fillPacks: () => {},
+    refreshUsage: async () => {},
+    initReferralPromoDetailsState: () => {},
+  });
+  await wire.loadRefInvited(30);
+  assert.match(els.refInvitedBody.innerHTML, /No invited users yet/);
+  assert.equal(typeof wire.loadRefLeaderboard, "function");
+});

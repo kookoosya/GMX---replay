@@ -1,6 +1,6 @@
 // ----- Referrals -----
-  if (!window.__GMXReferralsFactory) throw new Error("GMX referrals factory missing");
-  const __gmxReferrals = window.__GMXReferralsFactory({
+  if (!window.__GMXReferralsWireFactory) throw new Error("GMX referralswire factory missing");
+  const { loadRefInvited, loadRefLeaderboard } = window.__GMXReferralsWireFactory({
     $,
     escapeHtml,
     api,
@@ -20,6 +20,3 @@
     refreshUsage,
     initReferralPromoDetailsState,
   });
-  const loadRefInvited = (days) => __gmxReferrals.loadRefInvited(days);
-  const loadRefLeaderboard = (days) => __gmxReferrals.loadRefLeaderboard(days);
-  __gmxReferrals.bindReferrals();
