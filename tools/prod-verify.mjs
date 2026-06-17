@@ -26,13 +26,25 @@ ok(`health build=${String(health.json.build || "").slice(0, 8)}`);
 const appJs = await get("/app.js");
 if (appJs.status !== 200) fail(`app.js status ${appJs.status}`);
 const js = appJs.text;
-if ((js.match(/function packsForKind\(/g) || []).length !== 1) {
-  fail("app.js: packsForKind must appear once");
-}
-for (const needle of ["setWallpaperLayerImage", "readGenParams", "antiWindow(strength)", "gmxWallImg"]) {
+for (const needle of [
+  "__GMXBootstrapCoreWireFactory",
+  "__GMXBootstrapUnlockWireFactory",
+  "__GMXBootstrapGenWireFactory",
+  "__GMXBootstrapUsageWireFactory",
+  "__GMXBootstrapUiWireFactory",
+  "setWallpaperLayerImage",
+  "readGenParams",
+]) {
   if (!js.includes(needle)) fail(`app.js missing ${needle}`);
 }
 ok("app.js client invariants");
+
+const genParamsJs = await get("/app.genparams.js");
+if (genParamsJs.status !== 200) fail(`app.genparams.js status ${genParamsJs.status}`);
+if (!genParamsJs.text.includes("antiWindow(strength)")) {
+  fail("app.genparams.js missing antiWindow(strength)");
+}
+ok("app.genparams anti-window invariant");
 
 const css = await get("/app.css");
 if (!css.text.includes("gmxWallLayer") || !css.text.includes("object-fit:cover")) {
