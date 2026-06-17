@@ -2284,6 +2284,25 @@ test("connectwire: wires connect factory and binds UI", async () => {
   assert.match(els.connectMsg.innerHTML, /valid @handle/);
 });
 
+test("connectrunwire: groups deps and delegates to connectwire", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.connectwire.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.connectrunwire.js"), "utf8")};`)(win);
+  let captured = null;
+  win.__GMXConnectWireFactory = (cfg) => {
+    captured = cfg;
+    return { bindConnect: () => {} };
+  };
+  win.__GMXConnectRunWireFactory({
+    core: { $: () => null, api: async () => ({}), escapeHtml: (s) => s, friendlyUiErrorMessage: (m) => m, normalizeHandle: (h) => h },
+    auth: { setAuthOk: () => {}, applyAdminVisibility: () => {} },
+    session: { refreshUsage: async () => {}, loadPlans: async () => {}, ping: async () => {} },
+    keys: { handle: "h", token: "t", isAdmin: "a", adminClaimable: "c", forceLogout: "f", forceLogoutV2: "f2" },
+  }).run();
+  assert.equal(captured.keys.token, "t");
+  assert.equal(typeof captured.ping, "function");
+});
+
 test("bootstrapunlockwire: wires unlock catalog and storage delegates", () => {
   const win = {};
   const scripts = [

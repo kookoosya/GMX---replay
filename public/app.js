@@ -65,7 +65,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260619d";
+const ASSET_REV = "20260619e";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {
@@ -1081,18 +1081,11 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
   }).run();
 
   // ----- Connect -----
-  if (!window.__GMXConnectWireFactory) throw new Error("GMX connectwire factory missing");
-  window.__GMXConnectWireFactory({
-    $,
-    api,
-    escapeHtml,
-    friendlyUiErrorMessage,
-    normalizeHandle,
-    setAuthOk: (v) => { AUTH_OK = !!v; },
-    applyAdminVisibility,
-    refreshUsage,
-    loadPlans,
-    ping,
+  if (!window.__GMXConnectRunWireFactory) throw new Error("GMX connectrunwire factory missing");
+  window.__GMXConnectRunWireFactory({
+    core: { $, api, escapeHtml, friendlyUiErrorMessage, normalizeHandle },
+    auth: { setAuthOk: (v) => { AUTH_OK = !!v; }, applyAdminVisibility },
+    session: { refreshUsage, loadPlans, ping },
     keys: {
       handle: LS_HANDLE,
       token: LS_TOKEN,
@@ -1101,6 +1094,6 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
       forceLogout: LS_FORCE_LOGOUT,
       forceLogoutV2: LS_FORCE_LOGOUT_V2,
     },
-  });
+  }).run();
 
 })();
