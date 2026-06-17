@@ -1703,6 +1703,24 @@ test("wallpaperswire: exports wallpaper catalog delegates and runs normalize hoo
   assert.equal(wire.currentTabName(), "gm");
 });
 
+test("wallpapersrunwire: groups deps and delegates to wallpaperswire", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.wallpaperswire.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.wallpapersrunwire.js"), "utf8")};`)(win);
+  let captured = null;
+  win.__GMXWallpapersWireFactory = (cfg) => {
+    captured = cfg;
+    return { currentTabName: () => "gm" };
+  };
+  const wire = win.__GMXWallpapersRunWireFactory({
+    keys: { K: { WP_GLOBAL: "gmx_wp_global" } },
+    mod: { wp: { SITE_PACK_COUNT: 58 }, wpStore: { normalizeAllWallpapers: () => {} } },
+  });
+  wire.run();
+  assert.equal(captured.keys.WP_GLOBAL, "gmx_wp_global");
+  assert.equal(captured.wp.SITE_PACK_COUNT, 58);
+});
+
 test("bankswire: delegates bank storage helpers", () => {
   const wire = loadFactory("app.bankswire.js", "__GMXBanksWireFactory")({
     banks: {

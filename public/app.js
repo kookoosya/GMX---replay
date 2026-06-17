@@ -65,7 +65,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618v";
+const ASSET_REV = "20260618w";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {
@@ -405,21 +405,23 @@ const {
     },
   }).run();
 
-  if (!window.__GMXWallpapersWireFactory) throw new Error("GMX wallpaperswire factory missing");
+  if (!window.__GMXWallpapersRunWireFactory) throw new Error("GMX wallpapersrunwire factory missing");
   const SITE_WALLPAPER_PACK_COUNT = __gmxWp.SITE_PACK_COUNT;
-  const __gmxWallpapersWire = window.__GMXWallpapersWireFactory({
-    keys: K,
-    wp: __gmxWp,
-    wpStore: __gmxWpStore,
-    customWp: __gmxCustomWp,
-    wpHelpers: __gmxWpHelpers,
-    extWpStore: __gmxExtWpStore,
-    tabState: __gmxTabState,
-    wpApply: __gmxWpApply,
-    i18nUi: __gmxI18nUi,
-    wpUi: __gmxWpUi,
-    langUi: __gmxLangUi,
-  });
+  const __gmxWallpapersWire = window.__GMXWallpapersRunWireFactory({
+    keys: { K },
+    mod: {
+      wp: __gmxWp,
+      wpStore: __gmxWpStore,
+      customWp: __gmxCustomWp,
+      wpHelpers: __gmxWpHelpers,
+      extWpStore: __gmxExtWpStore,
+      tabState: __gmxTabState,
+      wpApply: __gmxWpApply,
+      i18nUi: __gmxI18nUi,
+      wpUi: __gmxWpUi,
+      langUi: __gmxLangUi,
+    },
+  }).run();
   const {
     LS_WP_GLOBAL,
     LS_WP_TAB_PREFIX,

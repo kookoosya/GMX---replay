@@ -86,6 +86,7 @@ const APP_FILES = [
   "app.sitesync.js",
   "app.extwallpaperui.js",
   "app.wallpaperswire.js",
+  "app.wallpapersrunwire.js",
   "app.themeswire.js",
   "app.accountui.js",
   "app.admin.js",
