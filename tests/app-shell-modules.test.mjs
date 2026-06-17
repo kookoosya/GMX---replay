@@ -2067,3 +2067,51 @@ test("bootstrapunlockwire: wires unlock catalog and storage delegates", () => {
   assert.equal(typeof wire.__gmxBanks.readKey, "function");
   assert.equal(typeof wire.__gmxUi.observeLazyBg, "function");
 });
+
+test("bootstrapgenwire: wires genparams styles toggles and custombg delegates", () => {
+  const win = {
+    document: { body: { classList: { contains: () => false } } },
+    localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} },
+  };
+  const scripts = [
+    "app.genparams.js",
+    "app.cleanfill.js",
+    "app.styles.js",
+    "app.toggles.js",
+    "app.custombg.js",
+    "app.tabtheme.js",
+    "app.logs.js",
+    "app.bootstrapgenwire.js",
+  ];
+  for (const file of scripts) {
+    new Function("window", `${readFileSync(path.join(root, "public", file), "utf8")};`)(win);
+  }
+  const wire = win.__GMXBootstrapGenWireFactory({
+    storage: {
+      lsGet: () => "",
+      lsSet: () => {},
+    },
+    keys: {},
+    chrome: { $: () => null },
+    themes: { STYLES: ["classic"], packsForKind: () => [] },
+    anti: { antiWindow: () => new Map() },
+    isPro: () => false,
+    reqRefsForUnlockIndex: () => 0,
+    unlockedCountByRefs: () => 0,
+    freeVisiblePacks: 2,
+    freeVisibleStyles: 2,
+    t: (k) => k,
+    syncModePanelCopy: () => {},
+    siteLang: () => "en",
+    syncCleanFillUi: () => {},
+    getCurrentLang: () => "en",
+    getCurrentTab: () => "home",
+    hasActiveUnlockedWallpaper: () => false,
+  });
+  assert.equal(typeof wire.__gmxGp.readGenParams, "function");
+  assert.equal(typeof wire.__gmxStyles.fillStyles, "function");
+  assert.equal(typeof wire.__gmxToggles.syncBestModeUi, "function");
+  assert.equal(typeof wire.__gmxCbg.applyUserBg, "function");
+  assert.equal(typeof wire.__gmxTabTheme.getTabBg, "function");
+  assert.equal(typeof wire.__gmxLogs.logEvent, "function");
+});

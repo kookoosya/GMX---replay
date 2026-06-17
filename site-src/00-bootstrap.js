@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618m";
+const ASSET_REV = "20260618n";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {
@@ -194,58 +194,32 @@ const {
   getExtWallpapers: () => EXT_WALLPAPERS,
 });
 
-if (!window.__GMXGenParamsFactory) throw new Error("GMX genparams factory missing");
-const __gmxGp = window.__GMXGenParamsFactory({
-  $: __gmxChrome.$,
+if (!window.__GMXBootstrapGenWireFactory) throw new Error("GMX bootstrapgenwire factory missing");
+const {
+  __gmxGp,
+  __gmxCf,
+  __gmxStyles,
+  __gmxToggles,
+  __gmxCbg,
+  __gmxTabTheme,
+  __gmxLogs,
+} = window.__GMXBootstrapGenWireFactory({
   storage: __gmxSt,
-  packsForKind: (kind) => __gmxThemes.packsForKind(kind),
-  antiWindow: (s) => __gmxAnti.antiWindow(s),
-  getCurrentLang: (kind) => currentLang(kind),
+  keys: K,
+  chrome: __gmxChrome,
+  themes: __gmxThemes,
+  anti: __gmxAnti,
   isPro,
   reqRefsForUnlockIndex,
   unlockedCountByRefs,
   freeVisiblePacks: FREE_VISIBLE_PACKS,
-  t: (key) => __gmxI18nUi.t(key),
-  syncModePanelCopy: () => { try { __gmxSiteI18nDynamic.syncModePanelCopy(); } catch {} },
-});
-
-if (!window.__GMXCleanFillFactory) throw new Error("GMX cleanfill factory missing");
-const __gmxCf = window.__GMXCleanFillFactory({
-  storage: __gmxSt,
-  $: __gmxChrome.$,
-  siteLang: () => siteLang(),
-});
-__gmxCf.bootstrap();
-
-if (!window.__GMXStylesFactory) throw new Error("GMX styles factory missing");
-const __gmxStyles = window.__GMXStylesFactory({
-  $: __gmxChrome.$,
-  storage: __gmxSt,
-  getStyles: () => __gmxThemes.STYLES,
-  normalizeStyle: (s) => __gmxGp.normalizeStyle(s),
-  isPro,
-  reqRefsForUnlockIndex,
-  unlockedCountByRefs,
   freeVisibleStyles: FREE_VISIBLE_STYLES,
   t: (key) => __gmxI18nUi.t(key),
   syncModePanelCopy: () => { try { __gmxSiteI18nDynamic.syncModePanelCopy(); } catch {} },
-});
-
-if (!window.__GMXTogglesFactory) throw new Error("GMX toggles factory missing");
-const __gmxToggles = window.__GMXTogglesFactory({
-  storage: __gmxSt,
-  $: __gmxChrome.$,
-  onAfterBestChange: () => { try { syncCleanFillUi(); } catch {} },
-});
-
-if (!window.__GMXCustomBgFactory) throw new Error("GMX custombg factory missing");
-const __gmxCbg = window.__GMXCustomBgFactory({
-  storage: __gmxSt,
-  isPro,
-  unlockedCountByRefs,
-  reqRefsForUnlockIndex,
+  siteLang: () => siteLang(),
+  syncCleanFillUi: () => { try { syncCleanFillUi(); } catch {} },
+  getCurrentLang: (kind) => currentLang(kind),
   getCurrentTab: () => { try { return currentTabName(); } catch { return "home"; } },
-  hasWallBg: () => document.body.classList.contains("hasWallBg"),
   hasActiveUnlockedWallpaper: (tab) => {
     try {
       const wid = getWallpaperForTab(tab);
@@ -258,14 +232,6 @@ const __gmxCbg = window.__GMXCustomBgFactory({
     }
   },
 });
-__gmxCbg.migrateLegacy();
-__gmxToggles.bootstrap();
-
-if (!window.__GMXTabThemeFactory) throw new Error("GMX tabtheme factory missing");
-const __gmxTabTheme = window.__GMXTabThemeFactory();
-
-if (!window.__GMXLogsFactory) throw new Error("GMX logs factory missing");
-const __gmxLogs = window.__GMXLogsFactory();
 
 if (!window.__GMXPaywallFactory) throw new Error("GMX paywall factory missing");
 const __gmxPaywall = window.__GMXPaywallFactory({
