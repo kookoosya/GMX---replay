@@ -26,3 +26,5 @@
     getHandle,
     tab,
   });
+  __gmxBankUiWireCtx.pushRecent = pushRecent;
+  __gmxBankUiWireCtx.repeatKey = repeatKey;

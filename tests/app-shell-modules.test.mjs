@@ -1724,3 +1724,45 @@ test("chromewire: wires chrome shell helpers and shellwire auth", () => {
     globalThis.document = prevDoc;
   }
 });
+
+test("bankuiwire: wires bankui and bestpick modules", () => {
+  const prevLs = globalThis.localStorage;
+  globalThis.localStorage = { getItem: () => null, setItem: () => {} };
+  const win = {};
+  try {
+  new Function("window", `${readFileSync(path.join(root, "public", "app.bankui.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.bestpick.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.bankuiwire.js"), "utf8")};`)(win);
+  const wireCtx = {
+    $: () => ({ value: "en" }),
+    fmt: { escapeHtml: (s) => `e:${s}` },
+    gen: { dedupeLines: (x) => x, normalizeLine: (s) => s, pickBestLine: () => "best" },
+    keys: { DRAFT_GM_NEW: "d1", DRAFT_GN_NEW: "d2", DRAFT_GM_PASTE: "d3", DRAFT_GN_PASTE: "d4" },
+    getBankKey: () => "gmx_gm_bank",
+    readKey: () => ["line"],
+    writeKey: () => {},
+    saveCap: () => 50,
+    saveCapFree: 50,
+    lastSaved: { gm: 0, gn: 0 },
+    dedupeLines: (x) => x,
+    linesFromText: (t) => [t],
+    requireConnected: () => true,
+    getHandle: () => "@x",
+    isPro: () => false,
+    api: async () => ({}),
+    toast: () => {},
+    t: (k) => k,
+    setBusy: () => {},
+    refreshUsage: async () => {},
+    readGenParams: () => ({ mode: "min", lang: "en", style: "warm", antiN: 1 }),
+    getAntiStrength: () => 1,
+  };
+  const wire = win.__GMXBankUiWireFactory(wireCtx);
+  assert.equal(wire.bankUi.totalSaved("gm"), 1);
+  assert.equal(wire.bestPick.pickBestLine("gm", ["a", "b"]), "best");
+  assert.equal(wire.escapeHtml("<b>"), "e:<b>");
+  assert.equal(wire.remainingSlots("gm"), 49);
+  } finally {
+    globalThis.localStorage = prevLs;
+  }
+});

@@ -107,6 +107,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.banks\.js/, "app.banks.js script tag");
   mustMatch(rel, /app\.bankswire\.js/, "app.bankswire.js script tag");
   mustMatch(rel, /app\.bankui\.js/, "app.bankui.js script tag");
+  mustMatch(rel, /app\.bankuiwire\.js/, "app.bankuiwire.js script tag");
   mustMatch(rel, /app\.antirepeat\.js/, "app.antirepeat.js script tag");
   mustMatch(rel, /app\.genparams\.js/, "app.genparams.js script tag");
   mustMatch(rel, /app\.cleanfill\.js/, "app.cleanfill.js script tag");
