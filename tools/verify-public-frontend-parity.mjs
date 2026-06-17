@@ -49,6 +49,7 @@ const APP_FILES = [
   "app.cleanfillrun.js",
   "app.cleanfillrunwire.js",
   "app.styles.js",
+  "app.themescatalogwire.js",
   "app.procontrols.js",
   "app.toggles.js",
   "app.custombg.js",

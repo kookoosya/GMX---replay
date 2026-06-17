@@ -188,6 +188,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.cleanfillrun.js": { target: BACKEND, changeOrigin: true },
         "/app.cleanfillrunwire.js": { target: BACKEND, changeOrigin: true },
         "/app.styles.js": { target: BACKEND, changeOrigin: true },
+        "/app.themescatalogwire.js": { target: BACKEND, changeOrigin: true },
         "/app.procontrols.js": { target: BACKEND, changeOrigin: true },
         "/app.toggles.js": { target: BACKEND, changeOrigin: true },
         "/app.custombg.js": { target: BACKEND, changeOrigin: true },

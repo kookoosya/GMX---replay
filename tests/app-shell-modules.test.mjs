@@ -1539,3 +1539,37 @@ test("i18nbridge: exports catalog and delegates site i18n helpers", () => {
     globalThis.GMX_SITE_I18N = prev;
   }
 });
+
+test("themescatalogwire: exports theme catalogs and genparam delegates", () => {
+  const prevLs = globalThis.localStorage;
+  globalThis.localStorage = { getItem: () => null, setItem: () => {} };
+  try {
+    const wire = loadFactory("app.themescatalogwire.js", "__GMXThemesCatalogWireFactory")({
+      themes: {
+        THEMES: [{ id: "a" }, { id: "b" }],
+        EXT_THEMES: [],
+        STYLES: [],
+        GM_PACKS: [],
+        GN_PACKS: [],
+        PACKS: {},
+        packsForKind: (k) => k,
+        rgbaToRgbTuple: (s) => s,
+      },
+      wp: { EXT_PACK_COUNT: 4, EXT_FREE_PACK_COUNT: 1, buildExtWallpapers: () => ["w1"] },
+      gp: { getAntiStrength: () => 2, fillPacks: () => true },
+      styles: { unlockedStylesCount: () => 5 },
+      unlockedCountByRefs: (total, free) => free,
+      freeVisibleThemes: 1,
+    });
+    assert.equal(wire.THEMES.length, 2);
+    assert.equal(wire.EXT_WALLPAPERS[0], "w1");
+    assert.equal(wire.packsForKind("gm"), "gm");
+    assert.equal(wire.unlockedThemesCount(), 1);
+    assert.equal(wire.unlockedStylesCount(), 5);
+    assert.equal(wire.getAntiStrength("gm"), 2);
+    assert.equal(wire.fillPacks(), true);
+    wire.migrateLegacyExtWallpaperSelectionOnce();
+  } finally {
+    globalThis.localStorage = prevLs;
+  }
+});
