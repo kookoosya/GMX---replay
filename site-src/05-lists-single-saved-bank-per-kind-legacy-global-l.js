@@ -13,3 +13,7 @@
     allLegacyKeysForKind,
     migrateLegacyBank,
   } = window.__GMXBanksWireFactory({ banks: __gmxBanks });
+
+function allKeysForKind(kind) {
+  return [getBankKey(kind)];
+}
