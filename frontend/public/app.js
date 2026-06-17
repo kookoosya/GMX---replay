@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260617t";
+const ASSET_REV = "20260617u";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -1147,52 +1147,34 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
 
   function friendlyUiErrorMessage(msg, opts){ return __gmxFmt.friendlyUiErrorMessage(msg, opts); }
 
-  if (!window.__GMXCleanFillRunFactory) throw new Error("GMX cleanfillrun factory missing");
-  const __gmxCfr = window.__GMXCleanFillRunFactory({
+  if (!window.__GMXCleanFillRunWireFactory) throw new Error("GMX cleanfillrunwire factory missing");
+  const {
+    oneClickCleanup,
+    refillCleanFill,
+    cleanupKeyLines,
+    pushRecent,
+    repeatKey,
+    filterAntiRepeat,
+    normalizeLine,
+    dedupeLines,
+  } = window.__GMXCleanFillRunWireFactory({
     $,
     api,
-    escapeHtml: (s) => __gmxFmt.escapeHtml(s),
-    getCleanFillStrength: () => __gmxCf.CLEAN_FILL_STRENGTH,
+    format: __gmxFmt,
+    cleanfill: __gmxCf,
+    gen: __gmxGen,
+    antirepeat: __gmxAnti,
+    ui: __gmxUi,
     readGenParams,
+    getAntiStrength,
     activeKey,
     readKey,
     writeKey,
     remainingSlots,
-    normalizeLine: (s) => __gmxGen.normalizeLine(s),
-    repeatKey: (s, strength) => __gmxGen.repeatKey(s, strength),
-    dedupeLinesByShape: (lines, strength) => __gmxGen.dedupeLinesByShape(lines, strength),
-    yieldToUiFrame: () => __gmxUi.yieldToUiFrame(),
-    pushRecent: (kind, keys) => __gmxAnti.pushRecent(kind, keys),
     renderList,
     getHandle,
     tab,
   });
-
-  function oneClickCleanup(kind, opts) {
-    return __gmxCfr.oneClickCleanup(kind, opts);
-  }
-  function refillCleanFill(kind, targetCount, opts) {
-    return __gmxCfr.refillCleanFill(kind, targetCount, opts);
-  }
-  function cleanupKeyLines(lines) {
-    return __gmxCfr.cleanupKeyLines(lines);
-  }
-
-  function pushRecent(kind, keys) {
-    return __gmxAnti.pushRecent(kind, keys);
-  }
-  function repeatKey(s, strength) {
-    return __gmxGen.repeatKey(s, strength);
-  }
-  function filterAntiRepeat(kind, key, lines) {
-    return __gmxAnti.filterLines(kind, key, lines, getAntiStrength(kind));
-  }
-  function normalizeLine(s) {
-    return __gmxGen.normalizeLine(s);
-  }
-  function dedupeLines(lines) {
-    return __gmxGen.dedupeLines(lines);
-  }
 
   function mergeAppendUnique(existing, newLines){
     return __gmxGen.mergeAppendUnique(existing, newLines);

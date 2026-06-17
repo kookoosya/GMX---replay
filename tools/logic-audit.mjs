@@ -108,6 +108,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.genparams\.js/, "app.genparams.js script tag");
   mustMatch(rel, /app\.cleanfill\.js/, "app.cleanfill.js script tag");
   mustMatch(rel, /app\.cleanfillrun\.js/, "app.cleanfillrun.js script tag");
+  mustMatch(rel, /app\.cleanfillrunwire\.js/, "app.cleanfillrunwire.js script tag");
   mustMatch(rel, /app\.styles\.js/, "app.styles.js script tag");
   mustMatch(rel, /app\.procontrols\.js/, "app.procontrols.js script tag");
   mustMatch(rel, /app\.toggles\.js/, "app.toggles.js script tag");

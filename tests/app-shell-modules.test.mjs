@@ -1460,3 +1460,37 @@ test("shelldeps: exports storage keys and delegates helpers", () => {
   assert.equal(deps.customBgKeyForTab("home"), "bg_home");
   assert.equal(deps.TAB_THEME.home, "grad");
 });
+
+test("cleanfillrunwire: wires cleanfillrun and gen helpers", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.cleanfillrun.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.cleanfillrunwire.js"), "utf8")};`)(win);
+  const wire = win.__GMXCleanFillRunWireFactory({
+    format: { escapeHtml: (s) => s },
+    cleanfill: { CLEAN_FILL_STRENGTH: 2 },
+    gen: {
+      normalizeLine: (s) => String(s).trim(),
+      repeatKey: (s) => `k:${s}`,
+      dedupeLinesByShape: (lines) => lines.slice(0, 1),
+      dedupeLines: (lines) => [...new Set(lines)],
+    },
+    antirepeat: {
+      pushRecent: () => {},
+      filterLines: (_k, _key, lines, strength) => (strength === 3 ? lines.slice(0, 1) : lines),
+    },
+    ui: { yieldToUiFrame: async () => {} },
+    getAntiStrength: () => 3,
+    readGenParams: () => ({}),
+    activeKey: () => "gm",
+    readKey: () => [],
+    writeKey: () => {},
+    remainingSlots: () => 10,
+    renderList: () => {},
+    getHandle: () => "@demo",
+    tab: () => {},
+  });
+  assert.equal(wire.normalizeLine("  hi "), "hi");
+  assert.equal(wire.repeatKey("x"), "k:x");
+  assert.deepEqual(wire.filterAntiRepeat("gm", "k", ["a", "b"]), ["a"]);
+  assert.deepEqual(wire.cleanupKeyLines(["a", "b"]), ["a"]);
+});

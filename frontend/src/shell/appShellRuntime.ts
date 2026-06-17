@@ -92,6 +92,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.genparams.js", "gmx-legacy-genparams");
     await injectAppShellRuntime("/app.cleanfill.js", "gmx-legacy-cleanfill");
     await injectAppShellRuntime("/app.cleanfillrun.js", "gmx-legacy-cleanfillrun");
+    await injectAppShellRuntime("/app.cleanfillrunwire.js", "gmx-legacy-cleanfillrunwire");
     await injectAppShellRuntime("/app.styles.js", "gmx-legacy-styles");
     await injectAppShellRuntime("/app.procontrols.js", "gmx-legacy-procontrols");
     await injectAppShellRuntime("/app.toggles.js", "gmx-legacy-toggles");
