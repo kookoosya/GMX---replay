@@ -212,6 +212,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.gmgnwire.js": { target: BACKEND, changeOrigin: true },
         "/app.sitesync.js": { target: BACKEND, changeOrigin: true },
         "/app.extwallpaperui.js": { target: BACKEND, changeOrigin: true },
+        "/app.themeswire.js": { target: BACKEND, changeOrigin: true },
         "/app.accountui.js": { target: BACKEND, changeOrigin: true },
         "/app.admin.js": { target: BACKEND, changeOrigin: true },
         "/app.leaderboard.js": { target: BACKEND, changeOrigin: true },

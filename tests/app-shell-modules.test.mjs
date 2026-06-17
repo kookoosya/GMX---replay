@@ -1494,3 +1494,23 @@ test("cleanfillrunwire: wires cleanfillrun and gen helpers", () => {
   assert.deepEqual(wire.filterAntiRepeat("gm", "k", ["a", "b"]), ["a"]);
   assert.deepEqual(wire.cleanupKeyLines(["a", "b"]), ["a"]);
 });
+
+test("themeswire: delegates theme and extension UI helpers", () => {
+  const wire = loadFactory("app.themeswire.js", "__GMXThemesWireFactory")({
+    extViewKey: "gmx_ext_view",
+    themeApply: { applyTheme: (id) => `theme:${id}` },
+    extView: { normalizeExtViewValue: (v) => v || "gmgn", bindExtTabs: () => true },
+    themesUi: { renderThemes: () => 3, unlockTagText: () => "Pro" },
+    extWpUi: { renderExtWallpapers: () => 5, initExtWallpaperControls: () => {} },
+    unlockedCountByRefs: (total, free) => free,
+    extThemesLength: 10,
+    freeVisibleExtThemes: 2,
+  });
+  assert.equal(wire.LS_EXT_VIEW, "gmx_ext_view");
+  assert.equal(wire.applyTheme("classic"), "theme:classic");
+  assert.equal(wire.normalizeExtViewValue(""), "gmgn");
+  assert.equal(wire.unlockedExtThemesCount(), 2);
+  assert.equal(wire.renderThemes(), 3);
+  assert.equal(wire.renderExtWallpapers(), 5);
+  assert.equal(wire.bindExtTabs(), true);
+});

@@ -135,6 +135,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.gmgnwire\.js/, "app.gmgnwire.js script tag");
   mustMatch(rel, /app\.sitesync\.js/, "app.sitesync.js script tag");
   mustMatch(rel, /app\.extwallpaperui\.js/, "app.extwallpaperui.js script tag");
+  mustMatch(rel, /app\.themeswire\.js/, "app.themeswire.js script tag");
   mustMatch(rel, /app\.accountui\.js/, "app.accountui.js script tag");
   mustMatch(rel, /app\.admin\.js/, "app.admin.js script tag");
   mustMatch(rel, /app\.leaderboard\.js/, "app.leaderboard.js script tag");
