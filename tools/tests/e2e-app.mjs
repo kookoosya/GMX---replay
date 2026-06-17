@@ -5,7 +5,7 @@
 import { chromium } from "playwright";
 import { fail, ok } from "./_helpers.mjs";
 
-const BASE = process.env.E2E_BASE || "https://www.gmxreply.com";
+const BASE = (process.env.E2E_BASE || "http://127.0.0.1:10000").replace(/\/$/, "");
 
 let browser;
 try {

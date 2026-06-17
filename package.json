@@ -20,6 +20,7 @@
     "test:smoke": "node smoke.js",
     "test:suite": "node tools/run-tests.mjs",
     "test:e2e": "node tools/tests/e2e-app.mjs",
+    "test:e2e:prod": "node tools/tests/e2e-app-prod.mjs",
     "verify:parity": "node tools/verify-public-frontend-parity.mjs",
     "dev:backend": "node index.js",
     "dev:frontend": "node tools/vite-dev.mjs",
@@ -54,13 +55,17 @@
     "audit:all": "npm run audit:logic && npm run audit:runtime",
     "build:server": "node tools/build-server.mjs",
     "build:all": "npm run build:site && npm run build:server",
-    "test:full": "npm run verify:lock && npm run build:all && npm run verify:site && npm run verify:wallpapers && npm test && npm run test:suite && npm run audit:all",
+    "test:full": "npm run verify:lock && npm run build:all && npm run verify:site && npm run verify:server && npm run verify:wallpapers && npm test && npm run test:suite && npm run audit:all",
     "verify:prod": "node tools/prod-verify.mjs",
-    "release:check": "npm run test:full && npm run verify:prod && npm run test:e2e",
+    "deploy:probe": "node tools/deploy-vps.mjs probe",
+    "deploy:setup": "node tools/deploy-vps.mjs setup",
+    "deploy:vps": "node tools/deploy-vps.mjs deploy",
+    "release:check": "npm run test:full && npm run verify:prod && npm run test:e2e:prod",
     "wallpapers:fetch": "node tools/fetch-wallpapers-pexels.mjs",
     "wallpapers:ideal": "npm run wallpapers:fetch && npm run build:site",
     "verify:lock": "npm ci --dry-run && npm ci --prefix frontend --dry-run",
     "verify:site": "node tools/verify-site-build.mjs",
+    "verify:server": "node tools/verify-server-build.mjs",
     "verify:wallpapers": "node tools/check-wallpaper-assets.mjs"
   },
   "dependencies": {
@@ -75,6 +80,7 @@
   "devDependencies": {
     "image-size": "^2.0.2",
     "playwright": "^1.58.2",
-    "sharp": "^0.33.5"
+    "sharp": "^0.33.5",
+    "ssh2": "^1.17.0"
   }
 }

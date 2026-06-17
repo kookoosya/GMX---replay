@@ -13,6 +13,17 @@
 node tools/sync-app-and-assets.mjs
 ```
 
+### Где что редактировать
+
+| Что меняете | Где править |
+|-------------|-------------|
+| Логика вкладок (GM, wallet, themes, …) | `public/app.<feature>.js` (+ wire/runwire при необходимости) |
+| Порядок инициализации / wiring в `app.js` | `site-src/*.js` → `npm run build:site` |
+| Разметка shell, список `<script>` | `public/app.html` |
+| Account Center (`/bridge`) | `frontend/src/` → `npm run build:frontend` |
+| API, биллинг, генерация | `server-src/` или `server/` → `npm run build:server` |
+| Переводы | `shared/i18n/locales/*.json` → `npm run i18n:sync` |
+
 Или `npm run dev` / `npm run build` (оба запускают sync в начале цепочки).
 
 ## Локальный dev (`npm run dev`)

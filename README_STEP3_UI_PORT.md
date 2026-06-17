@@ -1,33 +1,51 @@
-# STEP 3 — Port PACK6 UI into current React frontend (overlay)
+# React `/bridge` — Account Center (current)
 
-This overlay reuses the **stable PACK6** UI (HTML/CSS/JS) inside the Vite React TS frontend as a **temporary bridge**.
-It gives you the exact tabs/layout immediately, while we keep legacy `/app` alive and keep `/api/*` contracts unchanged.
+> **Status (2026-06):** The original STEP 3 plan (full PACK6 overlay via `LegacyApp.tsx`) was **not completed**.  
+> Production UI for GM/GN/Themes/Arcade remains the **legacy shell** at `/app` (`public/app.html` + `app.*.js`).  
+> React at `/bridge` is a slim **Account Center** only.
 
-## What you get
-Tabs: **Home | GM | GN | Referrals | Leaderboard | Themes | Extension Themes | Upgrade Pro**
-Admin tab remains hidden unless backend marks you admin (handle `@Kristofer_Sol_`).
+## What `/bridge` provides today
 
-## Files added/replaced
-- `frontend/src/App.tsx` (replaced) -> renders `LegacyApp`
-- `frontend/src/LegacyApp.tsx` (new)
-- `frontend/src/legacy/*` (new): `legacyBody.html`, `app.css`, `legacyApp.ts`
-- `frontend/public/mode.js` (new)
-- `frontend/public/assets/*` (new) — wallpapers, flags, wallet icons, extension backgrounds, etc.
-- `frontend/src/vite-env.d.ts` (new) adds `?raw` typing
+Routes (see `frontend/src/App.tsx`):
+
+| Route | Page |
+|-------|------|
+| `/bridge` | Home / session overview |
+| `/bridge/access` | Connect handle, activate codes |
+| `/bridge/referrals` | Referral stats (React) |
+| `/bridge/admin` | Admin tools (React, gated by backend) |
+
+Main product tabs (**Home, GM, GN, Themes, Wallet, Arcade, …**) live at **`/app`** — edit `public/` and `public/app.*.js`, not React.
+
+## Build & deploy path
+
+```bash
+npm run build:frontend          # tsc + vite
+node tools/sync-frontend-build.mjs   # → public/bridge/
+```
+
+Production: `https://www.gmxreply.com/bridge`
 
 ## Dev API routing
-The legacy JS calls `/api/*` on the **same origin**.
-In Vite dev this means you either need:
-1) a Vite proxy `/api -> http://localhost:10000` (preferred), OR
-2) set `VITE_API_ORIGIN=http://localhost:10000`
 
-This overlay supports (2) out of the box via `window.__GMX_API_ORIGIN`.
+React pages call `/api/*`. In Vite dev set `frontend/.env.local`:
 
-Create `frontend/.env.local`:
 ```
-VITE_API_ORIGIN=http://localhost:10000
+VITE_API_ORIGIN=http://127.0.0.1:10000
 ```
 
-If you already have a proxy, you can skip this.
+Use **`127.0.0.1`**, not `localhost`, on Windows (IPv6 issues). See `docs/DEV_KNOWN_ISSUES.md`.
 
----
+## If you want a full React port later
+
+Do **not** revive the old overlay approach. Prefer:
+
+1. One tab at a time behind feature flags, or
+2. A single esbuild bundle from `client-src/` shared by `/app` and `/bridge`.
+
+See `ARCHITECTURE.md` for canonical edit surfaces.
+
+## Removed / obsolete (do not recreate)
+
+- `frontend/src/LegacyApp.tsx` — never shipped to main
+- Full-tab React overlay from PACK6 HTML — superseded by modular `app.*.js` + tests
