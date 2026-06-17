@@ -67,6 +67,9 @@ for (const style of styles) {
 ok(`composeReply ${styles.length} styles`);
 
 const BANNED_CRYPTO_RE = /\b(?:wagmi|lfg|hodl|ath|moon|ape|aping)\b|diamond\s+hands?/i;
+const RE_ANY_EMOJI = /[\p{Extended_Pictographic}]/gu;
+const RE_GM_BAD_EMOJI = /[\u{1F319}\u{1F634}\u{1F4A4}\u{1F6CC}]/gu;
+const RE_GN_BAD_EMOJI = /[\u{2600}\u{FE0F}\u{2615}\u{1F305}]/gu;
 
 for (const style of ["degen", "alpha", "classy", "cheer", "calm", "builder", "focus"]) {
   for (let i = 0; i < 8; i++) {
@@ -76,6 +79,48 @@ for (const style of ["degen", "alpha", "classy", "cheer", "calm", "builder", "fo
   }
 }
 ok("crypto styles avoid hype and legacy vocatives");
+
+for (const mode of ["min", "mid", "max"]) {
+  for (let i = 0; i < 12; i++) {
+    const line = gen.composeReply("gm", mode, "en", "classic");
+    if (!gen.passesModeProfile(line, mode)) fail(`passesModeProfile gm/${mode}: ${line}`);
+  }
+  for (let i = 0; i < 12; i++) {
+    const line = gen.composeReply("gn", mode, "en", "classic");
+    if (!gen.passesModeProfile(line, mode)) fail(`passesModeProfile gn/${mode}: ${line}`);
+  }
+}
+ok("passesModeProfile for min/mid/max");
+
+for (let i = 0; i < 20; i++) {
+  const line = gen.composeReply("gm", "mid", "en", "noemoji");
+  if (RE_ANY_EMOJI.test(line)) fail(`noemoji style must not contain emoji: ${line}`);
+}
+for (let i = 0; i < 20; i++) {
+  const line = gen.composeReply("gn", "mid", "en", "noemoji");
+  if (RE_ANY_EMOJI.test(line)) fail(`noemoji style must not contain emoji: ${line}`);
+}
+ok("noemoji style strips emoji");
+
+for (let i = 0; i < 16; i++) {
+  const line = gen.composeReply("gm", "mid", "en", "classic");
+  const emojis = line.match(RE_ANY_EMOJI) || [];
+  if (emojis.length && RE_GM_BAD_EMOJI.test(line)) fail(`GM reply has night emoji: ${line}`);
+}
+for (let i = 0; i < 16; i++) {
+  const line = gen.composeReply("gn", "mid", "en", "classic");
+  const emojis = line.match(RE_ANY_EMOJI) || [];
+  if (emojis.length && RE_GN_BAD_EMOJI.test(line)) fail(`GN reply has morning emoji: ${line}`);
+}
+ok("emoji tone matches GM/GN");
+
+const bulkHandle = "@unittest03";
+db.exec("DELETE FROM recent_replies WHERE handle='@unittest03'");
+const bulk = gen.generateRankedCandidates(bulkHandle, "gm", "mid", "en", "classic", 8, 20, false);
+if (!Array.isArray(bulk) || bulk.length < 4) fail("generateRankedCandidates should return multiple candidates");
+const bulkShapes = new Set(bulk.map((x) => gen.shapeFingerprint(x, "gm")));
+if (bulkShapes.size < Math.min(4, bulk.length)) fail("generateRankedCandidates should diversify shapes");
+ok("generateRankedCandidates diversity");
 
 const antiHandle = "@unittest02";
 db.exec("DELETE FROM recent_replies WHERE handle='@unittest02'");

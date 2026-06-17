@@ -64,6 +64,11 @@ const BANKS = {
         "{greet}, morning reset {emoji}",
         "{greet}, clean read {emoji}",
         "{greet}, good thread {emoji}",
+        "{greet}, rise easy {emoji}",
+        "{greet} {voc}, quick gm {emoji}",
+        "{greet}, here for it {emoji}",
+        "{greet}, light start {emoji}",
+        "{greet} {voc}, back at it {emoji}",
       ],
       mid: [
         "{greet} {voc}, strong gm from you {emoji}",
@@ -78,6 +83,9 @@ const BANKS = {
         "{greet} {voc}, this one lands nicely {emoji}",
         "{greet}, good morning energy on this one {emoji}",
         "{greet} {voc}, hope the day opens kind {emoji}",
+        "{greet}, nice way to open the day {emoji}",
+        "{greet} {voc}, good vibes on this one {emoji}",
+        "{greet}, clean morning post {emoji}",
       ],
       max: [
         "{greet} {voc}, strong post and even better morning energy {emoji}",
@@ -105,6 +113,10 @@ const BANKS = {
         "{greet}, quiet close {emoji}",
         "{greet}, night reset {emoji}",
         "{greet}, proper rest {emoji}",
+        "{greet}, see you tomorrow {emoji}",
+        "{greet} {voc}, logging off {emoji}",
+        "{greet}, good night back {emoji}",
+        "{greet}, off to rest {emoji}",
       ],
       mid: [
         "{greet} {voc}, sleep easy tonight {emoji}",
@@ -146,6 +158,10 @@ const BANKS = {
         "{greet}, calm session {emoji}",
         "{greet}, good chart {emoji}",
         "{greet} {voc}, steady open {emoji}",
+        "{greet}, sharp setup {emoji}",
+        "{greet} {voc}, clean conviction {emoji}",
+        "{greet}, good session open {emoji}",
+        "{greet}, nice read here {emoji}",
       ],
       mid: [
         "{greet} {voc}, good alpha on this one {emoji}",
@@ -183,6 +199,9 @@ const BANKS = {
         "{greet}, charts can wait {emoji}",
         "{greet}, soft reset {emoji}",
         "{greet}, proper close {emoji}",
+        "{greet}, clean day done {emoji}",
+        "{greet} {voc}, log off easy {emoji}",
+        "{greet}, session closed {emoji}",
       ],
       mid: [
         "{greet} {voc}, good rest before the next session {emoji}",
@@ -724,7 +743,7 @@ function modeProfile(text) {
 function passesModeProfile(text, mode) {
   const { chars, words } = modeProfile(text);
   if (!chars || !words) return false;
-  if (mode === "min") return chars <= 40 && words >= 2 && words <= 6;
+  if (mode === "min") return chars <= 40 && words >= 1 && words <= 6;
   if (mode === "mid") return chars >= 18 && chars <= 84 && words >= 4 && words <= 12;
   return chars >= 28 && chars <= 116 && words >= 6 && words <= 18;
 }
@@ -923,7 +942,7 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
   const collect = ({ allowHistory = false, relaxGlobalShape = false, relaxGlobalExact = false, relaxHistoryShape = false, relaxSeenShape = false } = {}) => {
     while (pool.length < wantPool && tries < maxTries) {
       tries++;
-      const candidate = sanitizeSingle(composeReply(kind, mode, lang, style), mode, kind);
+      const candidate = composeReply(kind, mode, lang, style);
       if (!candidate || !passesModeProfile(candidate, mode)) continue;
       const fp = shapeFingerprint(candidate, kind);
       if (!fp) continue;
@@ -971,7 +990,7 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
     let emergencyTries = 0;
     while (pool.length < count && emergencyTries < emergencyMaxTries) {
       emergencyTries++;
-      const candidate = sanitizeSingle(composeReply(kind, mode, lang, style), mode, kind);
+      const candidate = composeReply(kind, mode, lang, style);
       if (!candidate) continue;
       const fp = shapeFingerprint(candidate, kind) || candidate.toLowerCase();
       if (seenText.has(candidate)) continue;
@@ -1018,7 +1037,7 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
 function generateUnique(handle, kind, mode, lang, style, antiLastN = 20) {
   const list = generateRankedCandidates(handle, kind, mode, lang, style, 1, antiLastN, false);
   if (Array.isArray(list) && list.length) return String(list[0] || "").trim();
-  return sanitizeSingle(composeReply(kind, mode, lang, style), mode, kind);
+  return composeReply(kind, mode, lang, style);
 }
 
   return {
