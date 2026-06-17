@@ -2248,6 +2248,24 @@ test("redeemwire: wires redeem factory and binds UI", async () => {
   assert.match(els.connectMsg.innerHTML, /Paste a code first/);
 });
 
+test("redeemrunwire: groups deps and delegates to redeemwire", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.redeemwire.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.redeemrunwire.js"), "utf8")};`)(win);
+  let captured = null;
+  win.__GMXRedeemWireFactory = (cfg) => {
+    captured = cfg;
+    return { bindRedeem: () => {} };
+  };
+  win.__GMXRedeemRunWireFactory({
+    core: { $: () => null, api: async () => ({}) },
+    auth: { requireConnected: () => true, getHandle: () => "@demo" },
+    ui: { tab: () => {}, renderWalletStatus: () => {}, refreshUsage: async () => {} },
+  }).run();
+  assert.equal(captured.getHandle(), "@demo");
+  assert.equal(typeof captured.refreshUsage, "function");
+});
+
 test("connectwire: wires connect factory and binds UI", async () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.connect.js"), "utf8")};`)(win);

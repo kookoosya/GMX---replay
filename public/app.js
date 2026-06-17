@@ -65,7 +65,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260619c";
+const ASSET_REV = "20260619d";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {
@@ -939,16 +939,12 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
   const pruneLegacyAdminPanels = () => __gmxAdminWire.pruneLegacyAdminPanels();
 
   // ----- Redeem code -----
-  if (!window.__GMXRedeemWireFactory) throw new Error("GMX redeemwire factory missing");
-  window.__GMXRedeemWireFactory({
-    $,
-    api,
-    requireConnected,
-    getHandle,
-    tab,
-    renderWalletStatus,
-    refreshUsage,
-  });
+  if (!window.__GMXRedeemRunWireFactory) throw new Error("GMX redeemrunwire factory missing");
+  window.__GMXRedeemRunWireFactory({
+    core: { $, api },
+    auth: { requireConnected, getHandle },
+    ui: { tab, renderWalletStatus, refreshUsage },
+  }).run();
 
   if (!window.__GMXSiteInitRunWireFactory) throw new Error("GMX siteinitrunwire factory missing");
   await window.__GMXSiteInitRunWireFactory({

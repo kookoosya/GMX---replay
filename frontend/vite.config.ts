@@ -249,6 +249,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.referralsrunwire.js": { target: BACKEND, changeOrigin: true },
         "/app.redeem.js": { target: BACKEND, changeOrigin: true },
         "/app.redeemwire.js": { target: BACKEND, changeOrigin: true },
+        "/app.redeemrunwire.js": { target: BACKEND, changeOrigin: true },
         "/app.prediction.js": { target: BACKEND, changeOrigin: true },
         "/app.predictionwire.js": { target: BACKEND, changeOrigin: true },
         "/app.predictionrunwire.js": { target: BACKEND, changeOrigin: true },

@@ -101,6 +101,7 @@ const APP_FILES = [
   "app.referralsrunwire.js",
   "app.redeem.js",
   "app.redeemwire.js",
+  "app.redeemrunwire.js",
   "app.prediction.js",
   "app.predictionwire.js",
   "app.predictionrunwire.js",

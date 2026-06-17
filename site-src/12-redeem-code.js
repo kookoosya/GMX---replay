@@ -1,11 +1,7 @@
   // ----- Redeem code -----
-  if (!window.__GMXRedeemWireFactory) throw new Error("GMX redeemwire factory missing");
-  window.__GMXRedeemWireFactory({
-    $,
-    api,
-    requireConnected,
-    getHandle,
-    tab,
-    renderWalletStatus,
-    refreshUsage,
-  });
+  if (!window.__GMXRedeemRunWireFactory) throw new Error("GMX redeemrunwire factory missing");
+  window.__GMXRedeemRunWireFactory({
+    core: { $, api },
+    auth: { requireConnected, getHandle },
+    ui: { tab, renderWalletStatus, refreshUsage },
+  }).run();
