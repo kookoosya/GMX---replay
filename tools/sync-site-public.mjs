@@ -78,6 +78,7 @@ const shellModules = [
   "app.gmgnwire.js",
   "app.sitesync.js",
   "app.extwallpaperui.js",
+  "app.wallpaperswire.js",
   "app.themeswire.js",
   "app.accountui.js",
   "app.admin.js",

@@ -1593,3 +1593,46 @@ test("uiwire: delegates performance helpers to ui module", () => {
     return wire.postEvent("click", { a: 1 }).then((r) => assert.deepEqual(r, { type: "click", meta: { a: 1 } }));
   });
 });
+
+test("wallpaperswire: exports wallpaper catalog delegates and runs normalize hooks", () => {
+  let normalized = false;
+  let extNormalized = false;
+  const wire = loadFactory("app.wallpaperswire.js", "__GMXWallpapersWireFactory")({
+    keys: { WP_GLOBAL: "gmx_wp_global", WP_TAB_PREFIX: "gmx_wp_tab_" },
+    wp: {
+      SITE_FREE_PACK_COUNT: 10,
+      CUSTOM_WP_FREE_COUNT: 5,
+      CUSTOM_UPLOAD_ID: "custom",
+      CUSTOM_WP_RE: /^custom_/,
+      buildSiteWallpapers: () => [{ id: "w1" }],
+      setWallpaperLayerImage: (layer, url) => ({ layer, url }),
+    },
+    wpStore: {
+      SITE_WALLPAPER_TABS: ["gm", "gn"],
+      normalizeAllWallpapers: () => { normalized = true; },
+      wallpaperKeyForTab: (tab) => `k:${tab}`,
+      getWallpaperForTab: (tab) => tab,
+      setWallpaperForTab: (tab, id) => ({ tab, id }),
+      migrateLegacyWallpaperSelectionOnce: () => true,
+    },
+    customWp: { loadCustomWallpapers: async () => [], getEffectiveCustomWallpapersSite: () => [] },
+    wpHelpers: {
+      normalizeWallpaperId: (id) => id,
+      wallpaperUrl: (id) => `/w/${id}`,
+      wallpaperUnlocked: () => true,
+    },
+    extWpStore: { normalizeStoredExtWallpaperSelections: () => { extNormalized = true; } },
+    tabState: { normalizeTopLevelTab: (t) => t, getCurrentTab: () => "gm" },
+    wpApply: { applyWallpaper: (tab) => tab },
+    i18nUi: { t: (k) => k, tr: (k) => k, prettyError: (c) => c },
+    wpUi: { renderWallpaperUI: () => true, initWallpapers: () => true },
+    langUi: { flagEmoji: (c) => c, updateLangFlags: () => {}, renderLangChips: () => {} },
+  });
+  assert.equal(normalized, true);
+  assert.equal(extNormalized, true);
+  assert.equal(wire.LS_WP_GLOBAL, "gmx_wp_global");
+  assert.equal(wire.WALLPAPERS[0].id, "w1");
+  assert.equal(wire.wallpaperKeyForTab("gm"), "k:gm");
+  assert.deepEqual(wire.setWallpaperLayerImage("layer", "/x.webp"), { layer: "layer", url: "/x.webp" });
+  assert.equal(wire.currentTabName(), "gm");
+});
