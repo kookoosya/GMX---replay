@@ -12,6 +12,8 @@
 | `routes/ext.mjs` | `/api/ext/selectors`, `/api/ext/event`, `/api/ext/faq` |
 | `routes/cloud.mjs` | `/api/cloud/lists` (Pro) |
 | `routes/admin.mjs` | `/api/admin/*` stats, metrics, codes, grants, leaderboard |
+| `routes/static.mjs` | `/app`, `/bridge`, `/arcade`, static `public/` |
+| `routes/errors.mjs` | Express error handler, API 404 fallback |
 | `ext-selectors.mjs` | Extension selector overrides (shared ext + admin) |
 Monolith source: `server-src/` → `npm run build:server` → `index.js`
 

@@ -15,6 +15,8 @@ const mustHave = {
   "ext.mjs": ["/api/ext/selectors", "/api/ext/event"],
   "cloud.mjs": ["/api/cloud/lists"],
   "admin.mjs": ["/api/admin/stats", "/api/admin/diag"],
+  "static.mjs": ["/bridge", "/get-extension"],
+  "errors.mjs": ["/api"],
 };
 
 for (const [file, paths] of Object.entries(mustHave)) {
