@@ -88,6 +88,7 @@ const APP_FILES = [
   "app.referralswire.js",
   "app.redeem.js",
   "app.prediction.js",
+  "app.predictionwire.js",
   "app.connect.js",
   "app.shellwire.js",
   "app.chromewire.js",

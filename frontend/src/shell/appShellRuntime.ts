@@ -136,6 +136,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.referralswire.js", "gmx-legacy-referralswire");
     await injectAppShellRuntime("/app.redeem.js", "gmx-legacy-redeem");
     await injectAppShellRuntime("/app.prediction.js", "gmx-legacy-prediction");
+    await injectAppShellRuntime("/app.predictionwire.js", "gmx-legacy-predictionwire");
     await injectAppShellRuntime("/app.authwire.js", "gmx-legacy-authwire");
     await injectAppShellRuntime("/app.shellwire.js", "gmx-legacy-shellwire");
     await injectAppShellRuntime("/app.chromewire.js", "gmx-legacy-chromewire");

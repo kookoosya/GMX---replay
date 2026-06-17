@@ -1916,3 +1916,35 @@ test("leaderboardwire: wires leaderboard factory delegates", () => {
   assert.equal(wire.getLbDays(), 7);
   assert.equal(lbDays, 7);
 });
+
+test("predictionwire: wires prediction factory delegates", async () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.prediction.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.predictionwire.js"), "utf8")};`)(win);
+  const sel = (value = "all") => ({
+    value,
+    innerHTML: "",
+    addEventListener: () => {},
+  });
+  const els = {
+    pmList: { innerHTML: "", classList: { add: () => {} } },
+    pm_status: { textContent: "" },
+    pm_locked_note: { textContent: "" },
+    pm_asset: sel(),
+    pm_bias: sel(),
+    pm_conf: sel("0"),
+    pm_refresh: { onclick: null },
+  };
+  const wire = win.__GMXPredictionWireFactory({
+    $: (id) => els[id] || null,
+    escapeHtml: (s) => s,
+    t: (_k, fb) => fb,
+    getHandle: () => "",
+    getToken: () => "",
+    tabState: { getCurrentTab: () => "prediction" },
+  });
+  wire.syncPredictionFilterCopy();
+  assert.match(els.pm_bias.innerHTML, /bullish/);
+  await wire.loadPredictionSignals({ force: true });
+  assert.match(els.pmList.innerHTML, /Polymarket Direction Signal/);
+});

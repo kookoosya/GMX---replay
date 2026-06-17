@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618h";
+const ASSET_REV = "20260618i";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -1189,8 +1189,8 @@ async function loadLeaderboard(days) {
 const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
 
 // ----- Prediction market -----
-  if (!window.__GMXPredictionFactory) throw new Error("GMX prediction factory missing");
-  const __gmxPrediction = window.__GMXPredictionFactory({
+  if (!window.__GMXPredictionWireFactory) throw new Error("GMX predictionwire factory missing");
+  const __gmxPredictionWire = window.__GMXPredictionWireFactory({
     $,
     escapeHtml,
     t,
@@ -1198,11 +1198,10 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
     getHandle,
     getToken,
     friendlyUiErrorMessage,
-    getCurrentTab: () => __gmxTabState.getCurrentTab(),
+    tabState: __gmxTabState,
   });
-  const syncPredictionFilterCopy = () => __gmxPrediction.syncPredictionFilterCopy();
-  const loadPredictionSignals = (opts) => __gmxPrediction.loadPredictionSignals(opts);
-  __gmxPrediction.bindPredictionMarketUI();
+  const syncPredictionFilterCopy = () => __gmxPredictionWire.syncPredictionFilterCopy();
+  const loadPredictionSignals = (opts) => __gmxPredictionWire.loadPredictionSignals(opts);
 
 // ----- Referrals -----
   if (!window.__GMXReferralsWireFactory) throw new Error("GMX referralswire factory missing");

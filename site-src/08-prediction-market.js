@@ -1,6 +1,6 @@
 // ----- Prediction market -----
-  if (!window.__GMXPredictionFactory) throw new Error("GMX prediction factory missing");
-  const __gmxPrediction = window.__GMXPredictionFactory({
+  if (!window.__GMXPredictionWireFactory) throw new Error("GMX predictionwire factory missing");
+  const __gmxPredictionWire = window.__GMXPredictionWireFactory({
     $,
     escapeHtml,
     t,
@@ -8,8 +8,7 @@
     getHandle,
     getToken,
     friendlyUiErrorMessage,
-    getCurrentTab: () => __gmxTabState.getCurrentTab(),
+    tabState: __gmxTabState,
   });
-  const syncPredictionFilterCopy = () => __gmxPrediction.syncPredictionFilterCopy();
-  const loadPredictionSignals = (opts) => __gmxPrediction.loadPredictionSignals(opts);
-  __gmxPrediction.bindPredictionMarketUI();
+  const syncPredictionFilterCopy = () => __gmxPredictionWire.syncPredictionFilterCopy();
+  const loadPredictionSignals = (opts) => __gmxPredictionWire.loadPredictionSignals(opts);
