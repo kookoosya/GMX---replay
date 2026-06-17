@@ -1791,6 +1791,27 @@ test("chromewire: wires chrome shell helpers and shellwire auth", () => {
   }
 });
 
+test("chromerunwire: builds grouped ctx and delegates to chromewire", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.chromewire.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.chromerunwire.js"), "utf8")};`)(win);
+  let captured = null;
+  win.__GMXChromeWireFactory = (cfg) => {
+    captured = cfg;
+    return { fillStyles: () => true };
+  };
+  const wire = win.__GMXChromeRunWireFactory({
+    mod: { chrome: { $: () => null }, styles: { fillStyles: () => true } },
+    keys: { LS_SITE_LANG: "gmx_site_lang", API: "http://test" },
+    hooks: { normalizeTopLevelTab: (n) => n, t: (k) => k },
+    session: { getInitDone: () => false, setAuthOk: () => {} },
+  });
+  wire.run();
+  assert.equal(captured.LS_SITE_LANG, "gmx_site_lang");
+  assert.equal(captured.API, "http://test");
+  assert.equal(captured.chrome.$, captured.chrome.$);
+});
+
 test("bankuiwire: wires bankui and bestpick modules", () => {
   const prevLs = globalThis.localStorage;
   globalThis.localStorage = { getItem: () => null, setItem: () => {} };

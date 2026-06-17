@@ -65,7 +65,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618u";
+const ASSET_REV = "20260618v";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {
@@ -542,33 +542,41 @@ const {
 });
 
   let INIT_DONE = false;
-  if (!window.__GMXChromeWireFactory) throw new Error("GMX chromewire factory missing");
-  const __gmxChromeWire = window.__GMXChromeWireFactory({
-    chrome: __gmxChrome,
-    fmt: __gmxFmt,
-    styles: __gmxStyles,
-    nav: __gmxNav,
-    setBg: __gmxSetBg,
-    modals: __gmxModals,
-    toggles: __gmxToggles,
-    paywall: __gmxPaywall,
-    health: __gmxHealth,
-    usage: __gmxUsage,
-    help: __gmxHelp,
-    account: __gmxAccount,
-    getInitDone: () => INIT_DONE,
-    normalizeTopLevelTab: (n) => normalizeTopLevelTab(n),
-    LS_SITE_LANG,
-    API,
-    LS_HANDLE,
-    LS_TOKEN,
-    LS_IS_ADMIN,
-    LS_ADMIN_CLAIMABLE,
-    isLocalDevHost,
-    getAdminToken,
-    setAuthOk: (v) => { AUTH_OK = !!v; },
-    t,
-  });
+  if (!window.__GMXChromeRunWireFactory) throw new Error("GMX chromerunwire factory missing");
+  const __gmxChromeWire = window.__GMXChromeRunWireFactory({
+    mod: {
+      chrome: __gmxChrome,
+      fmt: __gmxFmt,
+      styles: __gmxStyles,
+      nav: __gmxNav,
+      setBg: __gmxSetBg,
+      modals: __gmxModals,
+      toggles: __gmxToggles,
+      paywall: __gmxPaywall,
+      health: __gmxHealth,
+      usage: __gmxUsage,
+      help: __gmxHelp,
+      account: __gmxAccount,
+    },
+    keys: {
+      LS_SITE_LANG,
+      API,
+      LS_HANDLE,
+      LS_TOKEN,
+      LS_IS_ADMIN,
+      LS_ADMIN_CLAIMABLE,
+    },
+    hooks: {
+      normalizeTopLevelTab: (n) => normalizeTopLevelTab(n),
+      isLocalDevHost,
+      getAdminToken,
+      t,
+    },
+    session: {
+      getInitDone: () => INIT_DONE,
+      setAuthOk: (v) => { AUTH_OK = !!v; },
+    },
+  }).run();
   const {
     $,
     toast,

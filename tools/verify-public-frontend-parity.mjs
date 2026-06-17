@@ -102,6 +102,7 @@ const APP_FILES = [
   "app.connectwire.js",
   "app.shellwire.js",
   "app.chromewire.js",
+  "app.chromerunwire.js",
   "app.authwire.js",
   "app.siteboot.js",
   "app.siteinit.js",
