@@ -1425,6 +1425,35 @@ test("siteinitwire: builds nested siteinit ctx and delegates run", async () => {
   }
 });
 
+test("siteinitrunwire: flattens grouped ctx and delegates to siteinitwire", async () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.siteinitwire.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.siteinitrunwire.js"), "utf8")};`)(win);
+  let flatCtx = null;
+  win.__GMXSiteInitWireFactory = (ctx) => {
+    flatCtx = ctx;
+    return { run: async () => {} };
+  };
+  const wire = win.__GMXSiteInitRunWireFactory({
+    mod: { bankUi: { getGmView: () => "gm", getGnView: () => "gn" } },
+    keys: { K: { SITE_MODE: "mode" }, I18N: {}, LS_SITE_LANG: "lang" },
+    toggles: { setBestMode: () => "best" },
+    lang: { applyLang: () => "lang" },
+    chrome: { fillStyles: () => "styles" },
+    gmGn: { $: () => null, getHandle: () => "@x" },
+    wp: { toast: () => {} },
+    pro: { isPro: () => true },
+    boot: { ping: () => {} },
+    session: { setAuthOk: () => {}, setInitDone: () => {} },
+  });
+  await wire.run();
+  assert.equal(flatCtx.setBestMode(), "best");
+  assert.equal(flatCtx.applyLang(), "lang");
+  assert.equal(flatCtx.bankUi.getGmView(), "gm");
+  assert.equal(flatCtx.getHandle(), "@x");
+  assert.equal(flatCtx.isPro(), true);
+});
+
 test("shelldeps: exports storage keys and delegates helpers", () => {
   const deps = loadFactory("app.shelldeps.js", "__GMXShellDepsFactory")({
     K: { HANDLE: "gmx_handle", TOKEN: "gmx_token", SITE_LANG: "gmx_site_lang" },

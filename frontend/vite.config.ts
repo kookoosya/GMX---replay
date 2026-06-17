@@ -153,6 +153,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.siteboot.js": { target: BACKEND, changeOrigin: true },
         "/app.siteinit.js": { target: BACKEND, changeOrigin: true },
         "/app.siteinitwire.js": { target: BACKEND, changeOrigin: true },
+        "/app.siteinitrunwire.js": { target: BACKEND, changeOrigin: true },
         "/app.wallethelpers.js": { target: BACKEND, changeOrigin: true },
         "/app.walletpay.js": { target: BACKEND, changeOrigin: true },
         "/app.walletui.js": { target: BACKEND, changeOrigin: true },
