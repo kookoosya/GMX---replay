@@ -2056,6 +2056,26 @@ test("referralswire: wires referrals factory delegates", async () => {
   assert.equal(typeof wire.loadRefLeaderboard, "function");
 });
 
+test("referralsrunwire: groups deps and delegates to referralswire", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.referralswire.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.referralsrunwire.js"), "utf8")};`)(win);
+  let captured = null;
+  win.__GMXReferralsWireFactory = (cfg) => {
+    captured = cfg;
+    return { loadRefInvited: async () => {}, loadRefLeaderboard: async () => {} };
+  };
+  win.__GMXReferralsRunWireFactory({
+    core: { $: () => null, api: async () => ({}), t: (k) => k },
+    auth: { requireConnected: () => true },
+    keys: { siteLangKey: "gmx_site_lang" },
+    ui: { getReferralUiCopy: () => ({}) },
+    refs: { refreshRefStats: async () => {} },
+  }).run();
+  assert.equal(captured.siteLangKey, "gmx_site_lang");
+  assert.equal(typeof captured.requireConnected, "function");
+});
+
 test("leaderboardwire: wires leaderboard factory delegates", () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.leaderboard.js"), "utf8")};`)(win);

@@ -1,22 +1,23 @@
 // ----- Referrals -----
-  if (!window.__GMXReferralsWireFactory) throw new Error("GMX referralswire factory missing");
-  const { loadRefInvited, loadRefLeaderboard } = window.__GMXReferralsWireFactory({
-    $,
-    escapeHtml,
-    api,
-    t,
-    requireConnected,
-    getReferralUiCopy,
-    siteLangKey: LS_SITE_LANG,
-    refreshRefStats,
-    revealReferralLinkUi,
-    applyRefCountEligible,
-    renderThemes,
-    renderExtThemes,
-    initWallpapers,
-    renderExtWallpapers,
-    fillStyles,
-    fillPacks,
-    refreshUsage,
-    initReferralPromoDetailsState,
-  });
+  if (!window.__GMXReferralsRunWireFactory) throw new Error("GMX referralsrunwire factory missing");
+  const { loadRefInvited, loadRefLeaderboard } = window.__GMXReferralsRunWireFactory({
+    core: { $, escapeHtml, api, t },
+    auth: { requireConnected },
+    keys: { siteLangKey: LS_SITE_LANG },
+    ui: {
+      getReferralUiCopy,
+      renderThemes,
+      renderExtThemes,
+      initWallpapers,
+      renderExtWallpapers,
+      fillStyles,
+      fillPacks,
+      refreshUsage,
+      initReferralPromoDetailsState,
+    },
+    refs: {
+      refreshRefStats,
+      revealReferralLinkUi,
+      applyRefCountEligible,
+    },
+  }).run();

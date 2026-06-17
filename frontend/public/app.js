@@ -65,7 +65,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618x";
+const ASSET_REV = "20260618y";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {
@@ -894,27 +894,28 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
   const loadPredictionSignals = (opts) => __gmxPredictionWire.loadPredictionSignals(opts);
 
 // ----- Referrals -----
-  if (!window.__GMXReferralsWireFactory) throw new Error("GMX referralswire factory missing");
-  const { loadRefInvited, loadRefLeaderboard } = window.__GMXReferralsWireFactory({
-    $,
-    escapeHtml,
-    api,
-    t,
-    requireConnected,
-    getReferralUiCopy,
-    siteLangKey: LS_SITE_LANG,
-    refreshRefStats,
-    revealReferralLinkUi,
-    applyRefCountEligible,
-    renderThemes,
-    renderExtThemes,
-    initWallpapers,
-    renderExtWallpapers,
-    fillStyles,
-    fillPacks,
-    refreshUsage,
-    initReferralPromoDetailsState,
-  });
+  if (!window.__GMXReferralsRunWireFactory) throw new Error("GMX referralsrunwire factory missing");
+  const { loadRefInvited, loadRefLeaderboard } = window.__GMXReferralsRunWireFactory({
+    core: { $, escapeHtml, api, t },
+    auth: { requireConnected },
+    keys: { siteLangKey: LS_SITE_LANG },
+    ui: {
+      getReferralUiCopy,
+      renderThemes,
+      renderExtThemes,
+      initWallpapers,
+      renderExtWallpapers,
+      fillStyles,
+      fillPacks,
+      refreshUsage,
+      initReferralPromoDetailsState,
+    },
+    refs: {
+      refreshRefStats,
+      revealReferralLinkUi,
+      applyRefCountEligible,
+    },
+  }).run();
 
 // ----- Wallet / Billing -----
   if (!window.__GMXWalletWireFactory) throw new Error("GMX walletwire factory missing");
