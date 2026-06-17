@@ -2261,3 +2261,51 @@ test("bootstrapuiwire: wires setbg themesui nav and extension UI delegates", () 
   assert.equal(typeof wire.__gmxNav.showTab, "function");
   assert.equal(typeof wire.__gmxExtWpUi.renderExtWallpapers, "function");
 });
+
+test("bootstrapcorewire: wires storage chrome i18n and lang menu delegates", () => {
+  const win = {
+    localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} },
+    document: { querySelectorAll: () => [], getElementById: () => null },
+    addEventListener: () => {},
+  };
+  const scripts = [
+    "app.storage.js",
+    "app.format.js",
+    "app.i18nui.js",
+    "app.tabstate.js",
+    "app.sitei18nui.js",
+    "app.sitei18ndynamic.js",
+    "app.chrome.js",
+    "app.modals.js",
+    "app.sitelangmenu.js",
+    "app.langui.js",
+    "app.bootstrapcorewire.js",
+  ];
+  for (const file of scripts) {
+    new Function("window", `${readFileSync(path.join(root, "public", file), "utf8")};`)(win);
+  }
+  const wire = win.__GMXBootstrapCoreWireFactory({
+    getSiteLangs: () => ["en"],
+    setSiteLangs: () => {},
+    getReplyLangs: () => ["en"],
+    setReplyLangs: () => {},
+    applyLang: () => {},
+    syncBestModeUi: () => {},
+    syncCleanFillUi: () => {},
+    updateLangFlags: () => {},
+    renderWallpaperUI: () => {},
+    syncPredictionFilterCopy: () => {},
+    syncReferralCardCopy: () => {},
+    initReferralPromoDetailsState: () => {},
+    getHandle: () => "",
+    scheduleRefStatsRefresh: () => {},
+  });
+  assert.equal(wire.ADMIN_HANDLE, "@Kristofer_Sol_");
+  assert.equal(typeof wire.__gmxSt.lsGet, "function");
+  assert.equal(typeof wire.__gmxChrome.$, "function");
+  assert.equal(typeof wire.__gmxI18nUi.t, "function");
+  assert.equal(typeof wire.__gmxTabState.getCurrentTab, "function");
+  assert.equal(typeof wire.__gmxSiteLangMenu.closeLangMenu, "function");
+  assert.equal(typeof wire.__gmxLangUi.updateLangFlags, "function");
+  assert.equal(wire.INFLIGHT.gm, false);
+});

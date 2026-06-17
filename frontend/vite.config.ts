@@ -214,6 +214,7 @@ export default defineConfig(({ command, mode }) => {
         "/app.setbg.js": { target: BACKEND, changeOrigin: true },
         "/app.extview.js": { target: BACKEND, changeOrigin: true },
         "/app.extwallpaperstore.js": { target: BACKEND, changeOrigin: true },
+        "/app.bootstrapcorewire.js": { target: BACKEND, changeOrigin: true },
         "/app.bootstrapunlockwire.js": { target: BACKEND, changeOrigin: true },
         "/app.bootstrapgenwire.js": { target: BACKEND, changeOrigin: true },
         "/app.bootstrapusagewire.js": { target: BACKEND, changeOrigin: true },

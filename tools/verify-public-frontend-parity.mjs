@@ -70,6 +70,7 @@ const APP_FILES = [
   "app.themesui.js",
   "app.extview.js",
   "app.extwallpaperstore.js",
+  "app.bootstrapcorewire.js",
   "app.bootstrapunlockwire.js",
   "app.bootstrapgenwire.js",
   "app.bootstrapusagewire.js",

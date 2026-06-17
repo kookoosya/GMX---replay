@@ -51,6 +51,7 @@ for (const rel of appFiles) {
   if (!/__GMXWallpapersFactory/.test(appText) && !/__GMXWallpapersFactory/.test(unlockWireText)) {
     fail(`wallpapers module factory wired (${rel})`);
   }
+  mustMatch(rel, /__GMXBootstrapCoreWireFactory/, "bootstrap core wire wired");
   mustMatch(rel, /__GMXBootstrapUnlockWireFactory/, "bootstrap unlock wire wired");
   mustMatch(rel, /__GMXBootstrapGenWireFactory/, "bootstrap gen wire wired");
   mustMatch(rel, /__GMXBootstrapUsageWireFactory/, "bootstrap usage wire wired");
@@ -144,6 +145,7 @@ for (const rel of htmlFiles) {
   mustMatch(rel, /app\.setbg\.js/, "app.setbg.js script tag");
   mustMatch(rel, /app\.extview\.js/, "app.extview.js script tag");
   mustMatch(rel, /app\.extwallpaperstore\.js/, "app.extwallpaperstore.js script tag");
+  mustMatch(rel, /app\.bootstrapcorewire\.js/, "app.bootstrapcorewire.js script tag");
   mustMatch(rel, /app\.bootstrapunlockwire\.js/, "app.bootstrapunlockwire.js script tag");
   mustMatch(rel, /app\.bootstrapgenwire\.js/, "app.bootstrapgenwire.js script tag");
   mustMatch(rel, /app\.bootstrapusagewire\.js/, "app.bootstrapusagewire.js script tag");
