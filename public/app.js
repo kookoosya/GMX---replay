@@ -147,7 +147,7 @@ const __gmxLangUi = window.__GMXLangUiFactory({
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260618c";
+const ASSET_REV = "20260618d";
 
 if (!window.__GMXUnlockFactory) throw new Error("GMX unlock factory missing");
 const __gmxUnlock = window.__GMXUnlockFactory({ isPro, getRefCount: () => REF_COUNT });
@@ -685,7 +685,7 @@ const __gmxExtWpUi = window.__GMXExtWallpaperUiFactory({
     return __gmxUiWire.postEvent(type, meta);
   }
 
-  if (!window.__GMXShellDepsFactory) throw new Error("GMX shelldeps factory missing");
+  if (!window.__GMXShellDepsWireFactory) throw new Error("GMX shelldepswire factory missing");
   const {
     logEvent,
     LS_HANDLE,
@@ -748,7 +748,7 @@ const __gmxExtWpUi = window.__GMXExtWallpaperUiFactory({
     renderCustomBgUI,
     syncCustomBgUI,
     TAB_THEME,
-  } = window.__GMXShellDepsFactory({
+  } = window.__GMXShellDepsWireFactory({
     K,
     storage: __gmxSt,
     logs: __gmxLogs,

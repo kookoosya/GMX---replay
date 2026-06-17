@@ -1461,6 +1461,23 @@ test("shelldeps: exports storage keys and delegates helpers", () => {
   assert.equal(deps.TAB_THEME.home, "grad");
 });
 
+test("shelldepswire: delegates to shelldeps factory", () => {
+  const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.shelldeps.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.shelldepswire.js"), "utf8")};`)(win);
+  const deps = win.__GMXShellDepsWireFactory({
+    K: { HANDLE: "gmx_handle", TOKEN: "gmx_token" },
+    logs: { logEvent: (type) => type },
+    storage: { getAdminToken: () => "adm", setAdminToken: () => {}, isAdminSignedIn: () => true },
+    cleanfill: { CLEAN_FILL_STRENGTH: 2, getEnabled: () => false, setEnabled: () => {}, copyForKind: () => "", syncUi: () => {} },
+    antirepeat: { antiWindow: () => 0, getRecent: () => [] },
+    custombg: { TABS: [], TABS_PUBLIC: [], customBgKeyForTab: (t) => t },
+    tabtheme: { TAB_THEME: {} },
+  });
+  assert.equal(deps.LS_HANDLE, "gmx_handle");
+  assert.equal(deps.logEvent("evt"), "evt");
+});
+
 test("cleanfillrunwire: wires cleanfillrun and gen helpers", () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.cleanfillrun.js"), "utf8")};`)(win);

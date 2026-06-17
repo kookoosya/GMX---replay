@@ -1,4 +1,4 @@
-  if (!window.__GMXShellDepsFactory) throw new Error("GMX shelldeps factory missing");
+  if (!window.__GMXShellDepsWireFactory) throw new Error("GMX shelldepswire factory missing");
   const {
     logEvent,
     LS_HANDLE,
@@ -61,7 +61,7 @@
     renderCustomBgUI,
     syncCustomBgUI,
     TAB_THEME,
-  } = window.__GMXShellDepsFactory({
+  } = window.__GMXShellDepsWireFactory({
     K,
     storage: __gmxSt,
     logs: __gmxLogs,
