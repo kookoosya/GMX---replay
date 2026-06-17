@@ -43,6 +43,7 @@ const APP_FILES = [
   "app.uiwire.js",
   "app.generate.js",
   "app.banks.js",
+  "app.bankswire.js",
   "app.bankui.js",
   "app.antirepeat.js",
   "app.genparams.js",

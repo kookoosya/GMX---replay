@@ -89,6 +89,7 @@ export async function startAppShell() {
     await injectAppShellRuntime("/app.refstats.js", "gmx-legacy-refstats");
     await injectAppShellRuntime("/app.generateflow.js", "gmx-legacy-generateflow");
     await injectAppShellRuntime("/app.banks.js", "gmx-legacy-banks");
+    await injectAppShellRuntime("/app.bankswire.js", "gmx-legacy-bankswire");
     await injectAppShellRuntime("/app.bankui.js", "gmx-legacy-bankui");
     await injectAppShellRuntime("/app.antirepeat.js", "gmx-legacy-antirepeat");
     await injectAppShellRuntime("/app.genparams.js", "gmx-legacy-genparams");

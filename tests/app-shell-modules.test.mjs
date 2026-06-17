@@ -1636,3 +1636,20 @@ test("wallpaperswire: exports wallpaper catalog delegates and runs normalize hoo
   assert.deepEqual(wire.setWallpaperLayerImage("layer", "/x.webp"), { layer: "layer", url: "/x.webp" });
   assert.equal(wire.currentTabName(), "gm");
 });
+
+test("bankswire: delegates bank storage helpers", () => {
+  const wire = loadFactory("app.bankswire.js", "__GMXBanksWireFactory")({
+    banks: {
+      linesFromText: (t) => String(t || "").split("\n").filter(Boolean),
+      getBankKey: (kind) => `bank:${kind}`,
+      readKey: (key) => [key],
+      writeKey: (key, lines) => ({ key, lines }),
+      migrateLegacyBank: (kind) => kind === "gm",
+    },
+  });
+  assert.deepEqual(wire.linesFromText("a\nb"), ["a", "b"]);
+  assert.equal(wire.getBankKey("gm"), "bank:gm");
+  assert.deepEqual(wire.readKey("k"), ["k"]);
+  assert.deepEqual(wire.writeKey("k", ["x"]), { key: "k", lines: ["x"] });
+  assert.equal(wire.migrateLegacyBank("gm"), true);
+});
