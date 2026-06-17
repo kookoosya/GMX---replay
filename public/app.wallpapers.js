@@ -29,24 +29,15 @@
       "Panorama Ridge", "Silk Clouds", "Cedar Sunset",
     ];
 
-    function cryptoWallpaperMotif(num) {
-      const m = (Math.abs(num | 0) || 0) % 6;
-      if (m === 0) return { label: "SOLANA", sub: "X" };
-      if (m === 1) return { label: "DEGEN", sub: "SOL" };
-      if (m === 2) return { label: "CT", sub: "X" };
-      if (m === 3) return { label: "WAGMI", sub: "SOL" };
-      if (m === 4) return { label: "DEGEN", sub: "X" };
-      return { label: "SOL/X", sub: "CT" };
-    }
+    const SITE_PACK_NAMES = EXT_PACK_NAMES;
 
     function buildSiteWallpapers() {
       const out = [];
       for (let i = 1; i <= SITE_PACK_COUNT; i++) {
-        const motif = cryptoWallpaperMotif(i);
         const n = String(i).padStart(3, "0");
         out.push({
           id: `v2_${n}`,
-          name: `${motif.label} • ${motif.sub} #${i}`,
+          name: SITE_PACK_NAMES[i - 1] || `Scene ${i}`,
           tier: i <= SITE_FREE_PACK_COUNT ? "free" : "premium",
         });
       }

@@ -2,29 +2,28 @@
   if (global.GMXExtConfig) return;
 
   const EXT_WP_NAMES = [
-    "Solana Circuit",
-    "DEGEN Terminal",
-    "CT Warroom",
-    "X Bull Feed",
-    "Onchain Prism",
-    "Mempool Riot",
-    "WAGMI Signal",
-    "Alpha Drift",
-    "Neon Vault",
-    "Solana Flux",
-    "Degen Node",
-    "Bullish X",
+    "Coastal Dawn", "Forest Mist", "Mountain Lake", "City Sunset", "Desert Dunes",
+    "Ocean Horizon", "Nordic Fjord", "Rainy Street", "Cherry Blossom", "Golden Hour",
+    "Misty Pines", "Alpine Meadow", "River Bend", "Cliff Coast", "Lavender Field",
+    "Autumn Trail", "Snow Peak", "Bamboo Grove", "Harbor Lights", "Vineyard Hills",
+    "Canyon View", "Tropical Cove", "Urban Night", "Meadow Bloom", "Glacier Bay",
+    "Sandstone Arch", "Waterfall Glen", "Prairie Wind", "Island Palm", "Moonlit Bay",
+    "Cedar Forest", "Rose Garden", "Stone Bridge", "Lighthouse Shore", "Wildflower Hill",
+    "Cloud Valley", "Emerald Coast", "Silver Lake", "Amber Woods", "Coral Reef",
+    "Indigo Sky", "Morning Fog", "Twilight Pier", "Bamboo Path", "Rocky Shore",
+    "Savanna Gold", "Maple Lane", "Crystal Cave", "Dunescape", "Orchid Green",
+    "Vineyard Dawn", "Ice Lagoon", "Red Rock", "Moss Garden", "Delta Mirror",
+    "Panorama Ridge", "Silk Clouds", "Cedar Sunset",
   ];
 
   const EXT_WALLPAPER_OPTIONS = (() => {
     const out = [
-      { id: "ext_free_01", name: "X Bull Mempool" },
-      { id: "ext_free_02", name: "Solana Neon" },
+      { id: "ext_free_01", name: "Soft Gradient" },
+      { id: "ext_free_02", name: "Calm Glow" },
     ];
     for (let i = 1; i <= 58; i++) {
       const n = String(i).padStart(2, "0");
-      const base = EXT_WP_NAMES[(i - 1) % EXT_WP_NAMES.length] || "Wall";
-      out.push({ id: `w${n}`, name: `${base} #${i}` });
+      out.push({ id: `w${n}`, name: EXT_WP_NAMES[i - 1] || `Scene ${i}` });
     }
     return out;
   })();
@@ -42,7 +41,7 @@
       enabled: "gmx_market_alerts_enabled_v1",
       interval: "gmx_market_alerts_interval_v1",
     },
-    ASSET_REV: "20260616e",
+    ASSET_REV: "20260617a",
     WALLPAPER_REFRESH_KEY: "gmx_ext_wp_refresh_20260323",
     LEGACY_KEYS: {
       base: "apiBase",

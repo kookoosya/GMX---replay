@@ -427,25 +427,24 @@ async function resolveWallpaperSource(base, wallpaperId) {
     id = `extv3_${String(Math.max(1, Math.min(58, Number(extMatch[1]) || 1))).padStart(2, "0")}`;
   }
   if (id.startsWith("extv3_")) {
-    const num = Number((id.match(/^extv3_(\d{1,2})$/i) || [])[1]) || 1;
-    const data = extCryptoWallpaperDataUri(num, false);
-    WALL_CACHE.set(cacheKey, data);
-    try { prefetchWallpaper(data); } catch {}
-    return data;
+    const remote = `${origin}/assets/extbg/${id}.webp?v=${ASSET_REV}`;
+    WALL_CACHE.set(cacheKey, remote);
+    try { prefetchWallpaper(remote); } catch {}
+    return remote;
   }
   if (/^ext_free_(\d{2})$/i.test(id)) {
-    const num = Number((id.match(/^ext_free_(\d{1,2})$/i) || [])[1]) || 1;
-    const data = extCryptoWallpaperDataUri(num, false);
-    WALL_CACHE.set(cacheKey, data);
-    try { prefetchWallpaper(data); } catch {}
-    return data;
+    const localUrl = chrome.runtime.getURL(`extbg/${encodeURIComponent(id)}.svg`) + `?v=${ASSET_REV}`;
+    WALL_CACHE.set(cacheKey, localUrl);
+    try { prefetchWallpaper(localUrl.split("?")[0]); } catch {}
+    return localUrl;
   }
   if (/^w(\d{2})$/i.test(id)) {
     const num = Number(id.slice(1)) || 1;
-    const data = extCryptoWallpaperDataUri(num, false);
-    WALL_CACHE.set(cacheKey, data);
-    try { prefetchWallpaper(data); } catch {}
-    return data;
+    const extId = `extv3_${String(Math.max(1, Math.min(58, num))).padStart(2, "0")}`;
+    const remote = `${origin}/assets/extbg/${extId}.webp?v=${ASSET_REV}`;
+    WALL_CACHE.set(cacheKey, remote);
+    try { prefetchWallpaper(remote); } catch {}
+    return remote;
   }
 
   // Keep custom uploads as real images.
