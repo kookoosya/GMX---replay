@@ -17,6 +17,12 @@
     function observeLazyBg(el) {
       return ui.observeLazyBg?.(el);
     }
+    function tableSkeletonHtml(rowCount, colCount) {
+      return ui.tableSkeletonHtml?.(rowCount, colCount);
+    }
+    function mountLineListSkeleton(container, count) {
+      return ui.mountLineListSkeleton?.(container, count);
+    }
     async function postEvent(type, meta) {
       return ui.postEvent?.(type, meta);
     }
@@ -26,6 +32,8 @@
       yieldToUiFrame,
       prefetchImage,
       observeLazyBg,
+      tableSkeletonHtml,
+      mountLineListSkeleton,
       postEvent,
     };
   };

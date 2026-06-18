@@ -131,6 +131,46 @@
       } catch {}
     }
 
-    return { chunkedRender, yieldToUiFrame, prefetchImage, observeLazyBg, postEvent };
+    function tableSkeletonHtml(rowCount, colCount) {
+      const rows = Math.max(3, Math.min(Number(rowCount) || 6, 10));
+      const cols = Math.max(1, Number(colCount) || 4);
+      let html = "";
+      for (let r = 0; r < rows; r++) {
+        html += '<tr class="skeleton-row">';
+        for (let c = 0; c < cols; c++) {
+          const wide = c === 1 ? " skeleton-bar-wide" : "";
+          html += `<td><span class="skeleton skeleton-bar${wide}"></span></td>`;
+        }
+        html += "</tr>";
+      }
+      return html;
+    }
+
+    function mountLineListSkeleton(container, count) {
+      if (!container) return;
+      const n = Math.max(3, Math.min(Number(count) || 6, 12));
+      container.innerHTML = "";
+      const frag = document.createDocumentFragment();
+      for (let i = 0; i < n; i++) {
+        const row = document.createElement("div");
+        row.className = "lineRow skeleton-lineRow";
+        row.innerHTML =
+          '<span class="idx skeleton skeleton-dot"></span>' +
+          '<div class="lineCell"><span class="skeleton skeleton-bar skeleton-bar-wide"></span></div>' +
+          '<span class="skeleton skeleton-dot" aria-hidden="true"></span>';
+        frag.appendChild(row);
+      }
+      container.appendChild(frag);
+    }
+
+    return {
+      chunkedRender,
+      yieldToUiFrame,
+      prefetchImage,
+      observeLazyBg,
+      postEvent,
+      tableSkeletonHtml,
+      mountLineListSkeleton,
+    };
   };
 })(window);

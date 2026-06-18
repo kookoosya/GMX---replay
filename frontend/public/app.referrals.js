@@ -30,6 +30,16 @@
       typeof ctx.initReferralPromoDetailsState === "function"
         ? ctx.initReferralPromoDetailsState
         : () => {};
+    const tableSkeletonHtml =
+      typeof ctx.tableSkeletonHtml === "function"
+        ? ctx.tableSkeletonHtml
+        : (rows, cols) => {
+            try {
+              return window.__GMXUiFactory({ api: "", getToken: () => "" }).tableSkeletonHtml(rows, cols);
+            } catch {
+              return `<tr><td colspan="${cols || 4}" class="muted">…</td></tr>`;
+            }
+          };
 
     function escHtml(s) {
       return String(s || "").replace(/[&<>"']/g, (c) =>
@@ -40,7 +50,7 @@
     async function loadRefInvited(days = 30) {
       const body = $("refInvitedBody");
       if (!body) return;
-      body.innerHTML = `<tr><td colspan="4" class="muted">${t("r_loading") || "Loading..."}</td></tr>`;
+      body.innerHTML = tableSkeletonHtml(5, 4);
       const j = await api("/api/referral/list?days=" + encodeURIComponent(String(days)));
       if (!j || !j.ok) throw new Error("ref_list_failed");
       const list = Array.isArray(j.list) ? j.list : [];
@@ -71,7 +81,7 @@
       const lang = localStorage.getItem(siteLangKey) || "en";
       const ui = getReferralUiCopy(lang);
       if (body) {
-        body.innerHTML = `<tr><td colspan="3" class="muted">${escapeHtml(ui.leaderboardLoading || "Loading...")}</td></tr>`;
+        body.innerHTML = tableSkeletonHtml(5, 3);
       }
       const j = await api("/api/leaderboard/referrals?days=" + encodeURIComponent(String(days)));
       if (!j || !j.ok) throw new Error("leaderboard_failed");

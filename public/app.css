@@ -1002,6 +1002,28 @@ select option{background:#0b0e1a;color:#e9ecff}
 }
 @keyframes spin{ to{ transform: rotate(360deg); } }
 
+.skeleton{
+  display:inline-block;
+  border-radius:6px;
+  background:linear-gradient(90deg, rgba(255,255,255,.05) 0%, rgba(255,255,255,.11) 50%, rgba(255,255,255,.05) 100%);
+  background-size:200% 100%;
+  animation:skeleton-shimmer 1.15s ease-in-out infinite;
+}
+.skeleton-bar{ height:14px; width:68%; min-width:40px; vertical-align:middle; }
+.skeleton-bar-wide{ width:90%; }
+.skeleton-dot{ width:18px; height:18px; border-radius:999px; flex-shrink:0; }
+.skeleton-row td{ padding:10px 8px; vertical-align:middle; }
+.lineRow.skeleton-lineRow{ pointer-events:none; opacity:.92; }
+.lineRow.skeleton-lineRow .lineCell{ flex:1; min-width:0; }
+@keyframes skeleton-shimmer{
+  0%{ background-position:200% 0; }
+  100%{ background-position:-200% 0; }
+}
+html.mode-light .skeleton{
+  background:linear-gradient(90deg, rgba(15,23,42,.06) 0%, rgba(15,23,42,.12) 50%, rgba(15,23,42,.06) 100%);
+  background-size:200% 100%;
+}
+
 .fatal{
   position:fixed;
   inset:0;

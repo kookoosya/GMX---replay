@@ -80,6 +80,9 @@ test("ui: factory exports perf helpers", () => {
   assert.equal(typeof ui.prefetchImage, "function");
   assert.equal(typeof ui.observeLazyBg, "function");
   assert.equal(typeof ui.postEvent, "function");
+  assert.equal(typeof ui.tableSkeletonHtml, "function");
+  assert.ok(ui.tableSkeletonHtml(2, 3).includes("skeleton-row"));
+  assert.equal(typeof ui.mountLineListSkeleton, "function");
 });
 
 test("modals: open close stack and info", () => {

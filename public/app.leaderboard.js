@@ -8,6 +8,16 @@
     const t = typeof ctx.t === "function" ? ctx.t : (_k, fb) => fb;
     const getToken = typeof ctx.getToken === "function" ? ctx.getToken : () => "";
     const getHandle = typeof ctx.getHandle === "function" ? ctx.getHandle : () => "";
+    const tableSkeletonHtml =
+      typeof ctx.tableSkeletonHtml === "function"
+        ? ctx.tableSkeletonHtml
+        : (rows, cols) => {
+            try {
+              return window.__GMXUiFactory({ api: "", getToken: () => "" }).tableSkeletonHtml(rows, cols);
+            } catch {
+              return `<tr><td colspan="${cols || 4}" class="muted">…</td></tr>`;
+            }
+          };
 
     let lbDays = 7;
 
@@ -25,7 +35,7 @@
         if (st) st.textContent = "";
         const body = $("lb_body");
         if (body) {
-          body.innerHTML = `<tr><td colspan="4" class="muted">${escapeHtml(t("loading") || "Loading...")}</td></tr>`;
+          body.innerHTML = tableSkeletonHtml(6, 4);
         }
 
         const opts = {};
