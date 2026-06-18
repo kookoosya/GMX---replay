@@ -64,7 +64,7 @@
     "wallpapers:ideal": "npm run wallpapers:fetch && npm run build:site",
     "verify:lock": "npm ci --dry-run && npm ci --prefix frontend --dry-run",
     "verify:site": "node tools/verify-site-build.mjs",
-    "verify:server": "node tools/verify-server-build.mjs",
+    "verify:server": "node tools/verify-server-build.mjs && node tools/render-start-check.mjs",
     "verify:manifest": "node tools/verify-client-manifest.mjs",
     "manifest:generate": "node tools/generate-client-manifest.mjs",
     "verify:wallpapers": "node tools/check-wallpaper-assets.mjs"

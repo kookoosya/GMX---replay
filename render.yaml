@@ -30,6 +30,7 @@ services:
         sync: false
       - key: SOL_RECEIVER
         sync: false
+    healthCheckPath: /api/health
     disk:
       name: data
       mountPath: /var/data

@@ -77,8 +77,13 @@
       return fallback || String(key);
     }
 
-    function applyLang() {
+    let lastAppliedLang = null;
+
+    function applyLang(opts) {
+      const force = opts && opts.force === true;
       const lang = getSiteLang();
+      if (!force && lastAppliedLang === lang) return false;
+
       const base = getI18n().en || {};
       const d = getI18n()[lang] || {};
 
@@ -118,6 +123,9 @@
       try {
         onPatchDynamicCopy(lang, merged);
       } catch (_e) {}
+
+      lastAppliedLang = lang;
+      return true;
     }
 
     return { siteTr, applyLang, setText, setPh, sanitizeMiniHTML };

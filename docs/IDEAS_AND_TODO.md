@@ -18,10 +18,11 @@
 - wallpaper UI: guard от рекурсивного re-render при load custom
 - auto-recover: игнор Script error / chunk load (расширения)
 
+**Сделано (2026-06, Phase 4 start):** `applyLang()` пропускает full DOM pass, если язык не менялся (`force` для явного refresh); Render boot без `ADMIN_SECRET` — warn-only + `render-start-check.mjs`.
+
 **В план (следующие):**
 - Skeleton / lazy-load для тяжёлых списков (`SITE_RECOMMENDATIONS.md`)
-- i18n: не гонять full `applyLang()` без смены языка
-- Модульный boot (~110 deferred scripts) — долгосрочно упростить bundle
+- Модульный boot (~97 deferred scripts) — долгосрочно упростить bundle
 
 **Сделано (2026-06, Phase 2):** cascade `refreshUsage` → ref stats → renderThemes убран; ref stats refresh только при смене eligible или на вкладке referrals.
 

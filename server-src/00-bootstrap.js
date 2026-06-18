@@ -206,8 +206,7 @@ if (IS_RENDER) {
     console.warn("WARN: ADMIN_PASSWORD is not set on Render — admin UI login is disabled.");
   }
   if (!RAW_ADMIN_SECRET || RAW_ADMIN_SECRET === "CHANGE_ME_ADMIN_SECRET") {
-    console.error("FATAL: ADMIN_SECRET must be set to a non-default value on Render.");
-    process.exit(1);
+    console.warn("WARN: ADMIN_SECRET is not set on Render — admin API routes are disabled until configured.");
   }
 } else if (IS_PRODUCTION_DEPLOY && !IS_RENDER) {
   if (!RAW_ADMIN_PASSWORD) {

@@ -228,6 +228,24 @@ test("sitei18nui: siteTr fallback", () => {
   assert.equal(ui.siteTr("missing", "Fallback"), "Fallback");
 });
 
+test("sitei18nui: applyLang skips when language unchanged", () => {
+  let patchCalls = 0;
+  const ui = loadFactory("app.sitei18nui.js", "__GMXSiteI18nUiFactory")({
+    getSiteLang: () => "en",
+    getI18n: () => ({ en: { hello: "Hello" } }),
+    sanitizeI18nValue: (_l, v) => v,
+    onPatchDynamicCopy: () => {
+      patchCalls += 1;
+    },
+  });
+  assert.equal(ui.applyLang(), true);
+  assert.equal(patchCalls, 1);
+  assert.equal(ui.applyLang(), false);
+  assert.equal(patchCalls, 1);
+  assert.equal(ui.applyLang({ force: true }), true);
+  assert.equal(patchCalls, 2);
+});
+
 test("sitei18ndynamic: nextReferralUnlockAt steps", () => {
   const dyn = loadFactory("app.sitei18ndynamic.js", "__GMXSiteI18nDynamicFactory")({
     t: (k) => k,
