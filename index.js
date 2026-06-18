@@ -195,19 +195,30 @@ async function getHealthSnapshot(force = false) {
 const ADMIN_HANDLE_ENV = String(process.env.ADMIN_HANDLE || "").trim();
 const DEFAULT_ADMIN_HANDLE = String(process.env.DEFAULT_ADMIN_HANDLE || "@Kristofer_Sol_").trim();
 let ADMIN_HANDLE_CACHE = null;
-const ADMIN_SECRET = process.env.ADMIN_SECRET || "CHANGE_ME_ADMIN_SECRET";
-// Admin password strategy:
-// - Render (public) MUST set ADMIN_PASSWORD explicitly.
-// - Local/dev should work out-of-the-box (so Admin tools can be tested without env setup).
-// NOTE: Some local setups run with NODE_ENV=production; we still allow the fallback unless we're on Render.
 const IS_RENDER = Boolean(process.env.RENDER || process.env.RENDER_GIT_COMMIT || process.env.RENDER_SERVICE_ID);
+const IS_PRODUCTION_DEPLOY =
+  IS_RENDER || String(process.env.NODE_ENV || "").toLowerCase() === "production";
 const RAW_ADMIN_PASSWORD = String(process.env.ADMIN_PASSWORD || "").trim();
 const RAW_ADMIN_SECRET = String(process.env.ADMIN_SECRET || "").trim();
-// In production (NODE_ENV=production) we REQUIRE explicit ADMIN_PASSWORD.
-const ADMIN_PASSWORD = RAW_ADMIN_PASSWORD || (DEV_MODE
+
+if (IS_PRODUCTION_DEPLOY) {
+  if (!RAW_ADMIN_PASSWORD) {
+    console.error("FATAL: ADMIN_PASSWORD is required on Render/production.");
+    process.exit(1);
+  }
+  if (!RAW_ADMIN_SECRET || RAW_ADMIN_SECRET === "CHANGE_ME_ADMIN_SECRET") {
+    console.error("FATAL: ADMIN_SECRET must be set to a non-default value on Render/production.");
+    process.exit(1);
+  }
+}
+
+const ADMIN_SECRET = RAW_ADMIN_SECRET || (DEV_MODE ? "CHANGE_ME_ADMIN_SECRET" : "");
+// Admin password strategy:
+// - Render (public) MUST set ADMIN_PASSWORD explicitly (enforced above).
+// - Local/dev/test may use fallback for admin UI smoke tests.
+const ADMIN_PASSWORD = RAW_ADMIN_PASSWORD || (DEV_MODE && !IS_PRODUCTION_DEPLOY
   ? ((RAW_ADMIN_SECRET && RAW_ADMIN_SECRET !== "CHANGE_ME_ADMIN_SECRET") ? RAW_ADMIN_SECRET : "admin")
-  : ""
-);
+  : "");
 const ADMIN_SESSION_HOURS = Math.max(1, Math.min(168, Number(process.env.ADMIN_SESSION_HOURS || "24") || 24));
 
 

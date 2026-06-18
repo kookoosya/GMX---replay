@@ -27,6 +27,9 @@ for (const rel of appPaths) {
   if (!/SITE_WALLPAPER_PACK_COUNT = (?:58|__gmxWp\.SITE_PACK_COUNT)/.test(text)) {
     fail(`${rel}: wallpaper count must be 58`);
   }
+  if (text.includes("cryptoWallpaperMotif")) {
+    fail(`${rel}: must not export removed cryptoWallpaperMotif`);
+  }
   if (!text.includes('if (name === "themes" || name === "extthemes")')) {
     fail(`${rel}: onTabActivated must lazy-render wallpapers only on themes tabs`);
   }

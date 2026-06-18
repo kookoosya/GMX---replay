@@ -3,15 +3,20 @@
  * Browser smoke: /app loads, Random controls exist, no raw i18n keys in GM panel.
  */
 import { chromium } from "playwright";
-import { fail, ok } from "./_helpers.mjs";
+import { fail, ok, freePort, spawnTestServer } from "./_helpers.mjs";
 
-const BASE = (process.env.E2E_BASE || "http://127.0.0.1:10000").replace(/\/$/, "");
+let base = String(process.env.E2E_BASE || "").replace(/\/$/, "");
+let child = null;
+if (!base) {
+  const port = Number(process.env.SMOKE_PORT || 0) || await freePort();
+  ({ child, base } = await spawnTestServer(port));
+}
 
 let browser;
 try {
   browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
-  await page.goto(`${BASE}/app`, { waitUntil: "domcontentloaded", timeout: 30000 });
+  await page.goto(`${base}/app`, { waitUntil: "domcontentloaded", timeout: 30000 });
   await page.waitForTimeout(1500);
 
   for (const id of ["gmRand1", "gmRand10", "gnRand1", "gnStyle", "gmStyle"]) {
@@ -30,7 +35,6 @@ try {
     return Boolean(document.querySelector(".gmxWallLayer") || document.getElementById("gmxWallLayer"));
   });
   if (!hasWallCss) {
-    // layer may be created after wallpaper init — check function exists
     const fn = await page.evaluate(() => typeof window.setWallpaperLayerImage === "function");
     if (!fn) fail("setWallpaperLayerImage not available");
     ok("wallpaper API present (layer lazy)");
@@ -43,4 +47,8 @@ try {
   fail(e?.message || String(e));
 } finally {
   if (browser) await browser.close();
+  if (child) {
+    child.kill("SIGTERM");
+    setTimeout(() => child.kill("SIGKILL"), 500).unref();
+  }
 }

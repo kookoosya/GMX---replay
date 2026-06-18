@@ -331,6 +331,18 @@ export function registerBillingRoutes({
   }
 
   async function solanaRpcRequest(method, params) {
+    if (String(process.env.GMX_SOLANA_RPC_MOCK || "").trim() === "1") {
+      if (method === "getLatestBlockhash") {
+        return {
+          value: {
+            blockhash: "MockBlockhashForTests111111111111111111111111111",
+            lastValidBlockHeight: 999_999_999,
+          },
+        };
+      }
+      if (method === "sendTransaction") return "MockTransactionSignatureForTests1111111111";
+      if (method === "getTransaction") return null;
+    }
     const body = {
       jsonrpc: "2.0",
       id: 1,

@@ -170,7 +170,6 @@
       CUSTOM_WP_RE,
       buildSiteWallpapers,
       buildExtWallpapers,
-      cryptoWallpaperMotif,
       normalizeWallpaperId,
       normalizeExtWallpaperIdLocal,
       wallpaperAssetPath,

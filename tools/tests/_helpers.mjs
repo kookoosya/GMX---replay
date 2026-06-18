@@ -95,6 +95,9 @@ export async function spawnTestServer(port) {
       PORT: String(port),
       DB_PATH: dbPath,
       NODE_ENV: "test",
+      GMX_SOLANA_RPC_MOCK: "1",
+      ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || "test-admin-local",
+      ADMIN_SECRET: process.env.ADMIN_SECRET || "test-admin-secret-local",
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
