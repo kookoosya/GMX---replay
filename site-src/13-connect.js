@@ -1,6 +1,6 @@
   // ----- Connect -----
-  if (!window.__GMXConnectRunWireFactory) throw new Error("GMX connectrunwire factory missing");
-  window.__GMXConnectRunWireFactory({
+  if (!window.__GMXConnectWireFactory) throw new Error("GMX connectrunwire factory missing");
+  window.__GMXConnectWireFactory({
     core: { $, api, escapeHtml, friendlyUiErrorMessage, normalizeHandle },
     auth: { setAuthOk: (v) => { AUTH_OK = !!v; }, applyAdminVisibility },
     session: { refreshUsage, loadPlans, ping },
@@ -12,6 +12,6 @@
       forceLogout: LS_FORCE_LOGOUT,
       forceLogoutV2: LS_FORCE_LOGOUT_V2,
     },
-  }).run();
+  });
 
 })();

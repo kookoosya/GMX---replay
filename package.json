@@ -50,6 +50,7 @@
     "sync:site": "node tools/sync-site-public.mjs",
     "audit:all": "npm run audit:logic && npm run audit:runtime",
     "build:server": "node tools/build-server.mjs",
+    "collapse:wire": "node tools/collapse-runwire.mjs",
     "build:all": "npm run build:site && npm run build:server",
     "test:full": "npm run verify:lock && npm run build:all && npm run verify:site && npm run verify:server && npm run verify:manifest && npm run verify:wallpapers && npm test && npm run test:suite && npm run audit:all",
     "verify:prod": "node tools/prod-verify.mjs",

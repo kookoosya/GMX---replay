@@ -1,6 +1,6 @@
   let INIT_DONE = false;
-  if (!window.__GMXChromeRunWireFactory) throw new Error("GMX chromerunwire factory missing");
-  const __gmxChromeWire = window.__GMXChromeRunWireFactory({
+  if (!window.__GMXChromeWireFactory) throw new Error("GMX chromerunwire factory missing");
+  const __gmxChromeWire = window.__GMXChromeWireFactory({
     mod: {
       chrome: __gmxChrome,
       fmt: __gmxFmt,
@@ -33,7 +33,7 @@
       getInitDone: () => INIT_DONE,
       setAuthOk: (v) => { AUTH_OK = !!v; },
     },
-  }).run();
+  });
   const {
     $,
     toast,

@@ -331,7 +331,7 @@ const {
     return __gmxUiWire.postEvent(type, meta);
   }
 
-  if (!window.__GMXShellDepsRunWireFactory) throw new Error("GMX shelldepsrunwire factory missing");
+  if (!window.__GMXShellDepsWireFactory) throw new Error("GMX shelldepsrunwire factory missing");
   const {
     logEvent,
     LS_HANDLE,
@@ -394,7 +394,7 @@ const {
     renderCustomBgUI,
     syncCustomBgUI,
     TAB_THEME,
-  } = window.__GMXShellDepsRunWireFactory({
+  } = window.__GMXShellDepsWireFactory({
     keys: { K },
     mod: {
       storage: __gmxSt,
@@ -404,11 +404,11 @@ const {
       custombg: __gmxCbg,
       tabtheme: __gmxTabTheme,
     },
-  }).run();
+  });
 
-  if (!window.__GMXWallpapersRunWireFactory) throw new Error("GMX wallpapersrunwire factory missing");
+  if (!window.__GMXWallpapersWireFactory) throw new Error("GMX wallpapersrunwire factory missing");
   const SITE_WALLPAPER_PACK_COUNT = __gmxWp.SITE_PACK_COUNT;
-  const __gmxWallpapersWire = window.__GMXWallpapersRunWireFactory({
+  const __gmxWallpapersWire = window.__GMXWallpapersWireFactory({
     keys: { K },
     mod: {
       wp: __gmxWp,
@@ -422,7 +422,7 @@ const {
       wpUi: __gmxWpUi,
       langUi: __gmxLangUi,
     },
-  }).run();
+  });
   const {
     LS_WP_GLOBAL,
     LS_WP_TAB_PREFIX,
@@ -502,7 +502,7 @@ const {
   function readGenParams(kind){ return __gmxThemesCatalogWire.readGenParams(kind); }
   function unlockedPacksCountFor(kind){ return __gmxThemesCatalogWire.unlockedPacksCountFor(kind); }
 
-if (!window.__GMXThemesRunWireFactory) throw new Error("GMX themesrunwire factory missing");
+if (!window.__GMXThemesWireFactory) throw new Error("GMX themesrunwire factory missing");
 const {
   LS_EXT_VIEW,
   applyTheme,
@@ -528,7 +528,7 @@ const {
   renderExtWallpapers,
   bindExtTabs,
   initExtWallpaperControls,
-} = window.__GMXThemesRunWireFactory({
+} = window.__GMXThemesWireFactory({
   keys: { extViewKey: K.EXT_VIEW },
   mod: {
     themeApply: __gmxThemeApply,
@@ -546,11 +546,11 @@ const {
     extThemesLength: EXT_THEMES.length,
     freeVisibleExtThemes: FREE_VISIBLE_EXT_THEMES,
   },
-}).run();
+});
 
   let INIT_DONE = false;
-  if (!window.__GMXChromeRunWireFactory) throw new Error("GMX chromerunwire factory missing");
-  const __gmxChromeWire = window.__GMXChromeRunWireFactory({
+  if (!window.__GMXChromeWireFactory) throw new Error("GMX chromerunwire factory missing");
+  const __gmxChromeWire = window.__GMXChromeWireFactory({
     mod: {
       chrome: __gmxChrome,
       fmt: __gmxFmt,
@@ -583,7 +583,7 @@ const {
       getInitDone: () => INIT_DONE,
       setAuthOk: (v) => { AUTH_OK = !!v; },
     },
-  }).run();
+  });
   const {
     $,
     toast,
@@ -691,8 +691,8 @@ function pickBestLine(kind, lines){ return __gmxBestPick.pickBestLine(kind, line
 async function doBest(kind){ return __gmxBestPick.doBest(kind); }
 async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
 
-  if (!window.__GMXBankUiRunWireFactory) throw new Error("GMX bankuirunwire factory missing");
-  const __gmxBankUiRunWire = window.__GMXBankUiRunWireFactory({
+  if (!window.__GMXBankUiWireFactory) throw new Error("GMX bankuirunwire factory missing");
+  const __gmxBankUiRunWire = window.__GMXBankUiWireFactory({
     core: {
       $,
       fmt: __gmxFmt,
@@ -772,7 +772,7 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
     return getBankKey(kind);
   }
 
-  if (!window.__GMXCleanFillRunWireFactory) throw new Error("GMX cleanfillrunwire factory missing");
+  if (!window.__GMXCleanFillRunFactory) throw new Error("GMX cleanfillrunwire factory missing");
   const {
     oneClickCleanup,
     refillCleanFill,
@@ -782,7 +782,7 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
     filterAntiRepeat,
     normalizeLine,
     dedupeLines,
-  } = window.__GMXCleanFillRunWireFactory({
+  } = window.__GMXCleanFillRunFactory({
     $,
     api,
     format: __gmxFmt,
@@ -803,8 +803,8 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
   __gmxBankUiWireCtx.pushRecent = pushRecent;
   __gmxBankUiWireCtx.repeatKey = repeatKey;
 
-  if (!window.__GMXGenerateRunWireFactory) throw new Error("GMX generaterunwire factory missing");
-  const __gmxGenerateWire = window.__GMXGenerateRunWireFactory({
+  if (!window.__GMXGenerateWireFactory) throw new Error("GMX generaterunwire factory missing");
+  const __gmxGenerateWire = window.__GMXGenerateWireFactory({
     core: {
       $,
       api,
@@ -868,7 +868,7 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
       inflight: INFLIGHT,
       abort: ABORT,
     },
-  }).run();
+  });
   const {
     mergeAppendUnique,
     revealReferralLinkUi,
@@ -879,30 +879,30 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
 
 // ----- Leaderboard -----
 let LB_DAYS = 7;
-if (!window.__GMXLeaderboardRunWireFactory) throw new Error("GMX leaderboardrunwire factory missing");
-const __gmxLeaderboardWire = window.__GMXLeaderboardRunWireFactory({
+if (!window.__GMXLeaderboardWireFactory) throw new Error("GMX leaderboardrunwire factory missing");
+const __gmxLeaderboardWire = window.__GMXLeaderboardWireFactory({
   core: { $, escapeHtml, t },
   auth: { getToken, getHandle },
   lb: { setLbDays: (v) => { LB_DAYS = v; } },
-}).run();
+});
 async function loadLeaderboard(days) {
   return __gmxLeaderboardWire.loadLeaderboard(days);
 }
 const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
 
 // ----- Prediction market -----
-  if (!window.__GMXPredictionRunWireFactory) throw new Error("GMX predictionrunwire factory missing");
-  const __gmxPredictionWire = window.__GMXPredictionRunWireFactory({
+  if (!window.__GMXPredictionWireFactory) throw new Error("GMX predictionrunwire factory missing");
+  const __gmxPredictionWire = window.__GMXPredictionWireFactory({
     core: { $, escapeHtml, t, api, friendlyUiErrorMessage },
     auth: { getHandle, getToken },
     tab: { tabState: __gmxTabState },
-  }).run();
+  });
   const syncPredictionFilterCopy = () => __gmxPredictionWire.syncPredictionFilterCopy();
   const loadPredictionSignals = (opts) => __gmxPredictionWire.loadPredictionSignals(opts);
 
 // ----- Referrals -----
-  if (!window.__GMXReferralsRunWireFactory) throw new Error("GMX referralsrunwire factory missing");
-  const { loadRefInvited, loadRefLeaderboard } = window.__GMXReferralsRunWireFactory({
+  if (!window.__GMXReferralsWireFactory) throw new Error("GMX referralsrunwire factory missing");
+  const { loadRefInvited, loadRefLeaderboard } = window.__GMXReferralsWireFactory({
     core: { $, escapeHtml, api, t },
     auth: { requireConnected },
     keys: { siteLangKey: LS_SITE_LANG },
@@ -922,11 +922,11 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
       revealReferralLinkUi,
       applyRefCountEligible,
     },
-  }).run();
+  });
 
 // ----- Wallet / Billing -----
-  if (!window.__GMXWalletRunWireFactory) throw new Error("GMX walletrunwire factory missing");
-  const __gmxWalletWire = window.__GMXWalletRunWireFactory({
+  if (!window.__GMXWalletWireFactory) throw new Error("GMX walletrunwire factory missing");
+  const __gmxWalletWire = window.__GMXWalletWireFactory({
     core: { $, api, K },
     mod: { modals: __gmxModals },
     text: { escapeHtml, friendlyUiErrorMessage },
@@ -934,7 +934,7 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
     perf: { trackEvent, abVariant },
     pay: { setPayState, openPaySuccess },
     session: { getHandle, refreshUsage },
-  }).run();
+  });
   const setWalletUi = () => __gmxWalletWire.setWalletUi();
   const loadPlans = () => __gmxWalletWire.loadPlans();
   const loadBillingProof = () => __gmxWalletWire.loadBillingProof();
@@ -943,26 +943,26 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
   const bindWalletTab = () => __gmxWalletWire.bindWalletTab();
 
 // ----- Admin -----
-  if (!window.__GMXAdminRunWireFactory) throw new Error("GMX adminrunwire factory missing");
-  const __gmxAdminWire = window.__GMXAdminRunWireFactory({
+  if (!window.__GMXAdminWireFactory) throw new Error("GMX adminrunwire factory missing");
+  const __gmxAdminWire = window.__GMXAdminWireFactory({
     core: { $, escapeHtml, api },
     auth: { getHandle, requireConnected },
     admin: { setAdminToken, isAdminSignedIn, adminHandle: ADMIN_HANDLE },
-  }).run();
+  });
   const syncAdminUi = () => __gmxAdminWire.syncAdminUi();
   const requireAdminSignedIn = () => __gmxAdminWire.requireAdminSignedIn();
   const pruneLegacyAdminPanels = () => __gmxAdminWire.pruneLegacyAdminPanels();
 
   // ----- Redeem code -----
-  if (!window.__GMXRedeemRunWireFactory) throw new Error("GMX redeemrunwire factory missing");
-  window.__GMXRedeemRunWireFactory({
+  if (!window.__GMXRedeemWireFactory) throw new Error("GMX redeemrunwire factory missing");
+  window.__GMXRedeemWireFactory({
     core: { $, api },
     auth: { requireConnected, getHandle },
     ui: { tab, renderWalletStatus, refreshUsage },
-  }).run();
+  });
 
-  if (!window.__GMXSiteInitRunWireFactory) throw new Error("GMX siteinitrunwire factory missing");
-  await window.__GMXSiteInitRunWireFactory({
+  if (!window.__GMXSiteInitWireFactory) throw new Error("GMX siteinitwire factory missing");
+  await window.__GMXSiteInitWireFactory({
     mod: {
       siteLangMenu: __gmxSiteLangMenu,
       styles: __gmxStyles,
@@ -1096,8 +1096,8 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
   }).run();
 
   // ----- Connect -----
-  if (!window.__GMXConnectRunWireFactory) throw new Error("GMX connectrunwire factory missing");
-  window.__GMXConnectRunWireFactory({
+  if (!window.__GMXConnectWireFactory) throw new Error("GMX connectrunwire factory missing");
+  window.__GMXConnectWireFactory({
     core: { $, api, escapeHtml, friendlyUiErrorMessage, normalizeHandle },
     auth: { setAuthOk: (v) => { AUTH_OK = !!v; }, applyAdminVisibility },
     session: { refreshUsage, loadPlans, ping },
@@ -1109,6 +1109,6 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
       forceLogout: LS_FORCE_LOGOUT,
       forceLogoutV2: LS_FORCE_LOGOUT_V2,
     },
-  }).run();
+  });
 
 })();

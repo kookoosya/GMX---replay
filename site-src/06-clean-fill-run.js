@@ -1,4 +1,4 @@
-  if (!window.__GMXCleanFillRunWireFactory) throw new Error("GMX cleanfillrunwire factory missing");
+  if (!window.__GMXCleanFillRunFactory) throw new Error("GMX cleanfillrunwire factory missing");
   const {
     oneClickCleanup,
     refillCleanFill,
@@ -8,7 +8,7 @@
     filterAntiRepeat,
     normalizeLine,
     dedupeLines,
-  } = window.__GMXCleanFillRunWireFactory({
+  } = window.__GMXCleanFillRunFactory({
     $,
     api,
     format: __gmxFmt,

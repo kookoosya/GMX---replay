@@ -1,5 +1,5 @@
-  if (!window.__GMXGenerateRunWireFactory) throw new Error("GMX generaterunwire factory missing");
-  const __gmxGenerateWire = window.__GMXGenerateRunWireFactory({
+  if (!window.__GMXGenerateWireFactory) throw new Error("GMX generaterunwire factory missing");
+  const __gmxGenerateWire = window.__GMXGenerateWireFactory({
     core: {
       $,
       api,
@@ -63,7 +63,7 @@
       inflight: INFLIGHT,
       abort: ABORT,
     },
-  }).run();
+  });
   const {
     mergeAppendUnique,
     revealReferralLinkUi,

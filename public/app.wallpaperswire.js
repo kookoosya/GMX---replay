@@ -3,6 +3,24 @@
 
   window.__GMXWallpapersWireFactory = function createGMXWallpapersWire(ctx) {
     ctx = ctx || {};
+    if (ctx.mod && ctx.keys?.K) {
+      const keys = ctx.keys || {};
+    const mod = ctx.mod || {};
+
+    ctx = {
+        keys: keys.K,
+        wp: mod.wp,
+        wpStore: mod.wpStore,
+        customWp: mod.customWp,
+        wpHelpers: mod.wpHelpers,
+        extWpStore: mod.extWpStore,
+        tabState: mod.tabState,
+        wpApply: mod.wpApply,
+        i18nUi: mod.i18nUi,
+        wpUi: mod.wpUi,
+        langUi: mod.langUi,
+      };
+    }
     const keys = ctx.keys || {};
     const wp = ctx.wp || {};
     const wpStore = ctx.wpStore || {};

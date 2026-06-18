@@ -201,13 +201,21 @@ const IS_PRODUCTION_DEPLOY =
 const RAW_ADMIN_PASSWORD = String(process.env.ADMIN_PASSWORD || "").trim();
 const RAW_ADMIN_SECRET = String(process.env.ADMIN_SECRET || "").trim();
 
-if (IS_PRODUCTION_DEPLOY) {
+if (IS_RENDER) {
   if (!RAW_ADMIN_PASSWORD) {
-    console.error("FATAL: ADMIN_PASSWORD is required on Render/production.");
+    console.warn("WARN: ADMIN_PASSWORD is not set on Render — admin UI login is disabled.");
+  }
+  if (!RAW_ADMIN_SECRET || RAW_ADMIN_SECRET === "CHANGE_ME_ADMIN_SECRET") {
+    console.error("FATAL: ADMIN_SECRET must be set to a non-default value on Render.");
+    process.exit(1);
+  }
+} else if (IS_PRODUCTION_DEPLOY && !IS_RENDER) {
+  if (!RAW_ADMIN_PASSWORD) {
+    console.error("FATAL: ADMIN_PASSWORD is required in production.");
     process.exit(1);
   }
   if (!RAW_ADMIN_SECRET || RAW_ADMIN_SECRET === "CHANGE_ME_ADMIN_SECRET") {
-    console.error("FATAL: ADMIN_SECRET must be set to a non-default value on Render/production.");
+    console.error("FATAL: ADMIN_SECRET must be set to a non-default value in production.");
     process.exit(1);
   }
 }

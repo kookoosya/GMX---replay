@@ -3,6 +3,22 @@
 
   window.__GMXPredictionWireFactory = function createGMXPredictionWire(ctx) {
     ctx = ctx || {};
+    if (ctx.core) {
+      const core = ctx.core || {};
+    const auth = ctx.auth || {};
+    const tab = ctx.tab || {};
+
+    ctx = {
+        $: core.$,
+        escapeHtml: core.escapeHtml,
+        t: core.t,
+        api: core.api,
+        friendlyUiErrorMessage: core.friendlyUiErrorMessage,
+        getHandle: auth.getHandle,
+        getToken: auth.getToken,
+        tabState: tab.tabState,
+      };
+    }
     const tabState = ctx.tabState || {};
 
     if (!window.__GMXPredictionFactory) throw new Error("GMX prediction factory missing");

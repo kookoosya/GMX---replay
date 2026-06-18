@@ -3,6 +3,27 @@
 
   window.__GMXThemesWireFactory = function createGMXThemesWire(ctx) {
     ctx = ctx || {};
+    if (ctx.mod && ctx.catalog && ctx.keys) {
+      const keys = ctx.keys || {};
+    const mod = ctx.mod || {};
+    const catalog = ctx.catalog || {};
+
+    ctx = {
+        extViewKey: keys.extViewKey,
+        themeApply: mod.themeApply,
+        extWpStore: mod.extWpStore,
+        extView: mod.extView,
+        wpUi: mod.wpUi,
+        themesUi: mod.themesUi,
+        extApply: mod.extApply,
+        extCbgUi: mod.extCbgUi,
+        extThemesUi: mod.extThemesUi,
+        extWpUi: mod.extWpUi,
+        unlockedCountByRefs: catalog.unlockedCountByRefs,
+        extThemesLength: catalog.extThemesLength,
+        freeVisibleExtThemes: catalog.freeVisibleExtThemes,
+      };
+    }
     const themeApply = ctx.themeApply || {};
     const extWpStore = ctx.extWpStore || {};
     const extView = ctx.extView || {};

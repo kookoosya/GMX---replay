@@ -1,4 +1,4 @@
-  if (!window.__GMXShellDepsRunWireFactory) throw new Error("GMX shelldepsrunwire factory missing");
+  if (!window.__GMXShellDepsWireFactory) throw new Error("GMX shelldepsrunwire factory missing");
   const {
     logEvent,
     LS_HANDLE,
@@ -61,7 +61,7 @@
     renderCustomBgUI,
     syncCustomBgUI,
     TAB_THEME,
-  } = window.__GMXShellDepsRunWireFactory({
+  } = window.__GMXShellDepsWireFactory({
     keys: { K },
     mod: {
       storage: __gmxSt,
@@ -71,4 +71,4 @@
       custombg: __gmxCbg,
       tabtheme: __gmxTabTheme,
     },
-  }).run();
+  });

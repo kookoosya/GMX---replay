@@ -25,6 +25,8 @@
 
 **Сделано (2026-06, Phase 2):** cascade `refreshUsage` → ref stats → renderThemes убран; ref stats refresh только при смене eligible или на вкладке referrals.
 
+**Сделано (2026-06, Phase 3):** 15 `*runwire.js` влиты в `*wire.js` — boot **97 scripts** (−15 HTTP), `tools/collapse-runwire.mjs`.
+
 ### 2. Thumbs для обоев
 - ~~Загрузка превью (thumbs) в сетке вместо полных картинок~~ — **сделано (2026-06):** Pexels fetch → `thumbs/v2_*.webp` 480×270, full 1920×1080
 - Полное изображение только при применении (уже так в `wallpaperui.js`)

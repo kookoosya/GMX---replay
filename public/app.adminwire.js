@@ -3,6 +3,22 @@
 
   window.__GMXAdminWireFactory = function createGMXAdminWire(ctx) {
     ctx = ctx || {};
+    if (ctx.core) {
+      const core = ctx.core || {};
+    const auth = ctx.auth || {};
+    const admin = ctx.admin || {};
+
+    ctx = {
+        $: core.$,
+        escapeHtml: core.escapeHtml,
+        api: core.api,
+        getHandle: auth.getHandle,
+        requireConnected: auth.requireConnected,
+        setAdminToken: admin.setAdminToken,
+        isAdminSignedIn: admin.isAdminSignedIn,
+        adminHandle: admin.adminHandle,
+      };
+    }
 
     if (!window.__GMXAdminFactory) throw new Error("GMX admin factory missing");
     const __gmxAdmin = window.__GMXAdminFactory({

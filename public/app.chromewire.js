@@ -3,6 +3,39 @@
 
   window.__GMXChromeWireFactory = function createGMXChromeWire(ctx) {
     ctx = ctx || {};
+    if (ctx.mod) {
+      const mod = ctx.mod || {};
+    const keys = ctx.keys || {};
+    const hooks = ctx.hooks || {};
+    const session = ctx.session || {};
+
+    ctx = {
+        chrome: mod.chrome,
+        fmt: mod.fmt,
+        styles: mod.styles,
+        nav: mod.nav,
+        setBg: mod.setBg,
+        modals: mod.modals,
+        toggles: mod.toggles,
+        paywall: mod.paywall,
+        health: mod.health,
+        usage: mod.usage,
+        help: mod.help,
+        account: mod.account,
+        getInitDone: session.getInitDone,
+        normalizeTopLevelTab: hooks.normalizeTopLevelTab,
+        LS_SITE_LANG: keys.LS_SITE_LANG,
+        API: keys.API,
+        LS_HANDLE: keys.LS_HANDLE,
+        LS_TOKEN: keys.LS_TOKEN,
+        LS_IS_ADMIN: keys.LS_IS_ADMIN,
+        LS_ADMIN_CLAIMABLE: keys.LS_ADMIN_CLAIMABLE,
+        isLocalDevHost: hooks.isLocalDevHost,
+        getAdminToken: hooks.getAdminToken,
+        setAuthOk: session.setAuthOk,
+        t: hooks.t,
+      };
+    }
     const chrome = ctx.chrome || {};
     const fmt = ctx.fmt || {};
     const styles = ctx.styles || {};

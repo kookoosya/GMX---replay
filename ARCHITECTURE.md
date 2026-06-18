@@ -17,7 +17,7 @@ node tools/sync-app-and-assets.mjs
 
 | Что меняете | Где править |
 |-------------|-------------|
-| Логика вкладок (GM, wallet, themes, …) | `public/app.<feature>.js` (+ wire/runwire при необходимости) |
+| Логика вкладок (GM, wallet, themes, …) | `public/app.<feature>.js` + `app.<feature>wire.js` (runwire слой удалён в Phase 3) |
 | Порядок инициализации / wiring в `app.js` | `site-src/*.js` → `npm run build:site` |
 | Разметка shell, список `<script>` | `public/app.html` |
 | Account Center (`/bridge`) | `frontend/src/` → `npm run build:frontend` |

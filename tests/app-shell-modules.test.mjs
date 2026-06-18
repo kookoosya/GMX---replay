@@ -1425,35 +1425,6 @@ test("siteinitwire: builds nested siteinit ctx and delegates run", async () => {
   }
 });
 
-test("siteinitrunwire: flattens grouped ctx and delegates to siteinitwire", async () => {
-  const win = {};
-  new Function("window", `${readFileSync(path.join(root, "public", "app.siteinitwire.js"), "utf8")};`)(win);
-  new Function("window", `${readFileSync(path.join(root, "public", "app.siteinitrunwire.js"), "utf8")};`)(win);
-  let flatCtx = null;
-  win.__GMXSiteInitWireFactory = (ctx) => {
-    flatCtx = ctx;
-    return { run: async () => {} };
-  };
-  const wire = win.__GMXSiteInitRunWireFactory({
-    mod: { bankUi: { getGmView: () => "gm", getGnView: () => "gn" } },
-    keys: { K: { SITE_MODE: "mode" }, I18N: {}, LS_SITE_LANG: "lang" },
-    toggles: { setBestMode: () => "best" },
-    lang: { applyLang: () => "lang" },
-    chrome: { fillStyles: () => "styles" },
-    gmGn: { $: () => null, getHandle: () => "@x" },
-    wp: { toast: () => {} },
-    pro: { isPro: () => true },
-    boot: { ping: () => {} },
-    session: { setAuthOk: () => {}, setInitDone: () => {} },
-  });
-  await wire.run();
-  assert.equal(flatCtx.setBestMode(), "best");
-  assert.equal(flatCtx.applyLang(), "lang");
-  assert.equal(flatCtx.bankUi.getGmView(), "gm");
-  assert.equal(flatCtx.getHandle(), "@x");
-  assert.equal(flatCtx.isPro(), true);
-});
-
 test("shelldeps: exports storage keys and delegates helpers", () => {
   const deps = loadFactory("app.shelldeps.js", "__GMXShellDepsFactory")({
     K: { HANDLE: "gmx_handle", TOKEN: "gmx_token", SITE_LANG: "gmx_site_lang" },
@@ -1507,31 +1478,29 @@ test("shelldepswire: delegates to shelldeps factory", () => {
   assert.equal(deps.logEvent("evt"), "evt");
 });
 
-test("shelldepsrunwire: groups deps and delegates to shelldepswire", () => {
+test("shelldepswire grouped: flattens grouped ctx", () => {
   const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.shelldeps.js"), "utf8")};`)(win);
   new Function("window", `${readFileSync(path.join(root, "public", "app.shelldepswire.js"), "utf8")};`)(win);
-  new Function("window", `${readFileSync(path.join(root, "public", "app.shelldepsrunwire.js"), "utf8")};`)(win);
   let captured = null;
-  win.__GMXShellDepsWireFactory = (cfg) => {
+  win.__GMXShellDepsFactory = (cfg) => {
     captured = cfg;
     return { ok: true };
   };
-  const wire = win.__GMXShellDepsRunWireFactory({
+  const out = win.__GMXShellDepsWireFactory({
     keys: { K: { HANDLE: "gmx_handle" } },
     mod: { storage: { x: 1 }, logs: { y: 1 }, cleanfill: {}, antirepeat: {}, custombg: {}, tabtheme: {} },
   });
-  const out = wire.run();
   assert.equal(captured.K.HANDLE, "gmx_handle");
   assert.equal(captured.storage.x, 1);
   assert.equal(captured.logs.y, 1);
   assert.equal(out.ok, true);
 });
 
-test("cleanfillrunwire: wires cleanfillrun and gen helpers", () => {
+test("cleanfillrun grouped: wires cleanfillrun and gen helpers", () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.cleanfillrun.js"), "utf8")};`)(win);
-  new Function("window", `${readFileSync(path.join(root, "public", "app.cleanfillrunwire.js"), "utf8")};`)(win);
-  const wire = win.__GMXCleanFillRunWireFactory({
+  const wire = win.__GMXCleanFillRunFactory({
     format: { escapeHtml: (s) => s },
     cleanfill: { CLEAN_FILL_STRENGTH: 2 },
     gen: {
@@ -1579,24 +1548,6 @@ test("themeswire: delegates theme and extension UI helpers", () => {
   assert.equal(wire.renderThemes(), 3);
   assert.equal(wire.renderExtWallpapers(), 5);
   assert.equal(wire.bindExtTabs(), true);
-});
-
-test("themesrunwire: groups deps and delegates to themeswire", () => {
-  const win = {};
-  new Function("window", `${readFileSync(path.join(root, "public", "app.themeswire.js"), "utf8")};`)(win);
-  new Function("window", `${readFileSync(path.join(root, "public", "app.themesrunwire.js"), "utf8")};`)(win);
-  let captured = null;
-  win.__GMXThemesWireFactory = (cfg) => {
-    captured = cfg;
-    return { renderThemes: () => 1 };
-  };
-  win.__GMXThemesRunWireFactory({
-    keys: { extViewKey: "gmx_ext_view" },
-    mod: { themeApply: {}, themesUi: { renderThemes: () => 3 } },
-    catalog: { unlockedCountByRefs: () => 2, extThemesLength: 10, freeVisibleExtThemes: 2 },
-  }).run();
-  assert.equal(captured.extViewKey, "gmx_ext_view");
-  assert.equal(captured.extThemesLength, 10);
 });
 
 test("i18nbridge: exports catalog and delegates site i18n helpers", () => {
@@ -1721,22 +1672,26 @@ test("wallpaperswire: exports wallpaper catalog delegates and runs normalize hoo
   assert.equal(wire.currentTabName(), "gm");
 });
 
-test("wallpapersrunwire: groups deps and delegates to wallpaperswire", () => {
+test("wallpaperswire grouped: flattens grouped ctx", () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.wallpaperswire.js"), "utf8")};`)(win);
-  new Function("window", `${readFileSync(path.join(root, "public", "app.wallpapersrunwire.js"), "utf8")};`)(win);
-  let captured = null;
-  win.__GMXWallpapersWireFactory = (cfg) => {
-    captured = cfg;
-    return { currentTabName: () => "gm" };
-  };
-  const wire = win.__GMXWallpapersRunWireFactory({
-    keys: { K: { WP_GLOBAL: "gmx_wp_global" } },
-    mod: { wp: { SITE_PACK_COUNT: 58 }, wpStore: { normalizeAllWallpapers: () => {} } },
+  const wire = win.__GMXWallpapersWireFactory({
+    keys: { K: { WP_GLOBAL: "gmx_wp_global", WP_TAB_PREFIX: "gmx_wp_tab_" } },
+    mod: {
+      wp: { SITE_FREE_PACK_COUNT: 2, CUSTOM_WP_FREE_COUNT: 0, CUSTOM_UPLOAD_ID: "custom", CUSTOM_WP_RE: /^custom_/, buildSiteWallpapers: () => [] },
+      wpStore: { SITE_WALLPAPER_TABS: ["home"], normalizeAllWallpapers: () => {}, getWallpaperForTab: () => null },
+      customWp: { loadCustomWallpapers: async () => [] },
+      wpHelpers: { normalizeWallpaperId: (id) => id },
+      extWpStore: {},
+      tabState: { getCurrentTab: () => "home" },
+      wpApply: {},
+      i18nUi: { siteTr: (k) => k },
+      wpUi: {},
+      langUi: {},
+    },
   });
-  wire.run();
-  assert.equal(captured.keys.WP_GLOBAL, "gmx_wp_global");
-  assert.equal(captured.wp.SITE_PACK_COUNT, 58);
+  assert.equal(typeof wire.currentTabName, "function");
+  assert.equal(wire.WALLPAPERS.length, 0);
 });
 
 test("bankswire: delegates bank storage helpers", () => {
@@ -1827,27 +1782,6 @@ test("chromewire: wires chrome shell helpers and shellwire auth", () => {
   }
 });
 
-test("chromerunwire: builds grouped ctx and delegates to chromewire", () => {
-  const win = {};
-  new Function("window", `${readFileSync(path.join(root, "public", "app.chromewire.js"), "utf8")};`)(win);
-  new Function("window", `${readFileSync(path.join(root, "public", "app.chromerunwire.js"), "utf8")};`)(win);
-  let captured = null;
-  win.__GMXChromeWireFactory = (cfg) => {
-    captured = cfg;
-    return { fillStyles: () => true };
-  };
-  const wire = win.__GMXChromeRunWireFactory({
-    mod: { chrome: { $: () => null }, styles: { fillStyles: () => true } },
-    keys: { LS_SITE_LANG: "gmx_site_lang", API: "http://test" },
-    hooks: { normalizeTopLevelTab: (n) => n, t: (k) => k },
-    session: { getInitDone: () => false, setAuthOk: () => {} },
-  });
-  wire.run();
-  assert.equal(captured.LS_SITE_LANG, "gmx_site_lang");
-  assert.equal(captured.API, "http://test");
-  assert.equal(captured.chrome.$, captured.chrome.$);
-});
-
 test("bankuiwire: wires bankui and bestpick modules", () => {
   const prevLs = globalThis.localStorage;
   globalThis.localStorage = { getItem: () => null, setItem: () => {} };
@@ -1888,29 +1822,6 @@ test("bankuiwire: wires bankui and bestpick modules", () => {
   } finally {
     globalThis.localStorage = prevLs;
   }
-});
-
-test("bankuirunwire: builds grouped ctx and delegates to bankuiwire", () => {
-  const win = {};
-  new Function("window", `${readFileSync(path.join(root, "public", "app.bankuiwire.js"), "utf8")};`)(win);
-  new Function("window", `${readFileSync(path.join(root, "public", "app.bankuirunwire.js"), "utf8")};`)(win);
-  let captured = null;
-  win.__GMXBankUiWireFactory = (cfg) => {
-    captured = cfg;
-    return { bankUi: {}, bestPick: {} };
-  };
-  const wire = win.__GMXBankUiRunWireFactory({
-    core: { $: () => null, fmt: {}, gen: {}, dedupeLines: (x) => x, api: async () => ({}) },
-    auth: { requireConnected: () => true, getHandle: () => "@x", isPro: () => false },
-    data: { keys: { DRAFT_GM_NEW: "d1" }, saveCap: () => 1, saveCapFree: 1, lastSaved: {}, getBankKey: () => "k" },
-    ui: { toast: () => {}, t: (k) => k },
-    perf: { trackEvent: () => {} },
-    params: { readGenParams: () => ({}), getAntiStrength: () => 1 },
-    state: { abort: { gm: null, gn: null } },
-  });
-  wire.run();
-  assert.equal(captured.getHandle(), "@x");
-  assert.equal(captured.keys.DRAFT_GM_NEW, "d1");
 });
 
 test("generatewire: wires refstats and generateflow delegates", async () => {
@@ -1974,31 +1885,6 @@ test("generatewire: wires refstats and generateflow delegates", async () => {
   assert.match(msg.innerHTML, /Session expired/);
 });
 
-test("generaterunwire: builds generate ctx and delegates run", () => {
-  const win = {};
-  new Function("window", `${readFileSync(path.join(root, "public", "app.generatewire.js"), "utf8")};`)(win);
-  new Function("window", `${readFileSync(path.join(root, "public", "app.generaterunwire.js"), "utf8")};`)(win);
-  let captured = null;
-  win.__GMXGenerateWireFactory = (cfg) => {
-    captured = cfg;
-    return { generate: async () => {}, mergeAppendUnique: () => [] };
-  };
-  const runWire = win.__GMXGenerateRunWireFactory({
-    core: { $: () => null, api: async () => ({}), gen: {}, bankUi: {} },
-    auth: { getHandle: () => "@demo", requireConnected: () => true, getToken: () => "", initSession: async () => true },
-    ui: { renderList: () => {}, setBusy: () => {}, refreshUsage: async () => {}, toast: () => {} },
-    params: { readGenParams: () => ({}), getAntiStrength: () => 1, cleanFillStrength: 2 },
-    data: { siteLangKey: "gmx_site_lang", refPromoOpenKey: "gmx_ref_promo", remainingSlots: () => 1 },
-    text: { t: (k) => k },
-    perf: { logEvent: () => {}, yieldToUiFrame: async () => {} },
-    state: { inflight: { gm: false, gn: false }, abort: { gm: null, gn: null } },
-  });
-  runWire.run();
-  assert.equal(captured.getHandle(), "@demo");
-  assert.equal(captured.siteLangKey, "gmx_site_lang");
-  assert.equal(captured.cleanFillStrength, 2);
-});
-
 test("walletwire: wires wallet helpers, pay, and ui delegates", () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.wallethelpers.js"), "utf8")};`)(win);
@@ -2025,28 +1911,6 @@ test("walletwire: wires wallet helpers, pay, and ui delegates", () => {
   assert.match(els.w_status_desc.innerHTML, /Pro active/);
   assert.equal(typeof wire.loadPlans, "function");
   assert.equal(typeof wire.bindWalletTab, "function");
-});
-
-test("walletrunwire: groups deps and delegates to walletwire", () => {
-  const win = {};
-  new Function("window", `${readFileSync(path.join(root, "public", "app.walletwire.js"), "utf8")};`)(win);
-  new Function("window", `${readFileSync(path.join(root, "public", "app.walletrunwire.js"), "utf8")};`)(win);
-  let captured = null;
-  win.__GMXWalletWireFactory = (cfg) => {
-    captured = cfg;
-    return { bindWalletTab: () => {} };
-  };
-  win.__GMXWalletRunWireFactory({
-    core: { $: () => null, api: async () => ({}), K: { WALLET_CHOICE: "gmx_wallet_choice" } },
-    mod: { modals: {} },
-    text: { escapeHtml: (s) => s, friendlyUiErrorMessage: (m) => m },
-    ui: { toast: () => {} },
-    perf: { trackEvent: () => {}, abVariant: () => "a" },
-    pay: { setPayState: () => {}, openPaySuccess: () => {} },
-    session: { getHandle: () => "@demo", refreshUsage: async () => {} },
-  }).run();
-  assert.equal(captured.K.WALLET_CHOICE, "gmx_wallet_choice");
-  assert.equal(captured.getHandle(), "@demo");
 });
 
 test("referralswire: wires referrals factory delegates", async () => {
@@ -2078,26 +1942,6 @@ test("referralswire: wires referrals factory delegates", async () => {
   assert.equal(typeof wire.loadRefLeaderboard, "function");
 });
 
-test("referralsrunwire: groups deps and delegates to referralswire", () => {
-  const win = {};
-  new Function("window", `${readFileSync(path.join(root, "public", "app.referralswire.js"), "utf8")};`)(win);
-  new Function("window", `${readFileSync(path.join(root, "public", "app.referralsrunwire.js"), "utf8")};`)(win);
-  let captured = null;
-  win.__GMXReferralsWireFactory = (cfg) => {
-    captured = cfg;
-    return { loadRefInvited: async () => {}, loadRefLeaderboard: async () => {} };
-  };
-  win.__GMXReferralsRunWireFactory({
-    core: { $: () => null, api: async () => ({}), t: (k) => k },
-    auth: { requireConnected: () => true },
-    keys: { siteLangKey: "gmx_site_lang" },
-    ui: { getReferralUiCopy: () => ({}) },
-    refs: { refreshRefStats: async () => {} },
-  }).run();
-  assert.equal(captured.siteLangKey, "gmx_site_lang");
-  assert.equal(typeof captured.requireConnected, "function");
-});
-
 test("leaderboardwire: wires leaderboard factory delegates", () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.leaderboard.js"), "utf8")};`)(win);
@@ -2111,25 +1955,6 @@ test("leaderboardwire: wires leaderboard factory delegates", () => {
   wire.bindLeaderboardUI();
   assert.equal(wire.getLbDays(), 7);
   assert.equal(lbDays, 7);
-});
-
-test("leaderboardrunwire: groups deps and delegates to leaderboardwire", () => {
-  const win = {};
-  new Function("window", `${readFileSync(path.join(root, "public", "app.leaderboardwire.js"), "utf8")};`)(win);
-  new Function("window", `${readFileSync(path.join(root, "public", "app.leaderboardrunwire.js"), "utf8")};`)(win);
-  let captured = null;
-  win.__GMXLeaderboardWireFactory = (cfg) => {
-    captured = cfg;
-    return { loadLeaderboard: async () => ({}), bindLeaderboardUI: () => {}, getLbDays: () => 7 };
-  };
-  win.__GMXLeaderboardRunWireFactory({
-    core: { $: () => null, escapeHtml: (s) => s, t: (_k, fb) => fb },
-    auth: { getToken: () => "tok", getHandle: () => "@demo" },
-    lb: { setLbDays: () => {} },
-  }).run();
-  assert.equal(captured.getHandle(), "@demo");
-  assert.equal(captured.getToken(), "tok");
-  assert.equal(typeof captured.setLbDays, "function");
 });
 
 test("predictionwire: wires prediction factory delegates", async () => {
@@ -2164,25 +1989,6 @@ test("predictionwire: wires prediction factory delegates", async () => {
   assert.match(els.pmList.innerHTML, /Polymarket Direction Signal/);
 });
 
-test("predictionrunwire: groups deps and delegates to predictionwire", async () => {
-  const win = {};
-  new Function("window", `${readFileSync(path.join(root, "public", "app.predictionwire.js"), "utf8")};`)(win);
-  new Function("window", `${readFileSync(path.join(root, "public", "app.predictionrunwire.js"), "utf8")};`)(win);
-  let captured = null;
-  win.__GMXPredictionWireFactory = (cfg) => {
-    captured = cfg;
-    return { syncPredictionFilterCopy: () => {}, loadPredictionSignals: async () => {} };
-  };
-  win.__GMXPredictionRunWireFactory({
-    core: { $: () => null, escapeHtml: (s) => s, t: (_k, fb) => fb, api: async () => ({}), friendlyUiErrorMessage: (m) => m },
-    auth: { getHandle: () => "@demo", getToken: () => "tok" },
-    tab: { tabState: { getCurrentTab: () => "prediction" } },
-  }).run();
-  assert.equal(captured.getHandle(), "@demo");
-  assert.equal(captured.getToken(), "tok");
-  assert.equal(captured.tabState.getCurrentTab(), "prediction");
-});
-
 test("adminwire: wires admin factory delegates", () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.admin.js"), "utf8")};`)(win);
@@ -2205,24 +2011,6 @@ test("adminwire: wires admin factory delegates", () => {
   assert.equal(els.adminHandle.value, "@demo");
   assert.equal(els.adminAuthState.textContent, "signed out");
   assert.equal(typeof wire.pruneLegacyAdminPanels, "function");
-});
-
-test("adminrunwire: groups deps and delegates to adminwire", () => {
-  const win = {};
-  new Function("window", `${readFileSync(path.join(root, "public", "app.adminwire.js"), "utf8")};`)(win);
-  new Function("window", `${readFileSync(path.join(root, "public", "app.adminrunwire.js"), "utf8")};`)(win);
-  let captured = null;
-  win.__GMXAdminWireFactory = (cfg) => {
-    captured = cfg;
-    return { syncAdminUi: () => {}, requireAdminSignedIn: () => {}, pruneLegacyAdminPanels: () => {} };
-  };
-  win.__GMXAdminRunWireFactory({
-    core: { $: () => null, escapeHtml: (s) => s, api: async () => ({}) },
-    auth: { getHandle: () => "@demo", requireConnected: () => true },
-    admin: { setAdminToken: () => {}, isAdminSignedIn: () => false, adminHandle: "@Kristofer_Sol_" },
-  }).run();
-  assert.equal(captured.adminHandle, "@Kristofer_Sol_");
-  assert.equal(captured.getHandle(), "@demo");
 });
 
 test("redeemwire: wires redeem factory and binds UI", async () => {
@@ -2248,24 +2036,6 @@ test("redeemwire: wires redeem factory and binds UI", async () => {
   assert.match(els.connectMsg.innerHTML, /Paste a code first/);
 });
 
-test("redeemrunwire: groups deps and delegates to redeemwire", () => {
-  const win = {};
-  new Function("window", `${readFileSync(path.join(root, "public", "app.redeemwire.js"), "utf8")};`)(win);
-  new Function("window", `${readFileSync(path.join(root, "public", "app.redeemrunwire.js"), "utf8")};`)(win);
-  let captured = null;
-  win.__GMXRedeemWireFactory = (cfg) => {
-    captured = cfg;
-    return { bindRedeem: () => {} };
-  };
-  win.__GMXRedeemRunWireFactory({
-    core: { $: () => null, api: async () => ({}) },
-    auth: { requireConnected: () => true, getHandle: () => "@demo" },
-    ui: { tab: () => {}, renderWalletStatus: () => {}, refreshUsage: async () => {} },
-  }).run();
-  assert.equal(captured.getHandle(), "@demo");
-  assert.equal(typeof captured.refreshUsage, "function");
-});
-
 test("connectwire: wires connect factory and binds UI", async () => {
   const win = {};
   new Function("window", `${readFileSync(path.join(root, "public", "app.connect.js"), "utf8")};`)(win);
@@ -2284,21 +2054,21 @@ test("connectwire: wires connect factory and binds UI", async () => {
   assert.match(els.connectMsg.innerHTML, /valid @handle/);
 });
 
-test("connectrunwire: groups deps and delegates to connectwire", () => {
+test("connectwire grouped: flattens grouped ctx", () => {
   const win = {};
+  new Function("window", `${readFileSync(path.join(root, "public", "app.connect.js"), "utf8")};`)(win);
   new Function("window", `${readFileSync(path.join(root, "public", "app.connectwire.js"), "utf8")};`)(win);
-  new Function("window", `${readFileSync(path.join(root, "public", "app.connectrunwire.js"), "utf8")};`)(win);
   let captured = null;
-  win.__GMXConnectWireFactory = (cfg) => {
+  win.__GMXConnectFactory = (cfg) => {
     captured = cfg;
     return { bindConnect: () => {} };
   };
-  win.__GMXConnectRunWireFactory({
+  win.__GMXConnectWireFactory({
     core: { $: () => null, api: async () => ({}), escapeHtml: (s) => s, friendlyUiErrorMessage: (m) => m, normalizeHandle: (h) => h },
     auth: { setAuthOk: () => {}, applyAdminVisibility: () => {} },
     session: { refreshUsage: async () => {}, loadPlans: async () => {}, ping: async () => {} },
     keys: { handle: "h", token: "t", isAdmin: "a", adminClaimable: "c", forceLogout: "f", forceLogoutV2: "f2" },
-  }).run();
+  });
   assert.equal(captured.keys.token, "t");
   assert.equal(typeof captured.ping, "function");
 });

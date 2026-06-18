@@ -19,10 +19,10 @@ const CREDITS = path.join(ROOT, "docs", "WALLPAPER_CREDITS.md");
 
 /** 58 curated Pexels photo IDs — landscapes, coast, forest, mountains, soft sky. */
 const PEXELS_IDS = [
-  1366919, 1417647, 1520342, 1179229, 1261728, 1624496, 1732189, 1784575, 189349, 247599,
-  325044, 414612, 450597, 618833, 691668, 870941, 1143411, 1029604, 1287145, 1578750,
+  2662116, 1417647, 1520342, 1179229, 1261728, 1624496, 1732189, 1784575, 189349, 247599,
+  325044, 414612, 450597, 618833, 691668, 870941, 1486971, 1029604, 1287145, 1578750,
   1671279, 1761279, 2387845, 1257860, 3225519, 1323712, 3463772, 3558895, 3662634, 417411,
-  417173, 1693441, 1848771, 1437629, 2387428, 3131638, 207219, 209207, 2101820, 2343464,
+  417173, 1693441, 1848771, 1437629, 2387428, 2325447, 207219, 209207, 2101820, 2343464,
   2564552, 2774557, 3165335, 3847188, 3957971, 4482900, 5194269, 577585, 29128084, 29177407,
   29609552, 29986107, 30751954, 1770803, 1563356, 17483868, 2685339, 2832382,
 ];
@@ -63,6 +63,15 @@ async function downloadBuffer(url, retries = 3) {
 
 async function main() {
   const sharp = (await import("sharp")).default;
+  const onlyArg = process.argv.find((a) => a.startsWith("--slots="));
+  const onlySlots = onlyArg
+    ? onlyArg
+        .slice("--slots=".length)
+        .split(",")
+        .map((s) => Number(s.trim()))
+        .filter((n) => n >= 1 && n <= SITE_COUNT)
+    : null;
+
   for (const dir of [SITE_FULL, SITE_THUMB, EXT_FULL, EXT_THUMB]) {
     fs.mkdirSync(dir, { recursive: true });
   }
@@ -77,6 +86,8 @@ async function main() {
 
   let failed = 0;
   for (let i = 0; i < SITE_COUNT; i++) {
+    const slot = i + 1;
+    if (onlySlots && !onlySlots.includes(slot)) continue;
     const id = PEXELS_IDS[i] ?? PEXELS_IDS[i % PEXELS_IDS.length];
     const siteId = `v2_${String(i + 1).padStart(3, "0")}`;
     const extId = `extv3_${String(i + 1).padStart(2, "0")}`;

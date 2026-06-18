@@ -4,8 +4,8 @@ function pickBestLine(kind, lines){ return __gmxBestPick.pickBestLine(kind, line
 async function doBest(kind){ return __gmxBestPick.doBest(kind); }
 async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
 
-  if (!window.__GMXBankUiRunWireFactory) throw new Error("GMX bankuirunwire factory missing");
-  const __gmxBankUiRunWire = window.__GMXBankUiRunWireFactory({
+  if (!window.__GMXBankUiWireFactory) throw new Error("GMX bankuirunwire factory missing");
+  const __gmxBankUiRunWire = window.__GMXBankUiWireFactory({
     core: {
       $,
       fmt: __gmxFmt,

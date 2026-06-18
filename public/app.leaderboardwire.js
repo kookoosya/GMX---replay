@@ -3,6 +3,20 @@
 
   window.__GMXLeaderboardWireFactory = function createGMXLeaderboardWire(ctx) {
     ctx = ctx || {};
+    if (ctx.core) {
+      const core = ctx.core || {};
+    const auth = ctx.auth || {};
+    const lb = ctx.lb || {};
+
+    ctx = {
+        $: core.$,
+        escapeHtml: core.escapeHtml,
+        t: core.t,
+        getToken: auth.getToken,
+        getHandle: auth.getHandle,
+        setLbDays: lb.setLbDays,
+      };
+    }
 
     if (!window.__GMXLeaderboardFactory) throw new Error("GMX leaderboard factory missing");
     const __gmxLeaderboard = window.__GMXLeaderboardFactory({

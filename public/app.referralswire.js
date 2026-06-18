@@ -3,6 +3,34 @@
 
   window.__GMXReferralsWireFactory = function createGMXReferralsWire(ctx) {
     ctx = ctx || {};
+    if (ctx.core) {
+      const core = ctx.core || {};
+    const auth = ctx.auth || {};
+    const keys = ctx.keys || {};
+    const ui = ctx.ui || {};
+    const refs = ctx.refs || {};
+
+    ctx = {
+        $: core.$,
+        escapeHtml: core.escapeHtml,
+        api: core.api,
+        t: core.t,
+        requireConnected: auth.requireConnected,
+        getReferralUiCopy: ui.getReferralUiCopy,
+        siteLangKey: keys.siteLangKey,
+        refreshRefStats: refs.refreshRefStats,
+        revealReferralLinkUi: refs.revealReferralLinkUi,
+        applyRefCountEligible: refs.applyRefCountEligible,
+        renderThemes: ui.renderThemes,
+        renderExtThemes: ui.renderExtThemes,
+        initWallpapers: ui.initWallpapers,
+        renderExtWallpapers: ui.renderExtWallpapers,
+        fillStyles: ui.fillStyles,
+        fillPacks: ui.fillPacks,
+        refreshUsage: ui.refreshUsage,
+        initReferralPromoDetailsState: ui.initReferralPromoDetailsState,
+      };
+    }
 
     if (!window.__GMXReferralsFactory) throw new Error("GMX referrals factory missing");
     const __gmxReferrals = window.__GMXReferralsFactory({

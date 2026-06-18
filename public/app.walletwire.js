@@ -3,6 +3,31 @@
 
   window.__GMXWalletWireFactory = function createGMXWalletWire(ctx) {
     ctx = ctx || {};
+    if (ctx.core) {
+      const core = ctx.core || {};
+    const mod = ctx.mod || {};
+    const text = ctx.text || {};
+    const ui = ctx.ui || {};
+    const perf = ctx.perf || {};
+    const pay = ctx.pay || {};
+    const session = ctx.session || {};
+
+    ctx = {
+        $: core.$,
+        api: core.api,
+        K: core.K,
+        modals: mod.modals,
+        escapeHtml: text.escapeHtml,
+        toast: ui.toast,
+        trackEvent: perf.trackEvent,
+        abVariant: perf.abVariant,
+        friendlyUiErrorMessage: text.friendlyUiErrorMessage,
+        setPayState: pay.setPayState,
+        openPaySuccess: pay.openPaySuccess,
+        getHandle: session.getHandle,
+        refreshUsage: session.refreshUsage,
+      };
+    }
     const K = ctx.K || {};
 
     let BILLING = { receiver: "", plans: [], solUsd: 0, rpcPublic: "" };

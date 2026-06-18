@@ -3,6 +3,21 @@
 
   window.__GMXRedeemWireFactory = function createGMXRedeemWire(ctx) {
     ctx = ctx || {};
+    if (ctx.core) {
+      const core = ctx.core || {};
+    const auth = ctx.auth || {};
+    const ui = ctx.ui || {};
+
+    ctx = {
+        $: core.$,
+        api: core.api,
+        requireConnected: auth.requireConnected,
+        getHandle: auth.getHandle,
+        tab: ui.tab,
+        renderWalletStatus: ui.renderWalletStatus,
+        refreshUsage: ui.refreshUsage,
+      };
+    }
 
     if (!window.__GMXRedeemFactory) throw new Error("GMX redeem factory missing");
     const __gmxRedeem = window.__GMXRedeemFactory({

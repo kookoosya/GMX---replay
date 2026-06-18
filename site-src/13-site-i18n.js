@@ -1,5 +1,5 @@
-  if (!window.__GMXSiteInitRunWireFactory) throw new Error("GMX siteinitrunwire factory missing");
-  await window.__GMXSiteInitRunWireFactory({
+  if (!window.__GMXSiteInitWireFactory) throw new Error("GMX siteinitwire factory missing");
+  await window.__GMXSiteInitWireFactory({
     mod: {
       siteLangMenu: __gmxSiteLangMenu,
       styles: __gmxStyles,

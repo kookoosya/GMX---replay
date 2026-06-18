@@ -1,4 +1,4 @@
-if (!window.__GMXThemesRunWireFactory) throw new Error("GMX themesrunwire factory missing");
+if (!window.__GMXThemesWireFactory) throw new Error("GMX themesrunwire factory missing");
 const {
   LS_EXT_VIEW,
   applyTheme,
@@ -24,7 +24,7 @@ const {
   renderExtWallpapers,
   bindExtTabs,
   initExtWallpaperControls,
-} = window.__GMXThemesRunWireFactory({
+} = window.__GMXThemesWireFactory({
   keys: { extViewKey: K.EXT_VIEW },
   mod: {
     themeApply: __gmxThemeApply,
@@ -42,4 +42,4 @@ const {
     extThemesLength: EXT_THEMES.length,
     freeVisibleExtThemes: FREE_VISIBLE_EXT_THEMES,
   },
-}).run();
+});
