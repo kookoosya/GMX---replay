@@ -1749,8 +1749,6 @@ registerMetaRoutes({
   EXTENSION_STORE_URL,
 });
 
-// Public try routes registered in initGenerator() via server/routes/public.mjs
-
 import { registerUserRoutes } from "./server/routes/user.mjs";
 import { createExtSelectors } from "./server/ext-selectors.mjs";
 import { registerExtRoutes } from "./server/routes/ext.mjs";
@@ -1903,14 +1901,6 @@ var startAutoAwardsLoop;
   ext: __GMX_EXT_SELECTORS,
   grants: adminGrants,
 }));
-
-// merged into server/routes/admin.mjs (registerAdminRoutes in 16-admin.js)
-
-// merged into server/routes/admin.mjs
-
-// merged into server/routes/admin.mjs
-
-// auto awards loop: startAutoAwardsLoop from registerAdminRoutes (16-admin.js)
 
 import { registerStaticRoutes } from "./server/routes/static.mjs";
 

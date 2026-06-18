@@ -10,18 +10,13 @@
     "08-supabase-referrals-public-referrals-public-ref-click.js",
     "09-generator-see-server-generation-mjs.js",
     "10-api.js",
-    "11-public-try-no-auth.js",
     "12-extension-recovery-public.js",
     "13-cloud-sync-pro-server-side-gated.js",
     "14-pro-tools-server-side-gated-requires-auth.js",
     "15-admin.js",
     "16-admin.js",
-    "17-admin-business-conversion-metrics.js",
-    "18-admin-extension-health-dashboard.js",
-    "19-admin-faq-content-retired.js",
-    "20-auto-leaderboard-prizes-7d-30d.js",
     "21-static-site.js",
     "22-error-handler.js"
   ],
-  "generatedAt": "2026-05-30T19:12:34.677Z"
+  "generatedAt": "2026-06-18T08:00:00.000Z"
 }

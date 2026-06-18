@@ -5,7 +5,7 @@
  * Usage: node tools/audit-wallpapers.mjs [source-dir]
  *
  * Outputs: tools/wallpaper-selection.json (sorted list of best 160 filenames)
- * Then run: node tools/import-preset-wallpapers.mjs --from-selection
+ * For prod pack use: npm run wallpapers:fetch
  */
 import fs from "node:fs";
 import path from "node:path";

@@ -27,8 +27,12 @@
       typeof ctx.onCosmeticRefresh === "function" ? ctx.onCosmeticRefresh : () => {};
     const scheduleRefStatsRefresh =
       typeof ctx.scheduleRefStatsRefresh === "function" ? ctx.scheduleRefStatsRefresh : () => {};
+    const getCurrentTab =
+      typeof ctx.getCurrentTab === "function" ? ctx.getCurrentTab : () => "home";
     const renderHelpIfOpen =
       typeof ctx.renderHelpIfOpen === "function" ? ctx.renderHelpIfOpen : () => {};
+
+    let lastRefEligibleScheduled = -1;
 
     function normLimitForUI(limit) {
       const n = Number(limit);
@@ -74,7 +78,8 @@
         setLastUsage({ gm, gn, resetAt: j.resetAt || null });
         setSub(j.sub || null);
         renderWalletStatus(j.sub);
-        applyRefCountEligible(Number(j?.limits?.referralUnlocks?.eligible ?? 0) || 0, {
+        const eligible = Number(j?.limits?.referralUnlocks?.eligible ?? 0) || 0;
+        applyRefCountEligible(eligible, {
           renderUnlockUi: true,
         });
 
@@ -115,9 +120,13 @@
           onCosmeticRefresh();
         }
 
-        try {
-          scheduleRefStatsRefresh(280);
-        } catch {}
+        const onReferralsTab = getCurrentTab() === "referrals";
+        if (onReferralsTab || eligible !== lastRefEligibleScheduled) {
+          lastRefEligibleScheduled = eligible;
+          try {
+            scheduleRefStatsRefresh(onReferralsTab ? 160 : 280);
+          } catch {}
+        }
 
         try {
           renderHelpIfOpen();

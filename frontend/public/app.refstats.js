@@ -18,10 +18,6 @@
       typeof ctx.nextReferralUnlockAt === "function" ? ctx.nextReferralUnlockAt : () => 0;
     const renderReferralPromoNote =
       typeof ctx.renderReferralPromoNote === "function" ? ctx.renderReferralPromoNote : () => {};
-    const renderThemes = typeof ctx.renderThemes === "function" ? ctx.renderThemes : () => {};
-    const renderExtThemes = typeof ctx.renderExtThemes === "function" ? ctx.renderExtThemes : () => {};
-    const fillStyles = typeof ctx.fillStyles === "function" ? ctx.fillStyles : () => {};
-    const fillPacks = typeof ctx.fillPacks === "function" ? ctx.fillPacks : () => {};
 
     let cache = null;
     let lastAt = 0;
@@ -77,7 +73,7 @@
             renderGuideRightCopy(lang);
           } catch (_e) {}
 
-          applyRefCountEligible(eligible);
+          applyRefCountEligible(eligible, { renderUnlockUi: true });
 
           if ($("refConfirmedInline")) $("refConfirmedInline").textContent = String(confirmed);
           if ($("refActiveInline")) $("refActiveInline").textContent = String(active);
@@ -128,18 +124,6 @@
             } catch (_e) {}
           }
 
-          try {
-            renderThemes();
-          } catch (_e) {}
-          try {
-            renderExtThemes();
-          } catch (_e) {}
-          try {
-            fillStyles();
-          } catch (_e) {}
-          try {
-            fillPacks();
-          } catch (_e) {}
           cache = j;
           lastAt = Date.now();
           return j;

@@ -24,7 +24,7 @@ index.js: ASSETS_DIR = path.join(__dirname, "assets")
 - **w01–w158** — пресеты (имена циклически из списка + для w59+ тег темы в `preset-names.json`)
 - **custom_*** — из assets/wallpapers/custom/ (Add wallpaper → API)
 
-Добавить 100 процедурных JPG (w59–w158): `npm run wallpapers:generate-extra`, затем `npm run wallpapers:rebuild-manifest` и `npm run wallpapers:thumbs`. Полный импорт своих файлов: `tools/import-preset-wallpapers.mjs` (до 160 слотов).
+Добавить 100 процедурных JPG (w59–w158): `npm run wallpapers:generate-extra`, затем `npm run wallpapers:rebuild-manifest` и `npm run wallpapers:thumbs`. Prod pack (v2/extv3): `npm run wallpapers:fetch`.
 
 Исправление применения обоев: `mode.js` и встроенный fallback в `app.js` знают реальные расширения (`free01.png` и т.д.), чтобы не подставлялся неверный `.svg`/`.jpg` до загрузки `preset-manifest.json`.
 

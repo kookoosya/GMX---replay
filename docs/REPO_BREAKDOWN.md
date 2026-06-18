@@ -47,13 +47,13 @@
 
 **CSS:** `background-size: cover` на `body` (сайт и extension) — телефон, монитор, popup.
 
-**Генерация:** `node tools/generate-crypto-wallpapers.mjs`
+**Генерация:** `npm run wallpapers:fetch` (Pexels → `v2_*`, `extv3_*` + thumbs)
 
 ## Скрипты обслуживания
 
 | Скрипт | Действие |
 |--------|----------|
-| `tools/generate-crypto-wallpapers.mjs` | Пересоздать pack webp |
+| `tools/fetch-wallpapers-pexels.mjs` | Скачать/обновить scenic pack webp |
 | `tools/prune-asset-mirrors.mjs` | Удалить зеркала assets |
 | `tools/runtime_audit.mjs` | Проверка manifests + parity |
 | `tools/import-wallpapers.mjs` | Custom upload → `custom/` |

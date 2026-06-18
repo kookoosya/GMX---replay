@@ -74,6 +74,13 @@
           ctx.scheduleRefStatsRefresh?.(ms);
         } catch {}
       },
+      getCurrentTab: () => {
+        try {
+          return ctx.getCurrentTab?.();
+        } catch {
+          return "home";
+        }
+      },
       renderHelpIfOpen: () => {
         try {
           __gmxHelp.renderHelpIfOpen();

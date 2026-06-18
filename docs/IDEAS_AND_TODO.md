@@ -19,11 +19,11 @@
 - auto-recover: игнор Script error / chunk load (расширения)
 
 **В план (следующие):**
-- Wallpaper thumbs в сетке (полная картинка только при apply) — §2
 - Skeleton / lazy-load для тяжёлых списков (`SITE_RECOMMENDATIONS.md`)
-- Уменьшить cascade `refreshUsage` → ref stats → renderThemes
 - i18n: не гонять full `applyLang()` без смены языка
 - Модульный boot (~110 deferred scripts) — долгосрочно упростить bundle
+
+**Сделано (2026-06, Phase 2):** cascade `refreshUsage` → ref stats → renderThemes убран; ref stats refresh только при смене eligible или на вкладке referrals.
 
 ### 2. Thumbs для обоев
 - ~~Загрузка превью (thumbs) в сетке вместо полных картинок~~ — **сделано (2026-06):** Pexels fetch → `thumbs/v2_*.webp` 480×270, full 1920×1080

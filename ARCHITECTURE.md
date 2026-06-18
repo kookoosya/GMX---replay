@@ -4,7 +4,7 @@
 
 | Роль | Путь |
 |------|------|
-| **Источник правды** | `public/app.html`, `public/app.js`, `public/app.css`, `app.auth.js`, `app.storage.js`, `arcade.*`, `entitlements.js`, `mode.js`, `themes.json` |
+| **Источник правды** | `public/app.html`, `public/app.js`, `public/app.css`, `app.*.js`, `arcade.*`, `entitlements.js`, `mode.js`, `themes.json` |
 | Копия для Vite fallback | `frontend/public/*` — зеркало после `node tools/sync-app-and-assets.mjs` |
 
 Правки UI для основного сайта делайте в **`public/`**, затем:
@@ -21,8 +21,12 @@ node tools/sync-app-and-assets.mjs
 | Порядок инициализации / wiring в `app.js` | `site-src/*.js` → `npm run build:site` |
 | Разметка shell, список `<script>` | `public/app.html` |
 | Account Center (`/bridge`) | `frontend/src/` → `npm run build:frontend` |
-| API, биллинг, генерация | `server-src/` или `server/` → `npm run build:server` |
+| API routes, billing, generation | **`server/routes/*.mjs`**, **`server/generation.mjs`** |
+| Bootstrap, middleware, static, DB glue | **`server-src/*.js`** → `npm run build:server` → `index.js` |
 | Переводы | `shared/i18n/locales/*.json` → `npm run i18n:sync` |
+| Обои (prod pack) | `npm run wallpapers:fetch` → `assets/wallpapers/`, `assets/extbg/` |
+
+**Не редактируйте** `index.js` и `public/app.js` напрямую — они собираются из `server-src/` и `site-src/`.
 
 Или `npm run dev` / `npm run build` (оба запускают sync в начале цепочки).
 
@@ -53,8 +57,14 @@ Loaded in `popup.html` / `quick.html` before `popup.js`. Site i18n bundle: `exte
 
 - `node smoke.js` — быстрая проверка наличия ключевых id в shell.
 - `npm run verify:parity` — `public/` и `frontend/public/` совпадают по синхронизируемым файлам (после sync).
+- `npm run verify:server` — `index.js` совпадает с `server-src/manifest.json`.
 
 ## База данных
 
 - По умолчанию SQLite (`DB_MODE` не задан или `sqlite`).
 - `DB_MODE=supabase` требует `SUPABASE_URL` и `SUPABASE_SERVICE_ROLE_KEY`; иначе предупреждение и работа через SQLite.
+
+## Deploy (Render)
+
+- Prod: `https://www.gmxreply.com` — auto-deploy from `main` via `render.yaml`.
+- После push: `npm run verify:prod` (сравнивает `health.build` с локальным `git HEAD`).
