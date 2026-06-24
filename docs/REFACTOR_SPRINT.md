@@ -250,3 +250,35 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 - `tests/extension-unlock-gate.test.mjs` + client-invariants
 
 **Verify:** `node --test tests/extension-unlock-gate.test.mjs`, `npm run test:suite`.
+
+## 7.1 Catalog split — DONE
+
+**Problem:** 58-game catalog lived only inside `public/arcade.js` — hard to audit/edit without touching runtime shell.
+
+**Fix:** `data/arcade-catalog.json` source of truth; `tools/build-arcade-catalog.mjs` (`npm run arcade:build`); `load-arcade-catalog.mjs` for audits.
+
+**Verify:** `npm run arcade:build`, `npm run arcade:audit:catalog`.
+
+## 7.2 Quick insert — DONE
+
+**Problem:** No UI to paste CrazyGames / embed / GameDistribution links into a personal quick shelf.
+
+**Fix:** Quick insert panel in `arcade.js` + `tools/lib/arcade-quick-insert.mjs`; localStorage shelf (max 12); i18n in 15 locales.
+
+**Verify:** `node --test tests/arcade-sprint7.test.mjs`.
+
+## 7.3 Embed URL audit — DONE
+
+**Problem:** `tools/arcade-audit.mjs` was manual/network-only and not in CI.
+
+**Fix:** `tools/audit-arcade-embeds.mjs` offline (+ optional `--network`); wired into client-invariants; `npm run arcade:audit:embeds`.
+
+**Verify:** `npm run arcade:audit:embeds`, `npm run test:suite`.
+
+## 7.4 SEO slug deep-links — DONE
+
+**Problem:** `/arcade/agario` redirected blindly to `/arcade.html` without opening the game.
+
+**Fix:** `server/routes/static.mjs` `/arcade/:slug` → `/arcade.html?game=`; `tryOpenDeepLinkGame()` in arcade.js.
+
+**Verify:** `node --test tests/arcade-sprint7.test.mjs`, open `/arcade/agario`.

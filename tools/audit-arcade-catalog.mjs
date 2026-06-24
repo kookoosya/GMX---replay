@@ -1,16 +1,17 @@
 #!/usr/bin/env node
 /**
- * Offline integrity checks for Arcade RAW_GAMES catalog in public/arcade.js.
+ * Offline integrity checks for Arcade catalog (data/arcade-catalog.json).
  * Run: node tools/audit-arcade-catalog.mjs
  */
-import { parseArcadeGames, parseLocalGameCoverIds } from "./lib/parse-arcade-games.mjs";
+import { loadArcadeCatalogGames } from "./lib/load-arcade-catalog.mjs";
+import { parseLocalGameCoverIds } from "./lib/parse-arcade-games.mjs";
 
 const MIN_GAMES = 58;
 const CRAZY_EMBED = /^https:\/\/www\.crazygames\.com\/embed\/[^/?#]+$/i;
 const CRAZY_IMG = /^https:\/\/imgs\.crazygames\.com\//i;
 const ALLOWED_BADGES = new Set([null, "showcase", "top_pro"]);
 
-const games = parseArcadeGames();
+const games = loadArcadeCatalogGames();
 const localIds = parseLocalGameCoverIds();
 const catalogIds = new Set(games.map((g) => g.id));
 let issues = 0;

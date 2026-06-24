@@ -3,520 +3,857 @@
   {
     "id": "kour-io",
     "name": "Kour.io",
-    "icon": "🎮",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/kour-io_16x9/20241107024955/kour-io_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/kour-io",
     "launchUrl": "https://www.crazygames.com/embed/kour-io",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Shooter",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": "top_pro"
   },
   {
     "id": "hazmob-fps",
     "name": "Hazmob FPS",
-    "icon": "🎮",
     "access": "pro",
     "imageUrl": "",
     "embedUrl": "https://www.crazygames.com/embed/hazmob-fps-online-shooter",
     "launchUrl": "https://www.crazygames.com/embed/hazmob-fps-online-shooter",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Shooter",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": "top_pro"
   },
   {
     "id": "sniper-fury",
     "name": "Sniper Fury",
-    "icon": "🎮",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/sniper-fury_16x9/20260317093152/sniper-fury_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/sniper-fury",
     "launchUrl": "https://www.crazygames.com/embed/sniper-fury",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Shooter",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": "top_pro"
   },
   {
     "id": "zombie-derby-pixel",
     "name": "Zombie Derby Pixel",
-    "icon": "🎯",
     "access": "free",
     "imageUrl": "",
     "embedUrl": "https://www.crazygames.com/embed/zombie-derby-pixel-survival",
     "launchUrl": "https://www.crazygames.com/embed/zombie-derby-pixel-survival",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Action",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "path-of-survivor",
     "name": "Path of Survivor",
-    "icon": "🎯",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/path-of-survivor_16x9/20260121061826/path-of-survivor_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/path-of-survivor",
     "launchUrl": "https://www.crazygames.com/embed/path-of-survivor",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Action",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "trial-mania",
     "name": "Trial Mania",
-    "icon": "🏎️",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/trial-mania_16x9/20250121045401/trial-mania_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/trial-mania",
     "launchUrl": "https://www.crazygames.com/embed/trial-mania",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Racing",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "mx-offroad-master",
     "name": "MX Offroad Master",
-    "icon": "🏎️",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/mx-offroad-master_16x9/20260220035406/mx-offroad-master_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/mx-offroad-master",
     "launchUrl": "https://www.crazygames.com/embed/mx-offroad-master",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Racing",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": "top_pro"
   },
   {
     "id": "rally-racer-dirt",
     "name": "Rally Racer Dirt",
-    "icon": "🏎️",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/rally-racer-dirt_16x9/20260220034629/rally-racer-dirt_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/rally-racer-dirt",
     "launchUrl": "https://www.crazygames.com/embed/rally-racer-dirt",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Racing",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "super-bowling",
     "name": "Super Bowling",
-    "icon": "⚽",
     "access": "free",
     "imageUrl": "",
     "embedUrl": "https://www.crazygames.com/embed/super-bowling-mania",
     "launchUrl": "https://www.crazygames.com/embed/super-bowling-mania",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Sports",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "firestone-idle-rpg",
     "name": "Firestone Idle RPG",
-    "icon": "🎲",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/firestone-idle-rpg_16x9/20251001041305/firestone-idle-rpg_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/firestone-idle-rpg",
     "launchUrl": "https://www.crazygames.com/embed/firestone-idle-rpg",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "RPG",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": "top_pro"
   },
   {
     "id": "solitaire-home",
     "name": "Solitaire Home",
-    "icon": "💹",
     "access": "free",
     "imageUrl": "",
     "embedUrl": "https://www.crazygames.com/embed/solitaire-home-story",
     "launchUrl": "https://www.crazygames.com/embed/solitaire-home-story",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Casual",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "zumba-quest",
     "name": "Zumba Quest",
-    "icon": "🎪",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/zumba-quest_16x9/20251006091932/zumba-quest_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/zumba-quest",
     "launchUrl": "https://www.crazygames.com/embed/zumba-quest",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Arcade",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "goat-escape",
     "name": "Goat Escape",
-    "icon": "🎪",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/goat-escape_16x9/20260224082517/goat-escape_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/goat-escape",
     "launchUrl": "https://www.crazygames.com/embed/goat-escape",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Arcade",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "1v1-lol",
     "name": "1v1.LOL",
-    "icon": "🎮",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/games/1v1-lol/cover-1585728351086.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/1v1-lol",
     "launchUrl": "https://www.crazygames.com/embed/1v1-lol",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Shooter",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "shell-shockers",
     "name": "Shell Shockers",
-    "icon": "🎮",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/shellshockersio_16x9/20260203211252/shellshockersio_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/shellshockersio",
     "launchUrl": "https://www.crazygames.com/embed/shellshockersio",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Shooter",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "smash-karts",
     "name": "Smash Karts",
-    "icon": "🏎️",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/smash-karts_16x9/20260210123937/smash-karts_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/smash-karts",
     "launchUrl": "https://www.crazygames.com/embed/smash-karts",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Racing",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "drift-hunters",
     "name": "Drift Hunters",
-    "icon": "🏎️",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/games/drift-hunters/cover-1656950639575.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/drift-hunters",
     "launchUrl": "https://www.crazygames.com/embed/drift-hunters",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Racing",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "bloxd-io",
     "name": "Bloxd.io",
-    "icon": "🎪",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/bloxdhop-io_16x9/20250829023851/bloxdhop-io_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/bloxdhop-io",
     "launchUrl": "https://www.crazygames.com/embed/bloxdhop-io",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Arcade",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
-{
+  {
     "id": "crazy-roll-3d",
     "name": "Crazy Roll 3D",
-    "icon": "🎪",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/games/crazy-roll-3d/cover_16x9-1709124312204.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/crazy-roll-3d",
     "launchUrl": "https://www.crazygames.com/embed/crazy-roll-3d",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Arcade",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "slither-io",
     "name": "Slither.io",
-    "icon": "🎮",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/games/slitherio/cover-1587331280441.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/slitherio",
     "launchUrl": "https://www.crazygames.com/embed/slitherio",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "IO",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "paper-io-2",
     "name": "Paper.io 2",
-    "icon": "🎮",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/paper-io-2_16x9/20250214024143/paper-io-2_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/paper-io-2",
     "launchUrl": "https://www.crazygames.com/embed/paper-io-2",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "IO",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "hole-io",
     "name": "Hole.io",
-    "icon": "🎮",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/holey-io-battle-royale_16x9/20260220104426/holey-io-battle-royale_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/hole-io",
     "launchUrl": "https://www.crazygames.com/embed/hole-io",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "IO",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "worms-zone",
     "name": "Worms Zone",
-    "icon": "🎪",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/worms-zone_16x9/20241128100948/worms-zone_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/worms-zone",
     "launchUrl": "https://www.crazygames.com/embed/worms-zone",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Arcade",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "moto-x3m",
     "name": "Moto X3M",
-    "icon": "🏎️",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/games/moto-x3m/cover_16x9-1700625476572.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/moto-x3m",
     "launchUrl": "https://www.crazygames.com/embed/moto-x3m",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Racing",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "basketball-stars",
     "name": "Basketball Stars",
-    "icon": "⚽",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/games/basketball-stars-2019/cover-1583231506155.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/basketball-stars-2019",
     "launchUrl": "https://www.crazygames.com/embed/basketball-stars-2019",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Sports",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "tennis-masters",
     "name": "Tennis Masters",
-    "icon": "⚽",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/tennis-masters/20201207104629/tennis-masters-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/tennis-masters",
     "launchUrl": "https://www.crazygames.com/embed/tennis-masters",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Sports",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "soccer-legends",
     "name": "Soccer Legends",
-    "icon": "⚽",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/games/soccer-legends-2021/cover_16x9-1732724179287.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/soccer-legends-2021",
     "launchUrl": "https://www.crazygames.com/embed/soccer-legends-2021",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Sports",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "madalin-stunt-cars",
     "name": "Madalin Stunt Cars",
-    "icon": "🏎️",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/games/madalin-stunt-cars-2/cover_16x9-1695113654654.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/madalin-stunt-cars-2",
     "launchUrl": "https://www.crazygames.com/embed/madalin-stunt-cars-2",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Racing",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "night-city-racing",
     "name": "Night City Racing",
-    "icon": "🏎️",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/night-city-racing_16x9/20260220035423/night-city-racing_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/night-city-racing",
     "launchUrl": "https://www.crazygames.com/embed/night-city-racing",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Racing",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "evoworld-io",
     "name": "EvoWorld.io",
-    "icon": "🎮",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/flyordieio/20210614144226/flyordieio-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/flyordieio",
     "launchUrl": "https://www.crazygames.com/embed/flyordieio",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "IO",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "skribbl-io",
     "name": "Skribbl.io",
-    "icon": "💹",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/skribblio.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/skribblio",
     "launchUrl": "https://www.crazygames.com/embed/skribblio",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Casual",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "mahjongg",
     "name": "Mahjongg",
-    "icon": "🎪",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/games/mahjongg-solitaire/cover_16x9-1707829450935.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/mahjongg-solitaire",
     "launchUrl": "https://www.crazygames.com/embed/mahjongg-solitaire",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Puzzle",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "words-of-wonders",
     "name": "Words of Wonders",
-    "icon": "🎪",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/words-of-wonders_16x9/20231019163757/words-of-wonders_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/words-of-wonders",
     "launchUrl": "https://www.crazygames.com/embed/words-of-wonders",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Puzzle",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
-{
+  {
     "id": "dead-zed",
     "name": "Dead Zed",
-    "icon": "🎮",
     "access": "free",
     "imageUrl": "https://imgs.crazygames.com/dead-zed_16x9/20260220044407/dead-zed_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/dead-zed",
     "launchUrl": "https://www.crazygames.com/embed/dead-zed",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Shooter",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
   {
     "id": "buildnow-gg",
     "name": "BuildNow GG",
-    "icon": "🎯",
     "access": "pro",
     "imageUrl": "https://imgs.crazygames.com/buildnow-gg_16x9/20251229084241/buildnow-gg_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
     "embedUrl": "https://www.crazygames.com/embed/buildnow-gg",
     "launchUrl": "https://www.crazygames.com/embed/buildnow-gg",
-    "sourceLabel": "CrazyGames",
-    "shortNote": "",
     "category": "Action",
     "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
     "badge": null
   },
-  {"id":"agario","name":"Agar.io","icon":"🎮","access":"free","imageUrl":"https://imgs.crazygames.com/agario/20230719092731/agario-cover?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/agario","launchUrl":"https://www.crazygames.com/embed/agario","sourceLabel":"CrazyGames","shortNote":"","category":"IO","provider":"crazygames","badge":null},
-  {"id":"diep-io","name":"Diep.io","icon":"🎮","access":"free","imageUrl":"https://imgs.crazygames.com/diepio/20230629173952/diepio-cover?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/diepio","launchUrl":"https://www.crazygames.com/embed/diepio","sourceLabel":"CrazyGames","shortNote":"","category":"IO","provider":"crazygames","badge":null},
-  {"id":"geometry-dash","name":"Geometry Dash","icon":"🏃","access":"free","imageUrl":"https://imgs.crazygames.com/games/geometry-dash-online/cover_16x9-1732744370399.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/geometry-dash-online","launchUrl":"https://www.crazygames.com/embed/geometry-dash-online","sourceLabel":"CrazyGames","shortNote":"","category":"Platformer","provider":"crazygames","badge":null},
-  {"id":"snake-io","name":"Snake.io","icon":"🎮","access":"free","imageUrl":"https://imgs.crazygames.com/snake-io_16x9/20260302021932/snake-io_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/snake-io","launchUrl":"https://www.crazygames.com/embed/snake-io","sourceLabel":"CrazyGames","shortNote":"","category":"IO","provider":"crazygames","badge":null},
-  {"id":"voxiom-io","name":"Voxiom","icon":"🔫","access":"free","imageUrl":"https://imgs.crazygames.com/games/voxiom-io/cover_16x9-1714408559317.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/voxiom-io","launchUrl":"https://www.crazygames.com/embed/voxiom-io","sourceLabel":"CrazyGames","shortNote":"","category":"Shooter","provider":"crazygames","badge":null},
-  {"id":"zombs-royale","name":"Zombs Royale","icon":"🔫","access":"free","imageUrl":"https://imgs.crazygames.com/games/zombsroyaleio/cover-1587299840102.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/zombsroyaleio","launchUrl":"https://www.crazygames.com/embed/zombsroyaleio","sourceLabel":"CrazyGames","shortNote":"","category":"Shooter","provider":"crazygames","badge":null},
-  {"id":"lol-beans","name":"LOL Beans","icon":"🎮","access":"free","imageUrl":"https://imgs.crazygames.com/games/lolbeans-io/cover-1603275114093.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/lolbeans-io","launchUrl":"https://www.crazygames.com/embed/lolbeans-io","sourceLabel":"CrazyGames","shortNote":"","category":"IO","provider":"crazygames","badge":null},
-  {"id":"doodle-jump","name":"Doodle Jump","icon":"🃏","access":"free","imageUrl":"https://imgs.crazygames.com/games/doodle-jump/cover-1669135753297.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/doodle-jump","launchUrl":"https://www.crazygames.com/embed/doodle-jump","sourceLabel":"CrazyGames","shortNote":"","category":"Arcade","provider":"crazygames","badge":null},
-  {"id":"bubble-shooter","name":"Bubble Shooter","icon":"🃏","access":"free","imageUrl":"https://imgs.crazygames.com/games/bubble-shooter-classic/cover-1643212218101.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/bubble-shooter-classic","launchUrl":"https://www.crazygames.com/embed/bubble-shooter-classic","sourceLabel":"CrazyGames","shortNote":"","category":"Puzzle","provider":"crazygames","badge":null},
-  {"id":"2048","name":"2048","icon":"🃏","access":"free","imageUrl":"https://imgs.crazygames.com/games/2048/cover_16x9-1707828856995.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/2048","launchUrl":"https://www.crazygames.com/embed/2048","sourceLabel":"CrazyGames","shortNote":"","category":"Puzzle","provider":"crazygames","badge":null},
-  {"id":"basketball-legends","name":"Basketball Legends","icon":"🏀","access":"free","imageUrl":"https://imgs.crazygames.com/basketball-legends-2020_16x9/20231122050621/basketball-legends-2020_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/basketball-legends-2020","launchUrl":"https://www.crazygames.com/embed/basketball-legends-2020","sourceLabel":"CrazyGames","shortNote":"","category":"Sports","provider":"crazygames","badge":null},
-  {"id":"run-3","name":"Run 3","icon":"🏃","access":"free","imageUrl":"https://imgs.crazygames.com/run3b.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/run-3","launchUrl":"https://www.crazygames.com/embed/run-3","sourceLabel":"CrazyGames","shortNote":"","category":"Platformer","provider":"crazygames","badge":null},
-  {"id":"getaway-shootout","name":"Getaway Shootout","icon":"🔫","access":"free","imageUrl":"https://imgs.crazygames.com/getaway-shootout_16x9/20241230044730/getaway-shootout_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/getaway-shootout","launchUrl":"https://www.crazygames.com/embed/getaway-shootout","sourceLabel":"CrazyGames","shortNote":"","category":"Shooter","provider":"crazygames","badge":null},
-  {"id":"happy-wheels","name":"Happy Wheels","icon":"🏎️","access":"free","imageUrl":"https://imgs.crazygames.com/games/happy-wheels/cover-1688034516340.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/happy-wheels","launchUrl":"https://www.crazygames.com/embed/happy-wheels","sourceLabel":"CrazyGames","shortNote":"","category":"Racing","provider":"crazygames","badge":null},
-  {"id":"cut-the-rope","name":"Cut the Rope","icon":"🃏","access":"free","imageUrl":"https://imgs.crazygames.com/cut-the-rope-ebx_16x9/20240530085010/cut-the-rope-ebx_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/cut-the-rope","launchUrl":"https://www.crazygames.com/embed/cut-the-rope","sourceLabel":"CrazyGames","shortNote":"","category":"Puzzle","provider":"crazygames","badge":null},
-  {"id":"eggy-car","name":"Eggy Car","icon":"🏎️","access":"free","imageUrl":"https://imgs.crazygames.com/eggy-car/20230720050147/eggy-car-cover?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/eggy-car","launchUrl":"https://www.crazygames.com/embed/eggy-car","sourceLabel":"CrazyGames","shortNote":"","category":"Racing","provider":"crazygames","badge":null},
-  {"id":"drift-boss","name":"Drift Boss","icon":"🏎️","access":"free","imageUrl":"https://imgs.crazygames.com/drift-boss_16x9/20260209092420/drift-boss_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/drift-boss","launchUrl":"https://www.crazygames.com/embed/drift-boss","sourceLabel":"CrazyGames","shortNote":"","category":"Racing","provider":"crazygames","badge":null},
-  {"id":"friday-night-funkin","name":"Friday Night Funkin","icon":"🎵","access":"free","imageUrl":"https://imgs.crazygames.com/games/friday-night-funkin/cover-1614085803807.png?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/friday-night-funkin","launchUrl":"https://www.crazygames.com/embed/friday-night-funkin","sourceLabel":"CrazyGames","shortNote":"","category":"Arcade","provider":"crazygames","badge":null},
-  {"id":"kirka-io","name":"Kirka.io","icon":"🔫","access":"free","imageUrl":"https://imgs.crazygames.com/kirka-io_16x9/20260116015838/kirka-io_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop","embedUrl":"https://www.crazygames.com/embed/kirka-io","launchUrl":"https://www.crazygames.com/embed/kirka-io","sourceLabel":"CrazyGames","shortNote":"","category":"Shooter","provider":"crazygames","badge":null},
-  {"id":"marble-shooter","name":"Marble Shooter","icon":"🎯","access":"free","imageUrl":"","embedUrl":"https://www.crazygames.com/embed/marble-shooter","launchUrl":"https://www.crazygames.com/embed/marble-shooter","sourceLabel":"CrazyGames","shortNote":"","category":"Puzzle","provider":"crazygames","badge":null},
-  {"id":"bullet-force","name":"Bullet Force","icon":"🔫","access":"free","imageUrl":"","embedUrl":"https://www.crazygames.com/embed/bullet-force","launchUrl":"https://www.crazygames.com/embed/bullet-force","sourceLabel":"CrazyGames","shortNote":"","category":"Shooter","provider":"crazygames","badge":null},
-  {"id":"minecraft-classic","name":"Minecraft Classic","icon":"🎮","access":"free","imageUrl":"","embedUrl":"https://www.crazygames.com/embed/minecraft-classic","launchUrl":"https://www.crazygames.com/embed/minecraft-classic","sourceLabel":"CrazyGames","shortNote":"","category":"Arcade","provider":"crazygames","badge":null},
-  {"id":"subway-surfers","name":"Subway Surfers","icon":"🏃","access":"free","imageUrl":"","embedUrl":"https://www.crazygames.com/embed/subway-surfers-seoul","launchUrl":"https://www.crazygames.com/embed/subway-surfers-seoul","sourceLabel":"CrazyGames","shortNote":"","category":"Arcade","provider":"crazygames","badge":null}
+  {
+    "id": "agario",
+    "name": "Agar.io",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/agario/20230719092731/agario-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/agario",
+    "launchUrl": "https://www.crazygames.com/embed/agario",
+    "category": "IO",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "diep-io",
+    "name": "Diep.io",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/diepio/20230629173952/diepio-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/diepio",
+    "launchUrl": "https://www.crazygames.com/embed/diepio",
+    "category": "IO",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "geometry-dash",
+    "name": "Geometry Dash",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/games/geometry-dash-online/cover_16x9-1732744370399.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/geometry-dash-online",
+    "launchUrl": "https://www.crazygames.com/embed/geometry-dash-online",
+    "category": "Platformer",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "snake-io",
+    "name": "Snake.io",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/snake-io_16x9/20260302021932/snake-io_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/snake-io",
+    "launchUrl": "https://www.crazygames.com/embed/snake-io",
+    "category": "IO",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "voxiom-io",
+    "name": "Voxiom",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/games/voxiom-io/cover_16x9-1714408559317.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/voxiom-io",
+    "launchUrl": "https://www.crazygames.com/embed/voxiom-io",
+    "category": "Shooter",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "zombs-royale",
+    "name": "Zombs Royale",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/games/zombsroyaleio/cover-1587299840102.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/zombsroyaleio",
+    "launchUrl": "https://www.crazygames.com/embed/zombsroyaleio",
+    "category": "Shooter",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "lol-beans",
+    "name": "LOL Beans",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/games/lolbeans-io/cover-1603275114093.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/lolbeans-io",
+    "launchUrl": "https://www.crazygames.com/embed/lolbeans-io",
+    "category": "IO",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "doodle-jump",
+    "name": "Doodle Jump",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/games/doodle-jump/cover-1669135753297.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/doodle-jump",
+    "launchUrl": "https://www.crazygames.com/embed/doodle-jump",
+    "category": "Arcade",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "bubble-shooter",
+    "name": "Bubble Shooter",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/games/bubble-shooter-classic/cover-1643212218101.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/bubble-shooter-classic",
+    "launchUrl": "https://www.crazygames.com/embed/bubble-shooter-classic",
+    "category": "Puzzle",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "2048",
+    "name": "2048",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/games/2048/cover_16x9-1707828856995.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/2048",
+    "launchUrl": "https://www.crazygames.com/embed/2048",
+    "category": "Puzzle",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "basketball-legends",
+    "name": "Basketball Legends",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/basketball-legends-2020_16x9/20231122050621/basketball-legends-2020_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/basketball-legends-2020",
+    "launchUrl": "https://www.crazygames.com/embed/basketball-legends-2020",
+    "category": "Sports",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "run-3",
+    "name": "Run 3",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/run3b.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/run-3",
+    "launchUrl": "https://www.crazygames.com/embed/run-3",
+    "category": "Platformer",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "getaway-shootout",
+    "name": "Getaway Shootout",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/getaway-shootout_16x9/20241230044730/getaway-shootout_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/getaway-shootout",
+    "launchUrl": "https://www.crazygames.com/embed/getaway-shootout",
+    "category": "Shooter",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "happy-wheels",
+    "name": "Happy Wheels",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/games/happy-wheels/cover-1688034516340.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/happy-wheels",
+    "launchUrl": "https://www.crazygames.com/embed/happy-wheels",
+    "category": "Racing",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "cut-the-rope",
+    "name": "Cut the Rope",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/cut-the-rope-ebx_16x9/20240530085010/cut-the-rope-ebx_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/cut-the-rope",
+    "launchUrl": "https://www.crazygames.com/embed/cut-the-rope",
+    "category": "Puzzle",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "eggy-car",
+    "name": "Eggy Car",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/eggy-car/20230720050147/eggy-car-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/eggy-car",
+    "launchUrl": "https://www.crazygames.com/embed/eggy-car",
+    "category": "Racing",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "drift-boss",
+    "name": "Drift Boss",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/drift-boss_16x9/20260209092420/drift-boss_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/drift-boss",
+    "launchUrl": "https://www.crazygames.com/embed/drift-boss",
+    "category": "Racing",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "friday-night-funkin",
+    "name": "Friday Night Funkin",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/games/friday-night-funkin/cover-1614085803807.png?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/friday-night-funkin",
+    "launchUrl": "https://www.crazygames.com/embed/friday-night-funkin",
+    "category": "Arcade",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "kirka-io",
+    "name": "Kirka.io",
+    "access": "free",
+    "imageUrl": "https://imgs.crazygames.com/kirka-io_16x9/20260116015838/kirka-io_16x9-cover?metadata=none&quality=100&width=1200&height=630&fit=crop",
+    "embedUrl": "https://www.crazygames.com/embed/kirka-io",
+    "launchUrl": "https://www.crazygames.com/embed/kirka-io",
+    "category": "Shooter",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "marble-shooter",
+    "name": "Marble Shooter",
+    "access": "free",
+    "imageUrl": "",
+    "embedUrl": "https://www.crazygames.com/embed/marble-shooter",
+    "launchUrl": "https://www.crazygames.com/embed/marble-shooter",
+    "category": "Puzzle",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "bullet-force",
+    "name": "Bullet Force",
+    "access": "free",
+    "imageUrl": "",
+    "embedUrl": "https://www.crazygames.com/embed/bullet-force",
+    "launchUrl": "https://www.crazygames.com/embed/bullet-force",
+    "category": "Shooter",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "minecraft-classic",
+    "name": "Minecraft Classic",
+    "access": "free",
+    "imageUrl": "",
+    "embedUrl": "https://www.crazygames.com/embed/minecraft-classic",
+    "launchUrl": "https://www.crazygames.com/embed/minecraft-classic",
+    "category": "Arcade",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  },
+  {
+    "id": "subway-surfers",
+    "name": "Subway Surfers",
+    "access": "free",
+    "imageUrl": "",
+    "embedUrl": "https://www.crazygames.com/embed/subway-surfers-seoul",
+    "launchUrl": "https://www.crazygames.com/embed/subway-surfers-seoul",
+    "category": "Arcade",
+    "provider": "crazygames",
+    "sourceLabel": "CrazyGames",
+    "badge": null
+  }
 ];
   const LS_SITE_LANG = "gmx_site_lang";
   const LS_LAST_TAB = "gmx_last_tab";
   const LS_ARCADE_RETURN_GAME = "gmx_arcade_return_game";
+  const LS_ARCADE_QUICK_GAMES = "gmx_arcade_quick_games_v1";
+  const QUICK_GAME_LIMIT = 12;
+
+  function slugifyQuickId(value) {
+    return String(value || "custom")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 48) || "custom-game";
+  }
+  function titleFromQuickSlug(slug) {
+    return String(slug || "Custom game")
+      .split("-")
+      .filter(Boolean)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ");
+  }
+  function makeQuickGame({ id, name, embedUrl, sourceLabel, provider }) {
+    const embed = String(embedUrl || "").trim();
+    if (!/^https:\/\/www\.crazygames\.com\/embed\/[^/?#]+$/i.test(embed) && !/^https:\/\//i.test(embed)) return null;
+    return {
+      id,
+      name: String(name || titleFromQuickSlug(id)).trim() || "Custom game",
+      icon: "🎮",
+      access: "free",
+      imageUrl: "",
+      embedUrl: embed,
+      launchUrl: embed,
+      sourceLabel: sourceLabel || "Custom",
+      shortNote: "",
+      category: "Arcade",
+      provider: provider || "custom",
+      badge: null,
+      quick: true,
+    };
+  }
+  function parseQuickInsertInput(raw) {
+    const text = String(raw || "").trim();
+    if (!text) return { error: "empty" };
+    const iframeSrc = text.match(/<iframe[^>]+src=["']([^"']+)["']/i)?.[1];
+    const candidate = String(iframeSrc || text).trim();
+    if (/^[a-f0-9]{32}$/i.test(candidate)) {
+      const embedUrl = `https://html5.gamedistribution.com/${candidate}/`;
+      return {
+        game: makeQuickGame({
+          id: `quick-${candidate.slice(0, 8)}`,
+          name: "Custom embed",
+          embedUrl,
+          sourceLabel: "GameDistribution",
+          provider: "custom",
+        }),
+      };
+    }
+    try {
+      const url = new URL(candidate);
+      if (!/^https:$/i.test(url.protocol)) return { error: "http_only_https" };
+      const host = url.hostname.toLowerCase();
+      if (host.endsWith("crazygames.com")) {
+        const embedMatch = url.pathname.match(/^\/embed\/([^/?#]+)/i);
+        if (embedMatch) {
+          const slug = embedMatch[1];
+          return {
+            game: makeQuickGame({
+              id: `quick-${slugifyQuickId(slug)}`,
+              name: titleFromQuickSlug(slug),
+              embedUrl: `https://www.crazygames.com/embed/${slug}`,
+              sourceLabel: "CrazyGames",
+              provider: "crazygames",
+            }),
+          };
+        }
+        const gameMatch = url.pathname.match(/^\/game\/([^/?#]+)/i);
+        if (gameMatch) {
+          const slug = gameMatch[1];
+          return {
+            game: makeQuickGame({
+              id: `quick-${slugifyQuickId(slug)}`,
+              name: titleFromQuickSlug(slug),
+              embedUrl: `https://www.crazygames.com/embed/${slug}`,
+              sourceLabel: "CrazyGames",
+              provider: "crazygames",
+            }),
+          };
+        }
+        return { error: "crazygames_path" };
+      }
+      if (host.includes("gamedistribution.com") || host.includes("gamemonetize.com")) {
+        const tail = url.pathname.split("/").filter(Boolean).pop() || host;
+        return {
+          game: makeQuickGame({
+            id: `quick-${slugifyQuickId(tail)}`,
+            name: "Custom embed",
+            embedUrl: url.toString(),
+            sourceLabel: "Embed",
+            provider: "custom",
+          }),
+        };
+      }
+      return {
+        game: makeQuickGame({
+          id: `quick-${slugifyQuickId(host + url.pathname)}`,
+          name: "Custom embed",
+          embedUrl: url.toString(),
+          sourceLabel: "Embed",
+          provider: "custom",
+        }),
+      };
+    } catch {
+      return { error: "unrecognized" };
+    }
+  }
+  function loadQuickGames() {
+    try {
+      const raw = localStorage.getItem(LS_ARCADE_QUICK_GAMES);
+      const list = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(list)) return [];
+      const out = [];
+      const seen = new Set();
+      for (const item of list) {
+        if (!item || typeof item !== "object") continue;
+        const id = String(item.id || "").trim();
+        const embedUrl = String(item.embedUrl || item.launchUrl || "").trim();
+        if (!id || !embedUrl || seen.has(id)) continue;
+        const built = makeQuickGame({
+          id,
+          name: item.name,
+          embedUrl,
+          sourceLabel: item.sourceLabel,
+          provider: item.provider,
+        });
+        if (built) {
+          seen.add(id);
+          out.push(built);
+        }
+      }
+      return out.slice(0, QUICK_GAME_LIMIT);
+    } catch {
+      return [];
+    }
+  }
+  function saveQuickGames(list) {
+    try {
+      localStorage.setItem(LS_ARCADE_QUICK_GAMES, JSON.stringify(list.slice(0, QUICK_GAME_LIMIT)));
+    } catch {}
+  }
+  function addQuickGameFromInput(raw) {
+    const parsed = parseQuickInsertInput(raw);
+    if (!parsed.game) return parsed;
+    const list = loadQuickGames().filter((g) => g.id !== parsed.game.id);
+    list.unshift(parsed.game);
+    saveQuickGames(list);
+    reloadGames();
+    return { game: parsed.game };
+  }
 
   function appWalletHref(gameId) {
     const q = new URLSearchParams();
@@ -588,17 +925,27 @@
     };
     return map[key] || "GAME";
   }
-  const GAMES = RAW_GAMES.filter((g) => g && g.id && !String(g.id).startsWith("_REMOVE_") && !String(g.id).startsWith("_DEL_")).map((game) => {
+  function mapCatalogGame(game) {
     const categoryKey = canonicalCategoryKey(game && game.category);
     const categoryLabel = arcadeT(`arcade_cat_${categoryKey}`) || categoryKey;
     return {
       ...game,
       categoryKey,
       category: categoryLabel,
-      icon: categoryIconTag(categoryKey),
-      shortNote: arcadeT(`arcade_typ_${categoryKey}`) || arcadeT("arcade_note_generic"),
+      icon: game.icon || categoryIconTag(categoryKey),
+      shortNote: game.quick ? arcadeT("arcade_quick_note") : (arcadeT(`arcade_typ_${categoryKey}`) || arcadeT("arcade_note_generic")),
     };
-  });
+  }
+  function sourceCatalogGames() {
+    return RAW_GAMES.filter((g) => g && g.id && !String(g.id).startsWith("_REMOVE_") && !String(g.id).startsWith("_DEL_")).concat(loadQuickGames());
+  }
+  function buildGames() {
+    return sourceCatalogGames().map(mapCatalogGame);
+  }
+  let GAMES = buildGames();
+  function reloadGames() {
+    GAMES = buildGames();
+  }
   const PAGE_SIZE = 15;
   const CATEGORY_COVER_COLORS = {
     action: ["#ef4444", "#7f1d1d"],
@@ -715,6 +1062,17 @@
     if (el) el.textContent = text;
   }
 
+  function tryOpenDeepLinkGame() {
+    if (state.activeId || state.lockedId) return;
+    let gameId = "";
+    try {
+      gameId = String(new URLSearchParams(location.search).get("game") || "").trim();
+    } catch {}
+    if (!gameId) return;
+    const game = GAMES.find((item) => item.id === gameId);
+    if (game) openGame(game);
+  }
+
   function tryResumeArcadeGame() {
     if (state.plan !== "pro") return;
     let gameId = "";
@@ -744,6 +1102,7 @@
       state.plan = "free";
     }
     tryResumeArcadeGame();
+    tryOpenDeepLinkGame();
     const planEl = $("planLabel");
     if (planEl) planEl.textContent = planLabel();
     render();
@@ -931,6 +1290,18 @@
           <select id="categorySelect" class="field selectField"></select>
           <button id="resetFilters" class="ghostBtn">${esc(arcadeT("arcade_reset_filters"))}</button>
         </div>
+        <details class="quickInsertPanel" id="quickInsertPanel">
+          <summary>${esc(arcadeT("arcade_quick_insert_title"))}</summary>
+          <div class="quickInsertBody">
+            <div class="sub">${esc(arcadeT("arcade_quick_insert_hint"))}</div>
+            <textarea id="quickInsertInput" class="field quickInsertField" rows="3" placeholder="${esc(arcadeT("arcade_quick_insert_placeholder"))}"></textarea>
+            <div class="quickInsertActions">
+              <button type="button" id="quickInsertAdd" class="primaryBtn">${esc(arcadeT("arcade_quick_insert_add"))}</button>
+              <button type="button" id="quickInsertClear" class="ghostBtn">${esc(arcadeT("arcade_quick_insert_clear"))}</button>
+            </div>
+            <div id="quickInsertStatus" class="sub"></div>
+          </div>
+        </details>
         <div class="grid" id="gameGrid"></div>
         <div class="loadMoreWrap" id="loadMoreWrap"></div>
       </section>
@@ -983,6 +1354,34 @@
         render();
       });
     }
+
+    const quickStatus = $("quickInsertStatus");
+    const setQuickStatus = (text, tone = "") => {
+      if (!quickStatus) return;
+      quickStatus.textContent = text || "";
+      quickStatus.className = `sub${tone ? ` ${tone}` : ""}`;
+    };
+    $("quickInsertAdd")?.addEventListener("click", () => {
+      const input = $("quickInsertInput");
+      const raw = input ? input.value : "";
+      const result = addQuickGameFromInput(raw);
+      if (!result.game) {
+        setQuickStatus(arcadeT("arcade_quick_insert_error"), "warn");
+        return;
+      }
+      if (input) input.value = "";
+      setQuickStatus(arcadeT("arcade_quick_insert_saved", { name: result.game.name }), "ok");
+      state.visible = PAGE_SIZE;
+      render();
+      openGame(result.game);
+    });
+    $("quickInsertClear")?.addEventListener("click", () => {
+      saveQuickGames([]);
+      reloadGames();
+      setQuickStatus(arcadeT("arcade_quick_insert_cleared"));
+      state.visible = PAGE_SIZE;
+      render();
+    });
 
     const grid = $("gameGrid");
     if (grid) {
@@ -1081,6 +1480,7 @@
     loadPlan();
   });
 
+  reloadGames();
   render();
   loadPlan();
   setStatus(arcadeT("arcade_status_ready", { n: GAMES.length }));

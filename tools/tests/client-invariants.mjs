@@ -114,7 +114,17 @@ for (const rel of ["public/arcade.js", "frontend/public/arcade.js", "public/brid
   if (!/q\.set\("tab",\s*"wallet"\)/.test(text)) {
     fail(`${rel}: arcade checkout must deep-link wallet tab via appWalletHref`);
   }
+  if (!text.includes("quickInsertPanel")) {
+    fail(`${rel}: arcade must expose quick insert panel`);
+  }
+  if (!text.includes("tryOpenDeepLinkGame")) {
+    fail(`${rel}: arcade must honor ?game= deep links`);
+  }
   ok(rel);
+}
+
+if (!fs.existsSync("data/arcade-catalog.json")) {
+  fail("data/arcade-catalog.json missing (catalog source of truth)");
 }
 
 const siteboot = fs.readFileSync("public/app.siteboot.js", "utf8");
@@ -157,6 +167,14 @@ if (catalogAudit.status !== 0) {
   fail(`arcade catalog:\n${catalogAudit.stdout || catalogAudit.stderr}`);
 }
 ok("arcade catalog");
+
+const embedAudit = spawnSync(process.execPath, ["tools/audit-arcade-embeds.mjs"], {
+  encoding: "utf8",
+});
+if (embedAudit.status !== 0) {
+  fail(`arcade embeds:\n${embedAudit.stdout || embedAudit.stderr}`);
+}
+ok("arcade embeds");
 
 if (fs.existsSync("public/bridge/app.html")) {
   fail("public/bridge/app.html must not exist (bridge uses index.html SPA)");

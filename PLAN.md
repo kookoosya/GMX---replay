@@ -81,6 +81,13 @@ SUPABASE_SERVICE_ROLE_KEY=...
 
 1. **Extension cosmetics unlock gating** — DONE (6.1)
 
+### Sprint 7 — Arcade hardening (DONE)
+
+1. **Catalog split** — `data/arcade-catalog.json` + `npm run arcade:build` (7.1)
+2. **Quick insert** — local quick shelf in Arcade UI (7.2)
+3. **Embed audit** — `npm run arcade:audit:embeds` in client-invariants (7.3)
+4. **SEO slugs** — `/arcade/:slug` → `?game=` deep-link (7.4)
+
 ## i18n pipeline
 
 `shared/i18n/locales/*.json` → `npm run i18n:sync` → `public/i18n/siteI18n.js`, `extension/i18n-bundle.js`, bridge copy.

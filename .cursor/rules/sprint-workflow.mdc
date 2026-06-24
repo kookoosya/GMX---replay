@@ -66,3 +66,10 @@ Do not begin step N+1 until step N meets definition of done.
 ## Sprint 6 queue (strict order) — extension unlock parity
 
 1. Extension cosmetics unlock gating — DONE (6.1)
+
+## Sprint 7 queue (strict order) — Arcade hardening
+
+1. Catalog split (`data/arcade-catalog.json` + build) — DONE (7.1)
+2. Quick insert (URL / embed / GameDistribution id) — DONE (7.2)
+3. Embed URL offline audit in CI — DONE (7.3)
+4. SEO `/arcade/:slug` deep-links — DONE (7.4)

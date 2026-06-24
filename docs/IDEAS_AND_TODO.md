@@ -49,7 +49,10 @@
 ### 3. Arcade
 - **Монетизация**: Arcade Pro gate → wallet checkout (4.2 DONE)
 - **Real cover images**: category `.webp` (4.1 DONE); catalog audit guards CrazyGames entries (5.2)
-- **Quick insert** в Arcade: URL / GameMonetize ID / embed — уже частично есть
+- **Quick insert** — DONE (7.2): CrazyGames URL / iframe / GameDistribution hash, local shelf
+- **Catalog split** — DONE (7.1): `data/arcade-catalog.json` + `arcade:build`
+- **Embed audit** — DONE (7.3): `arcade:audit:embeds` offline in CI
+- **SEO slugs** — DONE (7.4): `/arcade/:slug` deep-links
 
 ### 4. Referrals
 - Unlock gating в site + extension — DONE (6.1)

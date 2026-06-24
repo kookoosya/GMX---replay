@@ -32,6 +32,17 @@ export function registerStaticRoutes(deps) {
     return res.redirect(302, "/arcade.html");
   });
 
+  app.get("/arcade/:slug", (req, res, next) => {
+    try {
+      const slug = String(req.params.slug || "").trim().toLowerCase();
+      if (!slug || slug.includes(".") || slug === "html") return next();
+      noStore(res);
+      return res.redirect(302, `/arcade.html?game=${encodeURIComponent(slug)}`);
+    } catch {
+      return next();
+    }
+  });
+
   app.use(
     express.static(PUBLIC_DIR, {
       maxAge: "1h",
