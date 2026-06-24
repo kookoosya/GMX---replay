@@ -105,3 +105,21 @@ Rules: `.cursor/rules/sprint-workflow.mdc` (one step at a time, no parity drift)
 - `ARCHITECTURE.md` — VPS vs Render section
 
 **Verify:** docs consistent with `render.yaml` (`DB_MODE=sqlite`) and `DEPLOY.md`.
+
+---
+
+# Refactor Sprint 3 — tracker
+
+Focus: **site + extension stability** (Supabase deferred).
+
+## 3.1 Referral progress bar i18n — DONE
+
+**Problem:** Progress meter logic existed (`refProgressWrap` / fill) but label was hardcoded English; no reward hint on the bar.
+
+**Fix:**
+- `ref_progress_meter_html` in all 15 locales
+- `syncRefProgressMeter()` in `app.sitei18ndynamic.js` — localized label + `nextReferralUnlockLabel` reward
+- Wired through `i18nbridge` → `generatewire` → `refstats`
+- `refProgressLabel` empty in `app.html` (filled on stats refresh)
+
+**Verify:** `npm test`, `npm run audit:i18n:strict`.

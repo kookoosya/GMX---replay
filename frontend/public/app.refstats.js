@@ -16,6 +16,8 @@
       typeof ctx.applyRefCountEligible === "function" ? ctx.applyRefCountEligible : () => {};
     const nextReferralUnlockAt =
       typeof ctx.nextReferralUnlockAt === "function" ? ctx.nextReferralUnlockAt : () => 0;
+    const syncRefProgressMeter =
+      typeof ctx.syncRefProgressMeter === "function" ? ctx.syncRefProgressMeter : () => {};
     const renderReferralPromoNote =
       typeof ctx.renderReferralPromoNote === "function" ? ctx.renderReferralPromoNote : () => {};
 
@@ -100,20 +102,9 @@
               renderReferralPromoNote(j, confirmed, active, eligible);
             } catch (_e) {}
           }
-          const nextStep = nextReferralUnlockAt(eligible);
-          const wrap = $("refProgressWrap");
-          const nextEl = $("refProgressNext");
-          const fillEl = $("refProgressFill");
-          if (wrap && nextEl && fillEl) {
-            if (nextStep > 0) {
-              wrap.classList.remove("hidden");
-              nextEl.textContent = String(nextStep);
-              const pct = Math.min(100, Math.round((eligible / nextStep) * 100));
-              fillEl.style.width = pct + "%";
-            } else {
-              wrap.classList.add("hidden");
-            }
-          }
+          try {
+            syncRefProgressMeter(lang, eligible);
+          } catch (_e) {}
 
           const promoDetails = $("promoDetails");
           if (promoDetails) {

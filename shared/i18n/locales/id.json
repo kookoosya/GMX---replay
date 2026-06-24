@@ -62,6 +62,7 @@
   "ref_promoter_details": "Detail promoter",
   "ref_unlocks_now": "Buka kuncinya sekarang",
   "ref_next_unlock": "Buka kunci berikutnya",
+  "ref_progress_meter_html": "Buka kunci berikutnya pada <b>{n}</b> memenuhi syarat — {reward}",
   "ref_all_unlocked": "Semua pembukaan kunci yang terdaftar telah tercapai",
   "ref_metric_clicks": "Klik",
   "ref_metric_bg_slots": "slot BG",

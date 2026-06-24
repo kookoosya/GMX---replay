@@ -60,10 +60,18 @@ SUPABASE_SERVICE_ROLE_KEY=...
 
 ## Дальше (приоритет)
 
-1. **Supabase на Render** (если нужна облачная БД) — env в Dashboard, прогнать SQL, `verify:prod`
-2. **Boot bundle** — ~97 deferred scripts в `app.html` (Phase 4+, не срочно)
-3. **Referral progress bar** — UI (`IDEAS_AND_TODO.md`)
-4. **Arcade** — category `.webp` covers, Pro checkout flow
+**Supabase отложен** — подключаем, когда сайт и расширение стабильно работают (`DB_MODE=sqlite` на Render достаточно).
+
+### Sprint 3 — стабильность сайта + расширения
+
+1. **Referral progress bar** — i18n + подсказка награды (в работе)
+2. **Extension connect/status** — убрать hardcoded EN в `popup.js`
+3. **Extension ↔ site session sync** — аудит + тесты
+4. **Boot bundle** — ~97 deferred scripts (не срочно, после 1–3)
+
+### Позже
+
+- **Arcade** — category `.webp` covers, Pro checkout flow
 
 ## i18n pipeline
 

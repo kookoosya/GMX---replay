@@ -62,6 +62,7 @@
   "ref_promoter_details": "Деталі промоутера",
   "ref_unlocks_now": "Відкривається зараз",
   "ref_next_unlock": "Наступне відкриття",
+  "ref_progress_meter_html": "Наступне відкриття при <b>{n}</b> запрошених — {reward}",
   "ref_all_unlocked": "Усі перелічені відкриття досягнуті",
   "ref_metric_clicks": "Кліки",
   "ref_metric_bg_slots": "Слоти фону",

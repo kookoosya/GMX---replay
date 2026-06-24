@@ -62,6 +62,7 @@
   "ref_promoter_details": "推广者详情",
   "ref_unlocks_now": "立即解锁",
   "ref_next_unlock": "下一步解锁",
+  "ref_progress_meter_html": "下次解锁需<b>{n}</b>个符合条件 — {reward}",
   "ref_all_unlocked": "已达到所有列出的解锁次数",
   "ref_metric_clicks": "点击次数",
   "ref_metric_bg_slots": "背景槽位",

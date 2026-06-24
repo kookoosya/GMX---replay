@@ -74,9 +74,9 @@
         items,
         promoterTitle: t("ref_promoter_details") || fallback.promoterTitle,
         baseDaily: t("ref_daily_limit_title") || fallback.baseDaily,
-        unlocksNow: fallback.unlocksNow,
-        nextUnlock: fallback.nextUnlock,
-        allUnlocked: fallback.allUnlocked,
+        unlocksNow: t("ref_unlocks_now") || fallback.unlocksNow,
+        nextUnlock: t("ref_next_unlock") || fallback.nextUnlock,
+        allUnlocked: t("ref_all_unlocked") || fallback.allUnlocked,
         antiAbuse: t("ref_abuse_note") || fallback.antiAbuse,
         confirmed: t("ref_k_confirmed") || fallback.confirmed,
         active: t("ref_k_active") || fallback.active,
@@ -210,6 +210,29 @@
       return ui.allUnlocked;
     }
 
+    function syncRefProgressMeter(lang, eligible) {
+      const wrap = $("refProgressWrap");
+      const label = $("refProgressLabel");
+      const fillEl = $("refProgressFill");
+      if (!wrap || !label || !fillEl) return;
+      const e = Number(eligible || 0) || 0;
+      const nextStep = nextReferralUnlockAt(e);
+      if (nextStep <= 0) {
+        wrap.classList.add("hidden");
+        return;
+      }
+      wrap.classList.remove("hidden");
+      const reward = nextReferralUnlockLabel(lang, nextStep);
+      const tpl = siteTr(
+        "ref_progress_meter_html",
+        "Next unlock at <b>{n}</b> eligible — {reward}"
+      );
+      label.innerHTML = tpl
+        .replace(/\{n\}/g, String(nextStep))
+        .replace(/\{reward\}/g, escapeHtml(reward));
+      fillEl.style.width = Math.min(100, Math.round((e / nextStep) * 100)) + "%";
+    }
+
     function renderReferralRightCopy(lang) {
       const ui = getReferralUiCopy(lang);
       const title = $("r_how");
@@ -294,6 +317,7 @@
       deriveReferralUnlocks,
       nextReferralUnlockAt,
       nextReferralUnlockLabel,
+      syncRefProgressMeter,
       renderReferralRightCopy,
       syncModePanelCopy,
       patchDynamicCopy,

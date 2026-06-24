@@ -36,6 +36,9 @@
     function nextReferralUnlockLabel(lang, step) {
       return siteI18nDynamic.nextReferralUnlockLabel?.(lang, step);
     }
+    function syncRefProgressMeter(lang, eligible) {
+      return siteI18nDynamic.syncRefProgressMeter?.(lang, eligible);
+    }
     function renderReferralRightCopy(lang) {
       return siteI18nDynamic.renderReferralRightCopy?.(lang);
     }
@@ -59,6 +62,7 @@
       deriveReferralUnlocks,
       nextReferralUnlockAt,
       nextReferralUnlockLabel,
+      syncRefProgressMeter,
       renderReferralRightCopy,
       syncModePanelCopy,
       patchDynamicCopy,

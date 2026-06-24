@@ -62,6 +62,7 @@
   "ref_promoter_details": "प्रोमोटर विवरण",
   "ref_unlocks_now": "अभी अनलॉक",
   "ref_next_unlock": "अगला अनलॉक",
+  "ref_progress_meter_html": "अगला अनलॉक <b>{n}</b> योग्य पर — {reward}",
   "ref_all_unlocked": "सभी सूचीबद्ध अनलॉक पूरे",
   "ref_metric_clicks": "क्लिक",
   "ref_metric_bg_slots": "बैकग्राउंड स्लॉट",

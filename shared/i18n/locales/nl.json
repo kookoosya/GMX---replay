@@ -62,6 +62,7 @@
   "ref_promoter_details": "Promoter-details",
   "ref_unlocks_now": "Ontgrendelt nu",
   "ref_next_unlock": "Volgende ontgrendeling",
+  "ref_progress_meter_html": "Volgende ontgrendeling bij <b>{n}</b> in aanmerking komenden — {reward}",
   "ref_all_unlocked": "Alle vermelde ontgrendelingen bereikt",
   "ref_metric_clicks": "Klikken",
   "ref_metric_bg_slots": "Achtergrondslots",

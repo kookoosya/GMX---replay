@@ -62,6 +62,7 @@
   "ref_promoter_details": "Promoter details",
   "ref_unlocks_now": "Unlocks now",
   "ref_next_unlock": "Next unlock",
+  "ref_progress_meter_html": "Next unlock at <b>{n}</b> eligible — {reward}",
   "ref_all_unlocked": "All listed unlocks reached",
   "ref_metric_clicks": "Clicks",
   "ref_metric_bg_slots": "BG slots",

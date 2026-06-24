@@ -62,6 +62,7 @@
   "ref_promoter_details": "Детали промоутера",
   "ref_unlocks_now": "Разблокируется сейчас",
   "ref_next_unlock": "Следующая разблокировка",
+  "ref_progress_meter_html": "Следующая разблокировка при <b>{n}</b> приглашённых — {reward}",
   "ref_all_unlocked": "Все перечисленные разблокировки достигнуты",
   "ref_metric_clicks": "Клики",
   "ref_metric_bg_slots": "Слоты БГ",

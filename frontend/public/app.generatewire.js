@@ -27,6 +27,7 @@
         renderGuideRightCopy: ui.renderGuideRightCopy,
         applyRefCountEligible: ui.applyRefCountEligible,
         nextReferralUnlockAt: ui.nextReferralUnlockAt,
+        syncRefProgressMeter: ui.syncRefProgressMeter,
         renderThemes: ui.renderThemes,
         renderExtThemes: ui.renderExtThemes,
         fillStyles: ui.fillStyles,
@@ -81,6 +82,7 @@
       renderGuideRightCopy: ctx.renderGuideRightCopy,
       applyRefCountEligible: ctx.applyRefCountEligible,
       nextReferralUnlockAt: ctx.nextReferralUnlockAt,
+      syncRefProgressMeter: ctx.syncRefProgressMeter,
     });
     const revealReferralLinkUi = () => refStats.revealReferralLinkUi?.();
     const scheduleRefStatsRefresh = (delay) => refStats.scheduleRefStatsRefresh?.(delay);

@@ -62,6 +62,7 @@
   "ref_promoter_details": "Détails du promoteur",
   "ref_unlocks_now": "Se débloque maintenant",
   "ref_next_unlock": "Déverrouillage suivant",
+  "ref_progress_meter_html": "Déverrouillage suivant à <b>{n}</b> éligibles — {reward}",
   "ref_all_unlocked": "Tous les déverrouillages répertoriés ont été atteints",
   "ref_metric_clicks": "Clics",
   "ref_metric_bg_slots": "Emplacements BG",

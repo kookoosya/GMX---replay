@@ -21,8 +21,10 @@
 **Сделано (2026-06, Phase 4):** skeleton loaders для Leaderboard/Referrals; Arcade iframe lazy-load (клик → embed); Render boot hardening; `applyLang()` skip без смены языка.
 
 **В план (следующие):**
-- Модульный boot (~97 deferred scripts) — bundle
-- Referral progress bar
+- Модульный boot (~97 deferred scripts) — bundle (Sprint 3.4, не срочно)
+- Extension connect/status i18n (Sprint 3.2)
+
+**Сделано (Sprint 3.1):** referral progress bar — i18n `ref_progress_meter_html` + подсказка награды на метре.
 
 **Сделано (2026-06, Phase 2):** cascade `refreshUsage` → ref stats → renderThemes убран; ref stats refresh только при смене eligible или на вкладке referrals.
 
