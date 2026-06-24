@@ -123,3 +123,14 @@ Focus: **site + extension stability** (Supabase deferred).
 - `refProgressLabel` empty in `app.html` (filled on stats refresh)
 
 **Verify:** `npm test`, `npm run audit:i18n:strict`.
+
+## 3.2 Extension connect/status i18n — DONE
+
+**Problem:** `extension/popup.js` showed hardcoded English for connect/sync session flow, API errors, and copy status messages — broken UX for ru/uk users after Sprint 2.1 static popup i18n.
+
+**Fix:**
+- 22 new `ext_connect_*`, `ext_err_*`, `ext_copy_*` keys in all 15 locales
+- `popup.js` uses `extT()` for `setConnectStatus`, `setCopyStatus`, `friendlyError`, clipboard errors
+- `connectHandle` checks API error codes directly (not translated string match)
+
+**Verify:** `npm test` (118 pass), `audit:i18n:strict`.
