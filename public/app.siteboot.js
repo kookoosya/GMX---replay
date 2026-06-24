@@ -181,6 +181,12 @@
         initProTabs();
       } catch {}
 
+      try {
+        if (window.__GMXHomeHeroFactory) {
+          window.__GMXHomeHeroFactory({ $ }).bindHomeHero();
+        }
+      } catch {}
+
       setInitDone(true);
     }
 

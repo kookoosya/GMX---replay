@@ -23,7 +23,7 @@
 - [x] Trust badges: «50K+ replies», «Games from CrazyGames»
 - [x] Кнопка «Play Arcade»
 - [x] Пункт «Arcade» в What you get
-- [ ] **Hero video** (10–15 сек) — «Reply on email, play games» для новых пользователей
+- [x] **Hero video** (10–15 сек) — «Reply on X, play games» (SVG loop + optional MP4)
 - [x] **Demo без регистрации** — один клик → короткое реплей-демо
 - [ ] Счётчик «X people connected today» (если есть метрики)
 
@@ -100,7 +100,7 @@
 
 | # | Задача | Раздел | Эффект |
 |---|--------|--------|--------|
-| 1 | Hero video / demo | Home | Конверсия | demo DONE (10.1); hero video pending (10.2) |
+| 1 | Hero video / demo | Home | Конверсия | DONE (10.1 + 10.2) |
 | 2 | Yearly plan со скидкой | Upgrade Pro | MRR |
 | 3 | «Игра дня» в расширении | Extension | Retention |
 | 4 | Достижения Arcade | Arcade | Вовлечённость |

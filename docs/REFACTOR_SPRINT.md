@@ -320,3 +320,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** Home try panel in `app.html`; `app.connect.js` calls `/api/public/random-bulk` (3 mid lines) + copy; `prod-verify` spot-check.
 
 **Verify:** `node --test tests/home-demo.test.mjs`, open Home logged out → Try GM.
+
+## 10.2 Home hero motion — DONE
+
+**Problem:** Home lacked a visual hook for «Reply on X, play games» (`SITE_RECOMMENDATIONS.md` priority #1).
+
+**Fix:** `#homeHero` card above grid — 12s animated SVG loop (`/assets/hero/gmx-hero-loop.svg`), poster, optional `<video>` when `gmx-hero.mp4` exists; `app.homehero.js` respects `prefers-reduced-motion`; CTA scrolls to guest demo.
+
+**Verify:** `node --test tests/home-hero.test.mjs`, `prod-verify` hero asset + `#homeHero` in `/app`.

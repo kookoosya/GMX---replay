@@ -68,6 +68,12 @@ if (!connectJs.includes("runHomeTry") || !connectJs.includes("/api/public/random
 if (!fs.readFileSync("public/app.html", "utf8").includes('id="homeTryGm"')) {
   fail("public/app.html missing homeTryGm guest demo control");
 }
+if (!fs.readFileSync("public/app.html", "utf8").includes('id="homeHero"')) {
+  fail("public/app.html missing homeHero block");
+}
+if (!fs.existsSync("public/assets/hero/gmx-hero-loop.svg")) {
+  fail("public/assets/hero/gmx-hero-loop.svg missing");
+}
 if (!fs.existsSync("extension/lib/unlock-core.js")) {
   fail("extension/lib/unlock-core.js missing");
 }

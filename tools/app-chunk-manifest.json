@@ -100,6 +100,7 @@
         "app.shellwire.js",
         "app.chromewire.js",
         "app.connect.js",
+        "app.homehero.js",
         "app.connectwire.js",
         "app.siteboot.js",
         "app.siteinit.js",
