@@ -292,3 +292,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 - `app.html` fallback Pro bullet; `tests/wallet-arcade-pro-i18n.test.mjs`
 
 **Verify:** `npm test`, Wallet tab + locked Arcade title show Arcade in Pro copy.
+
+## 8.2 prod-verify Arcade slug — DONE
+
+**Problem:** Sprint 7.4 slug redirect had unit test on source only; prod smoke did not hit `/arcade/agario`.
+
+**Fix:** `tools/prod-verify.mjs` — 302 to `/arcade.html?game=agario` + `siteI18n.js` contains wallet Arcade Pro copy.
+
+**Verify:** `npm run verify:prod` after deploy.

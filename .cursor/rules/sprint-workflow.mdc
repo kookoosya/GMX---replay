@@ -77,6 +77,6 @@ Do not begin step N+1 until step N meets definition of done.
 ## Sprint 8 queue (strict order) — Pro value copy
 
 1. Wallet / Arcade: explicit «Pro unlocks all Arcade games» — DONE (8.1)
-2. `prod-verify`: `/arcade/:slug` redirect spot-check — pending (8.2)
+2. `prod-verify`: `/arcade/:slug` redirect spot-check — DONE (8.2)
 
 Do not begin step N+1 until step N meets definition of done.

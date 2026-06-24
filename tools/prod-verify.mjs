@@ -84,6 +84,20 @@ if (arcadeCategoryCover.status !== 200) {
 }
 ok("arcade category covers");
 
+const slugRes = await fetch(`${BASE}/arcade/agario`, { redirect: "manual" });
+const slugLoc = String(slugRes.headers.get("location") || "");
+if (slugRes.status !== 302 || !slugLoc.includes("/arcade.html?game=agario")) {
+  fail(`arcade slug redirect: status=${slugRes.status} location=${slugLoc.slice(0, 120)}`);
+}
+ok("arcade slug redirect /arcade/agario");
+
+const siteI18n = await get("/i18n/siteI18n.js");
+if (siteI18n.status !== 200) fail(`siteI18n.js status ${siteI18n.status}`);
+if (!siteI18n.text.includes("all Arcade games")) {
+  fail("siteI18n.js wallet copy missing Arcade Pro mention");
+}
+ok("wallet i18n Arcade Pro copy");
+
 const handle = freshSmokeHandle("p");
 const init = await get("/api/user/init", {
   method: "POST",
