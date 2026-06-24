@@ -1,5 +1,5 @@
 GMXReply i18n sync report
-Updated: 2026-06-16T11:47:06.033Z
+Updated: 2026-06-24T11:02:57.413Z
 Locales: en, de, fr, es, pt, it, nl, tr, pl, id, ru, uk, hi, ja, zh
 
 en: copied-from-en=0, identical-to-en=624/624 (100%)
@@ -12,8 +12,8 @@ nl: copied-from-en=0, identical-to-en=151/624 (24%)
 tr: copied-from-en=0, identical-to-en=125/624 (20%)
 pl: copied-from-en=0, identical-to-en=101/624 (16%)
 id: copied-from-en=0, identical-to-en=120/624 (19%)
-ru: copied-from-en=0, identical-to-en=59/624 (9%)
-uk: copied-from-en=0, identical-to-en=88/624 (14%)
+ru: copied-from-en=0, identical-to-en=68/624 (11%)
+uk: copied-from-en=0, identical-to-en=97/624 (16%)
 hi: copied-from-en=0, identical-to-en=155/624 (25%)
 ja: copied-from-en=0, identical-to-en=130/624 (21%)
 zh: copied-from-en=0, identical-to-en=167/624 (27%)
