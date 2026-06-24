@@ -692,6 +692,7 @@
     visible: PAGE_SIZE,
     activeId: null,
     lockedId: null,
+    iframeReady: false,
   };
 
   const $ = (id) => document.getElementById(id);
@@ -745,11 +746,13 @@
     if (game.access === "pro" && state.plan !== "pro") {
       state.lockedId = game.id;
       state.activeId = null;
+      state.iframeReady = false;
       render();
       return;
     }
     state.lockedId = null;
     state.activeId = game.id;
+    state.iframeReady = false;
     render();
   }
 
@@ -762,6 +765,36 @@
   }
 
   function renderPlayer(game) {
+    const playerBody = state.iframeReady
+      ? `
+        <div class="playerWrap" id="playerWrap">
+          <iframe
+            title="${esc(game.name)}"
+            src="${esc(game.embedUrl)}"
+            allow="autoplay; fullscreen; gamepad; clipboard-read; clipboard-write"
+            allowfullscreen
+          ></iframe>
+        </div>`
+      : `
+        <div class="playerWrap playerWrapPending" id="playerWrap">
+          <button type="button" class="playerLaunch" id="loadGameIframe" aria-label="${esc(arcadeT("arcade_launch_cta"))}">
+            <img
+              src="${esc(coverSrc(game))}"
+              data-fallback-cover="${esc(fallbackCover(game))}"
+              alt=""
+              class="playerLaunchCover"
+              loading="lazy"
+              decoding="async"
+              referrerpolicy="no-referrer"
+            />
+            <span class="playerLaunchOverlay">
+              <span class="playerLaunchIcon" aria-hidden="true">▶</span>
+              <span class="playerLaunchLabel">${esc(arcadeT("arcade_launch_cta"))}</span>
+              <span class="playerLaunchHint">${esc(arcadeT("arcade_player_iframe_note"))}</span>
+            </span>
+          </button>
+        </div>`;
+
     return `
       <section class="panel playerPanel">
         <div class="playerHead">
@@ -775,17 +808,27 @@
             <a class="primaryBtn" href="${esc(game.launchUrl)}" target="_blank" rel="noreferrer">${esc(arcadeT("arcade_open_original"))}</a>
           </div>
         </div>
-        <div class="playerWrap">
-          <iframe
-            title="${esc(game.name)}"
-            src="${esc(game.embedUrl)}"
-            allow="autoplay; fullscreen; gamepad; clipboard-read; clipboard-write"
-            allowfullscreen
-          ></iframe>
-        </div>
+        ${playerBody}
         <div class="playerNote">${esc(arcadeT("arcade_player_iframe_note"))}</div>
       </section>
     `;
+  }
+
+  function mountPlayerControls() {
+    const wrap = $("playerWrap");
+    const btn = $("loadGameIframe");
+    if (!wrap || !btn) return;
+    upgradeTileCovers(wrap);
+    btn.addEventListener("click", () => {
+      if (!activeGame()) return;
+      state.iframeReady = true;
+      render();
+      requestAnimationFrame(() => {
+        try {
+          $("playerWrap")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        } catch {}
+      });
+    });
   }
 
   function renderLocked(game) {
@@ -999,8 +1042,11 @@
 
     $("backToLibrary")?.addEventListener("click", () => {
       state.activeId = null;
+      state.iframeReady = false;
       render();
     });
+
+    mountPlayerControls();
   }
 
   function render() {

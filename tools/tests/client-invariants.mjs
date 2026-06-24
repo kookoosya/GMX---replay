@@ -59,4 +59,15 @@ if (!popup.includes("/api/random-bulk")) {
 }
 ok("extension/popup.js");
 
+for (const rel of ["public/arcade.js", "frontend/public/arcade.js", "public/bridge/arcade.js"]) {
+  if (!fs.existsSync(rel)) continue;
+  const text = fs.readFileSync(rel, "utf8");
+  if (!text.includes("iframeReady")) fail(`${rel}: arcade must lazy-load iframe via iframeReady`);
+  if (!text.includes('id="loadGameIframe"')) fail(`${rel}: arcade must expose click-to-play control`);
+  if (!/state\.iframeReady\s*=\s*true/.test(text)) {
+    fail(`${rel}: arcade must set iframeReady only after explicit play click`);
+  }
+  ok(rel);
+}
+
 console.log("CLIENT_INVARIANTS_OK");

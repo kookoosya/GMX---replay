@@ -18,11 +18,11 @@
 - wallpaper UI: guard от рекурсивного re-render при load custom
 - auto-recover: игнор Script error / chunk load (расширения)
 
-**Сделано (2026-06, Phase 4):** skeleton loaders для Leaderboard и Referrals (`tableSkeletonHtml` в `app.ui.js`); Render boot без `ADMIN_SECRET` — warn-only + `render-start-check.mjs`; `applyLang()` skip без смены языка.
+**Сделано (2026-06, Phase 4):** skeleton loaders для Leaderboard/Referrals; Arcade iframe lazy-load (клик → embed); Render boot hardening; `applyLang()` skip без смены языка.
 
 **В план (следующие):**
-- Lazy-load iframe Arcade (клик → загрузка)
 - Модульный boot (~97 deferred scripts) — bundle
+- Referral progress bar
 
 **Сделано (2026-06, Phase 2):** cascade `refreshUsage` → ref stats → renderThemes убран; ref stats refresh только при смене eligible или на вкладке referrals.
 
