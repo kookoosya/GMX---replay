@@ -52,7 +52,7 @@
 - **Quick insert** в Arcade: URL / GameMonetize ID / embed — уже частично есть
 
 ### 4. Referrals
-- Unlock gating в site + extension (Phase 5)
+- Unlock gating в site + extension — DONE (6.1)
 - Admin unlock-credit коды уже есть в backend
 
 ### 5. Техдолг (по R69)

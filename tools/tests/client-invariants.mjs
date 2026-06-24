@@ -58,6 +58,21 @@ if (/\/api\/generate-bulk\?/.test(popup)) {
 if (!popup.includes("/api/random-bulk")) {
   fail("extension/popup.js: should call /api/random-bulk when authed");
 }
+if (!popup.includes("GMXExtCosmeticsGate") || !popup.includes("clampExtCosmetics")) {
+  fail("extension/popup.js must enforce referral unlock gating via GMXExtCosmeticsGate");
+}
+if (!fs.existsSync("extension/lib/unlock-core.js")) {
+  fail("extension/lib/unlock-core.js missing");
+}
+if (!fs.existsSync("extension/lib/ext-cosmetics-gate.js")) {
+  fail("extension/lib/ext-cosmetics-gate.js missing");
+}
+for (const html of ["extension/popup.html", "extension/quick.html"]) {
+  const shell = fs.readFileSync(html, "utf8");
+  if (!shell.includes("lib/unlock-core.js") || !shell.includes("lib/ext-cosmetics-gate.js")) {
+    fail(`${html} must load unlock-core + ext-cosmetics-gate before popup.js`);
+  }
+}
 ok("extension/popup.js");
 
 const siteSync = fs.readFileSync("extension/site_sync.js", "utf8");

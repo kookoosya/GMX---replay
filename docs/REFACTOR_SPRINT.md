@@ -238,3 +238,15 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 - client-invariants + `npm run arcade:audit:catalog`
 
 **Verify:** `node tools/audit-arcade-catalog.mjs`, `npm run test:suite`.
+
+## 6.1 Extension cosmetics unlock gating — DONE
+
+**Problem:** Site enforces referral/Pro locks on extension themes and wallpapers (`app.extapply.js`, `app.extthemesui.js`); extension popup applied any synced cosmetic without checking entitlements.
+
+**Fix:**
+- `extension/lib/unlock-core.js` — same `FREE_VISIBLE_EXT_*` + `unlockedCountByRefs` as `app.unlock.js`
+- `extension/lib/ext-cosmetics-gate.js` — `clampExtCosmetics()` before `applyThemeUi`
+- `popup.js` — load usage + eligible refs, clamp locked theme/wallpaper to first unlocked fallback
+- `tests/extension-unlock-gate.test.mjs` + client-invariants
+
+**Verify:** `node --test tests/extension-unlock-gate.test.mjs`, `npm run test:suite`.

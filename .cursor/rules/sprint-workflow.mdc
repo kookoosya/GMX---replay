@@ -62,3 +62,7 @@ Do not begin step N+1 until step N meets definition of done.
 2. Catalog static audit + prune orphan local-cover pipeline — DONE (5.2)
 
 Do not begin step N+1 until step N meets definition of done.
+
+## Sprint 6 queue (strict order) — extension unlock parity
+
+1. Extension cosmetics unlock gating — DONE (6.1)

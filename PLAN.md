@@ -77,6 +77,10 @@ SUPABASE_SERVICE_ROLE_KEY=...
 - **Sprint 5.1** Arcade per-game `.webp` covers — DONE (superseded by catalog cleanup in 5.2)
 - **Sprint 5.2** Arcade catalog static audit — DONE
 
+### Sprint 6 — extension unlock parity
+
+1. **Extension cosmetics unlock gating** — DONE (6.1)
+
 ## i18n pipeline
 
 `shared/i18n/locales/*.json` → `npm run i18n:sync` → `public/i18n/siteI18n.js`, `extension/i18n-bundle.js`, bridge copy.

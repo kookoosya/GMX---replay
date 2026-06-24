@@ -32,6 +32,8 @@ const state = {
   extWallpaper: "",
   extCustomBg: "",
   themeCatalog: null,
+  isPro: false,
+  refEligible: 0,
   cache: { gm: [], gn: [] },
   fallbackIndex: { gm: 0, gn: 0 },
   alertsEnabled: true,
@@ -220,8 +222,38 @@ async function getThemeCatalog() {
   return state.themeCatalog;
 }
 
+async function applyCosmeticsGate(themeList) {
+  const gate = globalThis.GMXExtCosmeticsGate;
+  if (!gate || typeof gate.clampExtCosmetics !== "function") return;
+  const clamped = gate.clampExtCosmetics(
+    {
+      extTheme: state.extTheme,
+      extView: state.extView,
+      extWallpaper: state.extWallpaper,
+      extCustomBg: state.extCustomBg,
+    },
+    {
+      themes: themeList,
+      wallpaperOptions: EXT_WALLPAPER_OPTIONS,
+      isPro: state.isPro,
+      refCount: state.refEligible,
+    }
+  );
+  if (!clamped.changed) return;
+  state.extTheme = clamped.extTheme;
+  state.extView = clamped.extView;
+  state.extWallpaper = clamped.extWallpaper;
+  await saveState({
+    [THEME_KEYS.extTheme]: state.extTheme,
+    [THEME_KEYS.extView]: state.extView,
+    [THEME_KEYS.extWallpaper]: state.extWallpaper,
+  });
+  lastThemeSignature = "";
+}
+
 async function applyThemeUi() {
   const list = await getThemeCatalog();
+  await applyCosmeticsGate(list);
 
   const pickedId = sanitizeThemeId(state.extTheme, list);
   const requestedView = normalizeExtView(state.extView || "theme");
@@ -763,7 +795,10 @@ async function copyKind(kind, preferBest = false) {
 async function refreshSnapshot() {
   applySessionUi();
   if (!state.token) {
+    state.isPro = false;
+    state.refEligible = 0;
     renderStats(null, null);
+    await applyThemeUi();
     void ensureCache("gm", 4);
     void ensureCache("gn", 4);
     return;
@@ -779,7 +814,16 @@ async function refreshSnapshot() {
   }
 
   const refs = await apiRequest("/api/referral/stats", { acceptStatuses: [401, 403] });
-  renderStats(usage.ok ? usage.data : null, refs.ok ? refs.data : null);
+  const usageData = usage.ok ? usage.data : null;
+  const refsData = refs.ok ? refs.data : null;
+  renderStats(usageData, refsData);
+
+  const gate = globalThis.GMXExtCosmeticsGate || {};
+  state.isPro = typeof gate.usageIsPro === "function" ? gate.usageIsPro(usageData) : false;
+  state.refEligible =
+    typeof gate.refEligibleFromStats === "function" ? gate.refEligibleFromStats(refsData) : 0;
+  await applyThemeUi();
+
   requestSignalPoll();
   void ensureCache("gm", 4);
   void ensureCache("gn", 4);
