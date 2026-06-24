@@ -10,6 +10,30 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const htmlPath = path.join(root, "public", "app.html");
 const outPath = path.join(root, "client-manifest.json");
+const chunkManifestPath = path.join(root, "tools", "app-chunk-manifest.json");
+
+const lazyTabFiles = [
+  "app.admin.js",
+  "app.adminwire.js",
+  "app.prediction.js",
+  "app.predictionwire.js",
+  "app.walletpay.js",
+  "app.walletui.js",
+  "app.wallethelpers.js",
+  "app.walletwire.js",
+  "app.leaderboard.js",
+  "app.leaderboardwire.js",
+  "app.referrals.js",
+  "app.referralswire.js",
+  "app.redeem.js",
+  "app.redeemwire.js",
+];
+
+let chunkSourceFiles = [];
+if (fs.existsSync(chunkManifestPath)) {
+  const { chunks } = JSON.parse(fs.readFileSync(chunkManifestPath, "utf8"));
+  chunkSourceFiles = (chunks || []).flatMap((c) => c.files);
+}
 
 const html = fs.readFileSync(htmlPath, "utf8");
 
@@ -62,12 +86,13 @@ const orderedSync = [
   "mode.js",
   "themes.json",
 ];
-// Add i18n if in scripts
+// Add i18n before first chunk or app.js entry
 if (scriptOrder.includes("i18n/siteI18n.js")) {
-  const idx = orderedSync.indexOf("app.storage.js");
-  if (idx > 0) orderedSync.splice(idx, 0, "i18n/siteI18n.js");
+  const idx = orderedSync.findIndex((s) => s.startsWith("chunks/") || s === "app.js");
+  const at = idx > 0 ? idx : orderedSync.indexOf("app.css") + 1;
+  if (at > 0) orderedSync.splice(at, 0, "i18n/siteI18n.js");
 }
-manifest.syncFiles = [...new Set(orderedSync)];
+manifest.syncFiles = [...new Set([...orderedSync, ...chunkSourceFiles, ...lazyTabFiles])];
 
 fs.writeFileSync(outPath, JSON.stringify(manifest, null, 2) + "\n");
 console.log(`wrote ${outPath} (${manifest.syncFiles.length} sync files, ${scriptOrder.length} defer scripts)`);

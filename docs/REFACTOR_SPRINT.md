@@ -171,7 +171,19 @@ Focus: **site + extension stability** (Supabase deferred).
 - `site-src/07–12` — lazy init via `__gmxLazyTabHooks`; wallet/redeem ensure on first use; `pruneLegacyAdminPanels` boot stub without loading admin module
 - `tests/app-lazytabs.test.mjs`; `logic-audit` + `audit-app-boot` updated
 
-**Next bundle work (not started):**
-- **5d:** esbuild 3–5 chunks for site-src + wire graph
+**Next bundle work (not started):** none — Phase 5d complete.
 
-**Verify:** `npm run audit:boot`, `npm test`, `npm run test:suite`.
+**Verify:** `npm run audit:boot`, `npm test`, `npm run verify:site`.
+
+## Bundle Phase 5d — esbuild shell chunks — DONE
+
+**Problem:** After 5c, boot still issued **84** sequential defer requests for shell modules+wires; HTTP overhead dominated first paint.
+
+**Fix:**
+- `tools/app-chunk-manifest.json` — four ordered packs (82 source files)
+- `tools/build-app-chunks.mjs` — esbuild minify → `public/chunks/app.shell.*.js`
+- `app.html` eager boot: **i18n + 4 chunks + app.js = 6** defer scripts
+- Source `app.*.js` files kept for unit tests, lazy tabs, and `prod-verify` spot checks
+- `verify-app-chunks.mjs` + updated `audit:boot` / `logic-audit`
+
+**Verify:** `npm run verify:site`, `npm run audit:boot`, `npm test`.

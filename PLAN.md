@@ -72,7 +72,7 @@ SUPABASE_SERVICE_ROLE_KEY=...
 ### После Sprint 3
 
 - **Bundle 5c:** lazy tab packs (`app.lazytabs.js`, 84 defer scripts) — DONE
-- **Bundle 5d:** esbuild chunks (3–5 HTTP) — next
+- **Bundle 5d:** esbuild shell chunks (6 eager defer scripts) — DONE
 - **Arcade** — category `.webp` covers, Pro checkout flow
 
 ## i18n pipeline

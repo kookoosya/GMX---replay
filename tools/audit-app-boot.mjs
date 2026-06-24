@@ -11,13 +11,21 @@ import { getScriptOrder, loadClientManifest } from "./lib/client-manifest.mjs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const publicDir = path.join(root, "public");
 const frontendPublic = path.join(root, "frontend", "public");
+const chunkManifestPath = path.join(root, "tools", "app-chunk-manifest.json");
 
-const BASELINE_DEFER_COUNT = 84;
+const BASELINE_DEFER_COUNT = 6;
 const jsonOut = process.argv.includes("--json");
+
+const chunkManifest = JSON.parse(fs.readFileSync(chunkManifestPath, "utf8"));
+const chunkSourceFiles = new Set(
+  (chunkManifest.chunks || []).flatMap((chunk) => chunk.files.map((f) => path.basename(f)))
+);
+const chunkOutputs = (chunkManifest.chunks || []).map((c) => c.out);
 
 function categorizeScript(rel) {
   const base = path.basename(rel);
   if (base === "app.js") return "entry";
+  if (rel.startsWith("chunks/")) return "chunk";
   if (rel.startsWith("i18n/")) return "i18n";
   if (/^app\.bootstrap\w+wire\.js$/.test(base)) return "bootstrap-wire";
   if (/wire\.js$/.test(base)) return "feature-wire";
@@ -39,6 +47,12 @@ const scriptOrder = getScriptOrder();
 const issues = [];
 if (scriptOrder.length !== BASELINE_DEFER_COUNT) {
   issues.push(`defer script count ${scriptOrder.length} != baseline ${BASELINE_DEFER_COUNT}`);
+}
+
+for (const out of chunkOutputs) {
+  if (!fs.existsSync(path.join(publicDir, out))) {
+    issues.push(`missing built chunk: ${out} (run: node tools/build-app-chunks.mjs)`);
+  }
 }
 
 const categories = {};
@@ -75,7 +89,9 @@ const lazyTabCandidates = [
 
 const loadedBases = new Set(scriptOrder.map((s) => path.basename(s)));
 const lazyBases = new Set(lazyTabCandidates);
-const orphanPublic = publicAppJs.filter((name) => !loadedBases.has(name) && !lazyBases.has(name));
+const orphanPublic = publicAppJs.filter(
+  (name) => !loadedBases.has(name) && !lazyBases.has(name) && !chunkSourceFiles.has(name)
+);
 if (orphanPublic.length) {
   issues.push(`orphan public app scripts not in app.html: ${orphanPublic.join(", ")}`);
 }
@@ -99,15 +115,17 @@ const report = {
   deferCount: scriptOrder.length,
   categories,
   totalBytes,
+  chunkCount: chunkOutputs.length,
+  chunkSourceCount: chunkSourceFiles.size,
   orphanPublic,
   staleRunwire,
-  lazyTabCandidates: lazyTabCandidates.filter((s) => lazyBases.has(s) || loadedBases.has(s)),
+  lazyTabCandidates: lazyTabCandidates.filter((s) => lazyBases.has(s)),
   lazyTabDeferred: lazyTabCandidates.filter((s) => !loadedBases.has(s)),
   bundlePhases: [
     "Phase 5a (done): collapse 15 *runwire.js into *wire.js",
     "Phase 5b (done): prune stale mirrors; audit:boot in CI",
     "Phase 5c (done): lazy tab packs via app.lazytabs.js (~14 scripts on tab activate)",
-    "Phase 5d (next): esbuild chunks for site-src app.js + wire graph; target 3–5 HTTP requests",
+    "Phase 5d (done): esbuild shell chunks (4 chunks + i18n + app.js = 6 defer requests)",
   ],
   issues,
 };
@@ -117,12 +135,13 @@ if (jsonOut) {
 } else {
   console.log("APP_BOOT_INVENTORY");
   console.log(`  defer scripts: ${report.deferCount} (baseline ${BASELINE_DEFER_COUNT})`);
-  console.log(`  payload (public): ${(totalBytes / 1024).toFixed(1)} KiB`);
+  console.log(`  esbuild chunks: ${report.chunkCount} (${report.chunkSourceCount} source files)`);
+  console.log(`  payload (eager defer): ${(totalBytes / 1024).toFixed(1)} KiB`);
   console.log("  categories:");
   for (const [cat, n] of Object.entries(categories).sort()) {
     console.log(`    ${cat}: ${n}`);
   }
-  console.log(`  lazy-tab candidates: ${report.lazyTabCandidates.length} modules`);
+  console.log(`  lazy-tab scripts: ${report.lazyTabDeferred.length}`);
   if (orphanPublic.length) console.log(`  orphan public: ${orphanPublic.join(", ")}`);
   if (staleRunwire.length) console.log(`  stale runwire mirrors: ${staleRunwire.length}`);
   console.log("  recommended phases:");

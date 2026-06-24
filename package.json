@@ -47,7 +47,7 @@
     "i18n:apply-critical": "node tools/i18n_apply_critical_fixes.mjs",
     "audit:logic": "node tools/logic-audit.mjs --strict",
     "audit:runtime": "node tools/runtime_audit.mjs --strict",
-    "build:site": "node tools/build-app-generate.mjs && node tools/build-site-app.mjs && node tools/sync-site-public.mjs",
+    "build:site": "node tools/build-app-generate.mjs && node tools/build-site-app.mjs && node tools/build-app-chunks.mjs && node tools/sync-site-public.mjs",
     "sync:site": "node tools/sync-site-public.mjs",
     "audit:all": "npm run audit:logic && npm run audit:runtime",
     "build:server": "node tools/build-server.mjs",
@@ -68,7 +68,7 @@
     "wallpapers:fetch": "node tools/fetch-wallpapers-pexels.mjs",
     "wallpapers:ideal": "npm run wallpapers:fetch && npm run build:site",
     "verify:lock": "npm ci --dry-run && npm ci --prefix frontend --dry-run",
-    "verify:site": "node tools/verify-site-build.mjs",
+    "verify:site": "node tools/verify-site-build.mjs && node tools/verify-app-chunks.mjs",
     "verify:server": "node tools/verify-server-build.mjs && node tools/render-start-check.mjs",
     "verify:manifest": "node tools/verify-client-manifest.mjs",
     "manifest:generate": "node tools/generate-client-manifest.mjs",
@@ -84,6 +84,7 @@
     "helmet": "^7.1.0"
   },
   "devDependencies": {
+    "esbuild": "^0.25.0",
     "image-size": "^2.0.2",
     "playwright": "^1.58.2",
     "sharp": "^0.33.5",

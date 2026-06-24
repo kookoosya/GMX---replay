@@ -37,10 +37,14 @@ test("app.lazytabs.js defines six tab packs covering 14 scripts", () => {
 
 test("lazy tab scripts are not eager in app.html defer list", () => {
   const order = getScriptOrder();
-  assert.ok(order.includes("app.lazytabs.js"));
   for (const name of LAZY_SCRIPTS) {
     assert.equal(order.includes(name), false, `${name} should load lazily`);
   }
+});
+
+test("lazytabs loader ships inside boot chunk", () => {
+  const bootChunk = fs.readFileSync(path.join(publicDir, "chunks/app.shell.boot.js"), "utf8");
+  assert.match(bootChunk, /__gmxEnsureTabPack/);
 });
 
 test("lazy tab script files still exist in public/", () => {

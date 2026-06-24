@@ -11,13 +11,14 @@ const root = path.resolve(__dirname, "..");
 const publicDir = path.join(root, "public");
 const frontendPublic = path.join(root, "frontend", "public");
 
-const BASELINE = 84;
+const BASELINE = 6;
 
 test("app.html defer script count matches baseline", () => {
   const order = getScriptOrder();
   assert.equal(order.length, BASELINE);
   assert.equal(order.at(-1), "app.js");
   assert.equal(order[0], "i18n/siteI18n.js");
+  assert.equal(order[1], "chunks/app.shell.deps.js");
 });
 
 test("client-manifest scriptOrder matches app.html", () => {
@@ -56,10 +57,15 @@ test("boot inventory categories are stable", () => {
       encoding: "utf8",
     }).stdout
   );
-  assert.equal(categories["bootstrap-wire"], 5);
+  assert.equal(categories.chunk, 4);
   assert.equal(categories.entry, 1);
   assert.equal(categories.i18n, 1);
-  assert.equal(categories["feature-wire"], 15);
-  assert.equal(categories.module, 58);
-  assert.equal(categories["i18n-runtime"], 4);
+});
+
+test("verify-app-chunks passes", () => {
+  const r = spawnSync(process.execPath, ["tools/verify-app-chunks.mjs"], {
+    cwd: root,
+    encoding: "utf8",
+  });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
 });

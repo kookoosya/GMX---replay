@@ -38,11 +38,9 @@
 
 ## Client boot
 
-- `public/app.html` — **84** eager deferred `<script>` + **14** lazy tab scripts via `app.lazytabs.js`
-- Phase 3: runwire слои влиты в `*wire.js` (−15 HTTP)
-- Phase 3.4: `npm run audit:boot` — inventory + stale mirror prune
-- Phase 5c: lazy tab packs on activate — см. `docs/REFACTOR_SPRINT.md` §5c
-- **Next:** esbuild chunks (5d)
+- `public/app.html` — **6** eager defer scripts (i18n + 4 esbuild chunks + `app.js`) + **14** lazy tab scripts
+- Phase 5c: lazy tab packs on activate
+- Phase 5d: esbuild shell chunks (`tools/build-app-chunks.mjs`)
 
 ## Обои
 

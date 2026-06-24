@@ -58,6 +58,13 @@ for (const needle of [
 }
 ok("app.js client invariants");
 
+const shellDeps = await get("/chunks/app.shell.deps.js");
+if (shellDeps.status !== 200) fail(`chunks/app.shell.deps.js status ${shellDeps.status}`);
+if (!shellDeps.text.includes("__GMXStorageFactory")) {
+  fail("app.shell.deps chunk missing __GMXStorageFactory");
+}
+ok("shell deps chunk");
+
 const genParamsJs = await get("/app.genparams.js");
 if (genParamsJs.status !== 200) fail(`app.genparams.js status ${genParamsJs.status}`);
 if (!genParamsJs.text.includes("antiWindow(strength)")) {

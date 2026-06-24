@@ -22,8 +22,9 @@
 
 **Сделано (Bundle 5c):** lazy tab packs — `app.lazytabs.js` loads 14 scripts on tab activate (admin, prediction, wallet, LB, referrals, redeem); boot baseline **84** defer scripts.
 
-**В план (следующие):**
-- Bundle Phase 5d: esbuild chunks
+**Сделано (Bundle 5d):** esbuild shell chunks — 4 packs, boot **6** eager defer scripts (i18n + chunks + app.js).
+
+**В план (следующие):** Arcade covers, Supabase when stable.
 
 **Сделано (Sprint 3.4):** boot inventory — `audit:boot`, baseline 97 scripts, pruned stale `*runwire.js` mirrors.
 
