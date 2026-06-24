@@ -38,6 +38,8 @@
 
 **Сделано (Sprint 14.1):** referral progress bar hardened — span-based %, `refProgressNeed`, boot cache hydrate, `referral-progress-core.js`.
 
+**Сделано (Sprint 16.1):** referral viral hook + one-click copy — `ref_viral_hook_html`, tap `#refLink`, `#refShare`.
+
 **Сделано (Sprint 3.2):** extension connect/sync/copy status — `ext_connect_*`, `ext_err_*`, `ext_copy_*` в `popup.js`.
 
 **Сделано (2026-06, Phase 2):** cascade `refreshUsage` → ref stats → renderThemes убран; ref stats refresh только при смене eligible или на вкладке referrals.

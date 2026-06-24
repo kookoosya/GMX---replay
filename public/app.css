@@ -1791,6 +1791,16 @@ html.mode-light .tab.active{ color: rgba(10,13,21,1); }
 .refTopRow .refActionsCol{ flex:0 1 420px; min-width:320px !important; }
 .refTopRow + #refMsg,
 .refTopRow + .muted#refMsg{margin-top:14px !important;}
+.refViralHook{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid rgba(153,69,255,.28);
+  background:linear-gradient(90deg,rgba(153,69,255,.12),rgba(20,241,149,.08));
+  line-height:1.45;
+}
+#refLink{cursor:pointer}
+#refLink.refLinkCopied{outline:2px solid rgba(20,241,149,.45)}
 .refTopRow .refLinkCol.is-hidden{ display:none; }
 .refTopRow .refActions{ justify-content:flex-start; align-items:flex-end; }
 .refTopRow .refCounts{ width:100%; }

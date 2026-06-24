@@ -665,17 +665,18 @@ html.mode-light body.hasUserBg .panel{
 <div class="card">
 <div class="title" id="r_title">Referrals</div>
 <div class="note" id="r_note">Referral perks unlock only from real product usage. A signup alone does not move anything.</div>
-
+<div class="refViralHook note" id="ref_viral_hook_html"></div>
 
 <div class="split refTopRow" id="refTopRow" style="flex-wrap:wrap;gap:12px;margin-top:12px">
   <div class="refCol refLinkCol" id="refLinkCol" style="min-width:320px;flex:1">
     <label id="refLinkLabel" for="refLink">Referral link</label>
-    <input aria-label="refLink" id="refLink" name="refLink" placeholder="" readonly=""/>
+    <input aria-label="refLink" id="refLink" name="refLink" placeholder="" readonly="" title=""/>
   </div>
   <div class="refCol refActionsCol" style="min-width:240px;flex:0 1 auto">
     <div class="labelSpacer" aria-hidden="true"></div>
     <div class="refActions">
-      <button class="btn ghost" id="refCopy" type="button">Copy link</button>
+      <button class="btn" id="refCopy" type="button">Copy link</button>
+      <button class="btn ghost hidden" id="refShare" type="button">Share</button>
       <button class="btn" id="refLoad" type="button">Load stats</button>
       <div class="refCounts" style="display:flex;gap:8px;flex-wrap:wrap">
         <span class="pill refPill"><strong id="refConfirmedLabel">Confirmed</strong><span class="muted"><b id="refConfirmedInline">0</b></span></span>

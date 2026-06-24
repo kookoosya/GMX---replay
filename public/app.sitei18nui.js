@@ -119,6 +119,7 @@
       try {
         const rl = document.getElementById("refLink");
         if (rl) rl.placeholder = merged.connectFirst || "";
+        if (rl && merged.ref_link_tap_to_copy) rl.title = String(merged.ref_link_tap_to_copy);
       } catch (_e) {}
       try {
         onPatchDynamicCopy(lang, merged);

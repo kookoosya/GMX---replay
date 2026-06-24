@@ -229,4 +229,9 @@ if (!appPage.text.includes('id="pwa_install"')) {
 }
 ok("PWA install UI");
 
+if (!appPage.text.includes('id="ref_viral_hook_html"')) {
+  fail("/app shell missing referral viral hook");
+}
+ok("referral viral hook UI");
+
 console.log("\nPROD_VERIFY_OK");

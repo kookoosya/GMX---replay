@@ -368,3 +368,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `manifest.webmanifest` + `sw.js` static cache; `#pwa_install` button with `beforeinstallprompt` / iOS hint; `app.pwainstall.js` in boot chunk.
 
 **Verify:** `node --test tests/pwa.test.mjs`, `prod-verify` manifest + sw + `pwa_install` in `/app`.
+
+## 16.1 Referral viral hook + one-click copy — DONE
+
+**Problem:** Referrals tab lacked a clear growth hook and copy required a separate button click (`SITE_RECOMMENDATIONS.md` Referrals).
+
+**Fix:** `#ref_viral_hook_html` banner (3 → cosmetics, 30 → Pro trial 7d); tap `#refLink` to copy; primary `#refCopy`; optional `#refShare` via Web Share API.
+
+**Verify:** `node --test tests/referral-share.test.mjs`, `prod-verify` `ref_viral_hook_html` in `/app`.

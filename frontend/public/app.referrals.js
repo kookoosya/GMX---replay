@@ -159,18 +159,81 @@
         initReferralPromoDetailsState();
       } catch (_e) {}
 
+      function refUiCopiedMessage() {
+        const lang = localStorage.getItem(siteLangKey) || "en";
+        const ui = getReferralUiCopy(lang);
+        return ui.copied || t("toast_copied") || "Copied.";
+      }
+
+      function flashRefCopied() {
+        const msg = $("refMsg");
+        if (msg) msg.innerHTML = '<span class="ok">' + escapeHtml(refUiCopiedMessage()) + "</span>";
+        const link = $("refLink");
+        if (link) {
+          link.classList.add("refLinkCopied");
+          setTimeout(() => {
+            try {
+              link.classList.remove("refLinkCopied");
+            } catch (_e) {}
+          }, 1200);
+        }
+      }
+
+      async function copyReferralLink() {
+        const link = $("refLink");
+        const v = (link?.value || "").trim();
+        if (!v) return false;
+        try {
+          await navigator.clipboard.writeText(v);
+          flashRefCopied();
+          return true;
+        } catch (_e) {
+          const msg = $("refMsg");
+          if (msg) {
+            msg.innerHTML =
+              '<span class="bad">' + escapeHtml(t("toast_copy_failed") || "Copy failed.") + "</span>";
+          }
+          return false;
+        }
+      }
+
+      const refLinkInput = $("refLink");
+      if (refLinkInput) {
+        refLinkInput.addEventListener("click", async () => {
+          if (!requireConnected("Referrals")) return;
+          const v = (refLinkInput.value || "").trim();
+          if (!v) return;
+          try {
+            refLinkInput.focus();
+            refLinkInput.select();
+          } catch (_e) {}
+          await copyReferralLink();
+        });
+      }
+
       const refCopyBtn = $("refCopy");
       if (refCopyBtn) {
         refCopyBtn.onclick = async () => {
           if (!requireConnected("Referrals")) return;
+          await copyReferralLink();
+        };
+      }
+
+      const refShareBtn = $("refShare");
+      if (refShareBtn && typeof navigator.share === "function") {
+        refShareBtn.classList.remove("hidden");
+        refShareBtn.onclick = async () => {
+          if (!requireConnected("Referrals")) return;
           const link = $("refLink");
           const v = (link?.value || "").trim();
           if (!v) return;
-          await navigator.clipboard.writeText(v);
-          const msg = $("refMsg");
-          const lang = localStorage.getItem(siteLangKey) || "en";
-          const ui = getReferralUiCopy(lang);
-          if (msg) msg.innerHTML = '<span class="ok">' + escapeHtml(ui.copied || "Copied.") + "</span>";
+          try {
+            await navigator.share({
+              title: "GMXReply",
+              text: t("ref_share_text") || "Join me on GMXReply",
+              url: v,
+            });
+          } catch (_e) {}
         };
       }
     }

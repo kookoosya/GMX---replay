@@ -45,8 +45,8 @@
 
 ### Referrals
 - [x] **Прогресс-бар** до следующего unlock (темы/обои)
-- [ ] «Invite 3 friends → week of Pro free»
-- [ ] Копируемая ссылка с одним кликом
+- [x] **Виральный хук** — 3 eligible → cosmetics, 30 → Pro trial 7d
+- [x] **Копируемая ссылка** — tap input + Share API + primary Copy
 
 ### Leaderboard
 - [ ] **Топ-3** визуально выделить (медали/бейджи)
