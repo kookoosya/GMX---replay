@@ -74,7 +74,8 @@ SUPABASE_SERVICE_ROLE_KEY=...
 - **Bundle 5c–5d** — DONE
 - **Sprint 4.1** Arcade category `.webp` covers — DONE
 - **Sprint 4.2** Pro checkout flow — DONE
-- **Sprint 5.1** Arcade per-game `.webp` covers — DONE
+- **Sprint 5.1** Arcade per-game `.webp` covers — DONE (superseded by catalog cleanup in 5.2)
+- **Sprint 5.2** Arcade catalog static audit — DONE
 
 ## i18n pipeline
 

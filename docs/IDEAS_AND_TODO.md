@@ -26,7 +26,9 @@
 
 **Сделано (Sprint 4.1):** Arcade category `.webp` fallbacks — 16 covers in `assets/arcade/covers/categories/`, `categoryCoverWebp()` + SVG fallback on error.
 
-**Сделано (Sprint 5.1):** Arcade per-game `.webp` covers — 7 local titles rasterized from SVG; `localGameCover()` serves webp with SVG fallback.
+**Сделано (Sprint 5.2):** Arcade catalog static audit — `audit-arcade-catalog.mjs`; removed orphan LOCAL_GAME_COVERS pipeline.
+
+**Сделано (Sprint 5.1):** Arcade per-game `.webp` covers (later pruned when GameDistribution titles stayed out of catalog).
 
 **В план (следующие):** Supabase when stable.
 
@@ -46,7 +48,7 @@
 
 ### 3. Arcade
 - **Монетизация**: Arcade Pro gate → wallet checkout (4.2 DONE)
-- **Real cover images**: per-game `.webp` for 7 local titles (5.1 DONE); category `.webp` (4.1 DONE)
+- **Real cover images**: category `.webp` (4.1 DONE); catalog audit guards CrazyGames entries (5.2)
 - **Quick insert** в Arcade: URL / GameMonetize ID / embed — уже частично есть
 
 ### 4. Referrals

@@ -135,13 +135,13 @@ if (categoryCoversAudit.status !== 0) {
 }
 ok("arcade category covers");
 
-const gameCoversAudit = spawnSync(process.execPath, ["tools/audit-arcade-game-covers.mjs"], {
+const catalogAudit = spawnSync(process.execPath, ["tools/audit-arcade-catalog.mjs"], {
   encoding: "utf8",
 });
-if (gameCoversAudit.status !== 0) {
-  fail(`arcade game covers:\n${gameCoversAudit.stdout || gameCoversAudit.stderr}`);
+if (catalogAudit.status !== 0) {
+  fail(`arcade catalog:\n${catalogAudit.stdout || catalogAudit.stderr}`);
 }
-ok("arcade game covers");
+ok("arcade catalog");
 
 if (fs.existsSync("public/bridge/app.html")) {
   fail("public/bridge/app.html must not exist (bridge uses index.html SPA)");

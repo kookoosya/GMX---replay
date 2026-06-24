@@ -226,3 +226,15 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 - `audit-arcade-game-covers.mjs` + client-invariants; `prod-verify` spot-check
 
 **Verify:** `npm run arcade:covers:games`, `node tools/audit-arcade-game-covers.mjs`, `npm run test:suite`.
+
+## 5.2 Catalog static audit — DONE
+
+**Problem:** No offline guard on `RAW_GAMES` integrity; `LOCAL_GAME_COVERS` still referenced seven GameDistribution titles removed from the catalog (dead assets + 5.1 drift).
+
+**Fix:**
+- `tools/audit-arcade-catalog.mjs` + `tools/lib/parse-arcade-games.mjs` — unique ids, CrazyGames embed/launch parity, access/badge/provider rules, min 58 games
+- Removed orphan `LOCAL_GAME_COVERS` / per-game cover helpers from `arcade.js` (`coverSrc` → remote → category webp)
+- Pruned unused game-cover generator/audit + `assets/arcade/covers/games/*`
+- client-invariants + `npm run arcade:audit:catalog`
+
+**Verify:** `node tools/audit-arcade-catalog.mjs`, `npm run test:suite`.

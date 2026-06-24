@@ -59,5 +59,6 @@ Do not begin step N+1 until step N meets definition of done.
 ## Sprint 5 queue (strict order) — Arcade covers (continued)
 
 1. Per-game `.webp` covers for LOCAL_GAME_COVERS — DONE (5.1)
+2. Catalog static audit + prune orphan local-cover pipeline — DONE (5.2)
 
 Do not begin step N+1 until step N meets definition of done.
