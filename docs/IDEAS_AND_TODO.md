@@ -20,8 +20,9 @@
 
 **Сделано (2026-06, Phase 4):** skeleton loaders для Leaderboard/Referrals; Arcade iframe lazy-load (клик → embed); Render boot hardening; `applyLang()` skip без смены языка.
 
+**Сделано (Bundle 5c):** lazy tab packs — `app.lazytabs.js` loads 14 scripts on tab activate (admin, prediction, wallet, LB, referrals, redeem); boot baseline **84** defer scripts.
+
 **В план (следующие):**
-- Bundle Phase 5c: lazy tab imports (~14 scripts)
 - Bundle Phase 5d: esbuild chunks
 
 **Сделано (Sprint 3.4):** boot inventory — `audit:boot`, baseline 97 scripts, pruned stale `*runwire.js` mirrors.

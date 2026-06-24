@@ -88,6 +88,7 @@ const shellModules = [
   "app.wallpaperswire.js",
   "app.themeswire.js",
   "app.accountui.js",
+  "app.lazytabs.js",
   "app.admin.js",
   "app.adminwire.js",
   "app.leaderboard.js",

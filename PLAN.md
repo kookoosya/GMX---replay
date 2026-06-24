@@ -69,10 +69,10 @@ SUPABASE_SERVICE_ROLE_KEY=...
 3. **Extension ↔ site session sync** — аудит + тесты — DONE (3.3)
 4. **Boot bundle** — inventory + audit (`audit:boot`) — DONE (3.4)
 
-### После Sprint 3 (не начато)
+### После Sprint 3
 
-- **Bundle 5c:** lazy import ~14 tab-specific scripts
-- **Bundle 5d:** esbuild chunks (3–5 HTTP)
+- **Bundle 5c:** lazy tab packs (`app.lazytabs.js`, 84 defer scripts) — DONE
+- **Bundle 5d:** esbuild chunks (3–5 HTTP) — next
 - **Arcade** — category `.webp` covers, Pro checkout flow
 
 ## i18n pipeline

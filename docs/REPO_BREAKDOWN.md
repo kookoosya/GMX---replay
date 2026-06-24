@@ -38,10 +38,11 @@
 
 ## Client boot
 
-- `public/app.html` — **97** deferred `<script>` (`client-manifest.json`, baseline locked)
+- `public/app.html` — **84** eager deferred `<script>` + **14** lazy tab scripts via `app.lazytabs.js`
 - Phase 3: runwire слои влиты в `*wire.js` (−15 HTTP)
 - Phase 3.4: `npm run audit:boot` — inventory + stale mirror prune
-- **Next:** lazy tab imports (5c) or esbuild chunks (5d) — см. `docs/REFACTOR_SPRINT.md` §3.4
+- Phase 5c: lazy tab packs on activate — см. `docs/REFACTOR_SPRINT.md` §5c
+- **Next:** esbuild chunks (5d)
 
 ## Обои
 

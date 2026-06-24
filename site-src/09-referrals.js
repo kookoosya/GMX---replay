@@ -1,6 +1,10 @@
 // ----- Referrals -----
+let __gmxReferralsWire = null;
+
+function initReferralsTab() {
+  if (__gmxReferralsWire) return __gmxReferralsWire;
   if (!window.__GMXReferralsWireFactory) throw new Error("GMX referralsrunwire factory missing");
-  const { loadRefInvited, loadRefLeaderboard } = window.__GMXReferralsWireFactory({
+  __gmxReferralsWire = window.__GMXReferralsWireFactory({
     core: { $, escapeHtml, api, t },
     auth: { requireConnected },
     keys: { siteLangKey: LS_SITE_LANG },
@@ -21,3 +25,8 @@
       applyRefCountEligible,
     },
   });
+  return __gmxReferralsWire;
+}
+
+window.__gmxLazyTabHooks = window.__gmxLazyTabHooks || {};
+window.__gmxLazyTabHooks.referrals = () => { initReferralsTab(); };

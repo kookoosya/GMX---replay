@@ -290,7 +290,16 @@ const {
     if (name === "themes" || name === "extthemes") {
       try { renderWallpaperUI(); } catch {}
     }
-    if (name === "referrals") { try { if (getHandle()) $("refLoad")?.click(); } catch {} }
+    if (name === "home") {
+      try { window.__gmxEnsureTabPack("redeem").catch(() => {}); } catch {}
+    }
+    if (name === "referrals") {
+      try {
+        window.__gmxEnsureTabPack("referrals").then(() => {
+          try { if (getHandle()) $("refLoad")?.click(); } catch {}
+        }).catch(() => {});
+      } catch {}
+    }
     if (name === "leaderboard") {
       try { bindLeaderboardUI(); } catch {}
       try { loadLeaderboard(LB_DAYS || 7); } catch {}
@@ -308,7 +317,7 @@ const {
     if (name === "wallet") {
       try { loadPlans(); } catch {}
       try { loadBillingProof(); } catch {}
-      try { setSfUi(); } catch {}
+      try { setWalletUi(); } catch {}
     }
   },
 });
@@ -650,7 +659,6 @@ const {
     deriveReferralUnlocks,
     nextReferralUnlockAt,
     nextReferralUnlockLabel,
-    syncRefProgressMeter,
     renderReferralRightCopy,
     syncModePanelCopy,
     patchDynamicCopy,
@@ -812,7 +820,6 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
       renderGuideRightCopy,
       applyRefCountEligible,
       nextReferralUnlockAt,
-      syncRefProgressMeter,
       renderThemes,
       renderExtThemes,
       fillStyles,
@@ -870,30 +877,67 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
 
 // ----- Leaderboard -----
 let LB_DAYS = 7;
-if (!window.__GMXLeaderboardWireFactory) throw new Error("GMX leaderboardrunwire factory missing");
-const __gmxLeaderboardWire = window.__GMXLeaderboardWireFactory({
-  core: { $, escapeHtml, t },
-  auth: { getToken, getHandle },
-  lb: { setLbDays: (v) => { LB_DAYS = v; } },
-});
-async function loadLeaderboard(days) {
-  return __gmxLeaderboardWire.loadLeaderboard(days);
+let __gmxLeaderboardWire = null;
+
+function initLeaderboardTab() {
+  if (__gmxLeaderboardWire) return __gmxLeaderboardWire;
+  if (!window.__GMXLeaderboardWireFactory) throw new Error("GMX leaderboardrunwire factory missing");
+  __gmxLeaderboardWire = window.__GMXLeaderboardWireFactory({
+    core: { $, escapeHtml, t },
+    auth: { getToken, getHandle },
+    lb: { setLbDays: (v) => { LB_DAYS = v; } },
+  });
+  return __gmxLeaderboardWire;
 }
-const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
+
+window.__gmxLazyTabHooks = window.__gmxLazyTabHooks || {};
+window.__gmxLazyTabHooks.leaderboard = () => { initLeaderboardTab(); };
+
+async function loadLeaderboard(days) {
+  await window.__gmxEnsureTabPack("leaderboard");
+  return initLeaderboardTab().loadLeaderboard(days);
+}
+
+function bindLeaderboardUI() {
+  window.__gmxEnsureTabPack("leaderboard")
+    .then(() => { try { initLeaderboardTab().bindLeaderboardUI(); } catch {} })
+    .catch(() => {});
+}
 
 // ----- Prediction market -----
+let __gmxPredictionWire = null;
+
+function initPredictionTab() {
+  if (__gmxPredictionWire) return __gmxPredictionWire;
   if (!window.__GMXPredictionWireFactory) throw new Error("GMX predictionrunwire factory missing");
-  const __gmxPredictionWire = window.__GMXPredictionWireFactory({
+  __gmxPredictionWire = window.__GMXPredictionWireFactory({
     core: { $, escapeHtml, t, api, friendlyUiErrorMessage },
     auth: { getHandle, getToken },
     tab: { tabState: __gmxTabState },
   });
-  const syncPredictionFilterCopy = () => __gmxPredictionWire.syncPredictionFilterCopy();
-  const loadPredictionSignals = (opts) => __gmxPredictionWire.loadPredictionSignals(opts);
+  return __gmxPredictionWire;
+}
+
+window.__gmxLazyTabHooks = window.__gmxLazyTabHooks || {};
+window.__gmxLazyTabHooks.prediction = () => { initPredictionTab(); };
+
+function syncPredictionFilterCopy() {
+  if (!__gmxPredictionWire) return;
+  try { __gmxPredictionWire.syncPredictionFilterCopy(); } catch {}
+}
+
+async function loadPredictionSignals(opts) {
+  await window.__gmxEnsureTabPack("prediction");
+  return initPredictionTab().loadPredictionSignals(opts);
+}
 
 // ----- Referrals -----
+let __gmxReferralsWire = null;
+
+function initReferralsTab() {
+  if (__gmxReferralsWire) return __gmxReferralsWire;
   if (!window.__GMXReferralsWireFactory) throw new Error("GMX referralsrunwire factory missing");
-  const { loadRefInvited, loadRefLeaderboard } = window.__GMXReferralsWireFactory({
+  __gmxReferralsWire = window.__GMXReferralsWireFactory({
     core: { $, escapeHtml, api, t },
     auth: { requireConnected },
     keys: { siteLangKey: LS_SITE_LANG },
@@ -914,10 +958,19 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
       applyRefCountEligible,
     },
   });
+  return __gmxReferralsWire;
+}
+
+window.__gmxLazyTabHooks = window.__gmxLazyTabHooks || {};
+window.__gmxLazyTabHooks.referrals = () => { initReferralsTab(); };
 
 // ----- Wallet / Billing -----
+let __gmxWalletWire = null;
+
+function initWalletTab() {
+  if (__gmxWalletWire) return __gmxWalletWire;
   if (!window.__GMXWalletWireFactory) throw new Error("GMX walletrunwire factory missing");
-  const __gmxWalletWire = window.__GMXWalletWireFactory({
+  __gmxWalletWire = window.__GMXWalletWireFactory({
     core: { $, api, K },
     mod: { modals: __gmxModals },
     text: { escapeHtml, friendlyUiErrorMessage },
@@ -926,31 +979,129 @@ const bindLeaderboardUI = () => __gmxLeaderboardWire.bindLeaderboardUI();
     pay: { setPayState, openPaySuccess },
     session: { getHandle, refreshUsage },
   });
-  const setWalletUi = () => __gmxWalletWire.setWalletUi();
-  const loadPlans = () => __gmxWalletWire.loadPlans();
-  const loadBillingProof = () => __gmxWalletWire.loadBillingProof();
-  const loadActivity = () => __gmxWalletWire.loadActivity();
-  const renderWalletStatus = (sub) => __gmxWalletWire.renderWalletStatus(sub);
-  const bindWalletTab = () => __gmxWalletWire.bindWalletTab();
+  return __gmxWalletWire;
+}
+
+window.__gmxLazyTabHooks = window.__gmxLazyTabHooks || {};
+window.__gmxLazyTabHooks.wallet = () => { initWalletTab(); };
+
+async function setWalletUi() {
+  await window.__gmxEnsureTabPack("wallet");
+  return initWalletTab().setWalletUi();
+}
+
+async function loadPlans() {
+  await window.__gmxEnsureTabPack("wallet");
+  return initWalletTab().loadPlans();
+}
+
+async function loadBillingProof() {
+  await window.__gmxEnsureTabPack("wallet");
+  return initWalletTab().loadBillingProof();
+}
+
+async function loadActivity() {
+  await window.__gmxEnsureTabPack("wallet");
+  return initWalletTab().loadActivity();
+}
+
+async function renderWalletStatus(sub) {
+  await window.__gmxEnsureTabPack("wallet");
+  return initWalletTab().renderWalletStatus(sub);
+}
+
+function bindWalletTab() {
+  window.__gmxEnsureTabPack("wallet")
+    .then(() => { try { initWalletTab().bindWalletTab(); } catch {} })
+    .catch(() => {});
+}
 
 // ----- Admin -----
+let __gmxAdminWire = null;
+
+function pruneLegacyAdminPanelsBoot() {
+  try {
+    const retiredAnchors = ["adminSelBox", "adminSelHistory", "adminFaqBox", "adminHealthOut"];
+    retiredAnchors.forEach((id) => {
+      const el = $(id);
+      if (!el) return;
+      const card = el.closest(".card");
+      if (card) card.style.display = "none";
+    });
+
+    const adminRoot = $("tab-admin");
+    if (!adminRoot) return;
+
+    const firstNote = adminRoot.querySelector(".card .note");
+    if (firstNote) {
+      firstNote.textContent =
+        "Sign in once, then use access, code, and leaderboard tools only. Retired admin experiments are removed from this admin workspace.";
+    }
+
+    adminRoot.querySelectorAll(".card .title").forEach((node) => {
+      const text = String(node.textContent || "").trim();
+      if (text === "Admin stats") node.textContent = "Admin access";
+      if (text === "Admin: promo codes") node.textContent = "Create access codes";
+      if (text === "Admin: leaderboard rewards") node.textContent = "Leaderboard rewards";
+      if (
+        text === "Admin: conversion metrics" ||
+        text === "Admin: extension health" ||
+        text === "Admin: FAQ base" ||
+        text === "Selectors history" ||
+        text === "Selectors JSON" ||
+        text.startsWith("Selectors")
+      ) {
+        const card = node.closest(".card");
+        if (card) card.style.display = "none";
+      }
+    });
+  } catch (_e) {}
+}
+
+function initAdminTab() {
+  if (__gmxAdminWire) return __gmxAdminWire;
   if (!window.__GMXAdminWireFactory) throw new Error("GMX adminrunwire factory missing");
-  const __gmxAdminWire = window.__GMXAdminWireFactory({
+  __gmxAdminWire = window.__GMXAdminWireFactory({
     core: { $, escapeHtml, api },
     auth: { getHandle, requireConnected },
     admin: { setAdminToken, isAdminSignedIn, adminHandle: ADMIN_HANDLE },
   });
-  const syncAdminUi = () => __gmxAdminWire.syncAdminUi();
-  const requireAdminSignedIn = () => __gmxAdminWire.requireAdminSignedIn();
-  const pruneLegacyAdminPanels = () => __gmxAdminWire.pruneLegacyAdminPanels();
+  return __gmxAdminWire;
+}
+
+window.__gmxLazyTabHooks = window.__gmxLazyTabHooks || {};
+window.__gmxLazyTabHooks.admin = () => { initAdminTab(); };
+
+function syncAdminUi() {
+  window.__gmxEnsureTabPack("admin")
+    .then(() => { try { initAdminTab().syncAdminUi(); } catch {} })
+    .catch(() => {});
+}
+
+function requireAdminSignedIn() {
+  if (!__gmxAdminWire) return false;
+  return __gmxAdminWire.requireAdminSignedIn();
+}
+
+function pruneLegacyAdminPanels() {
+  if (__gmxAdminWire) return __gmxAdminWire.pruneLegacyAdminPanels();
+  return pruneLegacyAdminPanelsBoot();
+}
 
   // ----- Redeem code -----
-  if (!window.__GMXRedeemWireFactory) throw new Error("GMX redeemrunwire factory missing");
-  window.__GMXRedeemWireFactory({
-    core: { $, api },
-    auth: { requireConnected, getHandle },
-    ui: { tab, renderWalletStatus, refreshUsage },
-  });
+  function initRedeemTab() {
+    if (window.__gmxRedeemTabInited) return;
+    if (!window.__GMXRedeemWireFactory) throw new Error("GMX redeemrunwire factory missing");
+    window.__GMXRedeemWireFactory({
+      core: { $, api },
+      auth: { requireConnected, getHandle },
+      ui: { tab, renderWalletStatus, refreshUsage },
+    });
+    window.__gmxRedeemTabInited = true;
+  }
+
+  window.__gmxLazyTabHooks = window.__gmxLazyTabHooks || {};
+  window.__gmxLazyTabHooks.redeem = () => { initRedeemTab(); };
 
   if (!window.__GMXSiteInitWireFactory) throw new Error("GMX siteinitwire factory missing");
   await window.__GMXSiteInitWireFactory({

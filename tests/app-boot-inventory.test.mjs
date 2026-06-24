@@ -11,7 +11,7 @@ const root = path.resolve(__dirname, "..");
 const publicDir = path.join(root, "public");
 const frontendPublic = path.join(root, "frontend", "public");
 
-const BASELINE = 97;
+const BASELINE = 84;
 
 test("app.html defer script count matches baseline", () => {
   const order = getScriptOrder();
@@ -59,7 +59,7 @@ test("boot inventory categories are stable", () => {
   assert.equal(categories["bootstrap-wire"], 5);
   assert.equal(categories.entry, 1);
   assert.equal(categories.i18n, 1);
-  assert.equal(categories["feature-wire"], 21);
-  assert.equal(categories.module, 65);
+  assert.equal(categories["feature-wire"], 15);
+  assert.equal(categories.module, 58);
   assert.equal(categories["i18n-runtime"], 4);
 });

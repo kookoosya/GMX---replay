@@ -1,6 +1,10 @@
 // ----- Wallet / Billing -----
+let __gmxWalletWire = null;
+
+function initWalletTab() {
+  if (__gmxWalletWire) return __gmxWalletWire;
   if (!window.__GMXWalletWireFactory) throw new Error("GMX walletrunwire factory missing");
-  const __gmxWalletWire = window.__GMXWalletWireFactory({
+  __gmxWalletWire = window.__GMXWalletWireFactory({
     core: { $, api, K },
     mod: { modals: __gmxModals },
     text: { escapeHtml, friendlyUiErrorMessage },
@@ -9,9 +13,39 @@
     pay: { setPayState, openPaySuccess },
     session: { getHandle, refreshUsage },
   });
-  const setWalletUi = () => __gmxWalletWire.setWalletUi();
-  const loadPlans = () => __gmxWalletWire.loadPlans();
-  const loadBillingProof = () => __gmxWalletWire.loadBillingProof();
-  const loadActivity = () => __gmxWalletWire.loadActivity();
-  const renderWalletStatus = (sub) => __gmxWalletWire.renderWalletStatus(sub);
-  const bindWalletTab = () => __gmxWalletWire.bindWalletTab();
+  return __gmxWalletWire;
+}
+
+window.__gmxLazyTabHooks = window.__gmxLazyTabHooks || {};
+window.__gmxLazyTabHooks.wallet = () => { initWalletTab(); };
+
+async function setWalletUi() {
+  await window.__gmxEnsureTabPack("wallet");
+  return initWalletTab().setWalletUi();
+}
+
+async function loadPlans() {
+  await window.__gmxEnsureTabPack("wallet");
+  return initWalletTab().loadPlans();
+}
+
+async function loadBillingProof() {
+  await window.__gmxEnsureTabPack("wallet");
+  return initWalletTab().loadBillingProof();
+}
+
+async function loadActivity() {
+  await window.__gmxEnsureTabPack("wallet");
+  return initWalletTab().loadActivity();
+}
+
+async function renderWalletStatus(sub) {
+  await window.__gmxEnsureTabPack("wallet");
+  return initWalletTab().renderWalletStatus(sub);
+}
+
+function bindWalletTab() {
+  window.__gmxEnsureTabPack("wallet")
+    .then(() => { try { initWalletTab().bindWalletTab(); } catch {} })
+    .catch(() => {});
+}

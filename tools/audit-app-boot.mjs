@@ -12,7 +12,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const publicDir = path.join(root, "public");
 const frontendPublic = path.join(root, "frontend", "public");
 
-const BASELINE_DEFER_COUNT = 97;
+const BASELINE_DEFER_COUNT = 84;
 const jsonOut = process.argv.includes("--json");
 
 function categorizeScript(rel) {
@@ -56,8 +56,26 @@ const publicAppJs = fs
   .readdirSync(publicDir)
   .filter((name) => name.startsWith("app.") && name.endsWith(".js") && name !== "app.js");
 
+const lazyTabCandidates = [
+  "app.admin.js",
+  "app.adminwire.js",
+  "app.prediction.js",
+  "app.predictionwire.js",
+  "app.walletpay.js",
+  "app.walletui.js",
+  "app.wallethelpers.js",
+  "app.walletwire.js",
+  "app.leaderboard.js",
+  "app.leaderboardwire.js",
+  "app.referrals.js",
+  "app.referralswire.js",
+  "app.redeem.js",
+  "app.redeemwire.js",
+];
+
 const loadedBases = new Set(scriptOrder.map((s) => path.basename(s)));
-const orphanPublic = publicAppJs.filter((name) => !loadedBases.has(name));
+const lazyBases = new Set(lazyTabCandidates);
+const orphanPublic = publicAppJs.filter((name) => !loadedBases.has(name) && !lazyBases.has(name));
 if (orphanPublic.length) {
   issues.push(`orphan public app scripts not in app.html: ${orphanPublic.join(", ")}`);
 }
@@ -76,23 +94,6 @@ if (fs.readdirSync(publicDir).some((name) => /runwire\.js$/i.test(name))) {
   issues.push("public/ must not contain *runwire.js (collapsed into *wire.js)");
 }
 
-const lazyTabCandidates = [
-  "app.admin.js",
-  "app.adminwire.js",
-  "app.prediction.js",
-  "app.predictionwire.js",
-  "app.walletpay.js",
-  "app.walletui.js",
-  "app.wallethelpers.js",
-  "app.walletwire.js",
-  "app.leaderboard.js",
-  "app.leaderboardwire.js",
-  "app.referrals.js",
-  "app.referralswire.js",
-  "app.redeem.js",
-  "app.redeemwire.js",
-];
-
 const report = {
   baselineDeferCount: BASELINE_DEFER_COUNT,
   deferCount: scriptOrder.length,
@@ -100,12 +101,13 @@ const report = {
   totalBytes,
   orphanPublic,
   staleRunwire,
-  lazyTabCandidates: lazyTabCandidates.filter((s) => loadedBases.has(s)),
+  lazyTabCandidates: lazyTabCandidates.filter((s) => lazyBases.has(s) || loadedBases.has(s)),
+  lazyTabDeferred: lazyTabCandidates.filter((s) => !loadedBases.has(s)),
   bundlePhases: [
     "Phase 5a (done): collapse 15 *runwire.js into *wire.js",
-    "Phase 5b (next, low risk): prune stale mirrors; keep audit:boot in CI",
-    "Phase 5c (medium): dynamic import on tab activate for admin/prediction/wallet/LB/referrals/redeem (~14 scripts)",
-    "Phase 5d (large): esbuild chunks for site-src app.js + wire graph; target 3–5 HTTP requests",
+    "Phase 5b (done): prune stale mirrors; audit:boot in CI",
+    "Phase 5c (done): lazy tab packs via app.lazytabs.js (~14 scripts on tab activate)",
+    "Phase 5d (next): esbuild chunks for site-src app.js + wire graph; target 3–5 HTTP requests",
   ],
   issues,
 };

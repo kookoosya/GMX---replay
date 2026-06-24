@@ -159,8 +159,19 @@ Focus: **site + extension stability** (Supabase deferred).
 
 **Inventory (2026-06):** 97 defer scripts ≈ 1.19 MiB — 65 modules, 21 feature-wires, 5 bootstrap-wires, 4 i18n-runtime, 1 i18n bundle, 1 entry (`app.js`).
 
+**Verify:** `npm run audit:boot`, `npm test`, `npm run test:suite`.
+
+## Bundle Phase 5c — lazy tab packs — DONE
+
+**Problem:** ~14 tab-specific module+wire scripts loaded on every page boot (~97 defer scripts total), slowing first paint for users who never open Admin, Prediction, Wallet, Leaderboard, Referrals, or Redeem.
+
+**Fix:**
+- `public/app.lazytabs.js` — `__gmxEnsureTabPack(tab)` injects scripts sequentially; six packs (14 files)
+- Removed eager `<script defer>` for lazy packs from `app.html` (baseline **84** defer scripts)
+- `site-src/07–12` — lazy init via `__gmxLazyTabHooks`; wallet/redeem ensure on first use; `pruneLegacyAdminPanels` boot stub without loading admin module
+- `tests/app-lazytabs.test.mjs`; `logic-audit` + `audit-app-boot` updated
+
 **Next bundle work (not started):**
-- **5c:** lazy-load ~14 scripts on tab activate (admin, prediction, wallet, LB, referrals, redeem)
 - **5d:** esbuild 3–5 chunks for site-src + wire graph
 
 **Verify:** `npm run audit:boot`, `npm test`, `npm run test:suite`.

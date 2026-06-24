@@ -290,7 +290,16 @@ const {
     if (name === "themes" || name === "extthemes") {
       try { renderWallpaperUI(); } catch {}
     }
-    if (name === "referrals") { try { if (getHandle()) $("refLoad")?.click(); } catch {} }
+    if (name === "home") {
+      try { window.__gmxEnsureTabPack("redeem").catch(() => {}); } catch {}
+    }
+    if (name === "referrals") {
+      try {
+        window.__gmxEnsureTabPack("referrals").then(() => {
+          try { if (getHandle()) $("refLoad")?.click(); } catch {}
+        }).catch(() => {});
+      } catch {}
+    }
     if (name === "leaderboard") {
       try { bindLeaderboardUI(); } catch {}
       try { loadLeaderboard(LB_DAYS || 7); } catch {}
@@ -308,7 +317,7 @@ const {
     if (name === "wallet") {
       try { loadPlans(); } catch {}
       try { loadBillingProof(); } catch {}
-      try { setSfUi(); } catch {}
+      try { setWalletUi(); } catch {}
     }
   },
 });

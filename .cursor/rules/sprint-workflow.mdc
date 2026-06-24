@@ -47,6 +47,6 @@ Supabase deferred until site and extension are stable (`DB_MODE=sqlite` on Rende
 3. Extension ↔ site session sync audit + tests — DONE
 4. Boot bundle inventory (defer implementation until 1–3 done) — DONE
 
-Sprint 3 complete. Next: bundle Phase 5c (lazy tab imports) or Arcade/Supabase when stable.
+Sprint 3 complete. Next: bundle Phase 5d (esbuild chunks) or Arcade/Supabase when stable.
 
 Do not begin step N+1 until step N meets definition of done.
