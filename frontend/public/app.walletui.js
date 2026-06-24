@@ -30,6 +30,8 @@
       typeof ctx.planPricePrimary === "function" ? ctx.planPricePrimary : () => "";
     const planPriceSecondary =
       typeof ctx.planPriceSecondary === "function" ? ctx.planPriceSecondary : () => "";
+    const siteTr =
+      typeof ctx.siteTr === "function" ? ctx.siteTr : (key, fallback) => String(fallback || key || "");
     const getBilling = typeof ctx.getBilling === "function" ? ctx.getBilling : () => ({ plans: [] });
     const setBilling = typeof ctx.setBilling === "function" ? ctx.setBilling : () => {};
     const getSelectedCurrency = typeof ctx.getSelectedCurrency === "function" ? ctx.getSelectedCurrency : () => "SOL";
@@ -320,12 +322,16 @@
         btn.className = "planCard";
         btn.dataset.key = p.key;
         btn.classList.toggle("active", p.key === selectedPlanKey);
+        btn.classList.toggle("planFeatured", p.key === "y1" || Number(p.days || 0) >= 365);
 
         const primary = planPricePrimary(p, selectedCurrency);
         const secondary = planPriceSecondary(p, selectedCurrency);
 
-        p.badge = Number(p.days || 0) >= 365 ? "2 mo free" : Number(p.days || 0) >= 180 ? "Popular" : "";
-        if (!p.badge) p.badge = "";
+        const days = Number(p.days || 0);
+        let badge = "";
+        if (days >= 365) badge = siteTr("plan_badge_2mo_free", "2 months free");
+        else if (days >= 180) badge = siteTr("plan_badge_popular", "Popular");
+        p.badge = badge;
 
         btn.innerHTML = `
         <div class="planTop">

@@ -99,9 +99,17 @@
       __gmxWalletPay.verifyIntentWithRetry(intentId, sig, payer);
 
     if (!window.__GMXWalletUiFactory) throw new Error("GMX walletui factory missing");
+    const siteTr =
+      typeof ctx.text?.siteTr === "function"
+        ? ctx.text.siteTr
+        : typeof ctx.siteTr === "function"
+          ? ctx.siteTr
+          : (key, fallback) => String(fallback || key || "");
+
     const __gmxWalletUi = window.__GMXWalletUiFactory({
       $: ctx.$,
       escapeHtml: ctx.escapeHtml,
+      siteTr,
       api: ctx.api,
       modals: ctx.modals,
       toast: ctx.toast,

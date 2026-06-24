@@ -253,10 +253,26 @@
       return `$${plan.usd} ${currency}`;
     }
 
+    function planPerMonthUsd(plan) {
+      const days = Number(plan?.days || 0);
+      const usd = Number(plan?.usd || 0);
+      if (!days || !usd) return "";
+      if (days >= 365) return (usd / 12).toFixed(2);
+      if (days >= 30) return (usd / (days / 30)).toFixed(2);
+      return "";
+    }
+
     function planPriceSecondary(plan, currency) {
-      if (currency === "SOL") return `$${plan.usd}`;
+      const perMo = planPerMonthUsd(plan);
+      const perMoTxt = perMo ? `~$${perMo}/mo` : "";
+      if (currency === "SOL") {
+        const parts = [`$${plan.usd}`];
+        if (perMoTxt) parts.push(perMoTxt);
+        return parts.join(" · ");
+      }
       const sol = fmtSol(plan.solApprox || 0);
-      return sol ? `≈ ${sol} SOL` : "";
+      const solTxt = sol ? `≈ ${sol} SOL` : "";
+      return [solTxt, perMoTxt].filter(Boolean).join(" · ");
     }
 
     return {

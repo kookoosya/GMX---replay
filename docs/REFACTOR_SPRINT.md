@@ -328,3 +328,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `#homeHero` card above grid — 12s animated SVG loop (`/assets/hero/gmx-hero-loop.svg`), poster, optional `<video>` when `gmx-hero.mp4` exists; `app.homehero.js` respects `prefers-reduced-motion`; CTA scrolls to guest demo.
 
 **Verify:** `node --test tests/home-hero.test.mjs`, `prod-verify` hero asset + `#homeHero` in `/app`.
+
+## 11.1 Wallet yearly plan marketing — DONE
+
+**Problem:** `y1` plan existed ($80/365d) but Wallet had no savings messaging (`SITE_RECOMMENDATIONS.md` priority #2).
+
+**Fix:** `#w_yearly_save` note, featured `y1` card, i18n badges, `~$6.67/mo` secondary quote, `plan_modal_desc` yearly line.
+
+**Verify:** `node --test tests/wallet-yearly.test.mjs`, `prod-verify` billing `y1` + `w_yearly_save`.

@@ -973,7 +973,7 @@ function initWalletTab() {
   __gmxWalletWire = window.__GMXWalletWireFactory({
     core: { $, api, K },
     mod: { modals: __gmxModals },
-    text: { escapeHtml, friendlyUiErrorMessage },
+    text: { escapeHtml, friendlyUiErrorMessage, siteTr },
     ui: { toast },
     perf: { trackEvent, abVariant },
     pay: { setPayState, openPaySuccess },

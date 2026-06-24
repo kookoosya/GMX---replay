@@ -9,13 +9,31 @@ import { fail, ok, freshSmokeHandle } from "./tests/_helpers.mjs";
 const BASE = String(process.env.PROD_BASE || "https://www.gmxreply.com").replace(/\/$/, "");
 
 async function get(path, opts = {}) {
-  const r = await fetch(`${BASE}${path}`, opts);
-  const text = await r.text();
-  let json = null;
-  try {
-    json = JSON.parse(text);
-  } catch {}
-  return { status: r.status, text, json };
+  const url = `${BASE}${path}`;
+  const retries = Math.max(1, Number(process.env.PROD_VERIFY_RETRIES || 6));
+  const timeoutMs = Math.max(5000, Number(process.env.PROD_VERIFY_TIMEOUT_MS || 30000));
+  let lastErr = null;
+
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const r = await fetch(url, { ...opts, signal: AbortSignal.timeout(timeoutMs) });
+      const text = await r.text();
+      let json = null;
+      try {
+        json = JSON.parse(text);
+      } catch {}
+      return { status: r.status, text, json };
+    } catch (err) {
+      lastErr = err;
+      if (attempt < retries) {
+        const waitMs = Math.min(20000, 4000 * attempt);
+        console.log(`  retry ${attempt}/${retries - 1} in ${waitMs}ms (${path})`);
+        await new Promise((resolve) => setTimeout(resolve, waitMs));
+      }
+    }
+  }
+
+  throw lastErr || new Error(`fetch failed: ${path}`);
 }
 
 console.log(`Prod verify: ${BASE}\n`);
@@ -147,5 +165,17 @@ if (!appPage.text.includes('id="homeHero"')) {
   fail("/app shell missing homeHero");
 }
 ok("home hero UI");
+
+const billingPlans = await get("/api/billing/plans");
+const y1 = (billingPlans.json?.plans || []).find((p) => p.key === "y1");
+if (!y1 || Number(y1.usd) !== 80 || Number(y1.days) !== 365) {
+  fail(`billing yearly plan y1: ${billingPlans.text.slice(0, 160)}`);
+}
+ok("billing yearly plan y1");
+
+if (!appPage.text.includes('id="w_yearly_save"')) {
+  fail("/app shell missing w_yearly_save yearly note");
+}
+ok("wallet yearly savings UI");
 
 console.log("\nPROD_VERIFY_OK");

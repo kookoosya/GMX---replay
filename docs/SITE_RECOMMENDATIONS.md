@@ -38,7 +38,7 @@
 - [ ] Ссылки на внешние маркеты (Polymarket, etc.) как «Learn more»
 
 ### Upgrade Pro
-- [ ] **Годовой план со скидкой** — «2 months free» при yearly
+- [x] **Годовой план со скидкой** — «2 months free» при yearly ($80/год)
 - [ ] **Сравнительная таблица** Free vs Pro с галочками
 - [ ] **Testimonial** — 1–2 коротких отзыва (если есть)
 - [x] Явно: «Pro unlocks all Arcade games»
@@ -101,7 +101,7 @@
 | # | Задача | Раздел | Эффект |
 |---|--------|--------|--------|
 | 1 | Hero video / demo | Home | Конверсия | DONE (10.1 + 10.2) |
-| 2 | Yearly plan со скидкой | Upgrade Pro | MRR |
+| 2 | Yearly plan со скидкой | Upgrade Pro | MRR | DONE (11.1) |
 | 3 | «Игра дня» в расширении | Extension | Retention |
 | 4 | Достижения Arcade | Arcade | Вовлечённость |
 | 5 | Quick presets GM/GN | GM, GN | UX |

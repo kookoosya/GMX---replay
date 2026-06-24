@@ -738,6 +738,16 @@ html.mode-light .pasteBox{
   transition: .15s ease;
 }
 .planCard:hover{ background: rgba(255,255,255,.11); transform: translateY(-1px); }
+.planCard.planFeatured{
+  border-color: rgba(20,241,149,.42);
+  background: linear-gradient(145deg, rgba(20,241,149,.1), rgba(153,69,255,.07));
+}
+.planCard.planFeatured:hover{ background: linear-gradient(145deg, rgba(20,241,149,.14), rgba(153,69,255,.1)); }
+.planYearlyNote{
+  margin-top: 10px;
+  color: rgba(20,241,149,.92);
+  font-weight: 650;
+}
 .planCard.active{
   border-color: color-mix(in srgb, var(--accentA) 55%, transparent);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accentA) 18%, transparent);
