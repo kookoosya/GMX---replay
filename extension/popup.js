@@ -350,15 +350,20 @@ function friendlyError(result) {
     result?.data?.error_code ||
     result?.data?.error ||
     result?.error ||
-    "Request failed"
+    ""
   );
   if (/existing_session_required|open_site_or_use_existing_session|token_required_for_rotate/i.test(raw)) {
-    return "This account already exists. Use site session instead.";
+    return extT("ext_err_account_exists");
   }
   if (/Failed to fetch|network_error/i.test(raw)) {
-    return "Could not reach the backend right now";
+    return extT("ext_err_backend_unreachable");
   }
-  return raw;
+  if (raw) return raw;
+  return extT("ext_err_request_failed");
+}
+
+function copyKindCode(kind) {
+  return kind === "gn" ? "GN" : "GM";
 }
 
 function scoreTemplate(text) {
@@ -688,7 +693,7 @@ async function ensureCache(kind, minItems) {
 
 async function copyToClipboard(text) {
   const value = String(text || "").trim();
-  if (!value) throw new Error("Nothing to copy");
+  if (!value) throw new Error(extT("ext_copy_nothing"));
   try {
     await navigator.clipboard.writeText(value);
     return;
@@ -704,7 +709,7 @@ async function copyToClipboard(text) {
   area.select();
   const ok = document.execCommand("copy");
   area.remove();
-  if (!ok) throw new Error("Clipboard blocked");
+  if (!ok) throw new Error(extT("ext_copy_clipboard_blocked"));
 }
 
 async function persistLastText(text) {
@@ -715,7 +720,12 @@ async function persistLastText(text) {
 
 async function copyKind(kind, preferBest = false) {
   const safeKind = kind === "gn" ? "gn" : "gm";
-  setCopyStatus(`Loading ${preferBest ? "best " : ""}${safeKind.toUpperCase()}...`);
+  const kindLabel = copyKindCode(safeKind);
+  setCopyStatus(
+    preferBest
+      ? extT("ext_copy_loading_best", { kind: kindLabel })
+      : extT("ext_copy_loading", { kind: kindLabel })
+  );
   await ensureCache(safeKind, preferBest ? 5 : 1);
   let picked = consumeFromCache(safeKind, preferBest);
   if (!picked) {
@@ -727,7 +737,7 @@ async function copyKind(kind, preferBest = false) {
     picked = fallbackLine(safeKind, preferBest);
   }
   if (!picked) {
-    setCopyStatus("Could not load text right now", "bad");
+    setCopyStatus(extT("ext_copy_load_failed"), "bad");
     return;
   }
 
@@ -735,12 +745,18 @@ async function copyKind(kind, preferBest = false) {
     await copyToClipboard(picked);
     if (el.previewText) el.previewText.textContent = picked;
     await persistLastText(picked);
-    setCopyStatus(`Copied ${preferBest ? "best " : ""}${safeKind.toUpperCase()} to clipboard`, "good");
+    setCopyStatus(
+      preferBest
+        ? extT("ext_copy_copied_best", { kind: kindLabel })
+        : extT("ext_copy_copied", { kind: kindLabel }),
+      "good"
+    );
     if ((state.cache[safeKind] || []).length < 3) {
       void ensureCache(safeKind, 5);
     }
   } catch (error) {
-    setCopyStatus(String(error && error.message || "Clipboard blocked"), "bad");
+    const fallback = extT("ext_copy_clipboard_blocked");
+    setCopyStatus(String((error && error.message) || fallback), "bad");
   }
 }
 
@@ -758,7 +774,7 @@ async function refreshSnapshot() {
     await saveAuthState(state.base, "", "");
     applySessionUi();
     renderStats(null, null);
-    setConnectStatus("Saved session expired. Use site session again.", "bad");
+    setConnectStatus(extT("ext_connect_session_expired"), "bad");
     return;
   }
 
@@ -784,16 +800,16 @@ async function queryAllTabs() {
 async function syncFromSite(options = {}) {
   const openIfMissing = options.openIfMissing !== false;
   const silent = options.silent === true;
-  if (!silent) setConnectStatus("Looking for an open site tab...");
+  if (!silent) setConnectStatus(extT("ext_connect_looking_tab"));
   const tabs = await queryAllTabs();
   const siteTabs = (tabs || []).filter((tab) => isSiteUrl(tab.url));
 
   if (!siteTabs.length) {
     if (openIfMissing) {
       await openTab(`${state.base || DEFAULT_BASE}/app`);
-      if (!silent) setConnectStatus("Opened the site. If you are already logged in there, click Use site session again.");
+      if (!silent) setConnectStatus(extT("ext_connect_opened_site"));
     } else if (!silent) {
-      setConnectStatus("No site tab found", "bad");
+      setConnectStatus(extT("ext_connect_no_tab"), "bad");
     }
     return false;
   }
@@ -832,14 +848,12 @@ async function syncFromSite(options = {}) {
   await refreshSnapshot();
 
   if (state.token && state.handle) {
-    if (!silent) setConnectStatus(`Using site session @${state.handle}`, "good");
+    if (!silent) setConnectStatus(extT("ext_connect_using_session", { handle: `@${state.handle}` }), "good");
     return true;
   }
   if (!silent) {
     setConnectStatus(
-      responded
-        ? "Site tab responded, but no active site session was found"
-        : "Site tab found, but sync did not return a session",
+      responded ? extT("ext_connect_no_session_on_tab") : extT("ext_connect_sync_failed"),
       "bad"
     );
   }
@@ -849,31 +863,37 @@ async function syncFromSite(options = {}) {
 async function connectHandle() {
   const handle = normalizeHandle(el.handleInput && el.handleInput.value);
   if (!handle) {
-    setConnectStatus("Enter a valid @handle", "bad");
+    setConnectStatus(extT("ext_connect_invalid_handle"), "bad");
     return;
   }
-  setConnectStatus("Connecting...");
+  setConnectStatus(extT("ext_connect_connecting"));
   const result = await apiRequest("/api/user/init", {
     method: "POST",
     body: { handle },
   });
   if (!result.ok || !result.data || !result.data.token) {
-    const msg = friendlyError(result);
-    if (/Use site session instead/i.test(msg)) {
-      setConnectStatus("This handle already exists. Trying site sync...");
+    const raw = String(
+      result?.data?.hint ||
+      result?.data?.error_code ||
+      result?.data?.error ||
+      result?.error ||
+      ""
+    );
+    if (/existing_session_required|open_site_or_use_existing_session|token_required_for_rotate/i.test(raw)) {
+      setConnectStatus(extT("ext_connect_handle_exists_try_sync"));
       const synced = await syncFromSite({ openIfMissing: true, silent: true });
       if (synced) {
-        setConnectStatus(`Using site session @${state.handle}`, "good");
+        setConnectStatus(extT("ext_connect_using_session", { handle: `@${state.handle}` }), "good");
         return;
       }
     }
-    setConnectStatus(msg, "bad");
+    setConnectStatus(friendlyError(result), "bad");
     return;
   }
 
   await saveAuthState(result.base || state.base, String(result.data.handle || handle), String(result.data.token || ""));
   if (el.handleInput) el.handleInput.value = state.handle ? `@${state.handle}` : "";
-  setConnectStatus("Connected", "good");
+  setConnectStatus(extT("ext_connect_connected"), "good");
   await refreshSnapshot();
 }
 
@@ -881,7 +901,7 @@ async function resetSession() {
   state.cache = { gm: [], gn: [] };
   await saveAuthState(state.base, "", "");
   if (el.handleInput) el.handleInput.value = "";
-  setConnectStatus("Local extension session cleared");
+  setConnectStatus(extT("ext_connect_session_cleared"));
   await refreshSnapshot();
 }
 

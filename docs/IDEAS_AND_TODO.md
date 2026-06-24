@@ -22,9 +22,11 @@
 
 **В план (следующие):**
 - Модульный boot (~97 deferred scripts) — bundle (Sprint 3.4, не срочно)
-- Extension connect/status i18n (Sprint 3.2)
+- Extension connect/status i18n (Sprint 3.2) — done
 
 **Сделано (Sprint 3.1):** referral progress bar — i18n `ref_progress_meter_html` + подсказка награды на метре.
+
+**Сделано (Sprint 3.2):** extension connect/sync/copy status — `ext_connect_*`, `ext_err_*`, `ext_copy_*` в `popup.js`.
 
 **Сделано (2026-06, Phase 2):** cascade `refreshUsage` → ref stats → renderThemes убран; ref stats refresh только при смене eligible или на вкладке referrals.
 
