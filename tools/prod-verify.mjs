@@ -78,6 +78,12 @@ if (!css.text.includes("gmxWallLayer") || !css.text.includes("object-fit:cover")
 }
 ok("app.css wallpapers");
 
+const arcadeCategoryCover = await get("/assets/arcade/covers/categories/action.webp");
+if (arcadeCategoryCover.status !== 200) {
+  fail(`arcade category cover status ${arcadeCategoryCover.status}`);
+}
+ok("arcade category covers");
+
 const handle = freshSmokeHandle("p");
 const init = await get("/api/user/init", {
   method: "POST",

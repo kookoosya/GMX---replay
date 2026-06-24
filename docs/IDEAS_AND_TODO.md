@@ -24,7 +24,9 @@
 
 **Сделано (Bundle 5d):** esbuild shell chunks — 4 packs, boot **6** eager defer scripts (i18n + chunks + app.js).
 
-**В план (следующие):** Arcade covers, Supabase when stable.
+**Сделано (Sprint 4.1):** Arcade category `.webp` fallbacks — 16 covers in `assets/arcade/covers/categories/`, `categoryCoverWebp()` + SVG fallback on error.
+
+**В план (следующие):** Arcade Pro checkout flow; Supabase when stable.
 
 **Сделано (Sprint 3.4):** boot inventory — `audit:boot`, baseline 97 scripts, pruned stale `*runwire.js` mirrors.
 

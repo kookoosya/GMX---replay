@@ -88,6 +88,15 @@ if (fs.existsSync(extbgSrc)) {
   console.log("  assets/extbg/");
 }
 
+// 5. Sync assets/arcade -> frontend/public/assets/arcade (game + category covers)
+const arcadeSrc = path.join(ASSETS, "arcade");
+const arcadeDest = path.join(FRONTEND_PUBLIC, "assets", "arcade");
+if (fs.existsSync(arcadeSrc)) {
+  copyDirRecursive(arcadeSrc, arcadeDest);
+  n++;
+  console.log("  assets/arcade/");
+}
+
 console.log(`[sync] Copied ${n} items: public + assets -> frontend/public`);
 
 // Prune obsolete collapsed runwire mirrors (Phase 3 → merged into *wire.js).

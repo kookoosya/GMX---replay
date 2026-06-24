@@ -47,6 +47,11 @@ Supabase deferred until site and extension are stable (`DB_MODE=sqlite` on Rende
 3. Extension ↔ site session sync audit + tests — DONE
 4. Boot bundle inventory (defer implementation until 1–3 done) — DONE
 
-Sprint 3 complete. Bundle Phases 5c–5d complete. Next: Arcade or Supabase when stable.
+Sprint 3 complete. Bundle 5c–5d complete.
+
+## Sprint 4 queue (strict order) — Arcade
+
+1. Category `.webp` fallback covers — DONE (4.1)
+2. Pro checkout flow for Arcade gate — NOT STARTED (4.2)
 
 Do not begin step N+1 until step N meets definition of done.

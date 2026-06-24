@@ -1,0 +1,21 @@
+{
+  "size": { "width": 900, "height": 540 },
+  "categories": {
+    "action": ["#ef4444", "#7f1d1d"],
+    "arcade": ["#8b5cf6", "#312e81"],
+    "casual": ["#ec4899", "#831843"],
+    "crypto": ["#f59e0b", "#7c2d12"],
+    "idle": ["#0ea5e9", "#0c4a6e"],
+    "io": ["#6366f1", "#312e81"],
+    "platformer": ["#22c55e", "#14532d"],
+    "puzzle": ["#a855f7", "#581c87"],
+    "racing": ["#f97316", "#7c2d12"],
+    "rpg": ["#a78bfa", "#4c1d95"],
+    "shooter": ["#3b82f6", "#1e3a8a"],
+    "simulation": ["#14b8a6", "#134e4a"],
+    "sports": ["#06b6d4", "#164e63"],
+    "strategy": ["#84cc16", "#365314"],
+    "survivor": ["#f43f5e", "#881337"],
+    "generic": ["#64748b", "#0f172a"]
+  }
+}

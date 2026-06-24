@@ -584,11 +584,14 @@
   const CATEGORY_COVER_COLORS = {
     action: ["#ef4444", "#7f1d1d"],
     arcade: ["#8b5cf6", "#312e81"],
+    casual: ["#ec4899", "#831843"],
     crypto: ["#f59e0b", "#7c2d12"],
     idle: ["#0ea5e9", "#0c4a6e"],
+    io: ["#6366f1", "#312e81"],
     platformer: ["#22c55e", "#14532d"],
     puzzle: ["#a855f7", "#581c87"],
     racing: ["#f97316", "#7c2d12"],
+    rpg: ["#a78bfa", "#4c1d95"],
     shooter: ["#3b82f6", "#1e3a8a"],
     simulation: ["#14b8a6", "#134e4a"],
     sports: ["#06b6d4", "#164e63"],
@@ -596,16 +599,28 @@
     survivor: ["#f43f5e", "#881337"],
     generic: ["#64748b", "#0f172a"],
   };
+  function categoryCoverKey(game) {
+    const key = String(game && game.categoryKey || "").toLowerCase().trim().replace(/[^a-z]+/g, "");
+    if (key && CATEGORY_COVER_COLORS[key]) return key;
+    return "generic";
+  }
   function categoryCoverSvgDataUri(label, c1, c2){
     const text = String(label || "GAME").slice(0, 12).toUpperCase();
     const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 540'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'><stop offset='0%' stop-color='${c1}'/><stop offset='100%' stop-color='${c2}'/></linearGradient></defs><rect width='900' height='540' fill='url(#g)'/><circle cx='760' cy='90' r='120' fill='rgba(255,255,255,.12)'/><circle cx='120' cy='460' r='180' fill='rgba(255,255,255,.08)'/><text x='58' y='460' font-family='Inter,Segoe UI,Arial' font-size='96' font-weight='800' fill='rgba(255,255,255,.92)'>${text}</text></svg>`;
     return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
   }
-  function categoryCover(game) {
-    const key = String(game && game.categoryKey || "").toLowerCase().trim().replace(/[^a-z]+/g, "");
+  function categoryCoverSvg(game) {
+    const key = categoryCoverKey(game);
     const colors = CATEGORY_COVER_COLORS[key] || CATEGORY_COVER_COLORS.generic;
     const label = (game && game.categoryKey ? String(game.categoryKey) : arcadeT("arcade_cover_fallback")).toUpperCase().slice(0, 12);
     return categoryCoverSvgDataUri(label, colors[0], colors[1]);
+  }
+  function categoryCoverWebp(game) {
+    const key = categoryCoverKey(game);
+    return `/assets/arcade/covers/categories/${key}.webp`;
+  }
+  function categoryCover(game) {
+    return categoryCoverWebp(game);
   }
   const LOCAL_GAME_COVERS = new Set([
     "obby-vs-zombies", "plane-chase", "sniper-team-3", "snow-rider-obby-parkour",
@@ -617,7 +632,7 @@
     return `/assets/arcade/covers/games/${slug}.svg`;
   }
   function fallbackCover(game) {
-    return localGameCover(game) || categoryCover(game);
+    return localGameCover(game) || categoryCoverSvg(game);
   }
   function remoteCoverUrl(game) {
     try {

@@ -187,3 +187,23 @@ Focus: **site + extension stability** (Supabase deferred).
 - `verify-app-chunks.mjs` + updated `audit:boot` / `logic-audit`
 
 **Verify:** `npm run verify:site`, `npm run audit:boot`, `npm test`.
+
+---
+
+# Refactor Sprint 4 — Arcade
+
+## 4.1 Category `.webp` fallback covers — DONE
+
+**Problem:** Games without `imageUrl` or local SVG used inline SVG data-URIs for every tile — no cacheable assets, inconsistent with the “real cover images” goal in `IDEAS_AND_TODO.md`.
+
+**Fix:**
+- `tools/arcade-category-covers.json` + `generate-arcade-category-covers.mjs` — 16 category `.webp` files (900×540) in `assets/arcade/covers/categories/`
+- `arcade.js`: `categoryCoverWebp()` → disk asset; `categoryCoverSvg()` kept as `data-fallback-cover` on `<img>` error
+- `audit-arcade-category-covers.mjs` + client-invariants; `sync-app-and-assets` mirrors `assets/arcade/` for Vite fallback
+- Added `casual`, `io`, `rpg` palette entries
+
+**Verify:** `npm run arcade:covers:categories`, `node tools/audit-arcade-category-covers.mjs`, `npm run test:suite`.
+
+## 4.2 Pro checkout flow — NOT STARTED
+
+Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).

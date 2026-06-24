@@ -84,8 +84,11 @@ for (const rel of ["public/arcade.js", "frontend/public/arcade.js", "public/brid
   if (coverSrcCount !== 1) {
     fail(`${rel}: arcade must define exactly one coverSrc (${coverSrcCount} found)`);
   }
-  if (/function liveScreenshotCover\s*\(/.test(text) || /function categoryCoverWebp\s*\(/.test(text)) {
-    fail(`${rel}: arcade must not keep dead cover helper functions`);
+  if (/function liveScreenshotCover\s*\(/.test(text)) {
+    fail(`${rel}: arcade must not keep dead liveScreenshotCover helper`);
+  }
+  if (!/function categoryCoverWebp\s*\(/.test(text)) {
+    fail(`${rel}: arcade must define categoryCoverWebp for category fallback covers`);
   }
   ok(rel);
 }
@@ -105,6 +108,14 @@ if (coversJsonAudit.status !== 0) {
   fail(`arcade-covers.json audit:\n${coversJsonAudit.stdout || coversJsonAudit.stderr}`);
 }
 ok("arcade-covers.json");
+
+const categoryCoversAudit = spawnSync(process.execPath, ["tools/audit-arcade-category-covers.mjs"], {
+  encoding: "utf8",
+});
+if (categoryCoversAudit.status !== 0) {
+  fail(`arcade category covers:\n${categoryCoversAudit.stdout || categoryCoversAudit.stderr}`);
+}
+ok("arcade category covers");
 
 if (fs.existsSync("public/bridge/app.html")) {
   fail("public/bridge/app.html must not exist (bridge uses index.html SPA)");
