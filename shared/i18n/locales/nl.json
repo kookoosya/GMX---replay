@@ -2,7 +2,7 @@
   "plan_compare_btn": "Vergelijken",
   "plan_modal_title": "Abonnementen vergelijken",
   "plan_modal_close": "Sluiten",
-  "plan_modal_desc": "Kies wat je nodig hebt — je kunt altijd verlengen. Pro ontgrendelt alles meteen.",
+  "plan_modal_desc": "Kies wat je nodig hebt — verlengen kan altijd. Pro ontgrendelt alles direct — inclusief alle Arcade-games.",
   "w_activity_title": "Jouw activiteit",
   "w_activity_refresh": "Vernieuwen",
   "w_activity_hint": "Toont recente events voor je handle (betalingen, referrals, upgrades)",
@@ -310,7 +310,7 @@
   ],
   "gn_desc": "Korte avondantwoorden — u bewerkt en plakt zelf. Eén opgeslagen bank; Gratis heeft een regellimiet.",
   "ref_desc": "Referrals: deel uw link. Bevestigd = verbonden, Actief = gebruikt, In aanmerking = max(actief, carry-over). Bonus: +10/dag per 20 in aanmerking (+12 bij 50+).",
-  "wallet_desc": "Pro: verwijdert de 70-cap, ontgrendelt alle themes & styles en geeft onbeperkte generatie. Volledige wallet-connect komt later — bewust voorzichtig voor security. Verify via signature is veiliger en betrouwbaar.",
+  "wallet_desc": "Pro-upgrade: onbeperkte dagelijkse GM/GN-regels + alle cosmetica (themes, styles, extension skins & wallpapers) + alle Arcade-games. Betaal op Solana met SOL / USDC / USDT. Auto-verificatie on-chain.",
   "w_pay_desc": "Receiver wallet verschijnt na het kiezen van een plan.",
   "w_status_desc": "Simpel & veilig: je stuurt vanuit je eigen wallet en plakt de signature ter verificatie.",
   "w_status_list": [
@@ -443,7 +443,7 @@
   "w_right_list": [
     "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
     "<b>Referrals:</b> unlocken geleidelijk themes/skins/packs. Details in tab <b>Referrals</b>.",
-    "<b>Pro:</b> onbeperkte daily generation, alles unlocked, advanced controls.",
+    "<b>Pro:</b> onbeperkte opgeslagen regels, volledige dagelijkse generatie, sterkere <b>Best</b>-flow, ontgrendel alles (inclusief alle Arcade-games en Cloud sync wanneer actief).",
     "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",
     "<b>Betalen:</b> kies een plan → SOL/USDC/USDT → wallet verbinden → overschrijving goedkeuren → auto‑verify."
   ],
@@ -535,7 +535,7 @@
   "arcade_player_iframe_note": "Als de uitgever het afspelen van iframes in uw browser blokkeert, gebruikt u Origineel openen.",
   "arcade_locked_eyebrow": "Vergrendelde Pro-titel",
   "arcade_locked_open_original": "Origineel nu openen",
-  "arcade_locked_premium_note": "Deze titel blijft alleen Pro totdat je abonnement actief is.",
+  "arcade_locked_premium_note": "Pro ontgrendelt alle Arcade-games. Upgrade om deze titel hier te starten.",
   "arcade_gotd_badge": "SPEL VAN DE DAG",
   "arcade_try_now": "Probeer het nu",
   "arcade_gotd_blurb": "De uitgelichte keuze van vandaag: één klik om te starten.",

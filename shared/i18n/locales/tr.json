@@ -2,7 +2,7 @@
   "plan_compare_btn": "Karşılaştır",
   "plan_modal_title": "Plan karşılaştırma",
   "plan_modal_close": "Kapat",
-  "plan_modal_desc": "İhtiyacını seç — istediğin zaman uzatabilirsin. Pro her şeyi anında açar.",
+  "plan_modal_desc": "İhtiyacın olanı seç — istediğin zaman uzatabilirsin. Pro anında her şeyi açar — tüm Arcade oyunları dahil.",
   "w_activity_title": "Aktiviten",
   "w_activity_refresh": "Yenile",
   "w_activity_hint": "Handle’ın için son olayları gösterir (ödemeler, referanslar, yükseltmeler)",
@@ -310,7 +310,7 @@
   ],
   "gn_desc": "Kısa gece yanıtları — kendiniz düzenleyip yapıştırırsınız. Bu bölüm için tek kayıtlı banka; Free’de satır limiti vardır.",
   "ref_desc": "Referanslar: bağlantınızı paylaşın. Onaylı = bağlı, Aktif = kullandı, Uygun = max(aktif, devir). Bonus: 20 uygun başına +10/gün (50+ için +12).",
-  "wallet_desc": "Pro: 70 cap’i kaldırır, tüm temaları & stilleri açar ve sınırsız üretim verir. Tam wallet-connect yakında — güvenlik için dikkatli gidiyoruz. Signature ile doğrulama daha güvenli ve stabil.",
+  "wallet_desc": "Pro yükseltme: sınırsız günlük GM/GN satırı + tüm kozmetikler (temalar, stiller, extension skin & wallpaper) + tüm Arcade oyunları. Solana’da SOL / USDC / USDT ile öde. On-chain otomatik doğrulama.",
   "w_pay_desc": "Alıcı cüzdan plan seçildikten sonra görünür.",
   "w_status_desc": "Basit & güvenli: kendi cüzdanından gönderip signature’ı yapıştırırsın.",
   "w_status_list": [
@@ -443,7 +443,7 @@
   "w_right_list": [
     "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
     "<b>Referanslar:</b> temaları/skinleri/paketleri kademeli açar. Detaylar <b>Referrals</b> sekmesinde.",
-    "<b>Pro:</b> sınırsız daily generation, her şey açık, gelişmiş kontroller.",
+    "<b>Pro:</b> sınırsız kayıtlı satır, tam günlük üretim, daha güçlü <b>Best</b> akışı, her şeyi açar (tüm Arcade oyunları ve etkin olduğunda Cloud sync dahil).",
     "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",
     "<b>Öde:</b> plan seç → SOL/USDC/USDT → cüzdanı bağla → transferi onayla → auto‑verify."
   ],
@@ -535,7 +535,7 @@
   "arcade_player_iframe_note": "If the publisher blocks iframe play in your browser, use Open original.",
   "arcade_locked_eyebrow": "Locked Pro title",
   "arcade_locked_open_original": "Open original now",
-  "arcade_locked_premium_note": "This title stays Pro-only until your plan is active.",
+  "arcade_locked_premium_note": "Pro tüm Arcade oyunlarını açar. Bu oyunu burada başlatmak için yükselt.",
   "arcade_gotd_badge": "GAME OF THE DAY",
   "arcade_try_now": "Try it now",
   "arcade_gotd_blurb": "Today’s featured pick — one click to launch.",

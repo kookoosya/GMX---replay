@@ -2,7 +2,7 @@
   "plan_compare_btn": "Confronta",
   "plan_modal_title": "Confronto piani",
   "plan_modal_close": "Chiudi",
-  "plan_modal_desc": "Scegli ciò che ti serve — puoi estendere quando vuoi. Pro sblocca tutto subito.",
+  "plan_modal_desc": "Scegli ciò che ti serve — puoi estendere in qualsiasi momento. Pro sblocca tutto subito — inclusi tutti i giochi Arcade.",
   "w_activity_title": "La tua attività",
   "w_activity_refresh": "Aggiorna",
   "w_activity_hint": "Mostra eventi recenti per il tuo handle (pagamenti, referral, upgrade)",
@@ -310,7 +310,7 @@
   ],
   "gn_desc": "Brevi risposte notturne — modifichi e incolli tu. Una banca salvata; Gratis ha limite righe.",
   "ref_desc": "Referral: condividi il link. Confermato = connesso, Attivo = usato, Idoneo = max(attivi, riporto). Bonus: +10/giorno ogni 20 idonei (+12 a 50+).",
-  "wallet_desc": "Upgrade Pro: rimuove il limite 70 e sblocca tutti i cosmetici (Themes, Styles, skin & wallpaper dell’estensione). Pagamento su Solana con SOL / USDC / USDT. Verifica automatica on‑chain.",
+  "wallet_desc": "Upgrade Pro: righe GM/GN giornaliere illimitate + tutti i cosmetici (temi, stili, skin e wallpaper dell’estensione) + tutti i giochi Arcade. Pagamento su Solana con SOL / USDC / USDT. Verifica automatica on‑chain.",
   "w_pay_desc": "Il wallet destinatario apparirà dopo la scelta del piano.",
   "w_status_desc": "Dopo l’approvazione nel wallet, verifichiamo automaticamente on‑chain.",
   "w_status_list": [
@@ -443,7 +443,7 @@
   "w_right_list": [
     "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
     "<b>Referral:</b> sbloccano temi/skin/pacchetti gradualmente. Dettagli nella tab <b>Referrals</b>.",
-    "<b>Pro:</b> daily generation illimitati, tutto sbloccato, controlli avanzati.",
+    "<b>Pro:</b> righe salvate illimitate, generazione giornaliera completa, flusso <b>Best</b> più forte, sblocca tutto (inclusi tutti i giochi Arcade e Cloud sync quando attivo).",
     "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",
     "<b>Paga:</b> scegli un piano → SOL/USDC/USDT → collega il wallet → approva il trasferimento → auto‑verify."
   ],
@@ -535,7 +535,7 @@
   "arcade_player_iframe_note": "If the publisher blocks iframe play in your browser, use Open original.",
   "arcade_locked_eyebrow": "Locked Pro title",
   "arcade_locked_open_original": "Open original now",
-  "arcade_locked_premium_note": "This title stays Pro-only until your plan is active.",
+  "arcade_locked_premium_note": "Pro sblocca tutti i giochi Arcade. Passa a Pro per avviare questo titolo qui.",
   "arcade_gotd_badge": "GAME OF THE DAY",
   "arcade_try_now": "Try it now",
   "arcade_gotd_blurb": "Today’s featured pick — one click to launch.",

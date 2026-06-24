@@ -2,7 +2,7 @@
   "plan_compare_btn": "比較",
   "plan_modal_title": "プラン比較",
   "plan_modal_close": "閉じる",
-  "plan_modal_desc": "必要なものを選んでください — いつでも延長できます。Proは全てを即時解放します。",
+  "plan_modal_desc": "必要なプランを選べます — いつでも延長可能。Proはすべてを即座に解放 — Arcadeの全ゲームを含みます。",
   "w_activity_title": "あなたのアクティビティ",
   "w_activity_refresh": "更新",
   "w_activity_hint": "あなたのハンドルの最近のイベントを表示（支払い、紹介、アップグレード）",
@@ -310,7 +310,7 @@
   ],
   "gn_desc": "短い夜の返信 — 自分で編集して貼り付けます。このセクション用の保存バンクは1つ。Free には保存行上限があります。",
   "ref_desc": "紹介: リンクを共有。確認済み = 接続、アクティブ = 利用、対象 = max(アクティブ, 繰越)。ボーナス: 対象20人ごとに +10/日（50+ で +12）。",
-  "wallet_desc": "Proアップグレード：GM/GNの1日上限なし + 全コスメ解放（テーマ、スタイル、拡張機能スキン&壁紙）。SolanaでSOL/USDC/USDT支払い。オンチェーン自動検証。",
+  "wallet_desc": "Proアップグレード：GM/GNの1日無制限 + すべてのコスメ（テーマ、スタイル、拡張スキン＆壁紙）+ Arcadeの全ゲーム。SolanaでSOL / USDC / USDT支払い。オンチェーン自動検証。",
   "w_pay_desc": "支払いを有効化するにはプランを選択してください。",
   "w_status_desc": "ウォレットで取引を承認すると、オンチェーンで自動検証します。",
   "w_status_list": [
@@ -443,7 +443,7 @@
   "w_right_list": [
     "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
     "<b>Referrals:</b> themes/skins/packs を段階的に解除。詳細は <b>Referrals</b> タブ。",
-    "<b>Pro:</b> daily generation 無制限、全解除、advanced controls。",
+    "<b>Pro：</b>保存行数無制限、フル日次生成、強化<b>Best</b>フロー、すべて解放（Arcadeの全ゲームと有効時のCloud同期を含む）。",
     "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",
     "<b>支払い:</b> プランを選択 → SOL/USDC/USDT → ウォレット接続 → 送金を承認 → auto‑verify."
   ],
@@ -535,7 +535,7 @@
   "arcade_player_iframe_note": "If the publisher blocks iframe play in your browser, use Open original.",
   "arcade_locked_eyebrow": "Locked Pro title",
   "arcade_locked_open_original": "Open original now",
-  "arcade_locked_premium_note": "This title stays Pro-only until your plan is active.",
+  "arcade_locked_premium_note": "ProでArcadeの全ゲームが解放されます。ここで起動するにはアップグレードしてください。",
   "arcade_gotd_badge": "今日のゲーム",
   "arcade_try_now": "今すぐ試してください",
   "arcade_gotd_blurb": "今日の注目のピック - ワンクリックで起動。",

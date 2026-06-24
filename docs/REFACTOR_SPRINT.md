@@ -282,3 +282,13 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `server/routes/static.mjs` `/arcade/:slug` → `/arcade.html?game=`; `tryOpenDeepLinkGame()` in arcade.js.
 
 **Verify:** `node --test tests/arcade-sprint7.test.mjs`, open `/arcade/agario`.
+
+## 8.1 Pro unlocks Arcade copy — DONE
+
+**Problem:** Upgrade Pro / Wallet did not explicitly say Pro unlocks all Arcade games (`SITE_RECOMMENDATIONS.md`).
+
+**Fix:**
+- `wallet_desc`, `plan_modal_desc`, `w_right_list` Pro bullet, `arcade_locked_premium_note` — EN + 14 locales via `tools/patch-wallet-arcade-pro-i18n.mjs`
+- `app.html` fallback Pro bullet; `tests/wallet-arcade-pro-i18n.test.mjs`
+
+**Verify:** `npm test`, Wallet tab + locked Arcade title show Arcade in Pro copy.

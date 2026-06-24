@@ -2,7 +2,7 @@
   "plan_compare_btn": "कम्पेयर करें",
   "plan_modal_title": "प्लान तुलना",
   "plan_modal_close": "बंद करें",
-  "plan_modal_desc": "जो चाहिए चुनें — आप कभी भी बढ़ा सकते हैं। Pro सब कुछ तुरंत अनलॉक करता है।",
+  "plan_modal_desc": "जो चाहिए चुनें — कभी भी बढ़ा सकते हैं। Pro तुरंत सब अनलॉक करता है — सभी Arcade गेम्स सहित।",
   "w_activity_title": "आपकी एक्टिविटी",
   "w_activity_refresh": "रीफ़्रेश",
   "w_activity_hint": "आपके हैंडल के हालिया इवेंट्स दिखाता है (पेमेंट, रेफरल, अपग्रेड)",
@@ -310,7 +310,7 @@
   ],
   "gn_desc": "छोटे रात के जवाब — आप खुद एडिट और पेस्ट करते हैं। एक सेव्ड बैंक; Free में लाइन सीमा।",
   "ref_desc": "रेफरल: अपना लिंक साझा करें। पुष्टि = कनेक्ट, सक्रिय = उपयोग, योग्य = max(सक्रिय, कैरी-ओवर)। बोनस: 20 योग्य पर +10/दिन (50+ पर +12)।",
-  "wallet_desc": "Pro अपग्रेड: अनलिमिटेड डेली GM/GN लाइन्स + सभी कॉस्मेटिक्स अनलॉक (थीम्स, स्टाइल्स, एक्सटेंशन स्किन्स और वॉलपेपर)। Solana पर SOL / USDC / USDT से पे करें। ऑन-चेन ऑटो-वेरिफाइड।",
+  "wallet_desc": "Pro अपग्रेड: अनलिमिटेड दैनिक GM/GN लाइन्स + सभी कॉस्मेटिक्स (थीम्स, स्टाइल्स, एक्सटेंशन स्किन्स और वॉलपेपर) + सभी Arcade गेम्स। Solana पर SOL / USDC / USDT से पे करें। ऑन-चेन ऑटो-वेरिफाइड।",
   "w_pay_desc": "पेमेंट सक्षम करने के लिए एक प्लान चुनें।",
   "w_status_desc": "जब आप अपने वॉलेट में ट्रांजैक्शन अप्रूव करेंगे, हम इसे ऑन-चेन ऑटोमैटिकली वेरिफाई करते हैं।",
   "w_status_list": [
@@ -443,7 +443,7 @@
   "w_right_list": [
     "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
     "<b>Referrals:</b> धीरे‑धीरे themes/skins/packs unlock करते हैं। Details <b>Referrals</b> tab में।",
-    "<b>Pro:</b> unlimited daily generation, सब unlocked, advanced controls.",
+    "<b>Pro:</b> अनलिमिटेड सेव्ड लाइन्स, पूरी दैनिक जनरेशन, मजबूत <b>Best</b> फ्लो, सब अनलॉक (सभी Arcade गेम्स और सक्रिय होने पर Cloud sync सहित)।",
     "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",
     "<b>Pay:</b> प्लान चुनें → SOL/USDC/USDT → वॉलेट कनेक्ट करें → ट्रांसफर approve करें → auto‑verify."
   ],
@@ -535,7 +535,7 @@
   "arcade_player_iframe_note": "यदि प्रकाशक आपके ब्राउज़र में आईफ्रेम प्ले को ब्लॉक करता है, तो ओपन ओरिजिनल का उपयोग करें।",
   "arcade_locked_eyebrow": "लॉक्ड प्रो शीर्षक",
   "arcade_locked_open_original": "अभी मूल खोलें",
-  "arcade_locked_premium_note": "यह शीर्षक केवल तब तक प्रो-केवल रहता है जब तक आपकी योजना सक्रिय नहीं होती।",
+  "arcade_locked_premium_note": "Pro सभी Arcade गेम्स अनलॉक करता है। यह गेम यहाँ चलाने के लिए अपग्रेड करें।",
   "arcade_gotd_badge": "दिन का खेल",
   "arcade_try_now": "अब इसे आजमाओ",
   "arcade_gotd_blurb": "आज की विशेष पसंद - लॉन्च करने के लिए एक क्लिक।",

@@ -2,7 +2,7 @@
   "plan_compare_btn": "Comparar",
   "plan_modal_title": "Comparación de planes",
   "plan_modal_close": "Cerrar",
-  "plan_modal_desc": "Elige lo que necesitas — puedes ampliar cuando quieras. Pro desbloquea todo al instante.",
+  "plan_modal_desc": "Elige lo que necesitas — puedes ampliar cuando quieras. Pro desbloquea todo al instante, incluidos todos los juegos del Arcade.",
   "w_activity_title": "Tu actividad",
   "w_activity_refresh": "Actualizar",
   "w_activity_hint": "Muestra eventos recientes para tu handle (pagos, referidos, upgrades)",
@@ -310,7 +310,7 @@
   ],
   "gn_desc": "Respuestas nocturnas cortas que editas y pegas tú mismo. Un banco guardado para esta sección; Gratis tiene un límite de línea guardada.",
   "ref_desc": "Referidos: comparte tu enlace. Confirmado = conectado, Activo = usó el producto, Elegible = max(activos, arrastre). Bono: +10/día por cada 20 elegibles (+12 con 50+).",
-  "wallet_desc": "Pro: elimina el límite de 70, desbloquea todos los temas y estilos, y obtén generación ilimitada. Wallet-connect completo llegará pronto — lo implementamos con cuidado por seguridad. Verificar por firma es más seguro y fiable.",
+  "wallet_desc": "Upgrade Pro: líneas GM/GN diarias ilimitadas + todos los cosméticos (temas, estilos, skins y wallpapers de extensión) + todos los juegos del Arcade. Pago en Solana con SOL / USDC / USDT. Verificación automática on-chain.",
   "w_pay_desc": "La wallet receptora aparecerá después de elegir un plan.",
   "w_status_desc": "Verificación simple y segura: envía desde tu propia wallet y pega la firma para verificar.",
   "w_status_list": [
@@ -443,7 +443,7 @@
   "w_right_list": [
     "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
     "<b>Referidos:</b> desbloquean temas/skins/packs poco a poco. Detalles en <b>Referrals</b>.",
-    "<b>Pro:</b> daily generation ilimitados, todo desbloqueado, controles avanzados.",
+    "<b>Pro:</b> líneas guardadas ilimitadas, generación diaria completa, flujo <b>Best</b> más fuerte, desbloquea todo (incluidos todos los juegos del Arcade y Cloud sync cuando esté activo).",
     "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",
     "<b>Pagar:</b> elige un plan → SOL/USDC/USDT → conecta la wallet → aprueba la transferencia → auto‑verify."
   ],
@@ -535,7 +535,7 @@
   "arcade_player_iframe_note": "If the publisher blocks iframe play in your browser, use Open original.",
   "arcade_locked_eyebrow": "Locked Pro title",
   "arcade_locked_open_original": "Open original now",
-  "arcade_locked_premium_note": "This title stays Pro-only until your plan is active.",
+  "arcade_locked_premium_note": "Pro desbloquea todos los juegos del Arcade. Mejora a Pro para lanzar este título aquí.",
   "arcade_gotd_badge": "GAME OF THE DAY",
   "arcade_try_now": "Try it now",
   "arcade_gotd_blurb": "Today’s featured pick — one click to launch.",

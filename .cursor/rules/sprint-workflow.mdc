@@ -73,3 +73,10 @@ Do not begin step N+1 until step N meets definition of done.
 2. Quick insert (URL / embed / GameDistribution id) — DONE (7.2)
 3. Embed URL offline audit in CI — DONE (7.3)
 4. SEO `/arcade/:slug` deep-links — DONE (7.4)
+
+## Sprint 8 queue (strict order) — Pro value copy
+
+1. Wallet / Arcade: explicit «Pro unlocks all Arcade games» — DONE (8.1)
+2. `prod-verify`: `/arcade/:slug` redirect spot-check — pending (8.2)
+
+Do not begin step N+1 until step N meets definition of done.

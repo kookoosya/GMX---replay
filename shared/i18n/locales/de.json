@@ -2,7 +2,7 @@
   "plan_compare_btn": "Vergleichen",
   "plan_modal_title": "Tarifvergleich",
   "plan_modal_close": "Schließen",
-  "plan_modal_desc": "Wähle, was du brauchst — du kannst jederzeit verlängern. Pro schaltet alles sofort frei.",
+  "plan_modal_desc": "Wähle was du brauchst — verlängern geht jederzeit. Pro schaltet sofort alles frei — inklusive aller Arcade-Spiele.",
   "w_activity_title": "Deine Aktivität",
   "w_activity_refresh": "Aktualisieren",
   "w_activity_hint": "Zeigt aktuelle Ereignisse für deinen Handle (Zahlungen, Referrals, Upgrades)",
@@ -310,7 +310,7 @@
   ],
   "gn_desc": "Kurze Nachtantworten, die Sie selbst bearbeiten und einfügen. Eine gespeicherte Bank für diesen Abschnitt; Free hat eine Begrenzung für gespeicherte Zeilen.",
   "ref_desc": "Weiterempfehlungen: Teile deinen Link. Bestätigt = verbunden, Aktiv = verwendet, Berechtigt = max(aktiv, Übertrag). Bonus: +10/Tag pro 20 teilnahmeberechtigten Personen (+12 bei 50+).",
-  "wallet_desc": "Pro: Entfernt das 70er-Limit, schaltet alle Themes & Styles frei und gibt unbegrenzte Generation. Voller Wallet-Connect kommt später — bewusst vorsichtig wegen Security. Verify per Signature ist sicherer und zuverlässig.",
+  "wallet_desc": "Pro-Upgrade: unbegrenzte tägliche GM/GN-Zeilen + alle Kosmetik (Themes, Styles, Extension-Skins & Wallpapers) + alle Arcade-Spiele. Zahlung auf Solana mit SOL / USDC / USDT. Auto-Verifizierung on-chain.",
   "w_pay_desc": "Empfänger-Wallet erscheint nach Plan-Auswahl.",
   "w_status_desc": "Einfach & sicher: Du sendest aus deiner Wallet und fügst die Signatur zur Verifizierung ein.",
   "w_status_list": [
@@ -443,7 +443,7 @@
   "w_right_list": [
     "<b>Kostenlos:</b> Speichern Sie bis zu <b>70</b> GM-Linien + <b>70</b> GN-Linien (jederzeit bearbeiten). Tägliche Erzeugung: je <b>70.</b>",
     "<b>Referrals:</b> schalten Themes/Skins/Packs nach und nach frei. Details im Tab <b>Referrals</b>.",
-    "<b>Pro:</b> unbegrenzte daily generation, alles freigeschaltet, erweiterte Controls.",
+    "<b>Pro:</b> unbegrenzte tägliche Generierung + unbegrenzte gespeicherte Zeilen, alles freigeschaltet (inkl. aller Arcade-Spiele und Cloud-Sync).",
     "<b>Pro:</b> unbegrenzte tägliche Generierung + unbegrenzte gespeicherte Zeilen, entsperren Sie alles (einschließlich Cloud-Synchronisierung).",
     "<b>Zahlung:</b> Plan wählen → SOL/USDC/USDT → Wallet verbinden → Überweisung bestätigen → Auto‑Verify."
   ],
@@ -535,7 +535,7 @@
   "arcade_player_iframe_note": "Wenn der Herausgeber die Iframe-Wiedergabe in Ihrem Browser blockiert, verwenden Sie „Original öffnen“.",
   "arcade_locked_eyebrow": "Gesperrter Pro-Titel",
   "arcade_locked_open_original": "Original jetzt öffnen",
-  "arcade_locked_premium_note": "Dieser Titel bleibt nur für Profis verfügbar, bis Ihr Plan aktiv ist.",
+  "arcade_locked_premium_note": "Pro schaltet alle Arcade-Spiele frei. Upgrade, um diesen Titel hier zu starten.",
   "arcade_gotd_badge": "SPIEL DES TAGES",
   "arcade_try_now": "Probieren Sie es jetzt aus",
   "arcade_gotd_blurb": "Die heutige Auswahl – ein Klick zum Starten.",

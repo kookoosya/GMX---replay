@@ -2,7 +2,7 @@
   "plan_compare_btn": "对比",
   "plan_modal_title": "套餐对比",
   "plan_modal_close": "关闭",
-  "plan_modal_desc": "按需选择 — 随时可延长。Pro 立即解锁全部功能。",
+  "plan_modal_desc": "按需选择方案 — 随时可续期。Pro 立即解锁全部 — 包括所有 Arcade 游戏。",
   "w_activity_title": "你的活动",
   "w_activity_refresh": "刷新",
   "w_activity_hint": "显示你的账号近期事件（付款、邀请、升级）",
@@ -310,7 +310,7 @@
   ],
   "gn_desc": "简短夜间回复 — 自行编辑并粘贴。本分区一个保存库；免费版有行数上限。",
   "ref_desc": "推荐：分享您的链接。已确认 = 已连接，活跃 = 已使用，符合条件 = max(活跃, 结转)。奖励：每 20 名符合条件 +10/天（50+ 为 +12）。",
-  "wallet_desc": "升级 Pro：每日 GM/GN 不限行数 + 解锁所有外观（主题、风格、扩展皮肤与壁纸）。在 Solana 上用 SOL / USDC / USDT 支付，链上自动验证。",
+  "wallet_desc": "升级 Pro：每日 GM/GN 行数不限 + 解锁全部外观（主题、样式、扩展皮肤与壁纸）+ 全部 Arcade 游戏。Solana 上用 SOL / USDC / USDT 支付。链上自动验证。",
   "w_pay_desc": "请选择一个套餐以启用付款。",
   "w_status_desc": "你在钱包里确认交易后，我们会在链上自动验证。",
   "w_status_list": [
@@ -443,7 +443,7 @@
   "w_right_list": [
     "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
     "<b>Referrals:</b> 逐步解锁 themes/skins/packs。详情见 <b>Referrals</b> 标签。",
-    "<b>Pro:</b> daily generation 无限、全部解锁、高级控制。",
+    "<b>Pro：</b>保存行数不限、完整每日生成、更强的 <b>Best</b> 流程，解锁一切（包括全部 Arcade 游戏及启用时的 Cloud 同步）。",
     "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",
     "<b>支付：</b>选择套餐 → SOL/USDC/USDT → 连接钱包 → 确认转账 → auto‑verify."
   ],
@@ -535,7 +535,7 @@
   "arcade_player_iframe_note": "如果发布者阻止您的浏览器中的 iframe 播放，请使用“打开原始内容”。",
   "arcade_locked_eyebrow": "锁定职业头衔",
   "arcade_locked_open_original": "立即打开原版",
-  "arcade_locked_premium_note": "在您的计划生效之前，此游戏仅适用于专业版。",
+  "arcade_locked_premium_note": "Pro 解锁全部 Arcade 游戏。升级后可在此启动该游戏。",
   "arcade_gotd_badge": "今日游戏",
   "arcade_try_now": "立即尝试",
   "arcade_gotd_blurb": "今天的精选——一键启动。",

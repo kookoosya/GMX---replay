@@ -2,7 +2,7 @@
   "plan_compare_btn": "Bandingkan",
   "plan_modal_title": "Perbandingan paket",
   "plan_modal_close": "Tutup",
-  "plan_modal_desc": "Pilih yang kamu butuhkan — bisa perpanjang kapan saja. Pro membuka semuanya langsung.",
+  "plan_modal_desc": "Pilih yang kamu butuhkan — bisa diperpanjang kapan saja. Pro membuka semuanya seketika — termasuk semua game Arcade.",
   "w_activity_title": "Aktivitas kamu",
   "w_activity_refresh": "Muat ulang",
   "w_activity_hint": "Menampilkan aktivitas terbaru untuk handle kamu (pembayaran, referral, upgrade)",
@@ -310,7 +310,7 @@
   ],
   "gn_desc": "Balasan malam singkat — Anda edit dan tempel sendiri. Satu bank tersimpan; Free punya batas baris.",
   "ref_desc": "Referral: bagikan tautan Anda. Terkonfirmasi = terhubung, Aktif = digunakan, Memenuhi syarat = max(aktif, carry-over). Bonus: +10/hari per 20 memenuhi syarat (+12 pada 50+).",
-  "wallet_desc": "Pro: hapus cap 70, unlock semua tema & style, dan unlimited generation. Full wallet-connect segera — kita implement pelan demi keamanan. Verify via signature lebih aman dan stabil.",
+  "wallet_desc": "Upgrade Pro: baris GM/GN harian tanpa batas + semua kosmetik (tema, style, skin & wallpaper ekstensi) + semua game Arcade. Bayar di Solana dengan SOL / USDC / USDT. Verifikasi otomatis on-chain.",
   "w_pay_desc": "Wallet penerima muncul setelah memilih plan.",
   "w_status_desc": "Flow aman & simpel: kirim dari wallet kamu lalu paste signature untuk verifikasi.",
   "w_status_list": [
@@ -443,7 +443,7 @@
   "w_right_list": [
     "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
     "<b>Referral:</b> membuka theme/skin/pack bertahap. Detail di tab <b>Referrals</b>.",
-    "<b>Pro:</b> daily generation tanpa batas, semua unlocked, kontrol lanjutan.",
+    "<b>Pro:</b> baris tersimpan tanpa batas, generasi harian penuh, alur <b>Best</b> lebih kuat, buka semuanya (termasuk semua game Arcade dan Cloud sync saat aktif).",
     "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",
     "<b>Bayar:</b> pilih paket → SOL/USDC/USDT → hubungkan wallet → setujui transfer → auto‑verify."
   ],
@@ -535,7 +535,7 @@
   "arcade_player_iframe_note": "If the publisher blocks iframe play in your browser, use Open original.",
   "arcade_locked_eyebrow": "Locked Pro title",
   "arcade_locked_open_original": "Open original now",
-  "arcade_locked_premium_note": "This title stays Pro-only until your plan is active.",
+  "arcade_locked_premium_note": "Pro membuka semua game Arcade. Upgrade untuk meluncurkan judul ini di sini.",
   "arcade_gotd_badge": "GAME OF THE DAY",
   "arcade_try_now": "Try it now",
   "arcade_gotd_blurb": "Today’s featured pick — one click to launch.",

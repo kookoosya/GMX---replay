@@ -41,7 +41,7 @@
 - [ ] **Годовой план со скидкой** — «2 months free» при yearly
 - [ ] **Сравнительная таблица** Free vs Pro с галочками
 - [ ] **Testimonial** — 1–2 коротких отзыва (если есть)
-- [ ] Явно: «Pro unlocks all Arcade games»
+- [x] Явно: «Pro unlocks all Arcade games»
 
 ### Referrals
 - [ ] **Прогресс-бар** до следующего unlock (темы/обои)
