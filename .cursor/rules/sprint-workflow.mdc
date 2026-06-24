@@ -30,3 +30,10 @@ alwaysApply: true
 5. Wire `mountLineListSkeleton` in bankui
 
 Do not begin step N+1 until step N meets definition of done.
+
+## Sprint 2 queue (strict order)
+
+1. ru/uk extension popup `ext_*` i18n corruption
+2. `arcade-covers.json` madalin-stunt-cars wrong URL
+3. Mark VPS deploy scripts obsolete (Render-only)
+4. Docs drift: `PLAN.md`, `REPO_BREAKDOWN.md` refresh

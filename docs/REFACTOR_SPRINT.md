@@ -57,3 +57,21 @@ Rules: `.cursor/rules/sprint-workflow.mdc` (one step at a time, no parity drift)
 - Wired through `app.bankuiwire.js`, `app.js` (`mountLineListSkeleton` helper), flat `__gmxBankUiWireCtx` (removed broken double `buildWireCtx` call)
 
 **Verify:** `npm test` includes `bankui: renderList uses mountLineListSkeleton for large lists`; `npm run test:suite` pass.
+
+---
+
+# Refactor Sprint 2 — tracker
+
+## 2.1 ru/uk extension popup ext_* i18n — DONE
+
+**Problem:** After Sprint 1.2 arcade fix, `ext_popup_subtitle` … `ext_stats_hint_static` (~56 keys) in `ru.json` and `uk.json` were still scrambled (arcade blurbs in button labels, session text in snapshot fields, etc.).
+
+**Fix:** Rewrote full extension popup block aligned to `en.json` semantics; `npm run i18n:sync`.
+
+**Verify:** `npm test`, `npm run audit:i18n:strict`.
+
+## 2.2 arcade-covers.json madalin — pending
+
+## 2.3 VPS deploy scripts — pending
+
+## 2.4 docs refresh — pending
