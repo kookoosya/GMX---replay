@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /** Static client invariants (site bundle, extension, HTML). */
 import fs from "node:fs";
+import { spawnSync } from "node:child_process";
 import { fail, ok } from "./_helpers.mjs";
 
 const appPaths = ["public/app.js", "frontend/public/app.js"];
@@ -69,5 +70,13 @@ for (const rel of ["public/arcade.js", "frontend/public/arcade.js", "public/brid
   }
   ok(rel);
 }
+
+const collisionAudit = spawnSync(process.execPath, ["tools/audit-arcade-cover-collisions.mjs"], {
+  encoding: "utf8",
+});
+if (collisionAudit.status !== 0) {
+  fail(`arcade cover collisions:\n${collisionAudit.stdout || collisionAudit.stderr}`);
+}
+ok("arcade cover collisions");
 
 console.log("CLIENT_INVARIANTS_OK");

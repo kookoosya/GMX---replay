@@ -1,0 +1,31 @@
+---
+description: GMXReply refactor sprint rules — one step at a time, no drift
+alwaysApply: true
+---
+
+# Sprint workflow (GMXReply refactor)
+
+## Order of work
+
+1. **One sprint step at a time** — do not start the next step until the current step is fully done, tested, synced, and documented.
+2. **No rushed patches** — every change must match project conventions; read surrounding code before editing.
+3. **Zero parity drift** — after client/static edits: sync `public/` → `frontend/public/` and `public/bridge/` where applicable; run `verify:parity` and `audit:runtime`.
+4. **Describe each step** — in commits and chat: what was wrong, what changed, how verified.
+
+## Definition of done (per step)
+
+- Root cause fixed (not masked)
+- Tests/audits relevant to the step pass (`npm test`, `test:suite`, `audit:all` as appropriate)
+- All mirrors byte-identical where required
+- `docs/IDEAS_AND_TODO.md` or sprint tracker updated if the step closes a listed item
+- Push + `verify:prod` only when the user expects deploy for that step
+
+## Sprint 1 queue (strict order)
+
+1. Arcade cover `imageUrl` fixes (wrong covers)
+2. ru/uk Arcade i18n corruption
+3. Remove duplicate `coverSrc()` in arcade.js
+4. Stop accidental `bridge/app.html` copy
+5. Wire `mountLineListSkeleton` in bankui
+
+Do not begin step N+1 until step N meets definition of done.
