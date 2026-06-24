@@ -97,6 +97,8 @@
   "error": "Hata",
   "connectFirst": "İlk önce bağlanın",
   "lb_you": "Sen",
+  "lb_your_rank": "Sıralaman",
+  "lb_unranked": "Henüz sıralamada değil",
   "lb_eligible": "Hak sahibi",
   "lb_empty": "Henüz veri yok.",
   "lb_failed": "Skor tablosu yüklenemedi.",

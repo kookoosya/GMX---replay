@@ -97,6 +97,8 @@
   "error": "错误",
   "connectFirst": "先连接",
   "lb_you": "你",
+  "lb_your_rank": "你的排名",
+  "lb_unranked": "尚未上榜",
   "lb_eligible": "有资格的",
   "lb_empty": "还没有数据。",
   "lb_failed": "无法加载排行榜。",

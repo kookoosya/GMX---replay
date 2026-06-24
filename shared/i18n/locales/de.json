@@ -97,6 +97,8 @@
   "error": "Fehler",
   "connectFirst": "Zuerst verbinden",
   "lb_you": "Du",
+  "lb_your_rank": "Dein Rang",
+  "lb_unranked": "Noch nicht gerankt",
   "lb_eligible": "Berechtigt",
   "lb_empty": "Noch keine Daten.",
   "lb_failed": "Die Bestenliste konnte nicht geladen werden.",

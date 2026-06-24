@@ -97,6 +97,8 @@
   "error": "Erreur",
   "connectFirst": "Connectez-vous d'abord",
   "lb_you": "Vous",
+  "lb_your_rank": "Votre rang",
+  "lb_unranked": "Pas encore classé",
   "lb_eligible": "Admissible",
   "lb_empty": "Aucune donnée pour l'instant.",
   "lb_failed": "Impossible de charger le classement.",

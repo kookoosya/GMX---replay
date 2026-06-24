@@ -97,6 +97,8 @@
   "error": "Kesalahan",
   "connectFirst": "Hubungkan dulu",
   "lb_you": "Kamu",
+  "lb_your_rank": "Peringkatmu",
+  "lb_unranked": "Belum masuk peringkat",
   "lb_eligible": "Memenuhi syarat",
   "lb_empty": "Belum ada datanya.",
   "lb_failed": "Tidak dapat memuat papan peringkat.",

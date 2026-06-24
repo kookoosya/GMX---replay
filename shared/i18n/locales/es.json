@@ -97,6 +97,8 @@
   "error": "Error",
   "connectFirst": "Conectar primero",
   "lb_you": "Tú",
+  "lb_your_rank": "Tu posición",
+  "lb_unranked": "Aún sin ranking",
   "lb_eligible": "Con derecho a asistir",
   "lb_empty": "Aún no hay datos.",
   "lb_failed": "No se ha podido cargar la tabla de clasificación.",

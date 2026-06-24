@@ -1801,6 +1801,26 @@ html.mode-light .tab.active{ color: rgba(10,13,21,1); }
 }
 #refLink{cursor:pointer}
 #refLink.refLinkCopied{outline:2px solid rgba(20,241,149,.45)}
+.lbYourRank{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px 14px;
+  margin-bottom:12px;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid rgba(20,241,149,.22);
+  background:linear-gradient(90deg,rgba(20,241,149,.08),rgba(153,69,255,.06));
+}
+.lbYourRank.hidden{display:none}
+.lbYourRankLabel{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;opacity:.85}
+.lbYourRankNum{font-size:22px;font-weight:800;line-height:1}
+.lbYourRankMeta{font-size:13px}
+.tbl tr.lbRowTop1 td{background:rgba(255,215,0,.08)}
+.tbl tr.lbRowTop2 td{background:rgba(192,192,192,.07)}
+.tbl tr.lbRowTop3 td{background:rgba(205,127,50,.08)}
+.tbl tr.lbRowTop1 td:first-child,.tbl tr.lbRowTop2 td:first-child,.tbl tr.lbRowTop3 td:first-child{font-weight:700}
+.lbMedal{display:inline-block;line-height:1}
 .refTopRow .refLinkCol.is-hidden{ display:none; }
 .refTopRow .refActions{ justify-content:flex-start; align-items:flex-end; }
 .refTopRow .refCounts{ width:100%; }

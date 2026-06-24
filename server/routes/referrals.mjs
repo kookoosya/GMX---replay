@@ -431,6 +431,31 @@ app.get("/api/leaderboard/referrals", (req, res) => {
             AND ri.inviter_handle=?
         `).get(sinceIso, u.handle)?.eligible || 0);
         me = { handle: u.handle, eligible: Number(mine||0) || 0 };
+        const eligible = me.eligible;
+        if (eligible > 0) {
+          const rankRow = safeDb(() => db.prepare(`
+            SELECT COUNT(*) + 1 AS rank
+            FROM (
+              SELECT
+                ri.inviter_handle AS handle,
+                SUM(CASE WHEN EXISTS (
+                  SELECT 1 FROM usage_daily ud
+                  WHERE ud.handle = ri.invited_handle AND ud.used > 0
+                  LIMIT 1
+                ) THEN 1 ELSE 0 END) AS active
+              FROM referral_invites ri
+              WHERE ri.status='confirmed'
+                AND ri.created_at >= ?
+                AND (ri.fraud_flag IS NULL OR ri.fraud_flag=0)
+              GROUP BY ri.inviter_handle
+              HAVING active > 0
+            ) AS lb
+            WHERE lb.active > ?
+               OR (lb.active = ? AND lb.handle < ?)
+          `).get(sinceIso, eligible, eligible, u.handle));
+          const rank = Number(rankRow?.rank || 0) || 0;
+          if (rank > 0) me.rank = rank;
+        }
       }
     }catch(_e){}
 

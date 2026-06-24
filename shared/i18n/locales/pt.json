@@ -97,6 +97,8 @@
   "error": "Erro",
   "connectFirst": "Antes de ligar,",
   "lb_you": "Você",
+  "lb_your_rank": "Sua posição",
+  "lb_unranked": "Ainda sem ranking",
   "lb_eligible": "Elegíveis",
   "lb_empty": "Sem dados (ainda)",
   "lb_failed": "Could not load leaderboard.",

@@ -97,6 +97,8 @@
   "error": "Błąd",
   "connectFirst": "Najpierw połącz",
   "lb_you": "Ty",
+  "lb_your_rank": "Twoja pozycja",
+  "lb_unranked": "Jeszcze bez rankingu",
   "lb_eligible": "Odpowiedni",
   "lb_empty": "Brak danych.",
   "lb_failed": "Nie udało się załadować tabeli liderów.",

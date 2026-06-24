@@ -2,7 +2,7 @@
   const ASSET_Q = "?v=SAFE16";
 
   const TAB_PACKS = {
-    leaderboard: ["app.leaderboard.js", "app.leaderboardwire.js"],
+    leaderboard: ["lib/leaderboard-core.js", "app.leaderboard.js", "app.leaderboardwire.js"],
     prediction: ["app.prediction.js", "app.predictionwire.js"],
     referrals: ["app.referrals.js", "app.referralswire.js"],
     redeem: ["app.redeem.js", "app.redeemwire.js"],

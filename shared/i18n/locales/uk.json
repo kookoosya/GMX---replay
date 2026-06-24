@@ -97,6 +97,8 @@
   "error": "Error",
   "connectFirst": "Connect first",
   "lb_you": "Ви",
+  "lb_your_rank": "Ваше місце",
+  "lb_unranked": "Поки немає в рейтингу",
   "lb_eligible": "Eligible",
   "lb_empty": "No data yet.",
   "lb_failed": "Could not load leaderboard.",

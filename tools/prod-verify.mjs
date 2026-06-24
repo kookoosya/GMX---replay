@@ -234,4 +234,15 @@ if (!appPage.text.includes('id="ref_viral_hook_html"')) {
 }
 ok("referral viral hook UI");
 
+if (!appPage.text.includes('class="lbYourRank')) {
+  fail("/app shell missing leaderboard your-rank strip");
+}
+ok("leaderboard your-rank UI");
+
+const lbCore = await get("/lib/leaderboard-core.js");
+if (!lbCore.text.includes("GMXLeaderboardCore")) {
+  fail("/lib/leaderboard-core.js missing GMXLeaderboardCore export");
+}
+ok("leaderboard core lib");
+
 console.log("\nPROD_VERIFY_OK");

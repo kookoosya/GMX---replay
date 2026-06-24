@@ -97,6 +97,8 @@
   "error": "エラー",
   "connectFirst": "まず接続してください",
   "lb_you": "あなた",
+  "lb_your_rank": "あなたの順位",
+  "lb_unranked": "まだランク外",
   "lb_eligible": "適格",
   "lb_empty": "まだデータがありません。",
   "lb_failed": "リーダーボードを読み込めませんでした。",

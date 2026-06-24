@@ -376,3 +376,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `#ref_viral_hook_html` banner (3 → cosmetics, 30 → Pro trial 7d); tap `#refLink` to copy; primary `#refCopy`; optional `#refShare` via Web Share API.
 
 **Verify:** `node --test tests/referral-share.test.mjs`, `prod-verify` `ref_viral_hook_html` in `/app`.
+
+## 17.1 Leaderboard medals + your rank — DONE
+
+**Problem:** Leaderboard rows looked flat; rank outside top-50 showed as `>50` with no server rank (`SITE_RECOMMENDATIONS.md` Leaderboard).
+
+**Fix:** `lib/leaderboard-core.js` medals for top-3; `.lbYourRank` strip above table; API `me.rank` via SQL; lazy tab pack loads core.
+
+**Verify:** `node --test tests/leaderboard-ui.test.mjs`, `prod-verify` `lbYourRank` + `/lib/leaderboard-core.js`.

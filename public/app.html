@@ -266,6 +266,11 @@ html.mode-light body.hasUserBg .panel{
         <div class="muted" id="lb_status"></div>
       </div>
       <div class="hr"></div>
+      <div class="lbYourRank hidden" id="lb_you" aria-live="polite">
+        <div class="lbYourRankLabel" id="lb_your_rank_label">Your rank</div>
+        <div class="lbYourRankNum" id="lb_your_rank_num">—</div>
+        <div class="lbYourRankMeta muted" id="lb_your_rank_meta"></div>
+      </div>
       <div class="tableWrap">
         <table class="tbl" id="lb_tbl">
           <thead>
@@ -279,7 +284,6 @@ html.mode-light body.hasUserBg .panel{
           <tbody id="lb_body"></tbody>
         </table>
       </div>
-      <div class="muted" id="lb_you" style="margin-top:10px"></div>
     </div>
     <div class="card">
       <div class="title" id="lb_rules_title">Rules</div>

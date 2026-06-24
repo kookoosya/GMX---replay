@@ -17,6 +17,7 @@ const LAZY_SCRIPTS = [
   "app.walletui.js",
   "app.wallethelpers.js",
   "app.walletwire.js",
+  "lib/leaderboard-core.js",
   "app.leaderboard.js",
   "app.leaderboardwire.js",
   "app.referrals.js",
@@ -25,7 +26,7 @@ const LAZY_SCRIPTS = [
   "app.redeemwire.js",
 ];
 
-test("app.lazytabs.js defines six tab packs covering 14 scripts", () => {
+test("app.lazytabs.js defines six tab packs covering 15 scripts", () => {
   const src = fs.readFileSync(path.join(publicDir, "app.lazytabs.js"), "utf8");
   assert.match(src, /__gmxEnsureTabPack/);
   assert.match(src, /leaderboard:/);

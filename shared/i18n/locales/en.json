@@ -97,6 +97,8 @@
   "error": "Error",
   "connectFirst": "Connect first",
   "lb_you": "You",
+  "lb_your_rank": "Your rank",
+  "lb_unranked": "Not ranked yet",
   "lb_eligible": "Eligible",
   "lb_empty": "No data yet.",
   "lb_failed": "Could not load leaderboard.",

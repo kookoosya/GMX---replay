@@ -18,6 +18,26 @@
               return `<tr><td colspan="${cols || 4}" class="muted">…</td></tr>`;
             }
           };
+    const core = window.GMXLeaderboardCore || {};
+    const medalFor =
+      typeof core.leaderboardMedal === "function" ? core.leaderboardMedal : () => ({ emoji: "", cls: "", rowCls: "" });
+    const rankCellHtml =
+      typeof core.leaderboardRankCellHtml === "function"
+        ? core.leaderboardRankCellHtml
+        : (rank) => String(rank);
+    const resolveMeRank =
+      typeof core.resolveMeRank === "function" ? core.resolveMeRank : (top, me) => {
+        if (!me?.handle || !Array.isArray(top)) return 0;
+        const idx = top.findIndex((r) => String(r?.handle || "") === String(me.handle || ""));
+        return idx >= 0 ? idx + 1 : Number(me.rank) || 0;
+      };
+    const formatLbRank =
+      typeof core.formatLbRank === "function"
+        ? core.formatLbRank
+        : (rank) => {
+            const n = Number(rank);
+            return Number.isFinite(n) && n > 0 ? `#${n}` : "—";
+          };
 
     let lbDays = 7;
 
@@ -25,6 +45,39 @@
       return String(s || "").replace(/[&<>"']/g, (c) =>
         ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]
       );
+    }
+
+    function renderYourRank(top, me) {
+      const wrap = $("lb_you");
+      const numEl = $("lb_your_rank_num");
+      const metaEl = $("lb_your_rank_meta");
+      const labelEl = $("lb_your_rank_label");
+      if (!wrap) return;
+
+      if (labelEl) labelEl.textContent = t("lb_your_rank") || "Your rank";
+
+      if (!getHandle()) {
+        wrap.classList.add("hidden");
+        if (metaEl) metaEl.textContent = t("connectFirst") || "Connect first.";
+        return;
+      }
+
+      wrap.classList.remove("hidden");
+
+      if (!me || !me.handle) {
+        if (numEl) numEl.textContent = formatLbRank(0, { unranked: t("lb_unranked") || "Not ranked yet" });
+        if (metaEl) metaEl.textContent = t("connectFirst") || "Connect first.";
+        return;
+      }
+
+      const rank = resolveMeRank(top, me);
+      const eligible = Number(me.eligible || 0) || 0;
+      const unranked = t("lb_unranked") || "Not ranked yet";
+      if (numEl) numEl.textContent = formatLbRank(rank, { unranked });
+      if (metaEl) {
+        const h = escHtml(String(me.handle || ""));
+        metaEl.innerHTML = `@${h} · ${escapeHtml(t("lb_eligible") || "Eligible")}: <b>${eligible}</b>`;
+      }
     }
 
     async function loadLeaderboard(days) {
@@ -55,28 +108,19 @@
           } else {
             body.innerHTML = top
               .map((row, idx) => {
+                const rank = idx + 1;
+                const medal = medalFor(rank);
+                const rowCls = medal.rowCls || "";
                 const h = escHtml(String(row.handle || ""));
                 const eligible = Number(row.eligible || 0) || 0;
                 const active = Number(row.active || 0) || 0;
-                return `<tr><td>${idx + 1}</td><td>@${h}</td><td>${eligible}</td><td>${active}</td></tr>`;
+                return `<tr class="${rowCls}"><td>${rankCellHtml(rank)}</td><td>@${h}</td><td>${eligible}</td><td>${active}</td></tr>`;
               })
               .join("");
           }
         }
 
-        const you = $("lb_you");
-        if (you) {
-          const me = j.me;
-          if (me && me.handle) {
-            const h = escHtml(String(me.handle || ""));
-            const eligible = Number(me.eligible || 0) || 0;
-            const idx = top.findIndex((r) => String(r.handle || "") === String(me.handle || ""));
-            const rank = idx >= 0 ? String(idx + 1) : ">50";
-            you.innerHTML = `${escapeHtml(t("lb_you") || "You")}: <b>#${rank}</b> @${h} · ${escapeHtml(t("lb_eligible") || "Eligible")}: <b>${eligible}</b>`;
-          } else {
-            you.textContent = getHandle() ? "" : t("connectFirst") || "Connect first.";
-          }
-        }
+        renderYourRank(top, j.me);
 
         if (st) st.textContent = `${lbDays}d`;
         return j;
@@ -87,6 +131,7 @@
         if (body) {
           body.innerHTML = `<tr><td colspan="4" class="muted">${escapeHtml(t("lb_failed") || "Could not load leaderboard.")}</td></tr>`;
         }
+        renderYourRank([], null);
         return null;
       }
     }
