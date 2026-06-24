@@ -91,4 +91,9 @@ npm run verify:prod
 
 This checks `https://www.gmxreply.com` and that health `build` matches local `git rev-parse HEAD`.
 
-**Production stays on Render** — do not use `deploy:vps`.
+### VPS deploy (obsolete)
+
+`npm run deploy:vps`, `deploy:probe`, `deploy:setup`, and `deploy:ssl` are **disabled** — they print Render workflow instructions and exit.
+
+Production is **Render only**. Legacy SSH scripts live under `tools/legacy/` and require `npm run deploy:legacy:*` (opt-in). See `tools/legacy/README.md`.
+

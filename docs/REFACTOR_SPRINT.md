@@ -82,6 +82,17 @@ Rules: `.cursor/rules/sprint-workflow.mdc` (one step at a time, no parity drift)
 
 **Verify:** `node tools/audit-arcade-covers-json.mjs`; `npm run test:suite`.
 
-## 2.3 VPS deploy scripts — pending
+## 2.3 VPS deploy scripts — DONE
+
+**Problem:** `npm run deploy:vps` and SSH tooling implied VPS was a valid prod path. Production is Render-only (`gmxreply.com`).
+
+**Fix:**
+- `tools/deploy-vps.mjs` → Render-only stub (exits with push + `verify:prod` instructions)
+- Full SSH deploy archived to `tools/legacy/deploy-vps.mjs` (requires `DEPLOY_VPS_ALLOW=1`)
+- `npm run deploy:legacy:*` opt-in wrappers via `tools/legacy/run-deploy-vps.mjs`
+- `tools/legacy/README.md`, `DEPLOY.md` updated
+- Client invariant: root `deploy-vps.mjs` must not import ssh2
+
+**Verify:** `npm run deploy:vps` exits 1 with Render message; `npm run test:suite` → deploy render-only pass.
 
 ## 2.4 docs refresh — pending

@@ -103,4 +103,13 @@ if (/bridge["',\s]+app\.html/.test(syncAppAssets) && /copyFile\(src,\s*path\.joi
 }
 ok("bridge shell hygiene");
 
+const deployStub = fs.readFileSync("tools/deploy-vps.mjs", "utf8");
+if (/from\s+["']ssh2["']/.test(deployStub) || /DEPLOY_SSH_PASSWORD/.test(deployStub)) {
+  fail("tools/deploy-vps.mjs must be Render-only stub (SSH deploy is in tools/legacy/)");
+}
+if (!fs.existsSync("tools/legacy/deploy-vps.mjs")) {
+  fail("tools/legacy/deploy-vps.mjs missing");
+}
+ok("deploy render-only");
+
 console.log("CLIENT_INVARIANTS_OK");
