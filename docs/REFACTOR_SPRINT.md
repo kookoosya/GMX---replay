@@ -47,4 +47,13 @@ Rules: `.cursor/rules/sprint-workflow.mdc` (one step at a time, no parity drift)
 
 **Verify:** `node tools/sync-app-and-assets.mjs` → no `bridge/app.html`; `npm run test:suite` → bridge shell hygiene pass.
 
-## 1.5 mountLineListSkeleton — pending
+## 1.5 mountLineListSkeleton — DONE
+
+**Problem:** `mountLineListSkeleton()` existed in `app.ui.js` but was never called from `app.bankui.js` `renderList()` — GM/GN saved-line lists had no loading skeleton during chunked render.
+
+**Fix:**
+- `chunkedRender` accepts optional `mountSkeleton` (shows skeleton instead of blank grid until first chunk)
+- `renderList` passes `mountLineListSkeleton` when list has >20 lines
+- Wired through `app.bankuiwire.js`, `app.js` (`mountLineListSkeleton` helper), flat `__gmxBankUiWireCtx` (removed broken double `buildWireCtx` call)
+
+**Verify:** `npm test` includes `bankui: renderList uses mountLineListSkeleton for large lists`; `npm run test:suite` pass.

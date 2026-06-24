@@ -1255,6 +1255,41 @@ test("bankui: renderList warns when disconnected", () => {
   assert.match(els.gmMsg.innerHTML, /Connect first/);
 });
 
+test("bankui: renderList uses mountLineListSkeleton for large lists", () => {
+  const els = {
+    gmList: { innerHTML: "", id: "gmList" },
+    gmCount: { textContent: "" },
+    gmMsg: { innerHTML: "" },
+    gmTotal: { textContent: "" },
+    gmCap: { textContent: "" },
+    gmSavedVal: { textContent: "" },
+    gmSavedFill: { style: { width: "" } },
+  };
+  let skeletonCalls = 0;
+  const lines = Array.from({ length: 24 }, (_, i) => `line ${i + 1}`);
+  const bankui = loadFactory("app.bankui.js", "__GMXBankUiFactory")({
+    $: (id) => els[id] || null,
+    getHandle: () => "@user",
+    getBankKey: () => "gmx_gm_bank",
+    readKey: () => lines,
+    writeKey: () => {},
+    dedupeLines: (lines) => lines,
+    normalizeLine: (s) => String(s || "").trim(),
+    lastSaved: { gm: 0, gn: 0 },
+    saveCapFree: 50,
+    isPro: () => false,
+    mountLineListSkeleton: (container) => {
+      skeletonCalls += 1;
+      container.innerHTML = '<div class="skeleton-lineRow"></div>';
+    },
+    chunkedRender: (grid, items, _renderItem, opts) => {
+      if (typeof opts?.mountSkeleton === "function") opts.mountSkeleton(grid, items.length);
+    },
+  });
+  bankui.renderList("gm");
+  assert.equal(skeletonCalls, 1);
+});
+
 test("leaderboard: bindLeaderboardUI is idempotent", () => {
   const lb = loadFactory("app.leaderboard.js", "__GMXLeaderboardFactory")({ $: () => null });
   lb.bindLeaderboardUI();

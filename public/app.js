@@ -320,6 +320,9 @@ const {
   function chunkedRender(grid, items, renderItem, opts){
     return __gmxUiWire.chunkedRender(grid, items, renderItem, opts);
   }
+  function mountLineListSkeleton(container, count){
+    return __gmxUiWire.mountLineListSkeleton(container, count);
+  }
   async function yieldToUiFrame(){
     return await __gmxUiWire.yieldToUiFrame();
   }
@@ -691,56 +694,42 @@ function pickBestLine(kind, lines){ return __gmxBestPick.pickBestLine(kind, line
 async function doBest(kind){ return __gmxBestPick.doBest(kind); }
 async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
 
-  if (!window.__GMXBankUiWireFactory) throw new Error("GMX bankuirunwire factory missing");
-  const __gmxBankUiRunWire = window.__GMXBankUiWireFactory({
-    core: {
-      $,
-      fmt: __gmxFmt,
-      gen: __gmxGen,
-      dedupeLines: __gmxGen.dedupeLines,
-      api,
-    },
-    auth: {
-      requireConnected,
-      getHandle,
-      isPro,
-    },
-    data: {
-      keys: K,
-      saveCap,
-      saveCapFree: SAVE_CAP_FREE,
-      lastSaved: LAST_SAVED,
-      getBankKey,
-      allLegacyKeysForKind,
-      setLangIndex,
-      getBankMigrationKey,
-      readKey,
-      writeKey,
-      linesFromText,
-    },
-    ui: {
-      chunkedRender,
-      renderHelpModal,
-      openLimitModal,
-      toast,
-      t,
-      updateLangFlags,
-      renderLangChips,
-      refreshUsage,
-      setBusy,
-    },
-    perf: {
-      trackEvent,
-    },
-    params: {
-      readGenParams,
-      getAntiStrength,
-    },
-    state: {
-      abort: ABORT,
-    },
-  });
-  const __gmxBankUiWireCtx = __gmxBankUiRunWire.buildWireCtx();
+  if (!window.__GMXBankUiWireFactory) throw new Error("GMX bankuiwire factory missing");
+  const __gmxBankUiWireCtx = {
+    $,
+    fmt: __gmxFmt,
+    gen: __gmxGen,
+    keys: K,
+    requireConnected,
+    getHandle,
+    isPro,
+    saveCap,
+    saveCapFree: SAVE_CAP_FREE,
+    lastSaved: LAST_SAVED,
+    getBankKey,
+    allLegacyKeysForKind,
+    setLangIndex,
+    getBankMigrationKey,
+    readKey,
+    writeKey,
+    dedupeLines: __gmxGen.dedupeLines,
+    linesFromText,
+    chunkedRender,
+    mountLineListSkeleton,
+    renderHelpModal,
+    openLimitModal,
+    trackEvent,
+    toast,
+    t,
+    updateLangFlags,
+    renderLangChips,
+    abort: ABORT,
+    api,
+    readGenParams,
+    getAntiStrength,
+    refreshUsage,
+    setBusy,
+  };
   const __gmxBankUiWire = window.__GMXBankUiWireFactory(__gmxBankUiWireCtx);
   __gmxBestPick = __gmxBankUiWire.bestPick;
   const __gmxBankUi = __gmxBankUiWire.bankUi;

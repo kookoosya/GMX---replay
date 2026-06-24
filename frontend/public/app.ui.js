@@ -14,9 +14,14 @@
         const o = opts || {};
         const key = String(o.key || grid.id || "grid");
         const chunk = Math.max(8, Number(o.chunk || 24));
+        const mountSkeleton = o.mountSkeleton;
         __GRID_JOBS[key] = (Number(__GRID_JOBS[key] || 0) + 1);
         const token = __GRID_JOBS[key];
-        grid.innerHTML = "";
+        if (typeof mountSkeleton === "function" && items.length > 0) {
+          mountSkeleton(grid, items.length);
+        } else {
+          grid.innerHTML = "";
+        }
         let i = 0;
         const step = () => {
           if (__GRID_JOBS[key] !== token) return;

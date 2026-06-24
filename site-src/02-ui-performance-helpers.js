@@ -3,6 +3,9 @@
   function chunkedRender(grid, items, renderItem, opts){
     return __gmxUiWire.chunkedRender(grid, items, renderItem, opts);
   }
+  function mountLineListSkeleton(container, count){
+    return __gmxUiWire.mountLineListSkeleton(container, count);
+  }
   async function yieldToUiFrame(){
     return await __gmxUiWire.yieldToUiFrame();
   }

@@ -29,6 +29,8 @@
     const ensureIndexed = typeof ctx.ensureIndexed === "function" ? ctx.ensureIndexed : () => {};
     const chunkedRender =
       typeof ctx.chunkedRender === "function" ? ctx.chunkedRender : (el, items, fn) => items.forEach(fn);
+    const mountLineListSkeleton =
+      typeof ctx.mountLineListSkeleton === "function" ? ctx.mountLineListSkeleton : () => {};
     const renderHelpModal =
       typeof ctx.renderHelpModal === "function" ? ctx.renderHelpModal : () => {};
     const openLimitModal = typeof ctx.openLimitModal === "function" ? ctx.openLimitModal : () => {};
@@ -258,7 +260,7 @@
           });
           return row;
         },
-        { key: `lineRows_${kind}`, chunk: 26 }
+        { key: `lineRows_${kind}`, chunk: 26, mountSkeleton: items.length > 20 ? mountLineListSkeleton : undefined }
       );
     }
 
