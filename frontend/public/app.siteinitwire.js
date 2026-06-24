@@ -219,6 +219,7 @@
           ensureIndexed: ctx.ensureIndexed,
           renderLangChips: ctx.renderLangChips,
           updateLangFlags: ctx.updateLangFlags,
+          syncModePanelCopy: ctx.syncModePanelCopy,
         },
         wallpaperUploadCtx: {
           $,

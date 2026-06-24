@@ -28,7 +28,7 @@
 - [ ] Счётчик «X people connected today» (если есть метрики)
 
 ### GM / GN
-- [ ] **Quick presets** — «Casual», «Professional», «Fun» — один клик на тон
+- [x] **Quick presets** — Casual / Professional / Fun — один клик на тон
 - [ ] **История генераций** — последние 5 batch’ей с возможностью копировать снова
 - [ ] **Keyboard shortcut** — Ctrl+Enter для Batch
 - [ ] Подсказка «Edit any line by clicking» более заметна
@@ -104,7 +104,7 @@
 | 2 | Yearly plan со скидкой | Upgrade Pro | MRR | DONE (11.1) |
 | 3 | «Игра дня» в расширении | Extension | Retention |
 | 4 | Достижения Arcade | Arcade | Вовлечённость | DONE (12.1) |
-| 5 | Quick presets GM/GN | GM, GN | UX |
+| 5 | Quick presets GM/GN | GM, GN | UX | DONE (13.1) |
 | 6 | Страницы /arcade/{slug} | Arcade | SEO |
 | 7 | Referral progress bar | Referrals | Виральность |
 | 8 | PWA | Глобально | Мобильный retention |

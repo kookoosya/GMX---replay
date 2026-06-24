@@ -68,6 +68,9 @@ if (!connectJs.includes("runHomeTry") || !connectJs.includes("/api/public/random
 if (!fs.readFileSync("public/app.html", "utf8").includes('id="homeTryGm"')) {
   fail("public/app.html missing homeTryGm guest demo control");
 }
+if (!fs.readFileSync("public/app.html", "utf8").includes('id="gm_preset_professional"')) {
+  fail("public/app.html missing GM quick preset controls");
+}
 if (!fs.readFileSync("public/app.html", "utf8").includes('id="homeHero"')) {
   fail("public/app.html missing homeHero block");
 }

@@ -376,12 +376,13 @@ html.mode-light body.hasUserBg .panel{
 </div>
 </div>
 <div class="note muted" id="gmProMovedNote" style="margin-top:10px;display:none"></div>
-<div class="quickPresets" data-kind="gm" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-  <button class="btn ghost mini" type="button" data-preset="casual" title="Natural, balanced">Casual</button>
-  <button class="btn ghost mini" type="button" data-preset="pro" title="Market/alpha tone">Pro</button>
-  <button class="btn ghost mini" type="button" data-preset="fun" title="Warm, light">Fun</button>
+<div class="muted small" id="gm_quick_presets_label" style="margin-top:10px">Quick tone</div>
+<div class="quickPresets" data-kind="gm" style="display:flex;gap:8px;flex-wrap:wrap">
+  <button class="btn ghost mini" type="button" id="gm_preset_casual" data-preset="casual" title="Natural, balanced">Casual</button>
+  <button class="btn ghost mini" type="button" id="gm_preset_professional" data-preset="professional" title="Market / alpha tone">Professional</button>
+  <button class="btn ghost mini" type="button" id="gm_preset_fun" data-preset="fun" title="Warm, light">Fun</button>
 </div>
-<div class="muted small" id="gmControlsHelp" style="margin-top:8px">Fast = short. Balanced = default. Full = richer. <kbd>Ctrl+Enter</kbd> = Batch 10.</div>
+<div class="muted small" id="gmControlsHelp" style="margin-top:8px">Quick tone sets size + style + preset in one click. <kbd>Ctrl+Enter</kbd> = Batch 10.</div>
 <div class="split" id="gmBestModeRow" style="margin-top:10px;align-items:center;gap:10px;flex-wrap:wrap">
   <div class="muted small" id="gmBestModeHint" style="flex:1;min-width:220px">Best uses the strongest saved line that already sounds postable.</div>
   <button class="btn ghost" id="gmBestModeToggle" type="button">Best: saved</button>
@@ -529,12 +530,13 @@ html.mode-light body.hasUserBg .panel{
 </div>
 </div>
 <div class="note muted" id="gnProMovedNote" style="margin-top:10px;display:none"></div>
-<div class="quickPresets" data-kind="gn" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-  <button class="btn ghost mini" type="button" data-preset="casual" title="Natural, balanced">Casual</button>
-  <button class="btn ghost mini" type="button" data-preset="pro" title="Market/alpha tone">Pro</button>
-  <button class="btn ghost mini" type="button" data-preset="fun" title="Warm, light">Fun</button>
+<div class="muted small" id="gn_quick_presets_label" style="margin-top:10px">Quick tone</div>
+<div class="quickPresets" data-kind="gn" style="display:flex;gap:8px;flex-wrap:wrap">
+  <button class="btn ghost mini" type="button" id="gn_preset_casual" data-preset="casual" title="Natural, balanced">Casual</button>
+  <button class="btn ghost mini" type="button" id="gn_preset_professional" data-preset="professional" title="Market / alpha tone">Professional</button>
+  <button class="btn ghost mini" type="button" id="gn_preset_fun" data-preset="fun" title="Warm, light">Fun</button>
 </div>
-<div class="muted small" id="gnControlsHelp" style="margin-top:8px">Fast = short. Balanced = default. Full = richer. <kbd>Ctrl+Enter</kbd> = Batch 10.</div>
+<div class="muted small" id="gnControlsHelp" style="margin-top:8px">Quick tone sets size + style + preset in one click. <kbd>Ctrl+Enter</kbd> = Batch 10.</div>
 <div class="split" id="gnBestModeRow" style="margin-top:10px;align-items:center;gap:10px;flex-wrap:wrap">
   <div class="muted small" id="gnBestModeHint" style="flex:1;min-width:220px">Best uses the strongest saved line that already sounds like a calm close.</div>
   <button class="btn ghost" id="gnBestModeToggle" type="button">Best: saved</button>

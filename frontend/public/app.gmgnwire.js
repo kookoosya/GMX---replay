@@ -42,6 +42,70 @@
       typeof ctx.renderLangChips === "function" ? ctx.renderLangChips : () => {};
     const updateLangFlags =
       typeof ctx.updateLangFlags === "function" ? ctx.updateLangFlags : () => {};
+    const syncModePanelCopy =
+      typeof ctx.syncModePanelCopy === "function" ? ctx.syncModePanelCopy : () => {};
+
+    const QUICK_PRESETS = {
+      casual: { mode: "mid", style: "classic", pack: "classic" },
+      professional: { mode: "mid", style: "alpha", pack: "king" },
+      fun: { mode: "min", style: "cheer", pack: "classic" },
+    };
+
+    function applyQuickPreset(kind, presetId) {
+      const presetKey = presetId === "pro" ? "professional" : presetId;
+      const preset = QUICK_PRESETS[presetKey];
+      if (!preset) return false;
+
+      const modeEl = kind === "gm" ? $("gmMode") : $("gnMode");
+      const styleEl = kind === "gm" ? $("gmStyle") : $("gnStyle");
+      const packEl = kind === "gm" ? $("gmPack") : $("gnPack");
+
+      if (modeEl) {
+        const hasMode = Array.from(modeEl.options).some((o) => o.value === preset.mode);
+        if (hasMode) modeEl.value = preset.mode;
+      }
+      if (styleEl) {
+        const styleOpt = Array.from(styleEl.options).find((o) => o.value === preset.style && !o.disabled);
+        if (styleOpt) styleEl.value = preset.style;
+        else if (styleEl.options.length) styleEl.value = styleEl.options[0].value;
+        persistStyle(kind, styleEl.value);
+      }
+      if (packEl) {
+        const packOpt = Array.from(packEl.options).find((o) => o.value === preset.pack && !o.disabled);
+        if (packOpt) packEl.value = preset.pack;
+        else if (packEl.options.length) packEl.value = packEl.options[0].value;
+        try {
+          lsSet(lsKeyPack(kind), packEl.value || "classic");
+        } catch (_e) {}
+      }
+
+      try {
+        modeEl?.dispatchEvent(new Event("change", { bubbles: true }));
+        styleEl?.dispatchEvent(new Event("change", { bubbles: true }));
+        packEl?.dispatchEvent(new Event("change", { bubbles: true }));
+      } catch (_e) {}
+      try {
+        syncModePanelCopy();
+      } catch (_e) {}
+      return true;
+    }
+
+    function wireQuickPresets() {
+      document.querySelectorAll(".quickPresets [data-preset]").forEach((btn) => {
+        btn.onclick = () => {
+          const wrap = btn.closest(".quickPresets");
+          const kind = wrap?.dataset?.kind || "gm";
+          const preset = btn.dataset.preset || "casual";
+          applyQuickPreset(kind, preset);
+          wrap?.querySelectorAll("[data-preset]").forEach((b) => {
+            b.classList.toggle("active", b === btn);
+          });
+          try {
+            trackEvent("quick_preset", { kind, preset });
+          } catch (_e) {}
+        };
+      });
+    }
 
     function wireKindPanel(kind) {
       const K = kind.toUpperCase();
@@ -192,41 +256,6 @@
           renderLangChips("gn");
         });
       }
-    }
-
-    function wireQuickPresets() {
-      document.querySelectorAll(".quickPresets [data-preset]").forEach((btn) => {
-        btn.onclick = () => {
-          const wrap = btn.closest(".quickPresets");
-          const kind = wrap?.dataset?.kind || "gm";
-          const preset = btn.dataset.preset || "casual";
-          const modeEl = kind === "gm" ? $("gmMode") : $("gnMode");
-          const styleEl = kind === "gm" ? $("gmStyle") : $("gnStyle");
-          const packEl = kind === "gm" ? $("gmPack") : $("gnPack");
-          if (preset === "casual") {
-            if (modeEl) modeEl.value = "mid";
-            if (styleEl) styleEl.value = "classic";
-            if (packEl) packEl.value = "classic";
-          } else if (preset === "pro") {
-            if (modeEl) modeEl.value = "mid";
-            if (styleEl) styleEl.value = "alpha";
-            if (packEl) packEl.value = "king";
-          } else if (preset === "fun") {
-            if (modeEl) modeEl.value = "min";
-            if (styleEl) styleEl.value = "cheer";
-            if (packEl) packEl.value = "classic";
-          }
-          if (styleEl) persistStyle(kind, styleEl.value);
-          if (packEl) {
-            try {
-              lsSet(lsKeyPack(kind), packEl.value || "classic");
-            } catch (_e) {}
-          }
-          wrap?.querySelectorAll("[data-preset]").forEach((b) => {
-            b.classList.toggle("active", b === btn);
-          });
-        };
-      });
     }
 
     function wireCtrlEnterBatch() {

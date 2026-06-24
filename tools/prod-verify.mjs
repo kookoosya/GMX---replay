@@ -196,4 +196,9 @@ if (arcadeJs.status !== 200 || !arcadeJs.text.includes("achievementsPanel")) {
 }
 ok("arcade achievements UI");
 
+if (!appPage.text.includes('id="gm_preset_professional"')) {
+  fail("/app shell missing gm_preset_professional quick preset");
+}
+ok("gm/gn quick presets UI");
+
 console.log("\nPROD_VERIFY_OK");

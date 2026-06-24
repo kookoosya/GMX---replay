@@ -344,3 +344,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `lib/arcade-achievements-core.js` + achievements panel on `/arcade.html`; progress in `localStorage` on iframe launch.
 
 **Verify:** `node --test tests/arcade-achievements.test.mjs`, `prod-verify` achievements core + panel.
+
+## 13.1 GM/GN quick presets — DONE
+
+**Problem:** Quick tone buttons existed in HTML but lacked i18n, Professional naming, and locked-option safety (`SITE_RECOMMENDATIONS.md` priority #5).
+
+**Fix:** `applyQuickPreset()` in `app.gmgnwire.js` sets mode/style/pack; GM & GN get labeled Casual / Professional / Fun + help copy.
+
+**Verify:** `node --test tests/gmgn-quick-presets.test.mjs`, `prod-verify` `gm_preset_professional` in `/app`.
