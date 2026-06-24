@@ -68,6 +68,13 @@ for (const rel of ["public/arcade.js", "frontend/public/arcade.js", "public/brid
   if (!/state\.iframeReady\s*=\s*true/.test(text)) {
     fail(`${rel}: arcade must set iframeReady only after explicit play click`);
   }
+  const coverSrcCount = (text.match(/function coverSrc\s*\(/g) || []).length;
+  if (coverSrcCount !== 1) {
+    fail(`${rel}: arcade must define exactly one coverSrc (${coverSrcCount} found)`);
+  }
+  if (/function liveScreenshotCover\s*\(/.test(text) || /function categoryCoverWebp\s*\(/.test(text)) {
+    fail(`${rel}: arcade must not keep dead cover helper functions`);
+  }
   ok(rel);
 }
 

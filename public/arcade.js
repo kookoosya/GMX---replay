@@ -630,40 +630,7 @@
       return "";
     }
   }
-  function liveScreenshotCover(game){
-    try{
-      const launch = String(game && (game.launchUrl || game.embedUrl) || "").trim();
-      if (!/^https?:\/\//i.test(launch)) return "";
-      let source = launch;
-      try{
-        const u = new URL(launch);
-        // For CrazyGames, page URLs usually render better than embed frames.
-        if (/crazygames\.com$/i.test(u.hostname || "")) {
-          const m = String(u.pathname || "").match(/^\/embed\/([^/?#]+)/i);
-          if (m && m[1]) source = `https://www.crazygames.com/game/${m[1]}`;
-        }
-      }catch{}
-      return `https://image.thum.io/get/width/900/crop/540/noanimate/${source}`;
-    }catch{
-      return "";
-    }
-  }
-  function categoryCoverWebp(game) {
-    const raw = String(game && game.category || "").toLowerCase().trim();
-    const key = raw.replace(/[^a-z]+/g, "") || "generic";
-    const allowed = new Set(["action","arcade","crypto","idle","platformer","puzzle","racing","shooter","simulation","sports","strategy","survivor","generic"]);
-    const slug = allowed.has(key) ? key : "generic";
-    return `/assets/arcade/covers/${slug}.webp`;
-  }
   function coverSrc(game) {
-    const remote = remoteCoverUrl(game);
-    if (remote) return remote;
-    const local = localGameCover(game);
-    if (local) return local;
-    return categoryCoverWebp(game);
-  }
-  function coverSrc(game) {
-    // Use live screenshot from game page when no explicit imageUrl (grab from site).
     return localGameCover(game) || remoteCoverUrl(game) || categoryCover(game);
   }
   function upgradeTileCovers(scope) {

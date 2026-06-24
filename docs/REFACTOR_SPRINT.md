@@ -24,7 +24,17 @@ Rules: `.cursor/rules/sprint-workflow.mdc` (one step at a time, no parity drift)
 
 **Verify:** `npm test` (117 pass), `npm run audit:i18n:strict` pass, strict i18n test ok.
 
-## 1.3 duplicate coverSrc() — pending
+## 1.3 duplicate coverSrc() — DONE
+
+**Problem:** Two `coverSrc()` definitions in `arcade.js` — second overrode first. Dead code: `liveScreenshotCover()` (never called), `categoryCoverWebp()` (`.webp` assets don't exist on disk).
+
+**Fix:**
+- Single `coverSrc`: `localGameCover → remoteCoverUrl → categoryCover` (preserves live behavior)
+- Removed dead helpers
+- Synced `public/arcade.js` → `frontend/public/arcade.js`, `public/bridge/arcade.js`
+- Client invariant: exactly one `coverSrc`, no dead cover helpers
+
+**Verify:** `npm test`, `npm run test:suite` → client-invariants pass on all 3 arcade copies.
 
 ## 1.4 bridge/app.html copy — pending
 
