@@ -147,3 +147,20 @@ Focus: **site + extension stability** (Supabase deferred).
 - Manifest loads `lib/site-sync-core.js` before `site_sync.js`
 
 **Verify:** `npm test` (126 pass), `npm run test:suite`.
+
+## 3.4 Boot bundle inventory — DONE
+
+**Problem:** ~97 deferred scripts documented informally; 15 stale `*runwire.js` mirrors lingered in `frontend/public/` after Phase 3 collapse; no automated inventory or bundle roadmap.
+
+**Fix:**
+- `tools/audit-app-boot.mjs` — counts defer scripts (baseline 97), categories, payload size, orphan/stale detection
+- `npm run audit:boot`; wired into `client-invariants` + `tests/app-boot-inventory.test.mjs`
+- Pruned 15 stale `frontend/public/*runwire.js`; `sync-app-and-assets.mjs` auto-prunes on sync
+
+**Inventory (2026-06):** 97 defer scripts ≈ 1.19 MiB — 65 modules, 21 feature-wires, 5 bootstrap-wires, 4 i18n-runtime, 1 i18n bundle, 1 entry (`app.js`).
+
+**Next bundle work (not started):**
+- **5c:** lazy-load ~14 scripts on tab activate (admin, prediction, wallet, LB, referrals, redeem)
+- **5d:** esbuild 3–5 chunks for site-src + wire graph
+
+**Verify:** `npm run audit:boot`, `npm test`, `npm run test:suite`.

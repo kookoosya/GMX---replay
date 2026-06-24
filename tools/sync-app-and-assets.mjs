@@ -90,6 +90,16 @@ if (fs.existsSync(extbgSrc)) {
 
 console.log(`[sync] Copied ${n} items: public + assets -> frontend/public`);
 
+// Prune obsolete collapsed runwire mirrors (Phase 3 → merged into *wire.js).
+if (fs.existsSync(FRONTEND_PUBLIC)) {
+  for (const name of fs.readdirSync(FRONTEND_PUBLIC)) {
+    if (/runwire\.js$/i.test(name)) {
+      fs.unlinkSync(path.join(FRONTEND_PUBLIC, name));
+      console.log(`  removed stale frontend/public/${name}`);
+    }
+  }
+}
+
 // Bridge is React SPA (index.html) — never keep legacy app shell copies here.
 const bridgeDir = path.join(PUBLIC, "bridge");
 if (fs.existsSync(bridgeDir)) {

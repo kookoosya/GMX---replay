@@ -21,8 +21,10 @@
 **Сделано (2026-06, Phase 4):** skeleton loaders для Leaderboard/Referrals; Arcade iframe lazy-load (клик → embed); Render boot hardening; `applyLang()` skip без смены языка.
 
 **В план (следующие):**
-- Модульный boot (~97 deferred scripts) — bundle (Sprint 3.4, не срочно)
-- Extension connect/status i18n (Sprint 3.2) — done
+- Bundle Phase 5c: lazy tab imports (~14 scripts)
+- Bundle Phase 5d: esbuild chunks
+
+**Сделано (Sprint 3.4):** boot inventory — `audit:boot`, baseline 97 scripts, pruned stale `*runwire.js` mirrors.
 
 **Сделано (Sprint 3.1):** referral progress bar — i18n `ref_progress_meter_html` + подсказка награды на метре.
 

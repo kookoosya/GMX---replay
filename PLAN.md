@@ -67,10 +67,12 @@ SUPABASE_SERVICE_ROLE_KEY=...
 1. **Referral progress bar** — i18n + подсказка награды — DONE (3.1)
 2. **Extension connect/status** — i18n в `popup.js` — DONE (3.2)
 3. **Extension ↔ site session sync** — аудит + тесты — DONE (3.3)
-4. **Boot bundle** — ~97 deferred scripts (Sprint 3.4)
+4. **Boot bundle** — inventory + audit (`audit:boot`) — DONE (3.4)
 
-### Позже
+### После Sprint 3 (не начато)
 
+- **Bundle 5c:** lazy import ~14 tab-specific scripts
+- **Bundle 5d:** esbuild chunks (3–5 HTTP)
 - **Arcade** — category `.webp` covers, Pro checkout flow
 
 ## i18n pipeline

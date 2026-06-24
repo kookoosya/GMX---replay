@@ -124,4 +124,12 @@ if (!fs.existsSync("tools/legacy/deploy-vps.mjs")) {
 }
 ok("deploy render-only");
 
+const bootAudit = spawnSync(process.execPath, ["tools/audit-app-boot.mjs"], {
+  encoding: "utf8",
+});
+if (bootAudit.status !== 0) {
+  fail(`app boot inventory:\n${bootAudit.stdout || bootAudit.stderr}`);
+}
+ok("app boot inventory");
+
 console.log("CLIENT_INVARIANTS_OK");
