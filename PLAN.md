@@ -1,44 +1,78 @@
-# Plan — закрытие аудита (паритет, CI, документация)
+# GMXReply — рабочий план (актуально 2026-06)
 
-## Assumptions
-- Единственный источник правды для shell сайта: `Backend/public/` (`app.html`, `app.js`, `app.css`, …).
-- `frontend/public/` — копия после `tools/sync-app-and-assets.mjs` (fallback при Vite).
-- Vite на `:5173` для запросов документа на `/` и `/app` отдаёт HTML с бэкенда (см. `ARCHITECTURE.md`).
+## Инфраструктура (что нужно, что нет)
 
-## Steps (выполнено)
-1. Добавить `tools/verify-public-frontend-parity.mjs` и скрипт `verify:parity` в `package.json`.
-2. Включить проверку в цепочку `npm run build` и отдельно для ручного запуска.
-3. CI: smoke без `|| true`; `verify:parity` входит в `npm run build` (отдельный job не обязателен).
-4. Добавить `ARCHITECTURE.md` — кто что грузит, порты, sync.
-5. Обновить `README.txt`, пометить отчёты в `docs/`.
-6. Запустить `sync` + `build` + `smoke` + `verify:parity` локально.
+| Компонент | Нужен для GMXReply? | Сейчас в prod |
+|-----------|---------------------|---------------|
+| **Render** | **Да** — единственный хост сайта/API | `https://www.gmxreply.com`, auto-deploy `main` |
+| **Supabase** | **Опционально** — облачная БД вместо SQLite | `DB_MODE=sqlite` в `render.yaml` (диск `/var/data`) |
+| **VPS** | **Нет** для сайта | SSH-деплой архивирован (`tools/legacy/`) |
 
-## Acceptance criteria
-- `node smoke.js` завершается с кодом 0.
-- `npm run verify:parity` завершается с кодом 0 после `sync`.
-- `npm run build` проходит полностью.
-- GitHub Actions падает при падении smoke или parity.
+**Render + SQLite** — рабочий прод без Supabase (пользователи, usage, referrals в SQLite на persistent disk).
+
+**Render + Supabase** — когда нужна облачная БД (бэкапы, отдельный доступ, будущий multi-instance):
+
+```env
+DB_MODE=supabase
+SUPABASE_URL=...
+SUPABASE_SERVICE_ROLE_KEY=...
+```
+
+Миграции: `supabase/01_core.sql` → `02_cloud_favorites.sql` → `03_referrals.sql`. Проверка: `/api/health` → `supabaseActive: true`.
+
+Отдельный VPS (например, торговый бот) **не связан** с деплоем GMXReply — можно оставить бота там; сайт на VPS не разворачиваем.
+
+Деплой: `git push origin main` → `npm run verify:prod`. Подробнее: `DEPLOY.md`, `ARCHITECTURE.md`.
 
 ---
 
-# Роадмап продукта (порядок работ)
+## Выполнено — аудит и паритет
 
-## Фаза A — сайт и расширение (сейчас)
-- Источник текстов сайта: `shared/i18n/locales/en.json` → `npm run i18n:sync` → `public/i18n/siteI18n.js` (+ фронт).
-- Расширение: копирайт в `extension/*.html`, `manifest.json`; сигналы бота — только как информационные уведомления (без инвестсовета).
-- Цель: полные английские формулировки без пустых ключей, единый тон «copy-first, без автопостинга».
+- `npm run verify:parity` — `public/` ↔ `frontend/public/`
+- `npm run build` включает parity; CI smoke без заглушек
+- `ARCHITECTURE.md`, `DEPLOY.md`, `docs/REFACTOR_SPRINT.md`
 
-## Фаза B — остальные локали
-- После стабилизации EN — вычитка каждого файла в `shared/i18n/locales/*.json` (без машинного «шума»), все языки равнозначны.
+## Выполнено — рефакторинг (фазы 1–4)
 
-## Фаза C — Supabase и Render
-- После стабильного UX сайта/расширения: env, миграции, деплой (см. `ARCHITECTURE.md`).
+| Фаза | Содержание |
+|------|------------|
+| **1** | Wallpapers factory, Solana mock, extension cleanup, E2E, client-invariants |
+| **2** | Legacy tools removed, server-src утоньшение, usage cascade fix |
+| **3** | 15 `*runwire.js` → `*wire.js`, boot −15 HTTP |
+| **4** | `applyLang()` skip, Render boot hardening, skeleton LB/Referrals, Arcade lazy iframe |
 
-## Acceptance (фаза A)
-- В `en.json` нет пустых строк у публичных ключей подзаголовков/описаний вкладок.
-- `npm run i18n:sync` и `npm run build` проходят без ошибок.
+## Выполнено — Sprint 1 (client parity)
 
-### i18n: сайт + расширение + Arcade
-- Каталог: `shared/i18n/locales/*.json` → `npm run i18n:sync` пишет `public/i18n/siteI18n.js`, фронт и **`extension/i18n-bundle.js`**.
-- Язык сайта `localStorage gmx_site_lang` синхронизируется в расширение как `gmx_site_lang_v1` (`extension/site_sync.js`).
-- `public/arcade.js` + `/i18n/siteI18n.js`; расширение: `data-i18n` + `ext_*` в `popup.js`.
+1. Arcade cover `imageUrl` collisions  
+2. ru/uk Arcade i18n  
+3. Duplicate `coverSrc()` в `arcade.js`  
+4. Stop `bridge/app.html` auto-copy  
+5. `mountLineListSkeleton` в bankui  
+
+## Выполнено — Sprint 2 (i18n + deploy hygiene)
+
+1. ru/uk extension popup `ext_*` i18n  
+2. `arcade-covers.json` madalin + audit  
+3. VPS deploy scripts → obsolete (Render-only)  
+4. Этот план + `REPO_BREAKDOWN.md`  
+
+---
+
+## Дальше (приоритет)
+
+1. **Supabase на Render** (если нужна облачная БД) — env в Dashboard, прогнать SQL, `verify:prod`
+2. **Boot bundle** — ~97 deferred scripts в `app.html` (Phase 4+, не срочно)
+3. **Referral progress bar** — UI (`IDEAS_AND_TODO.md`)
+4. **Arcade** — category `.webp` covers, Pro checkout flow
+
+## i18n pipeline
+
+`shared/i18n/locales/*.json` → `npm run i18n:sync` → `public/i18n/siteI18n.js`, `extension/i18n-bundle.js`, bridge copy.
+
+## Acceptance (регресс)
+
+```bash
+npm test
+npm run test:suite
+npm run verify:prod   # после push
+```

@@ -61,8 +61,13 @@ Loaded in `popup.html` / `quick.html` before `popup.js`. Site i18n bundle: `exte
 
 ## База данных
 
-- По умолчанию SQLite (`DB_MODE` не задан или `sqlite`).
-- `DB_MODE=supabase` требует `SUPABASE_URL` и `SUPABASE_SERVICE_ROLE_KEY`; иначе предупреждение и работа через SQLite.
+- **По умолчанию (prod сейчас):** SQLite на диске Render (`DB_MODE=sqlite`, `DB_PATH=/var/data/data.sqlite`).
+- **Опционально:** Supabase (`DB_MODE=supabase` + `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`). SQL: `supabase/README.md`. Health: `supabaseActive: true`.
+
+## VPS vs Render
+
+- **GMXReply сайт/API** — только **Render**. VPS для деплоя сайта **не нужен**.
+- Отдельный VPS (например торговый бот) — сторонний сервис; с GMXReply не связан. Скрипты SSH-деплоя архивированы в `tools/legacy/`.
 
 ## Deploy (Render)
 

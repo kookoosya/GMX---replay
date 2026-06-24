@@ -95,4 +95,13 @@ Rules: `.cursor/rules/sprint-workflow.mdc` (one step at a time, no parity drift)
 
 **Verify:** `npm run deploy:vps` exits 1 with Render message; `npm run test:suite` → deploy render-only pass.
 
-## 2.4 docs refresh — pending
+## 2.4 docs refresh — DONE
+
+**Problem:** `PLAN.md` and `REPO_BREAKDOWN.md` described pre-refactor state (VPS deploy, stale phases).
+
+**Fix:**
+- `PLAN.md` — infra table (Render / Supabase optional / VPS not for site), phases 1–4, Sprint 1–2 done, next priorities
+- `docs/REPO_BREAKDOWN.md` — prod stack, parity, tests, Render-only deploy
+- `ARCHITECTURE.md` — VPS vs Render section
+
+**Verify:** docs consistent with `render.yaml` (`DB_MODE=sqlite`) and `DEPLOY.md`.
