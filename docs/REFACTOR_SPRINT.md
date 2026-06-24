@@ -70,7 +70,17 @@ Rules: `.cursor/rules/sprint-workflow.mdc` (one step at a time, no parity drift)
 
 **Verify:** `npm test`, `npm run audit:i18n:strict`.
 
-## 2.2 arcade-covers.json madalin — pending
+## 2.2 arcade-covers.json madalin — DONE
+
+**Problem:** `arcade-covers.json` mapped `madalin-stunt-cars` to smash-karts CDN URL. `public/arcade.js` already had the correct `madalin-stunt-cars-2` cover — re-running `apply-arcade-covers.mjs` would have regressed prod.
+
+**Fix:**
+- Corrected `madalin-stunt-cars` URL in `arcade-covers.json` to match `arcade.js`
+- Aligned `basketball-stars` / `mahjongg` query params (`quality=100`) with `arcade.js`
+- `tools/audit-arcade-covers-json.mjs` — no duplicate URLs in covers.json; parity with `arcade.js` when both define a cover
+- Client-invariants runs covers.json audit
+
+**Verify:** `node tools/audit-arcade-covers-json.mjs`; `npm run test:suite`.
 
 ## 2.3 VPS deploy scripts — pending
 

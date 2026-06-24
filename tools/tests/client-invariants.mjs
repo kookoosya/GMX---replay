@@ -86,6 +86,14 @@ if (collisionAudit.status !== 0) {
 }
 ok("arcade cover collisions");
 
+const coversJsonAudit = spawnSync(process.execPath, ["tools/audit-arcade-covers-json.mjs"], {
+  encoding: "utf8",
+});
+if (coversJsonAudit.status !== 0) {
+  fail(`arcade-covers.json audit:\n${coversJsonAudit.stdout || coversJsonAudit.stderr}`);
+}
+ok("arcade-covers.json");
+
 if (fs.existsSync("public/bridge/app.html")) {
   fail("public/bridge/app.html must not exist (bridge uses index.html SPA)");
 }
