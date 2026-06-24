@@ -2,6 +2,20 @@
   if (window.__GMX_SAFE_SITE_SYNC__) return;
   window.__GMX_SAFE_SITE_SYNC__ = true;
 
+  const syncCore = globalThis.GMXSiteSyncCore || {};
+  const normalizeHandle =
+    typeof syncCore.normalizeHandle === "function"
+      ? syncCore.normalizeHandle
+      : (raw) => {
+          const value = String(raw || "").trim().replace(/^@+/, "");
+          if (!value) return "";
+          return /^[A-Za-z0-9_]{1,15}$/.test(value) ? value : "";
+        };
+  const resolveSyncedSession =
+    typeof syncCore.resolveSyncedSession === "function"
+      ? syncCore.resolveSyncedSession
+      : () => ({ handle: "", token: "", hasSiteSession: false });
+
   const LS_HANDLE = "gmx_handle";
   const LS_TOKEN = "gmx_token";
   const LS_FORCE_LOGOUT = "gmx_ext_force_logout_v2";
@@ -41,12 +55,6 @@
     } catch {
       return false;
     }
-  }
-
-  function normalizeHandle(raw) {
-    const value = String(raw || "").trim().replace(/^@+/, "");
-    if (!value) return "";
-    return /^[A-Za-z0-9_]{1,15}$/.test(value) ? value : "";
   }
 
   function normalizeText(raw) {
@@ -121,18 +129,22 @@
       V2_SITE_LANG,
     ]);
 
-    let nextHandle = "";
-    let nextToken = "";
+    const prevHandle = normalizeText(prev[V2_HANDLE] || prev[LEGACY_HANDLE]);
+    const prevToken = normalizeText(prev[V2_TOKEN] || prev[LEGACY_TOKEN]);
+    const session = resolveSyncedSession({
+      siteHandle,
+      siteToken,
+      forceLogout: Boolean(forceLogout),
+      prevHandle,
+      prevToken,
+    });
+    const nextHandle = session.handle;
+    const nextToken = session.token;
+    const hasSiteSession = Boolean(session.hasSiteSession);
 
     if (forceLogout) {
       try { localStorage.removeItem(LS_FORCE_LOGOUT); } catch {}
       try { localStorage.removeItem(LS_FORCE_LOGOUT_LEGACY); } catch {}
-    } else if (siteHandle && siteToken) {
-      nextHandle = siteHandle;
-      nextToken = siteToken;
-    } else {
-      nextHandle = normalizeText(prev[V2_HANDLE] || prev[LEGACY_HANDLE]);
-      nextToken = normalizeText(prev[V2_TOKEN] || prev[LEGACY_TOKEN]);
     }
 
     const apiBase = getApiBase();
@@ -166,6 +178,7 @@
       handle: nextHandle,
       token: nextToken,
       hasToken: Boolean(nextToken),
+      hasSiteSession,
       base: apiBase,
       extTheme: siteExtTheme,
       siteTheme,

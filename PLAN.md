@@ -66,8 +66,8 @@ SUPABASE_SERVICE_ROLE_KEY=...
 
 1. **Referral progress bar** — i18n + подсказка награды — DONE (3.1)
 2. **Extension connect/status** — i18n в `popup.js` — DONE (3.2)
-3. **Extension ↔ site session sync** — аудит + тесты (3.3)
-4. **Boot bundle** — ~97 deferred scripts (не срочно, после 1–3)
+3. **Extension ↔ site session sync** — аудит + тесты — DONE (3.3)
+4. **Boot bundle** — ~97 deferred scripts (Sprint 3.4)
 
 ### Позже
 

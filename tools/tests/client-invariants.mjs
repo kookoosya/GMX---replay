@@ -60,6 +60,18 @@ if (!popup.includes("/api/random-bulk")) {
 }
 ok("extension/popup.js");
 
+const siteSync = fs.readFileSync("extension/site_sync.js", "utf8");
+if (!siteSync.includes("hasSiteSession")) {
+  fail("extension/site_sync.js must return hasSiteSession for popup session sync");
+}
+if (!siteSync.includes("resolveSyncedSession")) {
+  fail("extension/site_sync.js must use GMXSiteSyncCore.resolveSyncedSession");
+}
+if (!fs.existsSync("extension/lib/site-sync-core.js")) {
+  fail("extension/lib/site-sync-core.js missing");
+}
+ok("extension/site_sync.js");
+
 for (const rel of ["public/arcade.js", "frontend/public/arcade.js", "public/bridge/arcade.js"]) {
   if (!fs.existsSync(rel)) continue;
   const text = fs.readFileSync(rel, "utf8");

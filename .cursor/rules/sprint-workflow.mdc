@@ -44,7 +44,7 @@ Supabase deferred until site and extension are stable (`DB_MODE=sqlite` on Rende
 
 1. Referral progress bar — i18n label + reward hint (`ref_progress_meter_html`) — DONE
 2. Extension connect/status strings — move hardcoded EN in `popup.js` to i18n — DONE
-3. Extension ↔ site session sync audit + tests
+3. Extension ↔ site session sync audit + tests — DONE
 4. Boot bundle inventory (defer implementation until 1–3 done)
 
 Do not begin step N+1 until step N meets definition of done.

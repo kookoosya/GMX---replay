@@ -17,6 +17,7 @@ test("extension manifest is valid MV3 with required scripts", () => {
   const requiredFiles = [
     manifest.action.default_popup,
     manifest.background.service_worker,
+    "lib/site-sync-core.js",
     "site_sync.js",
     "i18n-bundle.js",
     "lib/ext-config.js",

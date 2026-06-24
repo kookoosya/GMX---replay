@@ -134,3 +134,16 @@ Focus: **site + extension stability** (Supabase deferred).
 - `connectHandle` checks API error codes directly (not translated string match)
 
 **Verify:** `npm test` (118 pass), `audit:i18n:strict`.
+
+## 3.3 Extension ↔ site session sync — DONE
+
+**Problem:** `syncFromSite` applied every open tab in order — a logged-out tab could win over a logged-in one; popup reported “site session” when only extension storage had a token. No unit tests for session resolution.
+
+**Fix:**
+- `extension/lib/site-sync-core.js` — `resolveSyncedSession()` (site login, force logout, extension-only fallback)
+- `site_sync.js` returns `hasSiteSession`; uses shared resolver
+- `popup.js` — prefer first tab with `hasSiteSession`; explicit sync requires site session; silent init keeps extension-only auth
+- `tests/extension-site-sync.test.mjs` + client-invariants / logic-audit checks
+- Manifest loads `lib/site-sync-core.js` before `site_sync.js`
+
+**Verify:** `npm test` (126 pass), `npm run test:suite`.

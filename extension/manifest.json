@@ -37,6 +37,7 @@
         "http://127.0.0.1:*/*"
       ],
       "js": [
+        "lib/site-sync-core.js",
         "site_sync.js"
       ],
       "run_at": "document_idle"

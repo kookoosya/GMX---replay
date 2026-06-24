@@ -815,30 +815,50 @@ async function syncFromSite(options = {}) {
   }
 
   let responded = false;
+  let foundSiteSession = false;
+  let bestResponse = null;
+
+  function applySyncResponse(response) {
+    const syncPayload = {};
+    if (response.base) {
+      syncPayload[STORAGE_KEYS.base] = normalizeBase(response.base);
+    }
+    if (typeof response.handle === "string") {
+      syncPayload[STORAGE_KEYS.handle] = String(response.handle || "").trim();
+    }
+    if (typeof response.token === "string") {
+      syncPayload[STORAGE_KEYS.token] = String(response.token || "").trim();
+    }
+    if (typeof response.extTheme === "string") syncPayload[THEME_KEYS.extTheme] = String(response.extTheme || "").trim();
+    if (typeof response.siteTheme === "string") syncPayload[THEME_KEYS.siteTheme] = String(response.siteTheme || "").trim();
+    if (typeof response.extView === "string") syncPayload[THEME_KEYS.extView] = String(response.extView || "").trim();
+    if (typeof response.extWallpaper === "string") {
+      syncPayload[THEME_KEYS.extWallpaper] = normalizeWallpaperOptionId(response.extWallpaper);
+    }
+    if (typeof response.extCustomBg === "string") {
+      syncPayload[THEME_KEYS.extCustomBg] = String(response.extCustomBg || "").trim();
+    }
+    if (Object.keys(syncPayload).length) return saveState(syncPayload);
+    return Promise.resolve();
+  }
+
   for (const tab of siteTabs) {
     if (!Number.isFinite(tab.id)) continue;
     try {
       const response = await chrome.tabs.sendMessage(tab.id, { type: "GMX_FORCE_SITE_SYNC" });
-      if (response && response.ok) responded = true;
-      if (response && response.ok) {
-        const syncPayload = {};
-        if (response.base) {
-          syncPayload[STORAGE_KEYS.base] = normalizeBase(response.base);
-        }
-        if (typeof response.handle === 'string') {
-          syncPayload[STORAGE_KEYS.handle] = String(response.handle || '').trim();
-        }
-        if (typeof response.token === 'string') {
-          syncPayload[STORAGE_KEYS.token] = String(response.token || '').trim();
-        }
-        if (typeof response.extTheme === 'string') syncPayload[THEME_KEYS.extTheme] = String(response.extTheme || '').trim();
-        if (typeof response.siteTheme === 'string') syncPayload[THEME_KEYS.siteTheme] = String(response.siteTheme || '').trim();
-        if (typeof response.extView === 'string') syncPayload[THEME_KEYS.extView] = String(response.extView || '').trim();
-        if (typeof response.extWallpaper === 'string') syncPayload[THEME_KEYS.extWallpaper] = normalizeWallpaperOptionId(response.extWallpaper);
-        if (typeof response.extCustomBg === 'string') syncPayload[THEME_KEYS.extCustomBg] = String(response.extCustomBg || '').trim();
-        if (Object.keys(syncPayload).length) await saveState(syncPayload);
+      if (!response || !response.ok) continue;
+      responded = true;
+      if (response.hasSiteSession) {
+        foundSiteSession = true;
+        bestResponse = response;
+        break;
       }
+      if (!bestResponse) bestResponse = response;
     } catch {}
+  }
+
+  if (bestResponse) {
+    await applySyncResponse(bestResponse);
   }
 
   await new Promise((resolve) => setTimeout(resolve, responded ? 60 : 220));
@@ -847,13 +867,15 @@ async function syncFromSite(options = {}) {
   applySessionUi();
   await refreshSnapshot();
 
-  if (state.token && state.handle) {
+  if (state.token && state.handle && (foundSiteSession || silent)) {
     if (!silent) setConnectStatus(extT("ext_connect_using_session", { handle: `@${state.handle}` }), "good");
     return true;
   }
   if (!silent) {
     setConnectStatus(
-      responded ? extT("ext_connect_no_session_on_tab") : extT("ext_connect_sync_failed"),
+      responded
+        ? extT("ext_connect_no_session_on_tab")
+        : extT("ext_connect_sync_failed"),
       "bad"
     );
   }

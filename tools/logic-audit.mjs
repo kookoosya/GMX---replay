@@ -194,10 +194,14 @@ for (const rel of htmlFiles) {
 const siteSync = read("extension/site_sync.js");
 if (!siteSync.includes("gmx_ext_wp_v2_popup")) fail("site_sync must sync popup wallpaper key");
 if (!siteSync.includes("runSyncOnce")) fail("site_sync must debounce with runSyncOnce mutex");
+if (!siteSync.includes("hasSiteSession")) fail("site_sync must expose hasSiteSession for popup sync");
+if (!read("extension/lib/site-sync-core.js").includes("resolveSyncedSession")) {
+  fail("site-sync-core must export resolveSyncedSession");
+}
 
 const popup = read("extension/popup.js");
-if (!popup.includes("gmx_ext_wp_v2_popup") && strict) {
-  fail("extension/popup.js should read per-view wallpaper keys");
+if (!popup.includes("hasSiteSession") && strict) {
+  fail("extension/popup.js must prefer tabs with hasSiteSession");
 }
 
 if (/`\/api\/generate-bulk\?/.test(popup)) {
