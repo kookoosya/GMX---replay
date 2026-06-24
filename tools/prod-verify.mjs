@@ -131,4 +131,10 @@ if (appPage.status !== 200 || !appPage.text.includes("gmRand1")) {
 }
 ok("/app HTML shell");
 
+const homeDemo = await get("/api/public/random-bulk?kind=gm&mode=mid&count=3");
+if (homeDemo.status !== 200 || !homeDemo.json?.ok || !Array.isArray(homeDemo.json.list) || !homeDemo.json.list.length) {
+  fail(`home demo public bulk: ${homeDemo.text.slice(0, 160)}`);
+}
+ok("home guest demo API");
+
 console.log("\nPROD_VERIFY_OK");

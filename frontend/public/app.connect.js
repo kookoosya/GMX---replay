@@ -17,6 +17,46 @@
     const loadPlans = typeof ctx.loadPlans === "function" ? ctx.loadPlans : async () => {};
     const ping = typeof ctx.ping === "function" ? ctx.ping : () => {};
     const keys = ctx.keys || {};
+    const tr = typeof ctx.tr === "function" ? ctx.tr : (key) => String(key || "");
+
+    let tryInflight = false;
+    let tryLastText = "";
+
+    async function runHomeTry(kind) {
+      if (tryInflight) return;
+      const safeKind = kind === "gn" ? "gn" : "gm";
+      const out = $("homeTryOut");
+      const copyBtn = $("home_try_copy");
+      tryInflight = true;
+      if (out) out.textContent = tr("home_try_loading");
+      try {
+        const j = await api(`/api/public/random-bulk?kind=${safeKind}&mode=mid&count=3`);
+        const lines = Array.isArray(j && j.list) ? j.list.map((x) => String(x || "").trim()).filter(Boolean) : [];
+        tryLastText = lines.join("\n");
+        if (out) out.textContent = tryLastText || tr("home_try_empty");
+        if (copyBtn) copyBtn.classList.toggle("hidden", !tryLastText);
+      } catch (e) {
+        tryLastText = "";
+        if (out) {
+          out.textContent = friendlyUiErrorMessage(e.message || "request_failed", { scope: "connect" });
+        }
+        if (copyBtn) copyBtn.classList.add("hidden");
+      } finally {
+        tryInflight = false;
+      }
+    }
+
+    async function copyHomeTry() {
+      if (!tryLastText) return;
+      try {
+        await navigator.clipboard.writeText(tryLastText);
+        const cm = $("connectMsg");
+        if (cm) cm.innerHTML = `<span class="ok">${escapeHtml(tr("toast_copied"))}</span>`;
+      } catch {
+        const cm = $("connectMsg");
+        if (cm) cm.innerHTML = `<span class="bad">${escapeHtml(tr("toast_copy_failed"))}</span>`;
+      }
+    }
 
     function bindConnect() {
       const connectBtn = $("btnConnect");
@@ -85,6 +125,13 @@
           }
         };
       }
+
+      const btnTryGm = $("homeTryGm");
+      const btnTryGn = $("homeTryGn");
+      const btnTryCopy = $("home_try_copy");
+      if (btnTryGm) btnTryGm.onclick = () => void runHomeTry("gm");
+      if (btnTryGn) btnTryGn.onclick = () => void runHomeTry("gn");
+      if (btnTryCopy) btnTryCopy.onclick = () => void copyHomeTry();
 
       const resetBtn = $("btnReset");
       if (resetBtn) {

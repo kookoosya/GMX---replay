@@ -312,3 +312,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 - `popup.js` — shows today's title; Play opens deep-link
 
 **Verify:** `node --test tests/extension-gotd.test.mjs`, reload extension, see notification once per day.
+
+## 10.1 Home guest demo — DONE
+
+**Problem:** `h_try_*` / `homeTryGm` i18n existed but Home had no Try GM/GN UI; guests could not sample replies before connect (`SITE_RECOMMENDATIONS.md` priority #1).
+
+**Fix:** Home try panel in `app.html`; `app.connect.js` calls `/api/public/random-bulk` (3 mid lines) + copy; `prod-verify` spot-check.
+
+**Verify:** `node --test tests/home-demo.test.mjs`, open Home logged out → Try GM.

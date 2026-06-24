@@ -83,4 +83,9 @@ Do not begin step N+1 until step N meets definition of done.
 
 1. Game of the Day — daily notification + popup card with live title — DONE (9.1)
 
+## Sprint 10 queue (strict order) — Home conversion (SITE_RECOMMENDATIONS priority #1)
+
+1. Guest demo без регистрации — Try GM/GN on Home via `/api/public/random-bulk` — DONE (10.1)
+2. Hero video placeholder / asset hook — pending (10.2)
+
 Do not begin step N+1 until step N meets definition of done.

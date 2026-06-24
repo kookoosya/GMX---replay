@@ -88,6 +88,11 @@ SUPABASE_SERVICE_ROLE_KEY=...
 3. **Embed audit** — `npm run arcade:audit:embeds` in client-invariants (7.3)
 4. **SEO slugs** — `/arcade/:slug` → `?game=` deep-link (7.4)
 
+### Sprint 10 — Home conversion (SITE_RECOMMENDATIONS priority #1)
+
+1. **Guest demo** — Try GM/GN on Home, no @handle (`/api/public/random-bulk`) — 10.1
+2. **Hero video** — asset + embed — 10.2 (pending)
+
 ## i18n pipeline
 
 `shared/i18n/locales/*.json` → `npm run i18n:sync` → `public/i18n/siteI18n.js`, `extension/i18n-bundle.js`, bridge copy.

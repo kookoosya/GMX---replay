@@ -24,7 +24,7 @@
 - [x] Кнопка «Play Arcade»
 - [x] Пункт «Arcade» в What you get
 - [ ] **Hero video** (10–15 сек) — «Reply on email, play games» для новых пользователей
-- [ ] **Demo без регистрации** — один клик → короткое реплей-демо
+- [x] **Demo без регистрации** — один клик → короткое реплей-демо
 - [ ] Счётчик «X people connected today» (если есть метрики)
 
 ### GM / GN
@@ -68,7 +68,7 @@
 - [x] Реальные обложки, чистый каталог
 - [x] **«Игра дня» в расширении** — toast раз в день
 - [ ] **Достижения** — «сыграл 5 игр», «победил в Zombs Royale»
-- [ ] **Страницы /arcade/agario** для SEO
+- [ ] **Страницы /arcade/agario** для SEO — DONE (Sprint 7.4)
 
 ---
 
@@ -100,7 +100,7 @@
 
 | # | Задача | Раздел | Эффект |
 |---|--------|--------|--------|
-| 1 | Hero video / demo | Home | Конверсия |
+| 1 | Hero video / demo | Home | Конверсия | demo DONE (10.1); hero video pending (10.2) |
 | 2 | Yearly plan со скидкой | Upgrade Pro | MRR |
 | 3 | «Игра дня» в расширении | Extension | Retention |
 | 4 | Достижения Arcade | Arcade | Вовлечённость |

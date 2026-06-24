@@ -61,6 +61,13 @@ if (!popup.includes("/api/random-bulk")) {
 if (!popup.includes("GMXExtCosmeticsGate") || !popup.includes("clampExtCosmetics")) {
   fail("extension/popup.js must enforce referral unlock gating via GMXExtCosmeticsGate");
 }
+const connectJs = fs.readFileSync("public/app.connect.js", "utf8");
+if (!connectJs.includes("runHomeTry") || !connectJs.includes("/api/public/random-bulk")) {
+  fail("public/app.connect.js must wire guest home demo via /api/public/random-bulk");
+}
+if (!fs.readFileSync("public/app.html", "utf8").includes('id="homeTryGm"')) {
+  fail("public/app.html missing homeTryGm guest demo control");
+}
 if (!fs.existsSync("extension/lib/unlock-core.js")) {
   fail("extension/lib/unlock-core.js missing");
 }

@@ -1240,7 +1240,7 @@ function pruneLegacyAdminPanels() {
   // ----- Connect -----
   if (!window.__GMXConnectWireFactory) throw new Error("GMX connectrunwire factory missing");
   window.__GMXConnectWireFactory({
-    core: { $, api, escapeHtml, friendlyUiErrorMessage, normalizeHandle },
+    core: { $, api, escapeHtml, friendlyUiErrorMessage, normalizeHandle, tr: siteTr },
     auth: { setAuthOk: (v) => { AUTH_OK = !!v; }, applyAdminVisibility },
     session: { refreshUsage, loadPlans, ping },
     keys: {

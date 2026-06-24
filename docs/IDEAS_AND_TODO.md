@@ -54,6 +54,7 @@
 - **Embed audit** — DONE (7.3): `arcade:audit:embeds` offline in CI
 - **SEO slugs** — DONE (7.4): `/arcade/:slug` deep-links
 - **Extension GOTD toast** — DONE (9.1): daily notification + popup title from catalog
+- **Home guest demo** — DONE (10.1): Try GM/GN on Home without @handle
 
 ### 4. Referrals
 - Unlock gating в site + extension — DONE (6.1)
