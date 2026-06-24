@@ -336,3 +336,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `#w_yearly_save` note, featured `y1` card, i18n badges, `~$6.67/mo` secondary quote, `plan_modal_desc` yearly line.
 
 **Verify:** `node --test tests/wallet-yearly.test.mjs`, `prod-verify` billing `y1` + `w_yearly_save`.
+
+## 12.1 Arcade achievements — DONE
+
+**Problem:** No gamification on Arcade (`SITE_RECOMMENDATIONS.md` priority #4).
+
+**Fix:** `lib/arcade-achievements-core.js` + achievements panel on `/arcade.html`; progress in `localStorage` on iframe launch.
+
+**Verify:** `node --test tests/arcade-achievements.test.mjs`, `prod-verify` achievements core + panel.

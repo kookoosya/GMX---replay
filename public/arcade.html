@@ -114,6 +114,26 @@
     .quickInsertActions { display: flex; flex-wrap: wrap; gap: 10px; }
     .sub.ok { color: #86efac; opacity: 1; }
     .sub.warn { color: #fde68a; opacity: 1; }
+    .achievementsPanel { margin-top: 0; }
+    .achSummary {
+      padding: 10px 14px; border-radius: 999px; font-size: 13px; font-weight: 800;
+      background: rgba(20,241,149,.12); border: 1px solid rgba(20,241,149,.28); color: #bbf7d0;
+    }
+    .achGrid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 14px;
+    }
+    .achCard {
+      border-radius: 16px; padding: 14px; display: grid; gap: 8px;
+      border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04);
+    }
+    .achCard.achUnlocked {
+      border-color: rgba(20,241,149,.35);
+      background: linear-gradient(145deg, rgba(20,241,149,.12), rgba(59,130,246,.08));
+    }
+    .achCard.achLocked { opacity: .62; filter: grayscale(.25); }
+    .achIcon { font-size: 28px; line-height: 1; }
+    .achTitle { font-size: 15px; font-weight: 900; }
+    .achDesc { font-size: 12px; opacity: .78; line-height: 1.4; }
     #arcadeStatus { font-size: 12px; opacity: .58; text-align: center; padding-bottom: 20px; }
     @media (max-width: 900px) {
       .searchRow { display: grid; grid-template-columns: 1fr; }
@@ -127,6 +147,7 @@
     <div id="arcadeStatus"></div>
   </div>
   <script defer src="/i18n/siteI18n.js"></script>
-  <script defer src="/arcade.js?v=SAFE15"></script>
+  <script defer src="/lib/arcade-achievements-core.js"></script>
+  <script defer src="/arcade.js?v=SAFE16"></script>
 </body>
 </html>

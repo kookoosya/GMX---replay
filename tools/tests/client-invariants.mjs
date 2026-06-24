@@ -143,6 +143,9 @@ for (const rel of ["public/arcade.js", "frontend/public/arcade.js", "public/brid
   if (!text.includes("tryOpenDeepLinkGame")) {
     fail(`${rel}: arcade must honor ?game= deep links`);
   }
+  if (!text.includes("achievementsPanel") || !text.includes("onGameLaunched")) {
+    fail(`${rel}: arcade must wire achievements panel and launch tracking`);
+  }
   ok(rel);
 }
 

@@ -67,7 +67,7 @@
 - [x] **Back to GMXReply** в hero
 - [x] Реальные обложки, чистый каталог
 - [x] **«Игра дня» в расширении** — toast раз в день
-- [ ] **Достижения** — «сыграл 5 игр», «победил в Zombs Royale»
+- [x] **Достижения** — 6 badges (launch count, GOTD, categories, Pro) — local device
 - [ ] **Страницы /arcade/agario** для SEO — DONE (Sprint 7.4)
 
 ---
@@ -103,7 +103,7 @@
 | 1 | Hero video / demo | Home | Конверсия | DONE (10.1 + 10.2) |
 | 2 | Yearly plan со скидкой | Upgrade Pro | MRR | DONE (11.1) |
 | 3 | «Игра дня» в расширении | Extension | Retention |
-| 4 | Достижения Arcade | Arcade | Вовлечённость |
+| 4 | Достижения Arcade | Arcade | Вовлечённость | DONE (12.1) |
 | 5 | Quick presets GM/GN | GM, GN | UX |
 | 6 | Страницы /arcade/{slug} | Arcade | SEO |
 | 7 | Referral progress bar | Referrals | Виральность |

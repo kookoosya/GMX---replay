@@ -178,4 +178,22 @@ if (!appPage.text.includes('id="w_yearly_save"')) {
 }
 ok("wallet yearly savings UI");
 
+const achCore = await get("/lib/arcade-achievements-core.js");
+if (achCore.status !== 200 || !achCore.text.includes("GMXArcadeAchievementsCore")) {
+  fail(`arcade achievements core: ${achCore.status}`);
+}
+ok("arcade achievements core");
+
+const arcadeHtml = await get("/arcade.html");
+if (arcadeHtml.status !== 200 || !arcadeHtml.text.includes("arcade-achievements-core")) {
+  fail("arcade.html missing achievements core script");
+}
+ok("arcade.html achievements script");
+
+const arcadeJs = await get("/arcade.js");
+if (arcadeJs.status !== 200 || !arcadeJs.text.includes("achievementsPanel")) {
+  fail("arcade.js missing achievements panel");
+}
+ok("arcade achievements UI");
+
 console.log("\nPROD_VERIFY_OK");
