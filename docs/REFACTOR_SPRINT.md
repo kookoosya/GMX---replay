@@ -215,3 +215,14 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 - client-invariants: arcade checkout + siteboot tab deep-link guards
 
 **Verify:** `npm run test:suite`, open locked Pro game → Upgrade → wallet tab with Solana checkout.
+
+## 5.1 Per-game `.webp` covers — DONE
+
+**Problem:** Seven GameDistribution titles used inline SVG paths — not cacheable like category `.webp` assets.
+
+**Fix:**
+- Rasterize existing `assets/arcade/covers/games/*.svg` → `.webp` (900×540) via `generate-arcade-game-covers.mjs`
+- `localGameCover()` → `.webp`; `localGameCoverSvg()` kept as `data-fallback-cover` on error
+- `audit-arcade-game-covers.mjs` + client-invariants; `prod-verify` spot-check
+
+**Verify:** `npm run arcade:covers:games`, `node tools/audit-arcade-game-covers.mjs`, `npm run test:suite`.

@@ -84,6 +84,12 @@ if (arcadeCategoryCover.status !== 200) {
 }
 ok("arcade category covers");
 
+const arcadeGameCover = await get("/assets/arcade/covers/games/obby-vs-zombies.webp");
+if (arcadeGameCover.status !== 200) {
+  fail(`arcade game cover status ${arcadeGameCover.status}`);
+}
+ok("arcade game covers");
+
 const handle = freshSmokeHandle("p");
 const init = await get("/api/user/init", {
   method: "POST",

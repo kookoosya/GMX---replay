@@ -1,0 +1,12 @@
+{
+  "size": { "width": 900, "height": 540 },
+  "games": [
+    "obby-vs-zombies",
+    "plane-chase",
+    "sniper-team-3",
+    "snow-rider-obby-parkour",
+    "time-walker-survive",
+    "tripeaks-solitaire-escapes",
+    "zombie-redemption"
+  ]
+}

@@ -43,6 +43,7 @@
     "audit:i18n:strict": "node tools/i18n_audit.js --strict",
     "audit:boot": "node tools/audit-app-boot.mjs",
     "arcade:covers:categories": "node tools/generate-arcade-category-covers.mjs",
+    "arcade:covers:games": "node tools/generate-arcade-game-covers.mjs",
     "i18n:backfill": "node tools/i18n_lingva_backfill.mjs",
     "i18n:backfill:strict": "node tools/i18n_backfill_strict.mjs",
     "i18n:apply-critical": "node tools/i18n_apply_critical_fixes.mjs",

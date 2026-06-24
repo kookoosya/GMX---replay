@@ -26,6 +26,8 @@
 
 **Сделано (Sprint 4.1):** Arcade category `.webp` fallbacks — 16 covers in `assets/arcade/covers/categories/`, `categoryCoverWebp()` + SVG fallback on error.
 
+**Сделано (Sprint 5.1):** Arcade per-game `.webp` covers — 7 local titles rasterized from SVG; `localGameCover()` serves webp with SVG fallback.
+
 **В план (следующие):** Supabase when stable.
 
 **Сделано (Sprint 3.4):** boot inventory — `audit:boot`, baseline 97 scripts, pruned stale `*runwire.js` mirrors.
@@ -44,7 +46,7 @@
 
 ### 3. Arcade
 - **Монетизация**: Arcade Pro gate → wallet checkout (4.2 DONE)
-- **Real cover images**: категорийные .webp для action, racing, puzzle и т.д. (arcadeCovers.ts)
+- **Real cover images**: per-game `.webp` for 7 local titles (5.1 DONE); category `.webp` (4.1 DONE)
 - **Quick insert** в Arcade: URL / GameMonetize ID / embed — уже частично есть
 
 ### 4. Referrals

@@ -645,13 +645,18 @@
     "obby-vs-zombies", "plane-chase", "sniper-team-3", "snow-rider-obby-parkour",
     "time-walker-survive", "tripeaks-solitaire-escapes", "zombie-redemption",
   ]);
-  function localGameCover(game) {
+  function localGameCoverSvg(game) {
     const slug = game && (game.id || game.slug || "");
     if (!slug || !LOCAL_GAME_COVERS.has(slug)) return "";
     return `/assets/arcade/covers/games/${slug}.svg`;
   }
+  function localGameCover(game) {
+    const slug = game && (game.id || game.slug || "");
+    if (!slug || !LOCAL_GAME_COVERS.has(slug)) return "";
+    return `/assets/arcade/covers/games/${slug}.webp`;
+  }
   function fallbackCover(game) {
-    return localGameCover(game) || categoryCoverSvg(game);
+    return localGameCoverSvg(game) || categoryCoverSvg(game);
   }
   function remoteCoverUrl(game) {
     try {
