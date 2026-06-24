@@ -47,4 +47,12 @@ for (const mirror of mirrors) {
   if (fs.existsSync(path.dirname(mirror))) writeAll(mirror);
 }
 
-console.log(`build-arcade-catalog OK (${games.length} games → public/arcade.js)`);
+const gotdPath = path.join(root, "extension", "lib", "gotd-games.json");
+const gotdPayload = {
+  updatedAt: catalog.updatedAt || new Date().toISOString().slice(0, 10),
+  games: games.map((g) => ({ id: String(g.id || ""), name: String(g.name || g.id || "") })),
+};
+fs.mkdirSync(path.dirname(gotdPath), { recursive: true });
+fs.writeFileSync(gotdPath, JSON.stringify(gotdPayload, null, 2) + "\n", "utf8");
+
+console.log(`build-arcade-catalog OK (${games.length} games → public/arcade.js + extension/lib/gotd-games.json)`);

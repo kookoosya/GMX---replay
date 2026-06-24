@@ -606,6 +606,8 @@
   "ext_btn_open_x": "Xを開く",
   "ext_gotd_label": "今日のゲーム",
   "ext_gotd_play": "今すぐプレイ →",
+  "ext_gotd_toast_title": "今日のゲーム",
+  "ext_gotd_toast_body": "GMX Arcadeで{name}をプレイ — タップして開始。",
   "ext_section_quick": "クイックコピー",
   "ext_quick_hint": "英語の返信: ここをコピーして、X に自分で貼り付けてください。私たちがあなたのために投稿することはありません。",
   "ext_mode_min": "最小・短い",

@@ -606,6 +606,8 @@
   "ext_btn_open_x": "Open X",
   "ext_gotd_label": "Game of the Day",
   "ext_gotd_play": "Play now →",
+  "ext_gotd_toast_title": "Game of the Day",
+  "ext_gotd_toast_body": "Try {name} in GMX Arcade — tap to play.",
   "ext_section_quick": "Quick copy",
   "ext_quick_hint": "English replies: copy here, then paste on X yourself — we never post for you.",
   "ext_mode_min": "min · short",

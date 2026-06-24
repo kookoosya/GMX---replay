@@ -606,6 +606,8 @@
   "ext_btn_open_x": "Buka X",
   "ext_gotd_label": "Permainan Hari Ini",
   "ext_gotd_play": "Mainkan sekarang →",
+  "ext_gotd_toast_title": "Game hari ini",
+  "ext_gotd_toast_body": "Coba {name} di GMX Arcade — ketuk untuk main.",
   "ext_section_quick": "Salinan cepat",
   "ext_quick_hint": "Balasan bahasa Inggris: salin di sini, lalu tempel di X sendiri — kami tidak pernah memposting untuk Anda.",
   "ext_mode_min": "menit · pendek",

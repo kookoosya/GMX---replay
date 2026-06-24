@@ -606,6 +606,8 @@
   "ext_btn_open_x": "X'i aç",
   "ext_gotd_label": "Günün Oyunu",
   "ext_gotd_play": "Şimdi oyna →",
+  "ext_gotd_toast_title": "Günün oyunu",
+  "ext_gotd_toast_body": "GMX Arcade'de {name} oyna — dokun ve başlat.",
   "ext_section_quick": "Hızlı kopyalama",
   "ext_quick_hint": "İngilizce yanıtlar: buraya kopyalayın, ardından X'e kendiniz yapıştırın; sizin için asla göndermeyiz.",
   "ext_mode_min": "dk · kısa",

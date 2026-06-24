@@ -3,7 +3,10 @@ const QUICK_WIDTH = 430;
 const QUICK_HEIGHT = 760;
 const STORAGE_BASE = "gmx_ext_api_base_v2";
 const STORAGE_TOKEN = "gmx_ext_token_v2";
+const STORAGE_GOTD_DAY = "gmx_gotd_toast_day_v1";
+const STORAGE_UI_LANG = "gmx_site_lang_v1";
 const ALARM_SIGNALS = "gmx_market_signals_poll_v1";
+const ALARM_GOTD = "gmx_gotd_daily_v1";
 const STORAGE_LAST_PRICES = "gmx_market_last_prices_v1";
 const STORAGE_LAST_ALERT = "gmx_market_last_alert_v1";
 const STORAGE_LAST_HEADLINE = "gmx_market_last_headline_v1";
@@ -11,6 +14,83 @@ const STORAGE_ALERTS_ENABLED = "gmx_market_alerts_enabled_v1";
 const STORAGE_ALERTS_INTERVAL = "gmx_market_alerts_interval_v1";
 const DRAW_THRESHOLD = -5;
 const UPSIDE_THRESHOLD = 5;
+
+try {
+  importScripts("i18n-bundle.js", "lib/gotd-core.js");
+} catch {}
+
+function extTr(key, lang, vars) {
+  try {
+    const catalog = globalThis.GMX_SITE_I18N && globalThis.GMX_SITE_I18N.SITE_I18N;
+    if (!catalog) return key;
+    const code = String(lang || "en").toLowerCase();
+    const base = catalog.en || {};
+    const row = catalog[code] || {};
+    let s = row[key];
+    if (s === undefined || s === null || String(s).trim() === "") s = base[key];
+    if (s === undefined || s === null) return key;
+    let out = String(s);
+    if (vars && typeof vars === "object") {
+      for (const [vk, vv] of Object.entries(vars)) {
+        out = out.split(`{${vk}}`).join(String(vv));
+      }
+    }
+    return out;
+  } catch {
+    return key;
+  }
+}
+
+async function loadGotdGames() {
+  try {
+    const url = chrome.runtime.getURL("lib/gotd-games.json");
+    const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) return [];
+    const data = await response.json().catch(() => null);
+    return Array.isArray(data && data.games) ? data.games : [];
+  } catch {
+    return [];
+  }
+}
+
+async function maybeShowGotdToast() {
+  const core = globalThis.GMXGotdCore;
+  if (!core || typeof core.gameOfTheDay !== "function") return;
+  const games = await loadGotdGames();
+  const game = core.gameOfTheDay(games);
+  if (!game || !game.id) return;
+
+  const today = core.todayKey();
+  try {
+    const stored = await chrome.storage.local.get(STORAGE_GOTD_DAY);
+    if (String(stored[STORAGE_GOTD_DAY] || "") === today) return;
+  } catch {}
+
+  let lang = "en";
+  try {
+    const row = await chrome.storage.local.get(STORAGE_UI_LANG);
+    lang = String(row[STORAGE_UI_LANG] || "en").toLowerCase();
+  } catch {}
+
+  const title = extTr("ext_gotd_toast_title", lang);
+  const message = extTr("ext_gotd_toast_body", lang, { name: game.name || game.id });
+  try {
+    await chrome.notifications.create(`gotd:${game.id}`, {
+      type: "basic",
+      iconUrl: "icons/icon128.png",
+      title,
+      message,
+      priority: 0,
+    });
+    await chrome.storage.local.set({ [STORAGE_GOTD_DAY]: today });
+  } catch {}
+}
+
+async function ensureGotdAlarm() {
+  try {
+    await chrome.alarms.create(ALARM_GOTD, { periodInMinutes: 24 * 60 });
+  } catch {}
+}
 
 async function openQuickPanel() {
   const url = chrome.runtime.getURL(QUICK_URL);
@@ -214,16 +294,35 @@ chrome.commands.onCommand.addListener((command) => {
 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
-  if (!alarm || alarm.name !== ALARM_SIGNALS) return;
-  void pollMarketSignals();
+  if (!alarm) return;
+  if (alarm.name === ALARM_SIGNALS) void pollMarketSignals();
+  if (alarm.name === ALARM_GOTD) void maybeShowGotdToast();
+});
+
+chrome.notifications.onClicked.addListener((notificationId) => {
+  const id = String(notificationId || "");
+  if (!id.startsWith("gotd:")) return;
+  const slug = id.slice(5);
+  if (!slug) return;
+  void (async () => {
+    const { base } = await getSession();
+    const url = `${base}/arcade/${encodeURIComponent(slug)}`;
+    try {
+      await chrome.tabs.create({ url });
+    } catch {}
+  })();
 });
 
 chrome.runtime.onInstalled.addListener(() => {
   void ensureSignalAlarm();
   void pollMarketSignals();
+  void ensureGotdAlarm();
+  void maybeShowGotdToast();
 });
 
 chrome.runtime.onStartup.addListener(() => {
   void ensureSignalAlarm();
   void pollMarketSignals();
+  void ensureGotdAlarm();
+  void maybeShowGotdToast();
 });

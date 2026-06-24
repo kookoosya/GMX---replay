@@ -606,6 +606,8 @@
   "ext_btn_open_x": "Відкрити X",
   "ext_gotd_label": "Гра дня",
   "ext_gotd_play": "Грати →",
+  "ext_gotd_toast_title": "Гра дня",
+  "ext_gotd_toast_body": "Спробуй {name} у GMX Arcade — натисни, щоб грати.",
   "ext_section_quick": "Швидке копіювання",
   "ext_quick_hint": "Відповіді англійською: копіюйте тут, потім вставляйте в X самі — ми ніколи не постимо за вас.",
   "ext_mode_min": "min · коротко",

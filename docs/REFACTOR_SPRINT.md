@@ -300,3 +300,15 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `tools/prod-verify.mjs` — 302 to `/arcade.html?game=agario` + `siteI18n.js` contains wallet Arcade Pro copy.
 
 **Verify:** `npm run verify:prod` after deploy.
+
+## 9.1 Extension Game of the Day toast — DONE
+
+**Problem:** Extension had a static GOTD card without today's game; no once-per-day nudge (`SITE_RECOMMENDATIONS.md`).
+
+**Fix:**
+- `extension/lib/gotd-games.json` built from `data/arcade-catalog.json` (`arcade:build`)
+- `extension/lib/gotd-core.js` — same day-of-year picker as `arcade.js`
+- `background.js` — daily alarm + `chrome.notifications` once per local day; click opens `/arcade/:slug`
+- `popup.js` — shows today's title; Play opens deep-link
+
+**Verify:** `node --test tests/extension-gotd.test.mjs`, reload extension, see notification once per day.

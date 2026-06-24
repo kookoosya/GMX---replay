@@ -606,6 +606,8 @@
   "ext_btn_open_x": "Abra X",
   "ext_gotd_label": "Jogo do dia",
   "ext_gotd_play": "Jogue agora →",
+  "ext_gotd_toast_title": "Jogo do dia",
+  "ext_gotd_toast_body": "Experimente {name} no GMX Arcade — toque para jogar.",
   "ext_section_quick": "Cópia rápida",
   "ext_quick_hint": "Respostas em inglês: copie aqui e cole você mesmo no X - nunca postamos para você.",
   "ext_mode_min": "min · curto",

@@ -81,6 +81,40 @@ function pickSyncedWallpaperId(data) {
   return perView || global;
 }
 
+let gotdGame = null;
+
+async function loadGotdGame() {
+  try {
+    const core = globalThis.GMXGotdCore;
+    if (!core || typeof core.gameOfTheDay !== "function") return null;
+    const url = chrome.runtime.getURL("lib/gotd-games.json");
+    const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) return null;
+    const data = await response.json().catch(() => null);
+    const games = Array.isArray(data && data.games) ? data.games : [];
+    return core.gameOfTheDay(games);
+  } catch {
+    return null;
+  }
+}
+
+function applyGotdUi() {
+  if (!el.gotdCard) return;
+  const game = gotdGame;
+  if (!game || !game.id) {
+    el.gotdCard.classList.add("hidden");
+    return;
+  }
+  el.gotdCard.classList.remove("hidden");
+  if (el.gotdName) el.gotdName.textContent = String(game.name || game.id);
+}
+
+function gotdArcadeUrl() {
+  const base = state.base || DEFAULT_BASE;
+  const slug = gotdGame && gotdGame.id ? String(gotdGame.id) : "";
+  return slug ? `${base}/arcade/${encodeURIComponent(slug)}` : `${base}/arcade.html`;
+}
+
 function normalizeExtView(raw) {
   const value = String(raw || "").trim().toLowerCase();
   return ["theme", "wall", "custom"].includes(value) ? value : "theme";
@@ -97,6 +131,8 @@ const el = {
   openSite: document.getElementById("openSite"),
   openArcade: document.getElementById("openArcade"),
   openArcadeGotd: document.getElementById("openArcadeGotd"),
+  gotdCard: document.getElementById("gotdCard"),
+  gotdName: document.getElementById("gotdName"),
   openX: document.getElementById("openX"),
   openQuick: document.getElementById("openQuick"),
   syncSiteBtn: document.getElementById("syncSiteBtn"),
@@ -1023,7 +1059,7 @@ function bindEvents() {
   if (el.openQuick) el.openQuick.addEventListener("click", () => void openQuickPanel());
   if (el.openSite) el.openSite.addEventListener("click", () => void openTab(`${state.base || DEFAULT_BASE}/app`));
   if (el.openArcade) el.openArcade.addEventListener("click", () => void openTab(`${state.base || DEFAULT_BASE}/arcade.html`));
-  if (el.openArcadeGotd) el.openArcadeGotd.addEventListener("click", () => void openTab(`${state.base || DEFAULT_BASE}/arcade.html`));
+  if (el.openArcadeGotd) el.openArcadeGotd.addEventListener("click", () => void openTab(gotdArcadeUrl()));
   if (el.openX) el.openX.addEventListener("click", () => void openTab("https://x.com"));
 
   chrome.storage.onChanged.addListener((changes, area) => {
@@ -1082,6 +1118,8 @@ function bindEvents() {
     })();
   });
   await loadState();
+  gotdGame = await loadGotdGame();
+  applyGotdUi();
   await applyThemeUi();
   applySessionUi();
   await syncFromSite({ openIfMissing: false, silent: true });

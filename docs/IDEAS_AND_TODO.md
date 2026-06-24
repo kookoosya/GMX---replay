@@ -53,6 +53,7 @@
 - **Catalog split** — DONE (7.1): `data/arcade-catalog.json` + `arcade:build`
 - **Embed audit** — DONE (7.3): `arcade:audit:embeds` offline in CI
 - **SEO slugs** — DONE (7.4): `/arcade/:slug` deep-links
+- **Extension GOTD toast** — DONE (9.1): daily notification + popup title from catalog
 
 ### 4. Referrals
 - Unlock gating в site + extension — DONE (6.1)

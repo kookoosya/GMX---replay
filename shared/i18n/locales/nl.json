@@ -606,6 +606,8 @@
   "ext_btn_open_x": "X openen",
   "ext_gotd_label": "Spel van de dag",
   "ext_gotd_play": "Speel nu →",
+  "ext_gotd_toast_title": "Spel van de dag",
+  "ext_gotd_toast_body": "Probeer {name} in GMX Arcade — tik om te spelen.",
   "ext_section_quick": "Snel kopiëren",
   "ext_quick_hint": "Engelse antwoorden: kopieer hier en plak vervolgens zelf op X - we posten nooit voor je.",
   "ext_mode_min": "min · kort",

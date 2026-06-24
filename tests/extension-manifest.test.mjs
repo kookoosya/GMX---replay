@@ -22,6 +22,8 @@ test("extension manifest is valid MV3 with required scripts", () => {
     "i18n-bundle.js",
     "lib/ext-config.js",
     "lib/ext-i18n.js",
+    "lib/gotd-core.js",
+    "lib/gotd-games.json",
     "popup.js",
   ];
   for (const rel of requiredFiles) {

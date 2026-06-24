@@ -79,4 +79,8 @@ Do not begin step N+1 until step N meets definition of done.
 1. Wallet / Arcade: explicit «Pro unlocks all Arcade games» — DONE (8.1)
 2. `prod-verify`: `/arcade/:slug` redirect spot-check — DONE (8.2)
 
+## Sprint 9 queue (strict order) — extension Arcade nudge
+
+1. Game of the Day — daily notification + popup card with live title — DONE (9.1)
+
 Do not begin step N+1 until step N meets definition of done.

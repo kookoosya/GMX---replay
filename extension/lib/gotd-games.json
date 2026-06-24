@@ -1,0 +1,237 @@
+{
+  "updatedAt": "2026-06-24",
+  "games": [
+    {
+      "id": "kour-io",
+      "name": "Kour.io"
+    },
+    {
+      "id": "hazmob-fps",
+      "name": "Hazmob FPS"
+    },
+    {
+      "id": "sniper-fury",
+      "name": "Sniper Fury"
+    },
+    {
+      "id": "zombie-derby-pixel",
+      "name": "Zombie Derby Pixel"
+    },
+    {
+      "id": "path-of-survivor",
+      "name": "Path of Survivor"
+    },
+    {
+      "id": "trial-mania",
+      "name": "Trial Mania"
+    },
+    {
+      "id": "mx-offroad-master",
+      "name": "MX Offroad Master"
+    },
+    {
+      "id": "rally-racer-dirt",
+      "name": "Rally Racer Dirt"
+    },
+    {
+      "id": "super-bowling",
+      "name": "Super Bowling"
+    },
+    {
+      "id": "firestone-idle-rpg",
+      "name": "Firestone Idle RPG"
+    },
+    {
+      "id": "solitaire-home",
+      "name": "Solitaire Home"
+    },
+    {
+      "id": "zumba-quest",
+      "name": "Zumba Quest"
+    },
+    {
+      "id": "goat-escape",
+      "name": "Goat Escape"
+    },
+    {
+      "id": "1v1-lol",
+      "name": "1v1.LOL"
+    },
+    {
+      "id": "shell-shockers",
+      "name": "Shell Shockers"
+    },
+    {
+      "id": "smash-karts",
+      "name": "Smash Karts"
+    },
+    {
+      "id": "drift-hunters",
+      "name": "Drift Hunters"
+    },
+    {
+      "id": "bloxd-io",
+      "name": "Bloxd.io"
+    },
+    {
+      "id": "crazy-roll-3d",
+      "name": "Crazy Roll 3D"
+    },
+    {
+      "id": "slither-io",
+      "name": "Slither.io"
+    },
+    {
+      "id": "paper-io-2",
+      "name": "Paper.io 2"
+    },
+    {
+      "id": "hole-io",
+      "name": "Hole.io"
+    },
+    {
+      "id": "worms-zone",
+      "name": "Worms Zone"
+    },
+    {
+      "id": "moto-x3m",
+      "name": "Moto X3M"
+    },
+    {
+      "id": "basketball-stars",
+      "name": "Basketball Stars"
+    },
+    {
+      "id": "tennis-masters",
+      "name": "Tennis Masters"
+    },
+    {
+      "id": "soccer-legends",
+      "name": "Soccer Legends"
+    },
+    {
+      "id": "madalin-stunt-cars",
+      "name": "Madalin Stunt Cars"
+    },
+    {
+      "id": "night-city-racing",
+      "name": "Night City Racing"
+    },
+    {
+      "id": "evoworld-io",
+      "name": "EvoWorld.io"
+    },
+    {
+      "id": "skribbl-io",
+      "name": "Skribbl.io"
+    },
+    {
+      "id": "mahjongg",
+      "name": "Mahjongg"
+    },
+    {
+      "id": "words-of-wonders",
+      "name": "Words of Wonders"
+    },
+    {
+      "id": "dead-zed",
+      "name": "Dead Zed"
+    },
+    {
+      "id": "buildnow-gg",
+      "name": "BuildNow GG"
+    },
+    {
+      "id": "agario",
+      "name": "Agar.io"
+    },
+    {
+      "id": "diep-io",
+      "name": "Diep.io"
+    },
+    {
+      "id": "geometry-dash",
+      "name": "Geometry Dash"
+    },
+    {
+      "id": "snake-io",
+      "name": "Snake.io"
+    },
+    {
+      "id": "voxiom-io",
+      "name": "Voxiom"
+    },
+    {
+      "id": "zombs-royale",
+      "name": "Zombs Royale"
+    },
+    {
+      "id": "lol-beans",
+      "name": "LOL Beans"
+    },
+    {
+      "id": "doodle-jump",
+      "name": "Doodle Jump"
+    },
+    {
+      "id": "bubble-shooter",
+      "name": "Bubble Shooter"
+    },
+    {
+      "id": "2048",
+      "name": "2048"
+    },
+    {
+      "id": "basketball-legends",
+      "name": "Basketball Legends"
+    },
+    {
+      "id": "run-3",
+      "name": "Run 3"
+    },
+    {
+      "id": "getaway-shootout",
+      "name": "Getaway Shootout"
+    },
+    {
+      "id": "happy-wheels",
+      "name": "Happy Wheels"
+    },
+    {
+      "id": "cut-the-rope",
+      "name": "Cut the Rope"
+    },
+    {
+      "id": "eggy-car",
+      "name": "Eggy Car"
+    },
+    {
+      "id": "drift-boss",
+      "name": "Drift Boss"
+    },
+    {
+      "id": "friday-night-funkin",
+      "name": "Friday Night Funkin"
+    },
+    {
+      "id": "kirka-io",
+      "name": "Kirka.io"
+    },
+    {
+      "id": "marble-shooter",
+      "name": "Marble Shooter"
+    },
+    {
+      "id": "bullet-force",
+      "name": "Bullet Force"
+    },
+    {
+      "id": "minecraft-classic",
+      "name": "Minecraft Classic"
+    },
+    {
+      "id": "subway-surfers",
+      "name": "Subway Surfers"
+    }
+  ]
+}

@@ -67,6 +67,16 @@ if (!fs.existsSync("extension/lib/unlock-core.js")) {
 if (!fs.existsSync("extension/lib/ext-cosmetics-gate.js")) {
   fail("extension/lib/ext-cosmetics-gate.js missing");
 }
+if (!fs.existsSync("extension/lib/gotd-core.js")) {
+  fail("extension/lib/gotd-core.js missing");
+}
+if (!fs.existsSync("extension/lib/gotd-games.json")) {
+  fail("extension/lib/gotd-games.json missing — run npm run arcade:build");
+}
+const background = fs.readFileSync("extension/background.js", "utf8");
+if (!background.includes("maybeShowGotdToast")) {
+  fail("extension/background.js must schedule daily Game of the Day toast");
+}
 for (const html of ["extension/popup.html", "extension/quick.html"]) {
   const shell = fs.readFileSync(html, "utf8");
   if (!shell.includes("lib/unlock-core.js") || !shell.includes("lib/ext-cosmetics-gate.js")) {

@@ -25,10 +25,11 @@
     </div>
 
     <div class="card" id="gotdCard" style="padding:10px 14px;background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(244,63,94,.08));border-color:rgba(251,191,36,.2)">
-      <div class="row" style="align-items:center;gap:8px">
+      <div class="row" style="align-items:center;gap:8px;flex-wrap:wrap">
         <span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;opacity:.9" data-i18n="ext_gotd_label">Game of the Day</span>
         <button id="openArcadeGotd" class="linkbtn" type="button" style="font-size:13px;padding:4px 0" data-i18n="ext_gotd_play">Play now →</button>
       </div>
+      <div id="gotdName" class="small" style="margin-top:6px;font-weight:700"></div>
     </div>
     <div class="card">
       <div class="row headRow">
@@ -120,6 +121,7 @@
   <script src="lib/ext-i18n.js"></script>
   <script src="lib/unlock-core.js"></script>
   <script src="lib/ext-cosmetics-gate.js"></script>
+  <script src="lib/gotd-core.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

@@ -606,6 +606,8 @@
   "ext_btn_open_x": "打开X",
   "ext_gotd_label": "每日游戏",
   "ext_gotd_play": "立即播放 →",
+  "ext_gotd_toast_title": "今日游戏",
+  "ext_gotd_toast_body": "在 GMX Arcade 试试 {name} — 点击即玩。",
   "ext_section_quick": "快速复制",
   "ext_quick_hint": "英文回复：复制这里，然后自己粘贴到 X 上——我们从不替你发帖。",
   "ext_mode_min": "分钟 · 短",
