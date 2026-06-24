@@ -1623,6 +1623,8 @@ html.mode-light .walletTag{ border: 1px solid rgba(0,0,0,.14); }
 /* --- Free/Pro meters + responsive stability --- */
 .meter{height:8px;border-radius:999px;background:var(--glass2);border:1px solid var(--stroke);overflow:hidden}
 .meter > span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accentA),var(--accentB));transition:width .3s ease}
+.refProgressMeter{margin-top:6px}
+.refProgressWrap .meterVal{font-variant-numeric:tabular-nums;opacity:.85;min-width:42px;text-align:right}
 .quickPresets .btn.active{ background: rgba(153,69,255,.18); border-color: rgba(153,69,255,.4); }
 .meterRow{display:flex;align-items:center;gap:10px}
 .meterLabel{flex:1}

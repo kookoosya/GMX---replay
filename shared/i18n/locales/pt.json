@@ -72,6 +72,8 @@
   "ref_unlocks_now": "Desbloqueia agora",
   "ref_next_unlock": "Próximo desbloqueio",
   "ref_progress_meter_html": "Próximo desbloqueio com <b>{n}</b> elegíveis — {reward}",
+  "ref_progress_need_html": "Faltam <b>{n}</b> elegíveis",
+  "ref_progress_ready": "Desbloqueio no próximo referido elegível",
   "ref_all_unlocked": "Todos os desbloqueios listados foram alcançados",
   "ref_metric_clicks": "Cliques",
   "ref_metric_bg_slots": "Slots BG",

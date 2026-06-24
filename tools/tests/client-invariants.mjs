@@ -71,6 +71,9 @@ if (!fs.readFileSync("public/app.html", "utf8").includes('id="homeTryGm"')) {
 if (!fs.readFileSync("public/app.html", "utf8").includes('id="gm_preset_professional"')) {
   fail("public/app.html missing GM quick preset controls");
 }
+if (!fs.readFileSync("public/app.html", "utf8").includes('id="refProgressNeed"')) {
+  fail("public/app.html missing referral progress need hint");
+}
 if (!fs.readFileSync("public/app.html", "utf8").includes('id="homeHero"')) {
   fail("public/app.html missing homeHero block");
 }

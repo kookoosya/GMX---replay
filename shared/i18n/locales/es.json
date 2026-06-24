@@ -72,6 +72,8 @@
   "ref_unlocks_now": "Se desbloquea ahora",
   "ref_next_unlock": "Siguiente desbloqueo",
   "ref_progress_meter_html": "Siguiente desbloqueo con <b>{n}</b> elegibles — {reward}",
+  "ref_progress_need_html": "Faltan <b>{n}</b> elegibles más",
+  "ref_progress_ready": "Desbloqueo en el próximo referido elegible",
   "ref_all_unlocked": "Se han alcanzado todos los desbloqueos enumerados",
   "ref_metric_clicks": "Clics",
   "ref_metric_bg_slots": "Ranuras BG",

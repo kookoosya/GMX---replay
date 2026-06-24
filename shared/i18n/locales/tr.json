@@ -72,6 +72,8 @@
   "ref_unlocks_now": "Şimdi kilidi açılıyor",
   "ref_next_unlock": "Sonraki kilit açma",
   "ref_progress_meter_html": "Sonraki kilidi <b>{n}</b> uygun kullanıcıda — {reward}",
+  "ref_progress_need_html": "<b>{n}</b> uygun kullanıcı daha gerekli",
+  "ref_progress_ready": "Sonraki uygun referansla kilidi açılır",
   "ref_all_unlocked": "Listelenen tüm kilit açmalara ulaşıldı",
   "ref_metric_clicks": "Tıklamalar",
   "ref_metric_bg_slots": "BG yuvaları",

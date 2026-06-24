@@ -72,6 +72,8 @@
   "ref_unlocks_now": "今すぐロックを解除します",
   "ref_next_unlock": "次のロック解除",
   "ref_progress_meter_html": "次のロック解除は<b>{n}</b>人の対象者で — {reward}",
+  "ref_progress_need_html": "あと<b>{n}</b>人の対象者が必要",
+  "ref_progress_ready": "次の対象紹介でロック解除",
   "ref_all_unlocked": "リストされているすべてのロック解除に達しました",
   "ref_metric_clicks": "クリック数",
   "ref_metric_bg_slots": "BGスロット",

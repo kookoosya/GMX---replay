@@ -72,6 +72,8 @@
   "ref_unlocks_now": "Unlocks now",
   "ref_next_unlock": "Next unlock",
   "ref_progress_meter_html": "Next unlock at <b>{n}</b> eligible — {reward}",
+  "ref_progress_need_html": "Need <b>{n}</b> more eligible",
+  "ref_progress_ready": "Ready to unlock on next eligible referral",
   "ref_all_unlocked": "All listed unlocks reached",
   "ref_metric_clicks": "Clicks",
   "ref_metric_bg_slots": "BG slots",

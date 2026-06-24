@@ -44,7 +44,7 @@
 - [x] Явно: «Pro unlocks all Arcade games»
 
 ### Referrals
-- [ ] **Прогресс-бар** до следующего unlock (темы/обои)
+- [x] **Прогресс-бар** до следующего unlock (темы/обои)
 - [ ] «Invite 3 friends → week of Pro free»
 - [ ] Копируемая ссылка с одним кликом
 
@@ -106,7 +106,7 @@
 | 4 | Достижения Arcade | Arcade | Вовлечённость | DONE (12.1) |
 | 5 | Quick presets GM/GN | GM, GN | UX | DONE (13.1) |
 | 6 | Страницы /arcade/{slug} | Arcade | SEO |
-| 7 | Referral progress bar | Referrals | Виральность |
+| 7 | Referral progress bar | Referrals | Виральность | DONE (14.1) |
 | 8 | PWA | Глобально | Мобильный retention |
 
 ---

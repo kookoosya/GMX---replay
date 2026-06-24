@@ -72,6 +72,8 @@
   "ref_unlocks_now": "Odblokowuje się teraz",
   "ref_next_unlock": "Następne odblokowanie",
   "ref_progress_meter_html": "Następne odblokowanie przy <b>{n}</b> uprawnionych — {reward}",
+  "ref_progress_need_html": "Potrzeba jeszcze <b>{n}</b> uprawnionych",
+  "ref_progress_ready": "Odblokowanie przy następnym eligible referralu",
   "ref_all_unlocked": "Osiągnięto wszystkie wymienione odblokowania",
   "ref_metric_clicks": "Kliknięcia",
   "ref_metric_bg_slots": "Sloty BG",

@@ -646,7 +646,6 @@ const {
     applyAdminVisibility,
   } = __gmxChromeWire;
   function fillStyles(){ return __gmxChromeWire.fillStyles(); }
-  function applyRefCountEligible(eligible, opts){ return __gmxChromeWire.applyRefCountEligible(eligible, opts); }
 
   if (!window.__GMXI18nBridgeFactory) throw new Error("GMX i18nbridge factory missing");
   const {
@@ -659,6 +658,7 @@ const {
     deriveReferralUnlocks,
     nextReferralUnlockAt,
     nextReferralUnlockLabel,
+    syncRefProgressMeter,
     renderReferralRightCopy,
     syncModePanelCopy,
     patchDynamicCopy,
@@ -668,6 +668,19 @@ const {
     siteI18nDynamic: __gmxSiteI18nDynamic,
     siteLangMenu: __gmxSiteLangMenu,
   });
+
+  function applyRefCountEligible(eligible, opts){
+    const r = __gmxChromeWire.applyRefCountEligible(eligible, opts);
+    try {
+      syncRefProgressMeter(__gmxSt.lsGet(K.SITE_LANG, "en"), Math.max(0, Number(eligible || 0) || 0));
+    } catch (_e) {}
+    return r;
+  }
+
+  try {
+    const bootCached = Number(__gmxSt.lsGet(LS_REF_ELIGIBLE_CACHE, "0") || 0) || 0;
+    applyRefCountEligible(bootCached);
+  } catch (_e) {}
 
 function syncReferralCardCopy() {
   try {
@@ -973,7 +986,7 @@ function initWalletTab() {
   __gmxWalletWire = window.__GMXWalletWireFactory({
     core: { $, api, K },
     mod: { modals: __gmxModals },
-    text: { escapeHtml, friendlyUiErrorMessage, siteTr },
+    text: { escapeHtml, friendlyUiErrorMessage },
     ui: { toast },
     perf: { trackEvent, abVariant },
     pay: { setPayState, openPaySuccess },
@@ -1240,7 +1253,7 @@ function pruneLegacyAdminPanels() {
   // ----- Connect -----
   if (!window.__GMXConnectWireFactory) throw new Error("GMX connectrunwire factory missing");
   window.__GMXConnectWireFactory({
-    core: { $, api, escapeHtml, friendlyUiErrorMessage, normalizeHandle, tr: siteTr },
+    core: { $, api, escapeHtml, friendlyUiErrorMessage, normalizeHandle },
     auth: { setAuthOk: (v) => { AUTH_OK = !!v; }, applyAdminVisibility },
     session: { refreshUsage, loadPlans, ping },
     keys: {

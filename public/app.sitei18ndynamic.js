@@ -188,7 +188,10 @@
       };
     }
 
+    const refProgressCore = globalThis.GMXReferralProgressCore || null;
+
     function nextReferralUnlockAt(eligible) {
+      if (refProgressCore) return refProgressCore.nextReferralUnlockAt(eligible);
       const e = Number(eligible || 0) || 0;
       const steps = [1, 3, 7, 15, 30, 50, 100];
       for (const step of steps) {
@@ -214,23 +217,48 @@
       const wrap = $("refProgressWrap");
       const label = $("refProgressLabel");
       const fillEl = $("refProgressFill");
+      const pctEl = $("refProgressPct");
+      const needEl = $("refProgressNeed");
       if (!wrap || !label || !fillEl) return;
-      const e = Number(eligible || 0) || 0;
-      const nextStep = nextReferralUnlockAt(e);
-      if (nextStep <= 0) {
+      const state = refProgressCore
+        ? refProgressCore.referralProgressState(eligible)
+        : (() => {
+            const e = Number(eligible || 0) || 0;
+            const nextStep = nextReferralUnlockAt(e);
+            return {
+              eligible: e,
+              nextStep,
+              prevStep: 0,
+              needed: Math.max(0, nextStep - e),
+              pct: nextStep > 0 ? Math.min(100, Math.round((e / nextStep) * 100)) : 100,
+              complete: nextStep <= 0,
+            };
+          })();
+      if (state.complete) {
         wrap.classList.add("hidden");
         return;
       }
       wrap.classList.remove("hidden");
-      const reward = nextReferralUnlockLabel(lang, nextStep);
+      const reward = nextReferralUnlockLabel(lang, state.nextStep);
       const tpl = siteTr(
         "ref_progress_meter_html",
         "Next unlock at <b>{n}</b> eligible — {reward}"
       );
       label.innerHTML = tpl
-        .replace(/\{n\}/g, String(nextStep))
+        .replace(/\{n\}/g, String(state.nextStep))
         .replace(/\{reward\}/g, escapeHtml(reward));
-      fillEl.style.width = Math.min(100, Math.round((e / nextStep) * 100)) + "%";
+      fillEl.style.width = String(state.pct) + "%";
+      if (pctEl) pctEl.textContent = String(state.pct) + "%";
+      if (needEl) {
+        const needTpl = siteTr(
+          "ref_progress_need_html",
+          "Need <b>{n}</b> more eligible"
+        );
+        needEl.innerHTML =
+          state.needed > 0
+            ? needTpl.replace(/\{n\}/g, String(state.needed))
+            : siteTr("ref_progress_ready", "Ready to unlock on next eligible referral");
+      }
     }
 
     function renderReferralRightCopy(lang) {
@@ -302,6 +330,10 @@
       } catch (_e) {}
       try {
         initReferralPromoDetailsState();
+      } catch (_e) {}
+      try {
+        const eligible = Number($("refEligibleInline")?.textContent || 0) || 0;
+        syncRefProgressMeter(lang, eligible);
       } catch (_e) {}
       try {
         if (getCurrentTab() === "referrals" && getHandle()) {

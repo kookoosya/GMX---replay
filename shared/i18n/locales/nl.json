@@ -72,6 +72,8 @@
   "ref_unlocks_now": "Ontgrendelt nu",
   "ref_next_unlock": "Volgende ontgrendeling",
   "ref_progress_meter_html": "Volgende ontgrendeling bij <b>{n}</b> in aanmerking komenden — {reward}",
+  "ref_progress_need_html": "Nog <b>{n}</b> in aanmerking komenden nodig",
+  "ref_progress_ready": "Ontgrendeling bij de volgende eligible referral",
   "ref_all_unlocked": "Alle vermelde ontgrendelingen bereikt",
   "ref_metric_clicks": "Klikken",
   "ref_metric_bg_slots": "Achtergrondslots",

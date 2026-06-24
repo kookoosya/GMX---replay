@@ -72,6 +72,8 @@
   "ref_unlocks_now": "Wird jetzt freigeschaltet",
   "ref_next_unlock": "Nächstes Entsperren",
   "ref_progress_meter_html": "Nächstes Entsperren bei <b>{n}</b> berechtigten — {reward}",
+  "ref_progress_need_html": "Noch <b>{n}</b> berechtigte nötig",
+  "ref_progress_ready": "Freischaltung beim nächsten berechtigten Referral",
   "ref_all_unlocked": "Alle aufgelisteten Freischaltungen erreicht",
   "ref_metric_clicks": "Klicks",
   "ref_metric_bg_slots": "BG-Slots",

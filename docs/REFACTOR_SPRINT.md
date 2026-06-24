@@ -352,3 +352,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `applyQuickPreset()` in `app.gmgnwire.js` sets mode/style/pack; GM & GN get labeled Casual / Professional / Fun + help copy.
 
 **Verify:** `node --test tests/gmgn-quick-presets.test.mjs`, `prod-verify` `gm_preset_professional` in `/app`.
+
+## 14.1 Referral progress bar — DONE
+
+**Problem:** Basic meter existed (Sprint 3.1 i18n) but progress counted from zero (not span between unlocks), no “need N more” hint, bar hidden until API refresh (`SITE_RECOMMENDATIONS.md` priority #7).
+
+**Fix:** `lib/referral-progress-core.js` + span-based `referralProgressPct`; `#refProgressPct` / `#refProgressNeed`; hydrate from `localStorage` eligible cache on boot; `applyRefCountEligible` syncs meter.
+
+**Verify:** `node --test tests/referral-progress.test.mjs`, `prod-verify` referral progress core + `refProgressNeed` in `/app`.

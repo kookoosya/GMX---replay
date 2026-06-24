@@ -9,6 +9,7 @@
     deriveReferralUnlocks,
     nextReferralUnlockAt,
     nextReferralUnlockLabel,
+    syncRefProgressMeter,
     renderReferralRightCopy,
     syncModePanelCopy,
     patchDynamicCopy,
@@ -18,6 +19,19 @@
     siteI18nDynamic: __gmxSiteI18nDynamic,
     siteLangMenu: __gmxSiteLangMenu,
   });
+
+  function applyRefCountEligible(eligible, opts){
+    const r = __gmxChromeWire.applyRefCountEligible(eligible, opts);
+    try {
+      syncRefProgressMeter(__gmxSt.lsGet(K.SITE_LANG, "en"), Math.max(0, Number(eligible || 0) || 0));
+    } catch (_e) {}
+    return r;
+  }
+
+  try {
+    const bootCached = Number(__gmxSt.lsGet(LS_REF_ELIGIBLE_CACHE, "0") || 0) || 0;
+    applyRefCountEligible(bootCached);
+  } catch (_e) {}
 
 function syncReferralCardCopy() {
   try {

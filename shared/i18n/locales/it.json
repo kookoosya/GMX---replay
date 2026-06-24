@@ -72,6 +72,8 @@
   "ref_unlocks_now": "Sblocca ora",
   "ref_next_unlock": "Prossimo sblocco",
   "ref_progress_meter_html": "Prossimo sblocco a <b>{n}</b> idonei — {reward}",
+  "ref_progress_need_html": "Servono ancora <b>{n}</b> idonei",
+  "ref_progress_ready": "Sblocco al prossimo referral idoneo",
   "ref_all_unlocked": "Tutti gli sblocchi elencati raggiunti",
   "ref_metric_clicks": "Clic",
   "ref_metric_bg_slots": "Slot sfondo",

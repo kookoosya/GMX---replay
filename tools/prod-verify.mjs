@@ -201,4 +201,15 @@ if (!appPage.text.includes('id="gm_preset_professional"')) {
 }
 ok("gm/gn quick presets UI");
 
+const refCore = await get("/lib/referral-progress-core.js");
+if (refCore.status !== 200 || !refCore.text.includes("GMXReferralProgressCore")) {
+  fail(`referral progress core: ${refCore.status}`);
+}
+ok("referral progress core");
+
+if (!appPage.text.includes('id="refProgressNeed"')) {
+  fail("/app shell missing refProgressNeed referral bar");
+}
+ok("referral progress bar UI");
+
 console.log("\nPROD_VERIFY_OK");

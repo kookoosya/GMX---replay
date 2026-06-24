@@ -84,4 +84,3 @@
     applyAdminVisibility,
   } = __gmxChromeWire;
   function fillStyles(){ return __gmxChromeWire.fillStyles(); }
-  function applyRefCountEligible(eligible, opts){ return __gmxChromeWire.applyRefCountEligible(eligible, opts); }
