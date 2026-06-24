@@ -58,10 +58,6 @@ for (const f of APP_FILES) {
     copyFile(src, dest);
     n++;
     console.log(`  ${f}`);
-    if (f === "app.html") {
-      copyFile(src, path.join(PUBLIC, "bridge", "app.html"));
-      console.log("  bridge/app.html");
-    }
   }
 }
 
@@ -93,6 +89,17 @@ if (fs.existsSync(extbgSrc)) {
 }
 
 console.log(`[sync] Copied ${n} items: public + assets -> frontend/public`);
+
+// Bridge is React SPA (index.html) — never keep legacy app shell copies here.
+const bridgeDir = path.join(PUBLIC, "bridge");
+if (fs.existsSync(bridgeDir)) {
+  for (const name of fs.readdirSync(bridgeDir)) {
+    if (name === "app.js" || name === "app.html" || name === "app.css" || name.startsWith("app.")) {
+      fs.unlinkSync(path.join(bridgeDir, name));
+      console.log(`  removed obsolete bridge/${name}`);
+    }
+  }
+}
 
 // 5. Keep extension theme catalog aligned with site
 const themesSrc = path.join(PUBLIC, "themes.json");

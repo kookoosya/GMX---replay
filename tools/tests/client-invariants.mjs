@@ -86,4 +86,13 @@ if (collisionAudit.status !== 0) {
 }
 ok("arcade cover collisions");
 
+if (fs.existsSync("public/bridge/app.html")) {
+  fail("public/bridge/app.html must not exist (bridge uses index.html SPA)");
+}
+const syncAppAssets = fs.readFileSync("tools/sync-app-and-assets.mjs", "utf8");
+if (/bridge["',\s]+app\.html/.test(syncAppAssets) && /copyFile\(src,\s*path\.join\(PUBLIC,\s*"bridge",\s*"app\.html"\)\)/.test(syncAppAssets)) {
+  fail("sync-app-and-assets.mjs must not copy app.html into public/bridge/");
+}
+ok("bridge shell hygiene");
+
 console.log("CLIENT_INVARIANTS_OK");

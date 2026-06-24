@@ -36,6 +36,15 @@ Rules: `.cursor/rules/sprint-workflow.mdc` (one step at a time, no parity drift)
 
 **Verify:** `npm test`, `npm run test:suite` → client-invariants pass on all 3 arcade copies.
 
-## 1.4 bridge/app.html copy — pending
+## 1.4 bridge/app.html copy — DONE
+
+**Problem:** `tools/sync-app-and-assets.mjs` copied `app.html` → `public/bridge/app.html` on every sync. Bridge is a React SPA (`bridge/index.html`); legacy shell copy was obsolete and caused accidental commits.
+
+**Fix:**
+- Removed bridge `app.html` copy from `sync-app-and-assets.mjs`
+- Added prune of obsolete `bridge/app.*` shell files after sync (matches `sync-site-public.mjs`)
+- Client invariant: `public/bridge/app.html` must not exist; sync script must not reintroduce copy
+
+**Verify:** `node tools/sync-app-and-assets.mjs` → no `bridge/app.html`; `npm run test:suite` → bridge shell hygiene pass.
 
 ## 1.5 mountLineListSkeleton — pending

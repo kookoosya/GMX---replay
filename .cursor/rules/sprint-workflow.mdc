@@ -19,6 +19,7 @@ alwaysApply: true
 - All mirrors byte-identical where required
 - `docs/IDEAS_AND_TODO.md` or sprint tracker updated if the step closes a listed item
 - Push + `verify:prod` only when the user expects deploy for that step
+- **Agent pushes commits** — after each sprint step is done locally, push to `origin/main` yourself (retry on transient network errors); then run `verify:prod` and report `build=` id
 
 ## Sprint 1 queue (strict order)
 
