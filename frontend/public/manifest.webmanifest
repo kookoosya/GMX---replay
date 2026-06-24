@@ -1,0 +1,26 @@
+{
+  "name": "GMXReply",
+  "short_name": "GMXReply",
+  "description": "Human-sounding GM and GN replies. Build banks, copy, paste on X.",
+  "start_url": "/app",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0b0d12",
+  "theme_color": "#9945ff",
+  "categories": ["productivity", "social"],
+  "icons": [
+    {
+      "src": "/icons/gmx-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/gmx-icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

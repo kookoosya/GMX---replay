@@ -1148,6 +1148,7 @@ function pruneLegacyAdminPanels() {
     },
     lang: {
       applyLang,
+      siteTr,
       pruneLegacyAdminPanels,
       updateLangFlags,
       renderLangChips,

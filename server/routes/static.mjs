@@ -56,6 +56,9 @@ export function registerStaticRoutes(deps) {
         ) {
           noStore(res);
         }
+        if (filePath.endsWith(".webmanifest")) {
+          res.setHeader("Content-Type", "application/manifest+json");
+        }
       },
     })
   );

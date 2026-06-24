@@ -104,4 +104,8 @@ Do not begin step N+1 until step N meets definition of done.
 
 1. Span-based progress + need hint + boot cache hydrate — DONE (14.1)
 
+## Sprint 15 queue (strict order) — PWA (SITE_RECOMMENDATIONS priority #8)
+
+1. Manifest + service worker + install button — DONE (15.1)
+
 Do not begin step N+1 until step N meets definition of done.

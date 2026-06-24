@@ -90,7 +90,7 @@
 - **Blog** — «Top 10 .io games 2025», «How to write GM replies»
 
 ### Мобилка
-- **PWA** — «Add to home screen»
+- [x] **PWA** — «Add to home screen»
 - **Bottom nav** на мобильных вместо горизонтальных табов
 - **Swipe** между GM / GN
 
@@ -107,7 +107,7 @@
 | 5 | Quick presets GM/GN | GM, GN | UX | DONE (13.1) |
 | 6 | Страницы /arcade/{slug} | Arcade | SEO |
 | 7 | Referral progress bar | Referrals | Виральность | DONE (14.1) |
-| 8 | PWA | Глобально | Мобильный retention |
+| 8 | PWA | Глобально | Мобильный retention | DONE (15.1) |
 
 ---
 

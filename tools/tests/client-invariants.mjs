@@ -74,6 +74,9 @@ if (!fs.readFileSync("public/app.html", "utf8").includes('id="gm_preset_professi
 if (!fs.readFileSync("public/app.html", "utf8").includes('id="refProgressNeed"')) {
   fail("public/app.html missing referral progress need hint");
 }
+if (!fs.readFileSync("public/app.html", "utf8").includes('id="pwa_install"')) {
+  fail("public/app.html missing PWA install button");
+}
 if (!fs.readFileSync("public/app.html", "utf8").includes('id="homeHero"')) {
   fail("public/app.html missing homeHero block");
 }

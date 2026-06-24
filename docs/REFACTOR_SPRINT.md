@@ -360,3 +360,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `lib/referral-progress-core.js` + span-based `referralProgressPct`; `#refProgressPct` / `#refProgressNeed`; hydrate from `localStorage` eligible cache on boot; `applyRefCountEligible` syncs meter.
 
 **Verify:** `node --test tests/referral-progress.test.mjs`, `prod-verify` referral progress core + `refProgressNeed` in `/app`.
+
+## 15.1 PWA install shell — DONE
+
+**Problem:** No web app manifest or install path for mobile home-screen retention (`SITE_RECOMMENDATIONS.md` priority #8).
+
+**Fix:** `manifest.webmanifest` + `sw.js` static cache; `#pwa_install` button with `beforeinstallprompt` / iOS hint; `app.pwainstall.js` in boot chunk.
+
+**Verify:** `node --test tests/pwa.test.mjs`, `prod-verify` manifest + sw + `pwa_install` in `/app`.

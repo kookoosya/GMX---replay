@@ -30,6 +30,7 @@
     },
     lang: {
       applyLang,
+      siteTr,
       pruneLegacyAdminPanels,
       updateLangFlags,
       renderLangChips,

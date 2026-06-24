@@ -212,4 +212,21 @@ if (!appPage.text.includes('id="refProgressNeed"')) {
 }
 ok("referral progress bar UI");
 
+const manifest = await get("/manifest.webmanifest");
+if (manifest.status !== 200 || !manifest.text.includes('"short_name"')) {
+  fail(`PWA manifest: ${manifest.status}`);
+}
+ok("PWA manifest");
+
+const sw = await get("/sw.js");
+if (sw.status !== 200 || !sw.text.includes("gmx-shell-v1")) {
+  fail(`service worker: ${sw.status}`);
+}
+ok("PWA service worker");
+
+if (!appPage.text.includes('id="pwa_install"')) {
+  fail("/app shell missing pwa_install button");
+}
+ok("PWA install UI");
+
 console.log("\nPROD_VERIFY_OK");

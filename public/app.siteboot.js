@@ -187,6 +187,16 @@
         }
       } catch {}
 
+      try {
+        if (window.__GMXPwaInstallFactory) {
+          window.__GMXPwaInstallFactory({
+            $,
+            siteTr: typeof ctx.siteTr === "function" ? ctx.siteTr : (_k, fb) => fb || "",
+            lsGet,
+          }).bindPwaInstall();
+        }
+      } catch {}
+
       setInitDone(true);
     }
 

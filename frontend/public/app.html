@@ -3,7 +3,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<link rel="icon" href="data:,">
+<link rel="icon" href="/icons/gmx-icon.svg" type="image/svg+xml"/>
+<link rel="apple-touch-icon" href="/icons/gmx-icon.svg"/>
+<link rel="manifest" href="/manifest.webmanifest"/>
+<meta name="theme-color" content="#9945ff"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="GMXReply"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="no-store, no-cache, must-revalidate, proxy-revalidate" http-equiv="Cache-Control"/>
 <meta content="no-cache" http-equiv="Pragma"/>
@@ -97,6 +103,7 @@ html.mode-light body.hasUserBg .panel{
   <select aria-label="siteLang" id="siteLang" name="siteLang" class="hidden"></select>
 </div>
 </div>
+<div class="pill"><button class="btn ghost mini hidden" id="pwa_install" type="button">Install app</button></div>
 <div class="pill"><button class="btn ghost mini" id="btnMode" type="button" title="Toggle light/dark">Light</button></div>
 <div class="pill"><button class="btn ghost mini" id="btnHelp" type="button" title="How Free &amp; Pro work">Free / Pro</button></div>
 </div>

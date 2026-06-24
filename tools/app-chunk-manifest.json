@@ -101,6 +101,7 @@
         "app.chromewire.js",
         "app.connect.js",
         "app.homehero.js",
+        "app.pwainstall.js",
         "app.connectwire.js",
         "app.siteboot.js",
         "app.siteinit.js",
