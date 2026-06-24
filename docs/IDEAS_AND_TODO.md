@@ -26,7 +26,7 @@
 
 **Сделано (Sprint 4.1):** Arcade category `.webp` fallbacks — 16 covers in `assets/arcade/covers/categories/`, `categoryCoverWebp()` + SVG fallback on error.
 
-**В план (следующие):** Arcade Pro checkout flow; Supabase when stable.
+**В план (следующие):** Supabase when stable.
 
 **Сделано (Sprint 3.4):** boot inventory — `audit:boot`, baseline 97 scripts, pruned stale `*runwire.js` mirrors.
 
@@ -43,7 +43,7 @@
 - Полное изображение только при применении (уже так в `wallpaperui.js`)
 
 ### 3. Arcade
-- **Монетизация**: полный Pro checkout flow (сейчас только UI gate)
+- **Монетизация**: Arcade Pro gate → wallet checkout (4.2 DONE)
 - **Real cover images**: категорийные .webp для action, racing, puzzle и т.д. (arcadeCovers.ts)
 - **Quick insert** в Arcade: URL / GameMonetize ID / embed — уже частично есть
 

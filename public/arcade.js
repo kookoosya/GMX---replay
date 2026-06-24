@@ -515,6 +515,25 @@
   {"id":"subway-surfers","name":"Subway Surfers","icon":"🏃","access":"free","imageUrl":"","embedUrl":"https://www.crazygames.com/embed/subway-surfers-seoul","launchUrl":"https://www.crazygames.com/embed/subway-surfers-seoul","sourceLabel":"CrazyGames","shortNote":"","category":"Arcade","provider":"crazygames","badge":null}
 ];
   const LS_SITE_LANG = "gmx_site_lang";
+  const LS_LAST_TAB = "gmx_last_tab";
+  const LS_ARCADE_RETURN_GAME = "gmx_arcade_return_game";
+
+  function appWalletHref(gameId) {
+    const q = new URLSearchParams();
+    q.set("tab", "wallet");
+    q.set("from", "arcade");
+    if (gameId) q.set("game", String(gameId));
+    return `/app?${q.toString()}`;
+  }
+
+  function goUpgradePro(gameId) {
+    try {
+      localStorage.setItem(LS_LAST_TAB, "wallet");
+      if (gameId) localStorage.setItem(LS_ARCADE_RETURN_GAME, String(gameId));
+      else localStorage.removeItem(LS_ARCADE_RETURN_GAME);
+    } catch {}
+    location.href = appWalletHref(gameId);
+  }
   function arcadeT(key, vars) {
     try {
       const lang = String(localStorage.getItem(LS_SITE_LANG) || "en").toLowerCase();
@@ -705,6 +724,20 @@
     if (el) el.textContent = text;
   }
 
+  function tryResumeArcadeGame() {
+    if (state.plan !== "pro") return;
+    let gameId = "";
+    try {
+      gameId = String(localStorage.getItem(LS_ARCADE_RETURN_GAME) || "").trim();
+    } catch {}
+    if (!gameId) return;
+    const game = GAMES.find((item) => item.id === gameId);
+    try {
+      localStorage.removeItem(LS_ARCADE_RETURN_GAME);
+    } catch {}
+    if (game) openGame(game);
+  }
+
   async function loadPlan() {
     state.handle = handle();
     const handleEl = $("planHandle");
@@ -719,6 +752,7 @@
     } catch {
       state.plan = "free";
     }
+    tryResumeArcadeGame();
     const planEl = $("planLabel");
     if (planEl) planEl.textContent = planLabel();
     render();
@@ -821,7 +855,8 @@
         <h2>${esc(game.name)}</h2>
         <div class="sub">${esc(game.shortNote)}</div>
         <div class="lockedActions">
-          <a class="primaryBtn warm" href="${esc(game.launchUrl)}" target="_blank" rel="noreferrer">${esc(arcadeT("arcade_locked_open_original"))}</a>
+          <button type="button" class="primaryBtn" id="arcadeUpgradePro">${esc(arcadeT("arcade_upgrade_cta"))}</button>
+          <a class="ghostBtn" href="${esc(game.launchUrl)}" target="_blank" rel="noreferrer">${esc(arcadeT("arcade_locked_open_original"))}</a>
           <div class="muted">${esc(arcadeT("arcade_locked_premium_note"))}</div>
         </div>
       </section>
@@ -886,6 +921,7 @@
           <div class="planCard">
             <div id="planLabel" class="planMain">${esc(planLabel())}</div>
             <div id="planHandle" class="planSub">${esc(state.handle || arcadeT("arcade_guest_slot"))}</div>
+            ${state.plan !== "pro" ? `<button type="button" class="primaryBtn planUpgrade" id="planUpgradeBtn">${esc(arcadeT("arcade_upgrade_cta"))}</button>` : ""}
           </div>
         </div>
       </section>
@@ -1027,6 +1063,12 @@
       state.iframeReady = false;
       render();
     });
+
+    $("arcadeUpgradePro")?.addEventListener("click", () => {
+      const game = lockedGame();
+      goUpgradePro(game?.id || "");
+    });
+    $("planUpgradeBtn")?.addEventListener("click", () => goUpgradePro(""));
 
     mountPlayerControls();
   }

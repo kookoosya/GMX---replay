@@ -90,8 +90,26 @@ for (const rel of ["public/arcade.js", "frontend/public/arcade.js", "public/brid
   if (!/function categoryCoverWebp\s*\(/.test(text)) {
     fail(`${rel}: arcade must define categoryCoverWebp for category fallback covers`);
   }
+  if (!/function goUpgradePro\s*\(/.test(text)) {
+    fail(`${rel}: arcade must wire Pro gate to wallet checkout via goUpgradePro`);
+  }
+  if (!text.includes('id="arcadeUpgradePro"')) {
+    fail(`${rel}: locked Pro panel must expose arcadeUpgradePro checkout button`);
+  }
+  if (!/q\.set\("tab",\s*"wallet"\)/.test(text)) {
+    fail(`${rel}: arcade checkout must deep-link wallet tab via appWalletHref`);
+  }
   ok(rel);
 }
+
+const siteboot = fs.readFileSync("public/app.siteboot.js", "utf8");
+if (!siteboot.includes("URLSearchParams(location.search)")) {
+  fail("public/app.siteboot.js: must honor ?tab= query on boot");
+}
+if (!siteboot.includes('params.get("tab")')) {
+  fail("public/app.siteboot.js: must read tab query param before last-tab fallback");
+}
+ok("public/app.siteboot.js");
 
 const collisionAudit = spawnSync(process.execPath, ["tools/audit-arcade-cover-collisions.mjs"], {
   encoding: "utf8",

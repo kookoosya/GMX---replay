@@ -120,7 +120,13 @@
 
       let bootTab = "home";
       try {
-        bootTab = normalizeTopLevelTab(String(lsGet(lastTabKey, "") || "").trim() || "home");
+        const params = new URLSearchParams(location.search);
+        const qpTab = String(params.get("tab") || "").trim();
+        if (qpTab) {
+          bootTab = normalizeTopLevelTab(qpTab);
+        } else {
+          bootTab = normalizeTopLevelTab(String(lsGet(lastTabKey, "") || "").trim() || "home");
+        }
       } catch {}
       tab(bootTab);
       setCurrentTab(bootTab);

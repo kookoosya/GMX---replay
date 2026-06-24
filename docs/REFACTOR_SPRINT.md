@@ -204,6 +204,14 @@ Focus: **site + extension stability** (Supabase deferred).
 
 **Verify:** `npm run arcade:covers:categories`, `node tools/audit-arcade-category-covers.mjs`, `npm run test:suite`.
 
-## 4.2 Pro checkout flow — NOT STARTED
+## 4.2 Pro checkout flow — DONE
 
 Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
+
+**Changes:**
+- `arcade.js`: `goUpgradePro()` → `/app?tab=wallet&from=arcade` (+ optional `game=`); locked panel + plan card CTA
+- `gmx_arcade_return_game` localStorage — auto-resume locked game after Pro activates
+- `app.siteboot.js`: honor `?tab=` query on boot (before `gmx_last_tab` fallback)
+- client-invariants: arcade checkout + siteboot tab deep-link guards
+
+**Verify:** `npm run test:suite`, open locked Pro game → Upgrade → wallet tab with Solana checkout.
