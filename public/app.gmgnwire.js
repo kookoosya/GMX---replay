@@ -261,23 +261,20 @@
     function wireCtrlEnterBatch() {
       document.addEventListener("keydown", (e) => {
         if (!(e.ctrlKey || e.metaKey) || e.key !== "Enter") return;
+        if (!getHandle()) return;
         const active = $("t_gm")?.classList.contains("active")
           ? "gm"
           : $("t_gn")?.classList.contains("active")
             ? "gn"
             : null;
         if (!active) return;
-        const target = e.target;
-        if (!target) return;
-        const inGM = active === "gm" && target.closest("#tab-gm");
-        const inGN = active === "gn" && target.closest("#tab-gn");
-        if (inGM && getHandle()) {
-          e.preventDefault();
-          generate("gm", 10);
-        } else if (inGN && getHandle()) {
-          e.preventDefault();
-          generate("gn", 10);
-        }
+        const tab = $(`tab-${active}`);
+        if (!tab || tab.classList.contains("hidden")) return;
+        e.preventDefault();
+        try {
+          trackEvent("generate_click", { kind: active, count: 10, via: "ctrl_enter" });
+        } catch (_e) {}
+        generate(active, 10);
       });
     }
 
@@ -299,6 +296,9 @@
       wireKindPanel("gn");
       wireQuickPresets();
       wireCtrlEnterBatch();
+      try {
+        if (typeof ctx.renderAllGenHistory === "function") ctx.renderAllGenHistory();
+      } catch (_e) {}
     }
 
     return {

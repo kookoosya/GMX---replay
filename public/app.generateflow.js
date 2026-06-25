@@ -52,6 +52,10 @@
     const gen = ctx.gen || {};
     const mergeAppendUnique =
       typeof ctx.mergeAppendUnique === "function" ? ctx.mergeAppendUnique : (_a, b) => b;
+    const recordBatchHistory =
+      typeof ctx.recordBatchHistory === "function" ? ctx.recordBatchHistory : () => {};
+    const renderGenHistory =
+      typeof ctx.renderGenHistory === "function" ? ctx.renderGenHistory : () => {};
 
     async function generate(kind, count) {
       if (!requireConnected(kind === "gm" ? "GM" : "GN")) return;
@@ -261,6 +265,14 @@
             view,
             cleanFill: autoClean,
           });
+          if (selected.length) {
+            recordBatchHistory(kind, {
+              lines: selected,
+              count: effCount,
+              meta: { mode, lang, style, pack: packId },
+            });
+            renderGenHistory(kind);
+          }
           try {
             await refreshUsage();
           } catch (_e) {}

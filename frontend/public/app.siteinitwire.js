@@ -50,6 +50,7 @@
         requireConnected: gmGn.requireConnected,
         setView: gmGn.setView,
         generate: gmGn.generate,
+        renderAllGenHistory: gmGn.renderAllGenHistory,
         trackEvent: gmGn.trackEvent,
         getBestMode: toggles.getBestMode,
         getCleanFillEnabled: toggles.getCleanFillEnabled,
@@ -221,6 +222,7 @@
           renderLangChips: ctx.renderLangChips,
           updateLangFlags: ctx.updateLangFlags,
           syncModePanelCopy: ctx.syncModePanelCopy,
+          renderAllGenHistory: ctx.renderAllGenHistory,
         },
         wallpaperUploadCtx: {
           $,

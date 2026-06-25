@@ -114,6 +114,7 @@ const shellModules = [
   "app.bestpick.js",
   "app.refstats.js",
   "app.generateflow.js",
+  "app.genhistoryui.js",
   "app.generatewire.js",
 ];
 for (const name of shellModules) {

@@ -89,6 +89,13 @@
     const refreshRefStats = (force) => refStats.refreshRefStats?.(force);
 
     if (!window.__GMXGenerateFlowFactory) throw new Error("GMX generateflow factory missing");
+    if (!window.__GMXGenHistoryUiFactory) throw new Error("GMX genhistoryui factory missing");
+    const genHistoryUi = window.__GMXGenHistoryUiFactory({
+      $: ctx.$,
+      t: ctx.t,
+      toast: ctx.toast,
+      escapeHtml: ctx.escapeHtml,
+    });
     const genFlow = window.__GMXGenerateFlowFactory({
       $: ctx.$,
       api: ctx.api,
@@ -129,6 +136,8 @@
       cleanFillStrength: ctx.cleanFillStrength,
       gen,
       mergeAppendUnique,
+      recordBatchHistory: (kind, entry) => genHistoryUi.recordBatchHistory?.(kind, entry),
+      renderGenHistory: (kind) => genHistoryUi.renderGenHistory?.(kind),
     });
 
     async function generate(kind, count) {
@@ -141,6 +150,7 @@
       scheduleRefStatsRefresh,
       refreshRefStats,
       generate,
+      renderAllGenHistory: () => genHistoryUi.renderAllGenHistory?.(),
     };
   };
 })(window);

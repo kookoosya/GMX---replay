@@ -392,3 +392,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `lib/theme-group-core.js` buckets Dark/Light/Colorful; hover/focus live `applyTheme` preview; `.themeProHint` on locked cards; boot defer baseline → 8.
 
 **Verify:** `node --test tests/themes-ui.test.mjs`, `prod-verify` theme-group core + `app.themesui.js` groups.
+
+## 19.1 GM/GN batch history + Ctrl+Enter — DONE
+
+**Problem:** No way to re-copy recent batch runs; Ctrl+Enter only worked with focus inside tab (`SITE_RECOMMENDATIONS.md` GM/GN).
+
+**Fix:** `lib/gmgn-gen-history-core.js` stores last 5 batches; `#gmGenHistory` / `#gnGenHistory` with Copy again; Ctrl+Enter on active GM/GN tab; `.editHint` above lists.
+
+**Verify:** `node --test tests/gmgn-gen-history.test.mjs`, `prod-verify` `gmGenHistory` + gen-history core.

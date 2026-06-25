@@ -449,8 +449,13 @@ html.mode-light body.hasUserBg .panel{
   <button class="btn ghost" id="gmFilterClear" type="button">Clear</button>
 </div>
 <div class="muted small" id="gmSavedBreakdown"></div>
-<div class="muted" id="gmMsg"></div>
+<div class="muted small" id="gmMsg"></div>
 </div>
+<div class="genHistory hidden" id="gmGenHistory">
+<div class="genHistoryHead" id="gm_gen_history_label">Recent batches</div>
+<div class="genHistoryList" id="gmGenHistoryList"></div>
+</div>
+<div class="editHint" id="gm_edit_hint">Click any saved line to edit it inline.</div>
 <div class="listBody" id="gmList"></div>
 <div class="helperRow">
 <div style="flex:1">
@@ -605,6 +610,11 @@ html.mode-light body.hasUserBg .panel{
 <div class="muted small" id="gnSavedBreakdown"></div>
 <div class="muted" id="gnMsg"></div>
 </div>
+<div class="genHistory hidden" id="gnGenHistory">
+<div class="genHistoryHead" id="gn_gen_history_label">Recent batches</div>
+<div class="genHistoryList" id="gnGenHistoryList"></div>
+</div>
+<div class="editHint" id="gn_edit_hint">Click any saved line to edit it inline.</div>
 <div class="listBody" id="gnList"></div>
 <div class="helperRow">
 <div style="flex:1">
@@ -1250,6 +1260,7 @@ html.mode-light body.hasUserBg .panel{
 <script defer src="/i18n/siteI18n.js"></script>
 <script defer src="/lib/referral-progress-core.js"></script>
 <script defer src="/lib/theme-group-core.js"></script>
+<script defer src="/lib/gmgn-gen-history-core.js"></script>
 <script defer src="/chunks/app.shell.deps.js?v=SAFE16"></script>
 <script defer src="/chunks/app.shell.features.js?v=SAFE16"></script>
 <script defer src="/chunks/app.shell.bootstrap.js?v=SAFE16"></script>

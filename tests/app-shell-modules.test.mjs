@@ -1882,8 +1882,10 @@ test("bankuiwire: wires bankui and bestpick modules", () => {
 
 test("generatewire: wires refstats and generateflow delegates", async () => {
   const win = {};
+  new Function("global", `${readFileSync(path.join(root, "public", "lib", "gmgn-gen-history-core.js"), "utf8")};`)(win);
   new Function("window", `${readFileSync(path.join(root, "public", "app.refstats.js"), "utf8")};`)(win);
   new Function("window", `${readFileSync(path.join(root, "public", "app.generateflow.js"), "utf8")};`)(win);
+  new Function("window", `${readFileSync(path.join(root, "public", "app.genhistoryui.js"), "utf8")};`)(win);
   new Function("window", `${readFileSync(path.join(root, "public", "app.generatewire.js"), "utf8")};`)(win);
   const msg = { innerHTML: "" };
   const wire = win.__GMXGenerateWireFactory({

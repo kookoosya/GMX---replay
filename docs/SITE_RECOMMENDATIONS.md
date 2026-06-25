@@ -29,9 +29,9 @@
 
 ### GM / GN
 - [x] **Quick presets** — Casual / Professional / Fun — один клик на тон
-- [ ] **История генераций** — последние 5 batch’ей с возможностью копировать снова
-- [ ] **Keyboard shortcut** — Ctrl+Enter для Batch
-- [ ] Подсказка «Edit any line by clicking» более заметна
+- [x] **История генераций** — последние 5 batch’ей с возможностью копировать снова
+- [x] **Keyboard shortcut** — Ctrl+Enter для Batch
+- [x] Подсказка «Edit any line by clicking» более заметна
 
 ### Prediction Market
 - [ ] Краткое описание «What is prediction market» для новичков

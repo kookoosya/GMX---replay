@@ -885,6 +885,7 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
     revealReferralLinkUi,
     scheduleRefStatsRefresh,
     refreshRefStats,
+    renderAllGenHistory,
   } = __gmxGenerateWire;
   async function generate(kind, count){ return __gmxGenerateWire.generate(kind, count); }
 
@@ -1180,6 +1181,7 @@ function pruneLegacyAdminPanels() {
       saveDraft,
       getHandle,
       ensureIndexed,
+      renderAllGenHistory,
     },
     wp: {
       compressImageToJpegDataURL,

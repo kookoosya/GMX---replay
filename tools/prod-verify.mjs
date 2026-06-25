@@ -260,4 +260,17 @@ if (!css.text.includes(".themeProHint")) {
 }
 ok("themes grouped UI");
 
+const genHistCore = await get("/lib/gmgn-gen-history-core.js");
+if (!genHistCore.text.includes("GMXGmGnGenHistoryCore")) {
+  fail("/lib/gmgn-gen-history-core.js missing export");
+}
+if (!appPage.text.includes('id="gmGenHistory"')) {
+  fail("/app shell missing gmGenHistory panel");
+}
+const genHistUi = await get("/app.genhistoryui.js");
+if (!genHistUi.text.includes("recordBatchHistory")) {
+  fail("/app.genhistoryui.js missing recordBatchHistory");
+}
+ok("gm/gn batch history UI");
+
 console.log("\nPROD_VERIFY_OK");

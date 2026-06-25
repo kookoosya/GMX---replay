@@ -855,6 +855,45 @@ ul.clean li{ margin: 6px 0; }
   position:relative;
   z-index:2;
 }
+.genHistory{
+  margin:10px 0 8px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid rgba(148,180,255,.14);
+  background:rgba(10,14,24,.45);
+}
+.genHistory.hidden{display:none}
+.genHistoryHead{
+  font-size:12px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  margin-bottom:8px;
+  color:rgba(233,237,245,.78);
+}
+.genHistoryList{display:flex;flex-direction:column;gap:8px}
+.genHistoryItem{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:6px 10px;
+  align-items:start;
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);
+}
+.genHistoryMeta{font-size:12px;font-weight:700}
+.genHistoryPreview{grid-column:1/-1;font-size:11px;line-height:1.35}
+.editHint{
+  margin:0 0 8px;
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px dashed rgba(20,241,149,.28);
+  background:rgba(20,241,149,.06);
+  font-size:12px;
+  line-height:1.4;
+  color:rgba(233,237,245,.88);
+}
 .themeCard{
   cursor:pointer;
   text-align:left;

@@ -117,6 +117,7 @@
     "i18n/siteI18n.js",
     "lib/referral-progress-core.js",
     "lib/theme-group-core.js",
+    "lib/gmgn-gen-history-core.js",
     "chunks/app.shell.deps.js",
     "chunks/app.shell.features.js",
     "chunks/app.shell.bootstrap.js",
