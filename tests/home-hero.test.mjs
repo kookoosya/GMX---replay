@@ -11,7 +11,16 @@ test("home tab exposes hero motion block", () => {
   for (const id of ["homeHero", "homeHeroVideo", "homeHeroAnim", "hero_video_title", "hero_video_caption", "hero_try_demo"]) {
     assert.match(html, new RegExp(`id="${id}"`));
   }
+  assert.match(html, /homeHeroCinematic/);
   assert.match(html, /gmx-hero-loop\.svg/);
+});
+
+test("home founder social links", () => {
+  const html = fs.readFileSync(path.join(root, "public", "app.html"), "utf8");
+  assert.match(html, /homeFounderBar/);
+  assert.match(html, /https:\/\/x\.com\/Kristofer_Sol_/);
+  assert.match(html, /https:\/\/t\.me\/KrisSolana/);
+  assert.match(html, /Founder of the project/);
 });
 
 test("home hero module binds CTA and mp4 fallback", () => {

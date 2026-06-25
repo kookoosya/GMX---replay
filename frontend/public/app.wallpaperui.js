@@ -75,11 +75,13 @@
       ].join("|");
     }
 
-    function syncWallpaperFilterSelect(sel) {
+    function syncWallpaperFilterSelect(sel, opts) {
       if (!sel) return "featured";
       const core = wpCore();
       const options = core.WALLPAPER_FILTER_OPTIONS || [];
-      const saved = storage.lsGet(wpFilterKey, "featured");
+      const unlockedAll = !!(opts && opts.unlockedAll);
+      const fallback = unlockedAll ? "all" : "featured";
+      const saved = storage.lsGet(wpFilterKey, "");
       sel.innerHTML = "";
       for (const opt of options) {
         const o = document.createElement("option");
@@ -87,8 +89,8 @@
         o.textContent = t(opt.labelKey) || opt.id;
         sel.appendChild(o);
       }
-      const ok = Array.from(sel.options).some((o) => o.value === saved);
-      sel.value = ok ? saved : "featured";
+      const ok = saved && Array.from(sel.options).some((o) => o.value === saved);
+      sel.value = ok ? saved : fallback;
       return sel.value;
     }
 
@@ -270,8 +272,6 @@
         tabSel.value = ok ? prev : "all";
       } catch {}
 
-      const filterId = syncWallpaperFilterSelect($("wpFilter"));
-
       const targetTab = tabSel.value || "all";
       const activeId =
         targetTab === "all"
@@ -289,6 +289,7 @@
       );
       const unlocked = mainUnlocked + customUnlocked;
       const unlockedAll = isPro() || unlocked >= allWps.length;
+      const filterId = syncWallpaperFilterSelect($("wpFilter"), { unlockedAll });
       const nextReq = reqRefsForUnlockIndex(
         unlockedCountByRefs(wallpapers.length, freeVisibleWallpapers),
         freeVisibleWallpapers
@@ -371,6 +372,9 @@
       themePane.classList.toggle("hidden", !themeOn);
       wallPane.classList.toggle("hidden", !wallOn);
       if (wpNote) wpNote.classList.toggle("hidden", !wallOn);
+
+      const tabThemes = document.getElementById("tab-themes");
+      if (tabThemes) tabThemes.classList.toggle("themesWallFocus", wallOn);
 
       if (wallOn) {
         try {

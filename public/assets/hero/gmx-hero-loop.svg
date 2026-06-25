@@ -1,17 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-label="GMXReply">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 640" role="img" aria-label="GMXReply">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0b1020"/>
+      <stop offset="0%" stop-color="#070b14"/>
+      <stop offset="45%" stop-color="#12182a"/>
       <stop offset="100%" stop-color="#1a1030"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#9945ff" stop-opacity=".35"/>
+      <stop offset="100%" stop-color="#14f195" stop-opacity=".22"/>
     </linearGradient>
     <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#9945ff"/>
       <stop offset="100%" stop-color="#14f195"/>
     </linearGradient>
+    <radialGradient id="orb" cx="78%" cy="28%" r="42%">
+      <stop offset="0%" stop-color="#14f195" stop-opacity=".18"/>
+      <stop offset="100%" stop-color="#14f195" stop-opacity="0"/>
+    </radialGradient>
   </defs>
-  <rect width="960" height="540" fill="url(#bg)"/>
-  <text x="80" y="220" fill="#e8eeff" font-family="Segoe UI, system-ui, sans-serif" font-size="42" font-weight="800">Reply on X</text>
-  <text x="80" y="272" fill="#9fb0d9" font-family="Segoe UI, system-ui, sans-serif" font-size="28">Play browser games</text>
-  <rect x="80" y="310" width="220" height="48" rx="12" fill="url(#accent)"/>
-  <text x="190" y="341" text-anchor="middle" fill="#081018" font-family="Segoe UI, system-ui, sans-serif" font-size="18" font-weight="700">GMXReply</text>
+  <rect width="1680" height="640" fill="url(#bg)"/>
+  <rect width="1680" height="640" fill="url(#glow)"/>
+  <rect width="1680" height="640" fill="url(#orb)"/>
+  <text x="72" y="250" fill="#f2f6ff" font-family="Segoe UI, system-ui, sans-serif" font-size="56" font-weight="800">Reply on X</text>
+  <text x="72" y="318" fill="#9fb0d9" font-family="Segoe UI, system-ui, sans-serif" font-size="30">Play browser games</text>
+  <text x="72" y="372" fill="#7f93bf" font-family="Segoe UI, system-ui, sans-serif" font-size="20">Copy-first GM/GN — jump into Arcade when you are ready</text>
+  <rect x="72" y="410" width="240" height="54" rx="14" fill="url(#accent)"/>
+  <text x="192" y="444" text-anchor="middle" fill="#081018" font-family="Segoe UI, system-ui, sans-serif" font-size="20" font-weight="700">GMXReply</text>
 </svg>

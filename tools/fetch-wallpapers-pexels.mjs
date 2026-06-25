@@ -31,8 +31,12 @@ const PEXELS_IDS = [
 
 const SITE_COUNT = 58;
 const EXT_COUNT = 58;
-const FULL_Q = 92;
-const THUMB_Q = 86;
+const FULL_Q = 90;
+const THUMB_Q = 84;
+const SITE_MAX_W = 3840;
+const SITE_MAX_H = 2160;
+const EXT_W = 1440;
+const EXT_H = 2560;
 
 function pexelsUrl(id, w, h) {
   const base = `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg`;
@@ -40,10 +44,9 @@ function pexelsUrl(id, w, h) {
     auto: "compress",
     cs: "tinysrgb",
     w: String(w),
-    h: String(h),
-    fit: "crop",
     dpr: "1",
   });
+  if (h) q.set("h", String(h));
   return `${base}?${q}`;
 }
 
@@ -96,17 +99,26 @@ async function main() {
 
     try {
       process.stdout.write(`site ${siteId} (pexels ${id})… `);
-      const buf = await downloadBuffer(pexelsUrl(id, 1920, 1080));
-      await sharp(buf).webp({ quality: FULL_Q }).toFile(path.join(SITE_FULL, `${siteId}.webp`));
+      const buf = await downloadBuffer(pexelsUrl(id, SITE_MAX_W));
       await sharp(buf)
-        .resize(480, 270, { fit: "cover" })
+        .rotate()
+        .resize(SITE_MAX_W, SITE_MAX_H, { fit: "inside", withoutEnlargement: true })
+        .webp({ quality: FULL_Q })
+        .toFile(path.join(SITE_FULL, `${siteId}.webp`));
+      await sharp(buf)
+        .rotate()
+        .resize(480, 270, { fit: "cover", position: "centre" })
         .webp({ quality: THUMB_Q })
         .toFile(path.join(SITE_THUMB, `${siteId}.webp`));
       console.log("ok");
 
       process.stdout.write(`ext ${extId}… `);
-      const bufV = await downloadBuffer(pexelsUrl(id, 1080, 1920));
-      await sharp(bufV).webp({ quality: FULL_Q }).toFile(path.join(EXT_FULL, `${extId}.webp`));
+      const bufV = await downloadBuffer(pexelsUrl(id, EXT_W, EXT_H));
+      await sharp(bufV)
+        .rotate()
+        .resize(EXT_W, EXT_H, { fit: "cover", position: "centre" })
+        .webp({ quality: FULL_Q })
+        .toFile(path.join(EXT_FULL, `${extId}.webp`));
       await sharp(bufV)
         .resize(360, 640, { fit: "cover" })
         .webp({ quality: THUMB_Q })

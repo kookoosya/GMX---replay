@@ -16,6 +16,37 @@ document.documentElement.classList.remove("mode-light");
       try{ return localStorage.getItem(k) || ""; }catch(_e){ return ""; }
     }
 
+    function paintWallLayer(url){
+      function go(){
+        try{
+          if (!document.body){ setTimeout(go, 0); return; }
+          var layer = document.getElementById("gmxWallLayer");
+          if (!layer){
+            layer = document.createElement("div");
+            layer.id = "gmxWallLayer";
+            layer.className = "gmxWallLayer";
+            layer.setAttribute("aria-hidden", "true");
+            document.body.prepend(layer);
+          }
+          var img = layer.querySelector("img");
+          if (!img){
+            img = document.createElement("img");
+            img.className = "gmxWallImg";
+            img.alt = "";
+            img.decoding = "async";
+            img.loading = "eager";
+            layer.appendChild(img);
+          }
+          if (layer.getAttribute("data-wall-url") !== url){
+            layer.setAttribute("data-wall-url", url);
+            img.src = url;
+          }
+          layer.style.display = "block";
+        }catch(_e){}
+      }
+      go();
+    }
+
     // Wallpaper: tab-specific -> global (app.js overrides with manifest-based path)
     var wp = getLS("gmx_wp_tab_" + TAB) || getLS("gmx_wp_all");
     var wallOn = !!wp;
@@ -23,11 +54,13 @@ document.documentElement.classList.remove("mode-light");
       var file, base = "/assets/wallpapers/";
       var wid = String(wp).replace(/[^a-z0-9_\-]/gi, "");
       if (/^custom_.*\.(png|jpg|jpeg|webp)$/i.test(String(wp))) file = "custom/" + String(wp).replace(/[^a-z0-9_.\-]/gi, "");
+      else if (/^v2_\d{3}$/i.test(wid)) file = wid + ".webp";
       else if (wid === "free01") file = "free01.png";
       else if (wid === "free02") file = "free02.jpg";
       else if (/^w\d{1,3}$/.test(wid)) file = wid + ".jpg";
       else file = wid + ".svg";
-      document.documentElement.style.setProperty("--bg_wall", 'url("' + base + file + '")');
+      document.documentElement.style.setProperty("--bg_wall", "none");
+      paintWallLayer(base + file);
     } else {
       document.documentElement.style.setProperty("--bg_wall", "none");
     }

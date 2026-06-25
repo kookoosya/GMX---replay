@@ -162,12 +162,13 @@ html.mode-light body.hasUserBg .panel{
 </nav>
 <!-- HOME -->
 <div id="tab-home">
-<div class="card homeHero" id="homeHero">
+<div class="card homeHero homeHeroCinematic" id="homeHero">
 <div class="homeHeroMedia" aria-hidden="true">
 <video class="homeHeroVideo hidden" id="homeHeroVideo" playsinline muted loop preload="metadata" poster="/assets/hero/gmx-hero-poster.svg">
 <source src="/assets/hero/gmx-hero.mp4" type="video/mp4"/>
 </video>
 <img alt="" class="homeHeroAnim" id="homeHeroAnim" src="/assets/hero/gmx-hero-loop.svg"/>
+<div class="homeHeroOverlay"></div>
 </div>
 <div class="homeHeroCopy">
 <div class="title" id="hero_video_title">Reply on X. Play games.</div>
@@ -265,6 +266,11 @@ html.mode-light body.hasUserBg .panel{
           </div>
 </div>
 </div>
+<footer class="homeFounderBar" id="homeFounderBar">
+<span class="homeFounderLabel" id="home_founder_label">Founder of the project</span>
+<a class="homeFounderLink" href="https://x.com/Kristofer_Sol_" id="home_founder_x" rel="noopener noreferrer" target="_blank">X @Kristofer_Sol_</a>
+<a class="homeFounderLink" href="https://t.me/KrisSolana" id="home_founder_tg" rel="noopener noreferrer" target="_blank">Telegram @KrisSolana</a>
+</footer>
 </div>
 
 <!-- LEADERBOARD -->

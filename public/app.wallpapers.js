@@ -196,8 +196,36 @@
     return layer;
   }
 
+  function fitWallpaperCover(img) {
+    if (!img || !img.naturalWidth || !img.naturalHeight) return;
+    if (typeof window === "undefined") return;
+    const vw = window.innerWidth || 1;
+    const vh = window.innerHeight || 1;
+    const nw = img.naturalWidth;
+    const nh = img.naturalHeight;
+    const scale = Math.max(vw / nw, vh / nh);
+    img.style.width = Math.ceil(nw * scale) + "px";
+    img.style.height = Math.ceil(nh * scale) + "px";
+  }
+
+  let wallpaperResizeBound = false;
+  function bindWallpaperResize(layer) {
+    if (wallpaperResizeBound || !layer) return;
+    if (typeof window === "undefined" || typeof window.addEventListener !== "function") return;
+    wallpaperResizeBound = true;
+    let timer = 0;
+    window.addEventListener("resize", () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const img = layer.querySelector(".gmxWallImg");
+        if (img && img.complete) fitWallpaperCover(img);
+      }, 120);
+    });
+  }
+
   function setWallpaperLayerImageDom(layer, url) {
     if (!layer) return;
+    bindWallpaperResize(layer);
     if (!url) {
       layer.replaceChildren();
       layer.style.display = "none";
@@ -206,6 +234,8 @@
     }
     if (layer.getAttribute("data-wall-url") === url && layer.querySelector("img")) {
       layer.style.display = "block";
+      const existing = layer.querySelector("img");
+      if (existing && existing.complete) fitWallpaperCover(existing);
       return;
     }
     layer.setAttribute("data-wall-url", url);
@@ -216,9 +246,13 @@
     img.decoding = "async";
     img.loading = "eager";
     img.draggable = false;
+    if (typeof img.addEventListener === "function") {
+      img.addEventListener("load", () => fitWallpaperCover(img), { once: true });
+    }
     img.src = url;
     layer.appendChild(img);
     layer.style.display = "block";
+    if (img.complete) fitWallpaperCover(img);
   }
 
   global.ensureWallpaperLayer = ensureWallpaperLayerDom;
