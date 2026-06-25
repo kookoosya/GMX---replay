@@ -1,5 +1,6 @@
 /** Static HTML shell, bridge SPA, arcade redirects, extension page. */
 import path from "node:path";
+import { renderArcadeSlugHtml } from "../lib/arcade-slug-page.mjs";
 
 export function registerStaticRoutes(deps) {
   const { app, express, fs, PUBLIC_DIR, EXTENSION_STORE_URL } = deps;
@@ -36,8 +37,16 @@ export function registerStaticRoutes(deps) {
     try {
       const slug = String(req.params.slug || "").trim().toLowerCase();
       if (!slug || slug.includes(".") || slug === "html") return next();
+      const proto = String(req.headers["x-forwarded-proto"] || req.protocol || "https").split(",")[0].trim();
+      const host = String(req.headers["x-forwarded-host"] || req.get("host") || "www.gmxreply.com").split(",")[0].trim();
+      const origin = `${proto}://${host}`;
+      const html = renderArcadeSlugHtml(slug, { origin });
       noStore(res);
-      return res.redirect(302, `/arcade.html?game=${encodeURIComponent(slug)}`);
+      if (html) {
+        res.type("html").send(html);
+        return;
+      }
+      return res.redirect(302, "/arcade.html");
     } catch {
       return next();
     }

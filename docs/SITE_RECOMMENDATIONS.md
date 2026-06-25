@@ -68,7 +68,7 @@
 - [x] Реальные обложки, чистый каталог
 - [x] **«Игра дня» в расширении** — toast раз в день
 - [x] **Достижения** — 6 badges (launch count, GOTD, categories, Pro) — local device
-- [x] **Страницы /arcade/agario** для SEO — DONE (Sprint 7.4)
+- [x] **Страницы /arcade/agario** для SEO — DONE (Sprint 7.4 + 32.1 landing HTML)
 
 ---
 
@@ -105,7 +105,7 @@
 | 3 | «Игра дня» в расширении | Extension | Retention | DONE (31.1) |
 | 4 | Достижения Arcade | Arcade | Вовлечённость | DONE (12.1) |
 | 5 | Quick presets GM/GN | GM, GN | UX | DONE (13.1) |
-| 6 | Страницы /arcade/{slug} | Arcade | SEO |
+| 6 | Страницы /arcade/{slug} | Arcade | SEO | DONE (32.1) |
 | 7 | Referral progress bar | Referrals | Виральность | DONE (14.1) |
 | 8 | PWA | Глобально | Мобильный retention | DONE (15.1) |
 

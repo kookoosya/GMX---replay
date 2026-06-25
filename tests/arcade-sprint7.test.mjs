@@ -63,8 +63,8 @@ test("arcade.js exposes quick insert UI", () => {
   assert.match(arcade, /tryOpenDeepLinkGame/);
 });
 
-test("static route redirects arcade slug to game query", () => {
+test("static route serves arcade slug seo pages", () => {
   const staticRoute = fs.readFileSync(path.join(root, "server", "routes", "static.mjs"), "utf8");
   assert.match(staticRoute, /\/arcade\/:slug/);
-  assert.match(staticRoute, /arcade\.html\?game=/);
+  assert.match(staticRoute, /renderArcadeSlugHtml/);
 });

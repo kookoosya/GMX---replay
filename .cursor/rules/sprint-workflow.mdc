@@ -172,4 +172,8 @@ Do not begin step N+1 until step N meets definition of done.
 
 1. Game of the Day card + toast polish — DONE (31.1)
 
+## Sprint 32 queue (strict order) — Arcade SEO
+
+1. Per-game `/arcade/{slug}` landing HTML — DONE (32.1)
+
 Do not begin step N+1 until step N meets definition of done.

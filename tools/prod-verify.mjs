@@ -102,12 +102,17 @@ if (arcadeCategoryCover.status !== 200) {
 }
 ok("arcade category covers");
 
-const slugRes = await get("/arcade/agario", { redirect: "manual" });
-const slugLoc = String(slugRes.headers?.get("location") || "");
-if (slugRes.status !== 302 || !slugLoc.includes("/arcade.html?game=agario")) {
-  fail(`arcade slug redirect: status=${slugRes.status} location=${slugLoc.slice(0, 120)}`);
+const slugRes = await get("/arcade/agario");
+if (slugRes.status !== 200) {
+  fail(`arcade slug page: status=${slugRes.status}`);
 }
-ok("arcade slug redirect /arcade/agario");
+if (!slugRes.text.includes('name="description"') || !slugRes.text.includes("og:title")) {
+  fail("/arcade/agario missing seo meta tags");
+}
+if (!slugRes.text.includes("arcade.html?game=agario")) {
+  fail("/arcade/agario missing play deep-link");
+}
+ok("arcade slug seo page /arcade/agario");
 
 const siteI18n = await get("/i18n/siteI18n.js");
 if (siteI18n.status !== 200) fail(`siteI18n.js status ${siteI18n.status}`);

@@ -498,3 +498,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `gotd-games.json` includes category/access/cover from catalog build; popup cover + meta row; toast + Play use `/arcade.html?game=` deep-link; manifest `1.1.5`.
 
 **Verify:** `node --test tests/extension-gotd.test.mjs`, reload extension → GOTD card with cover.
+
+## 32.1 Arcade slug SEO landing pages — DONE
+
+**Problem:** `/arcade/:slug` only 302-redirected to `arcade.html?game=` — no indexable HTML (`SITE_RECOMMENDATIONS.md` priority #6).
+
+**Fix:** Server-rendered SEO page per catalog game (meta, og:image, canonical, cover, Play CTA); unknown slugs fall back to `/arcade.html`.
+
+**Verify:** `node --test tests/arcade-slug-seo.test.mjs`, `prod-verify` arcade slug seo page.
