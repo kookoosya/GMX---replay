@@ -80,8 +80,8 @@
 - **Skeleton loaders** — при загрузке списков (GM, GN, Arcade)
 
 ### Производительность
-- **Preload** популярных страниц (Arcade) при hover на таб
-- **Lazy-load** iframe игр — загружать только при клике
+- [x] **Preload** популярных страниц (Arcade) при hover на таб
+- [x] **Lazy-load** iframe игр — загружать только при клике
 - **Service Worker** — кэш статики, офлайн для части UI
 
 ### SEO и рост

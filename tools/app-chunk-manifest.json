@@ -105,6 +105,7 @@
         "app.connect.js",
         "app.homehero.js",
         "app.homestats.js",
+        "app.arcadepreload.js",
         "app.pwainstall.js",
         "app.mobilenav.js",
         "app.connectwire.js",

@@ -237,6 +237,12 @@
         }
       } catch {}
 
+      try {
+        if (window.__GMXArcadePreloadFactory) {
+          window.__GMXArcadePreloadFactory({ $ }).bindArcadePreload();
+        }
+      } catch {}
+
       setInitDone(true);
     }
 

@@ -456,3 +456,13 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `#app_breadcrumbs` with Home link + current section label; updates on tab switch via `app.breadcrumbs.js`.
 
 **Verify:** `node --test tests/breadcrumbs.test.mjs`, `prod-verify` app breadcrumbs UI.
+
+## 27.1 Arcade preload on hover — DONE
+
+**Problem:** Navigating to Arcade from `/app` paid full cold-load cost (`SITE_RECOMMENDATIONS.md` performance).
+
+**Fix:** `app.arcadepreload.js` injects `rel=prefetch` for `/arcade.html` and `/arcade.js` on pointerenter/focus of tab, home CTA, and mobile more link. Skips `saveData` and when already on Arcade.
+
+**Note:** Game iframe lazy-load (`iframeReady` + launch button) already ships in `arcade.js`.
+
+**Verify:** `node --test tests/arcade-preload.test.mjs`, `prod-verify` arcade preload on hover.

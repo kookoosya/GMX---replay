@@ -365,4 +365,10 @@ if (!css.text.includes(".appBreadcrumbs")) {
 }
 ok("app breadcrumbs UI");
 
+const bootChunk = await get("/chunks/app.shell.boot.js");
+if (!bootChunk.text.includes("__GMXArcadePreloadFactory")) {
+  fail("boot chunk missing arcade preload factory");
+}
+ok("arcade preload on hover");
+
 console.log("\nPROD_VERIFY_OK");
