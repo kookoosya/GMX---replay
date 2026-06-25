@@ -87,7 +87,7 @@
 ### SEO и рост
 - [x] **meta description** уникальные для Home, Arcade, Upgrade
 - [x] **og:image** для шаринга
-- **Blog** — «Top 10 .io games 2025», «How to write GM replies»
+- [x] **Blog** — «Top 10 .io games 2025», «How to write GM replies»
 
 ### Мобилка
 - [x] **PWA** — «Add to home screen»

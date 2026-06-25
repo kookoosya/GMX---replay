@@ -821,5 +821,9 @@
   "ext_quick_mode_full": "Полно",
   "ext_btn_open_arcade_long": "Открыть аркаду",
   "ext_quick_panel_title": "Быстрая панель GMXReply",
-  "ext_stats_hint_static": "Только ручное копирование. Без инъекций в x.com, без автопостинга."
+  "ext_stats_hint_static": "Только ручное копирование. Без инъекций в x.com, без автопостинга.",
+  "blog_home_teaser_title": "Гайды",
+  "blog_home_link_io": "Топ-10 .io игр в 2025",
+  "blog_home_link_gm": "Как писать GM, которые звучат по-человечески",
+  "blog_home_link_all": "Все гайды →"
 }

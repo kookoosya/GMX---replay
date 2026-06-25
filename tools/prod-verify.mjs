@@ -389,4 +389,17 @@ if (!skCore.text.includes("arcadeTileSkeletonHtml")) {
 }
 ok("skeleton loaders GM GN Arcade");
 
+const blogIndex = await get("/blog.html");
+if (blogIndex.status !== 200 || !blogIndex.text.includes("top-10-io-games-2025")) {
+  fail("/blog.html missing or incomplete");
+}
+const blogSlug = await get("/blog/how-to-write-gm-replies");
+if (blogSlug.status !== 200 || !blogSlug.text.includes("GM replies")) {
+  fail("/blog/how-to-write-gm-replies slug route failed");
+}
+if (!appPage.text.includes('id="blog_home_teaser"')) {
+  fail("/app shell missing blog home teaser");
+}
+ok("blog guides SEO");
+
 console.log("\nPROD_VERIFY_OK");

@@ -821,5 +821,9 @@
   "ext_quick_mode_full": "満杯",
   "ext_btn_open_arcade_long": "オープンアーケード",
   "ext_quick_panel_title": "GMXReply クイック パネル",
-  "ext_stats_hint_static": "手動コピーのみ。 x.com インジェクションや自動投稿はありません。"
+  "ext_stats_hint_static": "手動コピーのみ。 x.com インジェクションや自動投稿はありません。",
+  "blog_home_teaser_title": "ガイド",
+  "blog_home_link_io": "2025年の.ioゲームTOP10",
+  "blog_home_link_gm": "自然なGM返信の書き方",
+  "blog_home_link_all": "すべてのガイド →"
 }

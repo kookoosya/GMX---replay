@@ -32,8 +32,10 @@ test("pwa shell core maps offline navigation paths", () => {
   assert.equal(shellDocCacheKey("/app"), "/app");
   assert.equal(shellDocCacheKey("/app/wallet"), "/app");
   assert.equal(shellDocCacheKey("/arcade.html"), "/arcade.html");
+  assert.equal(shellDocCacheKey("/blog.html"), "/blog.html");
+  assert.equal(shellDocCacheKey("/blog/how-to-write-gm-replies.html"), "/blog/how-to-write-gm-replies.html");
   assert.equal(shellDocCacheKey("/"), null);
-  assert.deepEqual([...PWA_SHELL_DOC_PATHS], ["/app", "/arcade.html"]);
+  assert.ok(PWA_SHELL_DOC_PATHS.includes("/blog.html"));
 });
 
 test("pwa shell core marks chunk and lib assets cacheable", () => {

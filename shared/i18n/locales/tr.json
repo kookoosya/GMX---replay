@@ -821,5 +821,9 @@
   "ext_quick_mode_full": "Tam dolu",
   "ext_btn_open_arcade_long": "Açık Oyun Salonu",
   "ext_quick_panel_title": "GMXReply Hızlı Panel",
-  "ext_stats_hint_static": "Yalnızca manuel kopyalama. X.com enjeksiyonu yok, otomatik gönderim yok."
+  "ext_stats_hint_static": "Yalnızca manuel kopyalama. X.com enjeksiyonu yok, otomatik gönderim yok.",
+  "blog_home_teaser_title": "Rehberler",
+  "blog_home_link_io": "2025'in en iyi 10 .io oyunu",
+  "blog_home_link_gm": "İnsan gibi GM yanıtları yazma",
+  "blog_home_link_all": "Tüm rehberler →"
 }

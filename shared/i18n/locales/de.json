@@ -821,5 +821,9 @@
   "ext_quick_mode_full": "Voll",
   "ext_btn_open_arcade_long": "Öffne Arcade",
   "ext_quick_panel_title": "GMXReply-Schnellpanel",
-  "ext_stats_hint_static": "Nur manuelles Kopieren. Keine x.com-Injektion, kein automatisches Posten."
+  "ext_stats_hint_static": "Nur manuelles Kopieren. Keine x.com-Injektion, kein automatisches Posten.",
+  "blog_home_teaser_title": "Ratgeber",
+  "blog_home_link_io": "Top 10 .io-Spiele 2025",
+  "blog_home_link_gm": "GM-Antworten menschlich schreiben",
+  "blog_home_link_all": "Alle Guides →"
 }

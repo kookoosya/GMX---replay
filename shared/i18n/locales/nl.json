@@ -821,5 +821,9 @@
   "ext_quick_mode_full": "Vol",
   "ext_btn_open_arcade_long": "Arcade openen",
   "ext_quick_panel_title": "GMXReply-snelpaneel",
-  "ext_stats_hint_static": "Alleen handmatig kopiëren. Geen x.com-injectie, geen automatische berichten."
+  "ext_stats_hint_static": "Alleen handmatig kopiëren. Geen x.com-injectie, geen automatische berichten.",
+  "blog_home_teaser_title": "Gidsen",
+  "blog_home_link_io": "Top 10 .io-games in 2025",
+  "blog_home_link_gm": "GM-antwoorden menselijk schrijven",
+  "blog_home_link_all": "Alle gidsen →"
 }

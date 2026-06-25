@@ -821,5 +821,9 @@
   "ext_quick_mode_full": "Lleno",
   "ext_btn_open_arcade_long": "Arcade abierto",
   "ext_quick_panel_title": "Panel rápido de GMXReply",
-  "ext_stats_hint_static": "Sólo copia manual. Sin inyección de x.com, sin publicación automática."
+  "ext_stats_hint_static": "Sólo copia manual. Sin inyección de x.com, sin publicación automática.",
+  "blog_home_teaser_title": "Guías",
+  "blog_home_link_io": "Top 10 juegos .io en 2025",
+  "blog_home_link_gm": "Cómo escribir GM que suenen humanos",
+  "blog_home_link_all": "Todas las guías →"
 }

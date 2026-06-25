@@ -482,3 +482,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `gmx-shell-v2` + doc cache for `/app` and `/arcade.html` (network-first, cache fallback); precache `app.css` + og image; runtime cache for `/lib/`, `/assets/`, `/chunks/`.
 
 **Verify:** `node --test tests/pwa-offline-shell.test.mjs`, `prod-verify` PWA service worker v2.
+
+## 30.1 Blog SEO guides — DONE
+
+**Problem:** No content pages for organic traffic (`SITE_RECOMMENDATIONS.md` SEO/blog).
+
+**Fix:** `/blog.html` index + two articles with unique meta/og; clean `/blog/:slug` routes; Home guides teaser with i18n.
+
+**Verify:** `node --test tests/blog.test.mjs`, `prod-verify` blog guides SEO.

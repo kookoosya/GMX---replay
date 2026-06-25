@@ -821,5 +821,9 @@
   "ext_quick_mode_full": "Full",
   "ext_btn_open_arcade_long": "Open Arcade",
   "ext_quick_panel_title": "GMXReply Quick Panel",
-  "ext_stats_hint_static": "Manual copy only. No x.com injection, no auto-posting."
+  "ext_stats_hint_static": "Manual copy only. No x.com injection, no auto-posting.",
+  "blog_home_teaser_title": "Guides",
+  "blog_home_link_io": "Top 10 .io games 2025",
+  "blog_home_link_gm": "How to write GM replies",
+  "blog_home_link_all": "All guides →"
 }

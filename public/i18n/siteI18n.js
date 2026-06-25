@@ -824,7 +824,11 @@
     "ext_quick_mode_full": "Full",
     "ext_btn_open_arcade_long": "Open Arcade",
     "ext_quick_panel_title": "GMXReply Quick Panel",
-    "ext_stats_hint_static": "Manual copy only. No x.com injection, no auto-posting."
+    "ext_stats_hint_static": "Manual copy only. No x.com injection, no auto-posting.",
+    "blog_home_teaser_title": "Guides",
+    "blog_home_link_io": "Top 10 .io games 2025",
+    "blog_home_link_gm": "How to write GM replies",
+    "blog_home_link_all": "All guides →"
   },
   "de": {
     "plan_compare_btn": "Vergleichen",
@@ -1649,7 +1653,11 @@
     "ext_quick_mode_full": "Voll",
     "ext_btn_open_arcade_long": "Öffne Arcade",
     "ext_quick_panel_title": "GMXReply-Schnellpanel",
-    "ext_stats_hint_static": "Nur manuelles Kopieren. Keine x.com-Injektion, kein automatisches Posten."
+    "ext_stats_hint_static": "Nur manuelles Kopieren. Keine x.com-Injektion, kein automatisches Posten.",
+    "blog_home_teaser_title": "Ratgeber",
+    "blog_home_link_io": "Top 10 .io-Spiele 2025",
+    "blog_home_link_gm": "GM-Antworten menschlich schreiben",
+    "blog_home_link_all": "Alle Guides →"
   },
   "fr": {
     "plan_compare_btn": "Comparer",
@@ -2474,7 +2482,11 @@
     "ext_quick_mode_full": "Complet",
     "ext_btn_open_arcade_long": "Arcade ouverte",
     "ext_quick_panel_title": "Panneau rapide GMXReply",
-    "ext_stats_hint_static": "Copie manuelle uniquement. Pas d'injection x.com, pas de publication automatique."
+    "ext_stats_hint_static": "Copie manuelle uniquement. Pas d'injection x.com, pas de publication automatique.",
+    "blog_home_teaser_title": "Conseils",
+    "blog_home_link_io": "Top 10 jeux .io en 2025",
+    "blog_home_link_gm": "Écrire des GM qui sonnent humains",
+    "blog_home_link_all": "Tous les guides →"
   },
   "es": {
     "plan_compare_btn": "Comparar",
@@ -3299,7 +3311,11 @@
     "ext_quick_mode_full": "Lleno",
     "ext_btn_open_arcade_long": "Arcade abierto",
     "ext_quick_panel_title": "Panel rápido de GMXReply",
-    "ext_stats_hint_static": "Sólo copia manual. Sin inyección de x.com, sin publicación automática."
+    "ext_stats_hint_static": "Sólo copia manual. Sin inyección de x.com, sin publicación automática.",
+    "blog_home_teaser_title": "Guías",
+    "blog_home_link_io": "Top 10 juegos .io en 2025",
+    "blog_home_link_gm": "Cómo escribir GM que suenen humanos",
+    "blog_home_link_all": "Todas las guías →"
   },
   "pt": {
     "plan_compare_btn": "Comparar",
@@ -4124,7 +4140,11 @@
     "ext_quick_mode_full": "Completo",
     "ext_btn_open_arcade_long": "Arcada Aberta",
     "ext_quick_panel_title": "Painel rápido GMXReply",
-    "ext_stats_hint_static": "Somente cópia manual. Sem injeção de x.com, sem postagem automática."
+    "ext_stats_hint_static": "Somente cópia manual. Sem injeção de x.com, sem postagem automática.",
+    "blog_home_teaser_title": "Guias",
+    "blog_home_link_io": "Top 10 jogos .io em 2025",
+    "blog_home_link_gm": "Como escrever GM que soam humanos",
+    "blog_home_link_all": "Todos os guias →"
   },
   "it": {
     "plan_compare_btn": "Confronta",
@@ -4949,7 +4969,11 @@
     "ext_quick_mode_full": "Pieno",
     "ext_btn_open_arcade_long": "Galleria aperta",
     "ext_quick_panel_title": "Pannello rapido di risposta GMX",
-    "ext_stats_hint_static": "Solo copia manuale. Nessuna iniezione x.com, nessuna pubblicazione automatica."
+    "ext_stats_hint_static": "Solo copia manuale. Nessuna iniezione x.com, nessuna pubblicazione automatica.",
+    "blog_home_teaser_title": "Guide",
+    "blog_home_link_io": "Top 10 giochi .io nel 2025",
+    "blog_home_link_gm": "Scrivere GM che suonano umani",
+    "blog_home_link_all": "Tutte le guide →"
   },
   "nl": {
     "plan_compare_btn": "Vergelijken",
@@ -5774,7 +5798,11 @@
     "ext_quick_mode_full": "Vol",
     "ext_btn_open_arcade_long": "Arcade openen",
     "ext_quick_panel_title": "GMXReply-snelpaneel",
-    "ext_stats_hint_static": "Alleen handmatig kopiëren. Geen x.com-injectie, geen automatische berichten."
+    "ext_stats_hint_static": "Alleen handmatig kopiëren. Geen x.com-injectie, geen automatische berichten.",
+    "blog_home_teaser_title": "Gidsen",
+    "blog_home_link_io": "Top 10 .io-games in 2025",
+    "blog_home_link_gm": "GM-antwoorden menselijk schrijven",
+    "blog_home_link_all": "Alle gidsen →"
   },
   "tr": {
     "plan_compare_btn": "Karşılaştır",
@@ -6599,7 +6627,11 @@
     "ext_quick_mode_full": "Tam dolu",
     "ext_btn_open_arcade_long": "Açık Oyun Salonu",
     "ext_quick_panel_title": "GMXReply Hızlı Panel",
-    "ext_stats_hint_static": "Yalnızca manuel kopyalama. X.com enjeksiyonu yok, otomatik gönderim yok."
+    "ext_stats_hint_static": "Yalnızca manuel kopyalama. X.com enjeksiyonu yok, otomatik gönderim yok.",
+    "blog_home_teaser_title": "Rehberler",
+    "blog_home_link_io": "2025'in en iyi 10 .io oyunu",
+    "blog_home_link_gm": "İnsan gibi GM yanıtları yazma",
+    "blog_home_link_all": "Tüm rehberler →"
   },
   "pl": {
     "plan_compare_btn": "Porównaj",
@@ -7424,7 +7456,11 @@
     "ext_quick_mode_full": "Pełny",
     "ext_btn_open_arcade_long": "Otwórz Arcade",
     "ext_quick_panel_title": "Szybki panel GMXReply",
-    "ext_stats_hint_static": "Tylko kopia ręczna. Bez zastrzyku x.com, bez automatycznego wysyłania postów."
+    "ext_stats_hint_static": "Tylko kopia ręczna. Bez zastrzyku x.com, bez automatycznego wysyłania postów.",
+    "blog_home_teaser_title": "Poradniki",
+    "blog_home_link_io": "Top 10 gier .io w 2025",
+    "blog_home_link_gm": "Jak pisać GM brzmiące naturalnie",
+    "blog_home_link_all": "Wszystkie poradniki →"
   },
   "id": {
     "plan_compare_btn": "Bandingkan",
@@ -7648,7 +7684,7 @@
     "bank_nothing_saved": "Belum ada yang disimpan.",
     "bank_best_pass_running": "Lulus terbaik...",
     "bank_best_done_ok": "Best pass removed {removed} and refilled {refilled}. Bank now has {final}/{target}.",
-    "bank_best_done_warn": "Best pass removed {removed} and refilled {refilled}. Bank finished at {final}/{target}. Try another tone or preset for a wider pool.",
+    "bank_best_done_warn": "Pass terbaik dihapus {removed} dan diisi ulang {refilled}. Bank selesai pada ⟦⟧⟦2/3⟧. Coba nada atau preset lain untuk kolam renang yang lebih luas.",
     "pack_locked_msg": "Paket terkunci. Tingkatkan ke Pro atau buka kunci melalui referensi.",
     "pack_applied": "Paket yang diterapkan: {name}",
     "wallet_ui_not_connected": "tidak terhubung",
@@ -7656,7 +7692,7 @@
     "wallet_hint_pick_plan": "Pilih paket di atas untuk melanjutkan.",
     "wallet_hint_connect_pay": "Sekarang sambungkan dompet untuk membayar dalam {currency}.",
     "wallet_hint_ready": "Siap.",
-    "wallet_hint_install": "No wallet detected. Install Solflare / Phantom / Backpack.",
+    "wallet_hint_install": "Tidak ada dompet yang terdeteksi. Instal Solflare/ Phantom / Backpack.",
     "wallet_hint_choose": "Pilih dompet dan klik Hubungkan.",
     "wallet_opening": "Membuka dompet...",
     "wallet_connected_ok": "Dompet terhubung.",
@@ -7674,7 +7710,7 @@
     "ui_err_network_timeout": "Batas waktu jaringan habis. Coba lagi.",
     "ui_err_unauthorized_reconnect": "Tidak sah. Hubungkan kembali pegangan Anda.",
     "ui_err_gen_failed": "Permintaan pembuatan gagal. Periksa backend dan coba lagi.",
-    "ui_err_connect_backend": "Connection failed. Check the backend/runtime and try again.",
+    "ui_err_connect_backend": "Koneksi gagal. Periksa backend/runtime dan coba lagi.",
     "ui_err_request_backend": "Request failed. Check the backend/runtime and try again.",
     "ui_err_rpc_unavailable": "Solana RPC tidak tersedia saat ini. Coba lagi sebentar lagi.",
     "ui_err_wallet_bind": "Pengikatan dompet diperlukan sebelum verifikasi. Tanda tangani pesan dompet dan coba lagi.",
@@ -7796,7 +7832,7 @@
       "<b>Random 1/10/70</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
       "<b>Repeat guard</b>: filters recent or too-similar lines so bulk generation does not collapse into near-duplicates.",
       "Use <b>Filter</b> to search inside your saved lines.",
-      "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
+      "<b>Salin semua</b>/<b>Ekspor .txt</b>: cadangkan bank GM.",
       "Draf masukan manual disimpan secara otomatis.",
       "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
       "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
@@ -8059,8 +8095,8 @@
     "ext_custom_slots_label": "Slot:",
     "ext_custom_locked_label": "Terkunci:",
     "ext_custom_need_refs": "butuh {refs} referral untuk tab ini (atau upgrade ke Pro).",
-    "ext_custom_saved_inline_html": "<span class=\"ok\">Saved.</span> Auto-fitted for extension popup ratio.",
-    "ext_custom_error_inline_html": "<span class=\"bad\">Error.</span> Could not save background.",
+    "ext_custom_saved_inline_html": "<span class=\"ok\">Disimpan.</span> Dipasang otomatis untuk rasio popup ekstensi.",
+    "ext_custom_error_inline_html": "<span class=\"bad\">Kesalahan.</span> Tidak dapat menyimpan latar belakang.",
     "ext_theme_status_selected_html": "<span class=\"ok\">Selected.</span>",
     "ext_theme_status_selected_name_html": "<span class=\"ok\">Selected.</span> {name}.",
     "ext_wp_status_none_html": "<span class=\"muted\">None.</span> Pick a wallpaper for <b>{target}</b>.",
@@ -8074,14 +8110,14 @@
     "lb_r2": "Undangan yang ditandai penipuan dikecualikan.",
     "lb_r3": "Papan peringkat bersifat informatif dan tidak menjamin hadiah.",
     "lb_col_handle": "Handle",
-    "lb_col_eligible": "Eligible",
+    "lb_col_eligible": "Memenuhi syarat",
     "lb_col_active": "Active",
     "lb_7d": "7h",
     "lb_30d": "30h",
     "arcade_doc_title": "GMXReply Arcade",
     "arcade_plan_pro_unlocked": "PRO unlocked",
     "arcade_plan_checking": "Checking access",
-    "arcade_plan_free": "FREE plan",
+    "arcade_plan_free": "Paket Gratis",
     "arcade_guest": "Guest",
     "arcade_guest_slot": "Guest slot",
     "arcade_player_eyebrow": "Live game slot",
@@ -8098,7 +8134,7 @@
     "arcade_upgrade_cta": "Upgrade to unlock",
     "arcade_hero_eyebrow": "Live arcade shelf",
     "arcade_page_title": "Arcade",
-    "arcade_hero_text": "{n} browser games with real covers. Launch instantly — free titles always available.",
+    "arcade_hero_text": "⟦0 game⟧ browser dengan sampul asli. Luncurkan secara instan — judul gratis selalu tersedia.",
     "arcade_back_link": "← Back to GMXReply",
     "arcade_section_gotd": "Game of the Day",
     "arcade_section_achievements": "Pencapaian",
@@ -8249,7 +8285,11 @@
     "ext_quick_mode_full": "Penuh",
     "ext_btn_open_arcade_long": "Buka Arkade",
     "ext_quick_panel_title": "Panel Cepat Balasan GMX",
-    "ext_stats_hint_static": "Hanya salinan manual. Tanpa injeksi x.com, tanpa pengeposan otomatis."
+    "ext_stats_hint_static": "Hanya salinan manual. Tanpa injeksi x.com, tanpa pengeposan otomatis.",
+    "blog_home_teaser_title": "Panduan",
+    "blog_home_link_io": "10 game .io terbaik 2025",
+    "blog_home_link_gm": "Cara menulis balasan GM yang natural",
+    "blog_home_link_all": "Semua panduan →"
   },
   "ru": {
     "plan_compare_btn": "Сравнить",
@@ -8449,7 +8489,7 @@
     "gen_best_head_copied": "Best copied",
     "gen_empty_reply": "Сервер вернул пустую строку. Попробуйте другой тон или пресет.",
     "bank_empty": "Сохраненный банк пуст.",
-    "bank_filtered": "Filtered: showing {cur} / {total}",
+    "bank_filtered": "Отфильтровано: показано {cur}/{total}",
     "bank_no_matches": "Никаких совпадений.",
     "bank_save_limit_edit": "Достигнут лимит бесплатных сохранений ({cap} строк). Вы по-прежнему можете редактировать существующие строки. Обновите, чтобы получить больше.",
     "bank_save_limit_replace": "Достигнут лимит бесплатных сохранений ({cap}). Вы по-прежнему можете копировать строки, но ни одна сохраненная строка не будет заменена автоматически.",
@@ -8504,7 +8544,7 @@
     "ui_err_rpc_unavailable": "Solana RPC сейчас недоступен. Повторите попытку через минуту.",
     "ui_err_wallet_bind": "Перед проверкой требуется привязка кошелька. Подпишите сообщение кошелька и повторите попытку.",
     "ui_err_network_api": "Network/API error. Try again.",
-    "ui_degraded_network": "Network/API error. You can still edit lists locally.",
+    "ui_degraded_network": "Ошибка сети/API. Вы все равно можете редактировать списки локально.",
     "ui_offline_browser": "Браузер сообщает в автономном режиме. Проверьте свое соединение.",
     "ui_degraded_api": "API/network issue. You can still edit lists locally.",
     "pay_select_plan_first": "Сначала выберите план.",
@@ -8636,7 +8676,7 @@
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
       "Manual input drafts are auto-saved.",
       "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
-      "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
+      "Free Cap - это 70 сохраненных строк для банка GN. Если вы нажмете 70/70, новые сгенерированные линии заменят старые. Редактирование не ограничено."
     ],
     "gn_desc": "Короткие ночные ответы — вы сами редактируете и вставляете. Одна сохранённая база для раздела; в Free есть лимит строк.",
     "ref_desc": "Рефералы: делитесь ссылкой. Подтверждён = подключён, Активен = использовал продукт, Допущен = max(активные, перенос). Бонус: +10/день за каждые 20 допущенных (+12 при 50+).",
@@ -8725,7 +8765,7 @@
     "pm_learn_more_label": "Изучить live-рынки на стороне",
     "pm_learn_polymarket": "Polymarket",
     "pm_learn_kalshi": "Kalshi",
-    "pm_learn_manifold": "Manifold",
+    "pm_learn_manifold": "Коллектор",
     "wp_apply_prediction": "Рынок прогнозов",
     "h_title": "Главная",
     "h_note": "Введите ваш X handle и подключитесь один раз. Без валидного @handle приложение не работает.",
@@ -8899,7 +8939,7 @@
     "lb_r2": "Инвайты, помеченные как фрод, исключаются.",
     "lb_r3": "Таблица носит информационный характер и не гарантирует награды.",
     "lb_col_handle": "Хендл",
-    "lb_col_eligible": "Eligible",
+    "lb_col_eligible": "Приемлемый ",
     "lb_col_active": "Active",
     "lb_7d": "7д",
     "lb_30d": "30д",
@@ -9065,7 +9105,7 @@
     "ext_shortcut_hint": "Горячая клавиша: назначьте в chrome://extensions/shortcuts для «Open GMXReply quick panel».",
     "ext_plan_unlimited": "Безлимит",
     "ext_plan_paid": "Оплачено",
-    "ext_plan_free": "Free",
+    "ext_plan_free": "Без оплаты",
     "ext_plan_guest_label": "Гость",
     "ext_quick_title": "Быстрое копирование",
     "ext_quick_subtitle": "Закреплённые ответы для копирования",
@@ -9074,7 +9114,11 @@
     "ext_quick_mode_full": "Полно",
     "ext_btn_open_arcade_long": "Открыть аркаду",
     "ext_quick_panel_title": "Быстрая панель GMXReply",
-    "ext_stats_hint_static": "Только ручное копирование. Без инъекций в x.com, без автопостинга."
+    "ext_stats_hint_static": "Только ручное копирование. Без инъекций в x.com, без автопостинга.",
+    "blog_home_teaser_title": "Гайды",
+    "blog_home_link_io": "Топ-10 .io игр в 2025",
+    "blog_home_link_gm": "Как писать GM, которые звучат по-человечески",
+    "blog_home_link_all": "Все гайды →"
   },
   "uk": {
     "plan_compare_btn": "Порівняти",
@@ -9184,7 +9228,7 @@
     "gm_pro_2": "Optional best pass for cleaner picks when you want a stronger reply.",
     "gm_pro_3": "Сильніший anti‑repeat, чистіший output, швидший flow.",
     "gn_pro_title": "Що відкриває Pro",
-    "gn_pro_1": "<b>Unlimited</b> saved lines and daily generation.",
+    "gn_pro_1": "<b>Необмежена кількість</b> збережених рядків і щоденна генерація.",
     "gn_pro_2": "Optional best pass for GN when you want a stronger pick.",
     "gn_pro_3": "Преміум‑паки та сильніший anti‑repeat.",
     "gm_safe_title": "Безпечний режим",
@@ -9237,7 +9281,7 @@
     "lb_empty": "No data yet.",
     "lb_failed": "Could not load leaderboard.",
     "err_unauthorized": "Unauthorized",
-    "err_forbidden": "Forbidden",
+    "err_forbidden": "Заборонено",
     "err_not_found": "Not found",
     "err_rate_limited": "Too many requests",
     "err_busy": "Busy, try again",
@@ -9293,7 +9337,7 @@
     "ui_saved_unlimited": "необмежений",
     "bank_best_cleanup_note": "(Найкращий пропуск видалено {removed}, поповнено {refilled})",
     "bank_best_cleanup_warn": "Added {added}. Best pass removed {removed}, refilled {refilled}, final {final}/{target}. Try another tone or preset for a wider pool.",
-    "bank_pool_narrow": "Added {added}/{total}. Random fill stopped early because the pool got too narrow. Change tone or preset for a wider pull.",
+    "bank_pool_narrow": "Додано {added}/{total}. Випадкове заповнення припинилося раніше, оскільки пул став занадто вузьким. Змініть тон або попереднє налаштування для більш широкого натискання.",
     "bank_run_best_hint": "Запускайте Best вручну для очищення або дозаповнення.",
     "bank_nothing_saved": "Ще нічого не збережено.",
     "bank_best_pass_running": "Найкращий пас...",
@@ -9325,7 +9369,7 @@
     "ui_err_unauthorized_reconnect": "Несанкціонований. Знову підключіть ручку.",
     "ui_err_gen_failed": "Не вдалося створити запит. Перевірте серверну частину та повторіть спробу.",
     "ui_err_connect_backend": "Connection failed. Check the backend/runtime and try again.",
-    "ui_err_request_backend": "Request failed. Check the backend/runtime and try again.",
+    "ui_err_request_backend": "Помилка запиту. Перевірте сервер/середовище виконання та повторіть спробу.",
     "ui_err_rpc_unavailable": "Solana RPC зараз недоступний. Повторіть спробу за мить.",
     "ui_err_wallet_bind": "Перед перевіркою потрібно прив’язати гаманець. Підпишіть повідомлення гаманця та повторіть спробу.",
     "ui_err_network_api": "Network/API error. Try again.",
@@ -9423,7 +9467,7 @@
     ],
     "themes_wp_section_title": "Шпалери сайту",
     "themes_wp_hint": "Фони для основного сайту. Акцентні кольори слідують збереженій темі (або стандартним).",
-    "ext_wp_simple_note": "One wallpaper choice for the extension UI. Pick below — advanced targeting and custom upload controls were removed here to reduce clutter.",
+    "ext_wp_simple_note": "Один варіант шпалер для інтерфейсу розширення. Виберіть нижче — тут було видалено розширене націлювання та спеціальні елементи керування завантаженням, щоб зменшити безлад.",
     "extthemes_right_title": "Як працюють анлоки",
     "extthemes_right_desc": "До 100 скінів для extension і 100 шпалер. Free прев’ю: перші 10 скінів. Unlock +1 при 10 рефералах, потім +1 кожні 5. Pro відкриває всю косметику.",
     "extthemes_right_list": [
@@ -9724,7 +9768,7 @@
     "lb_r2": "Інвайти, позначені як фрод, виключаються.",
     "lb_r3": "Таблиця має інформаційний характер і не гарантує нагороди.",
     "lb_col_handle": "Хендл",
-    "lb_col_eligible": "Eligible",
+    "lb_col_eligible": "Відповідні",
     "lb_col_active": "Active",
     "lb_7d": "7д",
     "lb_30d": "30д",
@@ -9801,7 +9845,7 @@
     "arcade_cat_platformer": "Платформер",
     "arcade_cat_puzzle": "Головоломки",
     "arcade_cat_racing": "Перегони",
-    "arcade_cat_rpg": "RPG",
+    "arcade_cat_rpg": "РПГ",
     "arcade_cat_shooter": "Шутер",
     "arcade_cat_simulation": "Симулятор",
     "arcade_cat_sports": "Спорт",
@@ -9899,7 +9943,11 @@
     "ext_quick_mode_full": "Повно",
     "ext_btn_open_arcade_long": "Відкрити аркаду",
     "ext_quick_panel_title": "Швидка панель GMXReply",
-    "ext_stats_hint_static": "Лише ручне копіювання. Без ін'єкцій у x.com, без автопостингу."
+    "ext_stats_hint_static": "Лише ручне копіювання. Без ін'єкцій у x.com, без автопостингу.",
+    "blog_home_teaser_title": "Гайди",
+    "blog_home_link_io": "Топ-10 .io ігор у 2025",
+    "blog_home_link_gm": "Як писати GM, які звучать по-людськи",
+    "blog_home_link_all": "Усі гайди →"
   },
   "hi": {
     "plan_compare_btn": "कम्पेयर करें",
@@ -9910,7 +9958,7 @@
     "wallet_testimonial_quote": "«असीमित बैंक और पूरा Arcade — Pro पहले दिन से सार्थक।»",
     "wallet_testimonial_author": "— GMXReply बीटा उपयोगकर्ता",
     "plan_cmp_col_feature": "फ़ीचर",
-    "plan_cmp_col_free": "Free",
+    "plan_cmp_col_free": "मुफ़्त",
     "plan_cmp_col_pro": "Pro",
     "plan_modal_cmp_col_feature": "फ़ीचर",
     "plan_modal_cmp_col_free": "Free",
@@ -9962,7 +10010,7 @@
     "w_activity_refresh": "रीफ़्रेश",
     "w_activity_hint": "आपके हैंडल के हालिया इवेंट्स दिखाता है (पेमेंट, रेफरल, अपग्रेड)",
     "refCopy": "Copy link",
-    "refLoad": "Load stats",
+    "refLoad": "आँकड़े लोड करें",
     "h_what_title": "क्या मिलेगा",
     "h_what_1": "HTML:प्राकृतिक विविधता वाले मानव-<b>GM</b> और <b>GN</b> जवाब।",
     "h_what_2": "HTML:सुरक्षित copy-first एक्सटेंशन: जनरेट करें, कॉपी करें, X पर खुद पेस्ट करें।",
@@ -10010,7 +10058,7 @@
     "gm_pro_3": "Stronger anti‑repeat, cleaner output, faster flow.",
     "gn_pro_title": "Pro क्या अनलॉक करता है",
     "gn_pro_1": "<b>Unlimited</b> saved lines and daily generation.",
-    "gn_pro_2": "Optional best pass for GN when you want a stronger pick.",
+    "gn_pro_2": "जब आप एक मजबूत पिक चाहते हैं तो जीएन के लिए वैकल्पिक सर्वोत्तम पास।",
     "gn_pro_3": "Premium packs और stronger anti‑repeat.",
     "gm_safe_title": "ट्रस्ट और सेफ्टी",
     "gm_safe_1": "हम seed phrase या private keys कभी नहीं मांगते.",
@@ -10058,11 +10106,11 @@
     "lb_you": "आप",
     "lb_your_rank": "आपकी रैंक",
     "lb_unranked": "अभी रैंक में नहीं",
-    "lb_eligible": "Eligible",
+    "lb_eligible": "पात्र",
     "lb_empty": "No data yet.",
     "lb_failed": "Could not load leaderboard.",
     "err_unauthorized": "Unauthorized",
-    "err_forbidden": "Forbidden",
+    "err_forbidden": "निषिध",
     "err_not_found": "Not found",
     "err_rate_limited": "Too many requests",
     "err_busy": "Busy, try again",
@@ -10136,7 +10184,7 @@
     "wallet_opening": "बटुआ खुल रहा है...",
     "wallet_connected_ok": "बटुआ जुड़ा.",
     "wallet_toast_disconnected": "बटुआ काट दिया गया.",
-    "wallet_reconnect_toast": "Wallet was updated/restarted. Please reconnect.",
+    "wallet_reconnect_toast": "वॉलेट अपडेट/रीस्टार्ट किया गया था। कृपया फिर से कनेक्ट करें।",
     "billing_no_receipts": "अभी तक कोई रसीद नहीं.",
     "billing_receipts_unavailable": "रसीदें अनुपलब्ध हैं.",
     "billing_receipt_stats": "{n} रसीदें",
@@ -10162,13 +10210,13 @@
     "pay_paid_verified": "Paid & verified.",
     "wallet_status_unknown": "Status unknown.",
     "wallet_pro_active": "Pro active",
-    "wallet_plan_free": "Free",
+    "wallet_plan_free": "मुफ़्त",
     "redeem_paste_first": "Paste a code first.",
     "redeem_activated": "Activated.",
     "connect_invalid_handle_html": "Enter a valid @handle",
     "connect_warn_html": "Open the extension and click Connect on the site.",
     "connect_toast_html": "Connected.",
-    "this_feature": "This feature",
+    "this_feature": "यह सुविधा",
     "locked": "Locked",
     "ui_tag_free": "FREE",
     "ui_breadcrumb_nav_label": "ब्रेडक्रंब नेविगेशन",
@@ -10262,7 +10310,7 @@
     "r_desc": "संक्षिप्त में:",
     "home_desc": "एक जगह पर तेज़ रिप्लाई, पैक और टूल्स",
     "gm_desc": "छोटे सुबह के जवाब — आप खुद एडिट और पेस्ट करते हैं। एक सेव्ड बैंक; Free में लाइन सीमा।",
-    "gm_lang_tabs_note": "Single saved bank for GM.",
+    "gm_lang_tabs_note": "जीएम के लिए एकल सहेजा गया बैंक।",
     "gn_lang_tabs_note": "Single saved bank for GN.",
     "gm_right": "GM कैसे इस्तेमाल करें",
     "gm_right_desc": "दूसरे की पोस्ट पर छोटे अंग्रेज़ी सुबह के जवाब। प्राकृतिक, सीधे, पेस्ट करने में आसान।",
@@ -10724,7 +10772,11 @@
     "ext_quick_mode_full": "भरा हुआ",
     "ext_btn_open_arcade_long": "आर्केड खोलें",
     "ext_quick_panel_title": "GMXरिप्लाई त्वरित पैनल",
-    "ext_stats_hint_static": "केवल मैनुअल कॉपी. कोई x.com इंजेक्शन नहीं, कोई ऑटो-पोस्टिंग नहीं।"
+    "ext_stats_hint_static": "केवल मैनुअल कॉपी. कोई x.com इंजेक्शन नहीं, कोई ऑटो-पोस्टिंग नहीं।",
+    "blog_home_teaser_title": "गाइड",
+    "blog_home_link_io": "2025 के टॉप 10 .io गेम",
+    "blog_home_link_gm": "इंसानी GM जवाब कैसे लिखें",
+    "blog_home_link_all": "सभी गाइड →"
   },
   "ja": {
     "plan_compare_btn": "比較",
@@ -11549,7 +11601,11 @@
     "ext_quick_mode_full": "満杯",
     "ext_btn_open_arcade_long": "オープンアーケード",
     "ext_quick_panel_title": "GMXReply クイック パネル",
-    "ext_stats_hint_static": "手動コピーのみ。 x.com インジェクションや自動投稿はありません。"
+    "ext_stats_hint_static": "手動コピーのみ。 x.com インジェクションや自動投稿はありません。",
+    "blog_home_teaser_title": "ガイド",
+    "blog_home_link_io": "2025年の.ioゲームTOP10",
+    "blog_home_link_gm": "自然なGM返信の書き方",
+    "blog_home_link_all": "すべてのガイド →"
   },
   "zh": {
     "plan_compare_btn": "对比",
@@ -12374,7 +12430,11 @@
     "ext_quick_mode_full": "满的",
     "ext_btn_open_arcade_long": "开放街机",
     "ext_quick_panel_title": "GMX回复快速面板",
-    "ext_stats_hint_static": "仅限手动复印。没有 x.com 注入，没有自动发布。"
+    "ext_stats_hint_static": "仅限手动复印。没有 x.com 注入，没有自动发布。",
+    "blog_home_teaser_title": "指南",
+    "blog_home_link_io": "2025 十大 .io 游戏",
+    "blog_home_link_gm": "如何写出自然的 GM 回复",
+    "blog_home_link_all": "全部指南 →"
   }
 };
   function clone(value){ return JSON.parse(JSON.stringify(value)); }

@@ -821,5 +821,9 @@
   "ext_quick_mode_full": "满的",
   "ext_btn_open_arcade_long": "开放街机",
   "ext_quick_panel_title": "GMX回复快速面板",
-  "ext_stats_hint_static": "仅限手动复印。没有 x.com 注入，没有自动发布。"
+  "ext_stats_hint_static": "仅限手动复印。没有 x.com 注入，没有自动发布。",
+  "blog_home_teaser_title": "指南",
+  "blog_home_link_io": "2025 十大 .io 游戏",
+  "blog_home_link_gm": "如何写出自然的 GM 回复",
+  "blog_home_link_all": "全部指南 →"
 }

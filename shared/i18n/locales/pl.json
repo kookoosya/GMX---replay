@@ -821,5 +821,9 @@
   "ext_quick_mode_full": "Pełny",
   "ext_btn_open_arcade_long": "Otwórz Arcade",
   "ext_quick_panel_title": "Szybki panel GMXReply",
-  "ext_stats_hint_static": "Tylko kopia ręczna. Bez zastrzyku x.com, bez automatycznego wysyłania postów."
+  "ext_stats_hint_static": "Tylko kopia ręczna. Bez zastrzyku x.com, bez automatycznego wysyłania postów.",
+  "blog_home_teaser_title": "Poradniki",
+  "blog_home_link_io": "Top 10 gier .io w 2025",
+  "blog_home_link_gm": "Jak pisać GM brzmiące naturalnie",
+  "blog_home_link_all": "Wszystkie poradniki →"
 }

@@ -43,6 +43,24 @@ export function registerStaticRoutes(deps) {
     }
   });
 
+  app.get("/blog", (req, res) => {
+    noStore(res);
+    return res.redirect(302, "/blog.html");
+  });
+
+  app.get("/blog/:slug", (req, res, next) => {
+    try {
+      const slug = String(req.params.slug || "").trim().toLowerCase();
+      if (!slug || slug.includes(".")) return next();
+      const file = path.join(PUBLIC_DIR, "blog", `${slug}.html`);
+      if (fs.existsSync(file)) {
+        noStore(res);
+        return res.sendFile(file);
+      }
+    } catch {}
+    return next();
+  });
+
   app.use(
     express.static(PUBLIC_DIR, {
       maxAge: "1h",
