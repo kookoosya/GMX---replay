@@ -2211,3 +2211,20 @@ html.theme-applied body.hasWallBg .sideCard {
 @media (pointer: coarse){
   .mobileNavBtn{ min-height: 48px; }
 }
+
+/* --- Prediction Market onboarding (Sprint 21.1) --- */
+.pmNewbieIntro{
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--r);
+  background: var(--glass2);
+  border: 1px solid var(--stroke);
+}
+.pmNewbieIntro .title{ font-size: 14px; margin-bottom: 6px; }
+.pmLearnMore{ margin-top: 12px; }
+.pmLearnLinks{ flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.pmLearnLinks .btn{
+  flex: 1 1 120px;
+  justify-content: center;
+  text-decoration: none;
+}

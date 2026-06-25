@@ -34,8 +34,8 @@
 - [x] Подсказка «Edit any line by clicking» более заметна
 
 ### Prediction Market
-- [ ] Краткое описание «What is prediction market» для новичков
-- [ ] Ссылки на внешние маркеты (Polymarket, etc.) как «Learn more»
+- [x] Краткое описание «What is prediction market» для новичков
+- [x] Ссылки на внешние маркеты (Polymarket, etc.) как «Learn more»
 
 ### Upgrade Pro
 - [x] **Годовой план со скидкой** — «2 months free» при yearly ($80/год)

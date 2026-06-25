@@ -408,3 +408,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `lib/mobile-nav-core.js` + `app.mobilenav.js` — fixed bottom nav (Home/GM/GN/Pro/More), more sheet for secondary tabs, swipe between GM/GN; boot defer baseline → 10.
 
 **Verify:** `node --test tests/mobile-nav.test.mjs`, `prod-verify` mobile-nav core + shell.
+
+## 21.1 Prediction newbie intro + learn-more links — DONE
+
+**Problem:** Prediction tab had no plain-language explainer or pointers to real markets (`SITE_RECOMMENDATIONS.md` Prediction Market).
+
+**Fix:** `#pm_newbie_block` intro copy + `#pm_learn_more` external links (Polymarket, Kalshi, Manifold) with i18n across locales.
+
+**Verify:** `node --test tests/prediction-onboarding.test.mjs`, `prod-verify` prediction onboarding shell.

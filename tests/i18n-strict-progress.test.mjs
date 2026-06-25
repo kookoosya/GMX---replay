@@ -12,6 +12,7 @@ const STRICT_IGNORE_KEYS = new Set([
   "w_support_title", "w_status_list", "r_list", "h_guide", "ext_custom_slots_label",
   "t_gm", "t_gn", "arcade_doc_title", "arcade_page_title", "ui_tag_free", "ui_tag_unlocked",
   "ui_tag_refs", "ui_prediction_title", "ui_coming_soon", "t_prediction", "ref_reward_pro_trial",
+  "pm_learn_polymarket", "pm_learn_kalshi", "pm_learn_manifold",
 ]);
 
 const CRITICAL_PATTERNS = [

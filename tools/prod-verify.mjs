@@ -289,4 +289,15 @@ if (!css.text.includes(".mobileBottomNav")) {
 }
 ok("mobile bottom nav UI");
 
+if (!appPage.text.includes('id="pm_newbie_title"')) {
+  fail("/app shell missing prediction newbie intro");
+}
+if (!appPage.text.includes('pm_learn_polymarket')) {
+  fail("/app shell missing prediction learn-more links");
+}
+if (!css.text.includes(".pmNewbieIntro")) {
+  fail("app.css missing prediction onboarding styles");
+}
+ok("prediction onboarding UI");
+
 console.log("\nPROD_VERIFY_OK");
