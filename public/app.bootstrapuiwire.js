@@ -247,6 +247,11 @@
           ctx.onTabActivated?.(name);
         } catch {}
       },
+      onTabShown: (name) => {
+        try {
+          globalThis.__gmxMobileNavSync?.(name);
+        } catch {}
+      },
     });
 
     if (!window.__GMXExtWallpaperUiFactory) throw new Error("GMX extwallpaperui factory missing");

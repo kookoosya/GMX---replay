@@ -13,6 +13,7 @@
       typeof ctx.persistLastTab === "function" ? ctx.persistLastTab : () => {};
     const onTabActivated =
       typeof ctx.onTabActivated === "function" ? ctx.onTabActivated : () => {};
+    const onTabShown = typeof ctx.onTabShown === "function" ? ctx.onTabShown : () => {};
 
     function ensurePredictionTabVisible() {
       try {
@@ -60,6 +61,9 @@
       } catch {}
       try {
         onTabActivated(safe);
+      } catch {}
+      try {
+        onTabShown(safe);
       } catch {}
     }
 

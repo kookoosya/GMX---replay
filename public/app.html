@@ -1257,10 +1257,64 @@ html.mode-light body.hasUserBg .panel{
 </div>
 </div>
 
+<nav class="mobileBottomNav hidden" id="mobileBottomNav" aria-label="Main navigation">
+<button type="button" class="mobileNavBtn" data-tab="home" id="mnav_home" aria-label="Home">
+<span class="mobileNavIcon" aria-hidden="true">⌂</span>
+<span class="mobileNavLabel" data-label-key="t_home" data-label-fb="Home">Home</span>
+</button>
+<button type="button" class="mobileNavBtn" data-tab="gm" id="mnav_gm" aria-label="GM">
+<span class="mobileNavIcon" aria-hidden="true">☀</span>
+<span class="mobileNavLabel" data-label-key="t_gm" data-label-fb="GM">GM</span>
+</button>
+<button type="button" class="mobileNavBtn" data-tab="gn" id="mnav_gn" aria-label="GN">
+<span class="mobileNavIcon" aria-hidden="true">☾</span>
+<span class="mobileNavLabel" data-label-key="t_gn" data-label-fb="GN">GN</span>
+</button>
+<button type="button" class="mobileNavBtn" data-tab="wallet" id="mnav_wallet" aria-label="Upgrade Pro">
+<span class="mobileNavIcon" aria-hidden="true">★</span>
+<span class="mobileNavLabel" data-label-key="t_wallet" data-label-fb="Upgrade Pro">Upgrade Pro</span>
+</button>
+<button type="button" class="mobileNavBtn" data-tab="more" id="mnav_more" aria-label="More">
+<span class="mobileNavIcon" aria-hidden="true">⋯</span>
+<span class="mobileNavLabel" data-label-key="mobile_nav_more" data-label-fb="More">More</span>
+</button>
+</nav>
+<div class="gmgnSwipeHint hidden" id="gmgnSwipeHint" aria-hidden="true"></div>
+<div class="mobileMoreSheet hidden" id="mobileMoreSheet" role="dialog" aria-modal="true" aria-labelledby="mobileMoreTitle">
+<div class="mobileMoreBackdrop" id="mobileMoreBackdrop"></div>
+<div class="mobileMoreCard">
+<div class="split modalHead" style="align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px">
+<div class="title" id="mobileMoreTitle">More</div>
+<button class="btn secondary" id="mobileMoreClose" type="button">Close</button>
+</div>
+<div class="mobileMoreGrid">
+<button type="button" class="mobileMoreBtn" data-tab="referrals" id="mmore_referrals">
+<span class="mobileMoreLabel" data-label-key="t_ref" data-label-fb="Referrals">Referrals</span>
+</button>
+<button type="button" class="mobileMoreBtn" data-tab="leaderboard" id="mmore_leaderboard">
+<span class="mobileMoreLabel" data-label-key="t_lb" data-label-fb="Leaderboard">Leaderboard</span>
+</button>
+<button type="button" class="mobileMoreBtn" data-tab="themes" id="mmore_themes">
+<span class="mobileMoreLabel" data-label-key="t_themes" data-label-fb="Themes">Themes</span>
+</button>
+<button type="button" class="mobileMoreBtn" data-tab="extthemes" id="mmore_extthemes">
+<span class="mobileMoreLabel" data-label-key="t_extthemes" data-label-fb="Extension">Extension</span>
+</button>
+<button type="button" class="mobileMoreBtn" data-tab="prediction" id="mmore_prediction">
+<span class="mobileMoreLabel" data-label-key="t_prediction" data-label-fb="Prediction Market">Prediction Market</span>
+</button>
+<a class="mobileMoreBtn mobileMoreLink" href="/arcade.html" id="mmore_arcade">
+<span class="mobileMoreLabel" data-label-key="mobile_nav_arcade" data-label-fb="Arcade">Arcade</span>
+</a>
+</div>
+</div>
+</div>
+
 <script defer src="/i18n/siteI18n.js"></script>
 <script defer src="/lib/referral-progress-core.js"></script>
 <script defer src="/lib/theme-group-core.js"></script>
 <script defer src="/lib/gmgn-gen-history-core.js"></script>
+<script defer src="/lib/mobile-nav-core.js"></script>
 <script defer src="/chunks/app.shell.deps.js?v=SAFE16"></script>
 <script defer src="/chunks/app.shell.features.js?v=SAFE16"></script>
 <script defer src="/chunks/app.shell.bootstrap.js?v=SAFE16"></script>

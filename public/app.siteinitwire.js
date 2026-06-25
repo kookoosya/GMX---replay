@@ -339,6 +339,7 @@
           renderList: ctx.renderList,
           initProTabs: ctx.initProTabs,
           siteTr: ctx.siteTr,
+          getCurrentTab: () => tabState.getCurrentTab?.(),
           lsGet,
           lastTabKey: LS_LAST_TAB,
           extViewKey: LS_EXT_VIEW,

@@ -400,3 +400,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `lib/gmgn-gen-history-core.js` stores last 5 batches; `#gmGenHistory` / `#gnGenHistory` with Copy again; Ctrl+Enter on active GM/GN tab; `.editHint` above lists.
 
 **Verify:** `node --test tests/gmgn-gen-history.test.mjs`, `prod-verify` `gmGenHistory` + gen-history core.
+
+## 20.1 Mobile bottom nav + GM/GN swipe — DONE
+
+**Problem:** Horizontal tabs overflow on phones; no quick GM ↔ GN gesture (`SITE_RECOMMENDATIONS.md` Мобилка).
+
+**Fix:** `lib/mobile-nav-core.js` + `app.mobilenav.js` — fixed bottom nav (Home/GM/GN/Pro/More), more sheet for secondary tabs, swipe between GM/GN; boot defer baseline → 10.
+
+**Verify:** `node --test tests/mobile-nav.test.mjs`, `prod-verify` mobile-nav core + shell.

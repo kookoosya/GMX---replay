@@ -273,4 +273,20 @@ if (!genHistUi.text.includes("recordBatchHistory")) {
 }
 ok("gm/gn batch history UI");
 
+const mobileNavCore = await get("/lib/mobile-nav-core.js");
+if (!mobileNavCore.text.includes("GMXMobileNavCore")) {
+  fail("/lib/mobile-nav-core.js missing export");
+}
+if (!appPage.text.includes('id="mobileBottomNav"')) {
+  fail("/app shell missing mobileBottomNav");
+}
+const mobileNavUi = await get("/app.mobilenav.js");
+if (!mobileNavUi.text.includes("bindSwipePane")) {
+  fail("/app.mobilenav.js missing swipe binding");
+}
+if (!css.text.includes(".mobileBottomNav")) {
+  fail("app.css missing mobile bottom nav styles");
+}
+ok("mobile bottom nav UI");
+
 console.log("\nPROD_VERIFY_OK");

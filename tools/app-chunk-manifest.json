@@ -103,6 +103,7 @@
         "app.connect.js",
         "app.homehero.js",
         "app.pwainstall.js",
+        "app.mobilenav.js",
         "app.connectwire.js",
         "app.siteboot.js",
         "app.siteinit.js",

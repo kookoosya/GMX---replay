@@ -2074,3 +2074,140 @@ html.theme-applied body.hasWallBg .sideCard {
   background: rgba(10,14,24,.24) !important;
   backdrop-filter: blur(5px);
 }
+
+/* --- Mobile bottom nav + GM/GN swipe (Sprint 20.1) --- */
+.mobileBottomNav{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9985;
+  display: none;
+  align-items: stretch;
+  justify-content: space-around;
+  gap: 4px;
+  padding:
+    8px calc(8px + env(safe-area-inset-right))
+    calc(8px + env(safe-area-inset-bottom))
+    calc(8px + env(safe-area-inset-left));
+  background: rgba(8,10,18,.92);
+  border-top: 1px solid var(--stroke);
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  box-shadow: 0 -8px 32px rgba(0,0,0,.35);
+}
+.mobileNavBtn{
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 4px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: rgba(239,244,252,.78);
+  cursor: pointer;
+  font: inherit;
+}
+.mobileNavBtn.active{
+  color: var(--accentOn);
+  background: linear-gradient(135deg, rgba(153,69,255,.22) 0%, rgba(20,241,149,.14) 100%);
+  box-shadow: 0 0 0 1px rgba(153,69,255,.25) inset;
+}
+.mobileNavIcon{
+  font-size: 18px;
+  line-height: 1;
+}
+.mobileNavLabel{
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.gmgnSwipeHint{
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(68px + env(safe-area-inset-bottom));
+  z-index: 9984;
+  max-width: min(92vw, 360px);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 650;
+  text-align: center;
+  color: rgba(239,244,252,.88);
+  background: rgba(12,16,28,.88);
+  border: 1px solid var(--stroke);
+  pointer-events: none;
+}
+.mobileMoreSheet{
+  position: fixed;
+  inset: 0;
+  z-index: 9992;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.mobileMoreBackdrop{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+}
+.mobileMoreCard{
+  position: relative;
+  width: min(100%, 520px);
+  margin: 0 0 calc(env(safe-area-inset-bottom));
+  padding: 16px;
+  border-radius: 18px 18px 0 0;
+  background: rgba(10,14,24,.96);
+  border: 1px solid var(--stroke);
+  border-bottom: 0;
+  box-shadow: 0 -12px 40px rgba(0,0,0,.4);
+}
+.mobileMoreGrid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.mobileMoreBtn,
+.mobileMoreLink{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  background: var(--glass2);
+  color: inherit;
+  text-decoration: none;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+.mobileMoreBtn.active,
+.mobileMoreLink.active{
+  border-color: rgba(153,69,255,.45);
+  background: rgba(153,69,255,.14);
+}
+@media (max-width: 720px){
+  body.mobileNavOn .tabs{
+    display: none;
+  }
+  body.mobileNavOn .wrap{
+    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+  body.mobileNavOn .mobileBottomNav{
+    display: flex;
+  }
+}
+@media (pointer: coarse){
+  .mobileNavBtn{ min-height: 48px; }
+}

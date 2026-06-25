@@ -59,6 +59,9 @@
       typeof ctx.migrateLegacyBank === "function" ? ctx.migrateLegacyBank : () => {};
     const renderList = typeof ctx.renderList === "function" ? ctx.renderList : () => {};
     const initProTabs = typeof ctx.initProTabs === "function" ? ctx.initProTabs : () => {};
+    const siteTr = typeof ctx.siteTr === "function" ? ctx.siteTr : (_k, fb) => fb || "";
+    const getCurrentTab =
+      typeof ctx.getCurrentTab === "function" ? ctx.getCurrentTab : () => "home";
     const lsGet =
       typeof ctx.lsGet === "function"
         ? ctx.lsGet
@@ -194,6 +197,17 @@
             siteTr: typeof ctx.siteTr === "function" ? ctx.siteTr : (_k, fb) => fb || "",
             lsGet,
           }).bindPwaInstall();
+        }
+      } catch {}
+
+      try {
+        if (window.__GMXMobileNavFactory) {
+          window.__GMXMobileNavFactory({
+            $,
+            switchTab: tab,
+            getCurrentTab,
+            siteTr,
+          }).bindMobileNav();
         }
       } catch {}
 
