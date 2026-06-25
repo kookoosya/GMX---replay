@@ -82,7 +82,7 @@
 ### Производительность
 - [x] **Preload** популярных страниц (Arcade) при hover на таб
 - [x] **Lazy-load** iframe игр — загружать только при клике
-- **Service Worker** — кэш статики, офлайн для части UI
+- [x] **Service Worker** — кэш статики, офлайн для части UI
 
 ### SEO и рост
 - [x] **meta description** уникальные для Home, Arcade, Upgrade

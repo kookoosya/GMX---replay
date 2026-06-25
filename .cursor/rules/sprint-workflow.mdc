@@ -160,4 +160,8 @@ Do not begin step N+1 until step N meets definition of done.
 
 1. Skeleton loaders for GM, GN, Arcade lists — DONE (28.1)
 
+## Sprint 29 queue (strict order) — Offline shell
+
+1. Service Worker static cache + offline /app navigation — DONE (29.1)
+
 Do not begin step N+1 until step N meets definition of done.

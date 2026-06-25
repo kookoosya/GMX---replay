@@ -474,3 +474,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `skeleton-core` lib; GM/GN `renderList` skeleton from 3+ lines; Arcade GOTD + grid skeleton while `state.plan === 'loading'`.
 
 **Verify:** `node --test tests/skeleton-loaders.test.mjs`, `prod-verify` skeleton loaders.
+
+## 29.1 Service Worker offline shell — DONE
+
+**Problem:** SW only precached 3 assets and skipped navigation; offline revisit to `/app` failed (`SITE_RECOMMENDATIONS.md` performance).
+
+**Fix:** `gmx-shell-v2` + doc cache for `/app` and `/arcade.html` (network-first, cache fallback); precache `app.css` + og image; runtime cache for `/lib/`, `/assets/`, `/chunks/`.
+
+**Verify:** `node --test tests/pwa-offline-shell.test.mjs`, `prod-verify` PWA service worker v2.

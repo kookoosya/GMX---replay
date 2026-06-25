@@ -219,8 +219,14 @@ if (manifest.status !== 200 || !manifest.text.includes('"short_name"')) {
 ok("PWA manifest");
 
 const sw = await get("/sw.js");
-if (sw.status !== 200 || !sw.text.includes("gmx-shell-v1")) {
+if (sw.status !== 200) {
   fail(`service worker: ${sw.status}`);
+}
+if (!sw.text.includes("gmx-shell-v2") || !sw.text.includes("gmx-shell-docs-v1")) {
+  fail("sw.js missing v2 shell/doc caches");
+}
+if (!sw.text.includes('req.mode === "navigate"') || !sw.text.includes("/app.css")) {
+  fail("sw.js missing offline shell navigation or precache");
 }
 ok("PWA service worker");
 

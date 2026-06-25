@@ -1,6 +1,38 @@
-/* GMXReply shell service worker — static cache only; API stays network-only. */
-const CACHE = "gmx-shell-v1";
-const PRECACHE = ["/manifest.webmanifest", "/icons/gmx-icon.svg", "/mode.js"];
+/* GMXReply shell service worker — static cache + offline shell docs; API stays network-only. */
+const CACHE = "gmx-shell-v2";
+const DOC_CACHE = "gmx-shell-docs-v1";
+const PRECACHE = [
+  "/manifest.webmanifest",
+  "/icons/gmx-icon.svg",
+  "/mode.js",
+  "/app.css",
+  "/assets/og/gmx-share.svg",
+];
+
+function shellDocKey(pathname) {
+  if (pathname === "/app" || pathname.startsWith("/app/")) return "/app";
+  if (pathname === "/arcade.html") return "/arcade.html";
+  return null;
+}
+
+function isCacheableAsset(pathname) {
+  return (
+    pathname === "/sw.js" ||
+    pathname === "/manifest.webmanifest" ||
+    pathname.startsWith("/icons/") ||
+    pathname === "/mode.js" ||
+    pathname === "/app.css" ||
+    pathname.startsWith("/lib/") ||
+    pathname.startsWith("/assets/") ||
+    pathname.startsWith("/chunks/") ||
+    pathname.endsWith(".css") ||
+    pathname.endsWith(".js")
+  );
+}
+
+function putDoc(cacheKey, response) {
+  return caches.open(DOC_CACHE).then((cache) => cache.put(cacheKey, response.clone()));
+}
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -17,7 +49,11 @@ self.addEventListener("activate", (event) => {
     caches
       .keys()
       .then((keys) =>
-        Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
+        Promise.all(
+          keys
+            .filter((k) => k !== CACHE && k !== DOC_CACHE)
+            .map((k) => caches.delete(k))
+        )
       )
       .then(() => self.clients.claim())
       .catch(() => {})
@@ -30,17 +66,32 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
   if (url.pathname.startsWith("/api/")) return;
-  if (req.mode === "navigate") return;
 
-  const cacheable =
-    url.pathname === "/sw.js" ||
-    url.pathname === "/manifest.webmanifest" ||
-    url.pathname.startsWith("/icons/") ||
-    url.pathname === "/mode.js" ||
-    url.pathname.endsWith(".css") ||
-    url.pathname.endsWith(".js");
+  if (req.mode === "navigate") {
+    const docKey = shellDocKey(url.pathname);
+    if (!docKey) return;
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          if (res && res.ok) {
+            putDoc(docKey, res).catch(() => {});
+          }
+          return res;
+        })
+        .catch(() =>
+          caches.match(docKey).then((cached) => {
+            if (cached) return cached;
+            if (docKey !== "/app") {
+              return caches.match("/app");
+            }
+            return Response.error();
+          })
+        )
+    );
+    return;
+  }
 
-  if (!cacheable) return;
+  if (!isCacheableAsset(url.pathname)) return;
 
   event.respondWith(
     caches.match(req).then((cached) => {
