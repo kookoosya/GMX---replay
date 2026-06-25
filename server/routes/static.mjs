@@ -54,20 +54,17 @@ export function registerStaticRoutes(deps) {
 
   app.get("/blog", (req, res) => {
     noStore(res);
-    return res.redirect(302, "/blog.html");
+    return res.redirect(301, "/app");
   });
 
-  app.get("/blog/:slug", (req, res, next) => {
-    try {
-      const slug = String(req.params.slug || "").trim().toLowerCase();
-      if (!slug || slug.includes(".")) return next();
-      const file = path.join(PUBLIC_DIR, "blog", `${slug}.html`);
-      if (fs.existsSync(file)) {
-        noStore(res);
-        return res.sendFile(file);
-      }
-    } catch {}
-    return next();
+  app.get("/blog/:slug", (req, res) => {
+    noStore(res);
+    return res.redirect(301, "/app");
+  });
+
+  app.get("/blog.html", (req, res) => {
+    noStore(res);
+    return res.redirect(301, "/app");
   });
 
   app.use(

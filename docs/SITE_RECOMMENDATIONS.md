@@ -87,7 +87,7 @@
 ### SEO и рост
 - [x] **meta description** уникальные для Home, Arcade, Upgrade
 - [x] **og:image** для шаринга
-- [x] **Blog** — «Top 10 .io games 2025», «How to write GM replies»
+- ~~**Blog** — гайды~~ — убрано (Sprint 34); SEO игр на `/arcade/{slug}`
 
 ### Мобилка
 - [x] **PWA** — «Add to home screen»

@@ -39,6 +39,11 @@
     };
 
     let previewRestoreId = null;
+    let lastThemeRenderSig = "";
+
+    function themeRenderSignature(chosen, unlocked, total, curWps, wpTotal) {
+      return [chosen, unlocked, total, curWps, wpTotal, isPro() ? 1 : 0].join("|");
+    }
 
     function themePreviewBg(th) {
       const a = th?.a || "rgba(124,92,255,1)";
@@ -198,6 +203,10 @@
       );
 
       syncThemesUnlockMeters(curThemes, total, curWps, wallpapers.length);
+
+      const renderSig = themeRenderSignature(chosen, unlocked, total, curWps, wallpapers.length);
+      if (renderSig === lastThemeRenderSig) return;
+      lastThemeRenderSig = renderSig;
 
       const items = themes.map((th, idx) => ({ th, idx }));
       const groups = groupThemeItems(items);

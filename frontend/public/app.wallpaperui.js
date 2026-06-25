@@ -57,6 +57,19 @@
     let initDone = false;
     let wpRenderGen = 0;
     let lastCustomWpCount = -1;
+    let lastWpRenderSig = "";
+
+    function wallpaperRenderSignature(targetTab, activeId, allWps, unlocked, unlockedAll, nextReq) {
+      return [
+        targetTab,
+        activeId,
+        allWps.length,
+        unlocked,
+        unlockedAll ? 1 : 0,
+        nextReq,
+        isPro() ? 1 : 0,
+      ].join("|");
+    }
 
     function markWallpaperSelection(activeId) {
       try {
@@ -117,11 +130,26 @@
         ? `<span class="ok">Unlocked.</span> All wallpapers available. First ${customWpFreeCount} custom free, rest Pro.`
         : `<span class="warn">Locked.</span> First ${freeVisibleWallpapers} main + ${customWpFreeCount} custom free. Next unlock at <b>${nextReq} ref</b>.`;
 
+      const renderSig = wallpaperRenderSignature(
+        targetTab,
+        activeId,
+        allWps,
+        unlocked,
+        unlockedAll,
+        nextReq
+      );
+      if (renderSig === lastWpRenderSig) {
+        markWallpaperSelection(activeId);
+        return;
+      }
+      lastWpRenderSig = renderSig;
+
       loadCustomWallpapers().then((loaded) => {
         if (!loaded || !document.contains(grid) || renderGen !== wpRenderGen) return;
         const customCountAfter = getEffectiveCustomWallpapers().length;
         if (customCountAfter <= customCountBefore && customCountAfter === lastCustomWpCount) return;
         lastCustomWpCount = customCountAfter;
+        lastWpRenderSig = "";
         renderWallpaperUI();
       });
 

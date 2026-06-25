@@ -514,3 +514,19 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** Three new articles (Agar.io, Geometry Dash, GN evening routine); blog index + home teaser link; `blog-core` registry at 5 posts; i18n `blog_home_link_agario`.
 
 **Verify:** `node --test tests/blog.test.mjs`, `prod-verify` blog guides SEO + `/blog/how-to-play-agario`.
+
+## 34.0 Remove blog guides — DONE
+
+**Problem:** Game/GM blog guides not needed for product; SEO for games covered by `/arcade/{slug}` landing pages.
+
+**Fix:** Delete blog HTML; `/blog` + `/blog.html` + `/blog/:slug` → 301 `/app`; remove home teaser; drop blog from PWA shell cache.
+
+**Verify:** `node --test tests/perf-tab-activation.test.mjs`, `prod-verify` blog guides removed.
+
+## 34.1 Tab activation perf — DONE
+
+**Problem:** Site felt sluggish switching tabs — redundant wallpaper grid rebuild (58 cards) on Extension tab; prediction refetched every visit.
+
+**Fix:** `renderWallpaperUI` only on Themes tab; wallpaper/themes render signature skip; prediction `force` only on first tab visit.
+
+**Verify:** `node --test tests/perf-tab-activation.test.mjs`, manual tab switch GM → Themes → Extension.

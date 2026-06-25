@@ -12,15 +12,9 @@ export const PWA_PRECACHE_URLS = Object.freeze([
   "/assets/og/gmx-share.svg",
 ]);
 
-export const PWA_SHELL_DOC_PATHS = Object.freeze(["/app", "/arcade.html", "/blog.html"]);
+export const PWA_SHELL_DOC_PATHS = Object.freeze(["/app", "/arcade.html"]);
 
-export const PWA_BLOG_POST_PATHS = Object.freeze([
-  "/blog/top-10-io-games-2025.html",
-  "/blog/how-to-write-gm-replies.html",
-  "/blog/how-to-play-agario.html",
-  "/blog/geometry-dash-browser-guide.html",
-  "/blog/gn-replies-evening-routine.html",
-]);
+export const PWA_BLOG_POST_PATHS = Object.freeze([]);
 
 export const PWA_MANIFEST_PATH = "/manifest.webmanifest";
 
@@ -30,8 +24,6 @@ export function shellDocCacheKey(pathname) {
   const path = String(pathname || "");
   if (path === "/app" || path.startsWith("/app/")) return "/app";
   if (path === "/arcade.html") return "/arcade.html";
-  if (path === "/blog.html") return "/blog.html";
-  if (path.startsWith("/blog/") && path.endsWith(".html")) return path;
   return null;
 }
 

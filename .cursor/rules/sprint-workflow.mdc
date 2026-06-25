@@ -180,4 +180,15 @@ Do not begin step N+1 until step N meets definition of done.
 
 1. Expand blog guides (Agar.io, Geometry Dash, GN evening) — DONE (33.1)
 
+## Sprint 34 queue (strict order) — Perf + blog cleanup
+
+1. Remove blog/guides (redirect `/blog` → `/app`) — DONE (34.0)
+2. Tab activation perf + wallpaper/themes render cache — DONE (34.1)
+
+## Sprint 35+ (planned)
+
+- Wallpapers cleanup (site + extension)
+- Referral badges + badge shelf
+- Arcade tournaments v1
+
 Do not begin step N+1 until step N meets definition of done.

@@ -394,24 +394,17 @@ if (!skCore.text.includes("arcadeTileSkeletonHtml")) {
 }
 ok("skeleton loaders GM GN Arcade");
 
-const blogIndex = await get("/blog.html");
-if (blogIndex.status !== 200 || !blogIndex.text.includes("top-10-io-games-2025")) {
-  fail("/blog.html missing or incomplete");
+const blogLegacy = await get("/blog.html", { redirect: "manual" });
+if (blogLegacy.status !== 301 || !String(blogLegacy.headers.get("location") || "").includes("/app")) {
+  fail("/blog.html should 301 redirect to /app");
 }
-const blogSlug = await get("/blog/how-to-write-gm-replies");
-if (blogSlug.status !== 200 || !blogSlug.text.includes("GM replies")) {
-  fail("/blog/how-to-write-gm-replies slug route failed");
+const blogSlugLegacy = await get("/blog/how-to-play-agario", { redirect: "manual" });
+if (blogSlugLegacy.status !== 301) {
+  fail("/blog/:slug should 301 redirect to /app");
 }
-const blogAgario = await get("/blog/how-to-play-agario");
-if (blogAgario.status !== 200 || !blogAgario.text.includes("Agar.io")) {
-  fail("/blog/how-to-play-agario slug route failed");
+if (appPage.text.includes('id="blog_home_teaser"')) {
+  fail("/app shell should not include blog home teaser");
 }
-if (!blogIndex.text.includes("how-to-play-agario")) {
-  fail("/blog.html missing expanded guides");
-}
-if (!appPage.text.includes('id="blog_home_teaser"')) {
-  fail("/app shell missing blog home teaser");
-}
-ok("blog guides SEO");
+ok("blog guides removed");
 
 console.log("\nPROD_VERIFY_OK");

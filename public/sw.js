@@ -12,8 +12,6 @@ const PRECACHE = [
 function shellDocKey(pathname) {
   if (pathname === "/app" || pathname.startsWith("/app/")) return "/app";
   if (pathname === "/arcade.html") return "/arcade.html";
-  if (pathname === "/blog.html") return "/blog.html";
-  if (pathname.startsWith("/blog/") && pathname.endsWith(".html")) return pathname;
   return null;
 }
 

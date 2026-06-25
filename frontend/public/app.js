@@ -8,6 +8,7 @@
   let LAST_USAGE = { gm:{ used:0, limit:0 }, gn:{ used:0, limit:0 }, resetAt:null };
   let LAST_SAVED = { gm:0, gn:0 };
   let SAVE_CAP_FREE = 50;
+  const __gmxTabDataLoaded = { prediction: false };
 
   if (!window.__GMXBootstrapCoreWireFactory) throw new Error("GMX bootstrapcorewire factory missing");
   const {
@@ -288,7 +289,7 @@ const {
   },
   onTabActivated: (name) => {
     try { __gmxLangUi.updateLangFlags(); } catch {}
-    if (name === "themes" || name === "extthemes") {
+    if (name === "themes") {
       try { renderWallpaperUI(); } catch {}
     }
     if (name === "home") {
@@ -305,7 +306,10 @@ const {
       try { bindLeaderboardUI(); } catch {}
       try { loadLeaderboard(LB_DAYS || 7); } catch {}
     }
-    if (name === "prediction") { try { loadPredictionSignals({ force: true }); } catch {} }
+    if (name === "prediction") {
+      try { loadPredictionSignals({ force: !__gmxTabDataLoaded.prediction }); } catch {}
+      __gmxTabDataLoaded.prediction = true;
+    }
     if (name === "extthemes") {
       try { renderExtThemes(); } catch {}
       try { renderExtWallpapers(); } catch {}
