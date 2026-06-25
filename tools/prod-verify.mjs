@@ -22,7 +22,7 @@ async function get(path, opts = {}) {
       try {
         json = JSON.parse(text);
       } catch {}
-      return { status: r.status, text, json };
+      return { status: r.status, text, json, headers: r.headers };
     } catch (err) {
       lastErr = err;
       if (attempt < retries) {
@@ -102,8 +102,8 @@ if (arcadeCategoryCover.status !== 200) {
 }
 ok("arcade category covers");
 
-const slugRes = await fetch(`${BASE}/arcade/agario`, { redirect: "manual" });
-const slugLoc = String(slugRes.headers.get("location") || "");
+const slugRes = await get("/arcade/agario", { redirect: "manual" });
+const slugLoc = String(slugRes.headers?.get("location") || "");
 if (slugRes.status !== 302 || !slugLoc.includes("/arcade.html?game=agario")) {
   fail(`arcade slug redirect: status=${slugRes.status} location=${slugLoc.slice(0, 120)}`);
 }
