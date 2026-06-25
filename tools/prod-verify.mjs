@@ -161,7 +161,7 @@ if (homeDemo.status !== 200 || !homeDemo.json?.ok || !Array.isArray(homeDemo.jso
 ok("home guest demo API");
 
 const heroLoop = await get("/assets/hero/gmx-hero-loop.svg");
-if (heroLoop.status !== 200 || !heroLoop.text.includes("GM / GN replies")) {
+if (heroLoop.status !== 200 || !/Reply on X|GMXReply/.test(heroLoop.text)) {
   fail(`home hero loop asset: ${heroLoop.status}`);
 }
 ok("home hero loop asset");
