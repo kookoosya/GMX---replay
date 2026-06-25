@@ -835,5 +835,13 @@
   "blog_home_link_io": "Top 10 jeux .io en 2025",
   "blog_home_link_gm": "Écrire des GM qui sonnent humains",
   "blog_home_link_all": "Tous les guides →",
-  "blog_home_link_agario": "Jouer à Agar.io"
+  "blog_home_link_agario": "Jouer à Agar.io",
+  "ref_badge_title": "Badges promoteur",
+  "ref_badge_bronze": "Niveau bronze",
+  "ref_badge_silver": "Argent",
+  "ref_badge_gold": "Or",
+  "ref_badge_diamond": "Diamant",
+  "ref_badge_next_html": "Prochain badge à <b>{n}</b> éligibles — {tier}",
+  "ref_badge_toast_html": "Nouveau badge : <b>{tier}</b>",
+  "ref_badge_all_unlocked": "Tous les badges promoteur débloqués"
 }

@@ -835,5 +835,13 @@
   "blog_home_link_io": "Top 10 .io-Spiele 2025",
   "blog_home_link_gm": "GM-Antworten menschlich schreiben",
   "blog_home_link_all": "Alle Guides →",
-  "blog_home_link_agario": "Agar.io im Browser spielen"
+  "blog_home_link_agario": "Agar.io im Browser spielen",
+  "ref_badge_title": "Promoter-Abzeichen",
+  "ref_badge_bronze": "Bronzestufe",
+  "ref_badge_silver": "Silber",
+  "ref_badge_gold": "Goldstufe",
+  "ref_badge_diamond": "Diamant",
+  "ref_badge_next_html": "Nächstes Abzeichen bei <b>{n}</b> berechtigten — {tier}",
+  "ref_badge_toast_html": "Neues Abzeichen: <b>{tier}</b>",
+  "ref_badge_all_unlocked": "Alle Promoter-Abzeichen freigeschaltet"
 }

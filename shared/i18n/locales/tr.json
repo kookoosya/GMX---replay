@@ -835,5 +835,13 @@
   "blog_home_link_io": "2025'in en iyi 10 .io oyunu",
   "blog_home_link_gm": "İnsan gibi GM yanıtları yazma",
   "blog_home_link_all": "Tüm rehberler →",
-  "blog_home_link_agario": "Agar.io nasıl oynanır"
+  "blog_home_link_agario": "Agar.io nasıl oynanır",
+  "ref_badge_title": "Promoter rozetleri",
+  "ref_badge_bronze": "Bronz",
+  "ref_badge_silver": "Gümüş",
+  "ref_badge_gold": "Altın",
+  "ref_badge_diamond": "Elmas",
+  "ref_badge_next_html": "Sonraki rozet <b>{n}</b> uygun kullanıcıda — {tier}",
+  "ref_badge_toast_html": "Yeni rozet: <b>{tier}</b>",
+  "ref_badge_all_unlocked": "Tüm promoter rozetleri açıldı"
 }

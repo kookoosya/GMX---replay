@@ -835,5 +835,13 @@
   "blog_home_link_io": "Top 10 .io games 2025",
   "blog_home_link_gm": "How to write GM replies",
   "blog_home_link_all": "All guides →",
-  "blog_home_link_agario": "How to play Agar.io"
+  "blog_home_link_agario": "How to play Agar.io",
+  "ref_badge_title": "Promoter badges",
+  "ref_badge_bronze": "Bronze",
+  "ref_badge_silver": "Silver",
+  "ref_badge_gold": "Gold",
+  "ref_badge_diamond": "Diamond",
+  "ref_badge_next_html": "Next badge at <b>{n}</b> eligible — {tier}",
+  "ref_badge_toast_html": "New badge unlocked: <b>{tier}</b>",
+  "ref_badge_all_unlocked": "All promoter badges unlocked"
 }

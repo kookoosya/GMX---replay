@@ -39,6 +39,9 @@
     function syncRefProgressMeter(lang, eligible) {
       return siteI18nDynamic.syncRefProgressMeter?.(lang, eligible);
     }
+    function syncRefBadgeUi(lang, eligible, opts) {
+      return siteI18nDynamic.syncRefBadgeUi?.(lang, eligible, opts);
+    }
     function renderReferralRightCopy(lang) {
       return siteI18nDynamic.renderReferralRightCopy?.(lang);
     }
@@ -63,6 +66,7 @@
       nextReferralUnlockAt,
       nextReferralUnlockLabel,
       syncRefProgressMeter,
+      syncRefBadgeUi,
       renderReferralRightCopy,
       syncModePanelCopy,
       patchDynamicCopy,

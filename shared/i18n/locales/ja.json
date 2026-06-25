@@ -835,5 +835,13 @@
   "blog_home_link_io": "2025年の.ioゲームTOP10",
   "blog_home_link_gm": "自然なGM返信の書き方",
   "blog_home_link_all": "すべてのガイド →",
-  "blog_home_link_agario": "Agar.ioの遊び方"
+  "blog_home_link_agario": "Agar.ioの遊び方",
+  "ref_badge_title": "プロモーターバッジ",
+  "ref_badge_bronze": "ブロンズ",
+  "ref_badge_silver": "シルバー",
+  "ref_badge_gold": "ゴールド",
+  "ref_badge_diamond": "ダイヤ",
+  "ref_badge_next_html": "次のバッジは<b>{n}</b>人の対象者で — {tier}",
+  "ref_badge_toast_html": "新しいバッジ: <b>{tier}</b>",
+  "ref_badge_all_unlocked": "すべてのプロモーターバッジを解放"
 }

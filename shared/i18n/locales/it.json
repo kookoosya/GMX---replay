@@ -835,5 +835,13 @@
   "blog_home_link_io": "Top 10 giochi .io nel 2025",
   "blog_home_link_gm": "Scrivere GM che suonano umani",
   "blog_home_link_all": "Tutte le guide →",
-  "blog_home_link_agario": "Come giocare ad Agar.io"
+  "blog_home_link_agario": "Come giocare ad Agar.io",
+  "ref_badge_title": "Badge promotore",
+  "ref_badge_bronze": "Bronzo",
+  "ref_badge_silver": "Argento",
+  "ref_badge_gold": "Oro",
+  "ref_badge_diamond": "Diamante",
+  "ref_badge_next_html": "Prossimo badge a <b>{n}</b> idonei — {tier}",
+  "ref_badge_toast_html": "Nuovo badge: <b>{tier}</b>",
+  "ref_badge_all_unlocked": "Tutti i badge promotore sbloccati"
 }

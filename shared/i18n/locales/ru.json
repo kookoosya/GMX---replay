@@ -835,5 +835,13 @@
   "blog_home_link_io": "Топ-10 .io игр в 2025",
   "blog_home_link_gm": "Как писать GM, которые звучат по-человечески",
   "blog_home_link_all": "Все гайды →",
-  "blog_home_link_agario": "Как играть в Agar.io"
+  "blog_home_link_agario": "Как играть в Agar.io",
+  "ref_badge_title": "Бейджи промоутера",
+  "ref_badge_bronze": "Бронза",
+  "ref_badge_silver": "Серебро",
+  "ref_badge_gold": "Золото",
+  "ref_badge_diamond": "Алмаз",
+  "ref_badge_next_html": "Следующий бейдж при <b>{n}</b> eligible — {tier}",
+  "ref_badge_toast_html": "Новый бейдж: <b>{tier}</b>",
+  "ref_badge_all_unlocked": "Все бейджи промоутера открыты"
 }

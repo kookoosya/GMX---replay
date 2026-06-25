@@ -8,6 +8,7 @@
     "app.js",
     "app.css",
     "lib/referral-progress-core.js",
+    "lib/referral-badge-core.js",
     "lib/theme-group-core.js",
     "lib/wallpaper-core.js",
     "lib/gmgn-gen-history-core.js",
@@ -131,6 +132,7 @@
   "scriptOrder": [
     "i18n/siteI18n.js",
     "lib/referral-progress-core.js",
+    "lib/referral-badge-core.js",
     "lib/theme-group-core.js",
     "lib/wallpaper-core.js",
     "lib/gmgn-gen-history-core.js",

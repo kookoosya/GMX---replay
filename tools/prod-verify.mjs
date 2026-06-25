@@ -217,6 +217,17 @@ if (!appPage.text.includes('id="refProgressNeed"')) {
 }
 ok("referral progress bar UI");
 
+const refBadgeCore = await get("/lib/referral-badge-core.js");
+if (!refBadgeCore.ok || !refBadgeCore.text.includes("GMXReferralBadgeCore")) {
+  fail(`referral badge core: ${refBadgeCore.status}`);
+}
+ok("referral badge core lib");
+
+if (!appPage.text.includes('id="refBadgeShelf"') || !appPage.text.includes('id="headerRefBadge"')) {
+  fail("/app shell missing referral badge UI");
+}
+ok("referral badge UI");
+
 const manifest = await get("/manifest.webmanifest");
 if (manifest.status !== 200 || !manifest.text.includes('"short_name"')) {
   fail(`PWA manifest: ${manifest.status}`);

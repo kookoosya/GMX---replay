@@ -838,7 +838,15 @@
     "blog_home_link_io": "Top 10 .io games 2025",
     "blog_home_link_gm": "How to write GM replies",
     "blog_home_link_all": "All guides →",
-    "blog_home_link_agario": "How to play Agar.io"
+    "blog_home_link_agario": "How to play Agar.io",
+    "ref_badge_title": "Promoter badges",
+    "ref_badge_bronze": "Bronze",
+    "ref_badge_silver": "Silver",
+    "ref_badge_gold": "Gold",
+    "ref_badge_diamond": "Diamond",
+    "ref_badge_next_html": "Next badge at <b>{n}</b> eligible — {tier}",
+    "ref_badge_toast_html": "New badge unlocked: <b>{tier}</b>",
+    "ref_badge_all_unlocked": "All promoter badges unlocked"
   },
   "de": {
     "plan_compare_btn": "Vergleichen",
@@ -1677,7 +1685,15 @@
     "blog_home_link_io": "Top 10 .io-Spiele 2025",
     "blog_home_link_gm": "GM-Antworten menschlich schreiben",
     "blog_home_link_all": "Alle Guides →",
-    "blog_home_link_agario": "Agar.io im Browser spielen"
+    "blog_home_link_agario": "Agar.io im Browser spielen",
+    "ref_badge_title": "Promoter-Abzeichen",
+    "ref_badge_bronze": "Bronzestufe",
+    "ref_badge_silver": "Silber",
+    "ref_badge_gold": "Goldstufe",
+    "ref_badge_diamond": "Diamant",
+    "ref_badge_next_html": "Nächstes Abzeichen bei <b>{n}</b> berechtigten — {tier}",
+    "ref_badge_toast_html": "Neues Abzeichen: <b>{tier}</b>",
+    "ref_badge_all_unlocked": "Alle Promoter-Abzeichen freigeschaltet"
   },
   "fr": {
     "plan_compare_btn": "Comparer",
@@ -2516,7 +2532,15 @@
     "blog_home_link_io": "Top 10 jeux .io en 2025",
     "blog_home_link_gm": "Écrire des GM qui sonnent humains",
     "blog_home_link_all": "Tous les guides →",
-    "blog_home_link_agario": "Jouer à Agar.io"
+    "blog_home_link_agario": "Jouer à Agar.io",
+    "ref_badge_title": "Badges promoteur",
+    "ref_badge_bronze": "Niveau bronze",
+    "ref_badge_silver": "Argent",
+    "ref_badge_gold": "Or",
+    "ref_badge_diamond": "Diamant",
+    "ref_badge_next_html": "Prochain badge à <b>{n}</b> éligibles — {tier}",
+    "ref_badge_toast_html": "Nouveau badge : <b>{tier}</b>",
+    "ref_badge_all_unlocked": "Tous les badges promoteur débloqués"
   },
   "es": {
     "plan_compare_btn": "Comparar",
@@ -3355,7 +3379,15 @@
     "blog_home_link_io": "Top 10 juegos .io en 2025",
     "blog_home_link_gm": "Cómo escribir GM que suenen humanos",
     "blog_home_link_all": "Todas las guías →",
-    "blog_home_link_agario": "Cómo jugar Agar.io"
+    "blog_home_link_agario": "Cómo jugar Agar.io",
+    "ref_badge_title": "Insignias de promotor",
+    "ref_badge_bronze": "Bronce",
+    "ref_badge_silver": "Plata",
+    "ref_badge_gold": "Oro",
+    "ref_badge_diamond": "Diamante",
+    "ref_badge_next_html": "Próxima insignia con <b>{n}</b> elegibles — {tier}",
+    "ref_badge_toast_html": "Nueva insignia: <b>{tier}</b>",
+    "ref_badge_all_unlocked": "Todas las insignias de promotor desbloqueadas"
   },
   "pt": {
     "plan_compare_btn": "Comparar",
@@ -4194,7 +4226,15 @@
     "blog_home_link_io": "Top 10 jogos .io em 2025",
     "blog_home_link_gm": "Como escrever GM que soam humanos",
     "blog_home_link_all": "Todos os guias →",
-    "blog_home_link_agario": "Como jogar Agar.io"
+    "blog_home_link_agario": "Como jogar Agar.io",
+    "ref_badge_title": "Emblemas de promotor",
+    "ref_badge_bronze": "Nível bronze",
+    "ref_badge_silver": "Prata",
+    "ref_badge_gold": "Ouro",
+    "ref_badge_diamond": "Diamante",
+    "ref_badge_next_html": "Próximo emblema com <b>{n}</b> elegíveis — {tier}",
+    "ref_badge_toast_html": "Novo emblema: <b>{tier}</b>",
+    "ref_badge_all_unlocked": "Todos os emblemas de promotor desbloqueados"
   },
   "it": {
     "plan_compare_btn": "Confronta",
@@ -5033,7 +5073,15 @@
     "blog_home_link_io": "Top 10 giochi .io nel 2025",
     "blog_home_link_gm": "Scrivere GM che suonano umani",
     "blog_home_link_all": "Tutte le guide →",
-    "blog_home_link_agario": "Come giocare ad Agar.io"
+    "blog_home_link_agario": "Come giocare ad Agar.io",
+    "ref_badge_title": "Badge promotore",
+    "ref_badge_bronze": "Bronzo",
+    "ref_badge_silver": "Argento",
+    "ref_badge_gold": "Oro",
+    "ref_badge_diamond": "Diamante",
+    "ref_badge_next_html": "Prossimo badge a <b>{n}</b> idonei — {tier}",
+    "ref_badge_toast_html": "Nuovo badge: <b>{tier}</b>",
+    "ref_badge_all_unlocked": "Tutti i badge promotore sbloccati"
   },
   "nl": {
     "plan_compare_btn": "Vergelijken",
@@ -5872,7 +5920,15 @@
     "blog_home_link_io": "Top 10 .io-games in 2025",
     "blog_home_link_gm": "GM-antwoorden menselijk schrijven",
     "blog_home_link_all": "Alle gidsen →",
-    "blog_home_link_agario": "Agar.io spelen in de browser"
+    "blog_home_link_agario": "Agar.io spelen in de browser",
+    "ref_badge_title": "Promoter-badges",
+    "ref_badge_bronze": "Brons",
+    "ref_badge_silver": "Zilver",
+    "ref_badge_gold": "Goud",
+    "ref_badge_diamond": "Diamant",
+    "ref_badge_next_html": "Volgende badge bij <b>{n}</b> in aanmerking komenden — {tier}",
+    "ref_badge_toast_html": "Nieuwe badge: <b>{tier}</b>",
+    "ref_badge_all_unlocked": "Alle promoter-badges ontgrendeld"
   },
   "tr": {
     "plan_compare_btn": "Karşılaştır",
@@ -6711,7 +6767,15 @@
     "blog_home_link_io": "2025'in en iyi 10 .io oyunu",
     "blog_home_link_gm": "İnsan gibi GM yanıtları yazma",
     "blog_home_link_all": "Tüm rehberler →",
-    "blog_home_link_agario": "Agar.io nasıl oynanır"
+    "blog_home_link_agario": "Agar.io nasıl oynanır",
+    "ref_badge_title": "Promoter rozetleri",
+    "ref_badge_bronze": "Bronz",
+    "ref_badge_silver": "Gümüş",
+    "ref_badge_gold": "Altın",
+    "ref_badge_diamond": "Elmas",
+    "ref_badge_next_html": "Sonraki rozet <b>{n}</b> uygun kullanıcıda — {tier}",
+    "ref_badge_toast_html": "Yeni rozet: <b>{tier}</b>",
+    "ref_badge_all_unlocked": "Tüm promoter rozetleri açıldı"
   },
   "pl": {
     "plan_compare_btn": "Porównaj",
@@ -7550,7 +7614,15 @@
     "blog_home_link_io": "Top 10 gier .io w 2025",
     "blog_home_link_gm": "Jak pisać GM brzmiące naturalnie",
     "blog_home_link_all": "Wszystkie poradniki →",
-    "blog_home_link_agario": "Jak grać w Agar.io"
+    "blog_home_link_agario": "Jak grać w Agar.io",
+    "ref_badge_title": "Odznaki promotora",
+    "ref_badge_bronze": "Brąz",
+    "ref_badge_silver": "Srebro",
+    "ref_badge_gold": "Złoto",
+    "ref_badge_diamond": "Diament",
+    "ref_badge_next_html": "Następna odznaka przy <b>{n}</b> uprawnionych — {tier}",
+    "ref_badge_toast_html": "Nowa odznaka: <b>{tier}</b>",
+    "ref_badge_all_unlocked": "Wszystkie odznaki promotora odblokowane"
   },
   "id": {
     "plan_compare_btn": "Bandingkan",
@@ -8389,7 +8461,15 @@
     "blog_home_link_io": "10 game .io terbaik 2025",
     "blog_home_link_gm": "Cara menulis balasan GM yang natural",
     "blog_home_link_all": "Semua panduan →",
-    "blog_home_link_agario": "Cara bermain Agar.io"
+    "blog_home_link_agario": "Cara bermain Agar.io",
+    "ref_badge_title": "Lencana promotor",
+    "ref_badge_bronze": "Perunggu",
+    "ref_badge_silver": "Perak",
+    "ref_badge_gold": "Emas",
+    "ref_badge_diamond": "Berlian",
+    "ref_badge_next_html": "Lencana berikutnya pada <b>{n}</b> eligible — {tier}",
+    "ref_badge_toast_html": "Lencana baru: <b>{tier}</b>",
+    "ref_badge_all_unlocked": "Semua lencana promotor terbuka"
   },
   "ru": {
     "plan_compare_btn": "Сравнить",
@@ -9228,7 +9308,15 @@
     "blog_home_link_io": "Топ-10 .io игр в 2025",
     "blog_home_link_gm": "Как писать GM, которые звучат по-человечески",
     "blog_home_link_all": "Все гайды →",
-    "blog_home_link_agario": "Как играть в Agar.io"
+    "blog_home_link_agario": "Как играть в Agar.io",
+    "ref_badge_title": "Бейджи промоутера",
+    "ref_badge_bronze": "Бронза",
+    "ref_badge_silver": "Серебро",
+    "ref_badge_gold": "Золото",
+    "ref_badge_diamond": "Алмаз",
+    "ref_badge_next_html": "Следующий бейдж при <b>{n}</b> eligible — {tier}",
+    "ref_badge_toast_html": "Новый бейдж: <b>{tier}</b>",
+    "ref_badge_all_unlocked": "Все бейджи промоутера открыты"
   },
   "uk": {
     "plan_compare_btn": "Порівняти",
@@ -10067,7 +10155,15 @@
     "blog_home_link_io": "Топ-10 .io ігор у 2025",
     "blog_home_link_gm": "Як писати GM, які звучать по-людськи",
     "blog_home_link_all": "Усі гайди →",
-    "blog_home_link_agario": "Як грати в Agar.io"
+    "blog_home_link_agario": "Як грати в Agar.io",
+    "ref_badge_title": "Бейджі промоутера",
+    "ref_badge_bronze": "Бронза",
+    "ref_badge_silver": "Срібло",
+    "ref_badge_gold": "Золото",
+    "ref_badge_diamond": "Алмаз",
+    "ref_badge_next_html": "Наступний бейдж при <b>{n}</b> eligible — {tier}",
+    "ref_badge_toast_html": "Новий бейдж: <b>{tier}</b>",
+    "ref_badge_all_unlocked": "Усі бейджі промоутера відкриті"
   },
   "hi": {
     "plan_compare_btn": "कम्पेयर करें",
@@ -10906,7 +11002,15 @@
     "blog_home_link_io": "2025 के टॉप 10 .io गेम",
     "blog_home_link_gm": "इंसानी GM जवाब कैसे लिखें",
     "blog_home_link_all": "सभी गाइड →",
-    "blog_home_link_agario": "Agar.io कैसे खेलें"
+    "blog_home_link_agario": "Agar.io कैसे खेलें",
+    "ref_badge_title": "प्रमोटर बैज",
+    "ref_badge_bronze": "कांस्य",
+    "ref_badge_silver": "रजत",
+    "ref_badge_gold": "स्वर्ण",
+    "ref_badge_diamond": "हीरा",
+    "ref_badge_next_html": "अगला बैज <b>{n}</b> योग्य पर — {tier}",
+    "ref_badge_toast_html": "नया बैज: <b>{tier}</b>",
+    "ref_badge_all_unlocked": "सभी प्रमोटर बैज अनलॉक"
   },
   "ja": {
     "plan_compare_btn": "比較",
@@ -11745,7 +11849,15 @@
     "blog_home_link_io": "2025年の.ioゲームTOP10",
     "blog_home_link_gm": "自然なGM返信の書き方",
     "blog_home_link_all": "すべてのガイド →",
-    "blog_home_link_agario": "Agar.ioの遊び方"
+    "blog_home_link_agario": "Agar.ioの遊び方",
+    "ref_badge_title": "プロモーターバッジ",
+    "ref_badge_bronze": "ブロンズ",
+    "ref_badge_silver": "シルバー",
+    "ref_badge_gold": "ゴールド",
+    "ref_badge_diamond": "ダイヤ",
+    "ref_badge_next_html": "次のバッジは<b>{n}</b>人の対象者で — {tier}",
+    "ref_badge_toast_html": "新しいバッジ: <b>{tier}</b>",
+    "ref_badge_all_unlocked": "すべてのプロモーターバッジを解放"
   },
   "zh": {
     "plan_compare_btn": "对比",
@@ -12584,7 +12696,15 @@
     "blog_home_link_io": "2025 十大 .io 游戏",
     "blog_home_link_gm": "如何写出自然的 GM 回复",
     "blog_home_link_all": "全部指南 →",
-    "blog_home_link_agario": "如何玩 Agar.io"
+    "blog_home_link_agario": "如何玩 Agar.io",
+    "ref_badge_title": "推广徽章",
+    "ref_badge_bronze": "青铜",
+    "ref_badge_silver": "白银",
+    "ref_badge_gold": "黄金",
+    "ref_badge_diamond": "钻石",
+    "ref_badge_next_html": "下一枚徽章需<b>{n}</b>个符合条件 — {tier}",
+    "ref_badge_toast_html": "新徽章：<b>{tier}</b>",
+    "ref_badge_all_unlocked": "已解锁全部推广徽章"
   }
 };
   function clone(value){ return JSON.parse(JSON.stringify(value)); }

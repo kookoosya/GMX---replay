@@ -109,6 +109,13 @@
           ctx.scheduleRefStatsRefresh?.(ms);
         } catch {}
       },
+      isPro: () => {
+        try {
+          return !!ctx.isPro?.();
+        } catch {
+          return false;
+        }
+      },
     });
 
     if (!window.__GMXSiteLangMenuFactory) throw new Error("GMX sitelangmenu factory missing");

@@ -22,6 +22,7 @@
     const getHandle = typeof ctx.getHandle === "function" ? ctx.getHandle : () => "";
     const scheduleRefStatsRefresh =
       typeof ctx.scheduleRefStatsRefresh === "function" ? ctx.scheduleRefStatsRefresh : () => {};
+    const isPro = typeof ctx.isPro === "function" ? ctx.isPro : () => false;
 
     function getReferralUiCopy(_lang) {
       const fallback = {
@@ -189,6 +190,8 @@
     }
 
     const refProgressCore = globalThis.GMXReferralProgressCore || null;
+    const refBadgeCore = globalThis.GMXReferralBadgeCore || null;
+    const REF_BADGE_SEEN_KEY = "gmx_ref_badge_tier_v1";
 
     function nextReferralUnlockAt(eligible) {
       if (refProgressCore) return refProgressCore.nextReferralUnlockAt(eligible);
@@ -259,6 +262,83 @@
             ? needTpl.replace(/\{n\}/g, String(state.needed))
             : siteTr("ref_progress_ready", "Ready to unlock on next eligible referral");
       }
+    }
+
+    function badgeTierLabel(lang, tierId) {
+      const key = `ref_badge_${tierId}`;
+      return siteTr(key, tierId);
+    }
+
+    function renderBadgePill(tier, lang, { compact = false } = {}) {
+      if (!tier || !refBadgeCore) return "";
+      const label = badgeTierLabel(lang, tier.id);
+      return refBadgeCore.referralBadgePillHtml(tier, { label: escapeHtml(label), compact });
+    }
+
+    function syncRefBadgeUi(lang, eligible, { isPro = false, toast = null, announce = false } = {}) {
+      if (!refBadgeCore) return;
+      const state = refBadgeCore.referralBadgeState(eligible, { isPro });
+      const earned = refBadgeCore.earnedReferralBadgeTier(eligible);
+
+      const setPill = (id, compact) => {
+        const el = $(id);
+        if (!el) return;
+        if (!getHandle() || !state.current) {
+          el.classList.add("hidden");
+          el.innerHTML = "";
+          return;
+        }
+        el.classList.remove("hidden");
+        el.innerHTML = renderBadgePill(state.current, lang, { compact });
+      };
+
+      setPill("headerRefBadge", true);
+      setPill("homeRefBadge", false);
+
+      const shelf = $("refBadgeShelf");
+      const shelfTitle = $("refBadgeShelfTitle");
+      const shelfRow = $("refBadgeRow");
+      const nextHint = $("refBadgeNextHint");
+      if (shelfTitle) shelfTitle.textContent = siteTr("ref_badge_title", "Promoter badges");
+      if (shelfRow) {
+        shelfRow.innerHTML = refBadgeCore.REF_BADGE_TIERS.map((tier) => {
+          const unlocked = (earned && refBadgeCore.badgeTierRank(earned) >= refBadgeCore.badgeTierRank(tier));
+          const label = badgeTierLabel(lang, tier.id);
+          return `<div class="refBadgeTile ${tier.cls}${unlocked ? " refBadgeTileUnlocked" : ""}">
+            <span class="refBadgeIcon" aria-hidden="true">${tier.icon}</span>
+            <span class="refBadgeName">${escapeHtml(label)}</span>
+            <span class="refBadgeReq muted small">${tier.minEligible}+</span>
+          </div>`;
+        }).join("");
+      }
+      if (nextHint) {
+        if (state.complete) {
+          nextHint.textContent = siteTr("ref_badge_all_unlocked", "All promoter badges unlocked");
+        } else if (state.next) {
+          const tpl = siteTr("ref_badge_next_html", "Next badge at <b>{n}</b> eligible — {tier}");
+          const tierName = badgeTierLabel(lang, state.next.id);
+          nextHint.innerHTML = tpl
+            .replace(/\{n\}/g, String(state.next.minEligible))
+            .replace(/\{tier\}/g, escapeHtml(tierName));
+        } else {
+          nextHint.textContent = "";
+        }
+      }
+      if (shelf) shelf.classList.toggle("hidden", !getHandle());
+
+      if (!announce || !toast || typeof toast !== "function" || !state.current) return;
+      let seenId = "";
+      try {
+        seenId = String(localStorage.getItem(REF_BADGE_SEEN_KEY) || "");
+      } catch {}
+      const currentId = state.current.id;
+      if (refBadgeCore.badgeTierRank(currentId) <= refBadgeCore.badgeTierRank(seenId)) return;
+      try {
+        localStorage.setItem(REF_BADGE_SEEN_KEY, currentId);
+      } catch {}
+      const tierName = badgeTierLabel(lang, currentId);
+      const tpl = siteTr("ref_badge_toast_html", "New badge unlocked: <b>{tier}</b>");
+      toast("ok", tpl.replace(/\{tier\}/g, escapeHtml(tierName)), 5500);
     }
 
     function renderReferralRightCopy(lang) {
@@ -336,6 +416,10 @@
         syncRefProgressMeter(lang, eligible);
       } catch (_e) {}
       try {
+        const eligible = Number($("refEligibleInline")?.textContent || 0) || 0;
+        syncRefBadgeUi(lang, eligible, { isPro: isPro() });
+      } catch (_e) {}
+      try {
         if (getCurrentTab() === "referrals" && getHandle()) {
           scheduleRefStatsRefresh(220);
         }
@@ -350,6 +434,7 @@
       nextReferralUnlockAt,
       nextReferralUnlockLabel,
       syncRefProgressMeter,
+      syncRefBadgeUi,
       renderReferralRightCopy,
       syncModePanelCopy,
       patchDynamicCopy,

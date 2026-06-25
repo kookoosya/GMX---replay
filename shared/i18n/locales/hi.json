@@ -835,5 +835,13 @@
   "blog_home_link_io": "2025 के टॉप 10 .io गेम",
   "blog_home_link_gm": "इंसानी GM जवाब कैसे लिखें",
   "blog_home_link_all": "सभी गाइड →",
-  "blog_home_link_agario": "Agar.io कैसे खेलें"
+  "blog_home_link_agario": "Agar.io कैसे खेलें",
+  "ref_badge_title": "प्रमोटर बैज",
+  "ref_badge_bronze": "कांस्य",
+  "ref_badge_silver": "रजत",
+  "ref_badge_gold": "स्वर्ण",
+  "ref_badge_diamond": "हीरा",
+  "ref_badge_next_html": "अगला बैज <b>{n}</b> योग्य पर — {tier}",
+  "ref_badge_toast_html": "नया बैज: <b>{tier}</b>",
+  "ref_badge_all_unlocked": "सभी प्रमोटर बैज अनलॉक"
 }

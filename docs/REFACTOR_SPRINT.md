@@ -538,3 +538,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `wallpaper-core` curated featured set (24) + Free/Unlocked/Locked groups; default filter Featured; `v2_NNN` ↔ `extv3_NN` pairing; site checkbox syncs matching extension wallpaper.
 
 **Verify:** `node --test tests/wallpaper-ui.test.mjs`, `prod-verify` wallpaper core lib.
+
+## 36.1 Referral promoter badges — DONE
+
+**Problem:** Referral unlocks were invisible beyond the progress meter — no collectible badges for promoters.
+
+**Fix:** `referral-badge-core` tiers at 3/10/30/50 eligible (Bronze/Silver/Gold/Diamond); Pro floor shows Gold; shelf on Referrals tab; pills on Home + header; leaderboard row badges; toast on tier-up.
+
+**Verify:** `node --test tests/referral-badge.test.mjs`, `prod-verify` referral badge core + `refBadgeShelf` in `/app`.

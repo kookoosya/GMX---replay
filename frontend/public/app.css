@@ -1698,6 +1698,18 @@ html.mode-light .walletTag{ border: 1px solid rgba(0,0,0,.14); }
 .meter > span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accentA),var(--accentB));transition:width .3s ease}
 .refProgressMeter{margin-top:6px}
 .refProgressWrap .meterVal{font-variant-numeric:tabular-nums;opacity:.85;min-width:42px;text-align:right}
+.refBadgeShelf{margin-top:4px}
+.refBadgeRow{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.refBadgeTile{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 12px;border-radius:12px;border:1px solid var(--stroke);background:var(--glass2);min-width:72px;opacity:.42;transition:opacity .2s ease,box-shadow .2s ease}
+.refBadgeTileUnlocked{opacity:1;box-shadow:0 0 0 1px rgba(153,69,255,.22)}
+.refBadgePill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--stroke);vertical-align:middle}
+.refBadgePillWrap{display:inline-flex;align-items:center;margin-left:6px}
+.homeRefBadgeWrap .refBadgePill{font-size:13px;padding:4px 10px}
+.refBadgeIcon{display:inline-block;line-height:1}
+.refBadgeBronze,.refBadgeTile.refBadgeBronze{border-color:rgba(205,127,50,.4);background:rgba(205,127,50,.12)}
+.refBadgeSilver,.refBadgeTile.refBadgeSilver{border-color:rgba(192,192,192,.45);background:rgba(192,192,192,.12)}
+.refBadgeGold,.refBadgeTile.refBadgeGold{border-color:rgba(255,210,77,.45);background:rgba(255,210,77,.12)}
+.refBadgeDiamond,.refBadgeTile.refBadgeDiamond{border-color:rgba(124,200,255,.45);background:rgba(124,200,255,.12)}
 .quickPresets .btn.active{ background: rgba(153,69,255,.18); border-color: rgba(153,69,255,.4); }
 .meterRow{display:flex;align-items:center;gap:10px}
 .meterLabel{flex:1}

@@ -835,5 +835,13 @@
   "blog_home_link_io": "Top 10 gier .io w 2025",
   "blog_home_link_gm": "Jak pisać GM brzmiące naturalnie",
   "blog_home_link_all": "Wszystkie poradniki →",
-  "blog_home_link_agario": "Jak grać w Agar.io"
+  "blog_home_link_agario": "Jak grać w Agar.io",
+  "ref_badge_title": "Odznaki promotora",
+  "ref_badge_bronze": "Brąz",
+  "ref_badge_silver": "Srebro",
+  "ref_badge_gold": "Złoto",
+  "ref_badge_diamond": "Diament",
+  "ref_badge_next_html": "Następna odznaka przy <b>{n}</b> uprawnionych — {tier}",
+  "ref_badge_toast_html": "Nowa odznaka: <b>{tier}</b>",
+  "ref_badge_all_unlocked": "Wszystkie odznaki promotora odblokowane"
 }

@@ -11,7 +11,7 @@ const root = path.resolve(__dirname, "..");
 const publicDir = path.join(root, "public");
 const frontendPublic = path.join(root, "frontend", "public");
 
-const BASELINE = 12;
+const BASELINE = 13;
 
 test("app.html defer script count matches baseline", () => {
   const order = getScriptOrder();
@@ -19,12 +19,13 @@ test("app.html defer script count matches baseline", () => {
   assert.equal(order.at(-1), "app.js");
   assert.equal(order[0], "i18n/siteI18n.js");
   assert.equal(order[1], "lib/referral-progress-core.js");
-  assert.equal(order[2], "lib/theme-group-core.js");
-  assert.equal(order[3], "lib/wallpaper-core.js");
-  assert.equal(order[4], "lib/gmgn-gen-history-core.js");
-  assert.equal(order[5], "lib/mobile-nav-core.js");
-  assert.equal(order[6], "lib/skeleton-core.js");
-  assert.equal(order[7], "chunks/app.shell.deps.js");
+  assert.equal(order[2], "lib/referral-badge-core.js");
+  assert.equal(order[3], "lib/theme-group-core.js");
+  assert.equal(order[4], "lib/wallpaper-core.js");
+  assert.equal(order[5], "lib/gmgn-gen-history-core.js");
+  assert.equal(order[6], "lib/mobile-nav-core.js");
+  assert.equal(order[7], "lib/skeleton-core.js");
+  assert.equal(order[8], "chunks/app.shell.deps.js");
 });
 
 test("client-manifest scriptOrder matches app.html", () => {

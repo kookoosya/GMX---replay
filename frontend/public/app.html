@@ -88,7 +88,7 @@ html.mode-light body.hasUserBg .panel{
 <div class="row headerRow">
 <div class="pillGroup left">
 <div class="pill" id="apiPill"><span class="dot" id="apiDot"></span><strong>API</strong><span class="muted" id="apiText">checking...</span></div>
-<div class="pill"><strong id="ui_handle">Handle</strong><span class="muted" id="handlePill">not set</span></div>
+<div class="pill"><strong id="ui_handle">Handle</strong><span class="muted" id="handlePill">not set</span><span class="refBadgePillWrap hidden" id="headerRefBadge"></span></div>
 <div class="pill"><strong id="ui_used">Used</strong><span class="muted" id="usedPill">GM 0/70 • GN 0/70</span></div>
 <div class="pill"><strong id="ui_plan">Plan</strong><span class="muted" id="planPill">Free</span></div>
 <div class="pill"><strong id="ui_sync">Sync</strong><span class="muted" id="syncPill">-</span></div>
@@ -229,6 +229,7 @@ html.mode-light body.hasUserBg .panel{
   <span class="homeConnectedDot" aria-hidden="true"></span>
   <span id="home_connected_counter"></span>
 </div>
+<div class="homeRefBadgeWrap hidden" id="homeRefBadge" style="margin-top:8px"></div>
 <div class="sideSection">
   <div class="sideTitle" id="h_what_title">What you get</div>
   <ul class="clean small" id="h_what_list">
@@ -736,6 +737,11 @@ html.mode-light body.hasUserBg .panel{
   </div>
   <div class="meter refProgressMeter" style="margin-top:6px"><span id="refProgressFill"></span></div>
   <div class="muted small" id="refProgressNeed" style="margin-top:4px"></div>
+</div>
+<div class="refBadgeShelf" id="refBadgeShelf" style="margin-top:12px">
+  <div class="muted small refBadgeShelfTitle" id="refBadgeShelfTitle"></div>
+  <div class="refBadgeRow" id="refBadgeRow"></div>
+  <div class="muted small" id="refBadgeNextHint" style="margin-top:6px"></div>
 </div>
   <details class="foldSmall" id="promoDetails" style="margin-top:12px" open>
   <summary><b>Referral status</b></summary>
@@ -1469,6 +1475,7 @@ html.mode-light body.hasUserBg .panel{
 
 <script defer src="/i18n/siteI18n.js"></script>
 <script defer src="/lib/referral-progress-core.js"></script>
+<script defer src="/lib/referral-badge-core.js"></script>
 <script defer src="/lib/theme-group-core.js"></script>
 <script defer src="/lib/wallpaper-core.js"></script>
 <script defer src="/lib/gmgn-gen-history-core.js"></script>

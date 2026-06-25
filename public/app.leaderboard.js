@@ -19,6 +19,7 @@
             }
           };
     const core = window.GMXLeaderboardCore || {};
+    const badgeCore = window.GMXReferralBadgeCore || {};
     const medalFor =
       typeof core.leaderboardMedal === "function" ? core.leaderboardMedal : () => ({ emoji: "", cls: "", rowCls: "" });
     const rankCellHtml =
@@ -45,6 +46,16 @@
       return String(s || "").replace(/[&<>"']/g, (c) =>
         ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]
       );
+    }
+
+    function refBadgeHtml(eligible) {
+      const tier =
+        typeof badgeCore.earnedReferralBadgeTier === "function"
+          ? badgeCore.earnedReferralBadgeTier(eligible)
+          : null;
+      if (!tier || typeof badgeCore.referralBadgePillHtml !== "function") return "";
+      const label = t(`ref_badge_${tier.id}`) || tier.id;
+      return " " + badgeCore.referralBadgePillHtml(tier, { label, compact: true });
     }
 
     function renderYourRank(top, me) {
@@ -76,7 +87,8 @@
       if (numEl) numEl.textContent = formatLbRank(rank, { unranked });
       if (metaEl) {
         const h = escHtml(String(me.handle || ""));
-        metaEl.innerHTML = `@${h} · ${escapeHtml(t("lb_eligible") || "Eligible")}: <b>${eligible}</b>`;
+        const badge = refBadgeHtml(eligible);
+        metaEl.innerHTML = `@${h}${badge} · ${escapeHtml(t("lb_eligible") || "Eligible")}: <b>${eligible}</b>`;
       }
     }
 
@@ -114,7 +126,8 @@
                 const h = escHtml(String(row.handle || ""));
                 const eligible = Number(row.eligible || 0) || 0;
                 const active = Number(row.active || 0) || 0;
-                return `<tr class="${rowCls}"><td>${rankCellHtml(rank)}</td><td>@${h}</td><td>${eligible}</td><td>${active}</td></tr>`;
+                const badge = refBadgeHtml(eligible);
+                return `<tr class="${rowCls}"><td>${rankCellHtml(rank)}</td><td>@${h}${badge}</td><td>${eligible}</td><td>${active}</td></tr>`;
               })
               .join("");
           }

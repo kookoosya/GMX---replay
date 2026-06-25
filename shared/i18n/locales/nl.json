@@ -835,5 +835,13 @@
   "blog_home_link_io": "Top 10 .io-games in 2025",
   "blog_home_link_gm": "GM-antwoorden menselijk schrijven",
   "blog_home_link_all": "Alle gidsen →",
-  "blog_home_link_agario": "Agar.io spelen in de browser"
+  "blog_home_link_agario": "Agar.io spelen in de browser",
+  "ref_badge_title": "Promoter-badges",
+  "ref_badge_bronze": "Brons",
+  "ref_badge_silver": "Zilver",
+  "ref_badge_gold": "Goud",
+  "ref_badge_diamond": "Diamant",
+  "ref_badge_next_html": "Volgende badge bij <b>{n}</b> in aanmerking komenden — {tier}",
+  "ref_badge_toast_html": "Nieuwe badge: <b>{tier}</b>",
+  "ref_badge_all_unlocked": "Alle promoter-badges ontgrendeld"
 }

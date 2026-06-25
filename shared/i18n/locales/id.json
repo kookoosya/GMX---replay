@@ -835,5 +835,13 @@
   "blog_home_link_io": "10 game .io terbaik 2025",
   "blog_home_link_gm": "Cara menulis balasan GM yang natural",
   "blog_home_link_all": "Semua panduan →",
-  "blog_home_link_agario": "Cara bermain Agar.io"
+  "blog_home_link_agario": "Cara bermain Agar.io",
+  "ref_badge_title": "Lencana promotor",
+  "ref_badge_bronze": "Perunggu",
+  "ref_badge_silver": "Perak",
+  "ref_badge_gold": "Emas",
+  "ref_badge_diamond": "Berlian",
+  "ref_badge_next_html": "Lencana berikutnya pada <b>{n}</b> eligible — {tier}",
+  "ref_badge_toast_html": "Lencana baru: <b>{tier}</b>",
+  "ref_badge_all_unlocked": "Semua lencana promotor terbuka"
 }

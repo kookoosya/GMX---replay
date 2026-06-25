@@ -835,5 +835,13 @@
   "blog_home_link_io": "2025 十大 .io 游戏",
   "blog_home_link_gm": "如何写出自然的 GM 回复",
   "blog_home_link_all": "全部指南 →",
-  "blog_home_link_agario": "如何玩 Agar.io"
+  "blog_home_link_agario": "如何玩 Agar.io",
+  "ref_badge_title": "推广徽章",
+  "ref_badge_bronze": "青铜",
+  "ref_badge_silver": "白银",
+  "ref_badge_gold": "黄金",
+  "ref_badge_diamond": "钻石",
+  "ref_badge_next_html": "下一枚徽章需<b>{n}</b>个符合条件 — {tier}",
+  "ref_badge_toast_html": "新徽章：<b>{tier}</b>",
+  "ref_badge_all_unlocked": "已解锁全部推广徽章"
 }

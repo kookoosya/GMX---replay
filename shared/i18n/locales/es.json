@@ -835,5 +835,13 @@
   "blog_home_link_io": "Top 10 juegos .io en 2025",
   "blog_home_link_gm": "Cómo escribir GM que suenen humanos",
   "blog_home_link_all": "Todas las guías →",
-  "blog_home_link_agario": "Cómo jugar Agar.io"
+  "blog_home_link_agario": "Cómo jugar Agar.io",
+  "ref_badge_title": "Insignias de promotor",
+  "ref_badge_bronze": "Bronce",
+  "ref_badge_silver": "Plata",
+  "ref_badge_gold": "Oro",
+  "ref_badge_diamond": "Diamante",
+  "ref_badge_next_html": "Próxima insignia con <b>{n}</b> elegibles — {tier}",
+  "ref_badge_toast_html": "Nueva insignia: <b>{tier}</b>",
+  "ref_badge_all_unlocked": "Todas las insignias de promotor desbloqueadas"
 }
