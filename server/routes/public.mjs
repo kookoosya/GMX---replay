@@ -1,6 +1,6 @@
 /** Public try endpoints (no auth). Register after initGenerator(). */
 
-import { countConnectedToday } from "../lib/home-public-stats.mjs";
+import { countConnectedTodaySync } from "../lib/home-public-stats.mjs";
 
 export function registerPublicRoutes(deps) {
   const {
@@ -13,8 +13,6 @@ export function registerPublicRoutes(deps) {
     safeDb,
     db,
     todayKeyUTC,
-    supabaseActive,
-    getSupabaseAdmin,
   } = deps;
 
   app.get("/api/public/random", (req, res) => {
@@ -59,19 +57,14 @@ export function registerPublicRoutes(deps) {
     }
   });
 
-  app.get("/api/public/stats", async (_req, res) => {
+  app.get("/api/public/stats", (_req, res) => {
     try {
-      const connectedToday = await countConnectedToday({
-        safeDb,
-        db,
-        todayKeyUTC,
-        supabaseActive,
-        getSupabaseAdmin,
-      });
-      res.json({ ok: true, connectedToday, day: todayKeyUTC() });
+      const day = typeof todayKeyUTC === "function" ? todayKeyUTC() : "";
+      const connectedToday = countConnectedTodaySync({ safeDb, db, todayKeyUTC });
+      res.json({ ok: true, connectedToday, day });
     } catch (e) {
       console.error("PUBLIC_STATS_ERROR", e);
-      res.status(500).json({ ok: false, error: "server_error" });
+      res.json({ ok: true, connectedToday: 0, day: "" });
     }
   });
 }

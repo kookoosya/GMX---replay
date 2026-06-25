@@ -1739,8 +1739,6 @@ function initGenerator() {
     safeDb,
     db,
     todayKeyUTC,
-    supabaseActive,
-    getSupabaseAdmin,
   });
 }
 

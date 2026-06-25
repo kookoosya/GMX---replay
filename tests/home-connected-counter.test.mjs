@@ -22,7 +22,7 @@ test("public stats route counts users seen today", () => {
   const src = fs.readFileSync(path.join(root, "server", "routes", "public.mjs"), "utf8");
   assert.match(src, /\/api\/public\/stats/);
   assert.match(src, /connectedToday/);
-  assert.match(src, /countConnectedToday/);
+  assert.match(src, /countConnectedTodaySync/);
 });
 
 test("home stats module fetches public stats endpoint", () => {
