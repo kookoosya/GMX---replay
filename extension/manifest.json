@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "GMXReply",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Copy-only GM/GN replies for X: pull lines here, paste yourself. Session sync with gmxreply.com. No auto-posting or timeline injection.",
   "action": {
     "default_title": "GMXReply",

@@ -701,6 +701,8 @@
   const LS_LAST_TAB = "gmx_last_tab";
   const LS_ARCADE_RETURN_GAME = "gmx_arcade_return_game";
   const LS_ARCADE_QUICK_GAMES = "gmx_arcade_quick_games_v1";
+  const LS_ARCADE_ACH = "gmx_arcade_ach_progress";
+  const ACH = typeof window !== "undefined" ? window.GMXArcadeAchievementsCore : null;
   const QUICK_GAME_LIMIT = 12;
 
   function slugifyQuickId(value) {
@@ -1036,6 +1038,13 @@
 
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (m) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]));
+  const skeletonCore = () => {
+    try {
+      return window.GMXSkeletonCore || null;
+    } catch {
+      return null;
+    }
+  };
   const host = typeof window !== "undefined" ? window.location.origin : "";
   const token = () => {
     try { return String(localStorage.getItem("gmx_token") || localStorage.getItem("gmx_access_token") || ""); } catch { return ""; }
@@ -1060,6 +1069,67 @@
   function setStatus(text) {
     const el = $("arcadeStatus");
     if (el) el.textContent = text;
+  }
+
+  function readAchProgress() {
+    if (!ACH) return null;
+    try {
+      const raw = localStorage.getItem(LS_ARCADE_ACH);
+      return ACH.normalizeProgress(raw ? JSON.parse(raw) : null);
+    } catch {
+      return ACH.emptyProgress();
+    }
+  }
+
+  function saveAchProgress(progress) {
+    if (!ACH) return;
+    try {
+      localStorage.setItem(LS_ARCADE_ACH, JSON.stringify(ACH.normalizeProgress(progress)));
+    } catch {}
+  }
+
+  function onGameLaunched(game) {
+    if (!ACH || !game) return;
+    const before = ACH.evaluateAchievements(readAchProgress()).filter((a) => a.unlocked).map((a) => a.id);
+    const gotd = gameOfTheDay();
+    const next = ACH.recordPlay(
+      readAchProgress(),
+      { id: game.id, category: game.categoryKey || game.category, access: game.access },
+      { gotdId: gotd?.id || "", todayKey: ACH.todayKey() }
+    );
+    saveAchProgress(next);
+    const after = ACH.evaluateAchievements(next).filter((a) => a.unlocked).map((a) => a.id);
+    const newly = after.filter((id) => !before.includes(id));
+    if (newly.length) {
+      setStatus(arcadeT("arcade_ach_unlocked", { n: newly.length }));
+    }
+  }
+
+  function renderAchievementsPanel() {
+    if (!ACH) return "";
+    const items = ACH.evaluateAchievements(readAchProgress());
+    const unlocked = items.filter((item) => item.unlocked).length;
+    const cards = items
+      .map(
+        (item) => `
+        <article class="achCard ${item.unlocked ? "achUnlocked" : "achLocked"}">
+          <div class="achIcon" aria-hidden="true">${item.icon}</div>
+          <div class="achTitle">${esc(arcadeT(item.titleKey))}</div>
+          <div class="achDesc">${esc(arcadeT(item.descKey))}</div>
+        </article>`
+      )
+      .join("");
+    return `
+      <section class="panel achievementsPanel" id="achievementsPanel">
+        <div class="libraryHead">
+          <div>
+            <h2>${esc(arcadeT("arcade_section_achievements"))}</h2>
+            <div class="sub">${esc(arcadeT("arcade_ach_subtitle"))}</div>
+          </div>
+          <div class="achSummary">${esc(arcadeT("arcade_ach_progress", { unlocked, total: items.length }))}</div>
+        </div>
+        <div class="achGrid">${cards}</div>
+      </section>`;
   }
 
   function tryOpenDeepLinkGame() {
@@ -1188,6 +1258,7 @@
     btn.addEventListener("click", () => {
       if (!activeGame()) return;
       state.iframeReady = true;
+      onGameLaunched(activeGame());
       render();
       requestAnimationFrame(() => {
         try {
@@ -1275,7 +1346,8 @@
           </div>
         </div>
       </section>
-      ${gotd ? `<section class="panel"><h2 style="margin-bottom:14px">${esc(arcadeT("arcade_section_gotd"))}</h2><div class="grid gridGotd" id="gotdGrid">${gotdTile}</div></section>` : ""}
+      ${gotd ? `<section class="panel"><h2 style="margin-bottom:14px">${esc(arcadeT("arcade_section_gotd"))}</h2><div class="grid gridGotd" id="gotdGrid">${state.plan === "loading" ? (skeletonCore()?.arcadeGotdSkeletonHtml?.() || "") : gotdTile}</div></section>` : ""}
+      ${renderAchievementsPanel()}
       ${active ? renderPlayer(active) : renderLocked(locked)}
       <section class="panel">
         <div class="libraryHead">
@@ -1385,7 +1457,9 @@
 
     const grid = $("gameGrid");
     if (grid) {
-      if (!visible.length) {
+      if (state.plan === "loading") {
+        grid.innerHTML = skeletonCore()?.arcadeTileSkeletonHtml?.(visible.length) || "";
+      } else if (!visible.length) {
         grid.innerHTML = `<div class="empty">${esc(arcadeT("arcade_empty_filters"))}</div>`;
       } else {
         grid.innerHTML = visible.map((game) => {
@@ -1425,7 +1499,7 @@
     }
 
     const gotdGrid = $("gotdGrid");
-    if (gotdGrid) {
+    if (gotdGrid && state.plan !== "loading") {
       upgradeTileCovers(gotdGrid);
       gotdGrid.querySelectorAll("[data-game-id]").forEach((node) => {
         node.addEventListener("click", () => {

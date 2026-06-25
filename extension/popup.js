@@ -107,12 +107,31 @@ function applyGotdUi() {
   }
   el.gotdCard.classList.remove("hidden");
   if (el.gotdName) el.gotdName.textContent = String(game.name || game.id);
+  if (el.gotdMeta) {
+    const parts = [];
+    if (game.category) parts.push(String(game.category));
+    if (game.access === "pro") parts.push("Pro");
+    else parts.push(extT("ext_plan_free", "Free"));
+    el.gotdMeta.textContent = parts.join(" · ");
+  }
+  if (el.gotdCover) {
+    const url = String(game.imageUrl || "").trim();
+    if (url) {
+      el.gotdCover.src = url;
+      el.gotdCover.classList.remove("hidden");
+    } else {
+      el.gotdCover.removeAttribute("src");
+      el.gotdCover.classList.add("hidden");
+    }
+  }
 }
 
 function gotdArcadeUrl() {
   const base = state.base || DEFAULT_BASE;
   const slug = gotdGame && gotdGame.id ? String(gotdGame.id) : "";
-  return slug ? `${base}/arcade/${encodeURIComponent(slug)}` : `${base}/arcade.html`;
+  return slug
+    ? `${base}/arcade.html?game=${encodeURIComponent(slug)}`
+    : `${base}/arcade.html`;
 }
 
 function normalizeExtView(raw) {
@@ -133,6 +152,8 @@ const el = {
   openArcadeGotd: document.getElementById("openArcadeGotd"),
   gotdCard: document.getElementById("gotdCard"),
   gotdName: document.getElementById("gotdName"),
+  gotdMeta: document.getElementById("gotdMeta"),
+  gotdCover: document.getElementById("gotdCover"),
   openX: document.getElementById("openX"),
   openQuick: document.getElementById("openQuick"),
   syncSiteBtn: document.getElementById("syncSiteBtn"),

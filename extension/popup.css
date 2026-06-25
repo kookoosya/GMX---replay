@@ -137,6 +137,20 @@ button, input, select{ font: inherit; }
   margin-bottom: 10px;
   overflow: hidden;
 }
+.gotdRow{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+.gotdCover{
+  width:72px;
+  height:72px;
+  border-radius:12px;
+  object-fit:cover;
+  flex-shrink:0;
+  border:1px solid rgba(251,191,36,.25);
+}
+.gotdBody{ flex:1; min-width:0; }
 .row{
   display:flex;
   align-items:center;

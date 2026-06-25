@@ -306,7 +306,7 @@ chrome.notifications.onClicked.addListener((notificationId) => {
   if (!slug) return;
   void (async () => {
     const { base } = await getSession();
-    const url = `${base}/arcade/${encodeURIComponent(slug)}`;
+    const url = `${base}/arcade.html?game=${encodeURIComponent(slug)}`;
     try {
       await chrome.tabs.create({ url });
     } catch {}

@@ -50,7 +50,13 @@ for (const mirror of mirrors) {
 const gotdPath = path.join(root, "extension", "lib", "gotd-games.json");
 const gotdPayload = {
   updatedAt: catalog.updatedAt || new Date().toISOString().slice(0, 10),
-  games: games.map((g) => ({ id: String(g.id || ""), name: String(g.name || g.id || "") })),
+  games: games.map((g) => ({
+    id: String(g.id || ""),
+    name: String(g.name || g.id || ""),
+    category: String(g.category || ""),
+    access: String(g.access || "free"),
+    imageUrl: String(g.imageUrl || ""),
+  })),
 };
 fs.mkdirSync(path.dirname(gotdPath), { recursive: true });
 fs.writeFileSync(gotdPath, JSON.stringify(gotdPayload, null, 2) + "\n", "utf8");

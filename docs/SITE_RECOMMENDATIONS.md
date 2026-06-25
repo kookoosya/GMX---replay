@@ -102,7 +102,7 @@
 |---|--------|--------|--------|
 | 1 | Hero video / demo | Home | Конверсия | DONE (10.1 + 10.2) |
 | 2 | Yearly plan со скидкой | Upgrade Pro | MRR | DONE (11.1) |
-| 3 | «Игра дня» в расширении | Extension | Retention |
+| 3 | «Игра дня» в расширении | Extension | Retention | DONE (31.1) |
 | 4 | Достижения Arcade | Arcade | Вовлечённость | DONE (12.1) |
 | 5 | Quick presets GM/GN | GM, GN | UX | DONE (13.1) |
 | 6 | Страницы /arcade/{slug} | Arcade | SEO |

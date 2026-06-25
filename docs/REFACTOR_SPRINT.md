@@ -490,3 +490,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `/blog.html` index + two articles with unique meta/og; clean `/blog/:slug` routes; Home guides teaser with i18n.
 
 **Verify:** `node --test tests/blog.test.mjs`, `prod-verify` blog guides SEO.
+
+## 31.1 Extension GOTD polish — DONE
+
+**Problem:** GOTD toast/card shipped in 9.1 but popup showed title only; notification opened SEO slug instead of instant play (`SITE_RECOMMENDATIONS.md` priority #3).
+
+**Fix:** `gotd-games.json` includes category/access/cover from catalog build; popup cover + meta row; toast + Play use `/arcade.html?game=` deep-link; manifest `1.1.5`.
+
+**Verify:** `node --test tests/extension-gotd.test.mjs`, reload extension → GOTD card with cover.
