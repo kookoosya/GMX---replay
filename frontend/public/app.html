@@ -941,6 +941,67 @@ html.mode-light body.hasUserBg .panel{
 <div class="note" id="w_status_desc"></div>
 <div class="note" id="w_note">Plan flow is simple: choose a plan, choose SOL / USDC / USDT, connect a wallet, approve the transfer, then the site verifies it on-chain.</div>
 
+<div class="walletPlanCompare" id="wallet_plan_compare">
+<div class="title" id="wallet_plan_compare_title">Free vs Pro</div>
+<div class="walletTestimonial" id="wallet_testimonial">
+<div class="walletTestimonialQuote" id="wallet_testimonial_quote">"Unlimited banks and full Arcade access — Pro was worth it on day one."</div>
+<div class="muted small" id="wallet_testimonial_author">— GMXReply beta user</div>
+</div>
+<div class="planCompareScroll">
+<table class="table planCompareTable" id="wallet_plan_compare_table">
+<thead>
+<tr>
+<th id="plan_cmp_col_feature">Feature</th>
+<th id="plan_cmp_col_free">Free</th>
+<th id="plan_cmp_col_pro">Pro</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td id="plan_cmp_feat_copy">Copy-only extension flow</td>
+<td class="planCmpCell yes" aria-label="Included"><span aria-hidden="true">✓</span></td>
+<td class="planCmpCell yes" aria-label="Included"><span aria-hidden="true">✓</span></td>
+</tr>
+<tr>
+<td id="plan_cmp_feat_lines">GM/GN saved lines</td>
+<td class="planCmpCell" id="plan_cmp_val_free_lines">Up to 50 each</td>
+<td class="planCmpCell yes"><span aria-hidden="true">✓</span> <span id="plan_cmp_unlimited">Unlimited</span></td>
+</tr>
+<tr>
+<td id="plan_cmp_feat_daily">Daily generation</td>
+<td class="planCmpCell" id="plan_cmp_val_free_daily">Limited</td>
+<td class="planCmpCell yes"><span aria-hidden="true">✓</span> <span id="plan_cmp_full_daily">Full limit</span></td>
+</tr>
+<tr>
+<td id="plan_cmp_feat_themes">Themes &amp; wallpapers</td>
+<td class="planCmpCell" id="plan_cmp_val_free_themes">Referral unlocks</td>
+<td class="planCmpCell yes"><span aria-hidden="true">✓</span> <span id="plan_cmp_all_themes">All unlocked</span></td>
+</tr>
+<tr>
+<td id="plan_cmp_feat_styles">Writing styles &amp; packs</td>
+<td class="planCmpCell" id="plan_cmp_val_free_styles">Referral unlocks</td>
+<td class="planCmpCell yes"><span aria-hidden="true">✓</span> <span id="plan_cmp_all_styles">All unlocked</span></td>
+</tr>
+<tr>
+<td id="plan_cmp_feat_ext">Extension skins</td>
+<td class="planCmpCell" id="plan_cmp_val_free_ext">Referral unlocks</td>
+<td class="planCmpCell yes"><span aria-hidden="true">✓</span> <span id="plan_cmp_all_ext">All unlocked</span></td>
+</tr>
+<tr>
+<td id="plan_cmp_feat_arcade">Arcade games</td>
+<td class="planCmpCell" id="plan_cmp_val_free_arcade">Free catalog preview</td>
+<td class="planCmpCell yes"><span aria-hidden="true">✓</span> <span id="plan_cmp_all_arcade">All games</span></td>
+</tr>
+<tr>
+<td id="plan_cmp_feat_sync">Cloud sync</td>
+<td class="planCmpCell no" aria-label="Not included"><span aria-hidden="true">—</span></td>
+<td class="planCmpCell yes" aria-label="Included"><span aria-hidden="true">✓</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
 <div class="hr"></div>
 <div class="split" style="align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
   <div class="title" id="w_plan_title">Choose plan</div>
@@ -1218,18 +1279,52 @@ html.mode-light body.hasUserBg .panel{
       <table class="table" id="plan_modal_table" style="min-width:720px">
         <thead>
           <tr>
-            <th style="text-align:left">Feature</th>
-            <th style="text-align:left">Free</th>
-            <th style="text-align:left">Pro</th>
+            <th style="text-align:left" id="plan_modal_cmp_col_feature">Feature</th>
+            <th style="text-align:left" id="plan_modal_cmp_col_free">Free</th>
+            <th style="text-align:left" id="plan_modal_cmp_col_pro">Pro</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>Copy-only extension flow</td><td>Included</td><td>Included</td></tr>
-          <tr><td>GM/GN list size</td><td>Up to 50 lines each</td><td>Unlimited</td></tr>
-          <tr><td>Themes & wallpapers</td><td>Limited + referral unlocks</td><td>All unlocked</td></tr>
-          <tr><td>Writing styles & preset packs</td><td>Limited + referral unlocks</td><td>All unlocked</td></tr>
-          <tr><td>Extension skins & wallpapers</td><td>Limited + referral unlocks</td><td>All unlocked</td></tr>
-          <tr><td>Cloud sync</td><td>—</td><td>Included</td></tr>
+          <tr>
+            <td id="plan_modal_cmp_feat_copy">Copy-only extension flow</td>
+            <td class="planCmpCell yes"><span aria-hidden="true">✓</span></td>
+            <td class="planCmpCell yes"><span aria-hidden="true">✓</span></td>
+          </tr>
+          <tr>
+            <td id="plan_modal_cmp_feat_lines">GM/GN list size</td>
+            <td class="planCmpCell" id="plan_modal_cmp_val_free_lines">Up to 50 each</td>
+            <td class="planCmpCell yes"><span aria-hidden="true">✓</span> <span id="plan_modal_cmp_unlimited">Unlimited</span></td>
+          </tr>
+          <tr>
+            <td id="plan_modal_cmp_feat_daily">Daily generation</td>
+            <td class="planCmpCell" id="plan_modal_cmp_val_free_daily">Limited</td>
+            <td class="planCmpCell yes"><span aria-hidden="true">✓</span> <span id="plan_modal_cmp_full_daily">Full limit</span></td>
+          </tr>
+          <tr>
+            <td id="plan_modal_cmp_feat_themes">Themes &amp; wallpapers</td>
+            <td class="planCmpCell" id="plan_modal_cmp_val_free_themes">Referral unlocks</td>
+            <td class="planCmpCell yes"><span aria-hidden="true">✓</span> <span id="plan_modal_cmp_all_themes">All unlocked</span></td>
+          </tr>
+          <tr>
+            <td id="plan_modal_cmp_feat_styles">Writing styles &amp; packs</td>
+            <td class="planCmpCell" id="plan_modal_cmp_val_free_styles">Referral unlocks</td>
+            <td class="planCmpCell yes"><span aria-hidden="true">✓</span> <span id="plan_modal_cmp_all_styles">All unlocked</span></td>
+          </tr>
+          <tr>
+            <td id="plan_modal_cmp_feat_ext">Extension skins &amp; wallpapers</td>
+            <td class="planCmpCell" id="plan_modal_cmp_val_free_ext">Referral unlocks</td>
+            <td class="planCmpCell yes"><span aria-hidden="true">✓</span> <span id="plan_modal_cmp_all_ext">All unlocked</span></td>
+          </tr>
+          <tr>
+            <td id="plan_modal_cmp_feat_arcade">Arcade games</td>
+            <td class="planCmpCell" id="plan_modal_cmp_val_free_arcade">Free catalog preview</td>
+            <td class="planCmpCell yes"><span aria-hidden="true">✓</span> <span id="plan_modal_cmp_all_arcade">All games</span></td>
+          </tr>
+          <tr>
+            <td id="plan_modal_cmp_feat_sync">Cloud sync</td>
+            <td class="planCmpCell no"><span aria-hidden="true">—</span></td>
+            <td class="planCmpCell yes"><span aria-hidden="true">✓</span></td>
+          </tr>
         </tbody>
       </table>
     </div>

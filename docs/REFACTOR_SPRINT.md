@@ -424,3 +424,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `#ext_sync_hub` with sync list, SVG popup/inline previews, `/get-extension` Chrome Web Store CTA + i18n.
 
 **Verify:** `node --test tests/extension-tab-ux.test.mjs`, `prod-verify` extension sync hub.
+
+## 23.1 Wallet Free vs Pro compare + testimonial — DONE
+
+**Problem:** Upgrade Pro lacked an at-a-glance Free vs Pro table and social proof (`SITE_RECOMMENDATIONS.md` Upgrade Pro).
+
+**Fix:** `#wallet_plan_compare` inline table with ✓/— cells, `#wallet_testimonial`, upgraded `#plan_modal_table` with i18n + checkmarks.
+
+**Verify:** `node --test tests/wallet-plan-compare.test.mjs`, `prod-verify` wallet plan compare UI.

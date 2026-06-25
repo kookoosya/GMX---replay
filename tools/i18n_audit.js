@@ -58,6 +58,11 @@ const STRICT_IGNORE_KEYS = new Set([
   'ui_coming_soon',
   't_prediction',
   'ref_reward_pro_trial',
+  'wallet_plan_compare_title',
+  'plan_cmp_col_free',
+  'plan_cmp_col_pro',
+  'plan_modal_cmp_col_free',
+  'plan_modal_cmp_col_pro',
 ]);
 
 function isStrictIgnoredKey(key) {

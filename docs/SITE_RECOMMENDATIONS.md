@@ -39,8 +39,8 @@
 
 ### Upgrade Pro
 - [x] **Годовой план со скидкой** — «2 months free» при yearly ($80/год)
-- [ ] **Сравнительная таблица** Free vs Pro с галочками
-- [ ] **Testimonial** — 1–2 коротких отзыва (если есть)
+- [x] **Сравнительная таблица** Free vs Pro с галочками
+- [x] **Testimonial** — 1–2 коротких отзыва (если есть)
 - [x] Явно: «Pro unlocks all Arcade games»
 
 ### Referrals

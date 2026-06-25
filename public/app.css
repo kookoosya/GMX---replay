@@ -2266,3 +2266,35 @@ html.theme-applied body.hasWallBg .sideCard {
   flex-wrap: wrap;
 }
 .extStoreRow .btn{ text-decoration: none; }
+
+/* --- Wallet Free vs Pro compare (Sprint 23.1) --- */
+.walletPlanCompare{
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: var(--r);
+  background: var(--glass2);
+  border: 1px solid var(--stroke);
+}
+.walletPlanCompare .title{ font-size: 15px; margin-bottom: 10px; }
+.walletTestimonial{
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-left: 3px solid rgba(153,69,255,.45);
+  background: rgba(153,69,255,.06);
+  border-radius: 0 var(--r) var(--r) 0;
+}
+.walletTestimonialQuote{ font-size: 13px; font-style: italic; }
+.planCompareScroll{ overflow: auto; }
+.planCompareTable th,
+.planCompareTable td{ vertical-align: middle; }
+.planCompareTable th:last-child,
+.planCompareTable td:last-child{
+  color: #86efac;
+}
+.planCmpCell{
+  font-weight: 650;
+  white-space: nowrap;
+}
+.planCmpCell.yes{ color: #86efac; }
+.planCmpCell.no{ color: var(--muted); }
+.planCmpCell.yes span[aria-hidden="true"]{ font-size: 15px; line-height: 1; }

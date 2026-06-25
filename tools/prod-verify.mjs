@@ -315,4 +315,18 @@ if (!css.text.includes(".extSyncHub")) {
 }
 ok("extension tab sync hub UI");
 
+if (!appPage.text.includes('id="wallet_plan_compare"')) {
+  fail("/app shell missing wallet plan compare table");
+}
+if (!appPage.text.includes('id="wallet_testimonial"')) {
+  fail("/app shell missing wallet testimonial");
+}
+if (!appPage.text.includes('class="planCmpCell yes"')) {
+  fail("/app shell missing plan compare checkmark cells");
+}
+if (!css.text.includes(".walletPlanCompare")) {
+  fail("app.css missing wallet plan compare styles");
+}
+ok("wallet plan compare UI");
+
 console.log("\nPROD_VERIFY_OK");

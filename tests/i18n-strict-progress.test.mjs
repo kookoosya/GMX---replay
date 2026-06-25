@@ -13,6 +13,8 @@ const STRICT_IGNORE_KEYS = new Set([
   "t_gm", "t_gn", "arcade_doc_title", "arcade_page_title", "ui_tag_free", "ui_tag_unlocked",
   "ui_tag_refs", "ui_prediction_title", "ui_coming_soon", "t_prediction", "ref_reward_pro_trial",
   "pm_learn_polymarket", "pm_learn_kalshi", "pm_learn_manifold",
+  "wallet_plan_compare_title", "plan_cmp_col_free", "plan_cmp_col_pro",
+  "plan_modal_cmp_col_free", "plan_modal_cmp_col_pro",
 ]);
 
 const CRITICAL_PATTERNS = [
