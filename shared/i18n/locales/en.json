@@ -555,6 +555,18 @@
   "gn_repeat_note": "Filters repeats and near-duplicates. Higher = cleaner batches, but large runs may fill slower.",
   "scope_breakdown": "Global: {global} • Language lists: {langs}",
   "extthemes_note": "Pick a skin for the extension UI. This is selected on the site and synced to the extension.",
+  "ext_sync_hub_title": "Syncs with the site",
+  "ext_sync_hub_desc": "Keep GMXReply open in a browser tab — the site is the control panel for login and extension cosmetics.",
+  "ext_sync_list": [
+    "<b>Login</b> — your @handle and session from an open GMXReply tab (site wins over manual extension login).",
+    "<b>Extension theme</b> — the skin you pick below.",
+    "<b>Wallpaper</b> — popup/inline background from this tab.",
+    "<b>GM/GN toggles</b> — Best mode and Clean-fill stay aligned when both are open."
+  ],
+  "ext_preview_popup_caption": "Popup — quick GM/GN copy",
+  "ext_preview_inline_caption": "Inline panel on X",
+  "ext_chrome_store_btn": "Get Chrome extension",
+  "ext_chrome_store_hint": "Opens Chrome Web Store when published, or local install instructions.",
   "extCustomBgHint": "We auto-fit your image to the extension popup.",
   "ext_custom_saved_badge": "saved",
   "ext_custom_active_html": "<span class=\"ok\">Active.</span> Custom background is set for <b>{target}</b>.",

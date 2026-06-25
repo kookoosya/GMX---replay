@@ -555,6 +555,18 @@
   "gn_repeat_note": "Blockiert Wiederholungen aus deinen gespeicherten Zeilen. Höher = strenger.",
   "scope_breakdown": "Global: {global} • Sprachlisten: {langs}",
   "extthemes_note": "Wähle ein Design für das Erweiterungs-UI. Die Auswahl erfolgt hier auf der Seite und wird mit der Erweiterung synchronisiert.",
+  "ext_sync_hub_title": "Synchronisiert mit der Website",
+  "ext_sync_hub_desc": "GMXReply in einem Browser-Tab offen lassen — die Website steuert Login und Extension-Cosmetics.",
+  "ext_sync_list": [
+    "<b>Login</b> — @handle und Sitzung aus einem offenen GMXReply-Tab (Website schlägt manuelles Extension-Login).",
+    "<b>Extension-Theme</b> — das Skin, das du unten wählst.",
+    "<b>Wallpaper</b> — Popup/Inline-Hintergrund von diesem Tab.",
+    "<b>GM/GN-Schalter</b> — Best-Modus und Clean-fill bleiben abgestimmt."
+  ],
+  "ext_preview_popup_caption": "Popup — schnelles GM/GN-Kopieren",
+  "ext_preview_inline_caption": "Inline-Panel auf X",
+  "ext_chrome_store_btn": "Chrome-Erweiterung holen",
+  "ext_chrome_store_hint": "Öffnet den Chrome Web Store nach Veröffentlichung oder lokale Installationshinweise.",
   "extCustomBgHint": "Wir passen dein Bild automatisch an das Erweiterungs-Popup an.",
   "ext_custom_saved_badge": "gespeichert",
   "ext_custom_active_html": "<span class=\"ok\">Aktiv.</span> Eigener Hintergrund ist gesetzt für <b>{target}</b>.",

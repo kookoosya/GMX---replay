@@ -555,6 +555,18 @@
   "gn_repeat_note": "Memblokir pengulangan dari baris yang tersimpan. Semakin tinggi = semakin ketat.",
   "scope_breakdown": "Global: {global} • Daftar bahasa: {langs}",
   "extthemes_note": "Pilih tema untuk antarmuka ekstensi. Dipilih di situs ini dan disinkronkan ke ekstensi.",
+  "ext_sync_hub_title": "Sinkron dengan situs",
+  "ext_sync_hub_desc": "Biarkan GMXReply terbuka di tab — situs mengontrol login dan kosmetik ekstensi.",
+  "ext_sync_list": [
+    "<b>Login</b> — @handle dan sesi dari tab GMXReply terbuka (situs mengalahkan login manual).",
+    "<b>Tema ekstensi</b> — skin yang Anda pilih di bawah.",
+    "<b>Wallpaper</b> — latar popup/inline dari tab ini.",
+    "<b>Toggle GM/GN</b> — Best mode dan Clean-fill tetap selaras."
+  ],
+  "ext_preview_popup_caption": "Popup — salin GM/GN cepat",
+  "ext_preview_inline_caption": "Panel inline di X",
+  "ext_chrome_store_btn": "Dapatkan ekstensi Chrome",
+  "ext_chrome_store_hint": "Membuka Chrome Web Store setelah rilis, atau petunjuk instalasi lokal.",
   "extCustomBgHint": "Kami menyesuaikan gambar kamu secara otomatis ke popup ekstensi.",
   "ext_custom_saved_badge": "tersimpan",
   "ext_custom_active_html": "<span class=\"ok\">Aktif.</span> Latar belakang kustom disetel untuk <b>{target}</b>.",

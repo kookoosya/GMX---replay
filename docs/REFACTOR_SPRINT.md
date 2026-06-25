@@ -416,3 +416,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `#pm_newbie_block` intro copy + `#pm_learn_more` external links (Polymarket, Kalshi, Manifold) with i18n across locales.
 
 **Verify:** `node --test tests/prediction-onboarding.test.mjs`, `prod-verify` prediction onboarding shell.
+
+## 22.1 Extension sync hub + store CTA — DONE
+
+**Problem:** Extension tab lacked plain sync explainer, UI previews, and store install path (`SITE_RECOMMENDATIONS.md` Extension).
+
+**Fix:** `#ext_sync_hub` with sync list, SVG popup/inline previews, `/get-extension` Chrome Web Store CTA + i18n.
+
+**Verify:** `node --test tests/extension-tab-ux.test.mjs`, `prod-verify` extension sync hub.

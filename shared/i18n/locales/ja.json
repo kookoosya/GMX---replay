@@ -555,6 +555,18 @@
   "gn_repeat_note": "Blocks repeats from your saved lines. Higher = stricter.",
   "scope_breakdown": "Global: {global} • Language lists: {langs}",
   "extthemes_note": "拡張機能UIのスキンを選択。サイトで選んだ内容が拡張機能に同期されます。",
+  "ext_sync_hub_title": "サイトと同期",
+  "ext_sync_hub_desc": "GMXReply をブラウザタブで開いたままに — サイトがログインと拡張コスメを管理します。",
+  "ext_sync_list": [
+    "<b>ログイン</b> — 開いている GMXReply タブの @handle とセッション（サイトが手動ログインより優先）。",
+    "<b>拡張テーマ</b> — 下で選ぶスキン。",
+    "<b>壁紙</b> — このタブから popup/inline 背景。",
+    "<b>GM/GN トグル</b> — Best mode と Clean-fill を揃えます。"
+  ],
+  "ext_preview_popup_caption": "ポップアップ — クイック GM/GN コピー",
+  "ext_preview_inline_caption": "X のインラインパネル",
+  "ext_chrome_store_btn": "Chrome 拡張を入手",
+  "ext_chrome_store_hint": "公開後は Chrome Web Store、それ以前はローカル手順。",
   "extCustomBgHint": "画像を拡張機能のポップアップに自動でフィットさせます。",
   "ext_custom_saved_badge": "saved",
   "ext_custom_active_html": "<span class=\"ok\">Active.</span> Custom background is set for <b>{target}</b>.",

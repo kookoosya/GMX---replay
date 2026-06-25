@@ -555,6 +555,18 @@
   "gn_repeat_note": "Bloque les répétitions depuis tes lignes enregistrées. Plus haut = plus strict.",
   "scope_breakdown": "Global : {global} • Listes par langue : {langs}",
   "extthemes_note": "Choisis un thème pour l’interface de l’extension. La sélection se fait ici sur le site et se synchronise avec l’extension.",
+  "ext_sync_hub_title": "Synchronisé avec le site",
+  "ext_sync_hub_desc": "Gardez GMXReply ouvert dans un onglet — le site pilote la connexion et les cosmétiques extension.",
+  "ext_sync_list": [
+    "<b>Connexion</b> — @handle et session depuis un onglet GMXReply ouvert (le site prime sur la connexion manuelle).",
+    "<b>Thème extension</b> — le skin choisi ci-dessous.",
+    "<b>Fond d’écran</b> — arrière-plan popup/inline depuis cet onglet.",
+    "<b>Interrupteurs GM/GN</b> — Best mode et Clean-fill restent alignés."
+  ],
+  "ext_preview_popup_caption": "Popup — copie rapide GM/GN",
+  "ext_preview_inline_caption": "Panneau inline sur X",
+  "ext_chrome_store_btn": "Obtenir l’extension Chrome",
+  "ext_chrome_store_hint": "Ouvre le Chrome Web Store une fois publié, ou instructions d’installation locale.",
   "extCustomBgHint": "Nous adaptons automatiquement ton image à la fenêtre de l’extension.",
   "ext_custom_saved_badge": "enregistré",
   "ext_custom_active_html": "<span class=\"ok\">Actif.</span> Un arrière-plan personnalisé est défini pour <b>{target}</b>.",

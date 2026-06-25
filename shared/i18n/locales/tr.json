@@ -555,6 +555,18 @@
   "gn_repeat_note": "Kaydedilmiş satırlarındaki tekrarları engeller. Değer yüksek olduğunda daha sıkı olur.",
   "scope_breakdown": "Genel: {global} • Dil listeleri: {langs}",
   "extthemes_note": "Eklenti arayüzü için bir tema seç. Seçim burada sitede yapılır ve eklentiyle senkronize edilir.",
+  "ext_sync_hub_title": "Site ile senkron",
+  "ext_sync_hub_desc": "GMXReply’i bir sekmede açık tutun — site giriş ve extension kozmetiklerini yönetir.",
+  "ext_sync_list": [
+    "<b>Giriş</b> — açık GMXReply sekmesinden @handle ve oturum (site, manuel girişten önceliklidir).",
+    "<b>Extension teması</b> — aşağıda seçtiğiniz skin.",
+    "<b>Duvar kağıdı</b> — bu sekmeden popup/inline arka plan.",
+    "<b>GM/GN anahtarları</b> — Best mode ve Clean-fill hizalı kalır."
+  ],
+  "ext_preview_popup_caption": "Popup — hızlı GM/GN kopyalama",
+  "ext_preview_inline_caption": "X’te inline panel",
+  "ext_chrome_store_btn": "Chrome uzantısını al",
+  "ext_chrome_store_hint": "Yayınlandığında Chrome Web Store’u açar veya yerel kurulum talimatları.",
   "extCustomBgHint": "Görselini eklenti açılır penceresine otomatik olarak uyarlarız.",
   "ext_custom_saved_badge": "kaydedildi",
   "ext_custom_active_html": "<span class=\"ok\">Aktif.</span> Özel arka plan <b>{target}</b> için ayarlandı.",

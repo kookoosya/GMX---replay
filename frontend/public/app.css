@@ -2228,3 +2228,41 @@ html.theme-applied body.hasWallBg .sideCard {
   justify-content: center;
   text-decoration: none;
 }
+
+/* --- Extension tab sync hub + previews (Sprint 22.1) --- */
+.extSyncHub{
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: var(--r);
+  background: var(--glass2);
+  border: 1px solid var(--stroke);
+}
+.extSyncHub .title{ font-size: 15px; margin-bottom: 6px; }
+.extPreviewRow{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 12px;
+}
+.extPreviewCard{
+  margin: 0;
+  flex: 1 1 200px;
+  min-width: 0;
+}
+.extPreviewImg{
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  background: #0b1020;
+}
+.extPreviewImgWide{ max-width: 280px; }
+.extStoreRow{
+  align-items: center;
+  margin-top: 14px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.extStoreRow .btn{ text-decoration: none; }

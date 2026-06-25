@@ -555,6 +555,18 @@
   "gn_repeat_note": "Blokkeert herhalingen uit je opgeslagen regels. Hoger = strenger.",
   "scope_breakdown": "Globaal: {global} • Taallijsten: {langs}",
   "extthemes_note": "Kies een thema voor de extensie-interface. Je kiest hier op de site en het wordt gesynchroniseerd met de extensie.",
+  "ext_sync_hub_title": "Sync met de site",
+  "ext_sync_hub_desc": "Houd GMXReply open in een tab — de site stuurt login en extension-cosmetics.",
+  "ext_sync_list": [
+    "<b>Login</b> — @handle en sessie van een open GMXReply-tab (site wint van handmatige extension-login).",
+    "<b>Extension-thema</b> — de skin die je hieronder kiest.",
+    "<b>Achtergrond</b> — popup/inline wallpaper van dit tabblad.",
+    "<b>GM/GN-schakelaars</b> — Best mode en Clean-fill blijven gelijk."
+  ],
+  "ext_preview_popup_caption": "Popup — snel GM/GN kopiëren",
+  "ext_preview_inline_caption": "Inline-paneel op X",
+  "ext_chrome_store_btn": "Chrome-extensie halen",
+  "ext_chrome_store_hint": "Opent Chrome Web Store na publicatie, of lokale installatie-instructies.",
   "extCustomBgHint": "We passen je afbeelding automatisch aan het extensie-pop-up aan.",
   "ext_custom_saved_badge": "opgeslagen",
   "ext_custom_active_html": "<span class=\"ok\">Actief.</span> Aangepaste achtergrond ingesteld voor <b>{target}</b>.",

@@ -555,6 +555,18 @@
   "gn_repeat_note": "Bloquea repeticiones de tus líneas guardadas. Más alto = más estricto.",
   "scope_breakdown": "Global: {global} • Listas por idioma: {langs}",
   "extthemes_note": "Elige un tema para la interfaz de la extensión. Se selecciona aquí en el sitio y se sincroniza con la extensión.",
+  "ext_sync_hub_title": "Sincroniza con el sitio",
+  "ext_sync_hub_desc": "Mantén GMXReply abierto en una pestaña — el sitio controla el login y los cosméticos de la extensión.",
+  "ext_sync_list": [
+    "<b>Login</b> — @handle y sesión desde una pestaña GMXReply abierta (el sitio gana al login manual).",
+    "<b>Tema de extensión</b> — el skin que eliges abajo.",
+    "<b>Fondo</b> — wallpaper popup/inline desde esta pestaña.",
+    "<b>Interruptores GM/GN</b> — Best mode y Clean-fill alineados."
+  ],
+  "ext_preview_popup_caption": "Popup — copia rápida GM/GN",
+  "ext_preview_inline_caption": "Panel inline en X",
+  "ext_chrome_store_btn": "Obtener extensión Chrome",
+  "ext_chrome_store_hint": "Abre Chrome Web Store al publicar, o instrucciones de instalación local.",
   "extCustomBgHint": "Ajustamos automáticamente tu imagen a la ventana emergente de la extensión.",
   "ext_custom_saved_badge": "guardado",
   "ext_custom_active_html": "<span class=\"ok\">Activo.</span> Fondo personalizado establecido para <b>{target}</b>.",

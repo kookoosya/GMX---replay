@@ -97,6 +97,15 @@ if (fs.existsSync(arcadeSrc)) {
   console.log("  assets/arcade/");
 }
 
+// 6. Sync public/assets/ext -> frontend/public/assets/ext (extension UI previews)
+const extPreviewSrc = path.join(PUBLIC, "assets", "ext");
+const extPreviewDest = path.join(FRONTEND_PUBLIC, "assets", "ext");
+if (fs.existsSync(extPreviewSrc)) {
+  copyDirRecursive(extPreviewSrc, extPreviewDest);
+  n++;
+  console.log("  assets/ext/");
+}
+
 console.log(`[sync] Copied ${n} items: public + assets -> frontend/public`);
 
 // Prune obsolete collapsed runwire mirrors (Phase 3 → merged into *wire.js).

@@ -555,6 +555,18 @@
   "gn_repeat_note": "Blocks repeats from your saved lines. Higher = stricter.",
   "scope_breakdown": "Global: {global} • Language lists: {langs}",
   "extthemes_note": "为扩展 UI 选择皮肤。该选择在网站上完成，并会同步到扩展。",
+  "ext_sync_hub_title": "与网站同步",
+  "ext_sync_hub_desc": "保持 GMXReply 在浏览器标签页打开 — 网站控制登录与扩展外观。",
+  "ext_sync_list": [
+    "<b>登录</b> — 来自已打开 GMXReply 标签的 @handle 与会话（优先于扩展内手动登录）。",
+    "<b>扩展主题</b> — 下方选择的皮肤。",
+    "<b>壁纸</b> — 本标签的 popup/inline 背景。",
+    "<b>GM/GN 开关</b> — Best mode 与 Clean-fill 保持一致。"
+  ],
+  "ext_preview_popup_caption": "弹窗 — 快速复制 GM/GN",
+  "ext_preview_inline_caption": "X 上的内联面板",
+  "ext_chrome_store_btn": "获取 Chrome 扩展",
+  "ext_chrome_store_hint": "发布后打开 Chrome 网上应用店，或本地安装说明。",
   "extCustomBgHint": "我们会自动把你的图片适配到扩展弹窗尺寸。",
   "ext_custom_saved_badge": "saved",
   "ext_custom_active_html": "<span class=\"ok\">Active.</span> Custom background is set for <b>{target}</b>.",

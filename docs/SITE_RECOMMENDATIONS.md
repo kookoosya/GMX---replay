@@ -58,9 +58,9 @@
 - [x] «Pro unlocks all» рядом с locked items
 
 ### Extension
-- [ ] **Скриншоты** popup и inline UI
-- [ ] «Syncs with site» — что именно синхронится
-- [ ] Ссылка на Chrome Web Store
+- [x] **Скриншоты** popup и inline UI
+- [x] «Syncs with site» — что именно синхронится
+- [x] Ссылка на Chrome Web Store
 
 ### Arcade
 - [x] **Game of the Day** — одна игра в день вверху

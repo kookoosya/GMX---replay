@@ -300,4 +300,19 @@ if (!css.text.includes(".pmNewbieIntro")) {
 }
 ok("prediction onboarding UI");
 
+if (!appPage.text.includes('id="ext_sync_hub"')) {
+  fail("/app shell missing extension sync hub");
+}
+if (!appPage.text.includes('ext_chrome_store_btn')) {
+  fail("/app shell missing chrome store CTA");
+}
+const popupPreview = await get("/assets/ext/popup-preview.svg");
+if (popupPreview.status !== 200) {
+  fail("/assets/ext/popup-preview.svg missing");
+}
+if (!css.text.includes(".extSyncHub")) {
+  fail("app.css missing extension sync hub styles");
+}
+ok("extension tab sync hub UI");
+
 console.log("\nPROD_VERIFY_OK");

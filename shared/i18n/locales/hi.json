@@ -555,6 +555,18 @@
   "gn_repeat_note": "Blocks repeats from your saved lines. Higher = stricter.",
   "scope_breakdown": "वैश्विक: {global} • भाषा सूचियाँ: {langs}",
   "extthemes_note": "एक्सटेंशन UI के लिए स्किन चुनें। यह साइट पर चुनी जाती है और एक्सटेंशन में सिंक होती है।",
+  "ext_sync_hub_title": "साइट के साथ sync",
+  "ext_sync_hub_desc": "GMXReply को ब्राउज़र टैब में खुला रखें — साइट login और extension cosmetics नियंत्रित करती है।",
+  "ext_sync_list": [
+    "<b>Login</b> — खुले GMXReply टैब से @handle और session (साइट manual login से आगे)।",
+    "<b>Extension theme</b> — नीचे चुना गया skin।",
+    "<b>Wallpaper</b> — इस टैब से popup/inline background।",
+    "<b>GM/GN toggles</b> — Best mode और Clean-fill aligned रहते हैं।"
+  ],
+  "ext_preview_popup_caption": "Popup — त्वरित GM/GN copy",
+  "ext_preview_inline_caption": "X पर inline panel",
+  "ext_chrome_store_btn": "Chrome extension लें",
+  "ext_chrome_store_hint": "प्रकाशन के बाद Chrome Web Store खोलता है, या local install निर्देश।",
   "extCustomBgHint": "हम आपकी इमेज को एक्सटेंशन पॉपअप के अनुसार ऑटो-फिट करते हैं।",
   "ext_custom_saved_badge": "बचाया",
   "ext_custom_active_html": "<span class=\"ok\">Active.</span> Custom background is set for <b>{target}</b>.",

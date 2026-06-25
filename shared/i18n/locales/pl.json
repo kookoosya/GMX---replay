@@ -555,6 +555,18 @@
   "gn_repeat_note": "Blokuje powtórki z zapisanych linijek. Wyższa wartość = większa restrykcja.",
   "scope_breakdown": "Globalne: {global} • Listy językowe: {langs}",
   "extthemes_note": "Wybierz motyw dla interfejsu rozszerzenia. Wybór robisz tutaj na stronie, a ustawienie jest synchronizowane z rozszerzeniem.",
+  "ext_sync_hub_title": "Synchronizacja ze stroną",
+  "ext_sync_hub_desc": "Trzymaj GMXReply otwarte w karcie — strona steruje logowaniem i kosmetykami rozszerzenia.",
+  "ext_sync_list": [
+    "<b>Login</b> — @handle i sesja z otwartej karty GMXReply (strona wygrywa z ręcznym logowaniem).",
+    "<b>Motyw rozszerzenia</b> — skin wybrany poniżej.",
+    "<b>Tapeta</b> — tło popup/inline z tej karty.",
+    "<b>Przełączniki GM/GN</b> — Best mode i Clean-fill pozostają zsynchronizowane."
+  ],
+  "ext_preview_popup_caption": "Popup — szybkie kopiowanie GM/GN",
+  "ext_preview_inline_caption": "Panel inline na X",
+  "ext_chrome_store_btn": "Pobierz rozszerzenie Chrome",
+  "ext_chrome_store_hint": "Otwiera Chrome Web Store po publikacji lub instrukcje lokalnej instalacji.",
   "extCustomBgHint": "Automatycznie dopasowujemy obraz do okienka popup rozszerzenia.",
   "ext_custom_saved_badge": "zapisane",
   "ext_custom_active_html": "<span class=\"ok\">Aktywne.</span> Własne tło ustawione dla <b>{target}</b>.",
