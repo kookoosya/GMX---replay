@@ -1038,6 +1038,13 @@
 
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (m) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]));
+  const skeletonCore = () => {
+    try {
+      return window.GMXSkeletonCore || null;
+    } catch {
+      return null;
+    }
+  };
   const host = typeof window !== "undefined" ? window.location.origin : "";
   const token = () => {
     try { return String(localStorage.getItem("gmx_token") || localStorage.getItem("gmx_access_token") || ""); } catch { return ""; }
@@ -1339,7 +1346,7 @@
           </div>
         </div>
       </section>
-      ${gotd ? `<section class="panel"><h2 style="margin-bottom:14px">${esc(arcadeT("arcade_section_gotd"))}</h2><div class="grid gridGotd" id="gotdGrid">${gotdTile}</div></section>` : ""}
+      ${gotd ? `<section class="panel"><h2 style="margin-bottom:14px">${esc(arcadeT("arcade_section_gotd"))}</h2><div class="grid gridGotd" id="gotdGrid">${state.plan === "loading" ? (skeletonCore()?.arcadeGotdSkeletonHtml?.() || "") : gotdTile}</div></section>` : ""}
       ${renderAchievementsPanel()}
       ${active ? renderPlayer(active) : renderLocked(locked)}
       <section class="panel">
@@ -1450,7 +1457,9 @@
 
     const grid = $("gameGrid");
     if (grid) {
-      if (!visible.length) {
+      if (state.plan === "loading") {
+        grid.innerHTML = skeletonCore()?.arcadeTileSkeletonHtml?.(visible.length) || "";
+      } else if (!visible.length) {
         grid.innerHTML = `<div class="empty">${esc(arcadeT("arcade_empty_filters"))}</div>`;
       } else {
         grid.innerHTML = visible.map((game) => {
@@ -1490,7 +1499,7 @@
     }
 
     const gotdGrid = $("gotdGrid");
-    if (gotdGrid) {
+    if (gotdGrid && state.plan !== "loading") {
       upgradeTileCovers(gotdGrid);
       gotdGrid.querySelectorAll("[data-game-id]").forEach((node) => {
         node.addEventListener("click", () => {

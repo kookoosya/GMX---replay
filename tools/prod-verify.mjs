@@ -371,4 +371,16 @@ if (!bootChunk.text.includes("__GMXArcadePreloadFactory")) {
 }
 ok("arcade preload on hover");
 
+if (!appPage.text.includes("lib/skeleton-core.js")) {
+  fail("/app shell missing skeleton-core.js");
+}
+if (!arcadePage.text.includes("lib/skeleton-core.js") || !arcadePage.text.includes("tileSkeleton")) {
+  fail("/arcade.html missing skeleton loader styles");
+}
+const skCore = await get("/lib/skeleton-core.js");
+if (!skCore.text.includes("arcadeTileSkeletonHtml")) {
+  fail("/lib/skeleton-core.js missing arcade tile skeleton");
+}
+ok("skeleton loaders GM GN Arcade");
+
 console.log("\nPROD_VERIFY_OK");

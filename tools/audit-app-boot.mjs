@@ -13,7 +13,7 @@ const publicDir = path.join(root, "public");
 const frontendPublic = path.join(root, "frontend", "public");
 const chunkManifestPath = path.join(root, "tools", "app-chunk-manifest.json");
 
-const BASELINE_DEFER_COUNT = 10;
+const BASELINE_DEFER_COUNT = 11;
 const jsonOut = process.argv.includes("--json");
 
 const chunkManifest = JSON.parse(fs.readFileSync(chunkManifestPath, "utf8"));

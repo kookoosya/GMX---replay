@@ -11,7 +11,7 @@ const root = path.resolve(__dirname, "..");
 const publicDir = path.join(root, "public");
 const frontendPublic = path.join(root, "frontend", "public");
 
-const BASELINE = 10;
+const BASELINE = 11;
 
 test("app.html defer script count matches baseline", () => {
   const order = getScriptOrder();
@@ -22,7 +22,8 @@ test("app.html defer script count matches baseline", () => {
   assert.equal(order[2], "lib/theme-group-core.js");
   assert.equal(order[3], "lib/gmgn-gen-history-core.js");
   assert.equal(order[4], "lib/mobile-nav-core.js");
-  assert.equal(order[5], "chunks/app.shell.deps.js");
+  assert.equal(order[5], "lib/skeleton-core.js");
+  assert.equal(order[6], "chunks/app.shell.deps.js");
 });
 
 test("client-manifest scriptOrder matches app.html", () => {

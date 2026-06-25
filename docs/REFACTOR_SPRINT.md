@@ -466,3 +466,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Note:** Game iframe lazy-load (`iframeReady` + launch button) already ships in `arcade.js`.
 
 **Verify:** `node --test tests/arcade-preload.test.mjs`, `prod-verify` arcade preload on hover.
+
+## 28.1 Skeleton loaders — DONE
+
+**Problem:** GM/GN lists only skeletoned above 20 lines; Arcade catalog showed tiles before plan check finished.
+
+**Fix:** `skeleton-core` lib; GM/GN `renderList` skeleton from 3+ lines; Arcade GOTD + grid skeleton while `state.plan === 'loading'`.
+
+**Verify:** `node --test tests/skeleton-loaders.test.mjs`, `prod-verify` skeleton loaders.

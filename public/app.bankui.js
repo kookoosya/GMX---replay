@@ -260,7 +260,12 @@
           });
           return row;
         },
-        { key: `lineRows_${kind}`, chunk: 26, mountSkeleton: items.length > 20 ? mountLineListSkeleton : undefined }
+        { key: `lineRows_${kind}`, chunk: 26, mountSkeleton: (() => {
+          try {
+            if (window.GMXSkeletonCore?.lineListShouldUseSkeleton?.(items.length)) return mountLineListSkeleton;
+          } catch {}
+          return items.length >= 3 ? mountLineListSkeleton : undefined;
+        })() }
       );
     }
 
