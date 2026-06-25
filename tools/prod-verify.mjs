@@ -329,4 +329,16 @@ if (!css.text.includes(".walletPlanCompare")) {
 }
 ok("wallet plan compare UI");
 
+const homeStats = await get("/api/public/stats");
+if (homeStats.status !== 200 || !homeStats.json?.ok || typeof homeStats.json.connectedToday !== "number") {
+  fail(`/api/public/stats missing connectedToday: ${homeStats.text.slice(0, 160)}`);
+}
+if (!appPage.text.includes('id="home_connected_wrap"')) {
+  fail("/app shell missing home connected counter");
+}
+if (!css.text.includes(".homeConnectedToday")) {
+  fail("app.css missing home connected counter styles");
+}
+ok("home connected today UI");
+
 console.log("\nPROD_VERIFY_OK");

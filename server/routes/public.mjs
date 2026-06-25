@@ -1,7 +1,21 @@
 /** Public try endpoints (no auth). Register after initGenerator(). */
 
+import { countConnectedToday } from "../lib/home-public-stats.mjs";
+
 export function registerPublicRoutes(deps) {
-  const { app, sendError, normLang, generateRankedCandidates, composeReply, sanitizeSingle } = deps;
+  const {
+    app,
+    sendError,
+    normLang,
+    generateRankedCandidates,
+    composeReply,
+    sanitizeSingle,
+    safeDb,
+    db,
+    todayKeyUTC,
+    supabaseActive,
+    getSupabaseAdmin,
+  } = deps;
 
   app.get("/api/public/random", (req, res) => {
     try {
@@ -41,6 +55,22 @@ export function registerPublicRoutes(deps) {
       res.json({ ok: true, kind, mode, lang, count: list.length, list });
     } catch (e) {
       console.error("PUBLIC_RANDOM_BULK_ERROR", e);
+      res.status(500).json({ ok: false, error: "server_error" });
+    }
+  });
+
+  app.get("/api/public/stats", async (_req, res) => {
+    try {
+      const connectedToday = await countConnectedToday({
+        safeDb,
+        db,
+        todayKeyUTC,
+        supabaseActive,
+        getSupabaseAdmin,
+      });
+      res.json({ ok: true, connectedToday, day: todayKeyUTC() });
+    } catch (e) {
+      console.error("PUBLIC_STATS_ERROR", e);
       res.status(500).json({ ok: false, error: "server_error" });
     }
   });

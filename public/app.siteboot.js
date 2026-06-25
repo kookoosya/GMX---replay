@@ -191,6 +191,12 @@
       } catch {}
 
       try {
+        if (window.__GMXHomeStatsFactory) {
+          window.__GMXHomeStatsFactory({ $, tr: siteTr }).bindHomeStats();
+        }
+      } catch {}
+
+      try {
         if (window.__GMXPwaInstallFactory) {
           window.__GMXPwaInstallFactory({
             $,

@@ -25,7 +25,7 @@
 - [x] Пункт «Arcade» в What you get
 - [x] **Hero video** (10–15 сек) — «Reply on X, play games» (SVG loop + optional MP4)
 - [x] **Demo без регистрации** — один клик → короткое реплей-демо
-- [ ] Счётчик «X people connected today» (если есть метрики)
+- [x] Счётчик «X people connected today» (если есть метрики)
 
 ### GM / GN
 - [x] **Quick presets** — Casual / Professional / Fun — один клик на тон

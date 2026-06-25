@@ -1736,6 +1736,11 @@ function initGenerator() {
     generateRankedCandidates,
     composeReply,
     sanitizeSingle,
+    safeDb,
+    db,
+    todayKeyUTC,
+    supabaseActive,
+    getSupabaseAdmin,
   });
 }
 

@@ -432,3 +432,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `#wallet_plan_compare` inline table with ✓/— cells, `#wallet_testimonial`, upgraded `#plan_modal_table` with i18n + checkmarks.
 
 **Verify:** `node --test tests/wallet-plan-compare.test.mjs`, `prod-verify` wallet plan compare UI.
+
+## 24.1 Home connected-today counter — DONE
+
+**Problem:** Home lacked live social proof from real connection metrics (`SITE_RECOMMENDATIONS.md` Home).
+
+**Fix:** `/api/public/stats` (`connectedToday` from `users.last_seen`), `#home_connected_wrap` pill + `app.homestats.js`.
+
+**Verify:** `node --test tests/home-connected-counter.test.mjs`, `prod-verify` home connected today UI.
