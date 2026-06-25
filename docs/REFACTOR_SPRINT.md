@@ -539,16 +539,10 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 
 **Verify:** `node --test tests/wallpaper-ui.test.mjs`, `prod-verify` wallpaper core lib.
 
-## 36.x Referral promoter badges — LOCAL ONLY (not closed)
+## 36.1 Referral promoter badges — DONE
 
-**Status:** commit `bd17044` on `main` locally; **not pushed**; prod still `87e3736`.
+**Problem:** Referral unlocks were invisible beyond the progress meter — no visible promoter badges.
 
-**Coded (pending ship + 36.5 verify):**
-- `referral-badge-core` tiers at 3/10/30/50 eligible
-- Pro floor Gold; shelf on Referrals; pills Home/header; LB badges; tier-up toast
+**Fix:** `referral-badge-core` tiers at 3/10/30/50 eligible (Bronze/Silver/Gold/Diamond); Pro floor Gold; shelf on Referrals; pills Home + header; leaderboard badges; tier-up toast. Unlock gating for themes/wallpapers unchanged.
 
-**Still open before closing Sprint 36:**
-- 36.5 — confirm themes/wallpapers referral unlock logic unchanged
-- push `main` → Render deploy → `npm run verify:prod` → `PROD_VERIFY_OK`
-
-**Verify when shipping:** `node --test tests/referral-badge.test.mjs`, `prod-verify` referral badge core + `refBadgeShelf`.
+**Verify:** `node --test tests/referral-badge.test.mjs`; unlock regression (`app-shell-modules`, `extension-unlock-gate`); `prod-verify` referral badge core + `refBadgeShelf`. Prod `bd17044`, `PROD_VERIFY_OK`.

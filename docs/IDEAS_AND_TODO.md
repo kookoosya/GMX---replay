@@ -40,6 +40,8 @@
 
 **Сделано (Sprint 16.1):** referral viral hook + one-click copy — `ref_viral_hook_html`, tap `#refLink`, `#refShare`.
 
+**Сделано (Sprint 36.1):** referral promoter badges — Bronze/Silver/Gold/Diamond at 3/10/30/50 eligible; shelf + pills; `referral-badge-core.js`.
+
 **Сделано (Sprint 17.1):** leaderboard medals top-3 + persistent your-rank strip — `me.rank` API, `lbYourRank`.
 
 **Сделано (Sprint 18.1):** themes hover preview + Dark/Light/Colorful groups + Pro hint on locked cards.

@@ -193,21 +193,25 @@ Do not begin step N+1 until step N meets definition of done.
 4. Legacy id migration on boot (`w42` → `v2_042`, etc.) — **OPEN** (35.5)
 5. Grid uses thumbs only (no full 1920 in picker) — **OPEN** (35.6)
 
-Do not begin Sprint 36 ship until Sprint 35 queue is complete OR user explicitly reprioritizes.
+Do not begin Sprint 37 until Sprint 36 meets definition of done.
 
-## Sprint 36 queue (strict order) — Referral badges
+## Sprint 36 queue (strict order) — Referral badges — DONE
 
-**Status: LOCAL ONLY (`bd17044`) — NOT on prod, NOT closed.**
+1. Tiers 3/10/30/50 → Bronze/Silver/Gold/Diamond + `referral-badge-core` — DONE (36.1–36.3) prod `bd17044`
+2. UI: Home pill, Referrals shelf, Leaderboard row, header pill — DONE (36.2)
+3. Toast on tier-up — DONE (36.4)
+4. Themes/wallpapers unlock unchanged — DONE (36.5) unlock regression tests pass
+5. Ship: push + `verify:prod` — DONE (`b00098f` prod-verify badge check fix)
 
-1. Tiers 3/10/30/50 → Bronze/Silver/Gold/Diamond + `referral-badge-core` — coded locally (36.1–36.3)
-2. UI: Home pill, Referrals shelf, Leaderboard row, header pill — coded locally (36.2)
-3. Toast on tier-up — coded locally (36.4)
-4. Verify themes/wallpapers unlock unchanged — **NOT verified** (36.5)
-5. Ship: push → `verify:prod` → user sign-off — **NOT done**
+## Sprint 37 queue (strict order) — Badge shelf — NOT STARTED
 
-## Sprint 37+ (planned, do not start)
+1. Unified `badge-core` registry (Arcade + GM/GN + referral)
+2. Profile/home badge shelf with tooltips
+3. Migrate Arcade achievements into shared system
+4. i18n + tests + ship
 
-- Badge shelf (Arcade + GM/GN + refs unified)
+## Sprint 38+ (planned, do not start)
+
 - Arcade tournaments v1
 
 Do not begin step N+1 until step N meets definition of done.
