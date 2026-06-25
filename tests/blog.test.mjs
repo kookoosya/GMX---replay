@@ -7,10 +7,13 @@ import { BLOG_POSTS, blogPostBySlug, blogShellDocKey } from "../tools/lib/blog-c
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-test("blog core registers two launch posts", () => {
-  assert.equal(BLOG_POSTS.length, 2);
+test("blog core registers launch posts", () => {
+  assert.equal(BLOG_POSTS.length, 5);
   assert.ok(blogPostBySlug("top-10-io-games-2025"));
   assert.ok(blogPostBySlug("how-to-write-gm-replies"));
+  assert.ok(blogPostBySlug("how-to-play-agario"));
+  assert.ok(blogPostBySlug("geometry-dash-browser-guide"));
+  assert.ok(blogPostBySlug("gn-replies-evening-routine"));
 });
 
 test("blog index and articles exist with seo meta", () => {
@@ -18,6 +21,7 @@ test("blog index and articles exist with seo meta", () => {
   assert.match(index, /property="og:image"/);
   assert.match(index, /top-10-io-games-2025\.html/);
   assert.match(index, /how-to-write-gm-replies\.html/);
+  assert.match(index, /how-to-play-agario\.html/);
 
   for (const post of BLOG_POSTS) {
     const html = fs.readFileSync(path.join(root, "public", post.path.replace(/^\//, "")), "utf8");
@@ -34,6 +38,7 @@ test("home shell links to blog guides", () => {
     "blog_home_teaser_title",
     "blog_home_link_io",
     "blog_home_link_gm",
+    "blog_home_link_agario",
     "blog_home_link_all",
   ]) {
     assert.match(html, new RegExp(`id="${id}"`));
@@ -53,7 +58,7 @@ test("blog shell doc keys for offline cache", () => {
 
 test("en locale defines blog home teaser keys", () => {
   const en = JSON.parse(fs.readFileSync(path.join(root, "shared", "i18n", "locales", "en.json"), "utf8"));
-  for (const key of ["blog_home_teaser_title", "blog_home_link_io", "blog_home_link_gm", "blog_home_link_all"]) {
+  for (const key of ["blog_home_teaser_title", "blog_home_link_io", "blog_home_link_gm", "blog_home_link_agario", "blog_home_link_all"]) {
     assert.ok(en[key], `missing ${key}`);
   }
 });

@@ -402,6 +402,13 @@ const blogSlug = await get("/blog/how-to-write-gm-replies");
 if (blogSlug.status !== 200 || !blogSlug.text.includes("GM replies")) {
   fail("/blog/how-to-write-gm-replies slug route failed");
 }
+const blogAgario = await get("/blog/how-to-play-agario");
+if (blogAgario.status !== 200 || !blogAgario.text.includes("Agar.io")) {
+  fail("/blog/how-to-play-agario slug route failed");
+}
+if (!blogIndex.text.includes("how-to-play-agario")) {
+  fail("/blog.html missing expanded guides");
+}
 if (!appPage.text.includes('id="blog_home_teaser"')) {
   fail("/app shell missing blog home teaser");
 }

@@ -506,3 +506,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** Server-rendered SEO page per catalog game (meta, og:image, canonical, cover, Play CTA); unknown slugs fall back to `/arcade.html`.
 
 **Verify:** `node --test tests/arcade-slug-seo.test.mjs`, `prod-verify` arcade slug seo page.
+
+## 33.1 Blog content expansion — DONE
+
+**Problem:** Only two blog guides (30.1); organic SEO needed per-game and GN content (`SITE_RECOMMENDATIONS.md`).
+
+**Fix:** Three new articles (Agar.io, Geometry Dash, GN evening routine); blog index + home teaser link; `blog-core` registry at 5 posts; i18n `blog_home_link_agario`.
+
+**Verify:** `node --test tests/blog.test.mjs`, `prod-verify` blog guides SEO + `/blog/how-to-play-agario`.

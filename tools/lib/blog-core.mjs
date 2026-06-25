@@ -21,6 +21,36 @@ export const BLOG_POSTS = Object.freeze([
       "Practical tips for crypto Twitter GM replies — tone, variety, and when to use a reply bank instead of copy-paste spam.",
     tag: "GM / GN",
   },
+  {
+    slug: "how-to-play-agario",
+    path: "/blog/how-to-play-agario.html",
+    titleKey: "blog_post_agario_title",
+    title: "How to play Agar.io in the browser",
+    descriptionKey: "blog_post_agario_desc",
+    description:
+      "Beginner Agar.io tips — splitting, baiting, and when to run — plus one-click launch in GMXReply Arcade.",
+    tag: "Arcade",
+  },
+  {
+    slug: "geometry-dash-browser-guide",
+    path: "/blog/geometry-dash-browser-guide.html",
+    titleKey: "blog_post_gd_title",
+    title: "Geometry Dash in your browser — quick start",
+    descriptionKey: "blog_post_gd_desc",
+    description:
+      "Play Geometry Dash without a download. Rhythm tips and how to launch it from GMXReply Arcade.",
+    tag: "Arcade",
+  },
+  {
+    slug: "gn-replies-evening-routine",
+    path: "/blog/gn-replies-evening-routine.html",
+    titleKey: "blog_post_gn_title",
+    title: "GN replies that close the day right",
+    descriptionKey: "blog_post_gn_desc",
+    description:
+      "Evening GN lines for crypto Twitter — calm tone, no copy-paste fatigue, and a small reply bank habit.",
+    tag: "GM / GN",
+  },
 ]);
 
 export function blogPostBySlug(slug) {

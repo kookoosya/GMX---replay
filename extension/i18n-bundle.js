@@ -828,7 +828,8 @@
     "blog_home_teaser_title": "Guides",
     "blog_home_link_io": "Top 10 .io games 2025",
     "blog_home_link_gm": "How to write GM replies",
-    "blog_home_link_all": "All guides →"
+    "blog_home_link_all": "All guides →",
+    "blog_home_link_agario": "How to play Agar.io"
   },
   "de": {
     "plan_compare_btn": "Vergleichen",
@@ -1657,7 +1658,8 @@
     "blog_home_teaser_title": "Ratgeber",
     "blog_home_link_io": "Top 10 .io-Spiele 2025",
     "blog_home_link_gm": "GM-Antworten menschlich schreiben",
-    "blog_home_link_all": "Alle Guides →"
+    "blog_home_link_all": "Alle Guides →",
+    "blog_home_link_agario": "Agar.io im Browser spielen"
   },
   "fr": {
     "plan_compare_btn": "Comparer",
@@ -2486,7 +2488,8 @@
     "blog_home_teaser_title": "Conseils",
     "blog_home_link_io": "Top 10 jeux .io en 2025",
     "blog_home_link_gm": "Écrire des GM qui sonnent humains",
-    "blog_home_link_all": "Tous les guides →"
+    "blog_home_link_all": "Tous les guides →",
+    "blog_home_link_agario": "Jouer à Agar.io"
   },
   "es": {
     "plan_compare_btn": "Comparar",
@@ -3315,7 +3318,8 @@
     "blog_home_teaser_title": "Guías",
     "blog_home_link_io": "Top 10 juegos .io en 2025",
     "blog_home_link_gm": "Cómo escribir GM que suenen humanos",
-    "blog_home_link_all": "Todas las guías →"
+    "blog_home_link_all": "Todas las guías →",
+    "blog_home_link_agario": "Cómo jugar Agar.io"
   },
   "pt": {
     "plan_compare_btn": "Comparar",
@@ -4144,7 +4148,8 @@
     "blog_home_teaser_title": "Guias",
     "blog_home_link_io": "Top 10 jogos .io em 2025",
     "blog_home_link_gm": "Como escrever GM que soam humanos",
-    "blog_home_link_all": "Todos os guias →"
+    "blog_home_link_all": "Todos os guias →",
+    "blog_home_link_agario": "Como jogar Agar.io"
   },
   "it": {
     "plan_compare_btn": "Confronta",
@@ -4973,7 +4978,8 @@
     "blog_home_teaser_title": "Guide",
     "blog_home_link_io": "Top 10 giochi .io nel 2025",
     "blog_home_link_gm": "Scrivere GM che suonano umani",
-    "blog_home_link_all": "Tutte le guide →"
+    "blog_home_link_all": "Tutte le guide →",
+    "blog_home_link_agario": "Come giocare ad Agar.io"
   },
   "nl": {
     "plan_compare_btn": "Vergelijken",
@@ -5802,7 +5808,8 @@
     "blog_home_teaser_title": "Gidsen",
     "blog_home_link_io": "Top 10 .io-games in 2025",
     "blog_home_link_gm": "GM-antwoorden menselijk schrijven",
-    "blog_home_link_all": "Alle gidsen →"
+    "blog_home_link_all": "Alle gidsen →",
+    "blog_home_link_agario": "Agar.io spelen in de browser"
   },
   "tr": {
     "plan_compare_btn": "Karşılaştır",
@@ -6631,7 +6638,8 @@
     "blog_home_teaser_title": "Rehberler",
     "blog_home_link_io": "2025'in en iyi 10 .io oyunu",
     "blog_home_link_gm": "İnsan gibi GM yanıtları yazma",
-    "blog_home_link_all": "Tüm rehberler →"
+    "blog_home_link_all": "Tüm rehberler →",
+    "blog_home_link_agario": "Agar.io nasıl oynanır"
   },
   "pl": {
     "plan_compare_btn": "Porównaj",
@@ -7460,7 +7468,8 @@
     "blog_home_teaser_title": "Poradniki",
     "blog_home_link_io": "Top 10 gier .io w 2025",
     "blog_home_link_gm": "Jak pisać GM brzmiące naturalnie",
-    "blog_home_link_all": "Wszystkie poradniki →"
+    "blog_home_link_all": "Wszystkie poradniki →",
+    "blog_home_link_agario": "Jak grać w Agar.io"
   },
   "id": {
     "plan_compare_btn": "Bandingkan",
@@ -8289,7 +8298,8 @@
     "blog_home_teaser_title": "Panduan",
     "blog_home_link_io": "10 game .io terbaik 2025",
     "blog_home_link_gm": "Cara menulis balasan GM yang natural",
-    "blog_home_link_all": "Semua panduan →"
+    "blog_home_link_all": "Semua panduan →",
+    "blog_home_link_agario": "Cara bermain Agar.io"
   },
   "ru": {
     "plan_compare_btn": "Сравнить",
@@ -9118,7 +9128,8 @@
     "blog_home_teaser_title": "Гайды",
     "blog_home_link_io": "Топ-10 .io игр в 2025",
     "blog_home_link_gm": "Как писать GM, которые звучат по-человечески",
-    "blog_home_link_all": "Все гайды →"
+    "blog_home_link_all": "Все гайды →",
+    "blog_home_link_agario": "Как играть в Agar.io"
   },
   "uk": {
     "plan_compare_btn": "Порівняти",
@@ -9947,7 +9958,8 @@
     "blog_home_teaser_title": "Гайди",
     "blog_home_link_io": "Топ-10 .io ігор у 2025",
     "blog_home_link_gm": "Як писати GM, які звучать по-людськи",
-    "blog_home_link_all": "Усі гайди →"
+    "blog_home_link_all": "Усі гайди →",
+    "blog_home_link_agario": "Як грати в Agar.io"
   },
   "hi": {
     "plan_compare_btn": "कम्पेयर करें",
@@ -10776,7 +10788,8 @@
     "blog_home_teaser_title": "गाइड",
     "blog_home_link_io": "2025 के टॉप 10 .io गेम",
     "blog_home_link_gm": "इंसानी GM जवाब कैसे लिखें",
-    "blog_home_link_all": "सभी गाइड →"
+    "blog_home_link_all": "सभी गाइड →",
+    "blog_home_link_agario": "Agar.io कैसे खेलें"
   },
   "ja": {
     "plan_compare_btn": "比較",
@@ -11605,7 +11618,8 @@
     "blog_home_teaser_title": "ガイド",
     "blog_home_link_io": "2025年の.ioゲームTOP10",
     "blog_home_link_gm": "自然なGM返信の書き方",
-    "blog_home_link_all": "すべてのガイド →"
+    "blog_home_link_all": "すべてのガイド →",
+    "blog_home_link_agario": "Agar.ioの遊び方"
   },
   "zh": {
     "plan_compare_btn": "对比",
@@ -11832,7 +11846,7 @@
     "bank_best_done_warn": "Best pass removed {removed} and refilled {refilled}. Bank finished at {final}/{target}. Try another tone or preset for a wider pool.",
     "pack_locked_msg": "Pack is locked. Upgrade to Pro or unlock via referrals.",
     "pack_applied": "Applied pack: {name}",
-    "wallet_ui_not_connected": "not connected",
+    "wallet_ui_not_connected": "未连接",
     "wallet_label_default": "Wallet",
     "wallet_hint_pick_plan": "Select a plan above to continue.",
     "wallet_hint_connect_pay": "Now connect a wallet to pay in {currency}.",
@@ -11844,7 +11858,7 @@
     "wallet_toast_disconnected": "Wallet disconnected.",
     "wallet_reconnect_toast": "Wallet was updated/restarted. Please reconnect.",
     "billing_no_receipts": "No receipts yet.",
-    "billing_receipts_unavailable": "Receipts unavailable.",
+    "billing_receipts_unavailable": "收据不可用。",
     "billing_receipt_stats": "{n} receipt(s)",
     "ui_prediction_title": "Prediction Market",
     "ui_coming_soon": "Coming soon.",
@@ -11859,7 +11873,7 @@
     "ui_err_request_backend": "Request failed. Check the backend/runtime and try again.",
     "ui_err_rpc_unavailable": "Solana RPC is unavailable right now. Try again in a moment.",
     "ui_err_wallet_bind": "Wallet binding is required before verify. Sign the wallet message and try again.",
-    "ui_err_network_api": "Network/API error. Try again.",
+    "ui_err_network_api": "网络错误,再试一次!",
     "ui_degraded_network": "Network/API error. You can still edit lists locally.",
     "ui_offline_browser": "Browser reports offline. Check your connection.",
     "ui_degraded_api": "API/network issue. You can still edit lists locally.",
@@ -11979,7 +11993,7 @@
       "Use <b>Filter</b> to search inside your saved lines.",
       "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
       "Manual input drafts are auto-saved.",
-      "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
+      "<b>清晰的视图</b>清除可见的GM库。<b>清除所有</b>清除此部分的所有已保存的GM行。",
       "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "GN 使用方法",
@@ -11987,9 +12001,9 @@
     "gn_right_list": [
       "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
       "<b>Random 1/10/70</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
-      "<b>Repeat guard</b> reduces duplicates and near-duplicates during larger generation runs.",
+      "在较大的一代运行中，<b>重复防护</b>可减少重复和近似重复。",
       "Use <b>Filter</b> to search inside your saved lines.",
-      "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
+      "<b>全部复制</b>/<b>导出.txt</b> ：备份GN库。",
       "Manual input drafts are auto-saved.",
       "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
       "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
@@ -12173,7 +12187,7 @@
     ],
     "w_support_title": "支持",
     "w_support_desc": "仅在支持要求时复制安全的 support snapshot，不包含私钥。",
-    "toolSupport": "Copy support bundle",
+    "toolSupport": "复制支援搭售包",
     "toolDiag": "复制 support snapshot",
     "toolLogs": "Copy local logs",
     "supportOut_ph": "Paste support notes here...",
@@ -12189,7 +12203,7 @@
     "themes_k_walls": "已解锁壁纸",
     "ext_k_themes": "已解锁主题",
     "ext_k_walls": "Unlocked wallpapers",
-    "ext_k_ref": "Referrals",
+    "ext_k_ref": "转介",
     "w_pay_help_list_html": "<li>选择套餐和支付代币（SOL / USDC / USDT）。</li><li>连接钱包并在钱包内确认转账。</li><li>我们会在 Solana 上验证交易，并为你的账号激活 Pro。</li>",
     "w_trust_title": "信任与安全",
     "w_trust_list": [
@@ -12241,7 +12255,7 @@
     "ext_custom_locked_label": "已锁定：",
     "ext_custom_need_refs": "need {refs} referrals for this tab (or upgrade to Pro).",
     "ext_custom_saved_inline_html": "<span class=\"ok\">Saved.</span> Auto-fitted for extension popup ratio.",
-    "ext_custom_error_inline_html": "<span class=\"bad\">Error.</span> Could not save background.",
+    "ext_custom_error_inline_html": "<span class=\"bad\">错误。</span>无法保存背景。",
     "ext_theme_status_selected_html": "<span class=\"ok\">Selected.</span>",
     "ext_theme_status_selected_name_html": "<span class=\"ok\">Selected.</span> {name}.",
     "ext_wp_status_none_html": "<span class=\"muted\">None.</span> Pick a wallpaper for <b>{target}</b>.",
@@ -12255,7 +12269,7 @@
     "lb_r2": "被标记为欺诈的邀请将被排除。",
     "lb_r3": "排行榜仅供参考，不保证获得奖励。",
     "lb_col_handle": "Handle",
-    "lb_col_eligible": "Eligible",
+    "lb_col_eligible": "符合资格",
     "lb_col_active": "Active",
     "lb_7d": "7天",
     "lb_30d": "30天",
@@ -12434,7 +12448,8 @@
     "blog_home_teaser_title": "指南",
     "blog_home_link_io": "2025 十大 .io 游戏",
     "blog_home_link_gm": "如何写出自然的 GM 回复",
-    "blog_home_link_all": "全部指南 →"
+    "blog_home_link_all": "全部指南 →",
+    "blog_home_link_agario": "如何玩 Agar.io"
   }
 };
   function clone(value){ return JSON.parse(JSON.stringify(value)); }

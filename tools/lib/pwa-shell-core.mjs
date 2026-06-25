@@ -17,6 +17,9 @@ export const PWA_SHELL_DOC_PATHS = Object.freeze(["/app", "/arcade.html", "/blog
 export const PWA_BLOG_POST_PATHS = Object.freeze([
   "/blog/top-10-io-games-2025.html",
   "/blog/how-to-write-gm-replies.html",
+  "/blog/how-to-play-agario.html",
+  "/blog/geometry-dash-browser-guide.html",
+  "/blog/gn-replies-evening-routine.html",
 ]);
 
 export const PWA_MANIFEST_PATH = "/manifest.webmanifest";
