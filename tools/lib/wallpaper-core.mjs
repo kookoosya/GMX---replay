@@ -1,7 +1,9 @@
 /** Wallpaper pairing, curated picks, and UI grouping — shared by site UI and tests. */
 
+export const WALLPAPER_PACK_COUNT = 100;
+
 export const WALLPAPER_CURATED_INDICES = Object.freeze([
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 18, 22, 25, 28, 32, 35, 38, 42, 45, 50, 55, 58,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62, 66, 70, 74, 78, 82, 86, 90, 94, 98, 100,
 ]);
 
 export const WALLPAPER_GROUP_ORDER = Object.freeze(["custom", "free", "unlocked", "locked"]);
@@ -12,6 +14,11 @@ export const WALLPAPER_FILTER_OPTIONS = Object.freeze([
   { id: "free", labelKey: "wp_filter_free" },
   { id: "mine", labelKey: "wp_filter_mine" },
 ]);
+
+export function formatExtPackId(n) {
+  const num = Math.max(1, Math.min(WALLPAPER_PACK_COUNT, Number(n) || 1));
+  return `extv3_${String(num).padStart(3, "0")}`;
+}
 
 export function packIndexFromSiteId(id) {
   const m = String(id || "").match(/^v2_(\d+)$/i);
@@ -26,7 +33,7 @@ export function packIndexFromExtId(id) {
 export function pairedExtId(siteId) {
   const n = packIndexFromSiteId(siteId);
   if (!n) return "";
-  return `extv3_${String(n).padStart(2, "0")}`;
+  return formatExtPackId(n);
 }
 
 export function pairedSiteId(extId) {

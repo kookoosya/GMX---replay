@@ -15,9 +15,9 @@ import {
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 test("wallpaper core pairs site and extension pack ids", () => {
-  assert.equal(pairedExtId("v2_012"), "extv3_12");
-  assert.equal(pairedSiteId("extv3_05"), "v2_005");
-  assert.equal(WALLPAPER_CURATED_INDICES.length, 24);
+  assert.equal(pairedExtId("v2_012"), "extv3_012");
+  assert.equal(pairedSiteId("extv3_005"), "v2_005");
+  assert.equal(WALLPAPER_CURATED_INDICES.length, 34);
 });
 
 test("wallpaper core filters featured picks and groups buckets", () => {

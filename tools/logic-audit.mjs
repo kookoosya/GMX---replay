@@ -34,7 +34,7 @@ const htmlFiles = ["public/app.html", "frontend/public/app.html"];
 const wallpaperModule = "public/app.wallpapers.js";
 
 if (fs.existsSync(path.join(root, wallpaperModule))) {
-  mustMatch(wallpaperModule, /const SITE_PACK_COUNT = 58;/, "wallpaper pack count must be 58");
+  mustMatch(wallpaperModule, /const SITE_PACK_COUNT = 100;/, "wallpaper pack count must be 100");
   mustNotMatch(wallpaperModule, /source\.unsplash\.com/, "unsplash URLs forbidden");
   mustNotMatch(wallpaperModule, /sitePackWallpaperDataUri/, "chart SVG data-uri wallpapers forbidden");
   mustNotMatch(wallpaperModule, /SITE_WALLPAPER_LUX/, "lux SVG wallpaper catalog removed");

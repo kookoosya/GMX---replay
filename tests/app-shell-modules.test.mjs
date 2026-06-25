@@ -40,13 +40,13 @@ test("wallpapers: catalog and url helpers", () => {
     getExtCustomUpload: () => "",
   });
   const site = wp.buildSiteWallpapers();
-  assert.equal(site.length, 58);
+  assert.equal(site.length, 100);
   assert.equal(site[0].id, "v2_001");
   assert.equal(wp.normalizeWallpaperId("w12", site), "v2_001");
   assert.match(wp.wallpaperFullUrl("v2_001", site), /\/assets\/wallpapers\/v2_001\.webp\?v=rev1$/);
   const ext = wp.buildExtWallpapers();
-  assert.equal(ext[0].id, "extv3_01");
-  assert.equal(wp.normalizeExtWallpaperIdLocal("ext_3", ext), "extv3_03");
+  assert.equal(ext[0].id, "extv3_001");
+  assert.equal(wp.normalizeExtWallpaperIdLocal("ext_3", ext), "extv3_003");
 });
 
 test("themes: catalog exports", () => {
@@ -399,8 +399,8 @@ test("extwallpaperstore: view normalization", () => {
   });
   assert.equal(store.normalizeExtWallpaperView("popup"), "popup");
   assert.equal(store.normalizeExtWallpaperView("bogus"), "all");
-  store.setExtWallpaperForView("popup", "extv3_01");
-  assert.equal(store.getExtWallpaperForView("popup"), "extv3_01");
+  store.setExtWallpaperForView("popup", "extv3_001");
+  assert.equal(store.getExtWallpaperForView("popup"), "extv3_001");
 });
 
 test("themesui: unlockTagText and renderThemes", () => {

@@ -46,9 +46,9 @@ function canonicalExtWallpaperId(id){
   if (!v) return '';
   if (v === "custom_upload") return "custom_upload";
   if (EXT_WALLPAPER_OPTIONS.some(x=>String(x.id||'').toLowerCase()===v)) return v;
-  const m = v.match(/^(?:extv3_|w)(\d{1,2})$/i) || v.match(/^ext_(\d{1,2})$/i);
+  const m = v.match(/^(?:extv3_|w)(\d{1,3})$/i) || v.match(/^ext_(\d{1,3})$/i);
   if (m) {
-    const num = Math.max(1, Math.min(58, Number(m[1]) || 1));
+    const num = Math.max(1, Math.min(100, Number(m[1]) || 1));
     return 'w' + String(num).padStart(2, '0');
   }
   if (v.match(/^ext_free_(\d{1,2})$/i)) {
@@ -407,11 +407,13 @@ async function resolveWallpaperSource(base, wallpaperId) {
     try { prefetchWallpaper(remote); } catch {}
     return remote;
   }
-  const wMatch = id.match(/^w(\d{2})$/i);
-  if (wMatch) id = `extv3_${wMatch[1]}`;
-  const extMatch = id.match(/^ext_(\d{1,2})$/i);
+  const wMatch = id.match(/^w(\d{1,3})$/i);
+  if (wMatch) {
+    id = `extv3_${String(Math.max(1, Math.min(100, Number(wMatch[1]) || 1))).padStart(3, "0")}`;
+  }
+  const extMatch = id.match(/^ext_(\d{1,3})$/i);
   if (extMatch) {
-    id = `extv3_${String(Math.max(1, Math.min(58, Number(extMatch[1]) || 1))).padStart(2, "0")}`;
+    id = `extv3_${String(Math.max(1, Math.min(100, Number(extMatch[1]) || 1))).padStart(3, "0")}`;
   }
   if (id.startsWith("extv3_")) {
     const remote = `${origin}/assets/extbg/${id}.webp?v=${ASSET_REV}`;

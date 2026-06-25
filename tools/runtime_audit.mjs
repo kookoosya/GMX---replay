@@ -45,13 +45,13 @@ function printList(label, items) {
 let issues = 0;
 
 const expectedSiteWalls = [
-  ...seq("v2_", 58, ".webp", 3),
+  ...seq("v2_", 100, ".webp", 3),
 ];
-const expectedSiteThumbs = seq("v2_", 58, ".webp", 3);
+const expectedSiteThumbs = seq("v2_", 100, ".webp", 3);
 const expectedExtWalls = [
   "ext_free_01.svg",
   "ext_free_02.svg",
-  ...seq("extv3_", 58, ".webp", 2),
+  ...seq("extv3_", 100, ".webp", 3),
   "lux_ext_anime_neon_alley.svg",
   "lux_ext_cinematic_heroes.svg",
   "lux_ext_ct_warroom.svg",
@@ -61,7 +61,7 @@ const expectedExtWalls = [
   "lux_ext_onchain_spaceport.svg",
   "lux_ext_solana_temple.svg",
 ];
-const expectedExtThumbs = seq("extv3_", 58, ".webp", 2);
+const expectedExtThumbs = seq("extv3_", 100, ".webp", 3);
 
 for (const [label, rel, expected] of [
   ["site wallpapers", "assets/wallpapers", expectedSiteWalls],

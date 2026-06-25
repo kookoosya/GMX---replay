@@ -1,14 +1,18 @@
 #!/usr/bin/env node
 /**
- * Download scenic wallpapers from Pexels (free license).
- * Nature / landscape / calm abstract — no charts, no crypto overlays.
+ * Download 100 premium wallpapers from Pexels (free license).
+ * Crypto · anime cyber · comic/hero · neon urban · cinematic.
  *
  * Run: npm run wallpapers:fetch
- * Requires: sharp (devDependency)
  */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  WALLPAPER_PACK_COUNT,
+  WALLPAPER_CATALOG,
+  PEXELS_IDS,
+} from "./lib/wallpaper-pexels-catalog.mjs";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SITE_FULL = path.join(ROOT, "assets", "wallpapers");
@@ -17,26 +21,18 @@ const EXT_FULL = path.join(ROOT, "assets", "extbg");
 const EXT_THUMB = path.join(ROOT, "assets", "extbg", "thumbs");
 const CREDITS = path.join(ROOT, "docs", "WALLPAPER_CREDITS.md");
 
-/** 58 premium Pexels photo IDs — cinematic nature, minimal sky, no crypto clutter. */
-const PEXELS_IDS = [
-  2662116, 1365425, 1933239, 1183099, 2838979, 1684187, 189349, 1417647,
-  1520342, 1578750, 1732189, 1784575, 1476319, 1423600, 1261728, 1624496,
-  247599, 325044, 414612, 450597, 618833, 691668, 870941, 1486971,
-  1029604, 1287145, 1671279, 1761279, 2387845, 1257860, 3225519, 1323712,
-  3463772, 3558895, 3662634, 417411, 417173, 1693441, 1848771, 1437629,
-  2387428, 2325447, 207219, 209207, 2101820, 2343464, 2564552, 2774557,
-  3165335, 3847188, 3957971, 3844780, 1103970, 1770803, 1563356, 2685339,
-  2832382, 5194269,
-];
-
-const SITE_COUNT = 58;
-const EXT_COUNT = 58;
+const SITE_COUNT = WALLPAPER_PACK_COUNT;
+const EXT_COUNT = WALLPAPER_PACK_COUNT;
 const FULL_Q = 90;
 const THUMB_Q = 84;
 const SITE_MAX_W = 3840;
 const SITE_MAX_H = 2160;
 const EXT_W = 1440;
 const EXT_H = 2560;
+
+function extPackId(slot) {
+  return `extv3_${String(slot).padStart(3, "0")}`;
+}
 
 function pexelsUrl(id, w, h) {
   const base = `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg`;
@@ -66,6 +62,18 @@ async function downloadBuffer(url, retries = 3) {
   }
 }
 
+function pruneStale(dir, prefix, keepIds) {
+  if (!fs.existsSync(dir)) return;
+  const keep = new Set(keepIds.map((id) => `${id}.webp`));
+  for (const name of fs.readdirSync(dir)) {
+    if (!name.startsWith(prefix) || !name.endsWith(".webp")) continue;
+    if (!keep.has(name)) {
+      fs.unlinkSync(path.join(dir, name));
+      console.log(`  pruned stale ${name}`);
+    }
+  }
+}
+
 async function main() {
   const sharp = (await import("sharp")).default;
   const onlyArg = process.argv.find((a) => a.startsWith("--slots="));
@@ -81,10 +89,24 @@ async function main() {
     fs.mkdirSync(dir, { recursive: true });
   }
 
+  const siteIds = [];
+  const extIds = [];
+  for (let i = 0; i < SITE_COUNT; i++) {
+    siteIds.push(`v2_${String(i + 1).padStart(3, "0")}`);
+    extIds.push(extPackId(i + 1));
+  }
+  if (!onlySlots) {
+    pruneStale(SITE_FULL, "v2_", siteIds);
+    pruneStale(SITE_THUMB, "v2_", siteIds);
+    pruneStale(EXT_FULL, "extv3_", extIds);
+    pruneStale(EXT_THUMB, "extv3_", extIds);
+  }
+
   const credits = [
     "# Wallpaper credits",
     "",
     "Source: [Pexels](https://www.pexels.com/license/) — free to use.",
+    `Packs: ${SITE_COUNT} site + ${EXT_COUNT} extension (premium curated).`,
     `Generated: ${new Date().toISOString().slice(0, 10)}`,
     "",
   ];
@@ -93,12 +115,13 @@ async function main() {
   for (let i = 0; i < SITE_COUNT; i++) {
     const slot = i + 1;
     if (onlySlots && !onlySlots.includes(slot)) continue;
-    const id = PEXELS_IDS[i] ?? PEXELS_IDS[i % PEXELS_IDS.length];
-    const siteId = `v2_${String(i + 1).padStart(3, "0")}`;
-    const extId = `extv3_${String(i + 1).padStart(2, "0")}`;
+    const entry = WALLPAPER_CATALOG[i];
+    const id = entry?.pexelsId ?? PEXELS_IDS[i] ?? PEXELS_IDS[i % PEXELS_IDS.length];
+    const siteId = siteIds[i];
+    const extId = extIds[i];
 
     try {
-      process.stdout.write(`site ${siteId} (pexels ${id})… `);
+      process.stdout.write(`site ${siteId} (${entry?.name || "pack"} / pexels ${id})… `);
       const buf = await downloadBuffer(pexelsUrl(id, SITE_MAX_W));
       await sharp(buf)
         .rotate()
@@ -125,17 +148,19 @@ async function main() {
         .toFile(path.join(EXT_THUMB, `${extId}.webp`));
       console.log("ok");
 
-      credits.push(`- ${siteId} / ${extId}: https://www.pexels.com/photo/${id}/`);
+      credits.push(
+        `- ${siteId} / ${extId} (${entry?.tag || "pack"} · ${entry?.name || slot}): https://www.pexels.com/photo/${id}/`
+      );
     } catch (e) {
       failed++;
       console.log(`FAIL (${e.message || e})`);
     }
-    await new Promise((r) => setTimeout(r, 150));
+    await new Promise((r) => setTimeout(r, 120));
   }
 
   fs.writeFileSync(CREDITS, `${credits.join("\n")}\n`, "utf8");
   if (failed) {
-    console.error(`\n${failed} pack(s) failed. Re-run or swap IDs in PEXELS_IDS.`);
+    console.error(`\n${failed} pack(s) failed. Re-run or swap IDs in wallpaper-pexels-catalog.mjs`);
     process.exit(1);
   }
   console.log(`\nDone. ${SITE_COUNT} site + ${EXT_COUNT} extension wallpapers. Credits: docs/WALLPAPER_CREDITS.md`);

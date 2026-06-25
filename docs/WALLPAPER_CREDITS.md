@@ -1,63 +1,106 @@
 # Wallpaper credits
 
 Source: [Pexels](https://www.pexels.com/license/) — free to use.
+Packs: 100 site + 100 extension (premium curated).
 Generated: 2026-06-25
 
-- v2_001 / extv3_01: https://www.pexels.com/photo/2662116/
-- v2_002 / extv3_02: https://www.pexels.com/photo/1365425/
-- v2_003 / extv3_03: https://www.pexels.com/photo/1933239/
-- v2_004 / extv3_04: https://www.pexels.com/photo/1183099/
-- v2_005 / extv3_05: https://www.pexels.com/photo/2838979/
-- v2_006 / extv3_06: https://www.pexels.com/photo/1684187/
-- v2_007 / extv3_07: https://www.pexels.com/photo/189349/
-- v2_008 / extv3_08: https://www.pexels.com/photo/1417647/
-- v2_009 / extv3_09: https://www.pexels.com/photo/1520342/
-- v2_010 / extv3_10: https://www.pexels.com/photo/1578750/
-- v2_011 / extv3_11: https://www.pexels.com/photo/1732189/
-- v2_012 / extv3_12: https://www.pexels.com/photo/1784575/
-- v2_013 / extv3_13: https://www.pexels.com/photo/1476319/
-- v2_014 / extv3_14: https://www.pexels.com/photo/1423600/
-- v2_015 / extv3_15: https://www.pexels.com/photo/1261728/
-- v2_016 / extv3_16: https://www.pexels.com/photo/1624496/
-- v2_017 / extv3_17: https://www.pexels.com/photo/247599/
-- v2_018 / extv3_18: https://www.pexels.com/photo/325044/
-- v2_019 / extv3_19: https://www.pexels.com/photo/414612/
-- v2_020 / extv3_20: https://www.pexels.com/photo/450597/
-- v2_021 / extv3_21: https://www.pexels.com/photo/618833/
-- v2_022 / extv3_22: https://www.pexels.com/photo/691668/
-- v2_023 / extv3_23: https://www.pexels.com/photo/870941/
-- v2_024 / extv3_24: https://www.pexels.com/photo/1486971/
-- v2_025 / extv3_25: https://www.pexels.com/photo/1029604/
-- v2_026 / extv3_26: https://www.pexels.com/photo/1287145/
-- v2_027 / extv3_27: https://www.pexels.com/photo/1671279/
-- v2_028 / extv3_28: https://www.pexels.com/photo/1761279/
-- v2_029 / extv3_29: https://www.pexels.com/photo/2387845/
-- v2_030 / extv3_30: https://www.pexels.com/photo/1257860/
-- v2_031 / extv3_31: https://www.pexels.com/photo/3225519/
-- v2_032 / extv3_32: https://www.pexels.com/photo/1323712/
-- v2_033 / extv3_33: https://www.pexels.com/photo/3463772/
-- v2_034 / extv3_34: https://www.pexels.com/photo/3558895/
-- v2_035 / extv3_35: https://www.pexels.com/photo/3662634/
-- v2_036 / extv3_36: https://www.pexels.com/photo/417411/
-- v2_037 / extv3_37: https://www.pexels.com/photo/417173/
-- v2_038 / extv3_38: https://www.pexels.com/photo/1693441/
-- v2_039 / extv3_39: https://www.pexels.com/photo/1848771/
-- v2_040 / extv3_40: https://www.pexels.com/photo/1437629/
-- v2_041 / extv3_41: https://www.pexels.com/photo/2387428/
-- v2_042 / extv3_42: https://www.pexels.com/photo/2325447/
-- v2_043 / extv3_43: https://www.pexels.com/photo/207219/
-- v2_044 / extv3_44: https://www.pexels.com/photo/209207/
-- v2_045 / extv3_45: https://www.pexels.com/photo/2101820/
-- v2_046 / extv3_46: https://www.pexels.com/photo/2343464/
-- v2_047 / extv3_47: https://www.pexels.com/photo/2564552/
-- v2_048 / extv3_48: https://www.pexels.com/photo/2774557/
-- v2_049 / extv3_49: https://www.pexels.com/photo/3165335/
-- v2_050 / extv3_50: https://www.pexels.com/photo/3847188/
-- v2_051 / extv3_51: https://www.pexels.com/photo/3957971/
-- v2_052 / extv3_52: https://www.pexels.com/photo/3844780/
-- v2_053 / extv3_53: https://www.pexels.com/photo/1103970/
-- v2_054 / extv3_54: https://www.pexels.com/photo/1770803/
-- v2_055 / extv3_55: https://www.pexels.com/photo/1563356/
-- v2_056 / extv3_56: https://www.pexels.com/photo/2685339/
-- v2_057 / extv3_57: https://www.pexels.com/photo/2832382/
-- v2_058 / extv3_58: https://www.pexels.com/photo/5194269/
+- v2_001 / extv3_001 (crypto · Bitcoin Green Pulse): https://www.pexels.com/photo/5980864/
+- v2_002 / extv3_002 (crypto · Crypto Coin Stack): https://www.pexels.com/photo/1152708/
+- v2_003 / extv3_003 (crypto · Digital Gold Bars): https://www.pexels.com/photo/6770613/
+- v2_004 / extv3_004 (crypto · Blockchain Neon): https://www.pexels.com/photo/7681093/
+- v2_005 / extv3_005 (crypto · Fintech Glow): https://www.pexels.com/photo/7821705/
+- v2_006 / extv3_006 (crypto · Trading Terminal): https://www.pexels.com/photo/1939485/
+- v2_007 / extv3_007 (crypto · Ethereum Violet): https://www.pexels.com/photo/6771874/
+- v2_008 / extv3_008 (crypto · Coin Macro): https://www.pexels.com/photo/843700/
+- v2_009 / extv3_009 (crypto · Crypto Keys): https://www.pexels.com/photo/844124/
+- v2_010 / extv3_010 (crypto · Ledger Light): https://www.pexels.com/photo/730547/
+- v2_011 / extv3_011 (crypto · Wallet Neon): https://www.pexels.com/photo/6771664/
+- v2_012 / extv3_012 (crypto · Market Charts): https://www.pexels.com/photo/247933/
+- v2_013 / extv3_013 (crypto · Token Spark): https://www.pexels.com/photo/843702/
+- v2_014 / extv3_014 (crypto · DeFi Matrix): https://www.pexels.com/photo/3222041/
+- v2_015 / extv3_015 (crypto · Solana Teal): https://www.pexels.com/photo/1617976/
+- v2_016 / extv3_016 (crypto · Chain Link): https://www.pexels.com/photo/6771872/
+- v2_017 / extv3_017 (crypto · Crypto Circuit): https://www.pexels.com/photo/7821687/
+- v2_018 / extv3_018 (crypto · Mining Rig): https://www.pexels.com/photo/7681097/
+- v2_019 / extv3_019 (crypto · Bull Run): https://www.pexels.com/photo/1762851/
+- v2_020 / extv3_020 (crypto · Satoshi Glow): https://www.pexels.com/photo/963486/
+- v2_021 / extv3_021 (crypto · Web3 Dawn): https://www.pexels.com/photo/1181210/
+- v2_022 / extv3_022 (crypto · Hash Rate): https://www.pexels.com/photo/1181263/
+- v2_023 / extv3_023 (crypto · Altcoin Wave): https://www.pexels.com/photo/6770611/
+- v2_024 / extv3_024 (crypto · Cold Storage): https://www.pexels.com/photo/6770610/
+- v2_025 / extv3_025 (crypto · Exchange Floor): https://www.pexels.com/photo/5980744/
+- v2_026 / extv3_026 (anime · Neo Tokyo): https://www.pexels.com/photo/2506923/
+- v2_027 / extv3_027 (anime · Cyber Shrine): https://www.pexels.com/photo/3137052/
+- v2_028 / extv3_028 (anime · Rainy Akihabara): https://www.pexels.com/photo/1181244/
+- v2_029 / extv3_029 (anime · Sakura Night): https://www.pexels.com/photo/1131079/
+- v2_030 / extv3_030 (anime · Neon Alley): https://www.pexels.com/photo/1229861/
+- v2_031 / extv3_031 (anime · Tokyo Tower): https://www.pexels.com/photo/2885324/
+- v2_032 / extv3_032 (anime · Manga Skyline): https://www.pexels.com/photo/1320684/
+- v2_033 / extv3_033 (anime · Cyberpunk Rain): https://www.pexels.com/photo/1435077/
+- v2_034 / extv3_034 (anime · Vaporwave City): https://www.pexels.com/photo/3379934/
+- v2_035 / extv3_035 (anime · Anime Sunset): https://www.pexels.com/photo/2305442/
+- v2_036 / extv3_036 (anime · Purple Haze): https://www.pexels.com/photo/3861969/
+- v2_037 / extv3_037 (anime · Night Crossing): https://www.pexels.com/photo/3044476/
+- v2_038 / extv3_038 (anime · Electric Street): https://www.pexels.com/photo/1933902/
+- v2_039 / extv3_039 (anime · Pink Neon): https://www.pexels.com/photo/5473956/
+- v2_040 / extv3_040 (anime · Midnight Metro): https://www.pexels.com/photo/5474292/
+- v2_041 / extv3_041 (anime · Blade Runner): https://www.pexels.com/photo/5490715/
+- v2_042 / extv3_042 (anime · Synth City): https://www.pexels.com/photo/5669602/
+- v2_043 / extv3_043 (anime · Hologram Lane): https://www.pexels.com/photo/5740737/
+- v2_044 / extv3_044 (anime · Pixel Rain): https://www.pexels.com/photo/5740777/
+- v2_045 / extv3_045 (anime · Otaku Lights): https://www.pexels.com/photo/6985061/
+- v2_046 / extv3_046 (anime · Arcade Glow): https://www.pexels.com/photo/7915286/
+- v2_047 / extv3_047 (anime · Retro Future): https://www.pexels.com/photo/7965049/
+- v2_048 / extv3_048 (anime · Kawaii Neon): https://www.pexels.com/photo/7770129/
+- v2_049 / extv3_049 (anime · Shinjuku Blue): https://www.pexels.com/photo/8728382/
+- v2_050 / extv3_050 (anime · Cyber Sakura): https://www.pexels.com/photo/8823103/
+- v2_051 / extv3_051 (hero · Hero Burst): https://www.pexels.com/photo/3155666/
+- v2_052 / extv3_052 (hero · Comic Pop): https://www.pexels.com/photo/2835171/
+- v2_053 / extv3_053 (hero · Power Gradient): https://www.pexels.com/photo/7991579/
+- v2_054 / extv3_054 (hero · Shield Glow): https://www.pexels.com/photo/8089412/
+- v2_055 / extv3_055 (hero · Avenger Tone): https://www.pexels.com/photo/1097456/
+- v2_056 / extv3_056 (hero · Cartoon Sky): https://www.pexels.com/photo/1809644/
+- v2_057 / extv3_057 (hero · Toon Burst): https://www.pexels.com/photo/1040880/
+- v2_058 / extv3_058 (hero · Color Smash): https://www.pexels.com/photo/1766604/
+- v2_059 / extv3_059 (hero · Marvel Mood): https://www.pexels.com/photo/6195704/
+- v2_060 / extv3_060 (hero · Super Pop): https://www.pexels.com/photo/1181345/
+- v2_061 / extv3_061 (hero · Cosmic Hero): https://www.pexels.com/photo/1103970/
+- v2_062 / extv3_062 (hero · Galaxy Shield): https://www.pexels.com/photo/2832382/
+- v2_063 / extv3_063 (hero · Neon Cape): https://www.pexels.com/photo/2911521/
+- v2_064 / extv3_064 (hero · Comic Ink): https://www.pexels.com/photo/2561622/
+- v2_065 / extv3_065 (hero · Hero Horizon): https://www.pexels.com/photo/3037640/
+- v2_066 / extv3_066 (hero · Cartoon Clouds): https://www.pexels.com/photo/4153800/
+- v2_067 / extv3_067 (hero · Pop Art): https://www.pexels.com/photo/4218885/
+- v2_068 / extv3_068 (hero · Bold Panels): https://www.pexels.com/photo/4368386/
+- v2_069 / extv3_069 (hero · Action Blur): https://www.pexels.com/photo/4526396/
+- v2_070 / extv3_070 (hero · Origin Story): https://www.pexels.com/photo/4662438/
+- v2_071 / extv3_071 (neon · City Pulse): https://www.pexels.com/photo/4792285/
+- v2_072 / extv3_072 (neon · Skyline Teal): https://www.pexels.com/photo/5063436/
+- v2_073 / extv3_073 (neon · Rooftop Night): https://www.pexels.com/photo/5207781/
+- v2_074 / extv3_074 (neon · Bridge Lights): https://www.pexels.com/photo/5327585/
+- v2_075 / extv3_075 (neon · Urban Violet): https://www.pexels.com/photo/1435752/
+- v2_076 / extv3_076 (neon · Glass Tower): https://www.pexels.com/photo/1612282/
+- v2_077 / extv3_077 (neon · Metro Rush): https://www.pexels.com/photo/3618548/
+- v2_078 / extv3_078 (neon · Downtown Glow): https://www.pexels.com/photo/4056723/
+- v2_079 / extv3_079 (neon · Night Drive): https://www.pexels.com/photo/4482900/
+- v2_080 / extv3_080 (neon · Harbor Neon): https://www.pexels.com/photo/4116201/
+- v2_081 / extv3_081 (neon · Street Chrome): https://www.pexels.com/photo/577585/
+- v2_082 / extv3_082 (neon · City Rain): https://www.pexels.com/photo/461077/
+- v2_083 / extv3_083 (neon · Late Night): https://www.pexels.com/photo/462030/
+- v2_084 / extv3_084 (neon · Luxury Night): https://www.pexels.com/photo/17483868/
+- v2_085 / extv3_085 (neon · Aurora City): https://www.pexels.com/photo/2387793/
+- v2_086 / extv3_086 (cinematic · Alpine Stars): https://www.pexels.com/photo/2662116/
+- v2_087 / extv3_087 (cinematic · Ocean Cliff): https://www.pexels.com/photo/1365425/
+- v2_088 / extv3_088 (cinematic · Desert Gold): https://www.pexels.com/photo/1933239/
+- v2_089 / extv3_089 (cinematic · Forest Mist): https://www.pexels.com/photo/1183099/
+- v2_090 / extv3_090 (cinematic · Nordic Fjord): https://www.pexels.com/photo/2838979/
+- v2_091 / extv3_091 (cinematic · Coastal Dawn): https://www.pexels.com/photo/1684187/
+- v2_092 / extv3_092 (cinematic · Mountain Lake): https://www.pexels.com/photo/189349/
+- v2_093 / extv3_093 (cinematic · Golden Hour): https://www.pexels.com/photo/1417647/
+- v2_094 / extv3_094 (cinematic · Cherry Blossom): https://www.pexels.com/photo/1520342/
+- v2_095 / extv3_095 (cinematic · Lavender Field): https://www.pexels.com/photo/1578750/
+- v2_096 / extv3_096 (cinematic · Glacier Bay): https://www.pexels.com/photo/1732189/
+- v2_097 / extv3_097 (cinematic · Misty Pines): https://www.pexels.com/photo/1784575/
+- v2_098 / extv3_098 (cinematic · River Bend): https://www.pexels.com/photo/1476319/
+- v2_099 / extv3_099 (cinematic · Snow Peak): https://www.pexels.com/photo/1423600/
+- v2_100 / extv3_100 (cinematic · Silk Clouds): https://www.pexels.com/photo/5194269/

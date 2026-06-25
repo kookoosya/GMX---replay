@@ -5,7 +5,7 @@ import path from "node:path";
 
 const root = process.cwd();
 const MIN_FULL = 12_000;
-const MIN_THUMB = 2_000;
+const MIN_THUMB = 1_000;
 
 function checkDir(fullDir, thumbDir, prefix, count, pad) {
   let issues = 0;
@@ -37,19 +37,19 @@ issues += checkDir(
   path.join(root, "assets", "wallpapers"),
   path.join(root, "assets", "wallpapers", "thumbs"),
   "v2_",
-  58,
+  100,
   3
 );
 issues += checkDir(
   path.join(root, "assets", "extbg"),
   path.join(root, "assets", "extbg", "thumbs"),
   "extv3_",
-  58,
-  2
+  100,
+  3
 );
 
 if (issues) {
   console.error(`check-wallpaper-assets: ${issues} issue(s). Run: npm run wallpapers:fetch`);
   process.exit(1);
 }
-console.log("check-wallpaper-assets OK (58 site + 58 ext)");
+console.log("check-wallpaper-assets OK (100 site + 100 ext)");

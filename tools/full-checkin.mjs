@@ -16,8 +16,8 @@ const syncPath = path.join(root, "extension/site_sync.js");
 const syncJs = fs.readFileSync(syncPath, "utf8");
 
 const must = [
-  ["SITE_WALLPAPER_PACK_COUNT = 58", "site wallpaper catalog"],
-  ["EXT_WALLPAPER_PACK_COUNT = 58", "extension wallpaper catalog"],
+  ["SITE_WALLPAPER_PACK_COUNT = __gmxWp.SITE_PACK_COUNT", "site wallpaper catalog"],
+  ["EXT_WALLPAPER_PACK_COUNT = __gmxWp.EXT_PACK_COUNT", "extension wallpaper catalog"],
   ["/assets/wallpapers/${norm}.webp", "site pack uses webp files"],
   ["/assets/extbg/${norm}.webp", "ext pack uses webp files"],
   ["const antiN = antiWindow(strength);", "anti-repeat window in generate"],
@@ -43,7 +43,7 @@ const extMust = [
   ["gmx_ext_wp_v2_popup", "per-view popup wallpaper sync key"],
   ["pickSyncedWallpaperId", "per-view wallpaper picker"],
   ["/assets/extbg/${encodeURIComponent(id)}.webp", "extension loads pack webp from site"],
-  ["for (let i=1; i<=58; i++)", "extension wallpaper catalog count"],
+  ["for (let i=1; i<=100; i++)", "extension wallpaper catalog count"],
 ];
 
 const extMustNot = [

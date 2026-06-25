@@ -6,28 +6,116 @@
     const getSiteCustomUpload = () => String((ctx && typeof ctx.getSiteCustomUpload === "function" ? ctx.getSiteCustomUpload() : "") || "");
     const getExtCustomUpload = () => String((ctx && typeof ctx.getExtCustomUpload === "function" ? ctx.getExtCustomUpload() : "") || "");
 
-    const SITE_PACK_COUNT = 58;
+    const SITE_PACK_COUNT = 100;
     const SITE_FREE_PACK_COUNT = 10;
-    const EXT_PACK_COUNT = 58;
+    const EXT_PACK_COUNT = 100;
     const EXT_FREE_PACK_COUNT = 4;
     const CUSTOM_WP_FREE_COUNT = 5;
     const CUSTOM_UPLOAD_ID = "custom_upload";
     const CUSTOM_WP_RE = /^custom_[a-zA-Z0-9_.-]+\.(png|jpg|jpeg|webp)$/i;
 
     const EXT_PACK_NAMES = [
-      "Coastal Dawn", "Forest Mist", "Mountain Lake", "City Sunset", "Desert Dunes",
-      "Ocean Horizon", "Nordic Fjord", "Rainy Street", "Cherry Blossom", "Golden Hour",
-      "Misty Pines", "Alpine Meadow", "River Bend", "Cliff Coast", "Lavender Field",
-      "Autumn Trail", "Snow Peak", "Bamboo Grove", "Harbor Lights", "Vineyard Hills",
-      "Canyon View", "Tropical Cove", "Urban Night", "Meadow Bloom", "Glacier Bay",
-      "Sandstone Arch", "Waterfall Glen", "Prairie Wind", "Island Palm", "Moonlit Bay",
-      "Cedar Forest", "Rose Garden", "Stone Bridge", "Lighthouse Shore", "Wildflower Hill",
-      "Cloud Valley", "Emerald Coast", "Silver Lake", "Amber Woods", "Coral Reef",
-      "Indigo Sky", "Morning Fog", "Twilight Pier", "Bamboo Path", "Rocky Shore",
-      "Savanna Gold", "Maple Lane", "Crystal Cave", "Dunescape", "Orchid Green",
-      "Vineyard Dawn", "Ice Lagoon", "Red Rock", "Moss Garden", "Delta Mirror",
-      "Panorama Ridge", "Silk Clouds", "Cedar Sunset",
-    ];
+  "Bitcoin Green Pulse",
+  "Crypto Coin Stack",
+  "Digital Gold Bars",
+  "Blockchain Neon",
+  "Fintech Glow",
+  "Trading Terminal",
+  "Ethereum Violet",
+  "Coin Macro",
+  "Crypto Keys",
+  "Ledger Light",
+  "Wallet Neon",
+  "Market Charts",
+  "Token Spark",
+  "DeFi Matrix",
+  "Solana Teal",
+  "Chain Link",
+  "Crypto Circuit",
+  "Mining Rig",
+  "Bull Run",
+  "Satoshi Glow",
+  "Web3 Dawn",
+  "Hash Rate",
+  "Altcoin Wave",
+  "Cold Storage",
+  "Exchange Floor",
+  "Neo Tokyo",
+  "Cyber Shrine",
+  "Rainy Akihabara",
+  "Sakura Night",
+  "Neon Alley",
+  "Tokyo Tower",
+  "Manga Skyline",
+  "Cyberpunk Rain",
+  "Vaporwave City",
+  "Anime Sunset",
+  "Purple Haze",
+  "Night Crossing",
+  "Electric Street",
+  "Pink Neon",
+  "Midnight Metro",
+  "Blade Runner",
+  "Synth City",
+  "Hologram Lane",
+  "Pixel Rain",
+  "Otaku Lights",
+  "Arcade Glow",
+  "Retro Future",
+  "Kawaii Neon",
+  "Shinjuku Blue",
+  "Cyber Sakura",
+  "Hero Burst",
+  "Comic Pop",
+  "Power Gradient",
+  "Shield Glow",
+  "Avenger Tone",
+  "Cartoon Sky",
+  "Toon Burst",
+  "Color Smash",
+  "Marvel Mood",
+  "Super Pop",
+  "Cosmic Hero",
+  "Galaxy Shield",
+  "Neon Cape",
+  "Comic Ink",
+  "Hero Horizon",
+  "Cartoon Clouds",
+  "Pop Art",
+  "Bold Panels",
+  "Action Blur",
+  "Origin Story",
+  "City Pulse",
+  "Skyline Teal",
+  "Rooftop Night",
+  "Bridge Lights",
+  "Urban Violet",
+  "Glass Tower",
+  "Metro Rush",
+  "Downtown Glow",
+  "Night Drive",
+  "Harbor Neon",
+  "Street Chrome",
+  "City Rain",
+  "Late Night",
+  "Luxury Night",
+  "Aurora City",
+  "Alpine Stars",
+  "Ocean Cliff",
+  "Desert Gold",
+  "Forest Mist",
+  "Nordic Fjord",
+  "Coastal Dawn",
+  "Mountain Lake",
+  "Golden Hour",
+  "Cherry Blossom",
+  "Lavender Field",
+  "Glacier Bay",
+  "Misty Pines",
+  "River Bend",
+  "Snow Peak",
+  "Silk Clouds"
+];
 
     const SITE_PACK_NAMES = EXT_PACK_NAMES;
 
@@ -48,7 +136,7 @@
       const out = [];
       for (let i = 1; i <= EXT_PACK_COUNT; i++) {
         out.push({
-          id: `extv3_${String(i).padStart(2, "0")}`,
+          id: `extv3_${String(i).padStart(3, "0")}`,
           name: EXT_PACK_NAMES[i - 1] || `Scene ${i}`,
           tier: i <= EXT_FREE_PACK_COUNT ? "free" : "premium",
         });
@@ -74,16 +162,20 @@
       return "v2_001";
     }
 
+    function formatExtPackIdLocal(n) {
+      const num = Math.max(1, Math.min(100, Number(n) || 1));
+      return `extv3_${String(num).padStart(3, "0")}`;
+    }
+
     function normalizeExtWallpaperIdLocal(id, catalog) {
       const v = String(id || "").trim();
       if (!v) return "";
       if (catalogHasId(catalog, v)) return v;
       if (v === CUSTOM_UPLOAD_ID) return v;
       if (CUSTOM_WP_RE.test(v)) return v;
-      let m = v.match(/^extv3_(\d{1,2})$/i);
+      let m = v.match(/^extv3_(\d{1,3})$/i);
       if (m) {
-        const n = String(Math.max(1, Math.min(58, Number(m[1]) || 1))).padStart(2, "0");
-        return `extv3_${n}`;
+        return formatExtPackIdLocal(Number(m[1]) || 1);
       }
       m = v.match(/^ext_free_(\d{1,2})$/i);
       if (m) {
@@ -92,11 +184,10 @@
       }
       m = v.match(/^ext_(\d{1,2})$/i);
       if (m) {
-        const num = Math.max(1, Math.min(58, Number(m[1]) || 1));
-        return `extv3_${String(num).padStart(2, "0")}`;
+        return formatExtPackIdLocal(Number(m[1]) || 1);
       }
-      if (/^lux_ext_/i.test(v) || /^ext_free_/i.test(v)) return "extv3_01";
-      return "extv3_01";
+      if (/^lux_ext_/i.test(v) || /^ext_free_/i.test(v)) return "extv3_001";
+      return "extv3_001";
     }
 
     function wallpaperAssetPath(id) {
@@ -157,7 +248,7 @@
       if (norm === CUSTOM_UPLOAD_ID) return getExtCustomUpload();
       if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}${revQuery()}`;
       if (norm.startsWith("extv3_")) return `/assets/extbg/thumbs/${norm}.webp${revQuery()}`;
-      return `/assets/extbg/thumbs/extv3_01.webp${revQuery()}`;
+      return `/assets/extbg/thumbs/extv3_001.webp${revQuery()}`;
     }
 
     return {
