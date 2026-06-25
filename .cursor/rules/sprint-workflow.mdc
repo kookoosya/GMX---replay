@@ -187,15 +187,27 @@ Do not begin step N+1 until step N meets definition of done.
 
 ## Sprint 35 queue (strict order) — Wallpapers UX
 
-1. Grouped wallpaper picker + featured filter + site↔ext pairing — DONE (35.1)
+1. Curated featured (24) + grouped UI + filter — DONE on prod `87e3736` (35.1)
+2. Site↔ext pairing + sync checkbox — DONE on prod `87e3736` (35.3, shipped with 35.1)
+3. Unified apply-flow (`wallpaper-core` parity site + extension) — **OPEN** (35.4)
+4. Legacy id migration on boot (`w42` → `v2_042`, etc.) — **OPEN** (35.5)
+5. Grid uses thumbs only (no full 1920 in picker) — **OPEN** (35.6)
+
+Do not begin Sprint 36 ship until Sprint 35 queue is complete OR user explicitly reprioritizes.
 
 ## Sprint 36 queue (strict order) — Referral badges
 
-1. Bronze/Silver/Gold/Diamond tiers + shelf + header/home pills + toast — DONE (36.1)
+**Status: LOCAL ONLY (`bd17044`) — NOT on prod, NOT closed.**
 
-## Sprint 37+ (planned)
+1. Tiers 3/10/30/50 → Bronze/Silver/Gold/Diamond + `referral-badge-core` — coded locally (36.1–36.3)
+2. UI: Home pill, Referrals shelf, Leaderboard row, header pill — coded locally (36.2)
+3. Toast on tier-up — coded locally (36.4)
+4. Verify themes/wallpapers unlock unchanged — **NOT verified** (36.5)
+5. Ship: push → `verify:prod` → user sign-off — **NOT done**
 
-- Badge shelf (Arcade + GM/GN + refs)
+## Sprint 37+ (planned, do not start)
+
+- Badge shelf (Arcade + GM/GN + refs unified)
 - Arcade tournaments v1
 
 Do not begin step N+1 until step N meets definition of done.

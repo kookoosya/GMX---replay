@@ -218,7 +218,7 @@ if (!appPage.text.includes('id="refProgressNeed"')) {
 ok("referral progress bar UI");
 
 const refBadgeCore = await get("/lib/referral-badge-core.js");
-if (!refBadgeCore.ok || !refBadgeCore.text.includes("GMXReferralBadgeCore")) {
+if (refBadgeCore.status !== 200 || !refBadgeCore.text.includes("GMXReferralBadgeCore")) {
   fail(`referral badge core: ${refBadgeCore.status}`);
 }
 ok("referral badge core lib");
