@@ -530,3 +530,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `renderWallpaperUI` only on Themes tab; wallpaper/themes render signature skip; prediction `force` only on first tab visit.
 
 **Verify:** `node --test tests/perf-tab-activation.test.mjs`, manual tab switch GM → Themes → Extension.
+
+## 35.1 Wallpapers grouped picker — DONE
+
+**Problem:** 58 wallpapers in a flat grid felt like a dump; site and extension wallpapers were unrelated picks.
+
+**Fix:** `wallpaper-core` curated featured set (24) + Free/Unlocked/Locked groups; default filter Featured; `v2_NNN` ↔ `extv3_NN` pairing; site checkbox syncs matching extension wallpaper.
+
+**Verify:** `node --test tests/wallpaper-ui.test.mjs`, `prod-verify` wallpaper core lib.

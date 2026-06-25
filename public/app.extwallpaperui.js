@@ -61,14 +61,149 @@
       typeof ctx.unlockTagText === "function" ? ctx.unlockTagText : () => "LOCKED";
     const formatUnlockMeter =
       typeof ctx.formatUnlockMeter === "function" ? ctx.formatUnlockMeter : (a, b) => `${a}/${b}`;
+    const storage = ctx.storage || {};
+    const wpFilterKey = keys.wpFilter || "gmx_wp_filter";
+
+    const wpCore = () => window.GMXWallpaperCore || {};
+
+    let lastExtWpRenderSig = "";
+
+    function syncExtWallpaperFilterSelect(sel) {
+      if (!sel) return "featured";
+      const core = wpCore();
+      const options = core.WALLPAPER_FILTER_OPTIONS || [];
+      const saved = storage.lsGet?.(wpFilterKey, "featured") ?? "featured";
+      sel.innerHTML = "";
+      for (const opt of options) {
+        const o = document.createElement("option");
+        o.value = opt.id;
+        o.textContent = t(opt.labelKey) || opt.id;
+        sel.appendChild(o);
+      }
+      const ok = Array.from(sel.options).some((o) => o.value === saved);
+      sel.value = ok ? saved : "featured";
+      return sel.value;
+    }
+
+    function renderGroupedExtWallpapers(grid, groups, cardCtx) {
+      grid.innerHTML = "";
+      grid.classList.add("wpGridRoot");
+      for (const group of groups) {
+        if (!group.items.length) continue;
+        const section = document.createElement("section");
+        section.className = "wpGroupSection";
+        section.dataset.group = group.id;
+
+        const head = document.createElement("div");
+        head.className = "wpGroupHead";
+        head.textContent = t(group.labelKey) || group.id;
+        section.appendChild(head);
+
+        const subgrid = document.createElement("div");
+        subgrid.className = "wpGrid wpGroupGrid";
+        section.appendChild(subgrid);
+        grid.appendChild(section);
+
+        chunkedRender(
+          subgrid,
+          group.items,
+          (entry) => buildExtWpCard(entry, cardCtx),
+          { key: `extWpGrid-${group.id}`, chunk: 12 }
+        );
+      }
+    }
+
+    function buildExtWpCard({ wp, idx, isUnlocked, mainIdx }, ctx) {
+      const { chosen, selectedTarget, extWallpapersLen } = ctx;
+      const card = document.createElement("button");
+      card.type = "button";
+      card.dataset.wpId = wp.id;
+      card.dataset.tier = wp.tier || (mainIdx >= 0 && mainIdx < freeVisibleExtWallpapers ? "free" : "premium");
+      card.className =
+        "wpCard" + (wp.id === chosen ? " active" : "") + (!isUnlocked ? " mystery" : "");
+
+      const thumb = document.createElement("div");
+      thumb.className = "wpThumb";
+      const thumbUrl = extWallpaperThumbUrl(wp.id);
+      const fullUrl = extWallpaperFullUrl(wp.id);
+      if (thumbUrl) {
+        thumb.setAttribute("data-bg", thumbUrl);
+        observeLazyBg(thumb);
+      }
+      if (isUnlocked && fullUrl) {
+        card.addEventListener(
+          "pointerenter",
+          () => {
+            try {
+              prefetchImage(fullUrl);
+            } catch {}
+          },
+          { passive: true }
+        );
+      }
+
+      const name = document.createElement("div");
+      name.className = "wpName";
+      name.textContent = wp.name || wp.id;
+
+      const meta = document.createElement("div");
+      meta.className = "wpMeta";
+      meta.textContent = wp.tier === "custom" ? "Custom" : wp.tier || "";
+
+      const tag = document.createElement("div");
+      tag.className = "wpTag";
+      tag.textContent =
+        wp.tier === "custom"
+          ? "CUSTOM"
+          : unlockTagText(mainIdx >= 0 ? mainIdx : idx, isUnlocked, freeVisibleExtWallpapers);
+
+      card.appendChild(thumb);
+      card.appendChild(name);
+      card.appendChild(meta);
+      card.appendChild(tag);
+
+      if (!isUnlocked) {
+        const ov = document.createElement("div");
+        ov.className = "mysteryOverlay";
+        ov.textContent = t("locked") || "LOCKED";
+        card.appendChild(ov);
+      }
+
+      card.addEventListener("click", () => {
+        if (!requireConnected("Extension themes")) return;
+        if (!isUnlocked) {
+          const need = reqRefsForUnlockIndex(mainIdx >= 0 ? mainIdx : idx, freeVisibleExtWallpapers);
+          toast(
+            "warn",
+            (t("locked_unlock_at") ||
+              "Locked. Unlock at {n} referrals (+1 every 3 refs at first, then +1 every 4) or Pro.").replace(
+              "{n}",
+              String(need)
+            )
+          );
+          return;
+        }
+        applyExtWallpaper(wp.id, selectedTarget);
+      });
+
+      return card;
+    }
 
     function initExtWallpaperControls() {
       if (initExtWallpaperControls._done) return;
       initExtWallpaperControls._done = true;
       const sel = $("extWpTarget");
+      const filterSel = $("extWpFilter");
       const clearBtn = $("extWpClear");
       const addBtn = $("extWpAddCustom");
       const addFile = $("extWpAddFile");
+      if (filterSel) {
+        filterSel.addEventListener("change", () => {
+          storage.lsSet?.(wpFilterKey, filterSel.value || "featured");
+          lastExtWpRenderSig = "";
+          renderExtWallpapers();
+        });
+      }
       if (addBtn && addFile) {
         addBtn.onclick = () => {
           if (requireConnected("Extension themes")) addFile.click();
@@ -128,13 +263,11 @@
       if (!grid || !st) return;
 
       initExtWallpaperControls();
-      loadCustomWallpapers().then((loaded) => {
-        if (loaded && document.contains(grid)) renderExtWallpapers();
-      });
 
       const effectiveExtCustom = getEffectiveExtCustomWallpapers();
       const extWallpapers = getExtWallpapers();
       const allExtWps = [...extWallpapers, ...effectiveExtCustom];
+      const filterId = syncExtWallpaperFilterSelect($("extWpFilter"));
       const selectedTarget = syncExtWallpaperTargetUI(
         targetSel,
         targetSel?.value || currentExtWallpaperTarget()
@@ -155,90 +288,64 @@
       const wEl = $("extWpUnlocked");
       if (wEl) wEl.textContent = formatUnlockMeter(Math.min(unlocked, total), total);
 
-      const items = allExtWps.map((wp, idx) => ({ wp, idx }));
-      chunkedRender(
-        grid,
-        items,
-        ({ wp, idx }) => {
-          const isUnlocked =
-            wp.tier === "custom"
-              ? idx - extWallpapers.length < customWpFreeCount || isPro()
-              : isPro() || idx < mainUnlockedExt;
-          const card = document.createElement("button");
-          card.type = "button";
-          card.dataset.wpId = wp.id;
-          card.dataset.tier = wp.tier || (idx < freeVisibleExtWallpapers ? "free" : "premium");
-          card.className =
-            "wpCard" + (wp.id === chosen ? " active" : "") + (!isUnlocked ? " mystery" : "");
-
-          const thumb = document.createElement("div");
-          thumb.className = "wpThumb";
-          const thumbUrl = extWallpaperThumbUrl(wp.id);
-          const fullUrl = extWallpaperFullUrl(wp.id);
-          if (thumbUrl) {
-            thumb.setAttribute("data-bg", thumbUrl);
-            observeLazyBg(thumb);
-          }
-          if (isUnlocked && fullUrl) {
-            card.addEventListener(
-              "pointerenter",
-              () => {
-                try {
-                  prefetchImage(fullUrl);
-                } catch {}
-              },
-              { passive: true }
-            );
-          }
-
-          const name = document.createElement("div");
-          name.className = "wpName";
-          name.textContent = wp.name || wp.id;
-
-          const meta = document.createElement("div");
-          meta.className = "wpMeta";
-          meta.textContent = wp.tier === "custom" ? "Custom" : wp.tier || "";
-
-          const tag = document.createElement("div");
-          tag.className = "wpTag";
-          tag.textContent =
-            wp.tier === "custom"
-              ? "CUSTOM"
-              : unlockTagText(idx, isUnlocked, freeVisibleExtWallpapers);
-
-          card.appendChild(thumb);
-          card.appendChild(name);
-          card.appendChild(meta);
-          card.appendChild(tag);
-
-          if (!isUnlocked) {
-            const ov = document.createElement("div");
-            ov.className = "mysteryOverlay";
-            ov.textContent = t("locked") || "LOCKED";
-            card.appendChild(ov);
-          }
-
-          card.addEventListener("click", () => {
-            if (!requireConnected("Extension themes")) return;
-            if (!isUnlocked) {
-              const need = reqRefsForUnlockIndex(idx, freeVisibleExtWallpapers);
-              toast(
-                "warn",
-                (t("locked_unlock_at") ||
-                  "Locked. Unlock at {n} referrals (+1 every 3 refs at first, then +1 every 4) or Pro.").replace(
-                  "{n}",
-                  String(need)
-                )
-              );
-              return;
-            }
-            applyExtWallpaper(wp.id, selectedTarget);
+      const renderSig = [
+        filterId,
+        selectedTarget,
+        chosen,
+        total,
+        unlocked,
+        isPro() ? 1 : 0,
+      ].join("|");
+      if (renderSig === lastExtWpRenderSig) {
+        try {
+          const cards = grid.querySelectorAll(".wpCard[data-wp-id]");
+          cards.forEach((card) => {
+            card.classList.toggle("active", card.getAttribute("data-wp-id") === chosen);
           });
+        } catch {}
+        return;
+      }
+      lastExtWpRenderSig = renderSig;
 
-          return card;
-        },
-        { key: "extWpGrid", chunk: 12 }
-      );
+      loadCustomWallpapers().then((loaded) => {
+        if (loaded && document.contains(grid)) {
+          lastExtWpRenderSig = "";
+          renderExtWallpapers();
+        }
+      });
+
+      const core = wpCore();
+      const entries = allExtWps.map((wp, idx) => {
+        let isUnlocked;
+        let bucket;
+        let mainIdx;
+        if (wp.tier === "custom") {
+          isUnlocked = idx - extWallpapers.length < customWpFreeCount || isPro();
+          bucket = "custom";
+          mainIdx = -1;
+        } else {
+          mainIdx = idx;
+          isUnlocked = isPro() || idx < mainUnlockedExt;
+          if (mainIdx < freeVisibleExtWallpapers) bucket = "free";
+          else if (isUnlocked) bucket = "unlocked";
+          else bucket = "locked";
+        }
+        return { wp, idx, bucket, mainIdx, isUnlocked };
+      });
+      const filtered =
+        typeof core.filterWallpaperEntries === "function"
+          ? core.filterWallpaperEntries(entries, filterId, (wp) => core.packIndexFromExtId?.(wp.id))
+          : entries;
+      const groups =
+        typeof core.groupWallpaperEntries === "function"
+          ? core.groupWallpaperEntries(filtered)
+          : [{ id: "all", labelKey: "wp_filter_all", items: filtered }];
+
+      renderGroupedExtWallpapers(grid, groups, {
+        chosen,
+        selectedTarget,
+        extWallpapersLen: extWallpapers.length,
+      });
 
       if (!chosen) {
         st.innerHTML = `<span class="muted">None.</span> Pick a wallpaper for <b>${escapeHtml(extWallpaperLabel(selectedTarget))}</b>.`;

@@ -1171,6 +1171,17 @@ html.mode-light .skeleton{
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
   gap: 12px;
 }
+.wpGridRoot{display:flex;flex-direction:column;gap:14px}
+.wpGroupSection{display:block}
+.wpGroupHead{
+  font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;
+  color:rgba(255,255,255,.72);margin:4px 0 8px;
+}
+.wpGroupGrid{margin-top:0}
+.wpSyncRow{
+  display:flex;align-items:center;gap:8px;margin:10px 0 4px;font-size:13px;cursor:pointer;
+}
+.wpSyncRow input{margin:0}
 .wpCard{
   position:relative;
   border: 2px solid var(--stroke);

@@ -262,6 +262,15 @@ if (!themeGroupCore.text.includes("GMXThemeGroupCore")) {
 }
 ok("theme group core lib");
 
+const wallpaperCore = await get("/lib/wallpaper-core.js");
+if (!wallpaperCore.text.includes("GMXWallpaperCore") || !wallpaperCore.text.includes("pairedExtId")) {
+  fail("/lib/wallpaper-core.js missing GMXWallpaperCore export");
+}
+if (!appPage.text.includes('id="wpFilter"') || !appPage.text.includes('id="wpSyncExt"')) {
+  fail("/app shell missing grouped wallpaper controls");
+}
+ok("wallpaper core lib");
+
 const themesUi = await get("/app.themesui.js");
 if (!themesUi.text.includes("themeGroupSection") || !themesUi.text.includes("themeGridRoot")) {
   fail("/app.themesui.js missing grouped theme sections");

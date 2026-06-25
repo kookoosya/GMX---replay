@@ -10,7 +10,10 @@
     const keys = ctx.keys || {};
     const wpGlobalKey = keys.wpGlobal || "gmx_wp_global";
     const themewallViewKey = keys.themewallView || "gmx_themewall_view";
+    const wpFilterKey = keys.wpFilter || "gmx_wp_filter";
+    const wpSyncExtKey = keys.wpSyncExt || "gmx_wp_sync_ext";
 
+    const wpCore = () => window.GMXWallpaperCore || {};
     const getWallpaperTabs =
       typeof ctx.getWallpaperTabs === "function" ? ctx.getWallpaperTabs : () => [];
     const wallpaperKeyForTab =
@@ -59,7 +62,7 @@
     let lastCustomWpCount = -1;
     let lastWpRenderSig = "";
 
-    function wallpaperRenderSignature(targetTab, activeId, allWps, unlocked, unlockedAll, nextReq) {
+    function wallpaperRenderSignature(targetTab, activeId, allWps, unlocked, unlockedAll, nextReq, filterId) {
       return [
         targetTab,
         activeId,
@@ -68,7 +71,171 @@
         unlockedAll ? 1 : 0,
         nextReq,
         isPro() ? 1 : 0,
+        filterId || "featured",
       ].join("|");
+    }
+
+    function syncWallpaperFilterSelect(sel) {
+      if (!sel) return "featured";
+      const core = wpCore();
+      const options = core.WALLPAPER_FILTER_OPTIONS || [];
+      const saved = storage.lsGet(wpFilterKey, "featured");
+      sel.innerHTML = "";
+      for (const opt of options) {
+        const o = document.createElement("option");
+        o.value = opt.id;
+        o.textContent = t(opt.labelKey) || opt.id;
+        sel.appendChild(o);
+      }
+      const ok = Array.from(sel.options).some((o) => o.value === saved);
+      sel.value = ok ? saved : "featured";
+      return sel.value;
+    }
+
+    function buildWpCard({ wp, idx }, ctx) {
+      const {
+        targetTab,
+        activeId,
+        effectiveCustomLen,
+        isUnlocked,
+        mainIdx,
+      } = ctx;
+      const card = document.createElement("button");
+      card.type = "button";
+      card.dataset.wpId = wp.id;
+      card.dataset.tier =
+        wp.tier || (mainIdx >= 0 && mainIdx < freeVisibleWallpapers ? "free" : "premium");
+      card.className =
+        "wpCard" + (isUnlocked ? "" : " mystery") + (wp.id === activeId ? " active" : "");
+
+      const thumb = document.createElement("div");
+      thumb.className = "wpThumb";
+      const thumbUrl = wallpaperThumbUrl(wp.id);
+      const fullUrl = wallpaperFullUrl(wp.id);
+      if (thumbUrl) thumb.setAttribute("data-bg", thumbUrl);
+      observeLazyBg(thumb);
+      if (isUnlocked && fullUrl) {
+        card.addEventListener(
+          "pointerenter",
+          () => {
+            try {
+              prefetchImage(fullUrl);
+            } catch {}
+          },
+          { passive: true }
+        );
+      }
+
+      const name = document.createElement("div");
+      name.className = "wpName";
+      name.textContent = wp.name;
+
+      const meta = document.createElement("div");
+      meta.className = "wpMeta";
+      meta.textContent =
+        wp.tier === "custom"
+          ? "Custom"
+          : mainIdx >= 0 && mainIdx < freeVisibleWallpapers
+            ? "Free"
+            : isPro()
+              ? "Pro"
+              : "Locked";
+
+      const tag = document.createElement("div");
+      tag.className = "wpTag";
+      tag.textContent =
+        wp.tier === "custom"
+          ? "CUSTOM"
+          : mainIdx >= 0 && mainIdx < freeVisibleWallpapers
+            ? "FREE"
+            : isUnlocked
+              ? "UNLOCKED"
+              : reqRefsForUnlockIndex(mainIdx, freeVisibleWallpapers) + " ref";
+
+      card.appendChild(thumb);
+      card.appendChild(name);
+      card.appendChild(meta);
+      card.appendChild(tag);
+
+      if (!isUnlocked) {
+        const ov = document.createElement("div");
+        ov.className = "mysteryOverlay";
+        ov.textContent = t("locked") || "LOCKED";
+        card.appendChild(ov);
+      }
+
+      card.addEventListener("click", () => {
+        if (!isUnlocked) {
+          const reqIdx = wp.tier === "custom" ? idx : idx - effectiveCustomLen;
+          toast(
+            "warn",
+            (t("locked_unlock_at") ||
+              "Locked. Unlock at {n} referrals (+1 every 3 refs at first, then +1 every 4) or Pro.").replace(
+              "{n}",
+              String(reqRefsForUnlockIndex(reqIdx, freeVisibleWallpapers))
+            )
+          );
+          return;
+        }
+
+        if (targetTab === "all") {
+          storage.lsSet(wpGlobalKey, wp.id);
+        } else {
+          setWallpaperForTab(targetTab, wp.id);
+        }
+
+        const newActive =
+          targetTab === "all"
+            ? storage.lsGet(wpGlobalKey, "")
+            : storage.lsGet(wallpaperKeyForTab(targetTab), "");
+        markWallpaperSelection(newActive);
+
+        const previewTab = targetTab === "all" ? getCurrentTab() : targetTab;
+        const full = wallpaperFullUrl(wp.id);
+        const applyPreview = () => {
+          applyUserBg(previewTab);
+          applyWallpaper(previewTab);
+        };
+        if (full) prefetchImage(full).finally(applyPreview);
+        else applyPreview();
+
+        try {
+          const syncExt = $("wpSyncExt")?.checked;
+          if (syncExt && wp.tier !== "custom") {
+            window.__gmxApplyPairedExtWallpaper?.(wp.id);
+          }
+        } catch {}
+      });
+
+      return card;
+    }
+
+    function renderGroupedWallpapers(grid, groups, cardCtx) {
+      grid.innerHTML = "";
+      grid.classList.add("wpGridRoot");
+      for (const group of groups) {
+        if (!group.items.length) continue;
+        const section = document.createElement("section");
+        section.className = "wpGroupSection";
+        section.dataset.group = group.id;
+
+        const head = document.createElement("div");
+        head.className = "wpGroupHead";
+        head.textContent = t(group.labelKey) || group.id;
+        section.appendChild(head);
+
+        const subgrid = document.createElement("div");
+        subgrid.className = "wpGrid wpGroupGrid";
+        section.appendChild(subgrid);
+        grid.appendChild(section);
+
+        chunkedRender(
+          subgrid,
+          group.items,
+          (entry) => buildWpCard(entry, cardCtx),
+          { key: `wpGrid-${group.id}`, chunk: 12 }
+        );
+      }
     }
 
     function markWallpaperSelection(activeId) {
@@ -105,6 +272,8 @@
         tabSel.value = ok ? prev : "all";
       } catch {}
 
+      const filterId = syncWallpaperFilterSelect($("wpFilter"));
+
       const targetTab = tabSel.value || "all";
       const activeId =
         targetTab === "all"
@@ -136,7 +305,8 @@
         allWps,
         unlocked,
         unlockedAll,
-        nextReq
+        nextReq,
+        filterId
       );
       if (renderSig === lastWpRenderSig) {
         markWallpaperSelection(activeId);
@@ -153,120 +323,33 @@
         renderWallpaperUI();
       });
 
-      const items = allWps.map((wp, idx) => ({ wp, idx }));
-      chunkedRender(
-        grid,
-        items,
-        ({ wp, idx }) => {
-          const isUnlocked = wallpaperUnlocked(wp, idx, effectiveCustom.length);
-          const card = document.createElement("button");
-          card.type = "button";
-          card.dataset.wpId = wp.id;
-          const mainIdx = wp.tier === "custom" ? -1 : idx - effectiveCustom.length;
-          card.dataset.tier =
-            wp.tier || (mainIdx >= 0 && mainIdx < freeVisibleWallpapers ? "free" : "premium");
-          card.className =
-            "wpCard" + (isUnlocked ? "" : " mystery") + (wp.id === activeId ? " active" : "");
+      const core = wpCore();
+      const entries = allWps.map((wp, idx) => {
+        const isUnlocked = wallpaperUnlocked(wp, idx, effectiveCustom.length);
+        const mainIdx = wp.tier === "custom" ? -1 : idx - effectiveCustom.length;
+        const bucket =
+          typeof core.bucketWallpaperEntry === "function"
+            ? core.bucketWallpaperEntry(wp, idx, effectiveCustom.length, {
+                freeVisible: freeVisibleWallpapers,
+                isUnlocked: () => isUnlocked,
+              })
+            : "locked";
+        return { wp, idx, bucket, mainIdx, isUnlocked };
+      });
+      const filtered =
+        typeof core.filterWallpaperEntries === "function"
+          ? core.filterWallpaperEntries(entries, filterId, (wp) => core.packIndexFromSiteId?.(wp.id))
+          : entries;
+      const groups =
+        typeof core.groupWallpaperEntries === "function"
+          ? core.groupWallpaperEntries(filtered)
+          : [{ id: "all", labelKey: "wp_filter_all", items: filtered }];
 
-          const thumb = document.createElement("div");
-          thumb.className = "wpThumb";
-          const thumbUrl = wallpaperThumbUrl(wp.id);
-          const fullUrl = wallpaperFullUrl(wp.id);
-          if (thumbUrl) thumb.setAttribute("data-bg", thumbUrl);
-          observeLazyBg(thumb);
-          if (isUnlocked && fullUrl) {
-            card.addEventListener(
-              "pointerenter",
-              () => {
-                try {
-                  prefetchImage(fullUrl);
-                } catch {}
-              },
-              { passive: true }
-            );
-          }
-
-          const name = document.createElement("div");
-          name.className = "wpName";
-          name.textContent = wp.name;
-
-          const meta = document.createElement("div");
-          meta.className = "wpMeta";
-          meta.textContent =
-            wp.tier === "custom"
-              ? "Custom"
-              : mainIdx >= 0 && mainIdx < freeVisibleWallpapers
-                ? "Free"
-                : isPro()
-                  ? "Pro"
-                  : "Locked";
-
-          const tag = document.createElement("div");
-          tag.className = "wpTag";
-          tag.textContent =
-            wp.tier === "custom"
-              ? "CUSTOM"
-              : mainIdx >= 0 && mainIdx < freeVisibleWallpapers
-                ? "FREE"
-                : isUnlocked
-                  ? "UNLOCKED"
-                  : reqRefsForUnlockIndex(mainIdx, freeVisibleWallpapers) + " ref";
-
-          card.appendChild(thumb);
-          card.appendChild(name);
-          card.appendChild(meta);
-          card.appendChild(tag);
-
-          if (!isUnlocked) {
-            const ov = document.createElement("div");
-            ov.className = "mysteryOverlay";
-            ov.textContent = t("locked") || "LOCKED";
-            card.appendChild(ov);
-          }
-
-          card.addEventListener("click", () => {
-            if (!isUnlocked) {
-              const reqIdx = wp.tier === "custom" ? idx : idx - effectiveCustom.length;
-              toast(
-                "warn",
-                (t("locked_unlock_at") ||
-                  "Locked. Unlock at {n} referrals (+1 every 3 refs at first, then +1 every 4) or Pro.").replace(
-                  "{n}",
-                  String(reqRefsForUnlockIndex(reqIdx, freeVisibleWallpapers))
-                )
-              );
-              return;
-            }
-
-            if (targetTab === "all") {
-              storage.lsSet(wpGlobalKey, wp.id);
-            } else {
-              setWallpaperForTab(targetTab, wp.id);
-            }
-
-            const newActive =
-              targetTab === "all"
-                ? storage.lsGet(wpGlobalKey, "")
-                : storage.lsGet(wallpaperKeyForTab(targetTab), "");
-            markWallpaperSelection(newActive);
-
-            const previewTab = targetTab === "all" ? getCurrentTab() : targetTab;
-            const full = wallpaperFullUrl(wp.id);
-            if (full) {
-              prefetchImage(full).finally(() => {
-                applyUserBg(previewTab);
-                applyWallpaper(previewTab);
-              });
-            } else {
-              applyUserBg(previewTab);
-              applyWallpaper(previewTab);
-            }
-          });
-
-          return card;
-        },
-        { key: "wpGrid", chunk: 12 }
-      );
+      renderGroupedWallpapers(grid, groups, {
+        targetTab,
+        activeId,
+        effectiveCustomLen: effectiveCustom.length,
+      });
     }
 
     function setThemeWallView(view) {
@@ -312,7 +395,24 @@
       if (initDone) return;
       initDone = true;
       const tabSel = $("wpTab");
+      const filterSel = $("wpFilter");
       const clearBtn = $("wpClear");
+      const syncExt = $("wpSyncExt");
+      if (filterSel) {
+        filterSel.addEventListener("change", () => {
+          storage.lsSet(wpFilterKey, filterSel.value || "featured");
+          lastWpRenderSig = "";
+          renderWallpaperUI();
+        });
+      }
+      if (syncExt) {
+        try {
+          syncExt.checked = storage.lsGet(wpSyncExtKey, "1") !== "0";
+        } catch {}
+        syncExt.addEventListener("change", () => {
+          storage.lsSet(wpSyncExtKey, syncExt.checked ? "1" : "0");
+        });
+      }
       if (tabSel) {
         tabSel.addEventListener("change", () => {
           renderWallpaperUI();

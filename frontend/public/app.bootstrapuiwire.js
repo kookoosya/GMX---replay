@@ -70,7 +70,7 @@
       trWp: (key) => ctx.trWp?.(key),
       toast: (type, html, ms) => chrome.toast?.(type, html, ms),
       storage: st,
-      keys: { wpGlobal: K.WP_GLOBAL, themewallView: K.THEMEWALL_VIEW },
+      keys: { wpGlobal: K.WP_GLOBAL, themewallView: K.THEMEWALL_VIEW, wpFilter: "gmx_wp_filter", wpSyncExt: "gmx_wp_sync_ext" },
       getWallpaperTabs: () => ctx.getWallpaperTabs?.(),
       wallpaperKeyForTab: (tab) => wpStore.wallpaperKeyForTab?.(tab),
       setWallpaperForTab: (tab, id) => wpStore.setWallpaperForTab?.(tab, id),
@@ -286,7 +286,8 @@
       escapeHtml: (s) => fmt.escapeHtml?.(s),
       extSyncNow: (reason) => __gmxExtView.extSyncNow(reason),
       extLsSet: (key, value) => st.extLsSet?.(key, value),
-      keys: { extCustomBgGlobal: K.EXT_CUSTOM_BG_GLOBAL, extWpTarget: K.EXT_WP_TARGET },
+      storage: st,
+      keys: { extCustomBgGlobal: K.EXT_CUSTOM_BG_GLOBAL, extWpTarget: K.EXT_WP_TARGET, wpFilter: "gmx_wp_filter" },
       customUploadId: wp.CUSTOM_UPLOAD_ID,
       compressImageToJpegDataURL: (file, opts) => ctx.compressImageToJpegDataURL?.(file, opts),
       setExtWallpaperForView: (view, id) => extWpStore.setExtWallpaperForView?.(view, id),
@@ -313,6 +314,16 @@
       unlockTagText: (idx, unlocked, free) => __gmxThemesUi.unlockTagText(idx, unlocked, free),
       formatUnlockMeter: (cur, total) => ctx.formatUnlockMeter?.(cur, total),
     });
+
+    window.__gmxApplyPairedExtWallpaper = (siteId) => {
+      try {
+        const core = globalThis.GMXWallpaperCore;
+        if (!core || typeof core.pairedExtId !== "function") return;
+        const extId = core.pairedExtId(siteId);
+        if (!extId) return;
+        __gmxExtApply.applyExtWallpaper(extId, "all");
+      } catch {}
+    };
 
     return {
       __gmxSetBg,

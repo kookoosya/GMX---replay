@@ -185,9 +185,12 @@ Do not begin step N+1 until step N meets definition of done.
 1. Remove blog/guides (redirect `/blog` → `/app`) — DONE (34.0)
 2. Tab activation perf + wallpaper/themes render cache — DONE (34.1)
 
-## Sprint 35+ (planned)
+## Sprint 35 queue (strict order) — Wallpapers UX
 
-- Wallpapers cleanup (site + extension)
+1. Grouped wallpaper picker + featured filter + site↔ext pairing — DONE (35.1)
+
+## Sprint 36+ (planned)
+
 - Referral badges + badge shelf
 - Arcade tournaments v1
 
