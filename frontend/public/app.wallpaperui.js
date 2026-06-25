@@ -92,13 +92,11 @@
       return sel.value;
     }
 
-    function buildWpCard({ wp, idx }, ctx) {
+    function buildWpCard({ wp, idx, mainIdx, isUnlocked }, ctx) {
       const {
         targetTab,
         activeId,
         effectiveCustomLen,
-        isUnlocked,
-        mainIdx,
       } = ctx;
       const card = document.createElement("button");
       card.type = "button";

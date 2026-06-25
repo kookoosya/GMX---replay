@@ -56,6 +56,11 @@ test("extension wallpaper ui uses grouped grid and shared filter", () => {
   assert.match(src, /wpGroupSection/);
 });
 
+test("site wallpaper ui passes unlock state from entry to card builder", () => {
+  const src = fs.readFileSync(path.join(root, "public", "app.wallpaperui.js"), "utf8");
+  assert.match(src, /function buildWpCard\(\{ wp, idx, mainIdx, isUnlocked \}/);
+});
+
 test("wallpaper core lib is served for prod shell", () => {
   const lib = fs.readFileSync(path.join(root, "public", "lib", "wallpaper-core.js"), "utf8");
   assert.match(lib, /GMXWallpaperCore/);

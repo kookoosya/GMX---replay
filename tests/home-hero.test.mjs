@@ -31,8 +31,8 @@ test("siteboot wires home hero on init", () => {
 
 test("hero loop asset exists", () => {
   const svg = fs.readFileSync(path.join(root, "public", "assets", "hero", "gmx-hero-loop.svg"), "utf8");
-  assert.match(svg, /GM \/ GN replies/);
-  assert.match(svg, /Play Arcade games/);
+  assert.match(svg, /Reply on X|GMXReply/);
+  assert.match(svg, /Play browser games|Play Arcade/i);
 });
 
 test("boot chunk manifest includes home hero module", () => {

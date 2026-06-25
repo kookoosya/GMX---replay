@@ -106,6 +106,15 @@ if (fs.existsSync(extPreviewSrc)) {
   console.log("  assets/ext/");
 }
 
+// 7. Sync public/assets/hero -> frontend/public/assets/hero (home hero loop/poster)
+const heroSrc = path.join(PUBLIC, "assets", "hero");
+const heroDest = path.join(FRONTEND_PUBLIC, "assets", "hero");
+if (fs.existsSync(heroSrc)) {
+  copyDirRecursive(heroSrc, heroDest);
+  n++;
+  console.log("  assets/hero/");
+}
+
 console.log(`[sync] Copied ${n} items: public + assets -> frontend/public`);
 
 // Prune obsolete collapsed runwire mirrors (Phase 3 → merged into *wire.js).

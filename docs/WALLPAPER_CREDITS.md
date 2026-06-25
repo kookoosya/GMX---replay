@@ -1,5 +1,63 @@
 # Wallpaper credits
 
 Source: [Pexels](https://www.pexels.com/license/) — free to use.
-Generated: 2026-06-18
+Generated: 2026-06-25
 
+- v2_001 / extv3_01: https://www.pexels.com/photo/2662116/
+- v2_002 / extv3_02: https://www.pexels.com/photo/1365425/
+- v2_003 / extv3_03: https://www.pexels.com/photo/1933239/
+- v2_004 / extv3_04: https://www.pexels.com/photo/1183099/
+- v2_005 / extv3_05: https://www.pexels.com/photo/2838979/
+- v2_006 / extv3_06: https://www.pexels.com/photo/1684187/
+- v2_007 / extv3_07: https://www.pexels.com/photo/189349/
+- v2_008 / extv3_08: https://www.pexels.com/photo/1417647/
+- v2_009 / extv3_09: https://www.pexels.com/photo/1520342/
+- v2_010 / extv3_10: https://www.pexels.com/photo/1578750/
+- v2_011 / extv3_11: https://www.pexels.com/photo/1732189/
+- v2_012 / extv3_12: https://www.pexels.com/photo/1784575/
+- v2_013 / extv3_13: https://www.pexels.com/photo/1476319/
+- v2_014 / extv3_14: https://www.pexels.com/photo/1423600/
+- v2_015 / extv3_15: https://www.pexels.com/photo/1261728/
+- v2_016 / extv3_16: https://www.pexels.com/photo/1624496/
+- v2_017 / extv3_17: https://www.pexels.com/photo/247599/
+- v2_018 / extv3_18: https://www.pexels.com/photo/325044/
+- v2_019 / extv3_19: https://www.pexels.com/photo/414612/
+- v2_020 / extv3_20: https://www.pexels.com/photo/450597/
+- v2_021 / extv3_21: https://www.pexels.com/photo/618833/
+- v2_022 / extv3_22: https://www.pexels.com/photo/691668/
+- v2_023 / extv3_23: https://www.pexels.com/photo/870941/
+- v2_024 / extv3_24: https://www.pexels.com/photo/1486971/
+- v2_025 / extv3_25: https://www.pexels.com/photo/1029604/
+- v2_026 / extv3_26: https://www.pexels.com/photo/1287145/
+- v2_027 / extv3_27: https://www.pexels.com/photo/1671279/
+- v2_028 / extv3_28: https://www.pexels.com/photo/1761279/
+- v2_029 / extv3_29: https://www.pexels.com/photo/2387845/
+- v2_030 / extv3_30: https://www.pexels.com/photo/1257860/
+- v2_031 / extv3_31: https://www.pexels.com/photo/3225519/
+- v2_032 / extv3_32: https://www.pexels.com/photo/1323712/
+- v2_033 / extv3_33: https://www.pexels.com/photo/3463772/
+- v2_034 / extv3_34: https://www.pexels.com/photo/3558895/
+- v2_035 / extv3_35: https://www.pexels.com/photo/3662634/
+- v2_036 / extv3_36: https://www.pexels.com/photo/417411/
+- v2_037 / extv3_37: https://www.pexels.com/photo/417173/
+- v2_038 / extv3_38: https://www.pexels.com/photo/1693441/
+- v2_039 / extv3_39: https://www.pexels.com/photo/1848771/
+- v2_040 / extv3_40: https://www.pexels.com/photo/1437629/
+- v2_041 / extv3_41: https://www.pexels.com/photo/2387428/
+- v2_042 / extv3_42: https://www.pexels.com/photo/2325447/
+- v2_043 / extv3_43: https://www.pexels.com/photo/207219/
+- v2_044 / extv3_44: https://www.pexels.com/photo/209207/
+- v2_045 / extv3_45: https://www.pexels.com/photo/2101820/
+- v2_046 / extv3_46: https://www.pexels.com/photo/2343464/
+- v2_047 / extv3_47: https://www.pexels.com/photo/2564552/
+- v2_048 / extv3_48: https://www.pexels.com/photo/2774557/
+- v2_049 / extv3_49: https://www.pexels.com/photo/3165335/
+- v2_050 / extv3_50: https://www.pexels.com/photo/3847188/
+- v2_051 / extv3_51: https://www.pexels.com/photo/3957971/
+- v2_052 / extv3_52: https://www.pexels.com/photo/3844780/
+- v2_053 / extv3_53: https://www.pexels.com/photo/1103970/
+- v2_054 / extv3_54: https://www.pexels.com/photo/1770803/
+- v2_055 / extv3_55: https://www.pexels.com/photo/1563356/
+- v2_056 / extv3_56: https://www.pexels.com/photo/2685339/
+- v2_057 / extv3_57: https://www.pexels.com/photo/2832382/
+- v2_058 / extv3_58: https://www.pexels.com/photo/5194269/
