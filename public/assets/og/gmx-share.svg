@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="GMXReply  Reply on X, play games">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1020"/>
+      <stop offset="100%" stop-color="#1a1030"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#9945ff"/>
+      <stop offset="100%" stop-color="#14f195"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <text x="96" y="250" fill="#e8eeff" font-family="Segoe UI, system-ui, sans-serif" font-size="56" font-weight="800">Reply on X</text>
+  <text x="96" y="320" fill="#9fb0d9" font-family="Segoe UI, system-ui, sans-serif" font-size="36">Play browser games</text>
+  <rect x="96" y="370" width="280" height="58" rx="14" fill="url(#accent)"/>
+  <text x="236" y="408" text-anchor="middle" fill="#081018" font-family="Segoe UI, system-ui, sans-serif" font-size="24" font-weight="700">GMXReply</text>
+</svg>

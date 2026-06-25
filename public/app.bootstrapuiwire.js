@@ -251,6 +251,15 @@
         try {
           globalThis.__gmxMobileNavSync?.(name);
         } catch {}
+        try {
+          if (window.__GMXSeoMetaFactory) {
+            const tab =
+              typeof tabState.getCurrentTab === "function" ? tabState.getCurrentTab() : name;
+            window.__GMXSeoMetaFactory({
+              tr: (k, fb) => ctx.siteTr?.(k, fb) || ctx.t?.(k) || fb,
+            }).applySeoMeta(tab || name);
+          }
+        } catch {}
       },
     });
 

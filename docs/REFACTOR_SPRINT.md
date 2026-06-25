@@ -440,3 +440,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `/api/public/stats` (`connectedToday` from `users.last_seen`), `#home_connected_wrap` pill + `app.homestats.js`.
 
 **Verify:** `node --test tests/home-connected-counter.test.mjs`, `prod-verify` home connected today UI.
+
+## 25.1 SEO meta + og:image — DONE
+
+**Problem:** Home, Arcade, and Upgrade lacked unique share/SEO meta and og:image (`SITE_RECOMMENDATIONS.md` global SEO).
+
+**Fix:** `/assets/og/gmx-share.svg`, `app.seometa.js` tab-aware title/description, arcade.html meta tags, i18n `seo_*` keys.
+
+**Verify:** `node --test tests/seo-meta.test.mjs`, `prod-verify` seo meta and og:image.

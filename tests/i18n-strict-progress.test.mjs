@@ -15,6 +15,7 @@ const STRICT_IGNORE_KEYS = new Set([
   "pm_learn_polymarket", "pm_learn_kalshi", "pm_learn_manifold",
   "wallet_plan_compare_title", "plan_cmp_col_free", "plan_cmp_col_pro",
   "plan_modal_cmp_col_free", "plan_modal_cmp_col_pro",
+  "seo_wallet_title",
 ]);
 
 const CRITICAL_PATTERNS = [

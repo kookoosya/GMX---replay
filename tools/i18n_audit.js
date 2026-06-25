@@ -63,6 +63,7 @@ const STRICT_IGNORE_KEYS = new Set([
   'plan_cmp_col_pro',
   'plan_modal_cmp_col_free',
   'plan_modal_cmp_col_pro',
+  'seo_wallet_title',
 ]);
 
 function isStrictIgnoredKey(key) {

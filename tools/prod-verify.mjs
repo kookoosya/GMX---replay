@@ -341,4 +341,20 @@ if (!css.text.includes(".homeConnectedToday")) {
 }
 ok("home connected today UI");
 
+if (!appPage.text.includes('property="og:image"')) {
+  fail("/app shell missing og:image meta");
+}
+if (!appPage.text.includes("assets/og/gmx-share.svg")) {
+  fail("/app shell missing og share image path");
+}
+const ogAsset = await get("/assets/og/gmx-share.svg");
+if (ogAsset.status !== 200) {
+  fail("/assets/og/gmx-share.svg missing");
+}
+const arcadePage = await get("/arcade.html");
+if (!arcadePage.text.includes('name="description"') || !arcadePage.text.includes('property="og:image"')) {
+  fail("/arcade.html missing seo meta tags");
+}
+ok("seo meta and og:image");
+
 console.log("\nPROD_VERIFY_OK");

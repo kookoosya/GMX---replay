@@ -68,7 +68,7 @@
 - [x] Реальные обложки, чистый каталог
 - [x] **«Игра дня» в расширении** — toast раз в день
 - [x] **Достижения** — 6 badges (launch count, GOTD, categories, Pro) — local device
-- [ ] **Страницы /arcade/agario** для SEO — DONE (Sprint 7.4)
+- [x] **Страницы /arcade/agario** для SEO — DONE (Sprint 7.4)
 
 ---
 
@@ -85,8 +85,8 @@
 - **Service Worker** — кэш статики, офлайн для части UI
 
 ### SEO и рост
-- **meta description** уникальные для Home, Arcade, Upgrade
-- **og:image** для шаринга
+- [x] **meta description** уникальные для Home, Arcade, Upgrade
+- [x] **og:image** для шаринга
 - **Blog** — «Top 10 .io games 2025», «How to write GM replies»
 
 ### Мобилка

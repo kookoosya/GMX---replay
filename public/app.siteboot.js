@@ -90,6 +90,11 @@
       } catch {}
       applyLang();
       try {
+        if (window.__GMXSeoMetaFactory) {
+          window.__GMXSeoMetaFactory({ tr: siteTr }).applySeoMeta(getCurrentTab() || "home");
+        }
+      } catch {}
+      try {
         initThemeWallTabs();
       } catch {}
       try {
