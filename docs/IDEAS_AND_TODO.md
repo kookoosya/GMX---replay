@@ -42,6 +42,8 @@
 
 **Сделано (Sprint 17.1):** leaderboard medals top-3 + persistent your-rank strip — `me.rank` API, `lbYourRank`.
 
+**Сделано (Sprint 18.1):** themes hover preview + Dark/Light/Colorful groups + Pro hint on locked cards.
+
 **Сделано (Sprint 3.2):** extension connect/sync/copy status — `ext_connect_*`, `ext_err_*`, `ext_copy_*` в `popup.js`.
 
 **Сделано (2026-06, Phase 2):** cascade `refreshUsage` → ref stats → renderThemes убран; ref stats refresh только при смене eligible или на вкладке referrals.

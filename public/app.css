@@ -832,6 +832,29 @@ ul.clean li{ margin: 6px 0; }
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap:10px;
 }
+.themeGridRoot{display:flex;flex-direction:column;gap:18px}
+.themeGroupSection{display:block}
+.themeGroupHead{
+  font-weight:800;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  margin-bottom:8px;
+  color:rgba(233,237,245,.78);
+}
+.themeGroupGrid{margin-top:0}
+.themeCard.previewing{
+  outline:2px dashed color-mix(in srgb, var(--accentA) 70%, white 30%);
+  outline-offset:2px;
+}
+.themeProHint{
+  margin-top:8px;
+  font-size:11px;
+  font-weight:700;
+  color:rgba(255,210,77,.95);
+  position:relative;
+  z-index:2;
+}
 .themeCard{
   cursor:pointer;
   text-align:left;

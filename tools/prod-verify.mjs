@@ -245,4 +245,19 @@ if (!lbCore.text.includes("GMXLeaderboardCore")) {
 }
 ok("leaderboard core lib");
 
+const themeGroupCore = await get("/lib/theme-group-core.js");
+if (!themeGroupCore.text.includes("GMXThemeGroupCore")) {
+  fail("/lib/theme-group-core.js missing GMXThemeGroupCore export");
+}
+ok("theme group core lib");
+
+const themesUi = await get("/app.themesui.js");
+if (!themesUi.text.includes("themeGroupSection") || !themesUi.text.includes("themeGridRoot")) {
+  fail("/app.themesui.js missing grouped theme sections");
+}
+if (!css.text.includes(".themeProHint")) {
+  fail("app.css missing themeProHint styles");
+}
+ok("themes grouped UI");
+
 console.log("\nPROD_VERIFY_OK");

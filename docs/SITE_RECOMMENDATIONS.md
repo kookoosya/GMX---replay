@@ -53,9 +53,9 @@
 - [x] «Your rank» всегда виден, даже вне топ-10
 
 ### Themes
-- [ ] **Превью на hover** — быстрый preview темы
-- [ ] Группировка: «Dark», «Light», «Colorful»
-- [ ] «Pro unlocks all» рядом с locked items
+- [x] **Превью на hover** — быстрый preview темы
+- [x] Группировка: «Dark», «Light», «Colorful»
+- [x] «Pro unlocks all» рядом с locked items
 
 ### Extension
 - [ ] **Скриншоты** popup и inline UI

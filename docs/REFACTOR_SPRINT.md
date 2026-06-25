@@ -384,3 +384,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `lib/leaderboard-core.js` medals for top-3; `.lbYourRank` strip above table; API `me.rank` via SQL; lazy tab pack loads core.
 
 **Verify:** `node --test tests/leaderboard-ui.test.mjs`, `prod-verify` `lbYourRank` + `/lib/leaderboard-core.js`.
+
+## 18.1 Themes hover preview + grouping — DONE
+
+**Problem:** Theme picker was a flat grid with no live preview, buckets, or Pro upsell on locked cards (`SITE_RECOMMENDATIONS.md` Themes).
+
+**Fix:** `lib/theme-group-core.js` buckets Dark/Light/Colorful; hover/focus live `applyTheme` preview; `.themeProHint` on locked cards; boot defer baseline → 8.
+
+**Verify:** `node --test tests/themes-ui.test.mjs`, `prod-verify` theme-group core + `app.themesui.js` groups.
