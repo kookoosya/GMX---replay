@@ -268,6 +268,7 @@
   "this_feature": "この機能",
   "locked": "ロックされています",
   "ui_tag_free": "無料",
+  "ui_breadcrumb_nav_label": "パンくずナビ",
   "ui_tag_unlocked": "ロック解除済み",
   "ui_tag_refs": "{n}参照",
   "locked_unlock_at": "{n} の紹介でロックを解除します",

@@ -260,6 +260,21 @@
             }).applySeoMeta(tab || name);
           }
         } catch {}
+        try {
+          if (window.__GMXBreadcrumbsFactory) {
+            const tab =
+              typeof tabState.getCurrentTab === "function" ? tabState.getCurrentTab() : name;
+            const crumbs = window.__GMXBreadcrumbsFactory({
+              tr: (k, fb) => ctx.siteTr?.(k, fb) || ctx.t?.(k) || fb,
+              switchTab: (n) => {
+                try {
+                  globalThis.__gmxShowTab?.(n);
+                } catch {}
+              },
+            });
+            crumbs.applyBreadcrumbs(tab || name);
+          }
+        } catch {}
       },
     });
 

@@ -357,4 +357,12 @@ if (!arcadePage.text.includes('name="description"') || !arcadePage.text.includes
 }
 ok("seo meta and og:image");
 
+if (!appPage.text.includes('id="app_breadcrumbs"')) {
+  fail("/app shell missing breadcrumb nav");
+}
+if (!css.text.includes(".appBreadcrumbs")) {
+  fail("app.css missing breadcrumb styles");
+}
+ok("app breadcrumbs UI");
+
 console.log("\nPROD_VERIFY_OK");

@@ -268,6 +268,7 @@
   "this_feature": "Cette fonctionnalité",
   "locked": "Fermé",
   "ui_tag_free": "GRATUIT",
+  "ui_breadcrumb_nav_label": "Fil d'Ariane",
   "ui_tag_unlocked": "DÉBLOQUÉ",
   "ui_tag_refs": "{n} réf",
   "locked_unlock_at": "Se débloque à {n} références",

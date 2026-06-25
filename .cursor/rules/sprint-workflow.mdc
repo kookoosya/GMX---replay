@@ -148,4 +148,8 @@ Do not begin step N+1 until step N meets definition of done.
 
 1. Unique meta descriptions + og:image for Home, Arcade, Upgrade — DONE (25.1)
 
+## Sprint 26 queue (strict order) — Navigation UX
+
+1. Home > section breadcrumbs on deep tabs — DONE (26.1)
+
 Do not begin step N+1 until step N meets definition of done.

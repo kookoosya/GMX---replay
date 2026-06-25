@@ -268,6 +268,7 @@
   "this_feature": "Este recurso",
   "locked": "Bloqueado",
   "ui_tag_free": "LIVRE",
+  "ui_breadcrumb_nav_label": "Navegação estrutural",
   "ui_tag_unlocked": "DESBLOQUEADO",
   "ui_tag_refs": "{n} referência",
   "locked_unlock_at": "Desbloqueia em {n} referências",

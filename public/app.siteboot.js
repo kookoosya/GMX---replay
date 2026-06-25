@@ -95,6 +95,21 @@
         }
       } catch {}
       try {
+        if (window.__GMXBreadcrumbsFactory) {
+          const crumbs = window.__GMXBreadcrumbsFactory({
+            $,
+            tr: siteTr,
+            switchTab: (n) => {
+              try {
+                tab(n);
+              } catch {}
+            },
+          });
+          crumbs.bindBreadcrumbs();
+          crumbs.applyBreadcrumbs(getCurrentTab() || "home");
+        }
+      } catch {}
+      try {
         initThemeWallTabs();
       } catch {}
       try {

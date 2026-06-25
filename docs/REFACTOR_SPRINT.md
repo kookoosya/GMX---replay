@@ -448,3 +448,11 @@ Wire Arcade Pro gate to real wallet checkout (reuse site wallet tab flow).
 **Fix:** `/assets/og/gmx-share.svg`, `app.seometa.js` tab-aware title/description, arcade.html meta tags, i18n `seo_*` keys.
 
 **Verify:** `node --test tests/seo-meta.test.mjs`, `prod-verify` seo meta and og:image.
+
+## 26.1 App breadcrumbs — DONE
+
+**Problem:** Deep tabs lacked wayfinding (`SITE_RECOMMENDATIONS.md` global UX breadcrumbs).
+
+**Fix:** `#app_breadcrumbs` with Home link + current section label; updates on tab switch via `app.breadcrumbs.js`.
+
+**Verify:** `node --test tests/breadcrumbs.test.mjs`, `prod-verify` app breadcrumbs UI.

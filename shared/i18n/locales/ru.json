@@ -268,6 +268,7 @@
   "this_feature": "Эта функция",
   "locked": "Закрыто",
   "ui_tag_free": "БЕСПЛАТНО",
+  "ui_breadcrumb_nav_label": "Навигационная цепочка",
   "ui_tag_unlocked": "ОТКРЫТО",
   "ui_tag_refs": "{n} реф.",
   "locked_unlock_at": "Откроется при {n} рефералах",

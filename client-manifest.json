@@ -87,6 +87,7 @@
     "app.extcustombgui.js",
     "app.nav.js",
     "app.seometa.js",
+    "app.breadcrumbs.js",
     "app.tabwire.js",
     "app.gmgnwire.js",
     "app.sitesync.js",

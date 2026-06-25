@@ -268,6 +268,7 @@
   "this_feature": "This feature",
   "locked": "Locked",
   "ui_tag_free": "FREE",
+  "ui_breadcrumb_nav_label": "ब्रेडक्रंब नेविगेशन",
   "ui_tag_unlocked": "UNLOCKED",
   "ui_tag_refs": "{n} ref",
   "locked_unlock_at": "Unlocks at {n} referrals",
