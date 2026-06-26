@@ -64,3 +64,16 @@ test("boot chunk manifest includes home stats module", () => {
   const boot = manifest.chunks.find((c) => c.out === "chunks/app.shell.boot.js");
   assert.ok(boot?.files?.includes("app.homestats.js"));
 });
+
+test("server source wires public stats database dependencies", () => {
+  const src = fs.readFileSync(
+    path.join(root, "server-src", "09-generator-see-server-generation-mjs.js"),
+    "utf8"
+  );
+  const match = src.match(/registerPublicRoutes\(\{([\s\S]*?)\}\);/);
+  assert.ok(match, "registerPublicRoutes block not found");
+  const block = match[1];
+  for (const dep of ["safeDb", "db", "todayKeyUTC"]) {
+    assert.match(block, new RegExp(`\\b${dep}\\b`));
+  }
+});
