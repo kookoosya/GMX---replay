@@ -77,7 +77,7 @@
     const extViewKey = ctx.extViewKey || "gmx_ext_view";
 
     function run() {
-      setAuthOk(!!(getHandle() && getToken()));
+      setAuthOk(false);
 
       const handlePill = $("handlePill");
       if (handlePill) handlePill.textContent = getHandle() ? getHandle() : "not set";

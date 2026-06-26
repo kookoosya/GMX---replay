@@ -66,6 +66,11 @@
       if (!h) return;
       try {
         const j = await api("/api/usage");
+        if (j?.authenticated !== true) {
+          setAuthOk(false);
+          applyAdminVisibility();
+          return;
+        }
         setAuthOk(true);
         applyAdminVisibility();
 

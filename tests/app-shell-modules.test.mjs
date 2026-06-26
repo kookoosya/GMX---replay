@@ -1075,6 +1075,152 @@ test("sitesync: cross-frame best mode sync", () => {
   assert.equal(best, true);
 });
 
+function makeUsageCtx(overrides = {}) {
+  return {
+    $: () => null,
+    getToken: () => "tok",
+    getHandle: () => "@demo",
+    api: async () => ({}),
+    isPro: () => false,
+    getSaveCapFree: () => 70,
+    setSaveCapFree: () => {},
+    setAuthOk: () => {},
+    applyAdminVisibility: () => {},
+    setLastUsage: () => {},
+    getLastUsage: () => ({}),
+    setSub: () => {},
+    renderWalletStatus: () => {},
+    applyRefCountEligible: () => false,
+    getLastUsageCosmeticSig: () => "",
+    setLastUsageCosmeticSig: () => {},
+    onCosmeticRefresh: () => {},
+    scheduleRefStatsRefresh: () => {},
+    getCurrentTab: () => "home",
+    renderHelpIfOpen: () => {},
+    ...overrides,
+  };
+}
+
+test("auth: cached token stays unverified until server confirmation", async () => {
+  const store = new Map([
+    ["gmx_handle", "@demo"],
+    ["gmx_token", "stale-token"],
+  ]);
+  globalThis.localStorage = {
+    getItem(k) {
+      return store.has(k) ? store.get(k) : null;
+    },
+    setItem(k, v) {
+      store.set(k, v);
+    },
+  };
+  globalThis.location = { search: "" };
+  let fetchCalled = false;
+  globalThis.fetch = async () => {
+    fetchCalled = true;
+    return { ok: true, json: async () => ({}) };
+  };
+
+  const authOkCalls = [];
+  let adminVis = 0;
+  const auth = loadFactory("app.auth.js", "__GMXAuthFactory")({
+    API: "http://127.0.0.1:10000",
+    LS_HANDLE: "gmx_handle",
+    LS_TOKEN: "gmx_token",
+    LS_IS_ADMIN: "gmx_is_admin",
+    LS_ADMIN_CLAIMABLE: "gmx_admin_claimable",
+    isLocalDevHost: () => true,
+    getAdminToken: () => "",
+    setAuthOk: (v) => {
+      authOkCalls.push(!!v);
+    },
+    $: () => null,
+    t: (k) => k,
+    toast: () => {},
+    escapeHtml: (s) => s,
+    applyAdminVisibility: () => {
+      adminVis++;
+    },
+    ping: () => {},
+    setDegraded: () => {},
+  });
+
+  const tok = await auth.initSession(false);
+  assert.equal(tok, "stale-token");
+  assert.equal(fetchCalled, false);
+  assert.ok(!authOkCalls.includes(true), "setAuthOk(true) should not be called");
+  assert.equal(authOkCalls.at(-1), false);
+  assert.ok(adminVis >= 1);
+});
+
+test("usage: authenticated false clears auth without applying guest usage", async () => {
+  const authOkCalls = [];
+  let adminVis = 0;
+  let lastUsageCalled = false;
+  let subCalled = false;
+  const usage = loadFactory("app.usage.js", "__GMXUsageFactory")(
+    makeUsageCtx({
+      api: async () => ({
+        ok: true,
+        authenticated: false,
+        gm: { used: 5, limit: 70 },
+        gn: { used: 3, limit: 70 },
+        resetAt: "2026-06-26T00:00:00.000Z",
+        sub: { active: false },
+        limits: { freeDaily: 70, saveCapFree: 70, referralUnlocks: { eligible: 0 } },
+      }),
+      setAuthOk: (v) => {
+        authOkCalls.push(!!v);
+      },
+      applyAdminVisibility: () => {
+        adminVis++;
+      },
+      setLastUsage: () => {
+        lastUsageCalled = true;
+      },
+      setSub: () => {
+        subCalled = true;
+      },
+    })
+  );
+
+  await usage.refreshUsage();
+  assert.ok(authOkCalls.includes(false));
+  assert.ok(!authOkCalls.includes(true));
+  assert.ok(adminVis >= 1);
+  assert.equal(lastUsageCalled, false);
+  assert.equal(subCalled, false);
+});
+
+test("usage: authenticated true keeps usage refresh flow", async () => {
+  const authOkCalls = [];
+  let lastUsagePayload = null;
+  const usage = loadFactory("app.usage.js", "__GMXUsageFactory")(
+    makeUsageCtx({
+      api: async () => ({
+        ok: true,
+        authenticated: true,
+        gm: { used: 12, limit: 70 },
+        gn: { used: 8, limit: 70 },
+        resetAt: "2026-06-26T00:00:00.000Z",
+        sub: { active: true, tier: "pro" },
+        limits: { freeDaily: 70, saveCapFree: 70, referralUnlocks: { eligible: 2 } },
+      }),
+      setAuthOk: (v) => {
+        authOkCalls.push(!!v);
+      },
+      setLastUsage: (payload) => {
+        lastUsagePayload = payload;
+      },
+    })
+  );
+
+  await usage.refreshUsage();
+  assert.ok(authOkCalls.includes(true));
+  assert.deepEqual(lastUsagePayload?.gm, { used: 12, limit: 70 });
+  assert.deepEqual(lastUsagePayload?.gn, { used: 8, limit: 70 });
+});
+
 test("siteboot: restores handle pill and marks init done", () => {
   const els = {
     handlePill: { textContent: "" },
@@ -1105,7 +1251,7 @@ test("siteboot: restores handle pill and marks init done", () => {
     lsGet: (_k, fb) => fb,
   });
   boot.run();
-  assert.equal(authOk, true);
+  assert.equal(authOk, false);
   assert.equal(initDone, true);
   assert.equal(els.handlePill.textContent, "@demo");
   assert.equal(els.xHandle.value, "@demo");

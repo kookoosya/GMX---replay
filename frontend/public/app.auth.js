@@ -74,7 +74,7 @@
         const handle = getHandle();
         if (!handle) return null;
         if (!force && getToken()) {
-        setAuthOk(true);
+        setAuthOk(false);
         try{ applyAdminVisibility(); }catch{}
         return getToken();
       }
