@@ -2,30 +2,42 @@
 
 You are a senior engineer on this repo. Follow user instructions precisely. Prefer facts from the codebase over assumptions.
 
-## Who edits the repo (non-negotiable)
+## Who edits the repo
 
-- **The user does not edit code.** They describe what they want; **you** change files, run sync/smoke/parity/build as needed, and log in `docs/GMX_CANON_AND_LOG.md`.
-- **Deploy only on their side:** they may publish/deploy the app; **you** still do all repo edits, generators, `i18n:sync`, smoke/parity, and anything else needed so they do not have to run local tooling or touch source.
-- Do not tell the user to open files and fix things by hand unless they **explicitly** say they will edit themselves.
+- The user describes what they want; **you** change files and run verification as needed.
+- Do not tell the user to hand-edit source unless they **explicitly** say they will edit themselves.
+- **Do not push, deploy, or run `verify:prod`** unless the user explicitly requests it.
 
-## Canon (do not contradict)
+## Canon (verify against code, not stale docs)
 
-- **Layout / dev parity:** Canonical UI is what the **backend** serves from disk: `http://127.0.0.1:10000/app` (`public/app.html` + `public/` + `assets/`). **Vite** `http://127.0.0.1:5173` must show the same shell for document routes `/`, `/app`, `/app/*`, `/arcade*` via `frontend/vite.config.ts` middleware (see `docs/DEV_KNOWN_ISSUES.md`). Use **127.0.0.1**, not `localhost`, on Windows dev to avoid IPv6 connection issues.
-- **Single source for app shell:** Edit `public/app.html`, `public/app.js`, `public/app.css`, `mode.js`, etc.; run `node tools/sync-app-and-assets.mjs` (or `npm run dev` / `npm run build`, which run sync). `frontend/public/` is a mirror for Vite fallback.
-- **Wallpapers:** Source of truth is `assets/wallpapers/` (served at `/assets/wallpapers/`). Presets: `free01`, `free02`, `w01`–`w158`; manifest `preset-manifest.json`; built-in path fallback lives in `public/app.js` (`BUILTIN_PRESET_WP_MANIFEST`). Fast paint: `public/mode.js` must match real extensions (e.g. `free01.png`).
-- **i18n:** All locales are equal; strings live in `shared/i18n/locales/*.json`; sync with `npm run i18n:sync`. No special “curated” pipeline for individual languages.
-- **GM/GN text generation:** Implemented in `index.js` (`composeReply`, `sanitizeSingle`, `replyQualityScore`, `generateRankedCandidates`, `/api/random`). Banned tokens and scoring are authoritative. Product docs under `docs/` must match the engine; if a doc lists example lines that include banned words (e.g. WAGMI, frens, sunshine), mark them as **outdated** or replace — see `docs/GENERATION_TARGET_R48_RU.txt` and `docs/GMX_CANON_AND_LOG.md`.
+- **Layout / dev parity:** Canonical UI is what the backend serves from disk: `http://127.0.0.1:10000/app` (`public/app.html` + `public/` + `assets/`). Vite `http://127.0.0.1:5173` mirrors document routes via `frontend/vite.config.ts`. Use **127.0.0.1**, not `localhost`, on Windows dev.
+- **Site app shell (generated):** Canonical source is `site-src/*.js` (see `site-src/manifest.json`). `npm run build:site` writes `public/app.js`. Do **not** patch `public/app.js` by hand for logic that belongs in `site-src`.
+- **Server entry (generated):** Canonical source is `server-src/*.js` (see `server-src/manifest.json`). `npm run build:server` writes `index.js`. Do **not** patch `index.js` by hand for wiring that belongs in `server-src`.
+- **`frontend/public/`:** Controlled mirror for Vite and parity checks (`tools/sync-site-public.mjs`, `tools/sync-frontend-build.mjs`, `npm run verify:parity`). Not the primary edit surface for site shell logic.
+- **Wallpapers:** On-disk assets under `assets/wallpapers/` (site: `v2_001`–`v2_100` `.webp` + thumbs) and `assets/extbg/` (extension: `extv3_001`–`extv3_100`). Verified by `npm run verify:wallpapers` (`tools/check-wallpaper-assets.mjs`). UI logic in `public/app.wallpapers.js` (and site-src where applicable).
+- **i18n:** Strings in `shared/i18n/locales/*.json`; sync via `npm run i18n:sync` / `node tools/i18n_sync.mjs` (also the first step of `npm run build`).
+- **GM/GN generation:** Engine in `server/generation.mjs`; server bundle wires routes via `server-src` + `index.js`. Product docs under `docs/` may be stale — trust code and tests.
+
+## Build and sync scripts (from `package.json`)
+
+- **`npm run build`** (canonical production build):
+  1. `node tools/i18n_sync.mjs`
+  2. `npm run build:all` (`build:site` + `build:server`)
+  3. `npm run build:frontend`
+  4. `node tools/sync-frontend-build.mjs`
+  5. `npm run verify:parity`
+- **`tools/sync-app-and-assets.mjs`** is **not** part of `npm run build`. It runs via `npm run dev` and `npm run wallpapers:refresh-pack` only.
+- **`npm run test:full`:** lockfile + `build:all` + verify scripts + `npm test` + `test:suite` + `audit:all`. Use when a stage requires full pipeline proof.
 
 ## Engineering rules
 
-- Do not invent npm packages; verify with `package.json` / `npm ls` before importing.
+- Do not invent npm packages; verify with `package.json` before importing.
 - Keep changes minimal and scoped; do not refactor unrelated code.
-- After backend or `public/app.js` / `public/mode.js` changes: run `node smoke.js`; after frontend TS: `npm run build:frontend` when relevant.
-- Log non-trivial decisions and file touch lists in `docs/GMX_CANON_AND_LOG.md` so the team can revert or restore.
+- One user-assigned stage → one related module/fix → targeted tests → full pipeline when required → diff check → **one local commit** → **stop** (see `.cursor/rules/sprint-workflow.mdc`).
+- Log non-trivial decisions in `docs/GMX_CANON_AND_LOG.md` when the user or stage asks for documentation — not on every trivial edit.
 
 ## Workflow
 
-- Read existing code and this canon before editing.
-- **Default:** the agent applies code changes, runs `node smoke.js` / `npm run verify:parity` when shell files change, and syncs `node tools/sync-app-and-assets.mjs` as needed. The user does not need to hand-edit the repo unless they explicitly want to.
-- If the user asks for an **opinion only**, do not change files unless they explicitly ask to implement.
-- When implementing, note what changed and what was intentionally **not** changed in `docs/GMX_CANON_AND_LOG.md`.
+- Read existing code and manifests before editing.
+- If the user asks for **opinion only**, do not change files unless they ask to implement.
+- After changes to generated surfaces, confirm reproducibility (`verify:site`, `verify:server`, `verify:parity` as appropriate).
