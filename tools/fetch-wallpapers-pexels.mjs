@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Download 100 premium wallpapers from Pexels (free license).
+ * Download 100 premium wallpapers from Unsplash / Pexels (free license).
  * Crypto · anime cyber · comic/hero · neon urban · cinematic.
  *
  * Run: npm run wallpapers:fetch
@@ -34,16 +34,26 @@ function extPackId(slot) {
   return `extv3_${String(slot).padStart(3, "0")}`;
 }
 
-function pexelsUrl(id, w, h) {
+function sourceUrl(entry, w, h) {
+  const source = entry?.source || (entry?.photoId ? "unsplash" : "pexels");
+  if (source === "unsplash") {
+    const id = entry.photoId || entry.pexelsId;
+    const q = new URLSearchParams({ auto: "format", fit: "crop", w: String(w), q: "90" });
+    if (h) q.set("h", String(h));
+    return `https://images.unsplash.com/photo-${id}?${q}`;
+  }
+  const id = entry?.pexelsId ?? entry?.photoId;
   const base = `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg`;
-  const q = new URLSearchParams({
-    auto: "compress",
-    cs: "tinysrgb",
-    w: String(w),
-    dpr: "1",
-  });
+  const q = new URLSearchParams({ auto: "compress", cs: "tinysrgb", w: String(w), dpr: "1" });
   if (h) q.set("h", String(h));
   return `${base}?${q}`;
+}
+
+function creditUrl(entry) {
+  if (entry?.source === "unsplash" || entry?.photoId) {
+    return `https://unsplash.com/photos/${entry.photoId}`;
+  }
+  return `https://www.pexels.com/photo/${entry?.pexelsId}/`;
 }
 
 async function downloadBuffer(url, retries = 3) {
@@ -105,7 +115,7 @@ async function main() {
   const credits = [
     "# Wallpaper credits",
     "",
-    "Source: [Pexels](https://www.pexels.com/license/) — free to use.",
+    "Sources: [Unsplash](https://unsplash.com/license) · [Pexels](https://www.pexels.com/license/) — free to use.",
     `Packs: ${SITE_COUNT} site + ${EXT_COUNT} extension (premium curated).`,
     `Generated: ${new Date().toISOString().slice(0, 10)}`,
     "",
@@ -116,13 +126,13 @@ async function main() {
     const slot = i + 1;
     if (onlySlots && !onlySlots.includes(slot)) continue;
     const entry = WALLPAPER_CATALOG[i];
-    const id = entry?.pexelsId ?? PEXELS_IDS[i] ?? PEXELS_IDS[i % PEXELS_IDS.length];
+    const srcLabel = entry?.photoId || entry?.pexelsId || PEXELS_IDS[i] || PEXELS_IDS[i % PEXELS_IDS.length];
     const siteId = siteIds[i];
     const extId = extIds[i];
 
     try {
-      process.stdout.write(`site ${siteId} (${entry?.name || "pack"} / pexels ${id})… `);
-      const buf = await downloadBuffer(pexelsUrl(id, SITE_MAX_W));
+      process.stdout.write(`site ${siteId} (${entry?.name || "pack"} / ${entry?.source || "src"} ${srcLabel})… `);
+      const buf = await downloadBuffer(sourceUrl(entry, SITE_MAX_W));
       await sharp(buf)
         .rotate()
         .resize(SITE_MAX_W, SITE_MAX_H, { fit: "inside", withoutEnlargement: true })
@@ -136,7 +146,7 @@ async function main() {
       console.log("ok");
 
       process.stdout.write(`ext ${extId}… `);
-      const bufV = await downloadBuffer(pexelsUrl(id, EXT_W, EXT_H));
+      const bufV = await downloadBuffer(sourceUrl(entry, EXT_W, EXT_H));
       await sharp(bufV)
         .rotate()
         .resize(EXT_W, EXT_H, { fit: "cover", position: "centre" })
@@ -149,7 +159,7 @@ async function main() {
       console.log("ok");
 
       credits.push(
-        `- ${siteId} / ${extId} (${entry?.tag || "pack"} · ${entry?.name || slot}): https://www.pexels.com/photo/${id}/`
+        `- ${siteId} / ${extId} (${entry?.tag || "pack"} · ${entry?.name || slot}): ${creditUrl(entry)}`
       );
     } catch (e) {
       failed++;
