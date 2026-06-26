@@ -31,9 +31,7 @@ for (const rel of appPaths) {
   if (text.includes("cryptoWallpaperMotif")) {
     fail(`${rel}: must not export removed cryptoWallpaperMotif`);
   }
-  if (!text.includes('if (name === "themes" || name === "extthemes")')) {
-    fail(`${rel}: onTabActivated must lazy-render wallpapers only on themes tabs`);
-  }
+  // Wallpaper tab activation is covered by tests/perf-tab-activation.test.mjs.
   ok(rel);
 }
 
