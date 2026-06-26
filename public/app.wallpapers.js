@@ -297,8 +297,6 @@
     return layer;
   }
 
-  const wallImgCache = new Map();
-
   function setWallpaperLayerImageDom(layer, url) {
     if (!layer) return;
     const target = String(url || "");
@@ -309,28 +307,17 @@
       return;
     }
     if (layer.getAttribute("data-wall-url") === target) {
-      const existing = layer.querySelector("img");
-      if (existing && existing.complete) {
-        layer.style.display = "block";
-        return;
-      }
+      layer.style.display = "block";
+      return;
     }
     layer.setAttribute("data-wall-url", target);
-    let img = wallImgCache.get(target);
-    if (!img) {
-      img = document.createElement("img");
-      img.className = "gmxWallImg";
-      img.alt = "";
-      img.decoding = "async";
-      img.loading = "eager";
-      img.draggable = false;
-      img.src = target;
-      wallImgCache.set(target, img);
-      if (wallImgCache.size > 12) {
-        const first = wallImgCache.keys().next().value;
-        wallImgCache.delete(first);
-      }
-    }
+    const img = document.createElement("img");
+    img.className = "gmxWallImg";
+    img.alt = "";
+    img.decoding = "async";
+    img.loading = "eager";
+    img.draggable = false;
+    img.src = target;
     layer.replaceChildren(img);
     layer.style.display = "block";
   }

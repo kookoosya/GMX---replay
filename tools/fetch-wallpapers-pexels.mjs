@@ -186,6 +186,34 @@ async function main() {
     process.exit(1);
   }
   console.log(`\nDone. ${SITE_COUNT} site + ${EXT_COUNT} extension wallpapers. Credits: docs/WALLPAPER_CREDITS.md`);
+  bumpAssetRev();
+}
+
+function bumpAssetRev() {
+  const rev = new Date().toISOString().slice(0, 10).replace(/-/g, "") + "a";
+  const files = [
+    "public/app.js",
+    "site-src/00-bootstrap.js",
+    "extension/lib/ext-config.js",
+    "public/app.html",
+  ];
+  for (const rel of files) {
+    const file = path.join(ROOT, rel);
+    if (!fs.existsSync(file)) continue;
+    let src = fs.readFileSync(file, "utf8");
+    if (rel.endsWith("app.html")) {
+      src = src.replace(/<meta name="gmx-asset-rev" content="[^"]*"\/>/g, `<meta name="gmx-asset-rev" content="${rev}"/>`);
+      if (!src.includes("gmx-asset-rev")) {
+        src = src.replace("<title>", `<meta name="gmx-asset-rev" content="${rev}"/>\n<title>`);
+      }
+    } else if (rel.includes("ext-config")) {
+      src = src.replace(/ASSET_REV: "[^"]+"/, `ASSET_REV: "${rev}"`);
+    } else {
+      src = src.replace(/const ASSET_REV = "[^"]+";/, `const ASSET_REV = "${rev}";`);
+    }
+    fs.writeFileSync(file, src, "utf8");
+    console.log(`  bumped ASSET_REV → ${rev} in ${rel}`);
+  }
 }
 
 main().catch((e) => {

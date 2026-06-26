@@ -20,7 +20,7 @@
 
   window.__GMXWallpaperStoreFactory = function createGMXWallpaperStore(ctx) {
     const keys = ctx.keys || {};
-    const wpGlobalKey = keys.wpGlobal || "gmx_wp_global";
+    const wpGlobalKey = keys.wpGlobal || "gmx_wp_all";
     const wpTabPrefix = keys.wpTabPrefix || "gmx_wp_tab_";
     const migrationKey = keys.wallpaperRefreshMigration || "gmx_wallpaper_refresh_v2";
     const lsGet = typeof ctx.lsGet === "function" ? ctx.lsGet : (k, d) => {
@@ -54,7 +54,10 @@
     function getWallpaperForTab(tab) {
       const direct = lsGet(wallpaperKeyForTab(tab), "");
       if (direct) return direct;
-      return lsGet(wpGlobalKey, "");
+      const global = lsGet(wpGlobalKey, "");
+      if (global) return global;
+      if (wpGlobalKey !== "gmx_wp_global") return lsGet("gmx_wp_global", "");
+      return "";
     }
 
     function setWallpaperForTab(tab, id) {
@@ -65,6 +68,10 @@
 
     function migrateLegacyWallpaperSelectionOnce() {
       try {
+        const legacyGlobal = "gmx_wp_global";
+        if (!lsGet(wpGlobalKey, "") && lsGet(legacyGlobal, "")) {
+          lsSet(wpGlobalKey, lsGet(legacyGlobal, ""));
+        }
         if (lsGet(migrationKey, "") === "1") return;
         const mapLegacy = (id) => {
           const v = String(id || "").trim();

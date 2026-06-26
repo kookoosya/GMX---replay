@@ -23,7 +23,8 @@
 
     let lastApplyKey = "";
 
-    function applyWallpaper(tab) {
+    function applyWallpaper(tab, opts) {
+      const force = !!(opts && opts.force);
       const safeTab = String(tab || getCurrentTab() || "home");
       const id = getWallpaperForTab(safeTab);
       const effectiveCustom = getEffectiveCustomWallpapers();
@@ -40,7 +41,7 @@
       const full = id && ok ? wallpaperFullUrl(id) : "";
       const on = !!(id && ok && full);
       const applyKey = safeTab + "|" + (on ? full : "");
-      if (applyKey === lastApplyKey) return;
+      if (!force && applyKey === lastApplyKey) return;
       lastApplyKey = applyKey;
 
       const layer = ensureWallpaperLayer();

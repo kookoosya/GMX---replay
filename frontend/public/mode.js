@@ -16,6 +16,20 @@ document.documentElement.classList.remove("mode-light");
       try{ return localStorage.getItem(k) || ""; }catch(_e){ return ""; }
     }
 
+    function assetRev(){
+      try{
+        var m = document.querySelector('meta[name="gmx-asset-rev"]');
+        return (m && m.getAttribute("content")) || "";
+      }catch(_e){ return ""; }
+    }
+
+    function wallUrl(base, file){
+      var u = base + file;
+      var rev = assetRev();
+      if (rev) u += (u.indexOf("?") >= 0 ? "&" : "?") + "v=" + rev;
+      return u;
+    }
+
     function paintWallLayer(url){
       function go(){
         try{
@@ -51,7 +65,7 @@ document.documentElement.classList.remove("mode-light");
     }
 
     // Wallpaper: tab-specific -> global (app.js overrides with manifest-based path)
-    var wp = getLS("gmx_wp_tab_" + TAB) || getLS("gmx_wp_all");
+    var wp = getLS("gmx_wp_tab_" + TAB) || getLS("gmx_wp_all") || getLS("gmx_wp_global");
     var wallOn = !!wp;
     if (wp){
       var file, base = "/assets/wallpapers/";
@@ -63,7 +77,7 @@ document.documentElement.classList.remove("mode-light");
       else if (/^w\d{1,3}$/.test(wid)) file = wid + ".jpg";
       else file = wid + ".svg";
       document.documentElement.style.setProperty("--bg_wall", "none");
-      paintWallLayer(base + file);
+      paintWallLayer(wallUrl(base, file));
     } else {
       document.documentElement.style.setProperty("--bg_wall", "none");
     }

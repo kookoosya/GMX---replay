@@ -66,7 +66,7 @@
     }
   }
 // --- Unlock logic (Variant A)
-const ASSET_REV = "20260617a";
+const ASSET_REV = "20260626b";
 
 if (!window.__GMXBootstrapUnlockWireFactory) throw new Error("GMX bootstrapunlockwire factory missing");
 const {

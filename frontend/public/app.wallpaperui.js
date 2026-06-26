@@ -8,7 +8,7 @@
     const toast = typeof ctx.toast === "function" ? ctx.toast : () => {};
     const storage = ctx && ctx.storage ? ctx.storage : {};
     const keys = ctx.keys || {};
-    const wpGlobalKey = keys.wpGlobal || "gmx_wp_global";
+    const wpGlobalKey = keys.wpGlobal || "gmx_wp_all";
     const themewallViewKey = keys.themewallView || "gmx_themewall_view";
     const wpFilterKey = keys.wpFilter || "gmx_wp_filter";
     const wpSyncExtKey = keys.wpSyncExt || "gmx_wp_sync_ext";
@@ -193,8 +193,8 @@
         const previewTab = targetTab === "all" ? getCurrentTab() : targetTab;
         const full = wallpaperFullUrl(wp.id);
         const applyPreview = () => {
+          applyWallpaper(previewTab, { force: true });
           applyUserBg(previewTab);
-          applyWallpaper(previewTab);
         };
         if (full) prefetchImage(full).finally(applyPreview);
         else applyPreview();
