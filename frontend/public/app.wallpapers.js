@@ -15,9 +15,10 @@
     const CUSTOM_WP_RE = /^custom_[a-zA-Z0-9_.-]+\.(png|jpg|jpeg|webp)$/i;
 
     const EXT_PACK_NAMES = [
+  "BTC Stock Chart",
   "Gold Bitcoin",
   "Comic Hero Pages",
-  "Crypto Pulse",
+  "Alpine Aurora",
   "Blockchain Pulse",
   "Ethereum Pulse",
   "DeFi Pulse",
@@ -100,7 +101,6 @@
   "Night Drive Glow",
   "Metro Glow",
   "Harbor Glow",
-  "Aurora Pulse",
   "Alpine Pulse",
   "Ocean Pulse",
   "Golden Pulse",
@@ -275,75 +275,64 @@
     };
   };
 
+  function wallpaperBgMount() {
+    if (typeof document === "undefined") return null;
+    return document.querySelector(".bg") || document.body;
+  }
+
   function ensureWallpaperLayerDom() {
-    let layer = document.getElementById("gmxWallLayer");
+    const mount = wallpaperBgMount();
+    if (!mount) return null;
+    let layer = mount.querySelector("#gmxWallLayer") || document.getElementById("gmxWallLayer");
+    if (layer && layer.parentElement !== mount) {
+      mount.prepend(layer);
+    }
     if (!layer) {
       layer = document.createElement("div");
       layer.id = "gmxWallLayer";
       layer.className = "gmxWallLayer";
       layer.setAttribute("aria-hidden", "true");
-      document.body.prepend(layer);
+      mount.prepend(layer);
     }
     return layer;
   }
 
-  function fitWallpaperCover(img) {
-    if (!img || !img.naturalWidth || !img.naturalHeight) return;
-    if (typeof window === "undefined") return;
-    const vw = window.innerWidth || 1;
-    const vh = window.innerHeight || 1;
-    const nw = img.naturalWidth;
-    const nh = img.naturalHeight;
-    const scale = Math.max(vw / nw, vh / nh);
-    img.style.width = Math.ceil(nw * scale) + "px";
-    img.style.height = Math.ceil(nh * scale) + "px";
-  }
-
-  let wallpaperResizeBound = false;
-  function bindWallpaperResize(layer) {
-    if (wallpaperResizeBound || !layer) return;
-    if (typeof window === "undefined" || typeof window.addEventListener !== "function") return;
-    wallpaperResizeBound = true;
-    let timer = 0;
-    window.addEventListener("resize", () => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        const img = layer.querySelector(".gmxWallImg");
-        if (img && img.complete) fitWallpaperCover(img);
-      }, 120);
-    });
-  }
+  const wallImgCache = new Map();
 
   function setWallpaperLayerImageDom(layer, url) {
     if (!layer) return;
-    bindWallpaperResize(layer);
-    if (!url) {
+    const target = String(url || "");
+    if (!target) {
       layer.replaceChildren();
       layer.style.display = "none";
       layer.removeAttribute("data-wall-url");
       return;
     }
-    if (layer.getAttribute("data-wall-url") === url && layer.querySelector("img")) {
-      layer.style.display = "block";
+    if (layer.getAttribute("data-wall-url") === target) {
       const existing = layer.querySelector("img");
-      if (existing && existing.complete) fitWallpaperCover(existing);
-      return;
+      if (existing && existing.complete) {
+        layer.style.display = "block";
+        return;
+      }
     }
-    layer.setAttribute("data-wall-url", url);
-    layer.replaceChildren();
-    const img = document.createElement("img");
-    img.className = "gmxWallImg";
-    img.alt = "";
-    img.decoding = "async";
-    img.loading = "eager";
-    img.draggable = false;
-    if (typeof img.addEventListener === "function") {
-      img.addEventListener("load", () => fitWallpaperCover(img), { once: true });
+    layer.setAttribute("data-wall-url", target);
+    let img = wallImgCache.get(target);
+    if (!img) {
+      img = document.createElement("img");
+      img.className = "gmxWallImg";
+      img.alt = "";
+      img.decoding = "async";
+      img.loading = "eager";
+      img.draggable = false;
+      img.src = target;
+      wallImgCache.set(target, img);
+      if (wallImgCache.size > 12) {
+        const first = wallImgCache.keys().next().value;
+        wallImgCache.delete(first);
+      }
     }
-    img.src = url;
-    layer.appendChild(img);
+    layer.replaceChildren(img);
     layer.style.display = "block";
-    if (img.complete) fitWallpaperCover(img);
   }
 
   global.ensureWallpaperLayer = ensureWallpaperLayerDom;

@@ -920,8 +920,13 @@ test("wallpapers: layer DOM helpers", () => {
       querySelector() { return children[0] || null; },
     };
   }
-  const body = { prepend() {} };
+  const mount = {
+    prepend() {},
+    querySelector: () => null,
+  };
+  const body = { prepend() {}, querySelector: () => null };
   globalThis.document = {
+    querySelector: (sel) => (sel === ".bg" ? mount : null),
     getElementById: () => null,
     createElement: () => mockLayer(),
     body,

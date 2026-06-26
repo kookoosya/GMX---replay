@@ -23,12 +23,27 @@ const CREDITS = path.join(ROOT, "docs", "WALLPAPER_CREDITS.md");
 
 const SITE_COUNT = WALLPAPER_PACK_COUNT;
 const EXT_COUNT = WALLPAPER_PACK_COUNT;
-const FULL_Q = 90;
-const THUMB_Q = 84;
-const SITE_MAX_W = 3840;
-const SITE_MAX_H = 2160;
-const EXT_W = 1440;
-const EXT_H = 2560;
+const FULL_Q = 82;
+const THUMB_Q = 78;
+const SITE_MAX_W = 2560;
+const SITE_MAX_H = 1440;
+const EXT_W = 1080;
+const EXT_H = 1920;
+const MAX_FULL_BYTES = 900_000;
+
+async function encodeWebp(sharp, input, w, h, q) {
+  let quality = q;
+  for (let pass = 0; pass < 4; pass++) {
+    const buf = await sharp(input)
+      .rotate()
+      .resize(w, h, { fit: "inside", withoutEnlargement: true })
+      .webp({ quality })
+      .toBuffer();
+    if (buf.length <= MAX_FULL_BYTES || quality <= 68) return buf;
+    quality -= 6;
+  }
+  return sharp(input).rotate().resize(w, h, { fit: "inside", withoutEnlargement: true }).webp({ quality: 68 }).toBuffer();
+}
 
 function extPackId(slot) {
   return `extv3_${String(slot).padStart(3, "0")}`;
@@ -133,26 +148,23 @@ async function main() {
     try {
       process.stdout.write(`site ${siteId} (${entry?.name || "pack"} / ${entry?.source || "src"} ${srcLabel})… `);
       const buf = await downloadBuffer(sourceUrl(entry, SITE_MAX_W));
-      await sharp(buf)
-        .rotate()
-        .resize(SITE_MAX_W, SITE_MAX_H, { fit: "inside", withoutEnlargement: true })
-        .webp({ quality: FULL_Q })
-        .toFile(path.join(SITE_FULL, `${siteId}.webp`));
-      await sharp(buf)
-        .rotate()
-        .resize(480, 270, { fit: "cover", position: "centre" })
+      const siteBuf = await encodeWebp(sharp, buf, SITE_MAX_W, SITE_MAX_H, FULL_Q);
+      fs.writeFileSync(path.join(SITE_FULL, `${siteId}.webp`), siteBuf);
+      await sharp(siteBuf)
+        .resize(640, 360, { fit: "cover", position: "centre" })
         .webp({ quality: THUMB_Q })
         .toFile(path.join(SITE_THUMB, `${siteId}.webp`));
       console.log("ok");
 
       process.stdout.write(`ext ${extId}… `);
       const bufV = await downloadBuffer(sourceUrl(entry, EXT_W, EXT_H));
-      await sharp(bufV)
+      const extBuf = await sharp(bufV)
         .rotate()
         .resize(EXT_W, EXT_H, { fit: "cover", position: "centre" })
         .webp({ quality: FULL_Q })
-        .toFile(path.join(EXT_FULL, `${extId}.webp`));
-      await sharp(bufV)
+        .toBuffer();
+      fs.writeFileSync(path.join(EXT_FULL, `${extId}.webp`), extBuf);
+      await sharp(extBuf)
         .resize(360, 640, { fit: "cover" })
         .webp({ quality: THUMB_Q })
         .toFile(path.join(EXT_THUMB, `${extId}.webp`));

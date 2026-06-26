@@ -2,9 +2,10 @@
   if (global.GMXExtConfig) return;
 
   const EXT_WP_NAMES = [
+  "BTC Stock Chart",
   "Gold Bitcoin",
   "Comic Hero Pages",
-  "Crypto Pulse",
+  "Alpine Aurora",
   "Blockchain Pulse",
   "Ethereum Pulse",
   "DeFi Pulse",
@@ -87,7 +88,6 @@
   "Night Drive Glow",
   "Metro Glow",
   "Harbor Glow",
-  "Aurora Pulse",
   "Alpine Pulse",
   "Ocean Pulse",
   "Golden Pulse",

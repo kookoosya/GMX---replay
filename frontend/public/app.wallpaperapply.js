@@ -21,6 +21,8 @@
     const setWallpaperLayerImage =
       typeof ctx.setWallpaperLayerImage === "function" ? ctx.setWallpaperLayerImage : () => {};
 
+    let lastApplyKey = "";
+
     function applyWallpaper(tab) {
       const safeTab = String(tab || getCurrentTab() || "home");
       const id = getWallpaperForTab(safeTab);
@@ -35,10 +37,13 @@
       } catch {}
       const ok = !id || !wp || wallpaperUnlocked(wp, idx, effectiveCustom.length);
 
-      const layer = ensureWallpaperLayer();
       const full = id && ok ? wallpaperFullUrl(id) : "";
       const on = !!(id && ok && full);
+      const applyKey = safeTab + "|" + (on ? full : "");
+      if (applyKey === lastApplyKey) return;
+      lastApplyKey = applyKey;
 
+      const layer = ensureWallpaperLayer();
       setWallpaperLayerImage(layer, on ? full : "");
       document.documentElement.style.setProperty("--bg_wall", "none");
       document.body.classList.toggle("hasWallBg", on);

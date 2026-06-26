@@ -49,17 +49,7 @@ const expectedSiteWalls = [
 ];
 const expectedSiteThumbs = seq("v2_", 100, ".webp", 3);
 const expectedExtWalls = [
-  "ext_free_01.svg",
-  "ext_free_02.svg",
   ...seq("extv3_", 100, ".webp", 3),
-  "lux_ext_anime_neon_alley.svg",
-  "lux_ext_cinematic_heroes.svg",
-  "lux_ext_ct_warroom.svg",
-  "lux_ext_degen_terminal.svg",
-  "lux_ext_nft_gallery.svg",
-  "lux_ext_noir_detective.svg",
-  "lux_ext_onchain_spaceport.svg",
-  "lux_ext_solana_temple.svg",
 ];
 const expectedExtThumbs = seq("extv3_", 100, ".webp", 3);
 
@@ -99,6 +89,18 @@ const deadFiles = [
   "SAFE_PASS9_HANDOFF_03.txt",
   "SAFE_PASS9_HANDOFF_04.txt",
   ...seq("assets/extbg/v2_", 40, ".webp", 3),
+  "assets/wallpapers/_legacy",
+  "public/bridge/assets/wallpapers/_legacy",
+  "assets/extbg/ext_free_01.svg",
+  "assets/extbg/ext_free_02.svg",
+  "assets/extbg/lux_ext_anime_neon_alley.svg",
+  "assets/extbg/lux_ext_cinematic_heroes.svg",
+  "assets/extbg/lux_ext_ct_warroom.svg",
+  "assets/extbg/lux_ext_degen_terminal.svg",
+  "assets/extbg/lux_ext_nft_gallery.svg",
+  "assets/extbg/lux_ext_noir_detective.svg",
+  "assets/extbg/lux_ext_onchain_spaceport.svg",
+  "assets/extbg/lux_ext_solana_temple.svg",
 ];
 
 printSection("dead files present");

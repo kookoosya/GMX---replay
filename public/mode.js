@@ -20,13 +20,16 @@ document.documentElement.classList.remove("mode-light");
       function go(){
         try{
           if (!document.body){ setTimeout(go, 0); return; }
-          var layer = document.getElementById("gmxWallLayer");
+          var mount = document.querySelector(".bg") || document.body;
+          var layer = mount.querySelector("#gmxWallLayer") || document.getElementById("gmxWallLayer");
           if (!layer){
             layer = document.createElement("div");
             layer.id = "gmxWallLayer";
             layer.className = "gmxWallLayer";
             layer.setAttribute("aria-hidden", "true");
-            document.body.prepend(layer);
+            mount.prepend(layer);
+          } else if (layer.parentElement !== mount) {
+            mount.prepend(layer);
           }
           var img = layer.querySelector("img");
           if (!img){

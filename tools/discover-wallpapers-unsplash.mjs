@@ -18,13 +18,14 @@ const THEMES = [
     tag: "crypto",
     count: 25,
     queries: [
-      "bitcoin neon",
-      "cryptocurrency trading",
-      "blockchain technology",
-      "ethereum coin",
-      "crypto wallet",
-      "bitcoin chart",
-      "digital currency",
+      "bitcoin neon dark",
+      "cryptocurrency trading desk",
+      "blockchain abstract glow",
+      "ethereum coin macro",
+      "crypto chart screen",
+      "bitcoin gold coin",
+      "defi finance technology",
+      "web3 digital art",
     ],
     namePrefix: ["Bitcoin", "Crypto", "Blockchain", "Ethereum", "DeFi", "Web3", "Token", "Satoshi", "Altcoin", "Fintech"],
   },
@@ -32,13 +33,14 @@ const THEMES = [
     tag: "anime",
     count: 25,
     queries: [
-      "cyberpunk tokyo neon",
-      "tokyo night street",
-      "akihabara neon",
-      "japan neon alley",
-      "vaporwave city",
-      "neon shibuya",
-      "cyberpunk japan",
+      "cyberpunk tokyo rain neon",
+      "tokyo night street neon",
+      "akihabara neon signs",
+      "japan neon alley night",
+      "vaporwave aesthetic city",
+      "neon shibuya crossing",
+      "cyberpunk japan cityscape",
+      "anime city night lights",
     ],
     namePrefix: ["Neo Tokyo", "Cyber", "Shinjuku", "Akihabara", "Neon Alley", "Vaporwave", "Otaku", "Sakura Night", "Blade Runner", "Synth City"],
   },
@@ -46,12 +48,13 @@ const THEMES = [
     tag: "hero",
     count: 20,
     queries: [
-      "superhero comic",
-      "spiderman marvel",
-      "comic book hero",
-      "action figure superhero",
-      "comic gradient",
-      "superhero costume",
+      "superhero cinematic poster",
+      "marvel comic art",
+      "comic book pages macro",
+      "action hero silhouette",
+      "comic gradient abstract",
+      "superhero costume detail",
+      "avengers cinematic",
     ],
     namePrefix: ["Hero", "Marvel", "Comic", "Avenger", "Super", "Shield", "Cape", "Origin", "Power", "Action"],
   },
@@ -59,11 +62,12 @@ const THEMES = [
     tag: "neon",
     count: 15,
     queries: [
-      "neon city skyline night",
-      "cyberpunk city lights",
-      "neon urban night",
-      "night drive city",
-      "neon bridge",
+      "neon city skyline night 4k",
+      "cyberpunk city lights rain",
+      "neon urban night drive",
+      "neon bridge reflection",
+      "hong kong neon street",
+      "las vegas neon night",
     ],
     namePrefix: ["Neon", "City Pulse", "Skyline", "Urban", "Night Drive", "Metro", "Harbor", "Chrome"],
   },
@@ -71,11 +75,12 @@ const THEMES = [
     tag: "cinematic",
     count: 15,
     queries: [
-      "aurora borealis mountain",
-      "cinematic landscape sunset",
+      "aurora borealis mountain lake",
+      "cinematic landscape golden hour",
       "northern lights fjord",
-      "ocean cliff golden hour",
-      "misty forest mountain",
+      "ocean cliff sunset dramatic",
+      "misty forest mountains fog",
+      "alps cinematic sunrise",
     ],
     namePrefix: ["Aurora", "Alpine", "Ocean", "Golden", "Nordic", "Glacier", "Misty", "Coastal", "Desert", "Silk Clouds"],
   },
@@ -93,6 +98,10 @@ const FIXED_HAND = [
   { photoId: "1752070533454-44795dbdb5a3", name: "Shibuya Cyber Street", tag: "anime" },
   { photoId: "1752070522773-dbf492cc52c6", name: "Neon Japan Alley", tag: "anime" },
   { photoId: "1759863726410-ce278dded3a0", name: "Comic Hero Pages", tag: "hero" },
+  { photoId: "1514565131-fad020812a0a", name: "Tokyo Tower Night", tag: "anime" },
+  { photoId: "1550684848-fac1fc5f4a37", name: "Cyberpunk Neon City", tag: "neon" },
+  { photoId: "1506905925346-21bda4d32df4", name: "Alpine Aurora", tag: "cinematic" },
+  { photoId: "1464822759844-d150ad6bfc53", name: "Mountain Golden Hour", tag: "cinematic" },
 ];
 
 async function fetchText(url, retries = 3) {
@@ -137,10 +146,10 @@ async function validatePhoto(photoId, sharp) {
     });
     if (!res.ok) return null;
     const buf = Buffer.from(await res.arrayBuffer());
-    if (buf.length < 80_000) return null;
+    if (buf.length < 120_000) return null;
     const meta = await sharp(buf).metadata();
     if (!meta.width || !meta.height) return null;
-    if (meta.width < 1600 || meta.height < 900) return null;
+    if (meta.width < 1920 || meta.height < 1080) return null;
     const ratio = meta.width / meta.height;
     if (ratio < 1.2) return null; // prefer landscape for site
     return { width: meta.width, height: meta.height, bytes: buf.length };

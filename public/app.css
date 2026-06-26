@@ -92,6 +92,9 @@ body{
 a{ color:inherit; text-decoration:none; }
 b{ font-weight:700; }
 
+body.hasWallBg{
+  background:#05070f;
+}
 .bg{
   position:fixed;
   inset:0;
@@ -102,15 +105,16 @@ b{ font-weight:700; }
   background-repeat: no-repeat, no-repeat;
   transform: translateZ(0);
   pointer-events:none;
+  overflow:hidden;
 }
 body.hasWallBg .bg{
   background: var(--bg);
   background-size: cover;
 }
 .gmxWallLayer{
-  position:fixed;
+  position:absolute;
   inset:0;
-  z-index:-1;
+  z-index:0;
   overflow:hidden;
   pointer-events:none;
   display:none;
@@ -118,14 +122,9 @@ body.hasWallBg .bg{
 }
 .gmxWallLayer .gmxWallImg{
   position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%, -50%);
-  min-width:100%;
-  min-height:100%;
-  width:auto;
-  height:auto;
-  max-width:none;
+  inset:0;
+  width:100%;
+  height:100%;
   object-fit:cover;
   object-position:center center;
   display:block;
@@ -161,6 +160,11 @@ html.mode-light body.hasWallBg .bg::before{ opacity:.28 !important; }
 @keyframes floaty{
   from{ transform: translate3d(0,0,0) scale(1); opacity:.85; }
   to{ transform: translate3d(0,-14px,0) scale(1.02); opacity:1; }
+}
+body.hasWallBg .bg::after{
+  animation:none;
+  opacity:.35;
+  filter:blur(8px);
 }
 
 .wrap{
