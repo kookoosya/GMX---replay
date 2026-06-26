@@ -23,8 +23,13 @@
           grid.innerHTML = "";
         }
         let i = 0;
+        let clearedSkeleton = false;
         const step = () => {
           if (__GRID_JOBS[key] !== token) return;
+          if (!clearedSkeleton && typeof mountSkeleton === "function") {
+            grid.innerHTML = "";
+            clearedSkeleton = true;
+          }
           const frag = document.createDocumentFragment();
           const end = Math.min(i + chunk, items.length);
           for (; i < end; i++) {

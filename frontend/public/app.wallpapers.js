@@ -177,6 +177,10 @@
       if (m) {
         return formatExtPackIdLocal(Number(m[1]) || 1);
       }
+      m = v.match(/^w(\d{1,3})$/i);
+      if (m) {
+        return formatExtPackIdLocal(Number(m[1]) || 1);
+      }
       m = v.match(/^ext_free_(\d{1,2})$/i);
       if (m) {
         const n = String(Math.max(1, Math.min(2, Number(m[1]) || 1))).padStart(2, "0");

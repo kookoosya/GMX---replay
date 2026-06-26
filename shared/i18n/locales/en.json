@@ -125,7 +125,7 @@
   "gn_limits_note": "Free is enough to try everything. Pro removes caps + unlocks all themes/styles.",
   "themes_unlocked_label": "Themes unlocked",
   "themes_wallpapers_unlocked_label": "Wallpapers unlocked",
-  "themes_free_tip": "On Free, referrals widen what you can pick. On Pro, the full wallpaper set is already open.",
+  "themes_free_tip": "On Free, referrals widen your pick from the 100-wallpaper library. On Pro, the full set is already open.",
   "themes_pro_tip": "Pro unlocks the full theme and wallpaper library.",
   "ref_promoter_details": "Promoter details",
   "ref_unlocks_now": "Unlocks now",
@@ -347,7 +347,7 @@
   "themes_wp_hint": "Backgrounds for the main site. Accent colors follow your saved theme preset (or defaults).",
   "ext_wp_simple_note": "One wallpaper choice for the extension UI. Pick below — advanced targeting and custom upload controls were removed here to reduce clutter.",
   "extthemes_right_title": "How unlocks work",
-  "extthemes_right_desc": "Extension skins and wallpapers are chosen here and synced to the extension. Free starts with a preview set; referrals unlock more; Pro opens the full cosmetic set.",
+  "extthemes_right_desc": "Up to 100 extension skins and 100 wallpapers, synced to the extension. Free preview: first 10 of each. Referrals unlock more; Pro opens the full cosmetic set.",
   "extthemes_right_list": [
     "Use <b>Pick a theme</b> for skins or <b>Wallpapers</b> for backgrounds — both sync to the extension.",
     "Only one extension skin is active at a time.",
@@ -355,7 +355,8 @@
     "<b>Pro</b> removes save-line caps and unlocks all writing styles and preset packs, same as the main site."
   ],
   "themes_right": "About Themes",
-  "themes_desc": "Choose site wallpapers below. Accent colors follow your saved theme preset in storage. Referrals and Pro expand what you can pick; Pro adds custom uploads.",
+  "themes_desc": "Choose from 100 premium site wallpapers below. Accent colors follow your saved theme preset in storage. Referrals and Pro expand what you can pick; Pro adds custom uploads.",
+  "themes_rules": "Premium library: up to 100 themes and 100 wallpapers. Free preview starts with 10 of each; referrals unlock more step by step. Pro opens the full set immediately.",
   "r_desc": "Short version:",
   "home_desc": "Home: connect your X handle, activate a Pro code, and check your daily usage.",
   "gm_desc": "Short morning replies you edit and paste yourself. One saved bank for this section; Free has a saved-line cap.",

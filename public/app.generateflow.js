@@ -95,6 +95,7 @@
           msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()}). You can still copy lines, but no saved line will be replaced automatically.</span>`;
         postEvent("limit_hit", { where: "save_cap", kind });
         renderList(kind);
+        didRender = true;
         return;
       }
 
@@ -163,6 +164,7 @@
               msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()} lines). You can still copy lines, but no saved line will be replaced automatically.</span>`;
             postEvent("limit_hit", { where: "save_cap", kind });
             renderList(kind);
+            didRender = true;
             return;
           }
           cur.push(r);
@@ -226,6 +228,7 @@
           applyToKey(keyActive, selected);
           pushRecent(kind, selected.map((x) => repeatKey(x, Math.max(1, cleanFillStrength))));
           renderList(kind);
+          didRender = true;
 
           let added = Math.max(0, readKey(keyActive).length - beforeCount);
           let cleanRes = null;
