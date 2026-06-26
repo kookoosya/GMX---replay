@@ -42,6 +42,7 @@
     initReferralPromoDetailsState: () => { try { initReferralPromoDetailsState(); } catch {} },
     getHandle: () => { try { return getHandle(); } catch { return ""; } },
     scheduleRefStatsRefresh: (ms) => { try { scheduleRefStatsRefresh(ms); } catch {} },
+    isPro: () => !!(SUB && SUB.active),
   });
 
   const LS_REF_ELIGIBLE_CACHE = K.REF_ELIGIBLE_CACHE;
@@ -258,6 +259,7 @@ const {
   freeVisibleExtThemes: FREE_VISIBLE_EXT_THEMES,
   freeVisibleExtWallpapers: FREE_VISIBLE_EXT_WALLPAPERS,
   t: (key) => __gmxI18nUi.t(key),
+  siteTr: (key, fb) => __gmxSiteI18nUi.siteTr(key, fb),
   trWp: (key) => __gmxI18nUi.tr(key),
   getRefCount: () => REF_COUNT,
   setRefCount: (n) => { REF_COUNT = n; },

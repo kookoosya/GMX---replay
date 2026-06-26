@@ -10,6 +10,7 @@
     nextReferralUnlockAt,
     nextReferralUnlockLabel,
     syncRefProgressMeter,
+    syncRefBadgeUi,
     renderReferralRightCopy,
     syncModePanelCopy,
     patchDynamicCopy,
@@ -22,8 +23,17 @@
 
   function applyRefCountEligible(eligible, opts){
     const r = __gmxChromeWire.applyRefCountEligible(eligible, opts);
+    const e = Math.max(0, Number(eligible || 0) || 0);
+    const lang = __gmxSt.lsGet(K.SITE_LANG, "en");
     try {
-      syncRefProgressMeter(__gmxSt.lsGet(K.SITE_LANG, "en"), Math.max(0, Number(eligible || 0) || 0));
+      syncRefProgressMeter(lang, e);
+    } catch (_e) {}
+    try {
+      syncRefBadgeUi(lang, e, {
+        isPro: isPro(),
+        toast,
+        announce: !!r && opts?.announceBadge !== false,
+      });
     } catch (_e) {}
     return r;
   }

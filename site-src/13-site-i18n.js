@@ -62,6 +62,7 @@
       saveDraft,
       getHandle,
       ensureIndexed,
+      renderAllGenHistory,
     },
     wp: {
       compressImageToJpegDataURL,
