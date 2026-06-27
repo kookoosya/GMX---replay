@@ -6,6 +6,7 @@ export function registerStaticRoutes(deps) {
   const { app, express, fs, PUBLIC_DIR, EXTENSION_STORE_URL } = deps;
 
   const APP_HTML = path.join(PUBLIC_DIR, "app.html");
+  const INDEX_HTML = path.join(PUBLIC_DIR, "index.html");
   const BRIDGE_INDEX = path.join(PUBLIC_DIR, "bridge", "index.html");
 
   function noStore(res) {
@@ -67,6 +68,16 @@ export function registerStaticRoutes(deps) {
     return res.redirect(301, "/app");
   });
 
+  app.get("/", (req, res) => {
+    try {
+      noStore(res);
+      if (fs.existsSync(INDEX_HTML)) return res.sendFile(INDEX_HTML);
+      return res.redirect(302, "/app");
+    } catch {
+      res.status(500).send("error");
+    }
+  });
+
   app.use(
     express.static(PUBLIC_DIR, {
       maxAge: "1h",
@@ -86,11 +97,6 @@ export function registerStaticRoutes(deps) {
       },
     })
   );
-
-  app.get("/", (req, res) => {
-    noStore(res);
-    res.redirect("/app");
-  });
 
   app.use((req, res, next) => {
     try {
