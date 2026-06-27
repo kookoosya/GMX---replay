@@ -20,6 +20,18 @@
       typeof ctx.invalidatePendingSessionInit === "function"
         ? ctx.invalidatePendingSessionInit
         : () => {};
+    let connectFallbackGeneration = 0;
+    const beginSessionGeneration =
+      typeof ctx.beginSessionGeneration === "function"
+        ? ctx.beginSessionGeneration
+        : () => {
+            connectFallbackGeneration += 1;
+            return connectFallbackGeneration;
+          };
+    const isSessionGenerationCurrent =
+      typeof ctx.isSessionGenerationCurrent === "function"
+        ? ctx.isSessionGenerationCurrent
+        : () => true;
     const keys = ctx.keys || {};
     const tr = typeof ctx.tr === "function" ? ctx.tr : (key) => String(key || "");
 
@@ -78,8 +90,12 @@
           const params = new URLSearchParams(location.search);
           const ref = params.get("ref") || "";
 
+          const connectGeneration = beginSessionGeneration();
+
           try {
             const j = await api("/api/user/init", "POST", { handle, ref });
+            if (!isSessionGenerationCurrent(connectGeneration)) return;
+
             localStorage.setItem(keys.handle || "gmx_handle", j.handle);
             localStorage.setItem(keys.token || "gmx_token", j.token);
             try {
@@ -118,6 +134,7 @@
               if (rc) rc.value = code;
             }
           } catch (e) {
+            if (!isSessionGenerationCurrent(connectGeneration)) return;
             if (cm) {
               cm.innerHTML =
                 '<span class="bad">Connect error: ' +

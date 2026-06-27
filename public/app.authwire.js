@@ -46,6 +46,14 @@
       return getAuth().invalidatePendingSessionInit();
     }
 
+    function beginSessionGeneration() {
+      return getAuth().beginSessionGeneration();
+    }
+
+    function isSessionGenerationCurrent(generation) {
+      return getAuth().isSessionGenerationCurrent(generation);
+    }
+
     async function api(path, method = "GET", body, opts = {}) {
       return getAuth().api(path, method, body, opts);
     }
@@ -60,6 +68,8 @@
       isPublicApi,
       initSession,
       invalidatePendingSessionInit,
+      beginSessionGeneration,
+      isSessionGenerationCurrent,
       api,
     };
   };

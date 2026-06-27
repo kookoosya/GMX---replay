@@ -15,12 +15,38 @@
       }
       return () => {};
     }
+    function resolveBeginSessionGeneration(source) {
+      if (typeof source.beginSessionGeneration === "function") {
+        return source.beginSessionGeneration;
+      }
+      if (typeof source.auth?.beginSessionGeneration === "function") {
+        return source.auth.beginSessionGeneration;
+      }
+      if (typeof source.core?.api?.beginSessionGeneration === "function") {
+        return source.core.api.beginSessionGeneration;
+      }
+      return undefined;
+    }
+    function resolveIsSessionGenerationCurrent(source) {
+      if (typeof source.isSessionGenerationCurrent === "function") {
+        return source.isSessionGenerationCurrent;
+      }
+      if (typeof source.auth?.isSessionGenerationCurrent === "function") {
+        return source.auth.isSessionGenerationCurrent;
+      }
+      if (typeof source.core?.api?.isSessionGenerationCurrent === "function") {
+        return source.core.api.isSessionGenerationCurrent;
+      }
+      return undefined;
+    }
     if (ctx.core) {
       const core = ctx.core || {};
     const auth = ctx.auth || {};
     const session = ctx.session || {};
     const keys = ctx.keys || {};
     const invalidatePendingSessionInit = resolveInvalidatePendingSessionInit(ctx);
+    const beginSessionGeneration = resolveBeginSessionGeneration(ctx);
+    const isSessionGenerationCurrent = resolveIsSessionGenerationCurrent(ctx);
 
     ctx = {
         $: core.$,
@@ -35,6 +61,8 @@
         loadPlans: session.loadPlans,
         ping: session.ping,
         invalidatePendingSessionInit,
+        beginSessionGeneration,
+        isSessionGenerationCurrent,
         keys: {
           handle: keys.handle,
           token: keys.token,
@@ -47,6 +75,8 @@
     }
     const keys = ctx.keys || {};
     const invalidatePendingSessionInit = resolveInvalidatePendingSessionInit(ctx);
+    const beginSessionGeneration = resolveBeginSessionGeneration(ctx);
+    const isSessionGenerationCurrent = resolveIsSessionGenerationCurrent(ctx);
 
     if (!window.__GMXConnectFactory) throw new Error("GMX connect factory missing");
     const __gmxConnect = window.__GMXConnectFactory({
@@ -62,6 +92,8 @@
       loadPlans: ctx.loadPlans,
       ping: ctx.ping,
       invalidatePendingSessionInit,
+      beginSessionGeneration,
+      isSessionGenerationCurrent,
       keys: {
         handle: keys.handle,
         token: keys.token,

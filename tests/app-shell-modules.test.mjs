@@ -1845,6 +1845,330 @@ test("connect: reset remains local-safe when logout request fails", async () => 
   assert.ok(store.has("gmx_force_logout_v2"));
 });
 
+function makeConnectGenerationHarness({ store, api, els, ops = null }) {
+  const authOkCalls = [];
+  const auth = loadFactory("app.auth.js", "__GMXAuthFactory")({
+    API: "http://127.0.0.1:10000",
+    LS_HANDLE: "gmx_handle",
+    LS_TOKEN: "gmx_token",
+    LS_IS_ADMIN: "gmx_is_admin",
+    LS_ADMIN_CLAIMABLE: "gmx_admin_claimable",
+    isLocalDevHost: () => false,
+    getAdminToken: () => "",
+    setAuthOk: (v) => {
+      authOkCalls.push(!!v);
+      if (ops) ops.push(["setAuthOk", v]);
+    },
+    $: (id) => els[id] || null,
+    t: (k) => k,
+    toast: () => {},
+    escapeHtml: (s) => s,
+    applyAdminVisibility: () => {
+      if (ops) ops.push(["applyAdminVisibility"]);
+    },
+    ping: () => {
+      if (ops) ops.push(["ping"]);
+    },
+    setDegraded: () => {},
+  });
+  const connect = loadFactory("app.connect.js", "__GMXConnectFactory")({
+    $: (id) => els[id] || null,
+    api,
+    escapeHtml: (s) => s,
+    friendlyUiErrorMessage: (m) => m,
+    normalizeHandle: (v) => v,
+    tr: (k) => k,
+    setAuthOk: (v) => {
+      authOkCalls.push(!!v);
+      if (ops) ops.push(["setAuthOk", v]);
+    },
+    applyAdminVisibility: () => {
+      if (ops) ops.push(["applyAdminVisibility"]);
+    },
+    refreshUsage: async () => {
+      if (ops) ops.push(["refreshUsage"]);
+    },
+    loadPlans: async () => {
+      if (ops) ops.push(["loadPlans"]);
+    },
+    ping: () => {
+      if (ops) ops.push(["ping"]);
+    },
+    invalidatePendingSessionInit: auth.invalidatePendingSessionInit,
+    beginSessionGeneration: auth.beginSessionGeneration,
+    isSessionGenerationCurrent: auth.isSessionGenerationCurrent,
+    keys: {
+      handle: "gmx_handle",
+      token: "gmx_token",
+      isAdmin: "gmx_is_admin",
+      adminClaimable: "gmx_admin_claimable",
+      forceLogout: "gmx_force_logout",
+      forceLogoutV2: "gmx_force_logout_v2",
+    },
+  });
+  return { auth, connect, authOkCalls };
+}
+
+test("connect: reset invalidates pending connect response", async () => {
+  const origLocalStorage = globalThis.localStorage;
+  const origLocation = globalThis.location;
+  globalThis.location = { search: "" };
+  const store = new Map([["gmx_handle", "@seed"], ["gmx_token", "seed-token"]]);
+  globalThis.localStorage = {
+    getItem(k) {
+      return store.has(k) ? store.get(k) : null;
+    },
+    setItem(k, v) {
+      store.set(k, v);
+    },
+    removeItem(k) {
+      store.delete(k);
+    },
+  };
+
+  let resolveConnectA;
+  const connectADeferred = new Promise((resolve) => {
+    resolveConnectA = resolve;
+  });
+  const ops = [];
+  const apiCalls = [];
+  const els = {
+    btnConnect: { onclick: null },
+    btnReset: { onclick: null },
+    handlePill: { textContent: "not set" },
+    refLink: { value: "" },
+    xHandle: { value: "@old", focus: () => {} },
+    connectMsg: { textContent: "", innerHTML: "" },
+  };
+  const api = async (path, method) => {
+    apiCalls.push({ path, method });
+    if (path === "/api/user/init") return connectADeferred;
+    if (path === "/api/user/logout") return { ok: true };
+    return { ok: true };
+  };
+  const { connect, authOkCalls } = makeConnectGenerationHarness({ store, api, els, ops });
+  connect.bindConnect();
+
+  try {
+    const connectPromise = els.btnConnect.onclick();
+    await Promise.resolve();
+    assert.ok(apiCalls.some((c) => c.path === "/api/user/init"), "Connect A should start init");
+
+    await els.btnReset.onclick();
+    assert.equal(store.has("gmx_handle"), false);
+    assert.equal(store.has("gmx_token"), false);
+    assert.ok(store.has("gmx_force_logout"));
+    assert.ok(store.has("gmx_force_logout_v2"));
+    assert.ok(authOkCalls.includes(false));
+
+    const pingAfterReset = ops.filter((op) => op[0] === "ping").length;
+    const refreshAfterReset = ops.filter((op) => op[0] === "refreshUsage").length;
+    const loadPlansAfterReset = ops.filter((op) => op[0] === "loadPlans").length;
+
+    resolveConnectA({
+      handle: "@old",
+      token: "old-token",
+      isAdmin: true,
+      adminClaimable: true,
+      refLink: "https://example/ref-old",
+    });
+    await connectPromise;
+
+    assert.equal(store.has("gmx_handle"), false, "stale Connect must not restore handle");
+    assert.equal(store.has("gmx_token"), false, "stale Connect must not restore token");
+    assert.equal(store.has("gmx_is_admin"), false);
+    assert.equal(store.has("gmx_admin_claimable"), false);
+    assert.ok(!authOkCalls.includes(true), "stale Connect must not set AUTH_OK true");
+    assert.ok(store.has("gmx_force_logout"));
+    assert.ok(store.has("gmx_force_logout_v2"));
+    assert.equal(els.handlePill.textContent, "not set");
+    assert.equal(els.refLink.value, "");
+    assert.equal(ops.filter((op) => op[0] === "ping").length, pingAfterReset);
+    assert.equal(ops.filter((op) => op[0] === "refreshUsage").length, refreshAfterReset);
+    assert.equal(ops.filter((op) => op[0] === "loadPlans").length, loadPlansAfterReset);
+    assert.equal(els.connectMsg.innerHTML, '<span class="ok">Session cleared.</span>');
+  } finally {
+    globalThis.localStorage = origLocalStorage;
+    globalThis.location = origLocation;
+  }
+});
+
+test("connect: newer connect wins over older delayed response", async () => {
+  const origLocalStorage = globalThis.localStorage;
+  const origLocation = globalThis.location;
+  globalThis.location = { search: "" };
+  const store = new Map();
+  globalThis.localStorage = {
+    getItem(k) {
+      return store.has(k) ? store.get(k) : null;
+    },
+    setItem(k, v) {
+      store.set(k, v);
+    },
+    removeItem(k) {
+      store.delete(k);
+    },
+  };
+
+  const gates = new Map();
+  function gateFor(handle) {
+    if (!gates.has(handle)) {
+      const entry = {};
+      entry.promise = new Promise((resolve, reject) => {
+        entry.resolve = resolve;
+        entry.reject = reject;
+      });
+      gates.set(handle, entry);
+    }
+    return gates.get(handle);
+  }
+
+  const ops = [];
+  const api = async (path, method, body) => {
+    if (path === "/api/user/init") {
+      const handle = body?.handle || "";
+      return gateFor(handle).promise;
+    }
+    return { ok: true };
+  };
+
+  const els = {
+    btnConnect: { onclick: null },
+    handlePill: { textContent: "" },
+    refLink: { value: "" },
+    xHandle: { value: "@old", focus: () => {} },
+    connectMsg: { textContent: "", innerHTML: "" },
+  };
+  const { connect, authOkCalls } = makeConnectGenerationHarness({ store, api, els, ops });
+  connect.bindConnect();
+
+  try {
+    const promiseA = els.btnConnect.onclick();
+    await Promise.resolve();
+    els.xHandle.value = "@new";
+    const promiseB = els.btnConnect.onclick();
+    await Promise.resolve();
+
+    gates.get("@new").resolve({
+      handle: "@new",
+      token: "new-token",
+      isAdmin: false,
+      adminClaimable: false,
+      refLink: "https://example/ref-new",
+    });
+    await promiseB;
+
+    gates.get("@old").resolve({
+      handle: "@old",
+      token: "old-token",
+      isAdmin: true,
+      adminClaimable: true,
+      refLink: "https://example/ref-old",
+    });
+    await promiseA;
+
+    assert.equal(store.get("gmx_handle"), "@new");
+    assert.equal(store.get("gmx_token"), "new-token");
+    assert.equal(store.get("gmx_is_admin"), "0");
+    assert.equal(store.get("gmx_admin_claimable"), "0");
+    assert.equal(authOkCalls.filter(Boolean).length, 1, "AUTH_OK true only once from Connect B");
+    assert.equal(els.handlePill.textContent, "@new");
+    assert.equal(els.refLink.value, "https://example/ref-new");
+    assert.equal(store.has("gmx_force_logout"), false);
+    assert.equal(store.has("gmx_force_logout_v2"), false);
+    assert.equal(ops.filter((op) => op[0] === "refreshUsage").length, 1);
+    assert.equal(ops.filter((op) => op[0] === "loadPlans").length, 1);
+  } finally {
+    globalThis.localStorage = origLocalStorage;
+    globalThis.location = origLocation;
+  }
+});
+
+test("connect: stale failure does not overwrite newer success UI", async () => {
+  const origLocalStorage = globalThis.localStorage;
+  const origLocation = globalThis.location;
+  globalThis.location = { search: "" };
+  const store = new Map();
+  globalThis.localStorage = {
+    getItem(k) {
+      return store.has(k) ? store.get(k) : null;
+    },
+    setItem(k, v) {
+      store.set(k, v);
+    },
+    removeItem(k) {
+      store.delete(k);
+    },
+  };
+
+  const gates = new Map();
+  function gateFor(handle) {
+    if (!gates.has(handle)) {
+      const entry = {};
+      entry.promise = new Promise((resolve, reject) => {
+        entry.resolve = resolve;
+        entry.reject = reject;
+      });
+      gates.set(handle, entry);
+    }
+    return gates.get(handle);
+  }
+
+  const ops = [];
+  const api = async (path, method, body) => {
+    if (path === "/api/user/init") {
+      const handle = body?.handle || "";
+      return gateFor(handle).promise;
+    }
+    return { ok: true };
+  };
+
+  const els = {
+    btnConnect: { onclick: null },
+    handlePill: { textContent: "" },
+    refLink: { value: "" },
+    xHandle: { value: "@old", focus: () => {} },
+    connectMsg: { textContent: "", innerHTML: "" },
+  };
+  const { connect, authOkCalls } = makeConnectGenerationHarness({
+    store,
+    api,
+    els,
+    ops,
+  });
+  connect.bindConnect();
+
+  try {
+    const promiseA = els.btnConnect.onclick();
+    await Promise.resolve();
+    els.xHandle.value = "@new";
+    const promiseB = els.btnConnect.onclick();
+    await Promise.resolve();
+
+    gates.get("@new").resolve({
+      handle: "@new",
+      token: "new-token",
+      isAdmin: false,
+      adminClaimable: false,
+      refLink: "https://example/ref-new",
+    });
+    await promiseB;
+
+    gates.get("@old").reject(new Error("stale_connect_failed"));
+    await promiseA;
+
+    assert.equal(store.get("gmx_handle"), "@new");
+    assert.equal(store.get("gmx_token"), "new-token");
+    assert.equal(els.handlePill.textContent, "@new");
+    assert.equal(els.connectMsg.innerHTML, "");
+    assert.ok(!els.connectMsg.innerHTML.includes("Connect error"));
+    assert.equal(authOkCalls.filter(Boolean).length, 1);
+  } finally {
+    globalThis.localStorage = origLocalStorage;
+    globalThis.location = origLocation;
+  }
+});
+
 test("connect: reset clears session message", async () => {
   const els = {
     btnReset: { onclick: null },

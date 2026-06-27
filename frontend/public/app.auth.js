@@ -21,8 +21,21 @@
 
     let sessionInitEpoch = 0;
 
-    function invalidatePendingSessionInit() {
+    function bumpSessionGeneration() {
       sessionInitEpoch += 1;
+      return sessionInitEpoch;
+    }
+
+    function beginSessionGeneration() {
+      return bumpSessionGeneration();
+    }
+
+    function invalidatePendingSessionInit() {
+      return bumpSessionGeneration();
+    }
+
+    function isSessionGenerationCurrent(generation) {
+      return generation === sessionInitEpoch;
     }
 
     function normalizeHandle(input){
@@ -95,9 +108,9 @@
             body: JSON.stringify({ handle, ref, devReset: (force && isLocalDevHost()) ? 1 : 0 })
           });
           const j = await r.json().catch(()=>({}));
-          if (initEpoch !== sessionInitEpoch) return null;
+          if (!isSessionGenerationCurrent(initEpoch)) return null;
           if (!r.ok || !j.token) throw new Error(j.error_code || j.error || "init_failed");
-          if (initEpoch !== sessionInitEpoch) return null;
+          if (!isSessionGenerationCurrent(initEpoch)) return null;
           try{ localStorage.setItem(LS_HANDLE, j.handle || handle); }catch{}
           try{ localStorage.setItem(LS_TOKEN, j.token); }catch{}
           try{ $("handlePill").textContent = j.handle || handle; }catch{}
@@ -108,7 +121,7 @@
           try{ ping(); }catch{}
           return j.token;
         }catch(e){
-          if (initEpoch !== sessionInitEpoch) return null;
+          if (!isSessionGenerationCurrent(initEpoch)) return null;
           setAuthOk(false);
           try{ applyAdminVisibility(); }catch{}
           try{ ping(); }catch{}
@@ -222,6 +235,8 @@
       }
 
     api.invalidatePendingSessionInit = invalidatePendingSessionInit;
+    api.beginSessionGeneration = beginSessionGeneration;
+    api.isSessionGenerationCurrent = isSessionGenerationCurrent;
 
     return {
       normalizeHandle,
@@ -231,7 +246,9 @@
       requireConnected,
       isPublicApi,
       initSession,
+      beginSessionGeneration,
       invalidatePendingSessionInit,
+      isSessionGenerationCurrent,
       api,
     };
   };
