@@ -68,6 +68,7 @@
           path.startsWith("/api/health") ||
           path.startsWith("/api/version") ||
           path.startsWith("/api/user/init") ||
+          path.startsWith("/api/user/logout") ||
           path.startsWith("/api/billing/plans") ||
           path.startsWith("/api/billing/proof") ||
           path.startsWith("/api/config") ||

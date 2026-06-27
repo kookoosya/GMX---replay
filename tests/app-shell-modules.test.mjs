@@ -1674,6 +1674,177 @@ test("connect: bindConnect warns on invalid handle", async () => {
   assert.match(els.connectMsg.innerHTML, /valid @handle/);
 });
 
+test("auth: /api/user/logout is public", () => {
+  const auth = loadFactory("app.auth.js", "__GMXAuthFactory")({
+    API: "http://127.0.0.1:10000",
+    LS_HANDLE: "gmx_handle",
+    LS_TOKEN: "gmx_token",
+    LS_IS_ADMIN: "gmx_is_admin",
+    LS_ADMIN_CLAIMABLE: "gmx_admin_claimable",
+    isLocalDevHost: () => false,
+    getAdminToken: () => "",
+    setAuthOk: () => {},
+    $: () => null,
+    t: (k) => k,
+    toast: () => {},
+    escapeHtml: (s) => s,
+    applyAdminVisibility: () => {},
+    ping: () => {},
+    setDegraded: () => {},
+  });
+  assert.equal(auth.isPublicApi("/api/user/logout"), true);
+});
+
+test("connect: reset requests browser logout", async () => {
+  const store = new Map([
+    ["gmx_handle", "@demo"],
+    ["gmx_token", "tok"],
+    ["gmx_is_admin", "1"],
+    ["gmx_admin_claimable", "1"],
+  ]);
+  globalThis.localStorage = {
+    getItem(k) {
+      return store.has(k) ? store.get(k) : null;
+    },
+    setItem(k, v) {
+      store.set(k, v);
+    },
+    removeItem(k) {
+      store.delete(k);
+    },
+  };
+
+  const ops = [];
+  let invalidateCalls = 0;
+  const apiCalls = [];
+  const els = {
+    btnReset: { onclick: null },
+    handlePill: { textContent: "@demo" },
+    xHandle: { value: "@demo", focus: () => {} },
+    connectMsg: { textContent: "", innerHTML: "" },
+  };
+  const connect = loadFactory("app.connect.js", "__GMXConnectFactory")({
+    $: (id) => els[id] || null,
+    api: async (path, method) => {
+      apiCalls.push({ path, method });
+      ops.push(["api", path, method]);
+      return { ok: true };
+    },
+    escapeHtml: (s) => s,
+    friendlyUiErrorMessage: (m) => m,
+    normalizeHandle: (v) => v,
+    tr: (k) => k,
+    setAuthOk: (v) => {
+      ops.push(["setAuthOk", v]);
+    },
+    applyAdminVisibility: () => {
+      ops.push(["applyAdminVisibility"]);
+    },
+    refreshUsage: async () => {
+      ops.push(["refreshUsage"]);
+    },
+    loadPlans: async () => {
+      ops.push(["loadPlans"]);
+    },
+    ping: () => {
+      ops.push(["ping"]);
+    },
+    invalidatePendingSessionInit: () => {
+      invalidateCalls++;
+      ops.push(["invalidatePendingSessionInit"]);
+    },
+    keys: {
+      handle: "gmx_handle",
+      token: "gmx_token",
+      isAdmin: "gmx_is_admin",
+      adminClaimable: "gmx_admin_claimable",
+      forceLogout: "gmx_force_logout",
+      forceLogoutV2: "gmx_force_logout_v2",
+    },
+  });
+  connect.bindConnect();
+  await els.btnReset.onclick();
+
+  assert.equal(invalidateCalls, 1);
+  assert.equal(store.has("gmx_handle"), false);
+  assert.equal(store.has("gmx_token"), false);
+  assert.equal(store.has("gmx_is_admin"), false);
+  assert.equal(store.has("gmx_admin_claimable"), false);
+  assert.ok(store.has("gmx_force_logout"));
+  assert.ok(store.has("gmx_force_logout_v2"));
+  assert.deepEqual(apiCalls, [{ path: "/api/user/logout", method: "POST" }]);
+  assert.equal(ops[0][0], "invalidatePendingSessionInit");
+  const logoutIdx = ops.findIndex((op) => op[0] === "setAuthOk" && op[1] === false);
+  assert.ok(logoutIdx >= 0, "setAuthOk(false) should run during reset");
+  const apiOpIdx = ops.findIndex((op) => op[0] === "api");
+  assert.ok(apiOpIdx > logoutIdx, "logout API should run after client state clear");
+  assert.ok(apiCalls.length === 1);
+});
+
+test("connect: reset remains local-safe when logout request fails", async () => {
+  const store = new Map([
+    ["gmx_handle", "@demo"],
+    ["gmx_token", "tok"],
+    ["gmx_is_admin", "1"],
+    ["gmx_admin_claimable", "1"],
+  ]);
+  globalThis.localStorage = {
+    getItem(k) {
+      return store.has(k) ? store.get(k) : null;
+    },
+    setItem(k, v) {
+      store.set(k, v);
+    },
+    removeItem(k) {
+      store.delete(k);
+    },
+  };
+
+  let authOk = true;
+  const els = {
+    btnReset: { onclick: null },
+    handlePill: { textContent: "@demo" },
+    xHandle: { value: "@demo", focus: () => {} },
+    connectMsg: { textContent: "", innerHTML: "" },
+  };
+  const connect = loadFactory("app.connect.js", "__GMXConnectFactory")({
+    $: (id) => els[id] || null,
+    api: async () => {
+      throw new Error("network_failed");
+    },
+    escapeHtml: (s) => s,
+    friendlyUiErrorMessage: (m) => m,
+    normalizeHandle: (v) => v,
+    tr: (k) => k,
+    setAuthOk: (v) => {
+      authOk = !!v;
+    },
+    applyAdminVisibility: () => {},
+    refreshUsage: async () => {},
+    loadPlans: async () => {},
+    ping: () => {},
+    invalidatePendingSessionInit: () => {},
+    keys: {
+      handle: "gmx_handle",
+      token: "gmx_token",
+      isAdmin: "gmx_is_admin",
+      adminClaimable: "gmx_admin_claimable",
+      forceLogout: "gmx_force_logout",
+      forceLogoutV2: "gmx_force_logout_v2",
+    },
+  });
+  connect.bindConnect();
+  await els.btnReset.onclick();
+
+  assert.equal(authOk, false);
+  assert.equal(store.has("gmx_handle"), false);
+  assert.equal(store.has("gmx_token"), false);
+  assert.equal(store.has("gmx_is_admin"), false);
+  assert.equal(store.has("gmx_admin_claimable"), false);
+  assert.ok(store.has("gmx_force_logout"));
+  assert.ok(store.has("gmx_force_logout_v2"));
+});
+
 test("connect: reset clears session message", async () => {
   const els = {
     btnReset: { onclick: null },

@@ -19,6 +19,7 @@ export function registerUserRoutes(deps) {
     sha256,
     getAuthToken,
     setAuthCookie,
+    clearAuthCookie,
     canUseDevSessionReset,
     normalizeHandle,
     validHandle,
@@ -270,6 +271,18 @@ export function registerUserRoutes(deps) {
   });
 
 
+
+
+  app.post("/api/user/logout", (req, res) => {
+    try {
+      clearAuthCookie(req, res);
+      return res.json({ ok: true });
+    } catch (e) {
+      console.error("USER_LOGOUT_ERROR", e);
+      const detail = DEV_MODE ? String(e?.message || e) : "";
+      return sendError(res, 500, ERROR_CODES.SERVER_ERROR, detail ? { detail } : {});
+    }
+  });
 
 
   app.get("/api/usage", maybeAuth, async (req, res) => {

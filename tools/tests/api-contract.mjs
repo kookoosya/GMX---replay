@@ -31,6 +31,71 @@ try {
   const auth = { Authorization: `Bearer ${j.token}` };
   ok(`user/init (${handle})`);
 
+  const usageViaCookie = await fetch(`${base}/api/usage`, {
+    headers: { Cookie: `gmx_token=${encodeURIComponent(j.token)}` },
+  });
+  const usageViaCookieBody = await usageViaCookie.json();
+  if (!usageViaCookie.ok || usageViaCookieBody.authenticated !== true) {
+    fail(`usage cookie auth => ${usageViaCookie.status} ${JSON.stringify(usageViaCookieBody)}`);
+  }
+  ok("usage cookie auth fallback");
+
+  function getSetCookies(res) {
+    if (typeof res.headers.getSetCookie === "function") {
+      return res.headers.getSetCookie();
+    }
+    const raw = res.headers.get("set-cookie");
+    return raw ? [raw] : [];
+  }
+
+  const AUTH_COOKIE_NAMES = [
+    "gmx_token",
+    "gmx_session",
+    "gmxToken",
+    "gmxSession",
+    "access_token",
+    "token",
+  ];
+
+  function assertLogoutTombstones(setCookies) {
+    if (!setCookies.length) fail("logout response missing Set-Cookie tombstones");
+    for (const name of AUTH_COOKIE_NAMES) {
+      const hit = setCookies.some((c) => c.startsWith(`${name}=`) || c.includes(`${name}=;`));
+      if (!hit) fail(`logout tombstone missing cookie name ${name}`);
+    }
+    for (const c of setCookies) {
+      if (!c.includes("Max-Age=0")) fail(`logout tombstone missing Max-Age=0: ${c}`);
+      if (!/Expires=Thu, 01 Jan 1970/i.test(c)) fail(`logout tombstone missing past Expires: ${c}`);
+      if (!c.includes("HttpOnly")) fail(`logout tombstone missing HttpOnly: ${c}`);
+      if (!c.includes("SameSite=Lax")) fail(`logout tombstone missing SameSite=Lax: ${c}`);
+      if (!c.includes("Path=/")) fail(`logout tombstone missing Path=/: ${c}`);
+    }
+  }
+
+  async function expectLogoutOk(res) {
+    const body = await res.json();
+    if (!res.ok || body.ok !== true) fail(`logout failed: ${res.status} ${JSON.stringify(body)}`);
+    assertLogoutTombstones(getSetCookies(res));
+  }
+
+  const logoutWithCookie = await fetch(`${base}/api/user/logout`, {
+    method: "POST",
+    headers: { Cookie: `gmx_token=${encodeURIComponent(j.token)}` },
+  });
+  await expectLogoutOk(logoutWithCookie);
+  ok("user/logout with cookie");
+
+  const logoutNoCookie = await fetch(`${base}/api/user/logout`, { method: "POST" });
+  await expectLogoutOk(logoutNoCookie);
+  ok("user/logout without cookie");
+
+  const logoutBadCookie = await fetch(`${base}/api/user/logout`, {
+    method: "POST",
+    headers: { Cookie: "gmx_token=invalid-token-value" },
+  });
+  await expectLogoutOk(logoutBadCookie);
+  ok("user/logout with invalid cookie");
+
   for (const style of VALID_STYLES) {
     const q = `kind=gm&mode=mid&lang=en&style=${style}`;
     const r = await fetch(`${base}/api/generate?${q}`, { headers: auth });

@@ -173,6 +173,9 @@
             window.postMessage({ type: "GMX_SYNC_NOW", reason: "site_reset" }, "*");
           } catch (_e) {}
           try {
+            await api("/api/user/logout", "POST", null, { timeoutMs: 3000 });
+          } catch (_e) {}
+          try {
             ping();
           } catch (_e) {}
           applyAdminVisibility();

@@ -6,6 +6,7 @@ const {
   AUTH_COOKIE_MAX_AGE_SEC,
   getAuthToken,
   setAuthCookie,
+  clearAuthCookie,
   getBearer,
   userByHandle,
   userByToken,

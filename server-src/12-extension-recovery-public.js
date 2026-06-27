@@ -33,6 +33,7 @@ registerUserRoutes({
   sha256,
   getAuthToken,
   setAuthCookie,
+  clearAuthCookie,
   canUseDevSessionReset,
   normalizeHandle,
   validHandle,

@@ -37,6 +37,18 @@ export function createAuth(deps) {
     return Math.max(60, Math.min(60 * 60 * 24 * 365, v));
   })();
 
+  function authCookieNames() {
+    return [...new Set([
+      AUTH_COOKIE_NAME,
+      "gmx_token",
+      "gmx_session",
+      "gmxToken",
+      "gmxSession",
+      "access_token",
+      "token",
+    ])];
+  }
+
   function parseCookieHeader(cookieHeader) {
     const out = {};
     const h = String(cookieHeader || "").trim();
@@ -73,15 +85,7 @@ export function createAuth(deps) {
     if (x) return String(x).trim();
 
     const cookies = parseCookieHeader(req.headers.cookie || "");
-    const candidates = [
-      AUTH_COOKIE_NAME,
-      "gmx_token",
-      "gmx_session",
-      "gmxToken",
-      "gmxSession",
-      "access_token",
-      "token",
-    ];
+    const candidates = authCookieNames();
     for (const name of candidates) {
       const v = cookies[name];
       if (v) return String(v).trim();
@@ -115,6 +119,33 @@ export function createAuth(deps) {
       res.setHeader("Set-Cookie", [...prev, cookieStr]);
     } else {
       res.setHeader("Set-Cookie", [String(prev), cookieStr]);
+    }
+  }
+
+  function clearAuthCookie(req, res) {
+    const xfProto = String(req.headers["x-forwarded-proto"] || "").toLowerCase();
+    const isSecure = !!(req.secure || xfProto === "https");
+    const tombstones = [];
+    for (const name of authCookieNames()) {
+      const parts = [
+        `${name}=`,
+        "Path=/",
+        "Max-Age=0",
+        "Expires=Thu, 01 Jan 1970 00:00:00 GMT",
+        "HttpOnly",
+        "SameSite=Lax",
+      ];
+      if (isSecure) parts.push("Secure");
+      tombstones.push(parts.join("; "));
+    }
+
+    const prev = res.getHeader("Set-Cookie");
+    if (!prev) {
+      res.setHeader("Set-Cookie", tombstones);
+    } else if (Array.isArray(prev)) {
+      res.setHeader("Set-Cookie", [...prev, ...tombstones]);
+    } else {
+      res.setHeader("Set-Cookie", [String(prev), ...tombstones]);
     }
   }
 
@@ -491,6 +522,7 @@ export function createAuth(deps) {
     AUTH_COOKIE_MAX_AGE_SEC,
     getAuthToken,
     setAuthCookie,
+    clearAuthCookie,
     getBearer,
     userByHandle,
     userByToken,
