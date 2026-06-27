@@ -3,11 +3,24 @@
 
   window.__GMXConnectWireFactory = function createGMXConnectWire(ctx) {
     ctx = ctx || {};
+    function resolveInvalidatePendingSessionInit(source) {
+      if (typeof source.invalidatePendingSessionInit === "function") {
+        return source.invalidatePendingSessionInit;
+      }
+      if (typeof source.auth?.invalidatePendingSessionInit === "function") {
+        return source.auth.invalidatePendingSessionInit;
+      }
+      if (typeof source.core?.api?.invalidatePendingSessionInit === "function") {
+        return source.core.api.invalidatePendingSessionInit;
+      }
+      return () => {};
+    }
     if (ctx.core) {
       const core = ctx.core || {};
     const auth = ctx.auth || {};
     const session = ctx.session || {};
     const keys = ctx.keys || {};
+    const invalidatePendingSessionInit = resolveInvalidatePendingSessionInit(ctx);
 
     ctx = {
         $: core.$,
@@ -21,6 +34,7 @@
         refreshUsage: session.refreshUsage,
         loadPlans: session.loadPlans,
         ping: session.ping,
+        invalidatePendingSessionInit,
         keys: {
           handle: keys.handle,
           token: keys.token,
@@ -32,6 +46,7 @@
       };
     }
     const keys = ctx.keys || {};
+    const invalidatePendingSessionInit = resolveInvalidatePendingSessionInit(ctx);
 
     if (!window.__GMXConnectFactory) throw new Error("GMX connect factory missing");
     const __gmxConnect = window.__GMXConnectFactory({
@@ -46,6 +61,7 @@
       refreshUsage: ctx.refreshUsage,
       loadPlans: ctx.loadPlans,
       ping: ctx.ping,
+      invalidatePendingSessionInit,
       keys: {
         handle: keys.handle,
         token: keys.token,

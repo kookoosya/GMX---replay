@@ -1257,6 +1257,144 @@ test("siteboot: restores handle pill and marks init done", () => {
   assert.equal(els.xHandle.value, "@demo");
 });
 
+test("auth: logout invalidates pending initSession response", async () => {
+  const origLocalStorage = globalThis.localStorage;
+  const origFetch = globalThis.fetch;
+  const origLocation = globalThis.location;
+
+  const store = new Map([["gmx_handle", "@demo"]]);
+  globalThis.localStorage = {
+    getItem(k) {
+      return store.has(k) ? store.get(k) : null;
+    },
+    setItem(k, v) {
+      store.set(k, v);
+    },
+    removeItem(k) {
+      store.delete(k);
+    },
+  };
+  globalThis.location = { search: "" };
+
+  let fetchStarted = false;
+  let resolveFetch;
+  const fetchDone = new Promise((resolve) => {
+    resolveFetch = resolve;
+  });
+  globalThis.fetch = async () => {
+    fetchStarted = true;
+    await fetchDone;
+    return {
+      ok: true,
+      json: async () => ({
+        ok: true,
+        token: "late-token",
+        handle: "@demo",
+        isAdmin: true,
+        adminClaimable: true,
+      }),
+    };
+  };
+
+  const authOkCalls = [];
+  let adminVis = 0;
+  let pingCount = 0;
+  const auth = loadFactory("app.auth.js", "__GMXAuthFactory")({
+    API: "http://127.0.0.1:10000",
+    LS_HANDLE: "gmx_handle",
+    LS_TOKEN: "gmx_token",
+    LS_IS_ADMIN: "gmx_is_admin",
+    LS_ADMIN_CLAIMABLE: "gmx_admin_claimable",
+    isLocalDevHost: () => false,
+    getAdminToken: () => "",
+    setAuthOk: (v) => {
+      authOkCalls.push(!!v);
+    },
+    $: (id) => (id === "handlePill" ? { textContent: "" } : null),
+    t: (k) => k,
+    toast: () => {},
+    escapeHtml: (s) => s,
+    applyAdminVisibility: () => {
+      adminVis++;
+    },
+    ping: () => {
+      pingCount++;
+    },
+    setDegraded: () => {},
+  });
+
+  const els = {
+    btnReset: { onclick: null },
+    handlePill: { textContent: "@demo" },
+    xHandle: { value: "@demo" },
+    connectMsg: { textContent: "", innerHTML: "" },
+  };
+  const connect = loadFactory("app.connect.js", "__GMXConnectFactory")({
+    $: (id) => els[id] || null,
+    api: async () => ({}),
+    escapeHtml: (s) => s,
+    friendlyUiErrorMessage: (m) => m,
+    normalizeHandle: (v) => v,
+    tr: (k) => k,
+    setAuthOk: (v) => {
+      authOkCalls.push(!!v);
+    },
+    applyAdminVisibility: () => {
+      adminVis++;
+    },
+    refreshUsage: async () => {},
+    loadPlans: async () => {},
+    ping: () => {
+      pingCount++;
+    },
+    invalidatePendingSessionInit: auth.invalidatePendingSessionInit,
+    keys: {
+      handle: "gmx_handle",
+      token: "gmx_token",
+      isAdmin: "gmx_is_admin",
+      adminClaimable: "gmx_admin_claimable",
+      forceLogout: "gmx_force_logout",
+      forceLogoutV2: "gmx_force_logout_v2",
+    },
+  });
+  connect.bindConnect();
+
+  try {
+    const pending = auth.initSession(true);
+    await Promise.resolve();
+    assert.equal(fetchStarted, true, "initSession(true) should start fetch");
+
+    await els.btnReset.onclick();
+    assert.equal(store.has("gmx_handle"), false);
+    assert.equal(store.has("gmx_token"), false);
+    assert.equal(store.has("gmx_is_admin"), false);
+    assert.equal(store.has("gmx_admin_claimable"), false);
+    assert.ok(authOkCalls.includes(false), "reset should set AUTH_OK false");
+    assert.ok(store.has("gmx_force_logout"));
+    assert.ok(store.has("gmx_force_logout_v2"));
+
+    const adminVisAfterReset = adminVis;
+    const pingCountAfterReset = pingCount;
+
+    resolveFetch();
+    const tok = await pending;
+    assert.equal(tok, null);
+    assert.equal(store.has("gmx_handle"), false);
+    assert.equal(store.has("gmx_token"), false);
+    assert.equal(store.has("gmx_is_admin"), false);
+    assert.equal(store.has("gmx_admin_claimable"), false);
+    assert.ok(!authOkCalls.includes(true), "late response must not restore AUTH_OK true");
+    assert.equal(adminVis, adminVisAfterReset, "late response must not call applyAdminVisibility");
+    assert.equal(pingCount, pingCountAfterReset, "late response must not call ping");
+    assert.ok(store.has("gmx_force_logout"));
+    assert.ok(store.has("gmx_force_logout_v2"));
+  } finally {
+    globalThis.localStorage = origLocalStorage;
+    globalThis.fetch = origFetch;
+    globalThis.location = origLocation;
+  }
+});
+
 test("wallethelpers: base58 and fmtSol", () => {
   const wh = loadFactory("app.wallethelpers.js", "__GMXWalletHelpersFactory")();
   assert.equal(wh.b58encode(new Uint8Array([0, 1, 2])), "15T");

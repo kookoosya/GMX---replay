@@ -19,6 +19,12 @@
       setDegraded
     } = ctx;
 
+    let sessionInitEpoch = 0;
+
+    function invalidatePendingSessionInit() {
+      sessionInitEpoch += 1;
+    }
+
     function normalizeHandle(input){
         let t = String(input||"").trim();
         if (!t) return "";
@@ -78,6 +84,7 @@
         try{ applyAdminVisibility(); }catch{}
         return getToken();
       }
+        const initEpoch = sessionInitEpoch;
         try{
           const params = new URLSearchParams(location.search);
           const ref = params.get("ref") || "";
@@ -87,7 +94,9 @@
             body: JSON.stringify({ handle, ref, devReset: (force && isLocalDevHost()) ? 1 : 0 })
           });
           const j = await r.json().catch(()=>({}));
+          if (initEpoch !== sessionInitEpoch) return null;
           if (!r.ok || !j.token) throw new Error(j.error_code || j.error || "init_failed");
+          if (initEpoch !== sessionInitEpoch) return null;
           try{ localStorage.setItem(LS_HANDLE, j.handle || handle); }catch{}
           try{ localStorage.setItem(LS_TOKEN, j.token); }catch{}
           try{ $("handlePill").textContent = j.handle || handle; }catch{}
@@ -98,6 +107,7 @@
           try{ ping(); }catch{}
           return j.token;
         }catch(e){
+          if (initEpoch !== sessionInitEpoch) return null;
           setAuthOk(false);
           try{ applyAdminVisibility(); }catch{}
           try{ ping(); }catch{}
@@ -210,6 +220,8 @@
         throw lastErr || new Error("request_failed");
       }
 
+    api.invalidatePendingSessionInit = invalidatePendingSessionInit;
+
     return {
       normalizeHandle,
       getHandle,
@@ -218,6 +230,7 @@
       requireConnected,
       isPublicApi,
       initSession,
+      invalidatePendingSessionInit,
       api,
     };
   };

@@ -16,6 +16,10 @@
     const refreshUsage = typeof ctx.refreshUsage === "function" ? ctx.refreshUsage : async () => {};
     const loadPlans = typeof ctx.loadPlans === "function" ? ctx.loadPlans : async () => {};
     const ping = typeof ctx.ping === "function" ? ctx.ping : () => {};
+    const invalidatePendingSessionInit =
+      typeof ctx.invalidatePendingSessionInit === "function"
+        ? ctx.invalidatePendingSessionInit
+        : () => {};
     const keys = ctx.keys || {};
     const tr = typeof ctx.tr === "function" ? ctx.tr : (key) => String(key || "");
 
@@ -136,6 +140,7 @@
       const resetBtn = $("btnReset");
       if (resetBtn) {
         resetBtn.onclick = async () => {
+          invalidatePendingSessionInit();
           const xh = $("xHandle");
           try {
             localStorage.removeItem(keys.handle || "gmx_handle");

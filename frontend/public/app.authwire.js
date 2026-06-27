@@ -42,6 +42,10 @@
       return getAuth().initSession(force);
     }
 
+    function invalidatePendingSessionInit() {
+      return getAuth().invalidatePendingSessionInit();
+    }
+
     async function api(path, method = "GET", body, opts = {}) {
       return getAuth().api(path, method, body, opts);
     }
@@ -55,6 +59,7 @@
       requireConnected,
       isPublicApi,
       initSession,
+      invalidatePendingSessionInit,
       api,
     };
   };
