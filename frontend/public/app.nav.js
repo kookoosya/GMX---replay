@@ -48,12 +48,20 @@
       const safe = normalizeTopLevelTab(name);
       setCurrentTab(safe);
       document.querySelectorAll(".tab").forEach((b) => {
-        b.classList.toggle("active", b.dataset.tab === safe);
+        const active = b.dataset.tab === safe;
+        b.classList.toggle("active", active);
+        if (b.dataset.tab) {
+          b.setAttribute("aria-current", active ? "page" : "false");
+        }
       });
       const topTabs = getTopLevelTabs();
       topTabs.forEach((k) => {
         const el = document.getElementById("tab-" + k);
-        if (el) el.classList.toggle("hidden", k !== safe);
+        if (!el) return;
+        const show = k === safe;
+        el.classList.toggle("hidden", !show);
+        if (show) el.removeAttribute("inert");
+        else el.setAttribute("inert", "");
       });
       setBg(safe);
       try {

@@ -314,6 +314,17 @@ textarea{ min-height: 110px; resize: vertical; }
   border-color: rgba(20,241,149,.35);
   box-shadow: 0 8px 32px rgba(153,69,255,.35), 0 0 0 1px rgba(255,255,255,.08) inset;
 }
+.tab:focus-visible,
+.mobileNavBtn:focus-visible,
+.mobileMoreBtn:focus-visible,
+.mobileMoreLink:focus-visible{
+  outline: 2px solid var(--accentB);
+  outline-offset: 2px;
+}
+body.appShellScrollLock{
+  overflow: hidden;
+  touch-action: none;
+}
 .hidden{ display:none !important; }
 
 .grid{
@@ -2385,6 +2396,70 @@ html.theme-applied body.hasWallBg .sideCard {
   border-color: rgba(153,69,255,.45);
   background: rgba(153,69,255,.14);
 }
+@media (max-width: 680px){
+  #pill_sync{ display:none; }
+  #usedPill{
+    max-width: 118px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+}
+
+@media (min-width: 1024px){
+  .wrap{
+    display: grid;
+    grid-template-columns: minmax(204px, 236px) minmax(0, 1fr);
+    column-gap: 18px;
+    align-items: start;
+  }
+  .wrap > header{
+    grid-column: 1 / -1;
+  }
+  .appShellNav,
+  .tabs{
+    grid-column: 1;
+    grid-row: 2;
+    position: sticky;
+    top: calc(12px + env(safe-area-inset-top));
+    align-self: start;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    overflow-x: visible;
+    overflow-y: auto;
+    max-height: calc(100vh - 110px);
+    margin: 0 0 16px;
+    justify-content: flex-start;
+    scrollbar-gutter: stable;
+  }
+  .appShellNav .tab,
+  .tabs .tab{
+    flex: 0 0 auto;
+    width: 100%;
+    text-align: left;
+    justify-content: flex-start;
+  }
+  .wrap > .appBreadcrumbs,
+  .wrap > [id^="tab-"]{
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .wrap > .appBreadcrumbs{
+    align-self: start;
+    z-index: 1;
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 721px) and (max-width: 1023px){
+  .tabs{
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}
+
 @media (max-width: 720px){
   body.mobileNavOn .tabs{
     display: none;

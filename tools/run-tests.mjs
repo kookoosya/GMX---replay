@@ -16,6 +16,7 @@ const steps = [
 
 if (!process.env.SKIP_E2E) {
   steps.push(["e2e-app", "node", ["tools/tests/e2e-app.mjs"]]);
+  steps.push(["e2e-app-shell", "node", ["tools/tests/e2e-app-shell.mjs"]]);
   steps.push(["e2e-homepage", "node", ["tools/tests/e2e-homepage.mjs"]]);
   steps.push(["e2e-auth-cookie-race", "node", ["tools/tests/e2e-auth-cookie-race.mjs"]]);
   steps.push(["e2e-bridge-state-race", "node", ["tools/tests/e2e-bridge-state-race.mjs"]]);

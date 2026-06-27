@@ -226,7 +226,7 @@
   "bank_best_done_ok": "Best pass removed {removed} and refilled {refilled}. Bank now has {final}/{target}.",
   "bank_best_done_warn": "Best pass removed {removed} and refilled {refilled}. Bank finished at {final}/{target}. Try another tone or preset for a wider pool.",
   "pack_locked_msg": "Pack is locked. Upgrade to Pro or unlock via referrals.",
-  "pack_applied": "Applied pack: {name}",
+  "pack_applied": "Applied pack",
   "wallet_ui_not_connected": "not connected",
   "wallet_label_default": "Wallet",
   "wallet_hint_pick_plan": "Select a plan above to continue.",
@@ -853,5 +853,6 @@
   "ref_badge_diamond": "Diamond",
   "ref_badge_next_html": "Next badge at <b>{n}</b> eligible — {tier}",
   "ref_badge_toast_html": "New badge unlocked: <b>{tier}</b>",
-  "ref_badge_all_unlocked": "All promoter badges unlocked"
+  "ref_badge_all_unlocked": "All promoter badges unlocked",
+  "locked_pack": "Pack is locked. Upgrade to Pro or unlock via referrals."
 }

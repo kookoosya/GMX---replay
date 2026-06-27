@@ -120,11 +120,11 @@
   "gn_safe_1": "我们从不索要 seed phrase 或 private keys。",
   "gn_safe_2": "收款地址 + 金额始终在 wallet 内确认。",
   "gm_limits_title": "Free 限制（永久）",
-  "gm_daily_label": "每日生成（扩展）",
+  "gm_daily_label": "每日 GM 生成（扩展）",
   "gm_saved_label": "已保存行（站点）",
   "gm_limits_note": "Free 足够试用全部。Pro 移除限制并解锁所有主题/风格。",
   "gn_limits_title": "Free 限制（永久）",
-  "gn_daily_label": "每日生成（扩展）",
+  "gn_daily_label": "每日 GN 生成（扩展）",
   "gn_saved_label": "已保存行（站点）",
   "gn_limits_note": "Free 足够试用全部。Pro 移除限制并解锁所有主题/风格。",
   "themes_unlocked_label": "已解锁主题",
@@ -226,7 +226,7 @@
   "bank_best_done_ok": "Best pass removed {removed} and refilled {refilled}. Bank now has {final}/{target}.",
   "bank_best_done_warn": "Best pass removed {removed} and refilled {refilled}. Bank finished at {final}/{target}. Try another tone or preset for a wider pool.",
   "pack_locked_msg": "Pack is locked. Upgrade to Pro or unlock via referrals.",
-  "pack_applied": "Applied pack: {name}",
+  "pack_applied": "已应用包",
   "wallet_ui_not_connected": "未连接",
   "wallet_label_default": "Wallet",
   "wallet_hint_pick_plan": "Select a plan above to continue.",
@@ -367,7 +367,7 @@
   "gm_lang_tabs_note": "通用汽车的单一保存银行。",
   "gn_lang_tabs_note": "GN 的单个保存库。",
   "gm_right": "GM 使用方法",
-  "gm_right_desc": "早上用英语简短回复别人的帖子。保持它们自然、直接且易于粘贴。",
+  "gm_right_desc": "简短的早晨 GM 回复 — 自然、直接、便于粘贴。",
   "gm_right_list": [
     "<b>This bank</b>: one saved GM bank for this section. No hidden language split.",
     "<b>Random 1/10/70</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -379,7 +379,7 @@
     "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "GN 使用方法",
-  "gn_right_desc": "为他人帖子撰写简短英文夜间回复。保持平和、自然、易于粘贴。",
+  "gn_right_desc": "简短的夜间 GN 回复 — 平静、人性化、便于粘贴。",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
     "<b>Random 1/10/70</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -486,11 +486,11 @@
   "h_code_note": "此代码可在扩展中使用",
   "h_status": "状态",
   "h_desc": "GMXReply 用于快速、类人风格的 GM 回复，不显得像机器人。",
-  "h_badge_fast": "Fast",
-  "h_badge_safe": "No seed phrase",
-  "h_badge_onchain": "On-chain verify",
-  "h_badge_copy": "Copy-only",
-  "h_badge_arcade": "Browser games",
+  "h_badge_fast": "快速",
+  "h_badge_safe": "无需助记词",
+  "h_badge_onchain": "链上验证",
+  "h_badge_copy": "仅复制",
+  "h_badge_arcade": "浏览器游戏",
   "h_guide": [
     "<b>Step 1:</b> Connect your X handle (one-time).",
     "<b>Step 2:</b> Build lists in the <span class=\"kbd\">GM</span> / <span class=\"kbd\">GN</span> tabs.",
@@ -853,5 +853,6 @@
   "ref_badge_diamond": "钻石",
   "ref_badge_next_html": "下一枚徽章需<b>{n}</b>个符合条件 — {tier}",
   "ref_badge_toast_html": "新徽章：<b>{tier}</b>",
-  "ref_badge_all_unlocked": "已解锁全部推广徽章"
+  "ref_badge_all_unlocked": "已解锁全部推广徽章",
+  "locked_pack": "包已锁定。需要 Pro 或推荐。"
 }

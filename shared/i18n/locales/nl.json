@@ -120,11 +120,11 @@
   "gn_safe_1": "We vragen nooit om seed phrase of private keys.",
   "gn_safe_2": "Je bevestigt altijd ontvanger + bedrag in je wallet.",
   "gm_limits_title": "Free-limieten (altijd)",
-  "gm_daily_label": "Dagelijkse generatie (extensie)",
+  "gm_daily_label": "Dagelijkse GM-generatie (extensie)",
   "gm_saved_label": "Opgeslagen regels (site)",
   "gm_limits_note": "Free is genoeg om alles te proberen. Pro haalt limieten weg en ontgrendelt alle thema’s/stijlen.",
   "gn_limits_title": "Free-limieten (altijd)",
-  "gn_daily_label": "Dagelijkse generatie (extensie)",
+  "gn_daily_label": "Dagelijkse GN-generatie (extensie)",
   "gn_saved_label": "Opgeslagen regels (site)",
   "gn_limits_note": "Free is genoeg om alles te proberen. Pro haalt limieten weg en ontgrendelt alle thema’s/stijlen.",
   "themes_unlocked_label": "Thema’s ontgrendeld",
@@ -226,7 +226,7 @@
   "bank_best_done_ok": "Best pass removed {removed} and refilled {refilled}. Bank now has {final}/{target}.",
   "bank_best_done_warn": "Best pass removed {removed} and refilled {refilled}. Bank finished at {final}/{target}. Try another tone or preset for a wider pool.",
   "pack_locked_msg": "Pack is locked. Upgrade to Pro or unlock via referrals.",
-  "pack_applied": "Applied pack: {name}",
+  "pack_applied": "Pack toegepast",
   "wallet_ui_not_connected": "niet verbonden",
   "wallet_label_default": "Portemonnee",
   "wallet_hint_pick_plan": "Selecteer hierboven een abonnement om door te gaan.",
@@ -367,7 +367,7 @@
   "gm_lang_tabs_note": "Eén opgeslagen bank voor GM.",
   "gn_lang_tabs_note": "Eén opgeslagen bank voor GN.",
   "gm_right": "GM gebruiken",
-  "gm_right_desc": "Creëer korte Engelse ochtendantwoorden op de post van iemand anders. Houd ze natuurlijk, direct en gemakkelijk te plakken.",
+  "gm_right_desc": "Korte GM-ochtendantwoorden — natuurlijk, direct, makkelijk te plakken.",
   "gm_right_list": [
     "<b>This bank</b>: one saved GM bank for this section. No hidden language split.",
     "<b>Random 1/10/70</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -379,7 +379,7 @@
     "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "GN gebruiken",
-  "gn_right_desc": "Korte Engelse avondantwoorden op andermans post. Rustig, menselijk en makkelijk te plakken.",
+  "gn_right_desc": "Korte GN-nachtantwoorden — rustig, menselijk, makkelijk te plakken.",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
     "<b>Random 1/10/70</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -486,11 +486,11 @@
   "h_code_note": "Als je een test-/abonnementscode hebt gekregen, plak die hier en activeer hem.",
   "h_status": "Snelle gids",
   "h_desc": "GMXReply is gemaakt voor snelle, menselijke GM en GN zonder bot-look.",
-  "h_badge_fast": "Fast",
-  "h_badge_safe": "No seed phrase",
-  "h_badge_onchain": "On-chain verify",
-  "h_badge_copy": "Copy-only",
-  "h_badge_arcade": "Browser games",
+  "h_badge_fast": "Snel",
+  "h_badge_safe": "Geen seed phrase",
+  "h_badge_onchain": "On-chain verificatie",
+  "h_badge_copy": "Alleen kopiëren",
+  "h_badge_arcade": "Browsergames",
   "h_guide": [
     "<b>Step 1:</b> Connect your X handle (one-time).",
     "<b>Step 2:</b> Build lists in the <span class=\"kbd\">GM</span> / <span class=\"kbd\">GN</span> tabs.",
@@ -853,5 +853,6 @@
   "ref_badge_diamond": "Diamant",
   "ref_badge_next_html": "Volgende badge bij <b>{n}</b> in aanmerking komenden — {tier}",
   "ref_badge_toast_html": "Nieuwe badge: <b>{tier}</b>",
-  "ref_badge_all_unlocked": "Alle promoter-badges ontgrendeld"
+  "ref_badge_all_unlocked": "Alle promoter-badges ontgrendeld",
+  "locked_pack": "Pack vergrendeld. Pro of referrals nodig."
 }

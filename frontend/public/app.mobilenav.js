@@ -15,6 +15,23 @@
     let mq = null;
     let touchStart = null;
     let bound = false;
+    let moreTrigger = null;
+
+    function setMoreExpanded(open) {
+      const btn = $("mnav_more");
+      if (btn) btn.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    function setScrollLock(on) {
+      try {
+        document.body.classList.toggle("appShellScrollLock", !!on);
+      } catch {}
+    }
+
+    function isMoreSheetOpen() {
+      const sheet = $("mobileMoreSheet");
+      return !!(sheet && !sheet.classList.contains("hidden"));
+    }
 
     function isMobileNavViewport() {
       try {
@@ -85,18 +102,45 @@
 
     function closeMoreSheet() {
       const sheet = $("mobileMoreSheet");
-      if (sheet) sheet.classList.add("hidden");
+      if (sheet) {
+        sheet.classList.add("hidden");
+        sheet.setAttribute("aria-hidden", "true");
+      }
+      setScrollLock(false);
+      setMoreExpanded(false);
+      const trigger = moreTrigger || $("mnav_more");
+      moreTrigger = null;
+      if (trigger && typeof trigger.focus === "function") {
+        try {
+          trigger.focus();
+        } catch {}
+      }
     }
 
-    function openMoreSheet() {
+    function openMoreSheet(trigger) {
       const sheet = $("mobileMoreSheet");
-      if (sheet) sheet.classList.remove("hidden");
+      if (!sheet) return;
+      moreTrigger = trigger || $("mnav_more");
+      sheet.classList.remove("hidden");
+      sheet.setAttribute("aria-hidden", "false");
+      setScrollLock(true);
+      setMoreExpanded(true);
+      const closeBtn = $("mobileMoreClose");
+      if (closeBtn && typeof closeBtn.focus === "function") {
+        try {
+          closeBtn.focus();
+        } catch {}
+      }
     }
 
-    function onPrimaryNavClick(tab) {
+    function onPrimaryNavClick(tab, trigger) {
       if (tab === "more") {
-        openMoreSheet();
-        syncActive(getCurrentTab());
+        if (isMoreSheetOpen()) {
+          closeMoreSheet();
+        } else {
+          openMoreSheet(trigger);
+          syncActive(getCurrentTab());
+        }
         return;
       }
       closeMoreSheet();
@@ -179,7 +223,7 @@
       const nav = $("mobileBottomNav");
       if (nav) {
         nav.querySelectorAll(".mobileNavBtn").forEach((btn) => {
-          btn.addEventListener("click", () => onPrimaryNavClick(btn.dataset.tab || ""));
+          btn.addEventListener("click", () => onPrimaryNavClick(btn.dataset.tab || "", btn));
         });
       }
 
@@ -198,6 +242,12 @@
         const closeBtn = $("mobileMoreClose");
         if (closeBtn) closeBtn.addEventListener("click", closeMoreSheet);
       }
+
+      document.addEventListener("keydown", (ev) => {
+        if (ev.key !== "Escape" || !isMoreSheetOpen()) return;
+        ev.preventDefault();
+        closeMoreSheet();
+      });
 
       try {
         window.__gmxMobileNavSync = syncActive;

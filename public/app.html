@@ -92,7 +92,7 @@ html.mode-light body.hasUserBg .panel{
 <div class="pill"><strong id="ui_handle">Handle</strong><span class="muted" id="handlePill">not set</span><span class="refBadgePillWrap hidden" id="headerRefBadge"></span></div>
 <div class="pill"><strong id="ui_used">Used</strong><span class="muted" id="usedPill">GM 0/70 • GN 0/70</span></div>
 <div class="pill"><strong id="ui_plan">Plan</strong><span class="muted" id="planPill">Free</span></div>
-<div class="pill"><strong id="ui_sync">Sync</strong><span class="muted" id="syncPill">-</span></div>
+<div class="pill" id="pill_sync"><strong id="ui_sync">Sync</strong><span class="muted" id="syncPill">-</span></div>
 </div>
 <div class="pillGroup right">
 <div class="pill">
@@ -141,19 +141,19 @@ html.mode-light body.hasUserBg .panel{
     <div class="muted small" style="margin-top:10px">Tip: if you use many Chrome extensions (wallets, security tools), try Incognito with extensions off to confirm it's not an injected script.</div>
   </div>
 </div>
-<div class="tabs">
-<button class="tab active" data-tab="home" id="t_home">Home</button>
-<button class="tab" data-tab="gm" id="t_gm">GM</button>
-<button class="tab" data-tab="gn" id="t_gn">GN</button>
-<button class="tab" data-tab="prediction" id="t_prediction">Prediction Market</button>
-<button class="tab" data-tab="wallet" id="t_wallet">Upgrade Pro</button>
-<button class="tab" data-tab="referrals" id="t_ref">Referrals</button>
-<button class="tab" data-tab="leaderboard" id="t_lb">Leaderboard</button>
-<button class="tab" data-tab="themes" id="t_themes">Themes</button>
-<button class="tab" data-tab="extthemes" id="t_extthemes">Extension</button>
+<nav class="tabs appShellNav" id="app_shell_nav" aria-label="App sections">
+<button class="tab active" data-tab="home" id="t_home" type="button">Home</button>
+<button class="tab" data-tab="gm" id="t_gm" type="button">GM</button>
+<button class="tab" data-tab="gn" id="t_gn" type="button">GN</button>
+<button class="tab" data-tab="prediction" id="t_prediction" type="button">Prediction Market</button>
+<button class="tab" data-tab="wallet" id="t_wallet" type="button">Upgrade Pro</button>
+<button class="tab" data-tab="referrals" id="t_ref" type="button">Referrals</button>
+<button class="tab" data-tab="leaderboard" id="t_lb" type="button">Leaderboard</button>
+<button class="tab" data-tab="themes" id="t_themes" type="button">Themes</button>
+<button class="tab" data-tab="extthemes" id="t_extthemes" type="button">Extension</button>
 <a class="tab" href="/arcade.html" id="t_arcade">Arcade</a>
-<button class="tab hidden" data-tab="admin" id="t_admin">Admin</button>
-</div>
+<button class="tab hidden" data-tab="admin" id="t_admin" type="button">Admin</button>
+</nav>
 <nav class="appBreadcrumbs hidden" id="app_breadcrumbs" aria-label="Breadcrumb">
 <ol class="appBreadcrumbList">
 <li><button class="appBreadcrumbLink" id="app_breadcrumb_home" type="button">Home</button></li>
@@ -1453,13 +1453,13 @@ html.mode-light body.hasUserBg .panel{
 <span class="mobileNavIcon" aria-hidden="true">★</span>
 <span class="mobileNavLabel" data-label-key="t_wallet" data-label-fb="Upgrade Pro">Upgrade Pro</span>
 </button>
-<button type="button" class="mobileNavBtn" data-tab="more" id="mnav_more" aria-label="More">
+<button type="button" class="mobileNavBtn" data-tab="more" id="mnav_more" aria-label="More" aria-expanded="false" aria-controls="mobileMoreSheet">
 <span class="mobileNavIcon" aria-hidden="true">⋯</span>
 <span class="mobileNavLabel" data-label-key="mobile_nav_more" data-label-fb="More">More</span>
 </button>
 </nav>
 <div class="gmgnSwipeHint hidden" id="gmgnSwipeHint" aria-hidden="true"></div>
-<div class="mobileMoreSheet hidden" id="mobileMoreSheet" role="dialog" aria-modal="true" aria-labelledby="mobileMoreTitle">
+<div class="mobileMoreSheet hidden" id="mobileMoreSheet" role="dialog" aria-modal="true" aria-labelledby="mobileMoreTitle" aria-hidden="true">
 <div class="mobileMoreBackdrop" id="mobileMoreBackdrop"></div>
 <div class="mobileMoreCard">
 <div class="split modalHead" style="align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px">

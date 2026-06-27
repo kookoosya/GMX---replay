@@ -120,11 +120,11 @@
   "gn_safe_1": "On ne demande jamais ta seed phrase ni tes clés privées.",
   "gn_safe_2": "Tu confirmes toujours le destinataire + le montant dans ton wallet.",
   "gm_limits_title": "Limites Free (pour toujours)",
-  "gm_daily_label": "Génération quotidienne (extension)",
+  "gm_daily_label": "Génération GM quotidienne (extension)",
   "gm_saved_label": "Lignes enregistrées (site)",
   "gm_limits_note": "Free suffit pour tout essayer. Pro enlève les limites et débloque tous les thèmes/styles.",
   "gn_limits_title": "Limites Free (pour toujours)",
-  "gn_daily_label": "Génération quotidienne (extension)",
+  "gn_daily_label": "Génération GN quotidienne (extension)",
   "gn_saved_label": "Lignes enregistrées (site)",
   "gn_limits_note": "Free suffit pour tout essayer. Pro enlève les limites et débloque tous les thèmes/styles.",
   "themes_unlocked_label": "Thèmes débloqués",
@@ -226,7 +226,7 @@
   "bank_best_done_ok": "Meilleur laissez-passer retiré {removed} et rechargé {refilled}. La banque a maintenant {final}/{target}.",
   "bank_best_done_warn": "Meilleur laissez-passer retiré {removed} et rechargé {refilled}. Banque terminée au ⟦⟧⟦2/3⟧. Essayez une autre tonalité ou un préréglage pour une piscine plus large.",
   "pack_locked_msg": "Le pack est verrouillé. Passez à Pro ou débloquez via des références.",
-  "pack_applied": "Pack appliqué : {name}",
+  "pack_applied": "Pack appliqué",
   "wallet_ui_not_connected": "non connecté",
   "wallet_label_default": "Portefeuille",
   "wallet_hint_pick_plan": "Sélectionnez un forfait ci-dessus pour continuer.",
@@ -367,7 +367,7 @@
   "gm_lang_tabs_note": "Banque unique sauvegardée pour GM.",
   "gn_lang_tabs_note": "Banque unique sauvegardée pour GN.",
   "gm_right": "Comment utiliser GM",
-  "gm_right_desc": "Créez de courtes réponses matinales en anglais au message de quelqu'un d'autre. Gardez-les naturels, directs et faciles à coller.",
+  "gm_right_desc": "Réponses GM matinales courtes — naturelles, directes, faciles à coller.",
   "gm_right_list": [
     "<b>Cette banque</b> : une banque GM enregistrée pour cette section. Pas de division linguistique cachée.",
     "<b>Aléatoire 1/10/70</b> : ajoute de nouvelles lignes à la banque GM. Min reste court, Mid reste équilibré, Max peut respirer un peu plus.",
@@ -379,7 +379,7 @@
     "Le nombre de plafonds gratuits dans la banque GM. Si vous atteignez 70/70, les nouvelles lignes générées remplacent les anciennes (l'édition est illimitée)."
   ],
   "gn_right": "Comment utiliser GN",
-  "gn_right_desc": "Créez de courtes réponses de nuit en anglais à la publication de quelqu'un d'autre. Gardez-les calmes, humains et faciles à coller.",
+  "gn_right_desc": "Réponses GN nocturnes courtes — calmes, humaines, faciles à coller.",
   "gn_right_list": [
     "<b>Cette banque</b> : une banque GN enregistrée pour cette section. Pas de division linguistique cachée.",
     "<b>Random 1/10/70</b> ajoute des lignes fraîches. Min reste court, Mid reste équilibré, Max peut respirer un peu plus.",
@@ -486,11 +486,11 @@
   "h_code_note": "Si tu as reçu un code de test ou d’abonnement, colle-le ici pour l’activer.",
   "h_status": "Guide rapide",
   "h_desc": "GMXReply est fait pour des GM et GN rapides, naturels, sans ressembler à un bot.",
-  "h_badge_fast": "Fast",
-  "h_badge_safe": "No seed phrase",
-  "h_badge_onchain": "On-chain verify",
-  "h_badge_copy": "Copy-only",
-  "h_badge_arcade": "Browser games",
+  "h_badge_fast": "Rapide",
+  "h_badge_safe": "Pas de seed phrase",
+  "h_badge_onchain": "Vérification on-chain",
+  "h_badge_copy": "Copie uniquement",
+  "h_badge_arcade": "Jeux navigateur",
   "h_guide": [
     "<b>Step 1:</b> Connect your X handle (one-time).",
     "<b>Step 2:</b> Build lists in the <span class=\"kbd\">GM</span> / <span class=\"kbd\">GN</span> tabs.",
@@ -853,5 +853,6 @@
   "ref_badge_diamond": "Diamant",
   "ref_badge_next_html": "Prochain badge à <b>{n}</b> éligibles — {tier}",
   "ref_badge_toast_html": "Nouveau badge : <b>{tier}</b>",
-  "ref_badge_all_unlocked": "Tous les badges promoteur débloqués"
+  "ref_badge_all_unlocked": "Tous les badges promoteur débloqués",
+  "locked_pack": "Pack verrouillé. Pro ou parrainages requis."
 }

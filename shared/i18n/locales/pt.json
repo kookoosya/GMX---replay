@@ -120,11 +120,11 @@
   "gn_safe_1": "Nunca pedimos seed phrase nem chaves privadas.",
   "gn_safe_2": "Você sempre confirma destinatário + valor dentro da wallet.",
   "gm_limits_title": "Limites Free (para sempre)",
-  "gm_daily_label": "Geração diária (extensão)",
+  "gm_daily_label": "Geração diária GM (extensão)",
   "gm_saved_label": "Linhas salvas (site)",
   "gm_limits_note": "Free dá para testar tudo. Pro remove limites e desbloqueia todos temas/estilos.",
   "gn_limits_title": "Limites Free (para sempre)",
-  "gn_daily_label": "Geração diária (extensão)",
+  "gn_daily_label": "Geração diária GN (extensão)",
   "gn_saved_label": "Linhas salvas (site)",
   "gn_limits_note": "Free dá para testar tudo. Pro remove limites e desbloqueia todos temas/estilos.",
   "themes_unlocked_label": "Temas desbloqueados",
@@ -226,7 +226,7 @@
   "bank_best_done_ok": "Melhor passe removido {removed} e recarregado {refilled}. O banco agora tem ⟦⟧⟦2/3⟧.",
   "bank_best_done_warn": "Best pass removed {removed} and refilled {refilled}. Bank finished at {final}/{target}. Try another tone or preset for a wider pool.",
   "pack_locked_msg": "O pacote está bloqueado. Atualize para Pro ou desbloqueie através de indicações.",
-  "pack_applied": "Pacote aplicado: {name}",
+  "pack_applied": "Pack aplicado",
   "wallet_ui_not_connected": "Não conectado",
   "wallet_label_default": "Carteira",
   "wallet_hint_pick_plan": "Selecione um plano acima para continuar.",
@@ -367,7 +367,7 @@
   "gm_lang_tabs_note": "Único banco salvo para GM.",
   "gn_lang_tabs_note": "Banco único salvo para GN.",
   "gm_right": "Como usar GM",
-  "gm_right_desc": "Crie respostas matinais curtas em inglês para a postagem de outra pessoa. Mantenha-os naturais, diretos e fáceis de colar.",
+  "gm_right_desc": "Respostas GM curtas de manhã — naturais, diretas, fáceis de colar.",
   "gm_right_list": [
     "<b>Este banco</b>: um banco GM guardado para esta secção. Nenhuma divisão de idioma oculta.",
     "<b>Aleatório 1/10/70</b>: adiciona novas linhas ao banco GM. Min permanece curto, Mid permanece equilibrado, Max pode respirar um pouco mais.",
@@ -379,7 +379,7 @@
     "A tampa gratuita conta em todo o banco da GM. Se você atingir 70/70, as novas linhas geradas substituirão as mais antigas (a edição é ilimitada)."
   ],
   "gn_right": "Como usar GN",
-  "gn_right_desc": "Crie respostas curtas noturnas em inglês para a postagem de outra pessoa. Mantenha-os calmos, humanos e fáceis de colar.",
+  "gn_right_desc": "Respostas GN curtas à noite — calmas, humanas, fáceis de colar.",
   "gn_right_list": [
     "<b>Este banco</b>: One salvou o GN Bank para esta seção. Nenhuma divisão de idioma oculta.",
     "<b>Aleatório 1/10/70</b> adiciona linhas frescas. Min permanece curto, Mid permanece equilibrado, Max pode respirar um pouco mais.",
@@ -486,11 +486,11 @@
   "h_code_note": "Se recebeu um código de teste/assinatura, cole aqui e ative.",
   "h_status": "Guia rápido",
   "h_desc": "GMXReply foi feito para GMs e GNs rápidos e naturais, sem cara de bot.",
-  "h_badge_fast": "Fast",
-  "h_badge_safe": "No seed phrase",
-  "h_badge_onchain": "On-chain verify",
-  "h_badge_copy": "Copy-only",
-  "h_badge_arcade": "Browser games",
+  "h_badge_fast": "Rápido",
+  "h_badge_safe": "Sem seed phrase",
+  "h_badge_onchain": "Verificação on-chain",
+  "h_badge_copy": "Só copiar",
+  "h_badge_arcade": "Jogos no navegador",
   "h_guide": [
     "<b>Step 1:</b> Connect your X handle (one-time).",
     "<b>Step 2:</b> Build lists in the <span class=\"kbd\">GM</span> / <span class=\"kbd\">GN</span> tabs.",
@@ -853,5 +853,6 @@
   "ref_badge_diamond": "Diamante",
   "ref_badge_next_html": "Próximo emblema com <b>{n}</b> elegíveis — {tier}",
   "ref_badge_toast_html": "Novo emblema: <b>{tier}</b>",
-  "ref_badge_all_unlocked": "Todos os emblemas de promotor desbloqueados"
+  "ref_badge_all_unlocked": "Todos os emblemas de promotor desbloqueados",
+  "locked_pack": "Pack bloqueado. Pro ou indicações necessários."
 }

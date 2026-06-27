@@ -436,12 +436,22 @@ test("nav: showTab toggles active tab", () => {
   globalThis.document = {
     querySelectorAll: (sel) => {
       if (sel === ".tab") {
-        return [{ dataset: { tab: "home" }, classList: { toggle(c, on) { if (c === "active") flags.set("home", on); } } }];
+        return [{
+          dataset: { tab: "home" },
+          classList: { toggle(c, on) { if (c === "active") flags.set("home", on); } },
+          setAttribute() {},
+        }];
       }
       return [];
     },
     getElementById: (id) => {
-      if (id === "tab-home") return { classList: { toggle(_c, on) { flags.set("pane", !on); } } };
+      if (id === "tab-home") {
+        return {
+          classList: { toggle(_c, on) { flags.set("pane", !on); } },
+          removeAttribute() {},
+          setAttribute() {},
+        };
+      }
       return null;
     },
   };

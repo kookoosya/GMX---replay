@@ -33,9 +33,10 @@ test("primaryNavActiveTab highlights more for secondary tabs", () => {
 
 test("app shell exposes mobile bottom nav and swipe hint", () => {
   const html = fs.readFileSync(path.join(root, "public", "app.html"), "utf8");
-  for (const id of ["mobileBottomNav", "mobileMoreSheet", "gmgnSwipeHint", "mnav_gm"]) {
+  for (const id of ["mobileBottomNav", "mobileMoreSheet", "gmgnSwipeHint", "mnav_gm", "app_shell_nav"]) {
     assert.match(html, new RegExp(`id="${id}"`));
   }
+  assert.match(html, /class="tabs appShellNav"/);
   assert.match(html, /lib\/mobile-nav-core\.js/);
 });
 
