@@ -8,10 +8,19 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 test("home tab exposes hero motion block", () => {
   const html = fs.readFileSync(path.join(root, "public", "app.html"), "utf8");
-  for (const id of ["homeHero", "homeHeroVideo", "homeHeroAnim", "hero_video_title", "hero_video_caption", "hero_try_demo"]) {
+  for (const id of [
+    "homeHero",
+    "homeHeroVideo",
+    "homeHeroAnim",
+    "hero_brand_eyebrow",
+    "hero_video_title",
+    "hero_video_caption",
+    "hero_try_demo",
+  ]) {
     assert.match(html, new RegExp(`id="${id}"`));
   }
   assert.match(html, /homeHeroCinematic/);
+  assert.match(html, /homeHeroBrand/);
   assert.match(html, /gmx-hero-loop\.svg/);
 });
 
@@ -40,8 +49,8 @@ test("siteboot wires home hero on init", () => {
 
 test("hero loop asset exists", () => {
   const svg = fs.readFileSync(path.join(root, "public", "assets", "hero", "gmx-hero-loop.svg"), "utf8");
-  assert.match(svg, /Reply on X|GMXReply/);
-  assert.match(svg, /Play browser games|Play Arcade/i);
+  assert.match(svg, /GMXReply|9945ff|14f195/);
+  assert.doesNotMatch(svg, /Reply on X/i);
 });
 
 test("boot chunk manifest includes home hero module", () => {
@@ -52,7 +61,16 @@ test("boot chunk manifest includes home hero module", () => {
 
 test("en locale defines hero copy keys", () => {
   const en = JSON.parse(fs.readFileSync(path.join(root, "shared", "i18n", "locales", "en.json"), "utf8"));
-  for (const key of ["hero_video_title", "hero_video_caption", "hero_try_demo"]) {
+  for (const key of [
+    "hero_brand_eyebrow",
+    "hero_video_title",
+    "hero_video_caption",
+    "hero_try_demo",
+    "hero_pill_gmgn",
+    "h_desc",
+    "h_badge_copy",
+  ]) {
     assert.ok(en[key], `missing ${key}`);
   }
+  assert.equal(en.hero_video_title, "GMXReply");
 });

@@ -1,29 +1,47 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 640" role="img" aria-label="GMXReply">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#070b14"/>
-      <stop offset="45%" stop-color="#12182a"/>
-      <stop offset="100%" stop-color="#1a1030"/>
+      <stop offset="0%" stop-color="#050810"/>
+      <stop offset="42%" stop-color="#12102a"/>
+      <stop offset="100%" stop-color="#071018"/>
     </linearGradient>
-    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#9945ff" stop-opacity=".35"/>
-      <stop offset="100%" stop-color="#14f195" stop-opacity=".22"/>
+    <linearGradient id="beam" x1="0" y1="0.5" x2="1" y2="0.5">
+      <stop offset="0%" stop-color="#9945ff" stop-opacity="0"/>
+      <stop offset="35%" stop-color="#9945ff" stop-opacity=".45"/>
+      <stop offset="70%" stop-color="#14f195" stop-opacity=".28"/>
+      <stop offset="100%" stop-color="#14f195" stop-opacity="0"/>
     </linearGradient>
-    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#9945ff"/>
-      <stop offset="100%" stop-color="#14f195"/>
-    </linearGradient>
-    <radialGradient id="orb" cx="78%" cy="28%" r="42%">
-      <stop offset="0%" stop-color="#14f195" stop-opacity=".18"/>
+    <radialGradient id="orb1" cx="82%" cy="24%" r="38%">
+      <stop offset="0%" stop-color="#14f195" stop-opacity=".34"/>
       <stop offset="100%" stop-color="#14f195" stop-opacity="0"/>
     </radialGradient>
+    <radialGradient id="orb2" cx="18%" cy="78%" r="34%">
+      <stop offset="0%" stop-color="#9945ff" stop-opacity=".28"/>
+      <stop offset="100%" stop-color="#9945ff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#94b4ff" stroke-opacity=".06"/>
+    </pattern>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="18" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
   <rect width="1680" height="640" fill="url(#bg)"/>
-  <rect width="1680" height="640" fill="url(#glow)"/>
-  <rect width="1680" height="640" fill="url(#orb)"/>
-  <text x="72" y="250" fill="#f2f6ff" font-family="Segoe UI, system-ui, sans-serif" font-size="56" font-weight="800">Reply on X</text>
-  <text x="72" y="318" fill="#9fb0d9" font-family="Segoe UI, system-ui, sans-serif" font-size="30">Play browser games</text>
-  <text x="72" y="372" fill="#7f93bf" font-family="Segoe UI, system-ui, sans-serif" font-size="20">Copy-first GM/GN — jump into Arcade when you are ready</text>
-  <rect x="72" y="410" width="240" height="54" rx="14" fill="url(#accent)"/>
-  <text x="192" y="444" text-anchor="middle" fill="#081018" font-family="Segoe UI, system-ui, sans-serif" font-size="20" font-weight="700">GMXReply</text>
+  <rect width="1680" height="640" fill="url(#grid)"/>
+  <rect width="1680" height="640" fill="url(#beam)"/>
+  <rect width="1680" height="640" fill="url(#orb1)"/>
+  <rect width="1680" height="640" fill="url(#orb2)"/>
+  <g opacity=".85" filter="url(#glow)">
+    <path d="M1220 120 L1380 320 L1220 520 L1060 320 Z" fill="none" stroke="#14f195" stroke-width="3" stroke-opacity=".55"/>
+    <path d="M1240 320 H1520" stroke="#9945ff" stroke-width="2" stroke-opacity=".35"/>
+    <circle cx="1520" cy="320" r="10" fill="#14f195" fill-opacity=".75"/>
+  </g>
+  <g opacity=".55">
+    <rect x="980" y="180" width="420" height="280" rx="28" fill="#0a101c" stroke="#94b4ff" stroke-opacity=".14"/>
+    <rect x="1010" y="214" width="220" height="14" rx="7" fill="#14f195" fill-opacity=".55"/>
+    <rect x="1010" y="246" width="300" height="10" rx="5" fill="#94b4ff" fill-opacity=".22"/>
+    <rect x="1010" y="272" width="260" height="10" rx="5" fill="#94b4ff" fill-opacity=".16"/>
+    <rect x="1010" y="318" width="120" height="36" rx="18" fill="url(#beam)" stroke="#9945ff" stroke-opacity=".35"/>
+  </g>
 </svg>
