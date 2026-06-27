@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { apiJson, clearAuth, getStoredHandle, getStoredToken, normalizeHandle, setAuth } from "./api";
 import { TopNav } from "./components/TopNav";
 import { AccessPage } from "./pages/AccessPage";
@@ -77,6 +77,21 @@ function connectErrorText(raw: string, copy: (key: string, fallback?: string) =>
 }
 
 export default function App() {
+  const authGenerationRef = useRef(0);
+
+  function beginAuthGeneration(): number {
+    authGenerationRef.current += 1;
+    return authGenerationRef.current;
+  }
+
+  function currentAuthGeneration(): number {
+    return authGenerationRef.current;
+  }
+
+  function isAuthGenerationCurrent(generation: number): boolean {
+    return generation === authGenerationRef.current;
+  }
+
   const [handle, setHandleState] = useState<string>(() => getStoredHandle());
   const [token, setTokenState] = useState<string>(() => getStoredToken());
   const [connectInput, setConnectInput] = useState<string>(() => preferredConnectSeed(getStoredHandle()));
@@ -117,19 +132,23 @@ export default function App() {
     setRoute(safeRoute);
   }, []);
 
-  async function refreshAll() {
+  async function refreshAll(generation: number = currentAuthGeneration()) {
     setBusy(true);
     setErr("");
     try {
       const storedHandle = getStoredHandle();
       const storedToken = getStoredToken();
+      if (!isAuthGenerationCurrent(generation)) return;
       setHandleState(storedHandle);
       setTokenState(storedToken);
 
       const u = await apiJson("/api/usage", { token: storedToken });
+      if (!isAuthGenerationCurrent(generation)) return;
+
       if (u.ok) {
         const nextUsage = (u.data as AnyObj) || null;
         const serverAuthed = Boolean(nextUsage?.authenticated);
+        if (!isAuthGenerationCurrent(generation)) return;
         setUsage(nextUsage);
         setAuthChecked(true);
 
@@ -137,6 +156,7 @@ export default function App() {
           if (storedToken || storedHandle) {
             clearAuth();
           }
+          if (!isAuthGenerationCurrent(generation)) return;
           setTokenState("");
           setHandleState("");
           setIdentity(null);
@@ -146,6 +166,7 @@ export default function App() {
           return;
         }
       } else if (u.status === 401 || u.status === 403) {
+        if (!isAuthGenerationCurrent(generation)) return;
         clearAuth();
         setUsage({ authenticated: false });
         setAuthChecked(true);
@@ -167,10 +188,12 @@ export default function App() {
           }),
           apiJson("/api/me", { token: storedToken }),
         ]);
+        if (!isAuthGenerationCurrent(generation)) return;
 
         if (initRes.ok) {
           setIdentity(initRes.data as AnyObj);
         } else if (initRes.status === 401 || initRes.status === 403) {
+          if (!isAuthGenerationCurrent(generation)) return;
           clearAuth();
           setUsage({ authenticated: false });
           setTokenState("");
@@ -189,23 +212,34 @@ export default function App() {
           setMe(null);
         }
       } else {
+        if (!isAuthGenerationCurrent(generation)) return;
         setIdentity(null);
         setMe(null);
       }
 
+      if (!isAuthGenerationCurrent(generation)) return;
       setAuthChecked(true);
       setRefreshKey((x) => x + 1);
     } finally {
-      setBusy(false);
+      if (isAuthGenerationCurrent(generation)) {
+        setBusy(false);
+      }
     }
+  }
+
+  function handleRefresh() {
+    void refreshAll(currentAuthGeneration());
   }
 
   async function connect() {
     setBusy(true);
     setErr("");
+    let generation = currentAuthGeneration();
     try {
       const h = normalizeHandle(connectInput);
       if (!h) throw new Error("enter_valid_handle");
+
+      generation = beginAuthGeneration();
 
       const params = new URLSearchParams(window.location.search);
       const refCode = String(params.get("ref") || "").trim();
@@ -215,12 +249,14 @@ export default function App() {
         body: { handle: h, ref: refCode || undefined },
         timeoutMs: 20000,
       });
+      if (!isAuthGenerationCurrent(generation)) return;
 
       if (!r.ok || !r.data || !(r.data as AnyObj).token) {
         const code = (r.data as AnyObj)?.error_code || (r.data as AnyObj)?.error || r.errorText || "init_failed";
         throw new Error(String(code));
       }
 
+      if (!isAuthGenerationCurrent(generation)) return;
       const tok = String((r.data as AnyObj).token || "");
       const hh = String((r.data as AnyObj).handle || h);
       setAuth(hh, tok);
@@ -229,15 +265,19 @@ export default function App() {
       setConnectInput(hh);
       setIdentity(r.data as AnyObj);
       clearHandleSeedFromLocation();
-      await refreshAll();
+      await refreshAll(generation);
     } catch (e: any) {
+      if (!isAuthGenerationCurrent(generation)) return;
       setErr(connectErrorText(String(e?.message || "connect_failed"), copy));
     } finally {
-      setBusy(false);
+      if (isAuthGenerationCurrent(generation)) {
+        setBusy(false);
+      }
     }
   }
 
   async function disconnect() {
+    beginAuthGeneration();
     clearAuth();
     setHandleState("");
     setTokenState("");
@@ -246,6 +286,7 @@ export default function App() {
     setMe(null);
     setErr("");
     setAuthChecked(true);
+    setBusy(false);
     clearHandleSeedFromLocation();
     if (window.location.pathname !== "/bridge") {
       window.history.pushState({}, "", "/bridge");
@@ -259,11 +300,12 @@ export default function App() {
   }
 
   useEffect(() => {
-    void refreshAll();
+    void refreshAll(currentAuthGeneration());
     const onStorage = (ev: StorageEvent) => {
       if (!ev.key) return;
       if (ev.key === "gmx_token" || ev.key === "gmx_handle") {
-        void refreshAll();
+        const generation = beginAuthGeneration();
+        void refreshAll(generation);
       }
     };
     const onPopState = () => syncRouteFromLocation();
@@ -292,7 +334,7 @@ export default function App() {
         </div>
 
         <div className="row">
-          <button className="btn" onClick={() => void refreshAll()} disabled={busy}>{copy("refresh", "Refresh")}</button>
+          <button className="btn" onClick={handleRefresh} disabled={busy}>{copy("refresh", "Refresh")}</button>
           <a className="btn" href="/app" target="_blank" rel="noreferrer">{copy("openFullSite", "Open full site")}</a>
           <a className="btn" href="/arcade.html" target="_blank" rel="noreferrer">Open Arcade</a>
         </div>
@@ -383,7 +425,7 @@ export default function App() {
             me={me}
             refreshKey={refreshKey}
             refreshBusy={busy}
-            onRefresh={refreshAll}
+            onRefresh={handleRefresh}
           />
         )}
 
