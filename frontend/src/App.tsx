@@ -237,7 +237,7 @@ export default function App() {
     }
   }
 
-  function disconnect() {
+  async function disconnect() {
     clearAuth();
     setHandleState("");
     setTokenState("");
@@ -251,6 +251,11 @@ export default function App() {
       window.history.pushState({}, "", "/bridge");
     }
     setRoute("/");
+    try {
+      await apiJson("/api/user/logout", { method: "POST", timeoutMs: 3000 });
+    } catch {
+      // best-effort cookie cleanup
+    }
   }
 
   useEffect(() => {
@@ -300,7 +305,7 @@ export default function App() {
           <div className={`pill tone-${isAdmin ? "ok" : "warn"}`}>{isAdmin ? copy("adminHandle", "Admin handle") : copy("userHandle", "User handle")}</div>
           <div className="pill"><span>{copy("plan", "Plan")}</span><span className="mono">{currentPlanText}</span></div>
           <div className="spacer" />
-          {token ? <button className="btn" onClick={disconnect} disabled={busy}>{copy("disconnect", "Disconnect")}</button> : null}
+          {token ? <button className="btn" onClick={() => void disconnect()} disabled={busy}>{copy("disconnect", "Disconnect")}</button> : null}
         </div>
 
         <div className="row">

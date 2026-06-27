@@ -2169,6 +2169,186 @@ test("connect: stale failure does not overwrite newer success UI", async () => {
   }
 });
 
+function loadAuthWithLocks(navLocks) {
+  globalThis.localStorage = {
+    getItem: () => null,
+    setItem: () => {},
+    removeItem: () => {},
+  };
+  const code = readFileSync(path.join(root, "public", "app.auth.js"), "utf8");
+  const fn = new Function("window", `${code}; return window.__GMXAuthFactory;`);
+  const win = {};
+  if (navLocks !== undefined) {
+    win.navigator = { locks: navLocks };
+  }
+  const auth = fn(win)({
+    API: "http://127.0.0.1:10000",
+    LS_HANDLE: "gmx_handle",
+    LS_TOKEN: "gmx_token",
+    LS_IS_ADMIN: "gmx_is_admin",
+    LS_ADMIN_CLAIMABLE: "gmx_admin_claimable",
+    isLocalDevHost: () => false,
+    getAdminToken: () => "",
+    setAuthOk: () => {},
+    $: () => null,
+    t: (k) => k,
+    toast: () => {},
+    escapeHtml: (s) => s,
+    applyAdminVisibility: () => {},
+    ping: () => {},
+    setDegraded: () => {},
+  });
+  return auth;
+}
+
+test("auth: cookie mutation uses exclusive Web Lock", async () => {
+  const calls = [];
+  const auth = loadAuthWithLocks({
+    request(name, opts, cb) {
+      calls.push({ name, mode: opts?.mode });
+      return cb();
+    },
+  });
+  globalThis.fetch = async () => ({
+    ok: true,
+    headers: { get: () => "application/json" },
+    json: async () => ({ ok: true }),
+  });
+  await auth.api("/api/user/logout", "POST");
+  await auth.api("/api/user/init", "POST", { handle: "@demo" });
+  assert.equal(calls.length, 2);
+  assert.ok(calls.every((c) => c.name === auth.AUTH_COOKIE_MUTATION_LOCK));
+  assert.ok(calls.every((c) => c.mode === "exclusive"));
+});
+
+test("auth: cookie mutation waits for held lock", async () => {
+  let releaseFirst;
+  let resolveSecond;
+  let firstInside = false;
+  let secondCbStarted = false;
+  const auth = loadAuthWithLocks({
+    request(_name, _opts, cb) {
+      if (!firstInside) {
+        firstInside = true;
+        return new Promise((resolve) => {
+          releaseFirst = () => resolve(cb());
+        });
+      }
+      return new Promise((resolve) => {
+        resolveSecond = () => {
+          secondCbStarted = true;
+          resolve(cb());
+        };
+      });
+    },
+  });
+  let fetchCount = 0;
+  globalThis.fetch = async () => {
+    fetchCount++;
+    return {
+      ok: true,
+      headers: { get: () => "application/json" },
+      json: async () => ({ ok: true }),
+    };
+  };
+  const p1 = auth.api("/api/user/init", "POST", { handle: "@a" });
+  await Promise.resolve();
+  assert.equal(fetchCount, 0);
+  const p2 = auth.api("/api/user/logout", "POST");
+  await Promise.resolve();
+  assert.equal(secondCbStarted, false);
+  assert.equal(fetchCount, 0);
+  releaseFirst();
+  await Promise.resolve();
+  if (resolveSecond) resolveSecond();
+  await Promise.all([p1, p2]);
+  assert.equal(fetchCount, 2);
+});
+
+test("auth: cookie mutation fallback FIFO order", async () => {
+  const auth = loadAuthWithLocks(undefined);
+  const order = [];
+  globalThis.fetch = async (url) => {
+    order.push(String(url));
+    return {
+      ok: true,
+      headers: { get: () => "application/json" },
+      json: async () => ({ ok: true }),
+    };
+  };
+  await Promise.all([
+    auth.api("/api/user/init", "POST", { handle: "@a" }),
+    auth.api("/api/user/logout", "POST"),
+  ]);
+  assert.equal(order.length, 2);
+  assert.match(order[0], /\/api\/user\/init$/);
+  assert.match(order[1], /\/api\/user\/logout$/);
+});
+
+test("auth: rejected fallback item does not poison queue", async () => {
+  const auth = loadAuthWithLocks(undefined);
+  let logoutFetched = false;
+  globalThis.fetch = async (url) => {
+    if (String(url).includes("/api/user/logout")) {
+      logoutFetched = true;
+      return {
+        ok: true,
+        headers: { get: () => "application/json" },
+        json: async () => ({ ok: true }),
+      };
+    }
+    throw new Error("first_fail");
+  };
+  await auth.api("/api/user/init", "POST", { handle: "@a" }).catch(() => {});
+  await auth.api("/api/user/logout", "POST");
+  assert.equal(logoutFetched, true);
+});
+
+test("auth: lock error never runs unlocked fetch", async () => {
+  const auth = loadAuthWithLocks({
+    request() {
+      return Promise.reject(new Error("lock_denied"));
+    },
+  });
+  let fetchCalled = false;
+  globalThis.fetch = async () => {
+    fetchCalled = true;
+    return { ok: true, headers: { get: () => "application/json" }, json: async () => ({}) };
+  };
+  await auth.api("/api/user/logout", "POST").catch(() => {});
+  assert.equal(fetchCalled, false);
+});
+
+test("auth: public cookie mutations do not call initSession preflight", async () => {
+  const auth = loadAuthWithLocks({
+    request(_n, _o, cb) {
+      return cb();
+    },
+  });
+  globalThis.localStorage = {
+    getItem(k) {
+      if (k === "gmx_handle") return "@demo";
+      return null;
+    },
+    setItem() {},
+    removeItem() {},
+  };
+  let initSessionCalls = 0;
+  const origInit = auth.initSession;
+  auth.initSession = async () => {
+    initSessionCalls++;
+    return null;
+  };
+  globalThis.fetch = async () => ({
+    ok: true,
+    headers: { get: () => "application/json" },
+    json: async () => ({ ok: true }),
+  });
+  await auth.api("/api/user/logout", "POST");
+  assert.equal(initSessionCalls, 0);
+  auth.initSession = origInit;
+});
+
 test("connect: reset clears session message", async () => {
   const els = {
     btnReset: { onclick: null },

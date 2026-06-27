@@ -90,6 +90,50 @@
         );
       }
 
+    const AUTH_COOKIE_MUTATION_LOCK = "gmx-auth-cookie-mutation";
+    let authCookieMutationTail = Promise.resolve();
+
+    function isAuthCookieMutationPath(path) {
+      const p = String(path || "").split("?")[0];
+      return p === "/api/user/init" || p === "/api/user/logout";
+    }
+
+    function enqueueAuthCookieMutationFallback(operation) {
+      const run = authCookieMutationTail.then(operation, operation);
+      authCookieMutationTail = run.then(
+        () => undefined,
+        () => undefined
+      );
+      return run;
+    }
+
+    async function runAuthCookieMutation(operation) {
+      const locks = typeof global.navigator !== "undefined" ? global.navigator.locks : null;
+      if (locks && typeof locks.request === "function") {
+        return locks.request(
+          AUTH_COOKIE_MUTATION_LOCK,
+          { mode: "exclusive" },
+          operation
+        );
+      }
+      return enqueueAuthCookieMutationFallback(operation);
+    }
+
+    async function fetchInitSessionNetwork(payload, timeoutMs) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort("timeout"), timeoutMs);
+      try {
+        return await fetch(API + "/api/user/init", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          signal: controller.signal,
+        });
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
     async function initSession(force=false){
         const handle = getHandle();
         if (!handle) return null;
@@ -102,11 +146,8 @@
         try{
           const params = new URLSearchParams(location.search);
           const ref = params.get("ref") || "";
-          const r = await fetch(API + "/api/user/init", {
-            method: "POST",
-            headers: { "Content-Type":"application/json" },
-            body: JSON.stringify({ handle, ref, devReset: (force && isLocalDevHost()) ? 1 : 0 })
-          });
+          const payload = { handle, ref, devReset: (force && isLocalDevHost()) ? 1 : 0 };
+          const r = await runAuthCookieMutation(() => fetchInitSessionNetwork(payload, 20000));
           const j = await r.json().catch(()=>({}));
           if (!isSessionGenerationCurrent(initEpoch)) return null;
           if (!r.ok || !j.token) throw new Error(j.error_code || j.error || "init_failed");
@@ -175,12 +216,16 @@
           }
     
           try{
-            const r = await fetch(API + path, {
+            const performFetch = async () => fetch(API + path, {
               method,
               headers,
               body: body ? JSON.stringify(body) : null,
               signal: controller.signal
             });
+
+            const r = isAuthCookieMutationPath(path)
+              ? await runAuthCookieMutation(performFetch)
+              : await performFetch();
     
             const ct = (r.headers.get("content-type")||"").toLowerCase();
     
@@ -249,6 +294,10 @@
       beginSessionGeneration,
       invalidatePendingSessionInit,
       isSessionGenerationCurrent,
+      AUTH_COOKIE_MUTATION_LOCK,
+      isAuthCookieMutationPath,
+      runAuthCookieMutation,
+      enqueueAuthCookieMutationFallback,
       api,
     };
   };

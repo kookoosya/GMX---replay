@@ -81,9 +81,34 @@ export function clearAuth() {
   requestSiteExtensionSync();
 }
 
-export async function apiJson<T = any>(
+const AUTH_COOKIE_MUTATION_LOCK = "gmx-auth-cookie-mutation";
+let authCookieMutationTail: Promise<unknown> = Promise.resolve();
+
+function isAuthCookieMutationPath(path: string): boolean {
+  const p = String(path || "").split("?")[0];
+  return p === "/api/user/init" || p === "/api/user/logout";
+}
+
+function enqueueAuthCookieMutationFallback<T>(operation: () => Promise<T>): Promise<T> {
+  const run = authCookieMutationTail.then(operation, operation);
+  authCookieMutationTail = run.then(
+    () => undefined,
+    () => undefined
+  );
+  return run;
+}
+
+async function runAuthCookieMutation<T>(operation: () => Promise<T>): Promise<T> {
+  const locks = typeof navigator !== "undefined" ? navigator.locks : undefined;
+  if (locks && typeof locks.request === "function") {
+    return locks.request(AUTH_COOKIE_MUTATION_LOCK, { mode: "exclusive" }, operation);
+  }
+  return enqueueAuthCookieMutationFallback(operation);
+}
+
+async function performApiJsonFetch<T>(
   path: string,
-  opts: { method?: string; body?: any; token?: string; adminToken?: string; timeoutMs?: number } = {}
+  opts: { method?: string; body?: any; token?: string; adminToken?: string; timeoutMs?: number }
 ): Promise<{ ok: boolean; status: number; data: T | null; errorText?: string }> {
   const method = opts.method || (opts.body ? "POST" : "GET");
   const token = String(opts.token || getStoredToken() || "").trim();
@@ -102,7 +127,7 @@ export async function apiJson<T = any>(
       headers,
       body: opts.body != null ? JSON.stringify(opts.body) : undefined,
       signal: controller.signal,
-      credentials: "include"
+      credentials: "include",
     });
 
     const status = r.status;
@@ -122,6 +147,16 @@ export async function apiJson<T = any>(
   } finally {
     window.clearTimeout(timer);
   }
+}
+
+export async function apiJson<T = any>(
+  path: string,
+  opts: { method?: string; body?: any; token?: string; adminToken?: string; timeoutMs?: number } = {}
+): Promise<{ ok: boolean; status: number; data: T | null; errorText?: string }> {
+  if (isAuthCookieMutationPath(path)) {
+    return runAuthCookieMutation(() => performApiJsonFetch<T>(path, opts));
+  }
+  return performApiJsonFetch<T>(path, opts);
 }
 
 export async function copyText(text: string): Promise<boolean> {
