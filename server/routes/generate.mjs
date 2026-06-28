@@ -4,6 +4,13 @@ const VALID_STYLES = new Set([
   "classic","classy","emoji","noemoji","minimal","meme","degen","alpha","cheer","calm","builder","focus"
 ]);
 
+import {
+  freeGenLimitsFromPromo,
+  getFreeGenState,
+  consumeFreeGenAtomic,
+  ensureFreeGenMigratedAsync,
+} from "../free-gen-quota.mjs";
+
 export function registerGenerateRoutes(deps) {
   const {
     app,
@@ -15,76 +22,47 @@ export function registerGenerateRoutes(deps) {
     generateUnique,
     generateRankedCandidates,
     saveRecent,
-    todayKeyUTC,
     userByHandle,
     subscriptionInfo,
-    insertLimitForUser,
+    getReferralPromoterSummary,
     awardReferralBonus,
     maybeAwardStarterReward,
-    supabaseActive,
-    sbConsumeDailyAtomic,
-    consumeDailyAtomic,
-    nextResetUTC,
+    safeDb,
+    db,
+    CONFIG,
     logActivity,
+    sbSumLegacyGenUsed,
   } = deps;
 
-  async function consumeGenerationQuota(handle, kind, count) {
-    const day = todayKeyUTC();
+  async function freeGenContext(handle) {
     try {
       awardReferralBonus(handle);
     } catch (_e) {}
     try {
       maybeAwardStarterReward(handle);
     } catch (_e) {}
-
-    const u = userByHandle(handle);
-    const limit = await insertLimitForUser({ ...u, handle }, { userRow: u });
+    const u = userByHandle(handle) || { handle };
+    const promo = await getReferralPromoterSummary(handle, { userRow: u });
     const sub = subscriptionInfo({ ...u, handle });
-    const plan = sub.active ? "pro" : "free";
+    const limits = freeGenLimitsFromPromo(CONFIG, promo);
+    await ensureFreeGenMigratedAsync(safeDb, db, handle, limits.total, { sbSumLegacyGenUsed });
+    const state = getFreeGenState(safeDb, db, handle, sub.active ? 999999 : limits.total);
+    return { u, sub, promo, limits, state };
+  }
 
-    const consume = supabaseActive()
-      ? await sbConsumeDailyAtomic(handle, day, kind, limit, count, plan)
-      : consumeDailyAtomic(handle, day, kind, limit, count);
-
-    if (!consume.ok) {
-      if (consume.error === "supabase_error" || consume.error === "supabase_inactive") {
-        return {
-          ok: false,
-          status: 503,
-          body: {
-            ok: false,
-            error: "supabase_error",
-            detail: consume._sb_error || null,
-            resetAt: nextResetUTC(),
-          },
-        };
-      }
-      try {
-        logActivity(handle, "limit_hit", {
-          kind,
-          used: consume.used,
-          limit: consume.limit,
-          requested: count,
-          resetAt: nextResetUTC(),
-          source: "site_generate",
-        });
-      } catch (_e) {}
-      return {
-        ok: false,
-        status: 429,
-        body: {
-          ok: false,
-          error: "limit_reached",
-          used: consume.used,
-          limit: consume.limit,
-          requested: count,
-          remaining: Math.max(0, consume.limit - consume.used),
-          resetAt: nextResetUTC(),
-        },
-      };
-    }
-
-    return { ok: true, used: consume.used, limit, resetAt: nextResetUTC() };
+  function limitReachedBody(state, limits, requested = 1) {
+    return {
+      ok: false,
+      error: "limit_reached",
+      used: state.used,
+      limit: limits.total,
+      baseLimit: limits.base,
+      bonusLimit: limits.bonus,
+      requested,
+      remaining: Math.max(0, limits.total - state.used),
+      resetAt: null,
+      shared: true,
+    };
   }
 
   app.get("/api/generate", requireAuth, async (req, res) => {
@@ -100,10 +78,39 @@ export function registerGenerateRoutes(deps) {
       if (kind !== "gm" && kind !== "gn") return sendError(res, 400, "invalid_kind");
       if (!["min", "mid", "max"].includes(mode)) return sendError(res, 400, "invalid_mode");
 
-      const quota = await consumeGenerationQuota(handle, kind, 1);
-      if (!quota.ok) return res.status(quota.status).json(quota.body);
+      const ctx = await freeGenContext(handle);
+      if (!ctx.sub.active && ctx.state.remaining < 1) {
+        try {
+          logActivity(handle, "limit_hit", {
+            kind,
+            used: ctx.state.used,
+            limit: ctx.limits.total,
+            source: "site_generate",
+          });
+        } catch (_e) {}
+        return res.status(429).json(limitReachedBody(ctx.state, ctx.limits, 1));
+      }
 
-      const reply = generateUnique(handle, kind, mode, lang, style, antiN);
+      let reply;
+      try {
+        reply = generateUnique(handle, kind, mode, lang, style, antiN);
+      } catch (e) {
+        console.error("GENERATE_ERROR", e);
+        return sendError(res, 500, ERROR_CODES.SERVER_ERROR);
+      }
+
+      if (!String(reply || "").trim()) {
+        return res.status(502).json({ ok: false, error: "empty_reply" });
+      }
+
+      let consume = { ok: true, used: ctx.state.used, limit: ctx.limits.total, remaining: ctx.state.remaining };
+      if (!ctx.sub.active) {
+        consume = consumeFreeGenAtomic(safeDb, db, handle, 1, ctx.limits.total, kind);
+        if (!consume.ok) {
+          return res.status(429).json(limitReachedBody(getFreeGenState(safeDb, db, handle, ctx.limits.total), ctx.limits, 1));
+        }
+      }
+
       saveRecent(handle, kind, reply, mode, style);
       try {
         logActivity(handle, "gen", { kind, mode, lang, style, antiN, source: "site" });
@@ -117,13 +124,13 @@ export function registerGenerateRoutes(deps) {
         lang,
         reply,
         usage: {
-          used: quota.used,
-          limit: quota.limit,
-          remaining:
-            Number.isFinite(quota.limit) && quota.limit < 999999
-              ? Math.max(0, quota.limit - quota.used)
-              : null,
-          resetAt: quota.resetAt,
+          used: consume.used,
+          limit: ctx.sub.active ? null : ctx.limits.total,
+          baseLimit: ctx.limits.base,
+          bonusLimit: ctx.limits.bonus,
+          remaining: ctx.sub.active ? null : Math.max(0, ctx.limits.total - consume.used),
+          resetAt: null,
+          shared: true,
         },
       });
     } catch (e) {
@@ -148,13 +155,47 @@ export function registerGenerateRoutes(deps) {
       if (kind !== "gm" && kind !== "gn") return sendError(res, 400, "invalid_kind");
       if (!["min", "mid", "max"].includes(mode)) return sendError(res, 400, "invalid_mode");
 
-      const quota = await consumeGenerationQuota(handle, kind, count);
-      if (!quota.ok) return res.status(quota.status).json(quota.body);
+      const ctx = await freeGenContext(handle);
+      if (!ctx.sub.active && ctx.state.remaining < count) {
+        try {
+          logActivity(handle, "limit_hit", {
+            kind,
+            used: ctx.state.used,
+            limit: ctx.limits.total,
+            requested: count,
+            source: "site_generate_bulk",
+          });
+        } catch (_e) {}
+        return res.status(429).json(limitReachedBody(ctx.state, ctx.limits, count));
+      }
 
-      const list = generateRankedCandidates(handle, kind, mode, lang, style, count, antiN, false);
-      for (const r of list) saveRecent(handle, kind, r, mode, style);
+      let list;
       try {
-        logActivity(handle, "gen_bulk", { kind, mode, lang, style, count: list.length, source: "site" });
+        list = generateRankedCandidates(handle, kind, mode, lang, style, count, antiN, false);
+      } catch (e) {
+        console.error("BULK_ERROR", e);
+        return sendError(res, 500, ERROR_CODES.SERVER_ERROR);
+      }
+
+      const lines = Array.isArray(list) ? list.filter((x) => String(x || "").trim()) : [];
+      if (!lines.length) {
+        return res.status(502).json({ ok: false, error: "empty_reply", count: 0, list: [] });
+      }
+
+      const chargeCount = lines.length;
+      let consume = { ok: true, used: ctx.state.used, limit: ctx.limits.total, remaining: ctx.state.remaining };
+      if (!ctx.sub.active) {
+        consume = consumeFreeGenAtomic(safeDb, db, handle, chargeCount, ctx.limits.total, kind);
+        if (!consume.ok) {
+          return res.status(429).json(
+            limitReachedBody(getFreeGenState(safeDb, db, handle, ctx.limits.total), ctx.limits, chargeCount)
+          );
+        }
+      }
+
+      for (const r of lines) saveRecent(handle, kind, r, mode, style);
+      try {
+        logActivity(handle, "gen_bulk", { kind, mode, lang, style, count: lines.length, source: "site" });
       } catch (_e) {}
 
       res.json({
@@ -163,16 +204,16 @@ export function registerGenerateRoutes(deps) {
         kind,
         mode,
         lang,
-        count: list.length,
-        list,
+        count: lines.length,
+        list: lines,
         usage: {
-          used: quota.used,
-          limit: quota.limit,
-          remaining:
-            Number.isFinite(quota.limit) && quota.limit < 999999
-              ? Math.max(0, quota.limit - quota.used)
-              : null,
-          resetAt: quota.resetAt,
+          used: consume.used,
+          limit: ctx.sub.active ? null : ctx.limits.total,
+          baseLimit: ctx.limits.base,
+          bonusLimit: ctx.limits.bonus,
+          remaining: ctx.sub.active ? null : Math.max(0, ctx.limits.total - consume.used),
+          resetAt: null,
+          shared: true,
         },
       });
     } catch (e) {

@@ -1,5 +1,11 @@
 /** User session, usage, entitlements, lightweight events. */
 
+import {
+  freeGenLimitsFromPromo,
+  getFreeGenState,
+  buildUsageGenerationPayload,
+} from "../free-gen-quota.mjs";
+
 export function registerUserRoutes(deps) {
   const {
     app,
@@ -52,15 +58,14 @@ export function registerUserRoutes(deps) {
     const h = String(handle || "").trim();
     if (!h) {
       return {
-        gm:{ used:0, limit:0 },
-        gn:{ used:0, limit:0 },
-        resetAt: nextResetUTC(),
+        generation: { used: 0, baseLimit: CONFIG.FREE_DAILY_BASE, bonusLimit: 0, totalLimit: CONFIG.FREE_DAILY_BASE, remaining: CONFIG.FREE_DAILY_BASE, resetAt: null, shared: true },
+        gm:{ used:0, limit:CONFIG.FREE_DAILY_BASE, sharedUsed: 0 },
+        gn:{ used:0, limit:CONFIG.FREE_DAILY_BASE, sharedUsed: 0 },
+        resetAt: null,
         sub: subscriptionInfo({ handle: "" }),
-        limits:{ freeDaily: CONFIG.FREE_DAILY_BASE, dailyBonus: 0, saveCapFree: CONFIG.SAVE_CAP_FREE, referralUnlocks: computeReferralUnlocks(0, 0) }
+        limits:{ freeGenBase: CONFIG.FREE_DAILY_BASE, freeGenBonus: 0, freeGenTotal: CONFIG.FREE_DAILY_BASE, freeDaily: CONFIG.FREE_DAILY_BASE, dailyBonus: 0, saveCapFree: CONFIG.SAVE_CAP_FREE, referralUnlocks: computeReferralUnlocks(0, 0), sharedGeneration: true }
       };
     }
-    const day = todayKeyUTC();
-    // Referral bonuses are disabled in v1 unlock model; we still keep reward ledger in sync.
     try{ awardReferralBonus(h); }catch(_e){}
     try{ maybeAwardStarterReward(h); }catch(_e){}
     const u = userByHandle(h) || { handle: h };
@@ -69,32 +74,31 @@ export function registerUserRoutes(deps) {
     const manualEligibleCredits = referralRewardTotal(h, 'eligible_credit');
     const starterBgSlots = referralRewardTotal(h, 'starter_bg_slot');
     const unlocks = computeReferralUnlocks(earnedEligible + manualEligibleCredits, starterBgSlots);
-    const limit = await insertLimitForUser({ ...u, handle: h }, promo);
-
-    let gmUsed = 0;
-    let gnUsed = 0;
-    if (supabaseActive()) {
-      gmUsed = await sbGetDailyUsed(h, day, "gm");
-      gnUsed = await sbGetDailyUsed(h, day, "gn");
-    } else {
-      gmUsed = getDailyUsed(h, day, "gm");
-      gnUsed = getDailyUsed(h, day, "gn");
-    }
+    const sub = subscriptionInfo({ ...u, handle: h });
+    const genLimits = freeGenLimitsFromPromo(CONFIG, promo);
+    const totalLimit = sub.active ? 999999 : genLimits.total;
+    const state = getFreeGenState(safeDb, db, h, totalLimit);
+    const generation = buildUsageGenerationPayload(state, genLimits, sub.active);
 
     return {
-      gm: { used: gmUsed, limit },
-      gn: { used: gnUsed, limit },
-      resetAt: nextResetUTC(),
-      sub: subscriptionInfo({ ...u, handle: h }),
+      generation,
+      gm: { used: state.gmUsed, limit: sub.active ? null : genLimits.total, sharedUsed: state.used },
+      gn: { used: state.gnUsed, limit: sub.active ? null : genLimits.total, sharedUsed: state.used },
+      resetAt: null,
+      sub,
       limits: {
-        freeDaily: CONFIG.FREE_DAILY_BASE,
-        dailyBonus: Math.max(0, Number(promo?.dailyBonus || 0) || 0),
+        freeGenBase: genLimits.base,
+        freeGenBonus: genLimits.bonus,
+        freeGenTotal: sub.active ? null : genLimits.total,
+        freeDaily: genLimits.base,
+        dailyBonus: genLimits.bonus,
         saveCapFree: CONFIG.SAVE_CAP_FREE + (unlocks.saveCapBonus || 0),
         referralUnlocks: unlocks,
         bonusPer20: Math.max(0, Number(promo?.bonusPer20 || 0) || 0),
         bonusChunks: Math.max(0, Number(promo?.bonusChunks || 0) || 0),
         nextBonusAt: promo?.nextBonusAt == null ? null : (Number(promo.nextBonusAt || 0) || 0),
         promoter: !!promo?.promoter,
+        sharedGeneration: true,
       }
     };
   }
@@ -350,10 +354,11 @@ export function registerUserRoutes(deps) {
     return {
       handle: h,
       sub,
-      resetAt: usage?.resetAt || nextResetUTC(),
+      resetAt: null,
+      generation: usage?.generation || null,
       usage: {
-        gm: usage?.gm || { used: 0, limit: CONFIG.FREE_DAILY_BASE },
-        gn: usage?.gn || { used: 0, limit: CONFIG.FREE_DAILY_BASE },
+        gm: usage?.gm || { used: 0, limit: CONFIG.FREE_DAILY_BASE, sharedUsed: 0 },
+        gn: usage?.gn || { used: 0, limit: CONFIG.FREE_DAILY_BASE, sharedUsed: 0 },
       },
       tools: {
         studio: { used: studioUsed, limit: studioLimit },
@@ -361,11 +366,13 @@ export function registerUserRoutes(deps) {
         history: { limit: historyLimit, searchEnabled: !!sub?.active },
         favorites: { limit: favLimit },
       },
-      limits: usage?.limits || { freeDaily: CONFIG.FREE_DAILY_BASE, dailyBonus: 0, saveCapFree: CONFIG.SAVE_CAP_FREE, referralUnlocks: computeReferralUnlocks(0, 0) },
+      limits: usage?.limits || { freeGenBase: CONFIG.FREE_DAILY_BASE, freeGenBonus: 0, freeGenTotal: CONFIG.FREE_DAILY_BASE, freeDaily: CONFIG.FREE_DAILY_BASE, dailyBonus: 0, saveCapFree: CONFIG.SAVE_CAP_FREE, referralUnlocks: computeReferralUnlocks(0, 0), sharedGeneration: true },
       extension: {
         plan: isUnlimited ? "unlimited" : paidLike ? "paid" : "free",
         insertMode: paidLike ? "unlimited" : "metered",
-        dailyLimitPerKind: paidLike ? null : Number(usage?.gm?.limit || 0) || CONFIG.FREE_DAILY_BASE,
+        freeGenTotal: paidLike ? null : Number(usage?.generation?.totalLimit ?? usage?.limits?.freeGenTotal ?? CONFIG.FREE_DAILY_BASE) || CONFIG.FREE_DAILY_BASE,
+        freeGenRemaining: paidLike ? null : Number(usage?.generation?.remaining ?? 0),
+        dailyLimitPerKind: paidLike ? null : Number(usage?.generation?.totalLimit ?? CONFIG.FREE_DAILY_BASE) || CONFIG.FREE_DAILY_BASE,
         saveCap: Number(usage?.limits?.saveCapFree || CONFIG.SAVE_CAP_FREE) || CONFIG.SAVE_CAP_FREE,
         backgrounds: {
           unlimited: !!unlocks?.unlimitedBg,

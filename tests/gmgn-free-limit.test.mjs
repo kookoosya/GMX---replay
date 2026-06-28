@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
+import Database from "better-sqlite3";
 import { fileURLToPath } from "node:url";
 import { CONFIG } from "../server/config.mjs";
 import { registerGenerateRoutes } from "../server/routes/generate.mjs";
@@ -35,7 +36,8 @@ test("landing and app shell do not promise 70 free generations", () => {
   assert.doesNotMatch(html, /0\/70/);
   assert.match(html, /0\/50/);
   const en = JSON.parse(fs.readFileSync(path.join(root, "shared/i18n/locales/en.json"), "utf8"));
-  assert.match(en.plan_cmp_val_free_daily, /50/);
+  assert.doesNotMatch(en.plan_cmp_val_free_daily, /50\/day each/i);
+  assert.match(en.plan_cmp_val_free_daily, /50.*shared/i);
   assert.doesNotMatch(en.h_guide.join(" "), /\b70\b/);
   assert.doesNotMatch(en.gm_right_list.join(" "), /70\/70/);
 });
@@ -55,11 +57,12 @@ test("usage refresh uses server freeDaily fallback of 50", async () => {
     getHandle: () => "@user",
     api: async () => ({
       authenticated: true,
-      gm: { used: 2, limit: 50 },
-      gn: { used: 1, limit: 50 },
-      limits: { freeDaily: 50, saveCapFree: 50, referralUnlocks: { eligible: 0 } },
+      generation: { used: 3, baseLimit: 50, bonusLimit: 0, totalLimit: 50, remaining: 47, resetAt: null, shared: true },
+      gm: { used: 2, limit: 50, sharedUsed: 3 },
+      gn: { used: 1, limit: 50, sharedUsed: 3 },
+      limits: { freeGenBase: 50, freeGenBonus: 0, freeGenTotal: 50, freeDaily: 50, saveCapFree: 50, referralUnlocks: { eligible: 0 } },
       sub: { active: false },
-      resetAt: "2026-06-18T00:00:00.000Z",
+      resetAt: null,
     }),
     isPro: () => false,
     getSaveCapFree: () => 50,
@@ -83,11 +86,11 @@ test("usage refresh uses server freeDaily fallback of 50", async () => {
   await usage.refreshUsage();
   assert.equal(els.gmDailyVal.textContent, "2/50");
   assert.equal(els.gnDailyVal.textContent, "1/50");
-  assert.match(els.usedPill.textContent, /GM 2\/50/);
-  assert.deepEqual(lastUsage?.gm, { used: 2, limit: 50 });
+  assert.match(els.usedPill.textContent, /47\/50 free generations/);
+  assert.equal(lastUsage?.generation?.remaining, 47);
 });
 
-test("generate flow blocks at daily limit without calling API", async () => {
+test("generate flow blocks at shared generation limit without calling API", async () => {
   const apiCalls = [];
   const events = [];
   const els = { gmMsg: { innerHTML: "" } };
@@ -141,9 +144,10 @@ test("generate flow blocks at daily limit without calling API", async () => {
     },
     isPro: () => false,
     getLastUsage: () => ({
-      gm: { used: 50, limit: 50 },
-      gn: { used: 0, limit: 50 },
-      resetAt: "2026-06-18T00:00:00.000Z",
+      generation: { used: 50, totalLimit: 50, remaining: 0, baseLimit: 50, bonusLimit: 0 },
+      gm: { used: 50, limit: 50, sharedUsed: 50 },
+      gn: { used: 0, limit: 50, sharedUsed: 50 },
+      resetAt: null,
     }),
     openLimitModal: (p) => events.push({ modal: p }),
     normLimitForUI: (n) => Number(n),
@@ -151,8 +155,7 @@ test("generate flow blocks at daily limit without calling API", async () => {
 
   await flow.generate("gm", 1);
   assert.equal(apiCalls.length, 0);
-  assert.ok(events.some((e) => e.where === "daily"));
-  assert.ok(events.some((e) => e.modal?.reason === "daily"));
+  assert.ok(events.some((e) => e.modal?.reason === "generation"));
 });
 
 test("generate flow allows one generation when daily remaining is 1", async () => {
@@ -206,7 +209,11 @@ test("generate flow allows one generation when daily remaining is 1", async () =
       selectBestByShape: (_k, arr) => arr,
     },
     isPro: () => false,
-    getLastUsage: () => ({ gm: { used: 49, limit: 50 }, gn: { used: 0, limit: 50 } }),
+    getLastUsage: () => ({
+      generation: { used: 49, totalLimit: 50, remaining: 1 },
+      gm: { used: 30, limit: 50, sharedUsed: 49 },
+      gn: { used: 19, limit: 50, sharedUsed: 49 },
+    }),
     openLimitModal: () => {},
     normLimitForUI: (n) => Number(n),
   });
@@ -384,7 +391,14 @@ test("generate flow pro bypasses daily limit UI block", async () => {
   assert.equal(apiCalls.length, 1);
 });
 
-test("server generate route returns limit_reached when quota exhausted", async () => {
+test("server generate route returns limit_reached when shared quota exhausted", async () => {
+  const { db, safeDb } = (() => {
+    const d = new Database(":memory:");
+    d.exec(`CREATE TABLE users (handle TEXT PRIMARY KEY, free_gen_used INTEGER DEFAULT 50, free_gen_gm_used INTEGER DEFAULT 50, free_gen_gn_used INTEGER DEFAULT 0, free_gen_migrated INTEGER DEFAULT 1)`);
+    d.prepare("INSERT INTO users(handle) VALUES(?)").run("@u");
+    return { db: d, safeDb: (fn) => fn() };
+  })();
+
   const app = mockExpressApp();
   registerGenerateRoutes({
     app,
@@ -396,17 +410,16 @@ test("server generate route returns limit_reached when quota exhausted", async (
     generateUnique: () => "line",
     generateRankedCandidates: () => ["a"],
     saveRecent: () => {},
-    todayKeyUTC: () => "2026-06-17",
     userByHandle: () => ({ handle: "@u" }),
     subscriptionInfo: () => ({ active: false }),
-    insertLimitForUser: async () => 50,
+    getReferralPromoterSummary: async () => ({ dailyBonus: 0 }),
     awardReferralBonus: () => {},
     maybeAwardStarterReward: () => {},
-    supabaseActive: () => false,
-    sbConsumeDailyAtomic: async () => ({ ok: false }),
-    consumeDailyAtomic: () => ({ ok: false, used: 50, limit: 50 }),
-    nextResetUTC: () => "2026-06-18T00:00:00.000Z",
+    safeDb,
+    db,
+    CONFIG,
     logActivity: () => {},
+    sbSumLegacyGenUsed: async () => 0,
   });
 
   const route = app.routes.find((r) => r.path === "/api/generate");
@@ -432,9 +445,11 @@ test("server generate route returns limit_reached when quota exhausted", async (
   assert.equal(status, 429);
   assert.equal(body.error, "limit_reached");
   assert.equal(body.limit, 50);
+  assert.equal(body.shared, true);
+  assert.equal(body.resetAt, null);
 });
 
-test("paywall limit modal supports daily generation reason", () => {
+test("paywall limit modal supports generation credit reason", () => {
   const els = { limit_modal: { classList: { remove() {} } }, limit_modal_desc: { textContent: "" }, limit_modal_hint: { textContent: "" } };
   const paywall = loadFactory("app.paywall.js", "__GMXPaywallFactory")({
     $: (id) => els[id] || null,
@@ -443,7 +458,6 @@ test("paywall limit modal supports daily generation reason", () => {
     trackEvent: async () => {},
     storage: { lsGet: () => "A", lsSet: () => {} },
   });
-  paywall.openLimitModal({ reason: "daily", kind: "gm", resetAt: "tomorrow" });
-  assert.match(els.limit_modal_desc.textContent, /generation limit/i);
-  assert.equal(els.limit_modal_hint.textContent, "Next reset: tomorrow");
+  paywall.openLimitModal({ reason: "generation", kind: "gm", resetAt: "" });
+  assert.match(els.limit_modal_desc.textContent, /generation credits/i);
 });

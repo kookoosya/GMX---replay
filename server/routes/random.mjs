@@ -1,5 +1,12 @@
 /** Authenticated random single and bulk generation */
 
+import {
+  freeGenLimitsFromPromo,
+  getFreeGenState,
+  consumeFreeGenAtomic,
+  ensureFreeGenMigratedAsync,
+} from "../free-gen-quota.mjs";
+
 export function registerRandomRoutes(deps) {
   const {
     app,
@@ -63,8 +70,36 @@ export function registerRandomRoutes(deps) {
     validHandle,
     isAdminHandle,
     setFeatureFlag,
-    sbRefClicksUpsert
+    sbRefClicksUpsert,
+    sbSumLegacyGenUsed,
   } = deps;
+
+  async function freeGenContext(handle) {
+    try { awardReferralBonus(handle); } catch (_e) {}
+    try { maybeAwardStarterReward(handle); } catch (_e) {}
+    const u = userByHandle(handle) || { handle };
+    const promo = await getReferralPromoterSummary(handle, { userRow: u });
+    const sub = subscriptionInfo({ ...u, handle });
+    const limits = freeGenLimitsFromPromo(CONFIG, promo);
+    await ensureFreeGenMigratedAsync(safeDb, db, handle, limits.total, { sbSumLegacyGenUsed });
+    const state = getFreeGenState(safeDb, db, handle, sub.active ? 999999 : limits.total);
+    return { u, sub, limits, state };
+  }
+
+  function limitReachedBody(state, limits, requested = 1) {
+    return {
+      ok: false,
+      error: "limit_reached",
+      used: state.used,
+      limit: limits.total,
+      baseLimit: limits.base,
+      bonusLimit: limits.bonus,
+      requested,
+      remaining: Math.max(0, limits.total - state.used),
+      resetAt: null,
+      shared: true,
+    };
+  }
 
 // ---------- PRO TOOLS (server-side gated; requires auth) ----------
 function toolLimit(sub, freeLimit, proLimit){
@@ -99,36 +134,25 @@ app.get("/api/random", requireAuth, genBurstLimiter, async (req, res) => {
     }
     slotAcquired = true;
 
-
-    const day = todayKeyUTC();
-    try { awardReferralBonus(handle); } catch (_e) {}
-
-    const u = userByHandle(handle);
-    const limit = await insertLimitForUser({ ...u, handle }, { userRow: u });
-
-    const sub = subscriptionInfo({ ...u, handle });
-    const plan = sub.active ? "pro" : "free";
-
-
-    // consume quota atomically (prevents parallel overspend)
-    const consume = supabaseActive()
-      ? await sbConsumeDailyAtomic(handle, day, kind, limit, 1, plan)
-      : consumeDailyAtomic(handle, day, kind, limit, 1);
-    if (!consume.ok) {
-      if (consume.error === "supabase_error" || consume.error === "supabase_inactive") {
-        try{ logActivity(handle, 'busy_try_again', { kind, mode, lang, style, sb: consume._sb_error || null }); }catch{}
-        return res.status(503).json({
-          ok: false,
-          error: "supabase_error",
-          detail: consume._sb_error || null,
-          resetAt: nextResetUTC(),
-        });
-      }
-      try{ logActivity(handle, 'limit_hit', { kind, used: consume.used, limit: consume.limit, resetAt: nextResetUTC() }); }catch{}
-      return res.status(429).json({ ok:false, error:"limit_reached", used: consume.used, limit: consume.limit, resetAt: nextResetUTC() });
+    const ctx = await freeGenContext(handle);
+    if (!ctx.sub.active && ctx.state.remaining < 1) {
+      try{ logActivity(handle, 'limit_hit', { kind, used: ctx.state.used, limit: ctx.limits.total, source: 'ext_random' }); }catch{}
+      return res.status(429).json(limitReachedBody(ctx.state, ctx.limits, 1));
     }
 
     const reply = generateUnique(handle, kind, mode, lang, style, antiN);
+    if (!String(reply || "").trim()) {
+      return res.status(502).json({ ok: false, error: "empty_reply" });
+    }
+
+    let consume = { ok: true, used: ctx.state.used, limit: ctx.limits.total, remaining: ctx.state.remaining };
+    if (!ctx.sub.active) {
+      consume = consumeFreeGenAtomic(safeDb, db, handle, 1, ctx.limits.total, kind);
+      if (!consume.ok) {
+        return res.status(429).json(limitReachedBody(getFreeGenState(safeDb, db, handle, ctx.limits.total), ctx.limits, 1));
+      }
+    }
+
     saveRecent(handle, kind, reply, mode, style);
     logActivity(handle, 'gen', { kind, mode, lang, style, antiN });
     const newUsed = consume.used;
@@ -138,7 +162,15 @@ app.get("/api/random", requireAuth, genBurstLimiter, async (req, res) => {
       handle,
       kind,
       reply,
-      usage:{ used:newUsed, limit, remaining: (Number.isFinite(limit) && limit < 999999) ? Math.max(0, limit-newUsed) : null, resetAt: nextResetUTC() }
+      usage:{
+        used: newUsed,
+        limit: ctx.sub.active ? null : ctx.limits.total,
+        baseLimit: ctx.limits.base,
+        bonusLimit: ctx.limits.bonus,
+        remaining: ctx.sub.active ? null : Math.max(0, ctx.limits.total - newUsed),
+        resetAt: null,
+        shared: true,
+      }
     });
   } catch (e) {
     console.error("RANDOM_ERROR", e);
@@ -177,41 +209,10 @@ app.get("/api/random-bulk", requireAuth, bulkBurstLimiter, async (req, res) => {
     }
     slotAcquired = true;
 
-
-    const day = todayKeyUTC();
-    try { awardReferralBonus(handle); } catch (_e) {}
-
-    const u = userByHandle(handle);
-    const limit = await insertLimitForUser({ ...u, handle }, { userRow: u });
-
-    const sub = subscriptionInfo({ ...u, handle });
-    const plan = sub.active ? "pro" : "free";
-
-
-    const consume = supabaseActive()
-      ? await sbConsumeDailyAtomic(handle, day, kind, limit, count, plan)
-      : consumeDailyAtomic(handle, day, kind, limit, count);
-    if (!consume.ok) {
-      if (consume.error === "supabase_error" || consume.error === "supabase_inactive") {
-        try{ logActivity(handle, 'busy_try_again', { kind, mode, lang, style, count, sb: consume._sb_error || null }); }catch{}
-        return res.status(503).json({
-          ok: false,
-          error: "supabase_error",
-          detail: consume._sb_error || null,
-          resetAt: nextResetUTC(),
-        });
-      }
-      const curUsed = consume.used;
-      try{ logActivity(handle, 'limit_hit', { kind, used: curUsed, limit: consume.limit, requested: count, resetAt: nextResetUTC() }); }catch{}
-      return res.status(429).json({
-        ok:false,
-        error:"limit_reached",
-        used: curUsed,
-        limit: consume.limit,
-        requested: count,
-        remaining: Math.max(0, consume.limit - curUsed),
-        resetAt: nextResetUTC()
-      });
+    const ctx = await freeGenContext(handle);
+    if (!ctx.sub.active && ctx.state.remaining < count) {
+      try{ logActivity(handle, 'limit_hit', { kind, used: ctx.state.used, limit: ctx.limits.total, requested: count, source: 'ext_random_bulk' }); }catch{}
+      return res.status(429).json(limitReachedBody(ctx.state, ctx.limits, count));
     }
 
     const recent = getRecentSet(handle, kind, antiN);
@@ -241,6 +242,18 @@ app.get("/api/random-bulk", requireAuth, bulkBurstLimiter, async (req, res) => {
     for (const r of list) saveRecent(handle, kind, r, mode, style);
     logActivity(handle, 'gen_bulk', { kind, mode, lang, style, antiN, count: list.length });
 
+    const chargeCount = list.length;
+    if (!chargeCount) {
+      return res.status(502).json({ ok: false, error: "empty_reply", count: 0, list: [] });
+    }
+
+    let consume = { ok: true, used: ctx.state.used, limit: ctx.limits.total, remaining: ctx.state.remaining };
+    if (!ctx.sub.active) {
+      consume = consumeFreeGenAtomic(safeDb, db, handle, chargeCount, ctx.limits.total, kind);
+      if (!consume.ok) {
+        return res.status(429).json(limitReachedBody(getFreeGenState(safeDb, db, handle, ctx.limits.total), ctx.limits, chargeCount));
+      }
+    }
     const newUsed = consume.used;
 
     res.json({
@@ -251,7 +264,15 @@ app.get("/api/random-bulk", requireAuth, bulkBurstLimiter, async (req, res) => {
       lang,
       count: list.length,
       list,
-      usage:{ used:newUsed, limit, remaining: (Number.isFinite(limit) && limit < 999999) ? Math.max(0, limit-newUsed) : null, resetAt: nextResetUTC() }
+      usage:{
+        used: newUsed,
+        limit: ctx.sub.active ? null : ctx.limits.total,
+        baseLimit: ctx.limits.base,
+        bonusLimit: ctx.limits.bonus,
+        remaining: ctx.sub.active ? null : Math.max(0, ctx.limits.total - newUsed),
+        resetAt: null,
+        shared: true,
+      }
     });
   } catch (e) {
     console.error("RANDOM_BULK_ERROR", e);

@@ -69,13 +69,21 @@
     const renderGenHistory =
       typeof ctx.renderGenHistory === "function" ? ctx.renderGenHistory : () => {};
 
-    function dailyRemaining(kind) {
+    function freeGenRemaining() {
       if (isPro()) return Infinity;
-      const slot = getLastUsage()?.[kind] || {};
-      const limit = normLimitForUI(slot.limit);
+      const gen = getLastUsage()?.generation;
+      if (gen && gen.remaining != null) {
+        const rem = Number(gen.remaining);
+        if (Number.isFinite(rem)) return Math.max(0, rem);
+      }
+      const sharedUsed = Number(getLastUsage()?.gm?.sharedUsed ?? getLastUsage()?.gm?.used ?? 0) || 0;
+      const limit = normLimitForUI(gen?.totalLimit ?? getLastUsage()?.gm?.limit ?? 50);
       if (limit === Infinity) return Infinity;
-      const used = Number(slot.used || 0) || 0;
-      return Math.max(0, limit - used);
+      return Math.max(0, limit - sharedUsed);
+    }
+
+    function dailyRemaining(_kind) {
+      return freeGenRemaining();
     }
 
     async function generate(kind, count) {
@@ -114,11 +122,11 @@
       if (dailyRem <= 0) {
         if (msgElEarly) {
           msgElEarly.innerHTML = `<span class="warn">${escapeHtml(
-            siteTr("gen_daily_limit_reached", "Daily generation limit reached. Upgrade to Pro for unlimited generation.")
+            siteTr("gen_daily_limit_reached", "Free generation credits used up. Upgrade to Pro for unlimited generation.")
           )}</span>`;
         }
         openLimitModal({
-          reason: "daily",
+          reason: "generation",
           kind,
           resetAt: getLastUsage()?.resetAt || "",
         });
@@ -324,7 +332,7 @@
         const friendly = friendlyUiErrorMessage(m, { scope: "generate" });
         if (/limit_reached|daily limit/i.test(String(m || ""))) {
           openLimitModal({
-            reason: "daily",
+            reason: "generation",
             kind,
             resetAt: getLastUsage()?.resetAt || "",
           });

@@ -74,13 +74,20 @@
         setAuthOk(true);
         applyAdminVisibility();
 
-        const fallbackFree = Number(j?.limits?.freeDaily ?? 50) || 50;
+        const fallbackFree = Number(j?.generation?.totalLimit ?? j?.limits?.freeGenTotal ?? j?.limits?.freeDaily ?? 50) || 50;
         const cap = Number(j?.limits?.saveCapFree ?? getSaveCapFree()) || getSaveCapFree();
         setSaveCapFree(Math.max(10, Math.min(1000, cap)));
-        const gm = j.gm || { used: 0, limit: fallbackFree };
-        const gn = j.gn || { used: 0, limit: fallbackFree };
+        const gen = j.generation || {
+          used: Number(j?.gm?.sharedUsed ?? j?.gm?.used ?? 0) || 0,
+          totalLimit: fallbackFree,
+          remaining: Math.max(0, fallbackFree - (Number(j?.gm?.sharedUsed ?? j?.gm?.used ?? 0) || 0)),
+          baseLimit: Number(j?.limits?.freeGenBase ?? fallbackFree) || fallbackFree,
+          bonusLimit: Number(j?.limits?.freeGenBonus ?? j?.limits?.dailyBonus ?? 0) || 0,
+        };
+        const gm = j.gm || { used: gen.used, limit: fallbackFree, sharedUsed: gen.used };
+        const gn = j.gn || { used: gen.used, limit: fallbackFree, sharedUsed: gen.used };
 
-        setLastUsage({ gm, gn, resetAt: j.resetAt || null });
+        setLastUsage({ generation: gen, gm, gn, resetAt: j.resetAt || null });
         setSub(j.sub || null);
         renderWalletStatus(j.sub);
         const eligible = Number(j?.limits?.referralUnlocks?.eligible ?? 0) || 0;
@@ -90,12 +97,20 @@
 
         const gmCapUI = normLimitForUI(gm.limit);
         const gnCapUI = normLimitForUI(gn.limit);
+        const sharedUsed = Number(gen.used ?? gm.sharedUsed ?? gm.used ?? 0) || 0;
+        const sharedLimit = normLimitForUI(gen.totalLimit ?? fallbackFree);
+        const sharedRem = gen.remaining != null ? Number(gen.remaining) : Math.max(0, sharedLimit === Infinity ? Infinity : sharedLimit - sharedUsed);
         const up = $("usedPill");
         if (up) {
-          up.textContent =
-            isPro() || gmCapUI === Infinity || gnCapUI === Infinity
-              ? `GM ${gm.used}/unlimited • GN ${gn.used}/unlimited`
-              : `GM ${gm.used}/${gmCapUI} • GN ${gn.used}/${gnCapUI}`;
+          if (isPro() || sharedLimit === Infinity) {
+            up.textContent = `Free generations: unlimited (Pro)`;
+          } else {
+            const bonus = Number(gen.bonusLimit ?? j?.limits?.freeGenBonus ?? 0) || 0;
+            const base = Number(gen.baseLimit ?? fallbackFree) || fallbackFree;
+            up.textContent = bonus > 0
+              ? `${sharedRem}/${sharedLimit} free (${base} base + ${bonus} bonus)`
+              : `${sharedRem}/${sharedLimit} free generations (GM+GN shared)`;
+          }
         }
 
         try {
@@ -108,8 +123,23 @@
           }
         } catch {}
 
-        setMeter("gmDailyVal", "gmDailyFill", gm.used, gm.limit);
-        setMeter("gnDailyVal", "gnDailyFill", gn.used, gn.limit);
+        setMeter("gmDailyVal", "gmDailyFill", Number(gm.used ?? 0) || 0, gmCapUI);
+        setMeter("gnDailyVal", "gnDailyFill", Number(gn.used ?? 0) || 0, gnCapUI);
+
+        const genVal = $("genCreditsVal");
+        const genFill = $("genCreditsFill");
+        if (genVal || genFill) {
+          if (sharedLimit === Infinity) {
+            if (genVal) genVal.textContent = `${sharedUsed}/unlimited`;
+            if (genFill) genFill.style.width = "100%";
+          } else {
+            if (genVal) genVal.textContent = `${sharedUsed}/${sharedLimit}`;
+            if (genFill) {
+              const pct = sharedLimit ? Math.min(100, Math.round((sharedUsed / sharedLimit) * 100)) : 0;
+              genFill.style.width = pct + "%";
+            }
+          }
+        }
 
         const gmu = $("kGmUsed");
         if (gmu) gmu.textContent = String(gm.used);
@@ -117,7 +147,7 @@
         if (gnu) gnu.textContent = String(gn.used);
 
         const ra = $("kResetAt");
-        if (ra) ra.textContent = j.resetAt || "-";
+        if (ra) ra.textContent = j.resetAt ? j.resetAt : "No daily reset (lifetime free credits)";
 
         const cosmeticSig = usageCosmeticSignature(j);
         if (cosmeticSig !== getLastUsageCosmeticSig()) {

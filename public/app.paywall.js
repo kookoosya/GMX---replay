@@ -66,16 +66,16 @@
       const resetAt = payload?.resetAt || "";
       const reason = payload?.reason || "save_cap";
       if (desc) {
-        if (reason === "daily") {
+        if (reason === "daily" || reason === "generation") {
           desc.textContent =
             v === "A"
               ? siteTr(
                   "limit_modal_daily_a",
-                  `You reached today's free generation limit for ${kind.toUpperCase()}. Upgrade to Pro for unlimited daily generation`
+                  `You used all free generation credits (GM and GN share one pool). Upgrade to Pro for unlimited generation`
                 )
               : siteTr(
                   "limit_modal_daily_b",
-                  `Daily generation cap reached for ${kind.toUpperCase()}. Pro removes daily limits and unlocks everything`
+                  `Free generation credits exhausted. Pro removes generation limits and unlocks everything`
                 );
         } else {
           desc.textContent =

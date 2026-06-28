@@ -1,5 +1,12 @@
 /** GM/GN studio tools, favorites, consume quota */
 
+import {
+  freeGenLimitsFromPromo,
+  getFreeGenState,
+  consumeFreeGenAtomic,
+  ensureFreeGenMigratedAsync,
+} from "../free-gen-quota.mjs";
+
 export function registerToolsRoutes(deps) {
   const {
     app,
@@ -63,7 +70,8 @@ export function registerToolsRoutes(deps) {
     validHandle,
     isAdminHandle,
     setFeatureFlag,
-    sbRefClicksUpsert
+    sbRefClicksUpsert,
+    sbSumLegacyGenUsed,
   } = deps;
 
 // ---------- PRO TOOLS (server-side gated; requires auth) ----------
@@ -314,36 +322,45 @@ app.post("/api/consume", requireAuth, consumeLimiter, async (req, res) => {
     const kind = String(req.body?.kind || req.query?.kind || "").toLowerCase();
     if (kind !== "gm" && kind !== "gn") return sendError(res, 400, "invalid_kind");
 
-    const day = todayKeyUTC();
     try { awardReferralBonus(handle); } catch (_e) {}
     try { maybeAwardStarterReward(handle); } catch (_e) {}
 
-    const u = userByHandle(handle);
-    const limit = await insertLimitForUser({ ...u, handle }, { userRow: u });
-
+    const u = userByHandle(handle) || { handle };
+    const promo = await getReferralPromoterSummary(handle, { userRow: u });
     const sub = subscriptionInfo({ ...u, handle });
-    const plan = sub.active ? "pro" : "free";
+    const limits = freeGenLimitsFromPromo(CONFIG, promo);
+    await ensureFreeGenMigratedAsync(safeDb, db, handle, limits.total, { sbSumLegacyGenUsed });
+    const state = getFreeGenState(safeDb, db, handle, sub.active ? 999999 : limits.total);
 
-    const consume = supabaseActive()
-      ? await sbConsumeDailyAtomic(handle, day, kind, limit, 1, plan)
-      : consumeDailyAtomic(handle, day, kind, limit, 1);
-
-    if (!consume.ok) {
-      if (consume.error === "supabase_error" || consume.error === "supabase_inactive") {
-        return res.status(503).json({
-          ok: false,
-          error: "supabase_error",
-          detail: consume._sb_error || null,
-          resetAt: nextResetUTC(),
-        });
-      }
+    if (!sub.active && state.remaining < 1) {
       return res.status(429).json({
         ok: false,
         error: "limit_reached",
-        used: consume.used,
-        limit: consume.limit,
-        resetAt: nextResetUTC(),
+        used: state.used,
+        limit: limits.total,
+        baseLimit: limits.base,
+        bonusLimit: limits.bonus,
+        remaining: Math.max(0, limits.total - state.used),
+        resetAt: null,
+        shared: true,
       });
+    }
+
+    let consume = { ok: true, used: state.used, limit: limits.total, remaining: state.remaining };
+    if (!sub.active) {
+      consume = consumeFreeGenAtomic(safeDb, db, handle, 1, limits.total, kind);
+      if (!consume.ok) {
+        const st = getFreeGenState(safeDb, db, handle, limits.total);
+        return res.status(429).json({
+          ok: false,
+          error: "limit_reached",
+          used: st.used,
+          limit: limits.total,
+          remaining: Math.max(0, limits.total - st.used),
+          resetAt: null,
+          shared: true,
+        });
+      }
     }
 
     try {
@@ -356,10 +373,12 @@ app.post("/api/consume", requireAuth, consumeLimiter, async (req, res) => {
       kind,
       usage: {
         used: consume.used,
-        limit: consume.limit,
-        remaining:
-          Number.isFinite(limit) && limit < 999999 ? Math.max(0, limit - consume.used) : null,
-        resetAt: nextResetUTC(),
+        limit: sub.active ? null : limits.total,
+        baseLimit: limits.base,
+        bonusLimit: limits.bonus,
+        remaining: sub.active ? null : Math.max(0, limits.total - consume.used),
+        resetAt: null,
+        shared: true,
       },
     });
   } catch (e) {

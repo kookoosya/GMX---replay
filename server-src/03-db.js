@@ -15,6 +15,7 @@ const {
   sbFavoritesDelete,
   sbFavoritesUpsert,
   sbGetDailyUsed,
+  sbSumLegacyGenUsed,
   sbConsumeDailyAtomic,
   DB_PATH,
   db,

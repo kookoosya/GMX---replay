@@ -167,6 +167,23 @@ export function createDb(deps) {
     return Number(r.data?.[col] ?? 0);
   }
 
+  async function sbSumLegacyGenUsed(handle) {
+    const sb = getSupabaseAdmin();
+    if (!sb) return 0;
+    const h = String(handle || "").trim();
+    const r = await sb.from("usage_daily").select("gm_used, gn_used").eq("handle", h);
+    if (r.error) {
+      console.warn("SB_SUM_LEGACY_GEN_ERROR", r.error?.message || r.error);
+      return 0;
+    }
+    let sum = 0;
+    for (const row of r.data || []) {
+      sum += Math.max(0, Number(row?.gm_used || 0) || 0);
+      sum += Math.max(0, Number(row?.gn_used || 0) || 0);
+    }
+    return sum;
+  }
+
   async function sbConsumeDailyAtomic(handle, day, kind, limit, by = 1, plan = "free") {
     const sb = getSupabaseAdmin();
     if (!sb) return { ok: false, used: 0, limit, plan, error: "supabase_inactive", _sb_error: "supabase_inactive" };
@@ -225,6 +242,7 @@ export function createDb(deps) {
     sbFavoritesDelete,
     sbFavoritesUpsert,
     sbGetDailyUsed,
+    sbSumLegacyGenUsed,
     sbConsumeDailyAtomic,
     DB_PATH,
     db,
