@@ -186,6 +186,8 @@ const {
   api: (path, method, body) => api(path, method, body),
   trackEvent: (type, meta) => trackEvent(type, meta),
   onNavigateWallet: () => { try { tab("wallet"); } catch {} },
+  siteTr: (key, fb) => __gmxSiteI18nUi.siteTr(key, fb),
+  getSiteLocale: () => siteLang(),
   applyAdminVisibility: () => { try { applyAdminVisibility(); } catch {} },
   renderWalletStatus: (sub) => { try { renderWalletStatus(sub); } catch {} },
   applyRefCountEligible: (n, opts) => applyRefCountEligible(n, opts),

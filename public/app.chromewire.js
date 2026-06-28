@@ -118,8 +118,8 @@
     function setPayState(state, hint) {
       return paywall.setPayState?.(state, hint);
     }
-    function openPaySuccess() {
-      return paywall.openPaySuccess?.();
+    function openPaySuccess(payload) {
+      return paywall.openPaySuccess?.(payload);
     }
     function closePaySuccess() {
       return paywall.closePaySuccess?.();

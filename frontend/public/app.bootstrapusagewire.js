@@ -19,6 +19,8 @@
       modals,
       storage: st,
       getHandle: () => ctx.getHandle?.(),
+      siteTr: (key, fb) => ctx.siteTr?.(key, fb) ?? fb,
+      getSiteLocale: () => ctx.getSiteLocale?.() ?? "en",
       trackEvent: (type, meta) => ctx.trackEvent?.(type, meta),
       onNavigateWallet: () => {
         try {

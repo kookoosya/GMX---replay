@@ -584,9 +584,13 @@
         if (msg) msg.textContent = "Confirming & verifying on-chain...";
         const j = await verifyIntentWithRetry(intent.id, sig, payer);
 
+        if (!j?.ok || !j?.sub?.active) {
+          throw new Error("payment_not_verified");
+        }
+
         setPayState("verified", "Verified. Pro activated.");
         if (msg) msg.innerHTML = `<span class="ok">Paid & verified.</span>`;
-        trackEvent("pay_success", { v, plan: selectedPlan.key, cur });
+        trackEvent("pay_success", { v, plan: intent?.plan?.key || selectedPlan.key, cur });
 
         try {
           await refreshUsage();
@@ -599,7 +603,15 @@
         } catch {}
         renderWalletStatus(j.sub);
 
-        openPaySuccess();
+        const serverPlanLabel = String(intent?.plan?.label || "").trim();
+        const planLabel = serverPlanLabel
+          ? siteTr("pay_success_plan_pro", "Pro {plan}").replace("{plan}", serverPlanLabel)
+          : "";
+        openPaySuccess({
+          handle: getHandle(),
+          planLabel,
+          sub: j.sub,
+        });
       } catch (e) {
         const m = String(e?.message || "billing_failed");
         setPayState("failed", billingErrMsg(m));

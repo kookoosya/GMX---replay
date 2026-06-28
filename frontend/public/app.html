@@ -1279,9 +1279,16 @@ html.mode-light body.hasUserBg .panel{
 
 <!-- Payment success modal -->
 <div class="modalBack hidden" id="pay_success_modal" role="dialog" aria-modal="true" aria-labelledby="pay_success_title" aria-hidden="true">
-  <div class="modalCard" tabindex="-1">
-    <div class="title" id="pay_success_title">PRO Activated</div>
-    <div class="desc" id="pay_success_desc" style="margin-top:6px">Unlimited access is now active for your handle</div>
+  <div class="modalCard paySuccessCard" tabindex="-1">
+    <div class="title" id="pay_success_title">Pro activated</div>
+    <div class="paySuccessBody">
+      <div class="ok paySuccessHandle" id="pay_success_handle"></div>
+      <div class="paySuccessMeta">
+        <div class="paySuccessRow hidden" id="pay_success_plan_row"><span class="muted small" id="pay_success_plan_label">Plan</span> <span id="pay_success_plan"></span></div>
+        <div class="paySuccessRow hidden" id="pay_success_until_row"><span class="muted small" id="pay_success_until_label">Active until</span> <span id="pay_success_until"></span></div>
+      </div>
+      <div class="desc" id="pay_success_ready" style="margin-top:10px">Your Pro access is ready.</div>
+    </div>
     <div class="hr"></div>
     <div class="split" style="gap:10px;flex-wrap:wrap;justify-content:flex-end">
       <button class="btn" id="pay_success_ok" type="button">Continue</button>

@@ -1550,6 +1550,21 @@ html.mode-light .skeleton{
   background: rgba(18,22,34,.82);
   box-shadow: var(--shadow);
   padding: var(--pad2);
+}
+.paySuccessCard .paySuccessHandle{
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 6px;
+}
+.paySuccessMeta{
+  margin-top: 10px;
+  display: grid;
+  gap: 6px;
+}
+.paySuccessRow{
+  font-size: 14px;
+}
+.modalCard:focus{
   outline: none;
 }
 body.gmx-modal-open{
