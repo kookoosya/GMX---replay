@@ -31,6 +31,7 @@
   "plan_cmp_val_free_lines": "प्रत्येक में 50 तक",
   "plan_cmp_unlimited": "असीमित",
   "plan_cmp_val_free_daily": "सीमित",
+  "plan_modal_cmp_val_free_daily": "सीमित",
   "plan_cmp_full_daily": "पूर्ण सीमा",
   "plan_cmp_val_free_themes": "रेफ़रल अनलॉक",
   "plan_cmp_all_themes": "सब अनलॉक",
@@ -42,7 +43,6 @@
   "plan_cmp_all_arcade": "सभी गेम",
   "plan_modal_cmp_val_free_lines": "प्रत्येक में 50 तक",
   "plan_modal_cmp_unlimited": "असीमित",
-  "plan_modal_cmp_val_free_daily": "सीमित",
   "plan_modal_cmp_full_daily": "पूर्ण सीमा",
   "plan_modal_cmp_val_free_themes": "रेफ़रल अनलॉक",
   "plan_modal_cmp_all_themes": "सब अनलॉक",
@@ -168,6 +168,9 @@
   "err_rate_limited": "Too many requests",
   "err_busy": "Busy, try again",
   "err_limit_reached": "Limit reached",
+  "gen_daily_limit_reached": "Daily generation limit reached. Upgrade to Pro for unlimited generation.",
+  "limit_modal_daily_a": "You reached today's free generation limit. Upgrade to Pro for unlimited daily generation.",
+  "limit_modal_daily_b": "Daily generation cap reached. Pro removes daily limits and unlocks everything.",
   "err_upgrade_required": "अपग्रेड आवश्यक है",
   "err_invalid_handle": "Invalid handle",
   "err_init_failed": "Init failed",
@@ -370,7 +373,7 @@
   "extthemes_right_list": [
     "Skins और wallpapers साइट पर चुने जाते हैं और extension में sync होते हैं।",
     "एक समय में सिर्फ 1 skin active रहता है।",
-    "Pro 70‑line cap भी हटाता है और सभी writing styles / preset packs unlock करता है।",
+    "Pro 50‑line cap भी हटाता है और सभी writing styles / preset packs unlock करता है।",
     "<b>Pro</b> removes save-line caps and unlocks all writing styles and preset packs, same as the main site."
   ],
   "themes_right": "थीम्स के बारे में",
@@ -385,25 +388,25 @@
   "gm_right_desc": "छोटे सुबह के GM जवाब — प्राकृतिक, सीधे, पेस्ट करने में आसान।",
   "gm_right_list": [
     "<b>This bank</b>: one saved GM bank for this section. No hidden language split.",
-    "<b>Random 1/10/70</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
+    "<b>Quick 1 / Batch 10</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
     "<b>Repeat guard</b>: filters recent or too-similar lines so bulk generation does not collapse into near-duplicates.",
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
     "Manual input drafts are auto-saved.",
     "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
-    "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
+    "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "GN कैसे इस्तेमाल करें",
   "gn_right_desc": "छोटे रात के GN जवाब — शांत, मानवीय, पेस्ट करने में आसान।",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
-    "<b>Random 1/10/70</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
+    "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
     "<b>Repeat guard</b> reduces duplicates and near-duplicates during larger generation runs.",
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
     "Manual input drafts are auto-saved.",
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
-    "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
+    "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
   "gn_desc": "छोटे रात के जवाब — आप खुद एडिट और पेस्ट करते हैं। एक सेव्ड बैंक; Free में लाइन सीमा।",
   "ref_desc": "रेफरल: अपना लिंक साझा करें। पुष्टि = कनेक्ट, सक्रिय = उपयोग, योग्य = max(सक्रिय, कैरी-ओवर)। बोनस: 20 योग्य पर +10/दिन (50+ पर +12)।",
@@ -510,7 +513,7 @@
     "<b>Step 1:</b> Connect your X handle (one-time).",
     "<b>Step 2:</b> Build lists in the <span class=\"kbd\">GM</span> / <span class=\"kbd\">GN</span> tabs.",
     "<b>Step 3:</b> Use the Chrome extension to copy a reply, then paste it manually on X.",
-    "<b>Limits:</b> Free = up to <b>70 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
+    "<b>Limits:</b> Free = up to <b>50 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
   ],
   "gm_title": "GM रिप्लाई",
   "gm_note": "Lines are stored in this browser. Pro adds cloud sync when enabled for your account.",
@@ -581,7 +584,7 @@
   "ui_sync": "सिंक",
   "w_right_desc": "Free में आप GM lists बना/एडिट कर सकते हैं। Pro सब unlock करता है और limits हटाता है।",
   "w_right_list": [
-    "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
+    "<b>Free:</b> save up to <b>50</b> GM lines + <b>50</b> GN lines (edit anytime). Daily generation: <b>50</b>/day each.",
     "<b>Referrals:</b> धीरे‑धीरे themes/skins/packs unlock करते हैं। Details <b>Referrals</b> tab में।",
     "<b>Pro:</b> अनलिमिटेड सेव्ड लाइन्स, पूरी दैनिक जनरेशन, मजबूत <b>Best</b> फ्लो, सब अनलॉक (सभी Arcade गेम्स और सक्रिय होने पर Cloud sync सहित)।",
     "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",

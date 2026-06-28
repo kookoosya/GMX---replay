@@ -24,8 +24,8 @@
       const gnSaved = Number(lastSaved.gn ?? 0) || 0;
       const gmUsed = Number(lastUsage?.gm?.used ?? 0) || 0;
       const gnUsed = Number(lastUsage?.gn?.used ?? 0) || 0;
-      const gmLimit = normLimitForUI(lastUsage?.gm?.limit ?? 70);
-      const gnLimit = normLimitForUI(lastUsage?.gn?.limit ?? 70);
+      const gmLimit = normLimitForUI(lastUsage?.gm?.limit ?? 50);
+      const gnLimit = normLimitForUI(lastUsage?.gn?.limit ?? 50);
       const saveCap = getSaveCapFree();
 
       const savedEl = $("help_saved");
@@ -58,7 +58,7 @@
         if (isPro() || gmLimit === Infinity || gnLimit === Infinity) dailyFill.style.width = "100%";
         else {
           const used = gmUsed + gnUsed;
-          const cap = gmLimit + gnLimit || 140;
+          const cap = gmLimit + gnLimit || 100;
           dailyFill.style.width = Math.min(100, Math.round((used / cap) * 100)) + "%";
         }
       }

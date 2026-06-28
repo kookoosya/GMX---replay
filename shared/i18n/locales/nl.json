@@ -31,6 +31,7 @@
   "plan_cmp_val_free_lines": "Tot 50 per tab",
   "plan_cmp_unlimited": "Onbeperkt",
   "plan_cmp_val_free_daily": "Beperkt",
+  "plan_modal_cmp_val_free_daily": "Beperkt",
   "plan_cmp_full_daily": "Volledige limiet",
   "plan_cmp_val_free_themes": "Referral-unlocks",
   "plan_cmp_all_themes": "Alles vrij",
@@ -42,7 +43,6 @@
   "plan_cmp_all_arcade": "Alle spellen",
   "plan_modal_cmp_val_free_lines": "Tot 50 per tab",
   "plan_modal_cmp_unlimited": "Onbeperkt",
-  "plan_modal_cmp_val_free_daily": "Beperkt",
   "plan_modal_cmp_full_daily": "Volledige limiet",
   "plan_modal_cmp_val_free_themes": "Referral-unlocks",
   "plan_modal_cmp_all_themes": "Alles vrij",
@@ -168,6 +168,9 @@
   "err_rate_limited": "Too many requests",
   "err_busy": "Busy, try again",
   "err_limit_reached": "Limit reached",
+  "gen_daily_limit_reached": "Daily generation limit reached. Upgrade to Pro for unlimited generation.",
+  "limit_modal_daily_a": "You reached today's free generation limit. Upgrade to Pro for unlimited daily generation.",
+  "limit_modal_daily_b": "Daily generation cap reached. Pro removes daily limits and unlocks everything.",
   "err_upgrade_required": "Upgrade required",
   "err_invalid_handle": "Invalid handle",
   "err_init_failed": "Init failed",
@@ -359,7 +362,7 @@
   "themes_right_list": [
     "Kies links een ontgrendeld thema.",
     "Wallpapers en achtergronden worden direct toegepast.",
-    "In Free zijn sommige items locked. Pro unlockt alles en verwijdert de 70‑regels limiet.",
+    "In Free zijn sommige items locked. Pro unlockt alles en verwijdert de 50‑regels limiet.",
     "Custom backgrounds (Pro) zijn auto‑fit en syncen later naar de extensie."
   ],
   "themes_wp_section_title": "Site-wallpapers",
@@ -370,7 +373,7 @@
   "extthemes_right_list": [
     "Skins en wallpapers kies je op de site en worden gesynchroniseerd naar de extension.",
     "Er kan maar 1 skin tegelijk actief zijn.",
-    "Pro verwijdert ook de 70‑regels cap en unlockt alle writing styles / preset packs.",
+    "Pro verwijdert ook de 50‑regels cap en unlockt alle writing styles / preset packs.",
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "Over thema’s",
@@ -385,25 +388,25 @@
   "gm_right_desc": "Korte GM-ochtendantwoorden — natuurlijk, direct, makkelijk te plakken.",
   "gm_right_list": [
     "<b>This bank</b>: one saved GM bank for this section. No hidden language split.",
-    "<b>Random 1/10/70</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
+    "<b>Quick 1 / Batch 10</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
     "<b>Repeat guard</b>: filters recent or too-similar lines so bulk generation does not collapse into near-duplicates.",
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Alles kopiëren</b>/<b>Exporteren .txt</b>: maak een back-up van de GM-bank.",
     "Handmatige invoerconcepten worden automatisch opgeslagen.",
     "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
-    "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
+    "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "GN gebruiken",
   "gn_right_desc": "Korte GN-nachtantwoorden — rustig, menselijk, makkelijk te plakken.",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
-    "<b>Random 1/10/70</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
+    "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
     "<b>Repeat guard</b> reduces duplicates and near-duplicates during larger generation runs.",
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Alles kopiëren</b>/<b>Exporteren .txt</b>: maak een back-up van de GN-bank.",
     "Handmatige invoerconcepten worden automatisch opgeslagen.",
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
-    "Gratis limiet is 70 opgeslagen regels in totaal voor de GN-bank. Als u 70/70 bereikt, vervangen nieuwe gegenereerde lijnen de oudere. Bewerken is onbeperkt."
+    "Gratis limiet is 70 opgeslagen regels in totaal voor de GN-bank. Als u 50/50 bereikt, vervangen nieuwe gegenereerde lijnen de oudere. Bewerken is onbeperkt."
   ],
   "gn_desc": "Korte avondantwoorden — u bewerkt en plakt zelf. Eén opgeslagen bank; Gratis heeft een regellimiet.",
   "ref_desc": "Referrals: deel uw link. Bevestigd = verbonden, Actief = gebruikt, In aanmerking = max(actief, carry-over). Bonus: +10/dag per 20 in aanmerking (+12 bij 50+).",
@@ -510,7 +513,7 @@
     "<b>Step 1:</b> Connect your X handle (one-time).",
     "<b>Step 2:</b> Build lists in the <span class=\"kbd\">GM</span> / <span class=\"kbd\">GN</span> tabs.",
     "<b>Step 3:</b> Use the Chrome extension to copy a reply, then paste it manually on X.",
-    "<b>Limits:</b> Free = up to <b>70 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
+    "<b>Limits:</b> Free = up to <b>50 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
   ],
   "gm_title": "GM-replies",
   "gm_note": "Lijnen worden in deze browser opgeslagen. Pro voegt cloudsynchronisatie toe wanneer ingeschakeld voor uw account.",
@@ -581,7 +584,7 @@
   "ui_sync": "Sync",
   "w_right_desc": "Free: je kunt je GM-lijsten bouwen en bewerken. Pro unlockt alles en verwijdert limieten.",
   "w_right_list": [
-    "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
+    "<b>Free:</b> save up to <b>50</b> GM lines + <b>50</b> GN lines (edit anytime). Daily generation: <b>50</b>/day each.",
     "<b>Referrals:</b> unlocken geleidelijk themes/skins/packs. Details in tab <b>Referrals</b>.",
     "<b>Pro:</b> onbeperkte opgeslagen regels, volledige dagelijkse generatie, sterkere <b>Best</b>-flow, ontgrendel alles (inclusief alle Arcade-games en Cloud sync wanneer actief).",
     "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",

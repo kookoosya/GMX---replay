@@ -30,7 +30,8 @@
   "plan_modal_cmp_feat_sync": "Cloud sync",
   "plan_cmp_val_free_lines": "Up to 50 each",
   "plan_cmp_unlimited": "Unlimited",
-  "plan_cmp_val_free_daily": "Limited",
+  "plan_cmp_val_free_daily": "50/day each",
+  "plan_modal_cmp_val_free_daily": "50/day each",
   "plan_cmp_full_daily": "Full limit",
   "plan_cmp_val_free_themes": "Referral unlocks",
   "plan_cmp_all_themes": "All unlocked",
@@ -42,7 +43,6 @@
   "plan_cmp_all_arcade": "All games",
   "plan_modal_cmp_val_free_lines": "Up to 50 each",
   "plan_modal_cmp_unlimited": "Unlimited",
-  "plan_modal_cmp_val_free_daily": "Limited",
   "plan_modal_cmp_full_daily": "Full limit",
   "plan_modal_cmp_val_free_themes": "Referral unlocks",
   "plan_modal_cmp_all_themes": "All unlocked",
@@ -168,6 +168,9 @@
   "err_rate_limited": "Too many requests",
   "err_busy": "Busy, try again",
   "err_limit_reached": "Limit reached",
+  "gen_daily_limit_reached": "Daily generation limit reached. Upgrade to Pro for unlimited generation.",
+  "limit_modal_daily_a": "You reached today's free generation limit. Upgrade to Pro for unlimited daily generation.",
+  "limit_modal_daily_b": "Daily generation cap reached. Pro removes daily limits and unlocks everything.",
   "err_upgrade_required": "Upgrade required",
   "err_invalid_handle": "Invalid handle",
   "err_init_failed": "Init failed",
@@ -385,25 +388,25 @@
   "gm_right_desc": "Build short English morning replies to someone else’s post. Keep them natural, direct, and easy to paste.",
   "gm_right_list": [
     "<b>This bank</b>: one saved GM bank for this section. No hidden language split.",
-    "<b>Random 1/10/70</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
+    "<b>Quick 1 / Batch 10</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
     "<b>Repeat guard</b>: filters recent or too-similar lines so bulk generation does not collapse into near-duplicates.",
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
     "Manual input drafts are auto-saved.",
     "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
-    "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
+    "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "How to use GN",
   "gn_right_desc": "Build short English night replies to someone else’s post. Keep them calm, human, and easy to paste.",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
-    "<b>Random 1/10/70</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
+    "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
     "<b>Repeat guard</b> reduces duplicates and near-duplicates during larger generation runs.",
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
     "Manual input drafts are auto-saved.",
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
-    "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
+    "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
   "gn_desc": "Short night replies you edit and paste yourself. One saved bank for this section; Free has a saved-line cap.",
   "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
@@ -510,7 +513,7 @@
     "<b>Step 1:</b> Connect your X handle (one-time).",
     "<b>Step 2:</b> Build lists in the <span class=\"kbd\">GM</span> / <span class=\"kbd\">GN</span> tabs.",
     "<b>Step 3:</b> Use the Chrome extension to copy a reply, then paste it manually on X.",
-    "<b>Limits:</b> Free = up to <b>70 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
+    "<b>Limits:</b> Free = up to <b>50 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
   ],
   "gm_title": "GM replies",
   "gm_note": "Lines are stored in this browser. Pro adds cloud sync when enabled for your account.",

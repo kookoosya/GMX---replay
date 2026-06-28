@@ -24,6 +24,17 @@ function initGenerator() {
     generateUnique,
     generateRankedCandidates,
     saveRecent,
+    todayKeyUTC,
+    userByHandle,
+    subscriptionInfo,
+    insertLimitForUser,
+    awardReferralBonus,
+    maybeAwardStarterReward,
+    supabaseActive,
+    sbConsumeDailyAtomic,
+    consumeDailyAtomic,
+    nextResetUTC,
+    logActivity,
   });
   registerProToolsRoutes({
     app,

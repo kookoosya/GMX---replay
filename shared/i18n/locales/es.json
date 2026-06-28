@@ -31,6 +31,7 @@
   "plan_cmp_val_free_lines": "Hasta 50 cada uno",
   "plan_cmp_unlimited": "Ilimitado",
   "plan_cmp_val_free_daily": "Limitado",
+  "plan_modal_cmp_val_free_daily": "Limitado",
   "plan_cmp_full_daily": "Límite completo",
   "plan_cmp_val_free_themes": "Desbloqueo por referral",
   "plan_cmp_all_themes": "Todo desbloqueado",
@@ -42,7 +43,6 @@
   "plan_cmp_all_arcade": "Todos los juegos",
   "plan_modal_cmp_val_free_lines": "Hasta 50 cada uno",
   "plan_modal_cmp_unlimited": "Ilimitado",
-  "plan_modal_cmp_val_free_daily": "Limitado",
   "plan_modal_cmp_full_daily": "Límite completo",
   "plan_modal_cmp_val_free_themes": "Desbloqueo por referral",
   "plan_modal_cmp_all_themes": "Todo desbloqueado",
@@ -168,6 +168,9 @@
   "err_rate_limited": "Demasiadas solicitudes",
   "err_busy": "Ocupado, inténtalo de nuevo",
   "err_limit_reached": "Límite alcanzado",
+  "gen_daily_limit_reached": "Daily generation limit reached. Upgrade to Pro for unlimited generation.",
+  "limit_modal_daily_a": "You reached today's free generation limit. Upgrade to Pro for unlimited daily generation.",
+  "limit_modal_daily_b": "Daily generation cap reached. Pro removes daily limits and unlocks everything.",
   "err_upgrade_required": "Se requiere actualización",
   "err_invalid_handle": "Identificador no válido",
   "err_init_failed": "Inicialización fallida",
@@ -359,7 +362,7 @@
   "themes_right_list": [
     "Elige un tema desbloqueado a la izquierda.",
     "Los wallpapers y fondos se aplican al instante.",
-    "En Free, algunas opciones están bloqueadas. Pro lo desbloquea todo y quita el límite de 70 líneas.",
+    "En Free, algunas opciones están bloqueadas. Pro lo desbloquea todo y quita el límite de 50 líneas.",
     "Los fondos personalizados (Pro) se auto‑ajustan y luego se sincronizarán con la extensión."
   ],
   "themes_wp_section_title": "Fondos de pantalla del sitio",
@@ -370,7 +373,7 @@
   "extthemes_right_list": [
     "Skins y wallpapers se eligen en el sitio y se sincronizan con la extensión.",
     "Solo 1 skin puede estar activo a la vez.",
-    "Pro también quita el límite de 70 líneas y desbloquea todos los writing styles / preset packs.",
+    "Pro también quita el límite de 50 líneas y desbloquea todos los writing styles / preset packs.",
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "Sobre Temas",
@@ -385,25 +388,25 @@
   "gm_right_desc": "Respuestas GM cortas por la mañana — naturales, directas, fáciles de pegar.",
   "gm_right_list": [
     "<b>Este banco</b>: un banco GM guardado para esta sección. Sin división de idioma oculta.",
-    "<b>Aleatorio 1/10/70</b>: añade nuevas líneas al banco GM. Min se queda corto, Mid se mantiene equilibrado, Max puede respirar un poco más.",
+    "<b>Quick 1 / Batch 10</b>: añade nuevas líneas al banco GM. Min se queda corto, Mid se mantiene equilibrado, Max puede respirar un poco más.",
     "<b>Repeat guard</b>: filters recent or too-similar lines so bulk generation does not collapse into near-duplicates.",
     "Utilice <b>Filtro</b> para buscar dentro de sus líneas guardadas.",
     "<b>Copiar todo</b>/<b>Exportar .txt</b>: copia de seguridad del banco GM.",
     "Los borradores de entrada manual se guardan automáticamente.",
     "<b>La vista clara</b> borra el banco GM visible. <b>Borrar TODO</b> borra todas las líneas de GM guardadas para esta sección.",
-    "El límite gratuito cuenta en todo el banco de GM. Si llegas a 70/70, las nuevas líneas generadas reemplazan a las antiguas (la edición es ilimitada)."
+    "El límite gratuito cuenta en todo el banco de GM. Si llegas a 50/50, las nuevas líneas generadas reemplazan a las antiguas (la edición es ilimitada)."
   ],
   "gn_right": "Cómo usar GN",
   "gn_right_desc": "Respuestas GN cortas por la noche — calmadas, humanas, fáciles de pegar.",
   "gn_right_list": [
     "<b>Este banco</b>: un banco GN guardado para esta sección. Sin división de idioma oculta.",
-    "<b>Random 1/10/70</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
+    "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
     "<b>La protección de repetición</b> reduce los duplicados y casi duplicados durante las ejecuciones de generación más grandes.",
     "Utilice <b>Filtro</b> para buscar dentro de sus líneas guardadas.",
     "<b>Copiar todo</b>/<b>Exportar .txt</b>: copia de seguridad del banco GN.",
     "Los borradores de entrada manual se guardan automáticamente.",
     "<b>La vista clara</b> borra el banco de GN visible. <b>Borrar TODO</b> borra todas las líneas GN guardadas para esta sección.",
-    "El límite gratuito es de 70 líneas guardadas en total para el banco GN. Si llegas a 70/70, las nuevas líneas generadas reemplazan a las más antiguas. La edición es ilimitada."
+    "El límite gratuito es de 50 líneas guardadas en total para el banco GN. Si llegas a 50/50, las nuevas líneas generadas reemplazan a las más antiguas. La edición es ilimitada."
   ],
   "gn_desc": "Respuestas nocturnas cortas que editas y pegas tú mismo. Un banco guardado para esta sección; Gratis tiene un límite de línea guardada.",
   "ref_desc": "Referidos: comparte tu enlace. Confirmado = conectado, Activo = usó el producto, Elegible = max(activos, arrastre). Bono: +10/día por cada 20 elegibles (+12 con 50+).",
@@ -510,7 +513,7 @@
     "<b>Step 1:</b> Connect your X handle (one-time).",
     "<b>Step 2:</b> Build lists in the <span class=\"kbd\">GM</span> / <span class=\"kbd\">GN</span> tabs.",
     "<b>Step 3:</b> Use the Chrome extension to copy a reply, then paste it manually on X.",
-    "<b>Limits:</b> Free = up to <b>70 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
+    "<b>Limits:</b> Free = up to <b>50 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
   ],
   "gm_title": "Respuestas GM",
   "gm_note": "Las líneas se almacenan en este navegador. Pro añade la sincronización en la nube cuando está habilitada para tu cuenta.",
@@ -581,7 +584,7 @@
   "ui_sync": "Sincronizar",
   "w_right_desc": "Free te deja crear y editar tus listas GM. Pro desbloquea todo y quita límites.",
   "w_right_list": [
-    "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
+    "<b>Free:</b> save up to <b>50</b> GM lines + <b>50</b> GN lines (edit anytime). Daily generation: <b>50</b>/day each.",
     "<b>Referidos:</b> desbloquean temas/skins/packs poco a poco. Detalles en <b>Referrals</b>.",
     "<b>Pro:</b> líneas guardadas ilimitadas, generación diaria completa, flujo <b>Best</b> más fuerte, desbloquea todo (incluidos todos los juegos del Arcade y Cloud sync cuando esté activo).",
     "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",

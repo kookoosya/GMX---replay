@@ -893,7 +893,7 @@ test("usage: normLimitForUI and setMeter", () => {
     getToken: () => "",
     getSaveCapFree: () => 50,
   });
-  assert.equal(usage.normLimitForUI(70), 70);
+  assert.equal(usage.normLimitForUI(50), 50);
   assert.equal(usage.normLimitForUI(999999), Infinity);
   assert.equal(usage.normLimitForUI("x"), Infinity);
   usage.setMeter(null, null, 3, 10);
@@ -904,7 +904,7 @@ test("help: factory exports modal helpers", () => {
     $: () => null,
     isPro: () => false,
     getSaveCapFree: () => 50,
-    getLastUsage: () => ({ gm: { used: 1, limit: 70 }, gn: { used: 2, limit: 70 } }),
+    getLastUsage: () => ({ gm: { used: 1, limit: 50 }, gn: { used: 2, limit: 50 } }),
     getLastSaved: () => ({ gm: 0, gn: 0 }),
     normLimitForUI: (n) => n,
   });
@@ -1092,7 +1092,7 @@ function makeUsageCtx(overrides = {}) {
     getHandle: () => "@demo",
     api: async () => ({}),
     isPro: () => false,
-    getSaveCapFree: () => 70,
+    getSaveCapFree: () => 50,
     setSaveCapFree: () => {},
     setAuthOk: () => {},
     applyAdminVisibility: () => {},
@@ -1173,11 +1173,11 @@ test("usage: authenticated false clears auth without applying guest usage", asyn
       api: async () => ({
         ok: true,
         authenticated: false,
-        gm: { used: 5, limit: 70 },
-        gn: { used: 3, limit: 70 },
+        gm: { used: 5, limit: 50 },
+        gn: { used: 3, limit: 50 },
         resetAt: "2026-06-26T00:00:00.000Z",
         sub: { active: false },
-        limits: { freeDaily: 70, saveCapFree: 70, referralUnlocks: { eligible: 0 } },
+        limits: { freeDaily: 50, saveCapFree: 50, referralUnlocks: { eligible: 0 } },
       }),
       setAuthOk: (v) => {
         authOkCalls.push(!!v);
@@ -1210,11 +1210,11 @@ test("usage: authenticated true keeps usage refresh flow", async () => {
       api: async () => ({
         ok: true,
         authenticated: true,
-        gm: { used: 12, limit: 70 },
-        gn: { used: 8, limit: 70 },
+        gm: { used: 12, limit: 50 },
+        gn: { used: 8, limit: 50 },
         resetAt: "2026-06-26T00:00:00.000Z",
         sub: { active: true, tier: "pro" },
-        limits: { freeDaily: 70, saveCapFree: 70, referralUnlocks: { eligible: 2 } },
+        limits: { freeDaily: 50, saveCapFree: 50, referralUnlocks: { eligible: 2 } },
       }),
       setAuthOk: (v) => {
         authOkCalls.push(!!v);
@@ -1227,8 +1227,8 @@ test("usage: authenticated true keeps usage refresh flow", async () => {
 
   await usage.refreshUsage();
   assert.ok(authOkCalls.includes(true));
-  assert.deepEqual(lastUsagePayload?.gm, { used: 12, limit: 70 });
-  assert.deepEqual(lastUsagePayload?.gn, { used: 8, limit: 70 });
+  assert.deepEqual(lastUsagePayload?.gm, { used: 12, limit: 50 });
+  assert.deepEqual(lastUsagePayload?.gn, { used: 8, limit: 50 });
 });
 
 test("siteboot: restores handle pill and marks init done", () => {

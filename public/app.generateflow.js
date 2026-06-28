@@ -50,6 +50,18 @@
       typeof ctx.yieldToUiFrame === "function" ? ctx.yieldToUiFrame : async () => {};
     const cleanFillStrength = Number(ctx.cleanFillStrength || 2) || 2;
     const gen = ctx.gen || {};
+    const isPro = typeof ctx.isPro === "function" ? ctx.isPro : () => false;
+    const getLastUsage = typeof ctx.getLastUsage === "function" ? ctx.getLastUsage : () => ({});
+    const openLimitModal = typeof ctx.openLimitModal === "function" ? ctx.openLimitModal : () => {};
+    const normLimitForUI =
+      typeof ctx.normLimitForUI === "function"
+        ? ctx.normLimitForUI
+        : (n) => {
+            const x = Number(n);
+            if (!Number.isFinite(x)) return Infinity;
+            if (x >= 999999) return Infinity;
+            return x;
+          };
     const mergeAppendUnique =
       typeof ctx.mergeAppendUnique === "function" ? ctx.mergeAppendUnique : (_a, b) => b;
     const recordBatchHistory =
@@ -57,7 +69,17 @@
     const renderGenHistory =
       typeof ctx.renderGenHistory === "function" ? ctx.renderGenHistory : () => {};
 
+    function dailyRemaining(kind) {
+      if (isPro()) return Infinity;
+      const slot = getLastUsage()?.[kind] || {};
+      const limit = normLimitForUI(slot.limit);
+      if (limit === Infinity) return Infinity;
+      const used = Number(slot.used || 0) || 0;
+      return Math.max(0, limit - used);
+    }
+
     async function generate(kind, count) {
+      let didRender = false;
       if (!requireConnected(kind === "gm" ? "GM" : "GN")) return;
       const msgElEarly = kind === "gm" ? $("gmMsg") : $("gnMsg");
       if (!getToken() && getHandle()) {
@@ -88,11 +110,29 @@
       const beforeCount = readKey(keyActive).length;
 
       const remSlots = remainingSlots(kind);
-      const effCount = remSlots === Infinity ? count : Math.max(0, Math.min(count, remSlots));
+      const dailyRem = dailyRemaining(kind);
+      if (dailyRem <= 0) {
+        if (msgElEarly) {
+          msgElEarly.innerHTML = `<span class="warn">${escapeHtml(
+            siteTr("gen_daily_limit_reached", "Daily generation limit reached. Upgrade to Pro for unlimited generation.")
+          )}</span>`;
+        }
+        openLimitModal({
+          reason: "daily",
+          kind,
+          resetAt: getLastUsage()?.resetAt || "",
+        });
+        postEvent("limit_hit", { where: "daily", kind });
+        return;
+      }
+      const effCount = remSlots === Infinity
+        ? (dailyRem === Infinity ? count : Math.min(count, dailyRem))
+        : Math.max(0, Math.min(count, remSlots, dailyRem === Infinity ? count : dailyRem));
 
       if (effCount <= 0) {
-        if (msgEl)
-          msgEl.innerHTML = `<span class="warn">Free save limit reached (${saveCap()}). You can still copy lines, but no saved line will be replaced automatically.</span>`;
+        if (msgElEarly) {
+          msgElEarly.innerHTML = `<span class="warn">Free save limit reached (${saveCap()}). You can still copy lines, but no saved line will be replaced automatically.</span>`;
+        }
         postEvent("limit_hit", { where: "save_cap", kind });
         renderList(kind);
         didRender = true;
@@ -114,7 +154,6 @@
       const ctrl = new AbortController();
       abort[kind] = ctrl;
 
-      let didRender = false;
       try {
         if (count === 1) {
           const tries = Math.max(1, Math.min(4, 1 + Math.floor(strength / 2)));
@@ -283,6 +322,13 @@
       } catch (e) {
         const m = e && e.message ? e.message : "failed";
         const friendly = friendlyUiErrorMessage(m, { scope: "generate" });
+        if (/limit_reached|daily limit/i.test(String(m || ""))) {
+          openLimitModal({
+            reason: "daily",
+            kind,
+            resetAt: getLastUsage()?.resetAt || "",
+          });
+        }
         if (msgEl) msgEl.innerHTML = `<span class="bad">${escapeHtml(friendly)}</span>`;
         try {
           toast("bad", `<b>Generate failed:</b> ${escapeHtml(friendly)}`);

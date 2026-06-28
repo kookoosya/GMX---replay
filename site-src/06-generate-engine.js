@@ -11,6 +11,7 @@
       requireConnected,
       getToken,
       initSession,
+      isPro,
     },
     ui: {
       renderReferralRightCopy,
@@ -26,6 +27,8 @@
       setBusy,
       refreshUsage,
       toast,
+      openLimitModal,
+      normLimitForUI,
     },
     params: {
       readGenParams,
@@ -46,6 +49,7 @@
       writeKey,
       remainingSlots,
       saveCap,
+      getLastUsage: () => LAST_USAGE,
       pushRecent,
       oneClickCleanup,
     },

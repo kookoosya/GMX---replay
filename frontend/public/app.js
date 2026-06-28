@@ -855,6 +855,7 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
       requireConnected,
       getToken,
       initSession,
+      isPro,
     },
     ui: {
       renderReferralRightCopy,
@@ -870,6 +871,8 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
       setBusy,
       refreshUsage,
       toast,
+      openLimitModal,
+      normLimitForUI,
     },
     params: {
       readGenParams,
@@ -890,6 +893,7 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
       writeKey,
       remainingSlots,
       saveCap,
+      getLastUsage: () => LAST_USAGE,
       pushRecent,
       oneClickCleanup,
     },

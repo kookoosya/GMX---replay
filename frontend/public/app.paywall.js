@@ -64,11 +64,25 @@
       const hint = $("limit_modal_hint");
       const kind = payload?.kind || "gm";
       const resetAt = payload?.resetAt || "";
+      const reason = payload?.reason || "save_cap";
       if (desc) {
-        desc.textContent =
-          v === "A"
-            ? `You reached the free saved-line cap for ${kind.toUpperCase()}. Upgrade to Pro for unlimited saved lines + all cosmetics`
-            : `Free saved-line cap reached for ${kind.toUpperCase()}. Pro removes caps and unlocks everything`;
+        if (reason === "daily") {
+          desc.textContent =
+            v === "A"
+              ? siteTr(
+                  "limit_modal_daily_a",
+                  `You reached today's free generation limit for ${kind.toUpperCase()}. Upgrade to Pro for unlimited daily generation`
+                )
+              : siteTr(
+                  "limit_modal_daily_b",
+                  `Daily generation cap reached for ${kind.toUpperCase()}. Pro removes daily limits and unlocks everything`
+                );
+        } else {
+          desc.textContent =
+            v === "A"
+              ? `You reached the free saved-line cap for ${kind.toUpperCase()}. Upgrade to Pro for unlimited saved lines + all cosmetics`
+              : `Free saved-line cap reached for ${kind.toUpperCase()}. Pro removes caps and unlocks everything`;
+        }
       }
       if (hint) hint.textContent = resetAt ? `Next reset: ${resetAt}` : "";
       openModal("limit_modal");

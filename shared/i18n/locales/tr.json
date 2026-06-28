@@ -31,6 +31,7 @@
   "plan_cmp_val_free_lines": "Her biri için 50'ye kadar",
   "plan_cmp_unlimited": "Sınırsız",
   "plan_cmp_val_free_daily": "Sınırlı",
+  "plan_modal_cmp_val_free_daily": "Sınırlı",
   "plan_cmp_full_daily": "Tam limit",
   "plan_cmp_val_free_themes": "Referral ile açılır",
   "plan_cmp_all_themes": "Hepsi açık",
@@ -42,7 +43,6 @@
   "plan_cmp_all_arcade": "Tüm oyunlar",
   "plan_modal_cmp_val_free_lines": "Her biri için 50'ye kadar",
   "plan_modal_cmp_unlimited": "Sınırsız",
-  "plan_modal_cmp_val_free_daily": "Sınırlı",
   "plan_modal_cmp_full_daily": "Tam limit",
   "plan_modal_cmp_val_free_themes": "Referral ile açılır",
   "plan_modal_cmp_all_themes": "Hepsi açık",
@@ -168,6 +168,9 @@
   "err_rate_limited": "Çok fazla istek",
   "err_busy": "Meşgul, tekrar dene",
   "err_limit_reached": "Sınıra ulaşıldı",
+  "gen_daily_limit_reached": "Daily generation limit reached. Upgrade to Pro for unlimited generation.",
+  "limit_modal_daily_a": "You reached today's free generation limit. Upgrade to Pro for unlimited daily generation.",
+  "limit_modal_daily_b": "Daily generation cap reached. Pro removes daily limits and unlocks everything.",
   "err_upgrade_required": "Yükseltme gerekli",
   "err_invalid_handle": "Geçersiz tanıtıcı",
   "err_init_failed": "Başlatma başarısız oldu",
@@ -359,7 +362,7 @@
   "themes_right_list": [
     "Solda kilidi açık bir tema seç.",
     "Duvar kâğıtları ve arka planlar anında uygulanır.",
-    "Free’de bazı öğeler kilitli. Pro hepsini açar ve 70 satır limitini kaldırır.",
+    "Free’de bazı öğeler kilitli. Pro hepsini açar ve 50 satır limitini kaldırır.",
     "Özel arka planlar (Pro) auto‑fit ve daha sonra eklentiye senkronlanır."
   ],
   "themes_wp_section_title": "Site duvar kağıtları",
@@ -370,7 +373,7 @@
   "extthemes_right_list": [
     "Skin ve duvar kâğıtları siteden seçilir ve extension’a senkronlanır.",
     "Aynı anda sadece 1 skin aktif olabilir.",
-    "Pro ayrıca 70 satır limitini kaldırır ve tüm writing styles / preset packs’i açar.",
+    "Pro ayrıca 50 satır limitini kaldırır ve tüm writing styles / preset packs’i açar.",
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "Temalar hakkında",
@@ -385,25 +388,25 @@
   "gm_right_desc": "Kısa sabah GM yanıtları — doğal, net, yapıştırmaya hazır.",
   "gm_right_list": [
     "<b>Bu banka</b>: bu bölüm için kaydedilen bir GM bankası. Gizli dil bölünmesi yok.",
-    "<b>Random 1/10/70</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
+    "<b>Quick 1 / Batch 10</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
     "<b>Repeat guard</b>: filters recent or too-similar lines so bulk generation does not collapse into near-duplicates.",
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
     "Manual input drafts are auto-saved.",
     "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
-    "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
+    "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "GN nasıl kullanılır",
   "gn_right_desc": "Kısa gece GN yanıtları — sakin, insani, yapıştırmaya hazır.",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
-    "<b>Random 1/10/70</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
+    "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
     "<b>Tekrar koruması</b>, daha büyük üretim çalışmaları sırasında kopyaları ve neredeyse kopyaları azaltır.",
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
     "Manual input drafts are auto-saved.",
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
-    "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
+    "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
   "gn_desc": "Kısa gece yanıtları — kendiniz düzenleyip yapıştırırsınız. Bu bölüm için tek kayıtlı banka; Free’de satır limiti vardır.",
   "ref_desc": "Referanslar: bağlantınızı paylaşın. Onaylı = bağlı, Aktif = kullandı, Uygun = max(aktif, devir). Bonus: 20 uygun başına +10/gün (50+ için +12).",
@@ -510,7 +513,7 @@
     "<b>Step 1:</b> Connect your X handle (one-time).",
     "<b>Step 2:</b> Build lists in the <span class=\"kbd\">GM</span> / <span class=\"kbd\">GN</span> tabs.",
     "<b>Step 3:</b> Use the Chrome extension to copy a reply, then paste it manually on X.",
-    "<b>Limits:</b> Free = up to <b>70 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
+    "<b>Limits:</b> Free = up to <b>50 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
   ],
   "gm_title": "GM Yanıtları",
   "gm_note": "Hatlar bu tarayıcıda saklanır. Pro, hesabınız için etkinleştirildiğinde bulut senkronizasyonu ekler.",
@@ -581,7 +584,7 @@
   "ui_sync": "Senkronize",
   "w_right_desc": "Free: GM listelerini oluşturup düzenleyebilirsin. Pro her şeyi açar ve limitleri kaldırır.",
   "w_right_list": [
-    "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
+    "<b>Free:</b> save up to <b>50</b> GM lines + <b>50</b> GN lines (edit anytime). Daily generation: <b>50</b>/day each.",
     "<b>Referanslar:</b> temaları/skinleri/paketleri kademeli açar. Detaylar <b>Referrals</b> sekmesinde.",
     "<b>Pro:</b> sınırsız kayıtlı satır, tam günlük üretim, daha güçlü <b>Best</b> akışı, her şeyi açar (tüm Arcade oyunları ve etkin olduğunda Cloud sync dahil).",
     "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",

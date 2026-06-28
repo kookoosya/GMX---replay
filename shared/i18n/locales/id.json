@@ -31,6 +31,7 @@
   "plan_cmp_val_free_lines": "Hingga 50 masing-masing",
   "plan_cmp_unlimited": "Tak terbatas",
   "plan_cmp_val_free_daily": "Terbatas",
+  "plan_modal_cmp_val_free_daily": "Terbatas",
   "plan_cmp_full_daily": "Limit penuh",
   "plan_cmp_val_free_themes": "Buka via referral",
   "plan_cmp_all_themes": "Semua terbuka",
@@ -42,7 +43,6 @@
   "plan_cmp_all_arcade": "Semua game",
   "plan_modal_cmp_val_free_lines": "Hingga 50 masing-masing",
   "plan_modal_cmp_unlimited": "Tak terbatas",
-  "plan_modal_cmp_val_free_daily": "Terbatas",
   "plan_modal_cmp_full_daily": "Limit penuh",
   "plan_modal_cmp_val_free_themes": "Buka via referral",
   "plan_modal_cmp_all_themes": "Semua terbuka",
@@ -168,6 +168,9 @@
   "err_rate_limited": "Terlalu banyak permintaan",
   "err_busy": "Sibuk, coba lagi",
   "err_limit_reached": "Batas tercapai",
+  "gen_daily_limit_reached": "Daily generation limit reached. Upgrade to Pro for unlimited generation.",
+  "limit_modal_daily_a": "You reached today's free generation limit. Upgrade to Pro for unlimited daily generation.",
+  "limit_modal_daily_b": "Daily generation cap reached. Pro removes daily limits and unlocks everything.",
   "err_upgrade_required": "Diperlukan peningkatan",
   "err_invalid_handle": "Pegangan tidak valid",
   "err_init_failed": "Ini gagal",
@@ -359,7 +362,7 @@
   "themes_right_list": [
     "Pilih tema yang sudah terbuka di kiri.",
     "Wallpaper dan background langsung diterapkan.",
-    "Di Free, sebagian item terkunci. Pro membuka semuanya dan menghapus limit 70 baris.",
+    "Di Free, sebagian item terkunci. Pro membuka semuanya dan menghapus limit 50 baris.",
     "Custom background (Pro) auto‑fit dan nanti akan sinkron ke extension."
   ],
   "themes_wp_section_title": "Wallpaper situs",
@@ -370,7 +373,7 @@
   "extthemes_right_list": [
     "Skin dan wallpaper dipilih di site dan disinkronkan ke extension.",
     "Hanya 1 skin yang aktif pada satu waktu.",
-    "Pro juga menghapus batas 70 baris dan membuka semua writing styles / preset packs.",
+    "Pro juga menghapus batas 50 baris dan membuka semua writing styles / preset packs.",
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "Tentang Tema",
@@ -385,25 +388,25 @@
   "gm_right_desc": "Balasan GM pagi singkat — natural, langsung, mudah ditempel.",
   "gm_right_list": [
     "<b>This bank</b>: one saved GM bank for this section. No hidden language split.",
-    "<b>Random 1/10/70</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
+    "<b>Quick 1 / Batch 10</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
     "<b>Repeat guard</b>: filters recent or too-similar lines so bulk generation does not collapse into near-duplicates.",
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Salin semua</b>/<b>Ekspor .txt</b>: cadangkan bank GM.",
     "Draf masukan manual disimpan secara otomatis.",
     "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
-    "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
+    "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "Cara pakai GN",
   "gn_right_desc": "Balasan GN malam singkat — tenang, manusiawi, mudah ditempel.",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
-    "<b>Random 1/10/70</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
+    "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
     "<b>Repeat guard</b> reduces duplicates and near-duplicates during larger generation runs.",
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GN bank.",
     "Manual input drafts are auto-saved.",
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
-    "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
+    "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
   "gn_desc": "Balasan malam singkat — Anda edit dan tempel sendiri. Satu bank tersimpan; Free punya batas baris.",
   "ref_desc": "Referral: bagikan tautan Anda. Terkonfirmasi = terhubung, Aktif = digunakan, Memenuhi syarat = max(aktif, carry-over). Bonus: +10/hari per 20 memenuhi syarat (+12 pada 50+).",
@@ -510,7 +513,7 @@
     "<b>Step 1:</b> Connect your X handle (one-time).",
     "<b>Step 2:</b> Build lists in the <span class=\"kbd\">GM</span> / <span class=\"kbd\">GN</span> tabs.",
     "<b>Step 3:</b> Use the Chrome extension to copy a reply, then paste it manually on X.",
-    "<b>Limits:</b> Free = up to <b>70 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
+    "<b>Limits:</b> Free = up to <b>50 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
   ],
   "gm_title": "Balasan GM",
   "gm_note": "Lines are stored in this browser. Pro adds cloud sync when enabled for your account.",
@@ -581,7 +584,7 @@
   "ui_sync": "Sinkronkan",
   "w_right_desc": "Free: kamu bisa membuat dan mengedit list GM. Pro membuka semuanya dan menghapus limit.",
   "w_right_list": [
-    "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
+    "<b>Free:</b> save up to <b>50</b> GM lines + <b>50</b> GN lines (edit anytime). Daily generation: <b>50</b>/day each.",
     "<b>Referral:</b> membuka theme/skin/pack bertahap. Detail di tab <b>Referrals</b>.",
     "<b>Pro:</b> baris tersimpan tanpa batas, generasi harian penuh, alur <b>Best</b> lebih kuat, buka semuanya (termasuk semua game Arcade dan Cloud sync saat aktif).",
     "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",

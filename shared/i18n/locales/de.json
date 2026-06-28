@@ -31,6 +31,7 @@
   "plan_cmp_val_free_lines": "Bis zu 50 je Tab",
   "plan_cmp_unlimited": "Unbegrenzt",
   "plan_cmp_val_free_daily": "Begrenzt",
+  "plan_modal_cmp_val_free_daily": "Begrenzt",
   "plan_cmp_full_daily": "Volles Limit",
   "plan_cmp_val_free_themes": "Per Referral",
   "plan_cmp_all_themes": "Alles frei",
@@ -42,7 +43,6 @@
   "plan_cmp_all_arcade": "Alle Spiele",
   "plan_modal_cmp_val_free_lines": "Bis zu 50 je Tab",
   "plan_modal_cmp_unlimited": "Unbegrenzt",
-  "plan_modal_cmp_val_free_daily": "Begrenzt",
   "plan_modal_cmp_full_daily": "Volles Limit",
   "plan_modal_cmp_val_free_themes": "Per Referral",
   "plan_modal_cmp_all_themes": "Alles frei",
@@ -168,6 +168,9 @@
   "err_rate_limited": "Zu viele Anfragen",
   "err_busy": "Beschäftigt, versuchen Sie es noch einmal",
   "err_limit_reached": "Limit erreicht",
+  "gen_daily_limit_reached": "Daily generation limit reached. Upgrade to Pro for unlimited generation.",
+  "limit_modal_daily_a": "You reached today's free generation limit. Upgrade to Pro for unlimited daily generation.",
+  "limit_modal_daily_b": "Daily generation cap reached. Pro removes daily limits and unlocks everything.",
   "err_upgrade_required": "Upgrade erforderlich",
   "err_invalid_handle": "Ungültiges Handle",
   "err_init_failed": "Die Initialisierung ist fehlgeschlagen",
@@ -359,7 +362,7 @@
   "themes_right_list": [
     "Wähle links ein freigeschaltetes Theme aus.",
     "Wallpapers und Hintergründe werden sofort angewendet.",
-    "In Free sind einige Dinge gesperrt. Pro schaltet alles frei und entfernt das 70‑Zeilen‑Limit.",
+    "In Free sind einige Dinge gesperrt. Pro schaltet alles frei und entfernt das 50‑Zeilen‑Limit.",
     "Custom Backgrounds (Pro) sind auto‑fit und werden später zur Extension synchronisiert."
   ],
   "themes_wp_section_title": "Hintergrundbilder der Website",
@@ -370,7 +373,7 @@
   "extthemes_right_list": [
     "Skins und Wallpapers werden auf der Website gewählt und mit der Extension synchronisiert.",
     "Es kann nur 1 Skin gleichzeitig aktiv sein.",
-    "Pro entfernt außerdem das 70‑Zeilen‑Limit und schaltet alle Writing Styles / Preset Packs frei.",
+    "Pro entfernt außerdem das 50‑Zeilen‑Limit und schaltet alle Writing Styles / Preset Packs frei.",
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "Über Themes",
@@ -385,25 +388,25 @@
   "gm_right_desc": "Kurze GM-Morgenantworten auf fremde Posts — natürlich, direkt, einfach einfügen.",
   "gm_right_list": [
     "<b>Diese Bank</b>: eine gesparte GM-Bank für diesen Abschnitt. Keine versteckte Sprachteilung.",
-    "<b>Zufällig 1/10/70</b>: fügt der GM-Bank frische Linien hinzu. Min bleibt kurz, Mid bleibt ausgeglichen, Max kann etwas mehr atmen.",
+    "<b>Quick 1 / Batch 10</b>: fügt der GM-Bank frische Linien hinzu. Min bleibt kurz, Mid bleibt ausgeglichen, Max kann etwas mehr atmen.",
     "<b>Repeat Guard</b>: filtert aktuelle oder zu ähnliche Leitungen, damit die Massenerzeugung nicht in nahezu Duplikate zerfällt.",
     "Verwenden Sie <b>Filter</b>, um innerhalb Ihrer gespeicherten Zeilen zu suchen.",
     "<b>Alles kopieren</b>/<b>.txt exportieren</b>: Sichern Sie die GM-Bank.",
     "Manuell eingegebene Entwürfe werden automatisch gespeichert.",
     "<b>Freie Sicht</b> löscht die sichtbare GM-Bank. <b>Alle löschen löscht ALLE</b> gespeicherten GM-Zeilen für diesen Abschnitt.",
-    "Kostenlose Cap-Zählungen in der gesamten GM-Bank. Wenn Sie 70/70 erreichen, ersetzen neue generierte Zeilen ältere (die Bearbeitung ist unbegrenzt)."
+    "Kostenlose Cap-Zählungen in der gesamten GM-Bank. Wenn Sie 50/50 erreichen, ersetzen neue generierte Zeilen ältere (die Bearbeitung ist unbegrenzt)."
   ],
   "gn_right": "So nutzt du GN",
   "gn_right_desc": "Kurze GN-Nachtantworten auf fremde Posts — ruhig, menschlich, einfach einfügen.",
   "gn_right_list": [
     "<b>Diese Bank</b>: eine gespeicherte GN-Bank für diesen Abschnitt. Keine versteckte Sprachteilung.",
-    "<b>Zufällig 1/10/70</b> fügt frische Linien hinzu. Min bleibt kurz, Mid bleibt ausgeglichen, Max kann etwas mehr atmen.",
+    "<b>Quick 1 / Batch 10</b> fügt frische Linien hinzu. Min bleibt kurz, Mid bleibt ausgeglichen, Max kann etwas mehr atmen.",
     "<b>Repeat Guard</b> reduziert Duplikate und Beinahe-Duplikate bei größeren Generationsläufen.",
     "Verwenden Sie <b>Filter</b>, um innerhalb Ihrer gespeicherten Zeilen zu suchen.",
     "<b>Kopieren Sie alles</b>/<b>Exportieren Sie .txt</b>: Sichern Sie die GN-Bank.",
     "Manuell eingegebene Entwürfe werden automatisch gespeichert.",
     "<b>Freie Sicht</b> löscht die sichtbare GN-Bank. <b>Alle löschen löscht ALLE</b> gespeicherten GN-Zeilen für diesen Abschnitt.",
-    "Die freie Obergrenze beträgt insgesamt 70 gespeicherte Zeilen für die GN-Bank. Wenn Sie 70/70 erreichen, ersetzen neue generierte Linien ältere. Die Bearbeitung ist unbegrenzt."
+    "Die freie Obergrenze beträgt insgesamt 70 gespeicherte Zeilen für die GN-Bank. Wenn Sie 50/50 erreichen, ersetzen neue generierte Linien ältere. Die Bearbeitung ist unbegrenzt."
   ],
   "gn_desc": "Kurze Nachtantworten, die Sie selbst bearbeiten und einfügen. Eine gespeicherte Bank für diesen Abschnitt; Free hat eine Begrenzung für gespeicherte Zeilen.",
   "ref_desc": "Weiterempfehlungen: Teile deinen Link. Bestätigt = verbunden, Aktiv = verwendet, Berechtigt = max(aktiv, Übertrag). Bonus: +10/Tag pro 20 teilnahmeberechtigten Personen (+12 bei 50+).",
@@ -510,7 +513,7 @@
     "<b>Step 1:</b> Connect your X handle (one-time).",
     "<b>Step 2:</b> Build lists in the <span class=\"kbd\">GM</span> / <span class=\"kbd\">GN</span> tabs.",
     "<b>Step 3:</b> Use the Chrome extension to copy a reply, then paste it manually on X.",
-    "<b>Limits:</b> Free = up to <b>70 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
+    "<b>Limits:</b> Free = up to <b>50 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
   ],
   "gm_title": "GM Replies",
   "gm_note": "Zeilen werden in diesem Browser gespeichert. Pro fügt die Cloud-Synchronisierung hinzu, wenn diese für Ihr Konto aktiviert ist.",

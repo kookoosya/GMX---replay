@@ -74,7 +74,7 @@
         setAuthOk(true);
         applyAdminVisibility();
 
-        const fallbackFree = Number(j?.limits?.freeDaily ?? 70) || 70;
+        const fallbackFree = Number(j?.limits?.freeDaily ?? 50) || 50;
         const cap = Number(j?.limits?.saveCapFree ?? getSaveCapFree()) || getSaveCapFree();
         setSaveCapFree(Math.max(10, Math.min(1000, cap)));
         const gm = j.gm || { used: 0, limit: fallbackFree };

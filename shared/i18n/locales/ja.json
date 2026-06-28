@@ -31,6 +31,7 @@
   "plan_cmp_val_free_lines": "各最大50件",
   "plan_cmp_unlimited": "無制限",
   "plan_cmp_val_free_daily": "制限あり",
+  "plan_modal_cmp_val_free_daily": "制限あり",
   "plan_cmp_full_daily": "フル上限",
   "plan_cmp_val_free_themes": "紹介で解放",
   "plan_cmp_all_themes": "すべて解放",
@@ -42,7 +43,6 @@
   "plan_cmp_all_arcade": "全ゲーム",
   "plan_modal_cmp_val_free_lines": "各最大50件",
   "plan_modal_cmp_unlimited": "無制限",
-  "plan_modal_cmp_val_free_daily": "制限あり",
   "plan_modal_cmp_full_daily": "フル上限",
   "plan_modal_cmp_val_free_themes": "紹介で解放",
   "plan_modal_cmp_all_themes": "すべて解放",
@@ -168,6 +168,9 @@
   "err_rate_limited": "リクエストが多すぎます",
   "err_busy": "忙しいのでもう一度試してください",
   "err_limit_reached": "限界に達しました",
+  "gen_daily_limit_reached": "Daily generation limit reached. Upgrade to Pro for unlimited generation.",
+  "limit_modal_daily_a": "You reached today's free generation limit. Upgrade to Pro for unlimited daily generation.",
+  "limit_modal_daily_b": "Daily generation cap reached. Pro removes daily limits and unlocks everything.",
   "err_upgrade_required": "アップグレードが必要です",
   "err_invalid_handle": "無効なハンドル",
   "err_init_failed": "初期化に失敗しました",
@@ -385,13 +388,13 @@
   "gm_right_desc": "短い朝のGM返信 — 自然で、そのまま貼りやすい。",
   "gm_right_list": [
     "<b>This bank</b>: one saved GM bank for this section. No hidden language split.",
-    "<b>Random 1/10/70</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
+    "<b>Quick 1 / Batch 10</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
     "<b>Repeat guard</b>: filters recent or too-similar lines so bulk generation does not collapse into near-duplicates.",
     "<b>フィルター</b>を使用して、保存した行の中を検索します。",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
     "手動入力の下書きは自動保存されます。",
     "<b>Clear view</b> clears the visible GM bank. <b>Clear ALL</b> clears all saved GM lines for this section.",
-    "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
+    "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "GN の使い方",
   "gn_right_desc": "短い夜のGN返信 — 落ち着いて、人間味があり、貼りやすい。",
@@ -403,7 +406,7 @@
     "<b>ALLをコピー</b>/<b>.txtをエクスポート</b>： GNバンクをバックアップします。",
     "Manual input drafts are auto-saved.",
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
-    "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
+    "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
   "gn_desc": "短い夜の返信 — 自分で編集して貼り付けます。このセクション用の保存バンクは1つ。Free には保存行上限があります。",
   "ref_desc": "紹介: リンクを共有。確認済み = 接続、アクティブ = 利用、対象 = max(アクティブ, 繰越)。ボーナス: 対象20人ごとに +10/日（50+ で +12）。",
@@ -510,7 +513,7 @@
     "<b>Step 1:</b> Connect your X handle (one-time).",
     "<b>Step 2:</b> Build lists in the <span class=\"kbd\">GM</span> / <span class=\"kbd\">GN</span> tabs.",
     "<b>Step 3:</b> Use the Chrome extension to copy a reply, then paste it manually on X.",
-    "<b>Limits:</b> Free = up to <b>70 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
+    "<b>Limits:</b> Free = up to <b>50 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
   ],
   "gm_title": "GM 返信",
   "gm_note": "ラインはこのブラウザに保存されます。Proは、アカウントで有効になっている場合にクラウド同期を追加します。",
@@ -581,7 +584,7 @@
   "ui_sync": "同期",
   "w_right_desc": "Free では GM リストを作成・編集できます。Pro は全解除＆制限解除。",
   "w_right_list": [
-    "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
+    "<b>Free:</b> save up to <b>50</b> GM lines + <b>50</b> GN lines (edit anytime). Daily generation: <b>50</b>/day each.",
     "<b>Referrals:</b> themes/skins/packs を段階的に解除。詳細は <b>Referrals</b> タブ。",
     "<b>Pro：</b>保存行数無制限、フル日次生成、強化<b>Best</b>フロー、すべて解放（Arcadeの全ゲームと有効時のCloud同期を含む）。",
     "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",

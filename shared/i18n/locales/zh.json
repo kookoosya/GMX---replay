@@ -31,6 +31,7 @@
   "plan_cmp_val_free_lines": "各最多 50 条",
   "plan_cmp_unlimited": "无限",
   "plan_cmp_val_free_daily": "有限",
+  "plan_modal_cmp_val_free_daily": "有限",
   "plan_cmp_full_daily": "完整上限",
   "plan_cmp_val_free_themes": "推荐解锁",
   "plan_cmp_all_themes": "全部解锁",
@@ -42,7 +43,6 @@
   "plan_cmp_all_arcade": "全部游戏",
   "plan_modal_cmp_val_free_lines": "各最多 50 条",
   "plan_modal_cmp_unlimited": "无限",
-  "plan_modal_cmp_val_free_daily": "有限",
   "plan_modal_cmp_full_daily": "完整上限",
   "plan_modal_cmp_val_free_themes": "推荐解锁",
   "plan_modal_cmp_all_themes": "全部解锁",
@@ -168,6 +168,9 @@
   "err_rate_limited": "请求太多",
   "err_busy": "忙，再试一次",
   "err_limit_reached": "达到限制",
+  "gen_daily_limit_reached": "Daily generation limit reached. Upgrade to Pro for unlimited generation.",
+  "limit_modal_daily_a": "You reached today's free generation limit. Upgrade to Pro for unlimited daily generation.",
+  "limit_modal_daily_b": "Daily generation cap reached. Pro removes daily limits and unlocks everything.",
   "err_upgrade_required": "需要升级",
   "err_invalid_handle": "无效句柄",
   "err_init_failed": "初始化失败",
@@ -385,25 +388,25 @@
   "gm_right_desc": "简短的早晨 GM 回复 — 自然、直接、便于粘贴。",
   "gm_right_list": [
     "<b>This bank</b>: one saved GM bank for this section. No hidden language split.",
-    "<b>Random 1/10/70</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
+    "<b>Quick 1 / Batch 10</b>: adds fresh lines to the GM bank. Min stays short, Mid stays balanced, Max can breathe a little more.",
     "<b>Repeat guard</b>: filters recent or too-similar lines so bulk generation does not collapse into near-duplicates.",
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>Copy all</b> / <b>Export .txt</b>: back up the GM bank.",
     "Manual input drafts are auto-saved.",
     "<b>清晰的视图</b>清除可见的GM库。<b>清除所有</b>清除此部分的所有已保存的GM行。",
-    "Free cap counts across the GM bank. If you hit 70/70, new generated lines replace older ones (editing is unlimited)."
+    "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "GN 使用方法",
   "gn_right_desc": "简短的夜间 GN 回复 — 平静、人性化、便于粘贴。",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
-    "<b>Random 1/10/70</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
+    "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
     "在较大的一代运行中，<b>重复防护</b>可减少重复和近似重复。",
     "Use <b>Filter</b> to search inside your saved lines.",
     "<b>全部复制</b>/<b>导出.txt</b> ：备份GN库。",
     "Manual input drafts are auto-saved.",
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
-    "Free cap is 70 saved lines total for the GN bank. If you hit 70/70, new generated lines replace older ones. Editing is unlimited."
+    "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
   "gn_desc": "简短夜间回复 — 自行编辑并粘贴。本分区一个保存库；免费版有行数上限。",
   "ref_desc": "推荐：分享您的链接。已确认 = 已连接，活跃 = 已使用，符合条件 = max(活跃, 结转)。奖励：每 20 名符合条件 +10/天（50+ 为 +12）。",
@@ -510,7 +513,7 @@
     "<b>Step 1:</b> Connect your X handle (one-time).",
     "<b>Step 2:</b> Build lists in the <span class=\"kbd\">GM</span> / <span class=\"kbd\">GN</span> tabs.",
     "<b>Step 3:</b> Use the Chrome extension to copy a reply, then paste it manually on X.",
-    "<b>Limits:</b> Free = up to <b>70 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
+    "<b>Limits:</b> Free = up to <b>50 saved lines</b> for GM. Editing is unlimited. Pro removes the cap."
   ],
   "gm_title": "GM 回复",
   "gm_note": "Lines are stored in this browser. Pro adds cloud sync when enabled for your account.",
@@ -581,7 +584,7 @@
   "ui_sync": "同步",
   "w_right_desc": "Free 可以创建/编辑 GM 列表。Pro 解锁全部并移除限制。",
   "w_right_list": [
-    "<b>Free:</b> save up to <b>70</b> GM lines + <b>70</b> GN lines (edit anytime). Daily generation: <b>70</b> each.",
+    "<b>Free:</b> save up to <b>50</b> GM lines + <b>50</b> GN lines (edit anytime). Daily generation: <b>50</b>/day each.",
     "<b>Referrals:</b> 逐步解锁 themes/skins/packs。详情见 <b>Referrals</b> 标签。",
     "<b>Pro：</b>保存行数不限、完整每日生成、更强的 <b>Best</b> 流程，解锁一切（包括全部 Arcade 游戏及启用时的 Cloud 同步）。",
     "<b>Pro:</b> unlimited daily generation + unlimited saved lines, unlock everything (including Cloud sync).",

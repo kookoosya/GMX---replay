@@ -12,7 +12,7 @@ export const SOL_RECEIVER =
 export const EXTENSION_STORE_URL = process.env.EXTENSION_STORE_URL || "";
 
 export const CONFIG = {
-  FREE_DAILY_BASE: Math.max(0, Math.min(500, Number(process.env.GMX_FREE_DAILY || "70") || 70)),
+  FREE_DAILY_BASE: Math.max(0, Math.min(500, Number(process.env.GMX_FREE_DAILY || "50") || 50)),
   SAVE_CAP_FREE: Math.max(10, Math.min(1000, Number(process.env.GMX_SAVE_CAP_FREE || "50") || 50)),
   PRO_DAILY_SENTINEL: 999999,
   GEN_MIN_LATENCY_MS: Math.max(0, Math.min(5000, Number(process.env.GMX_GEN_MIN_LATENCY_MS || "250") || 250)),
