@@ -54,6 +54,9 @@ reports/
 
 # Local one-off helper scripts
 fix_*.cjs
+_*.cjs
+tools/_pgbot-*.mjs
+tools/_app-shell-screenshots.mjs
 tools/gmx-stage*.mjs
 tools/test-best*.mjs
 tools/diag-hook.mjs

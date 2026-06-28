@@ -51,8 +51,11 @@ export function registerUserRoutes(deps) {
     originFromReq,
     isAdminHandle,
     logActivity,
-    toolLimit,
   } = deps;
+
+  function toolLimit(sub, freeLimit, proLimit) {
+    return sub?.active ? proLimit : freeLimit;
+  }
 
   async function getUsageFor(handle){
     const h = String(handle || "").trim();
