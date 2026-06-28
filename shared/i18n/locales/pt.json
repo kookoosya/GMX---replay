@@ -231,6 +231,7 @@
   "wallet_label_default": "Carteira",
   "wallet_hint_pick_plan": "Selecione um plano acima para continuar.",
   "wallet_hint_connect_pay": "Agora ligue uma carteira para pagar em {currency}.",
+  "wallet_pay_connect_handle_first": "Connect your @handle on Home first — Pro is tied to your handle, not your wallet.",
   "wallet_hint_ready": "Preparar.",
   "wallet_hint_install": "Nenhuma carteira detectada. Instale Solflare / Phantom / Backpack.",
   "wallet_hint_choose": "Escolha uma carteira e clique em Conectar.",

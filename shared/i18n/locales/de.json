@@ -231,6 +231,7 @@
   "wallet_label_default": "Geldbörse",
   "wallet_hint_pick_plan": "Wählen Sie oben einen Plan aus, um fortzufahren.",
   "wallet_hint_connect_pay": "Schließen Sie nun ein Wallet an, um in {currency} einzuzahlen.",
+  "wallet_pay_connect_handle_first": "Connect your @handle on Home first — Pro is tied to your handle, not your wallet.",
   "wallet_hint_ready": "Bereit.",
   "wallet_hint_install": "Keine Brieftasche erkannt. Installieren Sie Solflare / Phantom / Backpack.",
   "wallet_hint_choose": "Wählen Sie ein Wallet und klicken Sie auf „Verbinden“.",

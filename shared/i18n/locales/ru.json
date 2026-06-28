@@ -231,6 +231,7 @@
   "wallet_label_default": "Кошелек",
   "wallet_hint_pick_plan": "Выберите план выше, чтобы продолжить.",
   "wallet_hint_connect_pay": "Теперь подключите кошелек для оплаты в {currency}.",
+  "wallet_pay_connect_handle_first": "Connect your @handle on Home first — Pro is tied to your handle, not your wallet.",
   "wallet_hint_ready": "Готовый.",
   "wallet_hint_install": "No wallet detected. Install Solflare / Phantom / Backpack.",
   "wallet_hint_choose": "Выберите кошелек и нажмите «Подключиться».",

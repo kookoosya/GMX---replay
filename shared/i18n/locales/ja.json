@@ -231,6 +231,7 @@
   "wallet_label_default": "財布",
   "wallet_hint_pick_plan": "続行するには、上のプランを選択してください。",
   "wallet_hint_connect_pay": "次に、{currency} で支払うためにウォレットを接続します。",
+  "wallet_pay_connect_handle_first": "Connect your @handle on Home first — Pro is tied to your handle, not your wallet.",
   "wallet_hint_ready": "準備ができて。",
   "wallet_hint_install": "No wallet detected. Install Solflare / Phantom / Backpack.",
   "wallet_hint_choose": "ウォレットを選択し、「接続」をクリックします。",

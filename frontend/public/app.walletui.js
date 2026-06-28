@@ -15,6 +15,11 @@
     const setPayState = typeof ctx.setPayState === "function" ? ctx.setPayState : () => {};
     const openPaySuccess = typeof ctx.openPaySuccess === "function" ? ctx.openPaySuccess : () => {};
     const getHandle = typeof ctx.getHandle === "function" ? ctx.getHandle : () => "";
+    const getToken = typeof ctx.getToken === "function" ? ctx.getToken : () => "";
+    const requireConnected =
+      typeof ctx.requireConnected === "function" ? ctx.requireConnected : () => true;
+    const onNavigateHome =
+      typeof ctx.onNavigateHome === "function" ? ctx.onNavigateHome : () => {};
     const refreshUsage = typeof ctx.refreshUsage === "function" ? ctx.refreshUsage : async () => {};
     const walletChoiceKey = ctx.walletChoiceKey || "gmx_wallet_choice";
     const wsChain = ctx.wsChain || "solana:mainnet";
@@ -509,6 +514,26 @@
       return m || "billing_failed";
     }
 
+    function ensureHandleSessionForPay() {
+      const handle = String(getHandle() || "").trim();
+      const token = String(getToken() || "").trim();
+      if (handle && token) return true;
+
+      const msg = $("w_msg");
+      const copy = siteTr(
+        "wallet_pay_connect_handle_first",
+        "Connect your @handle on Home first — Pro is tied to your handle, not your wallet."
+      );
+      if (msg) msg.innerHTML = `<span class="warn">${escapeHtml(copy)}</span>`;
+      try {
+        onNavigateHome();
+      } catch (_e) {}
+      try {
+        requireConnected("Upgrade Pro");
+      } catch (_e) {}
+      return false;
+    }
+
     async function payNow() {
       const WALLET = getWallet();
       const selectedPlan = getSelectedPlan();
@@ -518,6 +543,7 @@
         if (msg) msg.innerHTML = `<span class="warn">Select a plan first.</span>`;
         return;
       }
+      if (!ensureHandleSessionForPay()) return;
       if (!WALLET.connected) {
         openWalletModal();
         if (msg) msg.innerHTML = `<span class="warn">Connect a wallet to continue.</span>`;

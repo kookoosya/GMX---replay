@@ -25,6 +25,9 @@
         setPayState: pay.setPayState,
         openPaySuccess: pay.openPaySuccess,
         getHandle: session.getHandle,
+        getToken: session.getToken,
+        requireConnected: session.requireConnected,
+        onNavigateHome: session.onNavigateHome,
         refreshUsage: session.refreshUsage,
       };
     }
@@ -119,6 +122,9 @@
       setPayState: ctx.setPayState,
       openPaySuccess: ctx.openPaySuccess,
       getHandle: ctx.getHandle,
+      getToken: ctx.getToken,
+      requireConnected: ctx.requireConnected,
+      onNavigateHome: ctx.onNavigateHome,
       refreshUsage: ctx.refreshUsage,
       walletChoiceKey: LS_WALLET_CHOICE,
       wsChain: WS_CHAIN,

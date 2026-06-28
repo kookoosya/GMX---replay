@@ -231,6 +231,7 @@
   "wallet_label_default": "Wallet",
   "wallet_hint_pick_plan": "Select a plan above to continue.",
   "wallet_hint_connect_pay": "Now connect a wallet to pay in {currency}.",
+  "wallet_pay_connect_handle_first": "Connect your @handle on Home first — Pro is tied to your handle, not your wallet.",
   "wallet_hint_ready": "Ready.",
   "wallet_hint_install": "No wallet detected. Install Solflare / Phantom / Backpack.",
   "wallet_hint_choose": "Choose a wallet and click Connect.",

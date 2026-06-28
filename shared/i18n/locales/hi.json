@@ -231,6 +231,7 @@
   "wallet_label_default": "बटुआ",
   "wallet_hint_pick_plan": "जारी रखने के लिए ऊपर एक योजना चुनें.",
   "wallet_hint_connect_pay": "अब {currency} में भुगतान करने के लिए वॉलेट कनेक्ट करें।",
+  "wallet_pay_connect_handle_first": "Connect your @handle on Home first — Pro is tied to your handle, not your wallet.",
   "wallet_hint_ready": "तैयार।",
   "wallet_hint_install": "No wallet detected. Install Solflare / Phantom / Backpack.",
   "wallet_hint_choose": "एक वॉलेट चुनें और कनेक्ट पर क्लिक करें।",

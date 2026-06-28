@@ -231,6 +231,7 @@
   "wallet_label_default": "Portfel",
   "wallet_hint_pick_plan": "Wybierz plan powyżej, aby kontynuować.",
   "wallet_hint_connect_pay": "Teraz podłącz portfel, aby zapłacić w {currency}.",
+  "wallet_pay_connect_handle_first": "Connect your @handle on Home first — Pro is tied to your handle, not your wallet.",
   "wallet_hint_ready": "Gotowy.",
   "wallet_hint_install": "No wallet detected. Install Solflare / Phantom / Backpack.",
   "wallet_hint_choose": "Wybierz portfel i kliknij Połącz.",

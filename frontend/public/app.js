@@ -1007,7 +1007,13 @@ function initWalletTab() {
     ui: { toast },
     perf: { trackEvent, abVariant },
     pay: { setPayState, openPaySuccess },
-    session: { getHandle, refreshUsage },
+    session: {
+      getHandle,
+      getToken,
+      requireConnected,
+      onNavigateHome: () => tab("home"),
+      refreshUsage,
+    },
   });
   return __gmxWalletWire;
 }

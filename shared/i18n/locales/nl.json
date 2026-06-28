@@ -231,6 +231,7 @@
   "wallet_label_default": "Portemonnee",
   "wallet_hint_pick_plan": "Selecteer hierboven een abonnement om door te gaan.",
   "wallet_hint_connect_pay": "Sluit nu een portemonnee aan om in {currency} te betalen.",
+  "wallet_pay_connect_handle_first": "Connect your @handle on Home first — Pro is tied to your handle, not your wallet.",
   "wallet_hint_ready": "Klaar.",
   "wallet_hint_install": "No wallet detected. Install Solflare / Phantom / Backpack.",
   "wallet_hint_choose": "Kies een portemonnee en klik op Verbinden.",
