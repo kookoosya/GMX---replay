@@ -1,19 +1,19 @@
 GMXReply i18n sync report
-Updated: 2026-06-28T14:16:34.184Z
+Updated: 2026-06-28T21:05:05.948Z
 Locales: en, de, fr, es, pt, it, nl, tr, pl, id, ru, uk, hi, ja, zh
 
 en: copied-from-en=0, identical-to-en=850/850 (100%)
-de: copied-from-en=0, identical-to-en=81/850 (10%)
-fr: copied-from-en=0, identical-to-en=93/850 (11%)
-es: copied-from-en=0, identical-to-en=118/850 (14%)
-pt: copied-from-en=0, identical-to-en=101/850 (12%)
+de: copied-from-en=0, identical-to-en=79/850 (9%)
+fr: copied-from-en=0, identical-to-en=91/850 (11%)
+es: copied-from-en=0, identical-to-en=116/850 (14%)
+pt: copied-from-en=0, identical-to-en=99/850 (12%)
 it: copied-from-en=0, identical-to-en=186/850 (22%)
-nl: copied-from-en=0, identical-to-en=161/850 (19%)
-tr: copied-from-en=0, identical-to-en=135/850 (16%)
-pl: copied-from-en=0, identical-to-en=112/850 (13%)
-id: copied-from-en=0, identical-to-en=128/850 (15%)
+nl: copied-from-en=0, identical-to-en=158/850 (19%)
+tr: copied-from-en=0, identical-to-en=132/850 (16%)
+pl: copied-from-en=0, identical-to-en=109/850 (13%)
+id: copied-from-en=0, identical-to-en=125/850 (15%)
 ru: copied-from-en=0, identical-to-en=80/850 (9%)
 uk: copied-from-en=0, identical-to-en=111/850 (13%)
-hi: copied-from-en=0, identical-to-en=163/850 (19%)
-ja: copied-from-en=0, identical-to-en=137/850 (16%)
-zh: copied-from-en=0, identical-to-en=174/850 (20%)
+hi: copied-from-en=0, identical-to-en=160/850 (19%)
+ja: copied-from-en=0, identical-to-en=135/850 (16%)
+zh: copied-from-en=0, identical-to-en=171/850 (20%)

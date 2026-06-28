@@ -725,6 +725,12 @@ html.mode-light .pasteBox{
   outline:2px solid rgba(88,246,181,.55);
   outline-offset:2px;
 }
+#tab-gm #gm_desc{
+  line-height:1.45;
+}
+#tab-gm .toolbar #gmRand1.btn:not(:disabled){
+  font-weight:650;
+}
 .lineRow{
   display:flex;
   align-items:center;

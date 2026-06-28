@@ -148,7 +148,9 @@
       }
 
       if (inflight[kind]) {
-        if (msgEl) msgEl.innerHTML = '<span class="muted">Working...</span>';
+        if (msgEl) {
+          msgEl.innerHTML = `<span class="muted">${escapeHtml(siteTr("ui_working", "Working..."))}</span>`;
+        }
         return;
       }
       inflight[kind] = true;
