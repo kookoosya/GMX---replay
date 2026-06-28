@@ -50,6 +50,16 @@ export function registerGenerateRoutes(deps) {
     return { u, sub, promo, limits, state };
   }
 
+  function logGenerateRouteError(stage, err, meta = {}) {
+    console.error("GENERATE_ROUTE_ERROR", {
+      stage,
+      name: err?.name || "Error",
+      message: String(err?.message || err).slice(0, 240),
+      kind: meta.kind || null,
+      count: meta.count ?? null,
+    });
+  }
+
   function limitReachedBody(state, limits, requested = 1) {
     return {
       ok: false,
@@ -95,7 +105,7 @@ export function registerGenerateRoutes(deps) {
       try {
         reply = generateUnique(handle, kind, mode, lang, style, antiN);
       } catch (e) {
-        console.error("GENERATE_ERROR", e);
+        logGenerateRouteError("engine", e, { kind });
         return sendError(res, 500, ERROR_CODES.SERVER_ERROR);
       }
 
@@ -134,7 +144,7 @@ export function registerGenerateRoutes(deps) {
         },
       });
     } catch (e) {
-      console.error("GENERATE_ERROR", e);
+      logGenerateRouteError("route", e, { kind: req.query?.kind, count: 1 });
       sendError(res, 500, ERROR_CODES.SERVER_ERROR);
     }
   });
@@ -173,7 +183,7 @@ export function registerGenerateRoutes(deps) {
       try {
         list = generateRankedCandidates(handle, kind, mode, lang, style, count, antiN, false);
       } catch (e) {
-        console.error("BULK_ERROR", e);
+        logGenerateRouteError("engine_bulk", e, { kind, count });
         return sendError(res, 500, ERROR_CODES.SERVER_ERROR);
       }
 
@@ -217,7 +227,7 @@ export function registerGenerateRoutes(deps) {
         },
       });
     } catch (e) {
-      console.error("BULK_ERROR", e);
+      logGenerateRouteError("route_bulk", e, { kind: req.query?.kind, count: req.query?.count });
       sendError(res, 500, ERROR_CODES.SERVER_ERROR);
     }
   });
