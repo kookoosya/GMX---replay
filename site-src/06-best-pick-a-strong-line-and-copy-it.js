@@ -39,6 +39,16 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
     getAntiStrength,
     refreshUsage,
     setBusy,
+    onNavigateConnect: () => {
+      tab("home");
+      try {
+        const hi = $("xHandle");
+        if (hi) {
+          hi.focus();
+          hi.scrollIntoView({ block: "center", behavior: "smooth" });
+        }
+      } catch (_e) {}
+    },
   };
   const __gmxBankUiWire = window.__GMXBankUiWireFactory(__gmxBankUiWireCtx);
   __gmxBestPick = __gmxBankUiWire.bestPick;

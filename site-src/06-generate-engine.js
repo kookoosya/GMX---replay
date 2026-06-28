@@ -72,3 +72,4 @@
     renderAllGenHistory,
   } = __gmxGenerateWire;
   async function generate(kind, count){ return __gmxGenerateWire.generate(kind, count); }
+  __gmxBankUiWireCtx.onQuickGenerate = (kind) => generate(kind, 1);

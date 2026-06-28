@@ -704,6 +704,27 @@ html.mode-light .pasteBox{
   flex-direction:column;
   gap:8px;
 }
+.bankEmptyState{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:10px;
+  padding:14px 12px;
+  border:1px dashed var(--border);
+  border-radius:12px;
+  background:rgba(255,255,255,.02);
+}
+.bankEmptyTitle{
+  font-weight:650;
+  color:var(--text);
+}
+.bankEmptyHint{
+  line-height:1.45;
+}
+.bankEmptyCta:focus-visible{
+  outline:2px solid rgba(88,246,181,.55);
+  outline-offset:2px;
+}
 .lineRow{
   display:flex;
   align-items:center;

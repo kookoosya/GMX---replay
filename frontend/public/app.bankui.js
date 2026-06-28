@@ -37,6 +37,10 @@
     const trackEvent = typeof ctx.trackEvent === "function" ? ctx.trackEvent : () => {};
     const toast = typeof ctx.toast === "function" ? ctx.toast : () => {};
     const t = typeof ctx.t === "function" ? ctx.t : (_k, fb) => fb;
+    const onNavigateConnect =
+      typeof ctx.onNavigateConnect === "function" ? ctx.onNavigateConnect : null;
+    const getBankListError =
+      typeof ctx.getBankListError === "function" ? ctx.getBankListError : () => "";
     const updateLangFlags = typeof ctx.updateLangFlags === "function" ? ctx.updateLangFlags : () => {};
     const renderLangChips =
       typeof ctx.renderLangChips === "function" ? ctx.renderLangChips : () => {};
@@ -130,6 +134,81 @@
       return removed;
     }
 
+    function setEditHintVisible(kind, visible) {
+      const editHint = kind === "gm" ? $("gm_edit_hint") : $("gn_edit_hint");
+      if (!editHint) return;
+      if (editHint.classList && typeof editHint.classList.toggle === "function") {
+        editHint.classList.toggle("hidden", !visible);
+      } else {
+        editHint.className = visible
+          ? String(editHint.className || "")
+              .split(/\s+/)
+              .filter((x) => x && x !== "hidden")
+              .join(" ")
+          : `${String(editHint.className || "").replace(/\bhidden\b/g, "").trim()} hidden`.trim();
+      }
+    }
+
+    function renderBankEmptyState(container, kind, mode, msgEl) {
+      const wrap = document.createElement("div");
+      wrap.className = "bankEmptyState";
+      wrap.setAttribute("role", "status");
+
+      const title = document.createElement("div");
+      title.className = "bankEmptyTitle";
+
+      const hint = document.createElement("div");
+      hint.className = "bankEmptyHint muted small";
+
+      if (mode === "disconnected") {
+        if (msgEl) msgEl.textContent = "";
+        title.textContent =
+          t("bank_empty_connect_title") || "Connect your X handle to create and save lines.";
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "btn bankEmptyCta";
+        btn.textContent = t("bank_empty_connect_cta") || "Connect handle";
+        btn.addEventListener("click", () => {
+          if (onNavigateConnect) onNavigateConnect(kind);
+          else requireConnected(kind === "gm" ? "GM" : "GN");
+        });
+        wrap.appendChild(title);
+        wrap.appendChild(btn);
+      } else if (mode === "error") {
+        const errMsg = String(getBankListError(kind) || "").trim();
+        title.textContent = t("bank_list_error_title") || "Could not load saved lines";
+        hint.textContent =
+          errMsg || t("bank_list_error_hint") || "Try again in a moment.";
+        if (msgEl) {
+          msgEl.innerHTML = `<span class="bad">${escapeHtml(errMsg || hint.textContent)}</span>`;
+        }
+        wrap.appendChild(title);
+        wrap.appendChild(hint);
+      } else {
+        if (msgEl) msgEl.textContent = "";
+        const titleKey = kind === "gm" ? "bank_empty_title_gm" : "bank_empty_title_gn";
+        title.textContent =
+          t(titleKey) ||
+          (kind === "gm" ? "No saved GM lines yet" : "No saved GN lines yet");
+        hint.textContent =
+          t("bank_empty_hint") || "Create your first line, then save the ones you like.";
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "btn bankEmptyCta";
+        btn.textContent = t("bank_empty_generate") || "Generate one";
+        btn.addEventListener("click", () => {
+          const fn = ctx.onQuickGenerate;
+          if (typeof fn === "function") fn(kind);
+        });
+        wrap.appendChild(title);
+        wrap.appendChild(hint);
+        wrap.appendChild(btn);
+      }
+
+      container.appendChild(wrap);
+      setEditHintVisible(kind, false);
+    }
+
     function renderList(kind) {
       const container = kind === "gm" ? $("gmList") : $("gnList");
       const countEl = kind === "gm" ? $("gmCount") : $("gnCount");
@@ -147,7 +226,13 @@
       container.innerHTML = "";
 
       if (!getHandle()) {
-        if (msgEl) msgEl.innerHTML = '<span class="warn">Connect first.</span>';
+        renderBankEmptyState(container, kind, "disconnected", msgEl);
+        return;
+      }
+
+      const loadErr = String(getBankListError(kind) || "").trim();
+      if (loadErr) {
+        renderBankEmptyState(container, kind, "error", msgEl);
         return;
       }
 
@@ -158,9 +243,11 @@
         : lines.map((val, idx) => ({ idx, val }));
 
       if (!lines.length) {
-        if (msgEl) msgEl.textContent = "Saved bank is empty.";
+        renderBankEmptyState(container, kind, "empty", msgEl);
         return;
       }
+
+      setEditHintVisible(kind, true);
 
       if (q && msgEl) {
         msgEl.innerHTML = `<span class="muted">Filtered: showing <b>${items.length}</b> / ${lines.length}</span>`;

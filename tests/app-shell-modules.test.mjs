@@ -1528,30 +1528,102 @@ test("bankui: remainingSlots respects free cap", () => {
   assert.equal(bankui.remainingSlots("gm"), 47);
 });
 
-test("bankui: renderList warns when disconnected", () => {
+test("bankui: renderList shows connect CTA when disconnected", () => {
+  const prevDoc = globalThis.document;
+  globalThis.document = {
+    createElement(tag) {
+      const el = {
+        tagName: tag.toUpperCase(),
+        textContent: "",
+        children: [],
+        classList: {
+          _s: new Set(),
+          add(x) {
+            this._s.add(x);
+          },
+          remove(x) {
+            this._s.delete(x);
+          },
+          toggle(c, v) {
+            if (v) this._s.add(c);
+            else this._s.delete(c);
+          },
+          contains(c) {
+            return this._s.has(c);
+          },
+        },
+        get className() {
+          return [...this.classList._s].join(" ");
+        },
+        set className(v) {
+          this.classList._s = new Set(String(v || "").split(/\s+/).filter(Boolean));
+        },
+        appendChild(c) {
+          this.children.push(c);
+          return c;
+        },
+        addEventListener() {},
+        matches(s) {
+          return s.startsWith(".") && this.classList.contains(s.slice(1));
+        },
+        setAttribute() {},
+        getAttribute() {
+          return null;
+        },
+      };
+      if (tag === "button") el.click = () => {};
+      return el;
+    },
+  };
+  const gmList = {
+    innerHTML: "",
+    appendChild(n) {
+      this.last = n;
+    },
+    querySelector(sel) {
+      const walk = (node) => {
+        if (!node) return null;
+        if (node.matches?.(sel)) return node;
+        for (const c of node.children || []) {
+          const h = walk(c);
+          if (h) return h;
+        }
+        return null;
+      };
+      return walk(this.last);
+    },
+  };
   const els = {
-    gmList: { innerHTML: "" },
+    gmList,
     gmCount: { textContent: "" },
     gmMsg: { innerHTML: "" },
     gmTotal: { textContent: "" },
     gmCap: { textContent: "" },
     gmSavedVal: { textContent: "" },
     gmSavedFill: { style: { width: "" } },
+    gm_edit_hint: { className: "editHint", classList: { toggle() {} } },
   };
-  const bankui = loadFactory("app.bankui.js", "__GMXBankUiFactory")({
-    $: (id) => els[id] || null,
-    getHandle: () => "",
-    getBankKey: () => "gmx_gm_bank",
-    readKey: () => [],
-    writeKey: () => {},
-    dedupeLines: (lines) => lines,
-    normalizeLine: (s) => String(s || "").trim(),
-    lastSaved: { gm: 0, gn: 0 },
-    saveCapFree: 50,
-    isPro: () => false,
-  });
-  bankui.renderList("gm");
-  assert.match(els.gmMsg.innerHTML, /Connect first/);
+  try {
+    const bankui = loadFactory("app.bankui.js", "__GMXBankUiFactory")({
+      $: (id) => els[id] || null,
+      getHandle: () => "",
+      getBankKey: () => "gmx_gm_bank",
+      readKey: () => [],
+      writeKey: () => {},
+      dedupeLines: (lines) => lines,
+      normalizeLine: (s) => String(s || "").trim(),
+      lastSaved: { gm: 0, gn: 0 },
+      saveCapFree: 50,
+      isPro: () => false,
+      t: (_k, fb) => fb,
+    });
+    bankui.renderList("gm");
+    const cta = gmList.querySelector(".bankEmptyCta");
+    assert.ok(cta);
+    assert.match(cta.textContent, /Connect handle/i);
+  } finally {
+    globalThis.document = prevDoc;
+  }
 });
 
 test("bankui: renderList uses mountLineListSkeleton for large lists", () => {

@@ -104,6 +104,8 @@
       trackEvent: ctx.trackEvent,
       toast: ctx.toast,
       t: ctx.t,
+      onNavigateConnect: ctx.onNavigateConnect,
+      getBankListError: ctx.getBankListError,
       updateLangFlags: ctx.updateLangFlags,
       renderLangChips: ctx.renderLangChips,
       abort: ctx.abort,

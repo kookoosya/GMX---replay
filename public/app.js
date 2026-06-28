@@ -769,6 +769,16 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
     getAntiStrength,
     refreshUsage,
     setBusy,
+    onNavigateConnect: () => {
+      tab("home");
+      try {
+        const hi = $("xHandle");
+        if (hi) {
+          hi.focus();
+          hi.scrollIntoView({ block: "center", behavior: "smooth" });
+        }
+      } catch (_e) {}
+    },
   };
   const __gmxBankUiWire = window.__GMXBankUiWireFactory(__gmxBankUiWireCtx);
   __gmxBestPick = __gmxBankUiWire.bestPick;
@@ -906,6 +916,7 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
     renderAllGenHistory,
   } = __gmxGenerateWire;
   async function generate(kind, count){ return __gmxGenerateWire.generate(kind, count); }
+  __gmxBankUiWireCtx.onQuickGenerate = (kind) => generate(kind, 1);
 
 // ----- Leaderboard -----
 let LB_DAYS = 7;
