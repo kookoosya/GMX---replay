@@ -874,5 +874,18 @@
   "ref_badge_toast_html": "Nuovo badge: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Tutti i badge promotore sbloccati",
   "locked_pack": "Pack bloccato. Serve Pro o referral.",
-  "gn_lang": "Reply language"
+  "gn_lang": "Reply language",
+  "wallet_sol_unavailable": "SOL non è temporaneamente disponibile. Scegli USDC o USDT.",
+  "wallet_recovery_title": "Pagamento in sospeso",
+  "wallet_recovery_sent": "Pagamento inviato. Conferma on-chain in corso.",
+  "wallet_recovery_checking": "Pagamento inviato. Verifica conferma…",
+  "wallet_recovery_check_again": "Controlla di nuovo",
+  "wallet_recovery_dismiss": "Chiudi",
+  "wallet_recovery_recovered": "Pro attivato.",
+  "wallet_recovery_expired": "Questo checkout è scaduto. Se il pagamento è andato a buon fine, contatta il supporto con la firma della transazione.",
+  "wallet_recovery_expired_title": "Checkout scaduto",
+  "wallet_recovery_wrong_account": "Un pagamento in sospeso appartiene a un altro @handle. Torna a quell'account per completare la verifica.",
+  "wallet_recovery_wrong_account_title": "Account diverso",
+  "wallet_recovery_wrong_wallet": "Questo pagamento è stato inviato da un altro wallet. Riconnetti quel wallet o chiudi per ricominciare.",
+  "wallet_recovery_wrong_wallet_title": "Wallet diverso"
 }

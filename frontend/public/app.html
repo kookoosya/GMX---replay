@@ -1075,8 +1075,8 @@ html.mode-light body.hasUserBg .panel{
     <span>USDT</span>
   </button>
 </div>
+<div class="warn small hidden" id="w_token_availability" role="status" aria-live="polite" style="margin-top:8px"></div>
 <div class="muted small" id="w_quote_hint" style="margin-top:8px">Stablecoins pay exact USD. SOL amount is quoted live at checkout.</div>
-
 <div class="hr"></div>
 <div id="walletActions" class="hidden">
   <div class="title" id="sf_title">Wallet</div>
@@ -1091,6 +1091,14 @@ html.mode-light body.hasUserBg .panel{
     <div class="muted small" id="sf_hint">Select a plan to enable.</div>
   </div>
   <div class="muted" id="w_msg" style="margin-top:10px"></div>
+  <div id="w_recovery_box" class="walletRecovery hidden" role="region" aria-live="polite" aria-labelledby="w_recovery_title">
+    <div class="title small" id="w_recovery_title"></div>
+    <div class="muted small" id="w_recovery_msg" style="margin-top:6px"></div>
+    <div class="split" style="gap:8px;margin-top:10px;flex-wrap:wrap">
+      <button type="button" class="btn secondary" id="w_recovery_check">Check again</button>
+      <button type="button" class="btn ghost" id="w_recovery_dismiss">Dismiss</button>
+    </div>
+  </div>
   <div id="pay_state_box" class="hidden" style="margin-top:10px;border:1px solid var(--border);border-radius:14px;padding:10px;background:rgba(0,0,0,0.02)">
     <div class="muted small" id="pay_state_title" style="margin-bottom:8px">Payment status</div>
     <div class="split" style="gap:8px;flex-wrap:wrap">

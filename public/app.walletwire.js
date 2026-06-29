@@ -156,6 +156,17 @@
       buildPaymentTx,
       walletSendTransaction,
       verifyIntentWithRetry,
+      isTokenAvailable: __gmxWh.isTokenAvailable,
+      firstAvailableToken: __gmxWh.firstAvailableToken,
+      savePaymentRecovery: __gmxWh.savePaymentRecovery,
+      loadPaymentRecovery: __gmxWh.loadPaymentRecovery,
+      clearPaymentRecovery: __gmxWh.clearPaymentRecovery,
+      wasRecoverySuccessShown: __gmxWh.wasRecoverySuccessShown,
+      markRecoverySuccessShown: __gmxWh.markRecoverySuccessShown,
+      acquireVerifyLock: __gmxWh.acquireVerifyLock,
+      releaseVerifyLock: __gmxWh.releaseVerifyLock,
+      isRecoveryExpired: __gmxWh.isRecoveryExpired,
+      normPayHandle: __gmxWh.normPayHandle,
     });
 
     const setWalletUi = () => __gmxWalletUi.setWalletUi();

@@ -76,7 +76,7 @@ test("walletui: concurrent payNow creates only one billing intent", async () => 
 
 test("walletui: payInflight guard is present at payNow entry", () => {
   const src = readFileSync(path.join(root, "public", "app.walletui.js"), "utf8");
-  assert.match(src, /async function payNow\(\)\s*\{\s*if \(payInflight\) return;/);
+  assert.match(src, /async function payNow\(\)[\s\S]*?if \(payInflight \|\| recoveryVerifyInflight\) return;/);
 });
 
 test("walletpay: verifyIntentWithRetry retries transient verify errors", () => {

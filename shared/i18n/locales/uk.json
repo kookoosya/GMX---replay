@@ -874,5 +874,18 @@
   "ref_badge_toast_html": "Новий бейдж: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Усі бейджі промоутера відкриті",
   "locked_pack": "Пак заблоковано. Потрібен Pro або реферали.",
-  "gn_lang": "Reply language"
+  "gn_lang": "Reply language",
+  "wallet_sol_unavailable": "SOL тимчасово недоступний. Оберіть USDC або USDT.",
+  "wallet_recovery_title": "Очікується оплата",
+  "wallet_recovery_sent": "Платіж надіслано. Підтверджуємо транзакцію в мережі.",
+  "wallet_recovery_checking": "Платіж надіслано. Перевіряємо підтвердження…",
+  "wallet_recovery_check_again": "Перевірити знову",
+  "wallet_recovery_dismiss": "Приховати",
+  "wallet_recovery_recovered": "Pro активовано.",
+  "wallet_recovery_expired": "Термін checkout минув. Якщо оплата пройшла, зверніться в підтримку з підписом транзакції.",
+  "wallet_recovery_expired_title": "Checkout завершився",
+  "wallet_recovery_wrong_account": "Очікуючий платіж належить іншому @handle. Поверніться до того акаунта, щоб завершити перевірку.",
+  "wallet_recovery_wrong_account_title": "Інший акаунт",
+  "wallet_recovery_wrong_wallet": "Цей платіж надіслано з іншого гаманця. Підключіть той гаманець або приховайте, щоб почати спочатку.",
+  "wallet_recovery_wrong_wallet_title": "Інший гаманець"
 }

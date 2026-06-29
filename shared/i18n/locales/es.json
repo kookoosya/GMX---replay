@@ -874,5 +874,18 @@
   "ref_badge_toast_html": "Nueva insignia: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Todas las insignias de promotor desbloqueadas",
   "locked_pack": "Pack bloqueado. Necesitas Pro o referidos.",
-  "gn_lang": "Reply language"
+  "gn_lang": "Reply language",
+  "wallet_sol_unavailable": "SOL no está disponible temporalmente. Elige USDC o USDT.",
+  "wallet_recovery_title": "Pago pendiente",
+  "wallet_recovery_sent": "Pago enviado. Aún confirmando on-chain.",
+  "wallet_recovery_checking": "Pago enviado. Comprobando confirmación…",
+  "wallet_recovery_check_again": "Comprobar de nuevo",
+  "wallet_recovery_dismiss": "Descartar",
+  "wallet_recovery_recovered": "Pro activado.",
+  "wallet_recovery_expired": "Este checkout expiró. Si el pago se realizó, contacta soporte con la firma de la transacción.",
+  "wallet_recovery_expired_title": "Checkout expirado",
+  "wallet_recovery_wrong_account": "Un pago pendiente pertenece a otro @handle. Vuelve a esa cuenta para terminar la verificación.",
+  "wallet_recovery_wrong_account_title": "Cuenta distinta",
+  "wallet_recovery_wrong_wallet": "Este pago se envió desde otra wallet. Reconéctala o descarta para empezar de nuevo.",
+  "wallet_recovery_wrong_wallet_title": "Wallet distinta"
 }

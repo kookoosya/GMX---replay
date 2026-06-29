@@ -874,5 +874,18 @@
   "ref_badge_toast_html": "Lencana baru: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Semua lencana promotor terbuka",
   "locked_pack": "Paket terkunci. Butuh Pro atau referral.",
-  "gn_lang": "Reply language"
+  "gn_lang": "Reply language",
+  "wallet_sol_unavailable": "SOL sementara tidak tersedia. Pilih USDC atau USDT.",
+  "wallet_recovery_title": "Pembayaran tertunda",
+  "wallet_recovery_sent": "Pembayaran terkirim. Masih mengonfirmasi on-chain.",
+  "wallet_recovery_checking": "Pembayaran terkirim. Memeriksa konfirmasi…",
+  "wallet_recovery_check_again": "Periksa lagi",
+  "wallet_recovery_dismiss": "Tutup",
+  "wallet_recovery_recovered": "Pro diaktifkan.",
+  "wallet_recovery_expired": "Checkout ini kedaluwarsa. Jika pembayaran berhasil, hubungi dukungan dengan tanda tangan transaksi.",
+  "wallet_recovery_expired_title": "Checkout kedaluwarsa",
+  "wallet_recovery_wrong_account": "Pembayaran tertunda milik @handle lain. Kembali ke akun itu untuk menyelesaikan verifikasi.",
+  "wallet_recovery_wrong_account_title": "Akun berbeda",
+  "wallet_recovery_wrong_wallet": "Pembayaran ini dikirim dari dompet lain. Hubungkan kembali dompet itu atau tutup untuk memulai ulang.",
+  "wallet_recovery_wrong_wallet_title": "Dompet berbeda"
 }

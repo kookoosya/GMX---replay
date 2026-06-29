@@ -874,5 +874,18 @@
   "ref_badge_toast_html": "新徽章：<b>{tier}</b>",
   "ref_badge_all_unlocked": "已解锁全部推广徽章",
   "locked_pack": "包已锁定。需要 Pro 或推荐。",
-  "gn_lang": "Reply language"
+  "gn_lang": "Reply language",
+  "wallet_sol_unavailable": "SOL 暂时不可用。请选择 USDC 或 USDT。",
+  "wallet_recovery_title": "付款待确认",
+  "wallet_recovery_sent": "付款已发送。正在链上确认。",
+  "wallet_recovery_checking": "付款已发送。正在检查确认…",
+  "wallet_recovery_check_again": "再次检查",
+  "wallet_recovery_dismiss": "关闭",
+  "wallet_recovery_recovered": "Pro 已激活。",
+  "wallet_recovery_expired": "此结账已过期。若付款已成功，请携带交易签名联系支持。",
+  "wallet_recovery_expired_title": "结账已过期",
+  "wallet_recovery_wrong_account": "待处理付款属于另一个 @handle。请切回该账户以完成验证。",
+  "wallet_recovery_wrong_account_title": "不同账户",
+  "wallet_recovery_wrong_wallet": "此付款由另一个钱包发送。请重新连接该钱包，或关闭后重新开始。",
+  "wallet_recovery_wrong_wallet_title": "不同钱包"
 }

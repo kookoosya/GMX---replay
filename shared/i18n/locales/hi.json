@@ -874,5 +874,18 @@
   "ref_badge_toast_html": "नया बैज: <b>{tier}</b>",
   "ref_badge_all_unlocked": "सभी प्रमोटर बैज अनलॉक",
   "locked_pack": "पैक लॉक है। Pro या रेफरल चाहिए।",
-  "gn_lang": "Reply language"
+  "gn_lang": "Reply language",
+  "wallet_sol_unavailable": "SOL अस्थायी रूप से उपलब्ध नहीं है। USDC या USDT चुनें।",
+  "wallet_recovery_title": "भुगतान लंबित",
+  "wallet_recovery_sent": "भुगतान भेजा गया। On-chain पुष्टि जारी है।",
+  "wallet_recovery_checking": "भुगतान भेजा गया। पुष्टि जाँची जा रही है…",
+  "wallet_recovery_check_again": "फिर जाँचें",
+  "wallet_recovery_dismiss": "बंद करें",
+  "wallet_recovery_recovered": "Pro सक्रिय हो गया।",
+  "wallet_recovery_expired": "यह checkout समाप्त हो गया। यदि भुगतान हो गया, लेनदेन हस्ताक्षर के साथ सपोर्ट से संपर्क करें।",
+  "wallet_recovery_expired_title": "Checkout समाप्त",
+  "wallet_recovery_wrong_account": "लंबित भुगतान दूसरे @handle से है। सत्यापन पूरा करने के लिए उस खाते पर वापस जाएँ।",
+  "wallet_recovery_wrong_account_title": "अलग खाता",
+  "wallet_recovery_wrong_wallet": "यह भुगतान दूसरे वॉलेट से भेजा गया। उस वॉलेट को फिर कनेक्ट करें या बंद करके फिर से शुरू करें।",
+  "wallet_recovery_wrong_wallet_title": "अलग वॉलेट"
 }

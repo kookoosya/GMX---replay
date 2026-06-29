@@ -874,5 +874,18 @@
   "ref_badge_toast_html": "Novo emblema: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Todos os emblemas de promotor desbloqueados",
   "locked_pack": "Pack bloqueado. Pro ou indicações necessários.",
-  "gn_lang": "Reply language"
+  "gn_lang": "Reply language",
+  "wallet_sol_unavailable": "SOL está temporariamente indisponível. Escolha USDC ou USDT.",
+  "wallet_recovery_title": "Pagamento pendente",
+  "wallet_recovery_sent": "Pagamento enviado. Ainda confirmando on-chain.",
+  "wallet_recovery_checking": "Pagamento enviado. Verificando confirmação…",
+  "wallet_recovery_check_again": "Verificar novamente",
+  "wallet_recovery_dismiss": "Dispensar",
+  "wallet_recovery_recovered": "Pro ativado.",
+  "wallet_recovery_expired": "Este checkout expirou. Se o pagamento foi feito, contacte o suporte com a assinatura da transação.",
+  "wallet_recovery_expired_title": "Checkout expirado",
+  "wallet_recovery_wrong_account": "Um pagamento pendente pertence a outro @handle. Volte a essa conta para concluir a verificação.",
+  "wallet_recovery_wrong_account_title": "Conta diferente",
+  "wallet_recovery_wrong_wallet": "Este pagamento foi enviado de outra carteira. Reconecte essa carteira ou dispense para recomeçar.",
+  "wallet_recovery_wrong_wallet_title": "Carteira diferente"
 }

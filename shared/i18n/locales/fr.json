@@ -874,5 +874,18 @@
   "ref_badge_toast_html": "Nouveau badge : <b>{tier}</b>",
   "ref_badge_all_unlocked": "Tous les badges promoteur débloqués",
   "locked_pack": "Pack verrouillé. Pro ou parrainages requis.",
-  "gn_lang": "Reply language"
+  "gn_lang": "Reply language",
+  "wallet_sol_unavailable": "SOL est temporairement indisponible. Choisissez USDC ou USDT.",
+  "wallet_recovery_title": "Paiement en attente",
+  "wallet_recovery_sent": "Paiement envoyé. Confirmation on-chain en cours.",
+  "wallet_recovery_checking": "Paiement envoyé. Vérification en cours…",
+  "wallet_recovery_check_again": "Revérifier",
+  "wallet_recovery_dismiss": "Fermer",
+  "wallet_recovery_recovered": "Pro activé.",
+  "wallet_recovery_expired": "Ce checkout a expiré. Si le paiement est passé, contactez le support avec la signature de transaction.",
+  "wallet_recovery_expired_title": "Checkout expiré",
+  "wallet_recovery_wrong_account": "Un paiement en attente appartient à un autre @handle. Revenez à ce compte pour terminer la vérification.",
+  "wallet_recovery_wrong_account_title": "Compte différent",
+  "wallet_recovery_wrong_wallet": "Ce paiement a été envoyé depuis un autre portefeuille. Reconnectez ce portefeuille ou fermez pour recommencer.",
+  "wallet_recovery_wrong_wallet_title": "Portefeuille différent"
 }

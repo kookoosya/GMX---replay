@@ -874,5 +874,18 @@
   "ref_badge_toast_html": "Nowa odznaka: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Wszystkie odznaki promotora odblokowane",
   "locked_pack": "Pakiet zablokowany. Potrzebny Pro lub polecenia.",
-  "gn_lang": "Reply language"
+  "gn_lang": "Reply language",
+  "wallet_sol_unavailable": "SOL jest tymczasowo niedostępny. Wybierz USDC lub USDT.",
+  "wallet_recovery_title": "Płatność oczekuje",
+  "wallet_recovery_sent": "Płatność wysłana. Trwa potwierdzenie on-chain.",
+  "wallet_recovery_checking": "Płatność wysłana. Sprawdzanie potwierdzenia…",
+  "wallet_recovery_check_again": "Sprawdź ponownie",
+  "wallet_recovery_dismiss": "Zamknij",
+  "wallet_recovery_recovered": "Pro aktywowane.",
+  "wallet_recovery_expired": "Ten checkout wygasł. Jeśli płatność przeszła, skontaktuj się z supportem z podpisem transakcji.",
+  "wallet_recovery_expired_title": "Checkout wygasł",
+  "wallet_recovery_wrong_account": "Oczekująca płatność należy do innego @handle. Wróć do tego konta, aby dokończyć weryfikację.",
+  "wallet_recovery_wrong_account_title": "Inne konto",
+  "wallet_recovery_wrong_wallet": "Ta płatność została wysłana z innego portfela. Połącz ten portfel ponownie lub zamknij, aby zacząć od nowa.",
+  "wallet_recovery_wrong_wallet_title": "Inny portfel"
 }

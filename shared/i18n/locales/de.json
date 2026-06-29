@@ -874,5 +874,18 @@
   "ref_badge_toast_html": "Neues Abzeichen: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Alle Promoter-Abzeichen freigeschaltet",
   "locked_pack": "Paket gesperrt. Pro oder Referrals nötig.",
-  "gn_lang": "Reply language"
+  "gn_lang": "Reply language",
+  "wallet_sol_unavailable": "SOL ist vorübergehend nicht verfügbar. Wählen Sie USDC oder USDT.",
+  "wallet_recovery_title": "Zahlung ausstehend",
+  "wallet_recovery_sent": "Zahlung gesendet. On-chain-Bestätigung läuft noch.",
+  "wallet_recovery_checking": "Zahlung gesendet. Bestätigung wird geprüft…",
+  "wallet_recovery_check_again": "Erneut prüfen",
+  "wallet_recovery_dismiss": "Ausblenden",
+  "wallet_recovery_recovered": "Pro aktiviert.",
+  "wallet_recovery_expired": "Dieser Checkout ist abgelaufen. Wenn die Zahlung durchging, kontaktieren Sie den Support mit der Transaktionssignatur.",
+  "wallet_recovery_expired_title": "Checkout abgelaufen",
+  "wallet_recovery_wrong_account": "Eine ausstehende Zahlung gehört zu einem anderen @handle. Wechsle zurück zu diesem Konto, um die Verifizierung abzuschließen.",
+  "wallet_recovery_wrong_account_title": "Anderes Konto",
+  "wallet_recovery_wrong_wallet": "Diese Zahlung wurde von einer anderen Wallet gesendet. Verbinde diese Wallet erneut oder blende aus, um neu zu starten.",
+  "wallet_recovery_wrong_wallet_title": "Andere Wallet"
 }

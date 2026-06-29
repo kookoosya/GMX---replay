@@ -275,6 +275,149 @@
       return [solTxt, perMoTxt].filter(Boolean).join(" · ");
     }
 
+    const PAY_RECOVERY_KEY = "gmx_pay_recovery_v1";
+    const PAY_VERIFY_LOCK_KEY = "gmx_pay_verify_lock";
+    const PAY_SUCCESS_SIG_PREFIX = "gmx_pay_ok_";
+    const PAY_RECOVERY_VERSION = 1;
+    const VERIFY_LOCK_MS = 90_000;
+    const RECOVERY_FALLBACK_TTL_MS = 24 * 60 * 60 * 1000;
+
+    function tokenAvailabilityFromBilling(billing) {
+      const ta = billing?.tokenAvailability;
+      if (ta && typeof ta === "object") return ta;
+      const solOk = billing?.solAvailable === true || Number(billing?.solUsd || 0) > 0;
+      return {
+        SOL: { available: solOk, reason: solOk ? null : "price_unavailable" },
+        USDC: { available: true, reason: null },
+        USDT: { available: true, reason: null },
+      };
+    }
+
+    function isTokenAvailable(billing, currency) {
+      const key = String(currency || "").toUpperCase();
+      const ta = tokenAvailabilityFromBilling(billing);
+      if (ta[key]?.available === false) return false;
+      const tokens = billing?.tokens;
+      if (Array.isArray(tokens)) {
+        const row = tokens.find((t) => String(t.key || "").toUpperCase() === key);
+        if (row && row.available === false) return false;
+      }
+      return true;
+    }
+
+    function firstAvailableToken(billing) {
+      for (const key of ["USDC", "USDT", "SOL"]) {
+        if (isTokenAvailable(billing, key)) return key;
+      }
+      return "USDC";
+    }
+
+    function normPayHandle(handle) {
+      return String(handle || "").trim().toLowerCase();
+    }
+
+    function readJsonStorage(key) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch {
+        return null;
+      }
+    }
+
+    function writeJsonStorage(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function clearStorageKey(key) {
+      try {
+        localStorage.removeItem(key);
+      } catch {}
+    }
+
+    function savePaymentRecovery(record) {
+      const payload = {
+        v: PAY_RECOVERY_VERSION,
+        intentId: String(record?.intentId || "").trim(),
+        sig: String(record?.sig || "").trim(),
+        payer: String(record?.payer || "").trim(),
+        handle: String(record?.handle || "").trim(),
+        token: String(record?.token || "").trim().toUpperCase(),
+        planKey: String(record?.planKey || "").trim(),
+        planLabel: String(record?.planLabel || "").trim(),
+        expiresAt: String(record?.expiresAt || "").trim(),
+        createdAt: Number(record?.createdAt || Date.now()) || Date.now(),
+      };
+      if (!payload.intentId || !payload.sig || !payload.payer || !payload.handle) return false;
+      return writeJsonStorage(PAY_RECOVERY_KEY, payload);
+    }
+
+    function loadPaymentRecovery() {
+      const rec = readJsonStorage(PAY_RECOVERY_KEY);
+      if (!rec || rec.v !== PAY_RECOVERY_VERSION) return null;
+      if (!rec.intentId || !rec.sig || !rec.payer || !rec.handle) return null;
+      const createdAt = Number(rec.createdAt || 0) || 0;
+      if (createdAt && Date.now() - createdAt > RECOVERY_FALLBACK_TTL_MS) {
+        clearPaymentRecovery();
+        return null;
+      }
+      return rec;
+    }
+
+    function clearPaymentRecovery() {
+      clearStorageKey(PAY_RECOVERY_KEY);
+    }
+
+    function wasRecoverySuccessShown(sig) {
+      const key = PAY_SUCCESS_SIG_PREFIX + String(sig || "").slice(0, 24);
+      try {
+        return !!localStorage.getItem(key);
+      } catch {
+        return false;
+      }
+    }
+
+    function markRecoverySuccessShown(sig) {
+      const key = PAY_SUCCESS_SIG_PREFIX + String(sig || "").slice(0, 24);
+      try {
+        localStorage.setItem(key, String(Date.now()));
+      } catch {}
+    }
+
+    function acquireVerifyLock() {
+      const now = Date.now();
+      try {
+        const raw = localStorage.getItem(PAY_VERIFY_LOCK_KEY);
+        if (raw) {
+          const lock = JSON.parse(raw);
+          if (Number(lock?.until || 0) > now) return false;
+        }
+        localStorage.setItem(PAY_VERIFY_LOCK_KEY, JSON.stringify({ until: now + VERIFY_LOCK_MS }));
+        return true;
+      } catch {
+        return true;
+      }
+    }
+
+    function releaseVerifyLock() {
+      clearStorageKey(PAY_VERIFY_LOCK_KEY);
+    }
+
+    function isRecoveryExpired(rec) {
+      if (!rec?.expiresAt) return false;
+      try {
+        return new Date(rec.expiresAt) < new Date();
+      } catch {
+        return false;
+      }
+    }
+
     return {
       BILLING_MEMO_PROGRAM_ID,
       WS_CHAIN,
@@ -294,6 +437,18 @@
       fmtSol,
       planPricePrimary,
       planPriceSecondary,
+      tokenAvailabilityFromBilling,
+      isTokenAvailable,
+      firstAvailableToken,
+      savePaymentRecovery,
+      loadPaymentRecovery,
+      clearPaymentRecovery,
+      wasRecoverySuccessShown,
+      markRecoverySuccessShown,
+      acquireVerifyLock,
+      releaseVerifyLock,
+      isRecoveryExpired,
+      normPayHandle,
     };
   };
 })(window);

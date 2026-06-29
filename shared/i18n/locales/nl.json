@@ -874,5 +874,18 @@
   "ref_badge_toast_html": "Nieuwe badge: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Alle promoter-badges ontgrendeld",
   "locked_pack": "Pack vergrendeld. Pro of referrals nodig.",
-  "gn_lang": "Reply language"
+  "gn_lang": "Reply language",
+  "wallet_sol_unavailable": "SOL is tijdelijk niet beschikbaar. Kies USDC of USDT.",
+  "wallet_recovery_title": "Betaling in behandeling",
+  "wallet_recovery_sent": "Betaling verzonden. On-chain bevestiging loopt nog.",
+  "wallet_recovery_checking": "Betaling verzonden. Bevestiging controleren…",
+  "wallet_recovery_check_again": "Opnieuw controleren",
+  "wallet_recovery_dismiss": "Sluiten",
+  "wallet_recovery_recovered": "Pro geactiveerd.",
+  "wallet_recovery_expired": "Deze checkout is verlopen. Als de betaling is gelukt, neem contact op met support met de transactiesignatuur.",
+  "wallet_recovery_expired_title": "Checkout verlopen",
+  "wallet_recovery_wrong_account": "Een openstaande betaling hoort bij een andere @handle. Schakel terug naar dat account om de verificatie af te ronden.",
+  "wallet_recovery_wrong_account_title": "Ander account",
+  "wallet_recovery_wrong_wallet": "Deze betaling is vanuit een andere wallet verzonden. Verbind die wallet opnieuw of sluit om opnieuw te beginnen.",
+  "wallet_recovery_wrong_wallet_title": "Andere wallet"
 }

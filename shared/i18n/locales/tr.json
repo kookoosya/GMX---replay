@@ -874,5 +874,18 @@
   "ref_badge_toast_html": "Yeni rozet: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Tüm promoter rozetleri açıldı",
   "locked_pack": "Paket kilitli. Pro veya referans gerekir.",
-  "gn_lang": "Reply language"
+  "gn_lang": "Reply language",
+  "wallet_sol_unavailable": "SOL geçici olarak kullanılamıyor. USDC veya USDT seçin.",
+  "wallet_recovery_title": "Ödeme bekleniyor",
+  "wallet_recovery_sent": "Ödeme gönderildi. On-chain doğrulama sürüyor.",
+  "wallet_recovery_checking": "Ödeme gönderildi. Onay kontrol ediliyor…",
+  "wallet_recovery_check_again": "Tekrar kontrol et",
+  "wallet_recovery_dismiss": "Kapat",
+  "wallet_recovery_recovered": "Pro etkinleştirildi.",
+  "wallet_recovery_expired": "Bu checkout süresi doldu. Ödeme geçtiyse, işlem imzasıyla destekle iletişime geçin.",
+  "wallet_recovery_expired_title": "Checkout süresi doldu",
+  "wallet_recovery_wrong_account": "Bekleyen ödeme farklı bir @handle'a ait. Doğrulamayı bitirmek için o hesaba dönün.",
+  "wallet_recovery_wrong_account_title": "Farklı hesap",
+  "wallet_recovery_wrong_wallet": "Bu ödeme farklı bir cüzdandan gönderildi. O cüzdanı yeniden bağlayın veya kapatıp baştan başlayın.",
+  "wallet_recovery_wrong_wallet_title": "Farklı cüzdan"
 }

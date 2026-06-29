@@ -874,5 +874,18 @@
   "ref_badge_toast_html": "Новый бейдж: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Все бейджи промоутера открыты",
   "locked_pack": "Пак заблокирован. Нужен Pro или рефералы.",
-  "gn_lang": "Reply language"
+  "gn_lang": "Reply language",
+  "wallet_sol_unavailable": "SOL временно недоступен. Выберите USDC или USDT.",
+  "wallet_recovery_title": "Ожидается оплата",
+  "wallet_recovery_sent": "Платёж отправлен. Подтверждаем транзакцию в сети.",
+  "wallet_recovery_checking": "Платёж отправлен. Проверяем подтверждение…",
+  "wallet_recovery_check_again": "Проверить снова",
+  "wallet_recovery_dismiss": "Скрыть",
+  "wallet_recovery_recovered": "Pro активирован.",
+  "wallet_recovery_expired": "Срок checkout истёк. Если оплата прошла, обратитесь в поддержку с подписью транзакции.",
+  "wallet_recovery_expired_title": "Checkout истёк",
+  "wallet_recovery_wrong_account": "Ожидающий платёж привязан к другому @handle. Вернитесь к тому аккаунту для завершения проверки.",
+  "wallet_recovery_wrong_account_title": "Другой аккаунт",
+  "wallet_recovery_wrong_wallet": "Этот платёж отправлен с другого кошелька. Подключите тот кошелёк или скройте, чтобы начать заново.",
+  "wallet_recovery_wrong_wallet_title": "Другой кошелёк"
 }

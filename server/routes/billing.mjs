@@ -38,6 +38,12 @@ export function registerBillingRoutes({
       "https://api.mainnet-beta.solana.com";
     let solUsd = 0;
     try { solUsd = await getSolUsd(); } catch { solUsd = 0; }
+    const solAvailable = Number(solUsd) > 0;
+    const tokenAvailability = {
+      SOL: { available: solAvailable, reason: solAvailable ? null : "price_unavailable" },
+      USDC: { available: true, reason: null },
+      USDT: { available: true, reason: null },
+    };
 
     const plans = BILLING_PLANS.map((p) => {
       const lamports = solUsd > 0 ? quoteSolLamportsFromUsd(p.usd, solUsd) : 0n;
@@ -45,19 +51,37 @@ export function registerBillingRoutes({
       return { ...p, solApprox, currencyBase: "USD" };
     });
 
+    const tokens = BILLING_TOKENS.map((t) => ({
+      ...t,
+      available: tokenAvailability[t.key]?.available !== false,
+      unavailableReason: tokenAvailability[t.key]?.reason || null,
+    }));
+
     if (!isSolanaPubkey(SOL_RECEIVER)) {
       return res.status(503).json({
         ok: false,
         error: "billing_receiver_not_configured",
         message: "Set SOL_RECEIVER in server environment to enable payments.",
         plans: [],
-        tokens: BILLING_TOKENS,
+        tokens,
+        tokenAvailability,
         solUsd,
+        solAvailable: false,
         rpcPublic,
       });
     }
 
-    res.json({ ok: true, receiver: SOL_RECEIVER, plans, tokens: BILLING_TOKENS, solUsd, rpcPublic, receiverOk: true });
+    res.json({
+      ok: true,
+      receiver: SOL_RECEIVER,
+      plans,
+      tokens,
+      tokenAvailability,
+      solUsd,
+      solAvailable,
+      rpcPublic,
+      receiverOk: true,
+    });
   });
 
 

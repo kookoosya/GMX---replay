@@ -2632,6 +2632,20 @@ html.theme-applied body.hasWallBg .sideCard {
 }
 
 /* --- Wallet Free vs Pro compare (Sprint 23.1) --- */
+.walletRecovery{
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(88, 246, 181, 0.28);
+  background: rgba(88, 246, 181, 0.06);
+}
+html.mode-light .walletRecovery{
+  background: rgba(16, 120, 88, 0.06);
+  border-color: rgba(16, 120, 88, 0.22);
+}
+#w_token_availability:not(.hidden){
+  display: block;
+}
 .walletPlanCompare{
   margin-top: 12px;
   padding: 14px;

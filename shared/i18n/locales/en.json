@@ -874,5 +874,18 @@
   "ref_badge_toast_html": "New badge unlocked: <b>{tier}</b>",
   "ref_badge_all_unlocked": "All promoter badges unlocked",
   "locked_pack": "Pack is locked. Upgrade to Pro or unlock via referrals.",
-  "gn_lang": "Reply language"
+  "gn_lang": "Reply language",
+  "wallet_sol_unavailable": "SOL is temporarily unavailable. Choose USDC or USDT.",
+  "wallet_recovery_title": "Payment pending",
+  "wallet_recovery_sent": "Payment sent. We are still confirming it on-chain.",
+  "wallet_recovery_checking": "Payment sent. Checking confirmation…",
+  "wallet_recovery_check_again": "Check again",
+  "wallet_recovery_dismiss": "Dismiss",
+  "wallet_recovery_recovered": "Pro activated.",
+  "wallet_recovery_expired": "This checkout expired. If your payment went through, contact support with your transaction signature.",
+  "wallet_recovery_expired_title": "Checkout expired",
+  "wallet_recovery_wrong_account": "A pending payment belongs to a different @handle. Switch back to that account to finish verification.",
+  "wallet_recovery_wrong_account_title": "Different account",
+  "wallet_recovery_wrong_wallet": "This payment was sent from a different wallet. Reconnect that wallet or dismiss to start over.",
+  "wallet_recovery_wrong_wallet_title": "Different wallet"
 }

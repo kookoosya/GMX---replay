@@ -55,8 +55,34 @@
       typeof ctx.walletSendTransaction === "function" ? ctx.walletSendTransaction : async () => "";
     const verifyIntentWithRetry =
       typeof ctx.verifyIntentWithRetry === "function" ? ctx.verifyIntentWithRetry : async () => ({});
+    const isTokenAvailable =
+      typeof ctx.isTokenAvailable === "function"
+        ? ctx.isTokenAvailable
+        : () => true;
+    const firstAvailableToken =
+      typeof ctx.firstAvailableToken === "function" ? ctx.firstAvailableToken : () => "USDC";
+    const savePaymentRecovery =
+      typeof ctx.savePaymentRecovery === "function" ? ctx.savePaymentRecovery : () => false;
+    const loadPaymentRecovery =
+      typeof ctx.loadPaymentRecovery === "function" ? ctx.loadPaymentRecovery : () => null;
+    const clearPaymentRecovery =
+      typeof ctx.clearPaymentRecovery === "function" ? ctx.clearPaymentRecovery : () => {};
+    const wasRecoverySuccessShown =
+      typeof ctx.wasRecoverySuccessShown === "function" ? ctx.wasRecoverySuccessShown : () => false;
+    const markRecoverySuccessShown =
+      typeof ctx.markRecoverySuccessShown === "function" ? ctx.markRecoverySuccessShown : () => {};
+    const acquireVerifyLock =
+      typeof ctx.acquireVerifyLock === "function" ? ctx.acquireVerifyLock : () => true;
+    const releaseVerifyLock =
+      typeof ctx.releaseVerifyLock === "function" ? ctx.releaseVerifyLock : () => {};
+    const isRecoveryExpired =
+      typeof ctx.isRecoveryExpired === "function" ? ctx.isRecoveryExpired : () => false;
+    const normPayHandle =
+      typeof ctx.normPayHandle === "function" ? ctx.normPayHandle : (h) => String(h || "").trim().toLowerCase();
 
     let payInflight = false;
+    let recoveryVerifyInflight = false;
+    let recoveryActive = false;
 
     function readWalletChoice() {
       try {
@@ -92,8 +118,10 @@
       if (btnConnect) btnConnect.classList.toggle("hidden", !!WALLET.connected);
       if (btnDisconnect) btnDisconnect.classList.toggle("hidden", !WALLET.connected);
 
-      const canPay = !!(selectedPlan && WALLET.connected && WALLET.publicKey);
-      if (payBtn) payBtn.disabled = !canPay;
+      const canPay =
+        !!(selectedPlan && WALLET.connected && WALLET.publicKey && !recoveryActive) &&
+        isTokenAvailable(getBilling(), selectedCurrency);
+      if (payBtn) payBtn.disabled = !canPay || payInflight || recoveryVerifyInflight;
 
       if (hint) {
         if (!selectedPlan) hint.innerHTML = `<span class="muted">Select a plan above to continue.</span>`;
@@ -364,11 +392,216 @@
       }
     }
 
+    function applyTokenAvailability() {
+      const billing = getBilling();
+      ["SOL", "USDC", "USDT"].forEach((cur) => {
+        const el = $("token_" + cur);
+        if (!el) return;
+        const ok = isTokenAvailable(billing, cur);
+        el.disabled = !ok;
+        el.classList.toggle("disabled", !ok);
+        el.setAttribute("aria-disabled", ok ? "false" : "true");
+        if (!ok) el.classList.remove("active");
+      });
+
+      const note = $("w_token_availability");
+      if (note) {
+        if (!isTokenAvailable(billing, "SOL")) {
+          note.textContent = siteTr(
+            "wallet_sol_unavailable",
+            "SOL is temporarily unavailable. Choose USDC or USDT."
+          );
+          note.classList.remove("hidden");
+        } else {
+          note.textContent = "";
+          note.classList.add("hidden");
+        }
+      }
+
+      const cur = getSelectedCurrency();
+      if (!isTokenAvailable(billing, cur)) {
+        setCurrency(firstAvailableToken(billing));
+      }
+    }
+
+    function showRecoveryUi(mode, message, title) {
+      const box = $("w_recovery_box");
+      const titleEl = $("w_recovery_title");
+      const msgEl = $("w_recovery_msg");
+      const checkBtn = $("w_recovery_check");
+      const dismissBtn = $("w_recovery_dismiss");
+      recoveryActive = mode === "pending" || mode === "checking";
+      if (box) box.classList.toggle("hidden", !mode);
+      if (titleEl) {
+        titleEl.textContent =
+          title ||
+          siteTr("wallet_recovery_title", mode === "expired" ? "Checkout expired" : "Payment pending");
+      }
+      if (msgEl) msgEl.textContent = String(message || "");
+      if (checkBtn) {
+        checkBtn.classList.toggle("hidden", mode !== "pending" && mode !== "checking");
+        checkBtn.disabled = recoveryVerifyInflight;
+      }
+      if (dismissBtn) dismissBtn.classList.toggle("hidden", mode === "checking");
+      setWalletUi();
+    }
+
+    function hideRecoveryUi() {
+      recoveryActive = false;
+      const box = $("w_recovery_box");
+      if (box) box.classList.add("hidden");
+      setWalletUi();
+    }
+
+    async function runRecoveryVerify(rec, { showSuccessModal = true } = {}) {
+      if (!rec || recoveryVerifyInflight || payInflight) return null;
+      if (!acquireVerifyLock()) return null;
+
+      recoveryVerifyInflight = true;
+      const msg = $("w_msg");
+      showRecoveryUi(
+        "checking",
+        siteTr("wallet_recovery_checking", "Payment sent. Checking confirmation…"),
+        siteTr("wallet_recovery_title", "Payment pending")
+      );
+      setPayState("confirming", siteTr("wallet_recovery_checking", "Payment sent. Checking confirmation…"));
+
+      try {
+        const j = await verifyIntentWithRetry(rec.intentId, rec.sig, rec.payer);
+        if (j?.ok && j?.sub?.active) {
+          clearPaymentRecovery();
+          hideRecoveryUi();
+          setPayState("verified", siteTr("wallet_recovery_recovered", "Pro activated."));
+          if (msg) msg.innerHTML = `<span class="ok">${escapeHtml(siteTr("wallet_recovery_recovered", "Pro activated."))}</span>`;
+          try {
+            await refreshUsage();
+          } catch {}
+          try {
+            await loadBillingProof();
+          } catch {}
+          try {
+            await loadActivity();
+          } catch {}
+          renderWalletStatus(j.sub);
+          if (showSuccessModal && !wasRecoverySuccessShown(rec.sig)) {
+            markRecoverySuccessShown(rec.sig);
+            const serverPlanLabel = String(rec.planLabel || "").trim();
+            const planLabel = serverPlanLabel
+              ? siteTr("pay_success_plan_pro", "Pro {plan}").replace("{plan}", serverPlanLabel)
+              : rec.planKey
+                ? siteTr("pay_success_plan_pro", "Pro {plan}").replace("{plan}", rec.planKey)
+                : "";
+            openPaySuccess({
+              handle: getHandle(),
+              planLabel,
+              sub: j.sub,
+            });
+          }
+          return j;
+        }
+        showRecoveryUi(
+          "pending",
+          siteTr("wallet_recovery_sent", "Payment sent. We are still confirming it on-chain."),
+          siteTr("wallet_recovery_title", "Payment pending")
+        );
+        return j;
+      } catch (e) {
+        const code = String(e?.message || "payment_not_verified");
+        if (code === "intent_expired") {
+          showRecoveryUi(
+            "expired",
+            siteTr(
+              "wallet_recovery_expired",
+              "This checkout expired. If your payment went through, contact support with your transaction signature."
+            ),
+            siteTr("wallet_recovery_expired_title", "Checkout expired")
+          );
+        } else {
+          showRecoveryUi(
+            "pending",
+            billingErrMsg(code),
+            siteTr("wallet_recovery_title", "Payment pending")
+          );
+        }
+        setPayState("failed", billingErrMsg(code));
+        if (msg) msg.innerHTML = `<span class="bad">${escapeHtml(billingErrMsg(code))}</span>`;
+        return null;
+      } finally {
+        recoveryVerifyInflight = false;
+        releaseVerifyLock();
+        setWalletUi();
+      }
+    }
+
+    async function tryResumePaymentRecovery({ autoVerify = true } = {}) {
+      const rec = loadPaymentRecovery();
+      if (!rec) {
+        hideRecoveryUi();
+        return null;
+      }
+
+      const handle = String(getHandle() || "").trim();
+      const token = String(getToken() || "").trim();
+      if (!handle || !token) {
+        hideRecoveryUi();
+        return null;
+      }
+
+      if (normPayHandle(rec.handle) !== normPayHandle(handle)) {
+        showRecoveryUi(
+          "mismatch",
+          siteTr(
+            "wallet_recovery_wrong_account",
+            "A pending payment belongs to a different @handle. Switch back to that account to finish verification."
+          ),
+          siteTr("wallet_recovery_wrong_account_title", "Different account")
+        );
+        return null;
+      }
+
+      const WALLET = getWallet();
+      const payerNow = String(WALLET.publicKey?.toString?.() || "").trim();
+      if (payerNow && rec.payer && payerNow !== rec.payer) {
+        showRecoveryUi(
+          "wrong_wallet",
+          siteTr(
+            "wallet_recovery_wrong_wallet",
+            "This payment was sent from a different wallet. Reconnect that wallet or dismiss to start over."
+          ),
+          siteTr("wallet_recovery_wrong_wallet_title", "Different wallet")
+        );
+        return null;
+      }
+
+      if (isRecoveryExpired(rec)) {
+        showRecoveryUi(
+          "expired",
+          siteTr(
+            "wallet_recovery_expired",
+            "This checkout expired. If your payment went through, contact support with your transaction signature."
+          ),
+          siteTr("wallet_recovery_expired_title", "Checkout expired")
+        );
+        return null;
+      }
+
+      showRecoveryUi(
+        "pending",
+        siteTr("wallet_recovery_sent", "Payment sent. We are still confirming it on-chain."),
+        siteTr("wallet_recovery_title", "Payment pending")
+      );
+
+      if (autoVerify) return runRecoveryVerify(rec, { showSuccessModal: true });
+      return rec;
+    }
+
     function setCurrency(cur) {
-      setSelectedCurrency(cur);
+      const key = String(cur || "").toUpperCase();
+      if (!isTokenAvailable(getBilling(), key)) return;
+      setSelectedCurrency(key);
       ["SOL", "USDC", "USDT"].forEach((c) => {
         const el = $("token_" + c);
-        if (el) el.classList.toggle("active", c === cur);
+        if (el) el.classList.toggle("active", c === key);
       });
       renderPlanGrid();
       setWalletUi();
@@ -387,8 +620,10 @@
           setSelectedPlan(null);
         }
         if (planKey) setSelectedPlan(plans.find((p) => p.key === planKey) || null);
+        applyTokenAvailability();
         renderPlanGrid();
         setWalletUi();
+        await tryResumePaymentRecovery({ autoVerify: true });
       } catch (_e) {}
     }
 
@@ -511,6 +746,11 @@
       if (m === "intent_expired") return "This checkout expired. Start a new payment.";
       if (m === "sig_already_used") return "This transaction signature was already used.";
       if (m === "invalid_plan") return "Invalid plan.";
+      if (m === "price_unavailable")
+        return siteTr(
+          "wallet_sol_unavailable",
+          "SOL is temporarily unavailable. Choose USDC or USDT."
+        );
       return m || "billing_failed";
     }
 
@@ -535,7 +775,7 @@
     }
 
     async function payNow() {
-      if (payInflight) return;
+      if (payInflight || recoveryVerifyInflight) return;
       const WALLET = getWallet();
       const selectedPlan = getSelectedPlan();
       const selectedCurrency = getSelectedCurrency();
@@ -554,6 +794,18 @@
       const payBtn = $("sf_pay");
       const cur = selectedCurrency;
       const v = abVariant();
+
+      if (!isTokenAvailable(getBilling(), cur)) {
+        await loadPlans();
+        if (!isTokenAvailable(getBilling(), cur)) {
+          const copy = siteTr(
+            "wallet_sol_unavailable",
+            "SOL is temporarily unavailable. Choose USDC or USDT."
+          );
+          if (msg) msg.innerHTML = `<span class="warn">${escapeHtml(copy)}</span>`;
+          return;
+        }
+      }
 
       try {
         payInflight = true;
@@ -581,6 +833,18 @@
         const payer = String(WALLET.publicKey?.toString?.() || "");
         const sig = await walletSendTransaction(built.tx, built.connection);
 
+        savePaymentRecovery({
+          intentId: intent.id || intent.intentId,
+          sig,
+          payer,
+          handle: getHandle(),
+          token: cur,
+          planKey: intent?.plan?.key || selectedPlan.key,
+          planLabel: String(intent?.plan?.label || selectedPlan.label || "").trim(),
+          expiresAt: intent.expiresAt,
+          createdAt: Date.now(),
+        });
+
         setPayState("confirming", "Confirming on-chain...");
         if (msg) msg.textContent = "Confirming & verifying on-chain...";
         const j = await verifyIntentWithRetry(intent.id, sig, payer);
@@ -589,6 +853,9 @@
           throw new Error("payment_not_verified");
         }
 
+        clearPaymentRecovery();
+        hideRecoveryUi();
+        markRecoverySuccessShown(sig);
         setPayState("verified", "Verified. Pro activated.");
         if (msg) msg.innerHTML = `<span class="ok">Paid & verified.</span>`;
         trackEvent("pay_success", { v, plan: intent?.plan?.key || selectedPlan.key, cur });
@@ -615,12 +882,24 @@
         });
       } catch (e) {
         const m = String(e?.message || "billing_failed");
+        if (m === "price_unavailable") {
+          try {
+            await loadPlans();
+          } catch {}
+          applyTokenAvailability();
+        }
         setPayState("failed", billingErrMsg(m));
         if (msg) msg.innerHTML = `<span class="bad">${escapeHtml(billingErrMsg(m))}</span>`;
         trackEvent("pay_fail", { v, code: m, plan: selectedPlan?.key || "", cur: selectedCurrency });
+        if (loadPaymentRecovery()) {
+          showRecoveryUi(
+            "pending",
+            siteTr("wallet_recovery_sent", "Payment sent. We are still confirming it on-chain."),
+            siteTr("wallet_recovery_title", "Payment pending")
+          );
+        }
       } finally {
         payInflight = false;
-        if (payBtn) payBtn.disabled = !(selectedPlan && WALLET.connected) || payInflight;
         setWalletUi();
       }
     }
@@ -644,9 +923,28 @@
       const bSol = $("token_SOL");
       const bUsdc = $("token_USDC");
       const bUsdt = $("token_USDT");
-      if (bSol) bSol.onclick = () => setCurrency("SOL");
-      if (bUsdc) bUsdc.onclick = () => setCurrency("USDC");
-      if (bUsdt) bUsdt.onclick = () => setCurrency("USDT");
+      if (bSol) bSol.onclick = () => { if (!bSol.disabled) setCurrency("SOL"); };
+      if (bUsdc) bUsdc.onclick = () => { if (!bUsdc.disabled) setCurrency("USDC"); };
+      if (bUsdt) bUsdt.onclick = () => { if (!bUsdt.disabled) setCurrency("USDT"); };
+
+      const recCheck = $("w_recovery_check");
+      if (recCheck) {
+        recCheck.textContent = siteTr("wallet_recovery_check_again", "Check again");
+        recCheck.onclick = () => {
+          const rec = loadPaymentRecovery();
+          if (rec) runRecoveryVerify(rec, { showSuccessModal: !wasRecoverySuccessShown(rec.sig) });
+        };
+      }
+      const recDismiss = $("w_recovery_dismiss");
+      if (recDismiss) {
+        recDismiss.textContent = siteTr("wallet_recovery_dismiss", "Dismiss");
+        recDismiss.onclick = () => {
+          clearPaymentRecovery();
+          hideRecoveryUi();
+          const msg = $("w_msg");
+          if (msg) msg.textContent = "";
+        };
+      }
 
       modals.bindBackdrop("sf_modal", closeWalletModal);
       const close = $("sf_modal_close");
@@ -670,7 +968,9 @@
       if (actBtn) actBtn.onclick = () => loadActivity();
 
       setCurrency(getSelectedCurrency());
+      applyTokenAvailability();
       setWalletUi();
+      tryResumePaymentRecovery({ autoVerify: true });
 
       try {
         const check = () => {
@@ -706,6 +1006,11 @@
       renderWalletStatus,
       bindWalletTab,
       billingErrMsg,
+      applyTokenAvailability,
+      tryResumePaymentRecovery,
+      runRecoveryVerify,
+      loadPaymentRecovery,
+      clearPaymentRecovery,
     };
   };
 })(window);

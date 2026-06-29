@@ -610,6 +610,11 @@ const COINGECKO_SOL_URL =
 let SOL_USD_CACHE = { price: 0, ts: 0 };
 
 async function getSolUsd() {
+  const mock = String(process.env.GMX_SOL_USD_MOCK ?? "").trim();
+  if (mock === "0") return 0;
+  const mockNum = Number(mock);
+  if (mock && Number.isFinite(mockNum) && mockNum > 0) return mockNum;
+
   const now = Date.now();
   if (SOL_USD_CACHE.price > 0 && now - SOL_USD_CACHE.ts < 180_000) {
     return SOL_USD_CACHE.price;

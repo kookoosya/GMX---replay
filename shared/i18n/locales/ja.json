@@ -874,5 +874,18 @@
   "ref_badge_toast_html": "新しいバッジ: <b>{tier}</b>",
   "ref_badge_all_unlocked": "すべてのプロモーターバッジを解放",
   "locked_pack": "パックはロック中。Proまたは紹介が必要です。",
-  "gn_lang": "Reply language"
+  "gn_lang": "Reply language",
+  "wallet_sol_unavailable": "SOLは一時的に利用できません。USDCまたはUSDTを選択してください。",
+  "wallet_recovery_title": "支払い確認中",
+  "wallet_recovery_sent": "支払いを送信しました。オンチェーン確認中です。",
+  "wallet_recovery_checking": "支払いを送信しました。確認中…",
+  "wallet_recovery_check_again": "再確認",
+  "wallet_recovery_dismiss": "閉じる",
+  "wallet_recovery_recovered": "Proが有効になりました。",
+  "wallet_recovery_expired": "このチェックアウトは期限切れです。支払いが完了している場合は、取引署名を添えてサポートに連絡してください。",
+  "wallet_recovery_expired_title": "チェックアウト期限切れ",
+  "wallet_recovery_wrong_account": "保留中の支払いは別の@handleに紐づいています。確認を完了するにはそのアカウントに戻ってください。",
+  "wallet_recovery_wrong_account_title": "別のアカウント",
+  "wallet_recovery_wrong_wallet": "この支払いは別のウォレットから送信されました。そのウォレットを再接続するか、閉じて最初からやり直してください。",
+  "wallet_recovery_wrong_wallet_title": "別のウォレット"
 }
