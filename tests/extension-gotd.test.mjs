@@ -27,24 +27,11 @@ test("gotd-core.js exports gameOfTheDay helper", () => {
   assert.match(src, /gameOfTheDay/);
 });
 
-test("background schedules daily gotd toast and opens play deep-link", () => {
+test("copy-only extension background does not schedule GOTD toasts", () => {
   const bg = fs.readFileSync(path.join(extDir, "background.js"), "utf8");
-  assert.match(bg, /maybeShowGotdToast/);
-  assert.match(bg, /ALARM_GOTD/);
-  assert.match(bg, /gotd:/);
-  assert.match(bg, /arcade\.html\?game=/);
-});
-
-test("popup shows gotd cover, meta, and play deep-link", () => {
-  const popupHtml = fs.readFileSync(path.join(extDir, "popup.html"), "utf8");
-  assert.match(popupHtml, /gotd-core\.js/);
-  assert.match(popupHtml, /id="gotdCover"/);
-  assert.match(popupHtml, /id="gotdMeta"/);
-  const popup = fs.readFileSync(path.join(extDir, "popup.js"), "utf8");
-  assert.match(popup, /gotdArcadeUrl/);
-  assert.match(popup, /arcade\.html\?game=/);
-  assert.match(popup, /gotdMeta/);
-  assert.match(fs.readFileSync(path.join(extDir, "popup.css"), "utf8"), /\.gotdCover/);
+  assert.doesNotMatch(bg, /maybeShowGotdToast/);
+  assert.doesNotMatch(bg, /ALARM_GOTD/);
+  assert.match(bg, /sidePanel/);
 });
 
 test("shared gotd core picks stable game and play url", () => {

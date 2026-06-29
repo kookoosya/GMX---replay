@@ -125,6 +125,12 @@
       mode: "gmx_ext_mode_v2",
       lastText: "gmx_ext_last_text_v2",
     },
+    BANK_KEYS: {
+      gm: "gmx_ext_bank_gm_v1",
+      gn: "gmx_ext_bank_gn_v1",
+      syncedAt: "gmx_ext_bank_synced_at_v1",
+    },
+    EXT_VERSION: "1.2.0",
     ALERT_KEYS: {
       enabled: "gmx_market_alerts_enabled_v1",
       interval: "gmx_market_alerts_interval_v1",

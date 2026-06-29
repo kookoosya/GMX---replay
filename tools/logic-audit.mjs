@@ -105,18 +105,19 @@ for (const rel of htmlFiles) {
 const siteSync = read("extension/site_sync.js");
 if (!siteSync.includes("gmx_ext_wp_v2_popup")) fail("site_sync must sync popup wallpaper key");
 if (!siteSync.includes("runSyncOnce")) fail("site_sync must debounce with runSyncOnce mutex");
-if (!siteSync.includes("hasSiteSession")) fail("site_sync must expose hasSiteSession for popup sync");
+if (!siteSync.includes("hasSiteSession")) fail("site_sync must expose hasSiteSession for side panel sync");
+if (!siteSync.includes("gmx_ext_bank_gm_v1")) fail("site_sync must sync GM bank to extension storage");
+if (!read("extension/lib/bank-sync-core.js").includes("GMXBankSyncCore")) {
+  fail("bank-sync-core must export GMXBankSyncCore");
+}
 if (!read("extension/lib/site-sync-core.js").includes("resolveSyncedSession")) {
   fail("site-sync-core must export resolveSyncedSession");
 }
-
-const popup = read("extension/popup.js");
-if (!popup.includes("hasSiteSession") && strict) {
-  fail("extension/popup.js must prefer tabs with hasSiteSession");
+if (!read("extension/sidepanel.js").includes("hasSiteSession")) {
+  fail("extension/sidepanel.js must prefer tabs with hasSiteSession");
 }
-
-if (/`\/api\/generate-bulk\?/.test(popup)) {
-  fail("extension/popup.js must use /api/random-bulk when authed (quota)");
+if (/`\/api\/generate|\/api\/random-bulk/.test(read("extension/sidepanel.js"))) {
+  fail("extension/sidepanel.js must not call generation APIs");
 }
 if (!read("server/routes/billing.mjs").includes("/api/billing/tx-context")) {
   fail("billing route must expose /api/billing/tx-context");

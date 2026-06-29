@@ -49,15 +49,15 @@ if (!billingRoute.includes("/api/billing/tx-context")) {
   fail("server/routes/billing.mjs: missing /api/billing/tx-context alias");
 }
 
-const popup = fs.readFileSync("extension/popup.js", "utf8");
-if (/\/api\/generate-bulk\?/.test(popup)) {
-  fail("extension/popup.js: authenticated batch must not use /api/generate-bulk");
+const sidepanel = fs.readFileSync("extension/sidepanel.js", "utf8");
+if (/\/api\/generate|\/api\/random-bulk/.test(sidepanel)) {
+  fail("extension/sidepanel.js: copy-only panel must not call generation APIs");
 }
-if (!popup.includes("/api/random-bulk")) {
-  fail("extension/popup.js: should call /api/random-bulk when authed");
+if (!sidepanel.includes("navigator.clipboard.writeText")) {
+  fail("extension/sidepanel.js: must copy via Clipboard API on user click");
 }
-if (!popup.includes("GMXExtCosmeticsGate") || !popup.includes("clampExtCosmetics")) {
-  fail("extension/popup.js must enforce referral unlock gating via GMXExtCosmeticsGate");
+if (!sidepanel.includes("GMX_FORCE_SITE_SYNC")) {
+  fail("extension/sidepanel.js: must sync session from open site tab");
 }
 const connectJs = fs.readFileSync("public/app.connect.js", "utf8");
 if (!connectJs.includes("runHomeTry") || !connectJs.includes("/api/public/random-bulk")) {
@@ -94,16 +94,19 @@ if (!fs.existsSync("extension/lib/gotd-games.json")) {
   fail("extension/lib/gotd-games.json missing — run npm run arcade:build");
 }
 const background = fs.readFileSync("extension/background.js", "utf8");
-if (!background.includes("maybeShowGotdToast")) {
-  fail("extension/background.js must schedule daily Game of the Day toast");
+if (!background.includes("openPanelOnActionClick")) {
+  fail("extension/background.js must open Chrome Side Panel on action click");
 }
-for (const html of ["extension/popup.html", "extension/quick.html"]) {
+if (background.includes("maybeShowGotdToast")) {
+  fail("extension/background.js must not schedule GOTD toasts in copy-only build");
+}
+for (const html of ["extension/sidepanel.html"]) {
   const shell = fs.readFileSync(html, "utf8");
-  if (!shell.includes("lib/unlock-core.js") || !shell.includes("lib/ext-cosmetics-gate.js")) {
-    fail(`${html} must load unlock-core + ext-cosmetics-gate before popup.js`);
+  if (!shell.includes("lib/ext-config.js") || !shell.includes("lib/ext-i18n.js")) {
+    fail(`${html} must load ext-config + ext-i18n before sidepanel.js`);
   }
 }
-ok("extension/popup.js");
+ok("extension/sidepanel.js");
 
 const siteSync = fs.readFileSync("extension/site_sync.js", "utf8");
 if (!siteSync.includes("hasSiteSession")) {

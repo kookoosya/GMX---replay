@@ -1,0 +1,127 @@
+@import url("popup.css");
+
+html, body {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  max-height: none;
+  min-height: 100vh;
+}
+
+.wrap {
+  padding: 12px;
+  max-width: 100%;
+}
+
+.spHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.spHeaderActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.spStatus {
+  font-size: 12px;
+  color: var(--dim);
+  margin-top: 4px;
+}
+
+.spNav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.spNav button {
+  flex: 1;
+}
+
+.spNav button.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-soft);
+}
+
+.spToolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.spToolbar input {
+  flex: 1;
+  min-width: 0;
+}
+
+.spList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.spCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.spCardText {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 14px;
+  line-height: 1.45;
+  margin-bottom: 8px;
+}
+
+.spCardActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.spEmpty {
+  text-align: center;
+  padding: 20px 12px;
+}
+
+.spEmpty .primary {
+  margin-top: 12px;
+}
+
+.spFoot {
+  margin-top: 14px;
+  font-size: 11px;
+  color: var(--dim);
+  text-align: center;
+}
+
+.spSettings {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.spSettings summary {
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--dim);
+}
+
+.spSettingsBody {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hidden {
+  display: none !important;
+}

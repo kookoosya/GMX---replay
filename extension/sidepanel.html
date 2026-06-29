@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GMXReply</title>
+  <link rel="stylesheet" href="sidepanel.css" />
+</head>
+<body data-view="sidepanel">
+  <div class="wrap">
+    <header class="spHeader">
+      <div class="brand">
+        <img src="icons/icon48.png" class="logo" alt="" width="40" height="40" />
+        <div>
+          <div class="title">GMXReply</div>
+          <div class="subtitle" data-i18n="ext_sidepanel_subtitle">Saved replies — copy here, paste on X yourself</div>
+          <div class="spStatus" id="sessionStatus" data-i18n="ext_session_hint_disconnected">Use site sync first. Manual handle connect is only a fallback for new accounts.</div>
+        </div>
+      </div>
+      <div class="spHeaderActions">
+        <button id="btnRefresh" class="secondary compact" type="button" data-i18n="ext_bank_refresh">Refresh</button>
+        <button id="btnOpenSite" class="linkbtn" type="button" data-i18n="ext_btn_open_site">Open site</button>
+      </div>
+    </header>
+
+    <nav class="spNav" aria-label="Reply type">
+      <button id="tabGm" class="secondary active" type="button" data-i18n="ext_btn_gm">GM</button>
+      <button id="tabGn" class="secondary" type="button" data-i18n="ext_btn_gn">GN</button>
+    </nav>
+
+    <div class="spToolbar">
+      <input id="searchInput" type="search" autocomplete="off" data-i18n-ph="ext_search_placeholder" placeholder="Search saved lines" aria-label="Search" />
+    </div>
+
+    <div id="syncNote" class="small" role="status"></div>
+
+    <div id="emptyState" class="card spEmpty hidden">
+      <div class="sectionTitle" id="emptyTitle" data-i18n="bank_empty_title_gm">No saved GM lines yet</div>
+      <p class="hint" id="emptyHint" data-i18n="ext_sidepanel_empty_hint">Create and save replies on gmxreply.com first, then refresh here.</p>
+      <button id="btnEmptyOpenSite" class="primary" type="button" data-i18n="ext_sidepanel_open_site">Open GMXReply</button>
+    </div>
+
+    <div id="cardList" class="spList" role="list"></div>
+
+    <details class="spSettings" id="settingsPanel">
+      <summary data-i18n="ext_sidepanel_settings">Account &amp; settings</summary>
+      <div class="spSettingsBody">
+        <div class="row headRow">
+          <div class="value" id="sessionValue" data-i18n="ext_session_guest">Guest</div>
+        </div>
+        <div class="row buttonRow threeRow">
+          <button class="secondary compact grow" id="syncSiteBtn" type="button" data-i18n="ext_btn_site_session">Use site session</button>
+          <button class="secondary compact" id="connectBtn" type="button" data-i18n="ext_btn_connect">Connect</button>
+          <button class="ghost compact" id="disconnectBtn" type="button" data-i18n="ext_btn_reset">Reset</button>
+        </div>
+        <div class="row connectRow">
+          <input id="handleInput" data-i18n-ph="ext_placeholder_handle" placeholder="@yourhandle" />
+        </div>
+        <div id="connectStatus" class="small" role="status"></div>
+        <p class="hint" data-i18n="ext_sidepanel_manual_copy">Copy only — you paste and post on X yourself. We never read X or post for you.</p>
+      </div>
+    </details>
+
+    <footer class="spFoot">
+      <span data-i18n="ext_sidepanel_no_autopost">No auto-posting · No X page access</span>
+      · <span id="versionLabel">v1.2.0</span>
+    </footer>
+  </div>
+
+  <script src="i18n-bundle.js"></script>
+  <script src="lib/ext-config.js"></script>
+  <script src="lib/ext-i18n.js"></script>
+  <script src="lib/bank-sync-core.js"></script>
+  <script src="lib/site-sync-core.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>

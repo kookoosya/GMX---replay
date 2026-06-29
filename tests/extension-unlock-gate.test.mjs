@@ -80,13 +80,9 @@ test("cosmetics gate: clamp clears locked wallpaper view", () => {
   assert.equal(out.extWallpaper, "");
 });
 
-test("extension popup loads unlock gate before applyThemeUi", () => {
-  const popup = fs.readFileSync(path.join(extDir, "popup.js"), "utf8");
-  assert.match(popup, /GMXExtCosmeticsGate/);
-  assert.match(popup, /clampExtCosmetics/);
-  for (const html of ["popup.html", "quick.html"]) {
-    const text = fs.readFileSync(path.join(extDir, html), "utf8");
-    assert.match(text, /lib\/unlock-core\.js/);
-    assert.match(text, /lib\/ext-cosmetics-gate\.js/);
-  }
+test("unlock-core and cosmetics gate remain available for site sync", () => {
+  assert.ok(fs.existsSync(path.join(extDir, "lib", "unlock-core.js")));
+  assert.ok(fs.existsSync(path.join(extDir, "lib", "ext-cosmetics-gate.js")));
+  const siteSync = fs.readFileSync(path.join(extDir, "site_sync.js"), "utf8");
+  assert.match(siteSync, /gmx_ext_theme_v2/);
 });

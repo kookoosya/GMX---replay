@@ -1,11 +1,14 @@
 {
   "manifest_version": 3,
   "name": "GMXReply",
-  "version": "1.1.5",
-  "description": "Copy-only GM/GN replies for X: pull lines here, paste yourself. Session sync with gmxreply.com. No auto-posting or timeline injection.",
+  "version": "1.2.0",
+  "description": "Copy-only GM/GN reply library in Chrome Side Panel. Save on gmxreply.com, copy here, paste on X yourself. No auto-posting or X page access.",
+  "minimum_chrome_version": "114",
   "action": {
-    "default_title": "GMXReply",
-    "default_popup": "popup.html"
+    "default_title": "GMXReply — open Side Panel"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
   },
   "background": {
     "service_worker": "background.js"
@@ -15,37 +18,23 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "permissions": [
-    "storage",
-    "activeTab",
-    "tabs",
-    "alarms",
-    "notifications"
-  ],
+  "permissions": ["storage", "sidePanel", "tabs"],
   "host_permissions": [
     "https://www.gmxreply.com/*",
-    "https://gmxreply.com/*",
-    "http://localhost:*/*",
-    "http://127.0.0.1:*/*"
+    "https://gmxreply.com/*"
   ],
   "content_scripts": [
     {
       "matches": [
         "https://www.gmxreply.com/*",
-        "https://gmxreply.com/*",
-        "http://localhost:*/*",
-        "http://127.0.0.1:*/*"
+        "https://gmxreply.com/*"
       ],
       "js": [
         "lib/site-sync-core.js",
+        "lib/bank-sync-core.js",
         "site_sync.js"
       ],
       "run_at": "document_idle"
     }
-  ],
-  "commands": {
-    "open-quick-panel": {
-      "description": "Open GMXReply quick panel"
-    }
-  }
+  ]
 }

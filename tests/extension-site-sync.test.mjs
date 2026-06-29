@@ -66,20 +66,21 @@ test("site-sync-core: normalizes @handle", () => {
   assert.equal(out.hasSiteSession, true);
 });
 
-test("extension site_sync exposes hasSiteSession and uses sync core", () => {
+test("extension site_sync exposes hasSiteSession and syncs banks", () => {
   const siteSync = fs.readFileSync(path.join(extDir, "site_sync.js"), "utf8");
   assert.match(siteSync, /hasSiteSession/);
   assert.match(siteSync, /resolveSyncedSession/);
   assert.match(siteSync, /GMX_FORCE_SITE_SYNC/);
-  assert.match(siteSync, /gmx_ext_wp_v2_popup/);
+  assert.match(siteSync, /gmx_gm_bank/);
+  assert.match(siteSync, /gmx_gn_bank/);
   assert.match(siteSync, /runSyncOnce/);
 });
 
-test("extension popup prefers logged-in site tab for session sync", () => {
-  const popup = fs.readFileSync(path.join(extDir, "popup.js"), "utf8");
-  assert.match(popup, /hasSiteSession/);
-  assert.match(popup, /foundSiteSession/);
-  assert.match(popup, /applySyncResponse/);
+test("extension sidepanel prefers logged-in site tab for session sync", () => {
+  const panel = fs.readFileSync(path.join(extDir, "sidepanel.js"), "utf8");
+  assert.match(panel, /hasSiteSession/);
+  assert.match(panel, /foundSiteSession/);
+  assert.match(panel, /GMX_FORCE_SITE_SYNC/);
 });
 
 test("extension manifest loads site-sync-core before site_sync", () => {

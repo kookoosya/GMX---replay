@@ -30,7 +30,7 @@ test("extension tab css styles sync hub and previews", () => {
   assert.match(css, /\.extPreviewRow/);
 });
 
-test("en locale defines extension sync hub copy", () => {
+test("en locale defines extension sync hub copy for side panel", () => {
   const en = JSON.parse(fs.readFileSync(path.join(root, "shared", "i18n", "locales", "en.json"), "utf8"));
   assert.ok(Array.isArray(en.ext_sync_list) && en.ext_sync_list.length >= 3);
   for (const key of [
@@ -39,9 +39,12 @@ test("en locale defines extension sync hub copy", () => {
     "ext_chrome_store_btn",
     "ext_chrome_store_hint",
     "ext_preview_popup_caption",
+    "ext_sidepanel_subtitle",
   ]) {
     assert.ok(en[key], key);
   }
+  assert.match(en.ext_sync_hub_desc, /Side Panel/i);
+  assert.doesNotMatch(en.ext_preview_inline_caption, /on X page|inside X/i);
 });
 
 test("get-extension route exists for chrome store redirect", () => {
