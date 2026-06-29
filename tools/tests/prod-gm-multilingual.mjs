@@ -8,15 +8,22 @@ import { passesMinSubstance, RE_ANY_EMOJI } from "../../server/generation-min-su
 
 const BASE = String(process.env.PROD_BASE || "https://www.gmxreply.com").replace(/\/$/, "");
 
+function enProbe(t) {
+  const s = String(t || "").trim();
+  if (!s || /^GM\s*$/i.test(s)) return false;
+  const words = s.replace(/[^\p{L}\p{N}\s']/gu, " ").split(/\s+/).filter((w) => /[a-zA-Z]{2,}/.test(w));
+  return words.length >= 2 || /\b(Gm|GM|morning|bro|friend|day|start|coffee|rising|treats|hope|well)\b/i.test(s);
+}
+
 const SCENARIOS = [
-  { id: "en_mid_classic", lang: "en", mode: "mid", style: "classic", probe: (t) => /\b(Gm|Good morning|bro)\b/i.test(t) },
+  { id: "en_mid_classic", lang: "en", mode: "mid", style: "classic", probe: enProbe },
   { id: "ru_mid_classic", lang: "ru", mode: "mid", style: "classic", probe: (t) => /[\u0400-\u04FF]/.test(t) },
   { id: "tr_mid_cheer", lang: "tr", mode: "mid", style: "cheer", probe: (t) => /[çğıöşüÇĞİÖŞÜ]|güzel|Günaydın|paylaşım/i.test(t) },
   { id: "es_mid_noemoji", lang: "es", mode: "mid", style: "noemoji", probe: (t) => /[áéíóúñ]|Buenos|buen/i.test(t), noEmoji: true },
   { id: "ja_mid_classic", lang: "ja", mode: "mid", style: "classic", probe: (t) => /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u.test(t) },
   { id: "zh_mid_classic", lang: "zh", mode: "mid", style: "classic", probe: (t) => /[\p{Script=Han}]/u.test(t) },
   { id: "ru_min_classic", lang: "ru", mode: "min", style: "classic", probe: (t) => /[\u0400-\u04FF]/.test(t), min: true },
-  { id: "en_min_noemoji", lang: "en", mode: "min", style: "noemoji", probe: (t) => /\b(Gm|Good morning|nice|post|bro)\b/i.test(t), min: true, noEmoji: true },
+  { id: "en_min_noemoji", lang: "en", mode: "min", style: "noemoji", probe: enProbe, min: true, noEmoji: true },
 ];
 
 async function post(path, body) {
