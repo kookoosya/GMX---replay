@@ -65,10 +65,21 @@
       ]
     ],
     "reply": [
-      [
-        "en",
-        "English"
-      ]
+      ["en", "English"],
+      ["es", "Español"],
+      ["pt", "Português"],
+      ["fr", "Français"],
+      ["de", "Deutsch"],
+      ["it", "Italiano"],
+      ["nl", "Nederlands"],
+      ["tr", "Türkçe"],
+      ["pl", "Polski"],
+      ["id", "Indonesia"],
+      ["ru", "Русский"],
+      ["uk", "Українська"],
+      ["hi", "हिन्दी"],
+      ["ja", "日本語"],
+      ["zh", "中文"]
     ]
   },
   "themes": [

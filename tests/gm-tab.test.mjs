@@ -124,7 +124,8 @@ test("GM tab HTML exposes first-run copy and primary controls", () => {
   assert.doesNotMatch(html, /id="gmRand70"/);
   assert.match(html, /id="gmRand1"[^>]*>Quick 1</);
   assert.match(html, /id="gmRand10"[^>]*>Batch 10</);
-  assert.match(html, /id="gmStyle"/);
+  assert.match(html, /id="gmLang"/);
+  assert.doesNotMatch(html, /for="gmLang"[^<]*<\/label>\s*<\/div>\s*<div[^>]*display:\s*none[^>]*>\s*<label[^>]*for="gmLang"/);
   assert.match(html, /id="gmList"/);
 });
 

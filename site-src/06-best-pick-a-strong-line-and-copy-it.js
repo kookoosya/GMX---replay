@@ -10,6 +10,7 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
     fmt: __gmxFmt,
     gen: __gmxGen,
     keys: K,
+    storage: __gmxSt,
     requireConnected,
     getHandle,
     isPro,

@@ -1,13 +1,10 @@
 /**
  * GM/GN reply generation engine (extracted from index.js).
  */
+import { normLang, getLocalizedBank, SUPPORTED_REPLY_LANGS } from "./generation-lang.mjs";
+
 export function createGenerator(deps) {
   const { safeDb, db, nowIso, safeOptionalHistoryDb, sha256 } = deps;
-const LANGS = ["en"];
-
-function normLang(_x) {
-  return "en";
-}
 
 function pick(arr) {
   const list = Array.isArray(arr) ? arr.filter(Boolean) : [];
@@ -475,7 +472,11 @@ const RE_GN_BAD_EMOJI = /[\u{2600}\u{FE0F}\u{2615}\u{1F305}]/gu;
 
 function renderTemplate(template, bank, kind) {
   const greet = pick(bank.greet || [kind === "gm" ? "Gm" : "Gn"]);
-  const familyVoc = SAFE_VOCATIVE[bank.familyKey] || SAFE_VOCATIVE.ordinary;
+  const familyKey = bank.familyKey || "ordinary";
+  const familyVoc =
+    (bank.vocatives && bank.vocatives[familyKey]) ||
+    SAFE_VOCATIVE[familyKey] ||
+    SAFE_VOCATIVE.ordinary;
   const emoji = kind === "gm" ? pick(MORNING_EMOJI) : pick(NIGHT_EMOJI);
   return String(template || "")
     .replace(/\{greet\}/g, greet)
@@ -501,7 +502,7 @@ function sentenceCaseGreeting(text, kind) {
   return out;
 }
 
-function tightenMinimal(text, kind) {
+function tightenMinimal(text, kind, lang = "en") {
   const raw = String(text || "").trim();
   const firstEmoji = (raw.match(RE_ANY_EMOJI) || [""])[0] || "";
   let out = raw.replace(RE_ANY_EMOJI, " ").replace(/[!,]/g, " ").replace(/\s+/g, " ").trim();
@@ -509,7 +510,7 @@ function tightenMinimal(text, kind) {
   const cap = kind === "gm" ? 4 : 5;
   if (words.length > cap) words = words.slice(0, cap);
   out = words.join(" ").trim();
-  out = sentenceCaseGreeting(out, kind);
+  if (lang === "en") out = sentenceCaseGreeting(out, kind);
   if (firstEmoji) out = `${out} ${firstEmoji}`.trim();
   return out.trim();
 }
@@ -676,7 +677,7 @@ function diversifySoftEmoji(text, kind) {
 
   return src;
 }
-function sanitizeSingle(text, mode, kind) {
+function sanitizeSingle(text, mode, kind, lang = "en") {
   let out = String(text || "");
   out = out.replace(/[—–]/g, " ");
   out = out.replace(RE_BANNED_WORDS, " ");
@@ -686,8 +687,11 @@ function sanitizeSingle(text, mode, kind) {
   out = out.replace(/\s{2,}/g, " ").trim();
   out = out.replace(/\s+([,!?])/g, "$1");
   out = out.replace(/,{2,}/g, ",").replace(/!{2,}/g, "!");
-  out = sentenceCaseGreeting(out, kind);
-  out = normalizeVocatives(out);
+  if (lang === "en") {
+    out = sentenceCaseGreeting(out, kind);
+    out = normalizeVocatives(out);
+    out = normalizeHumanReply(out, kind, mode);
+  }
 
   if (kind === "gm") out = out.replace(RE_GM_BAD_EMOJI, " ");
   if (kind === "gn") out = out.replace(RE_GN_BAD_EMOJI, " ");
@@ -704,28 +708,28 @@ function sanitizeSingle(text, mode, kind) {
     if (parts.length > 1) out = parts.slice(0, 1).join(", ");
   }
 
-  out = out.replace(/\b(gm|gn)\s+(gm|gn)\b/gi, "$1");
-  out = out.replace(/\b(morning)\s+(morning)\b/gi, "$1");
-  out = out.replace(/\b(night)\s+(night)\b/gi, "$1");
+  if (lang === "en") {
+    out = out.replace(/\b(gm|gn)\s+(gm|gn)\b/gi, "$1");
+    out = out.replace(/\b(morning)\s+(morning)\b/gi, "$1");
+    out = out.replace(/\b(night)\s+(night)\b/gi, "$1");
+  }
   out = out.replace(/\s{2,}/g, " ").trim();
   out = out.replace(/^[,\s]+|[,\s]+$/g, "");
-  out = normalizeHumanReply(out, kind, mode);
   out = diversifySoftEmoji(out, kind);
   if (!out) return "";
   return out;
 }
 
-function applyStyle(base, style, kind, mode) {
+function applyStyle(base, style, kind, mode, lang = "en") {
   const s = String(style || "classic").toLowerCase().trim();
-  let out = sanitizeSingle(base, mode, kind);
-  if (!out) out = kind === "gm" ? "Gm" : "Gn";
+  let out = sanitizeSingle(base, mode, kind, lang);
+  if (!out) out = kind === "gm" ? (lang === "en" ? "Gm" : pick(LANG_PACK_FALLBACK_GREET(lang, "gm"))) : pick(LANG_PACK_FALLBACK_GREET(lang, "gn"));
   if (s === "noemoji") {
     out = out.replace(RE_ANY_EMOJI, " ").replace(/\s+/g, " ").trim();
-    if (mode === "min") out = tightenMinimal(out, kind).replace(RE_ANY_EMOJI, "").replace(/\s+/g, " ").trim();
-    return sentenceCaseGreeting(out, kind);
+    if (mode === "min") out = tightenMinimal(out, kind, lang).replace(RE_ANY_EMOJI, "").replace(/\s+/g, " ").trim();
+    return lang === "en" ? sentenceCaseGreeting(out, kind) : out;
   }
   if (s === "emoji") {
-    // Ensure at least one emoji for the emoji style (but keep it to a single emoji).
     if (!(out.match(RE_ANY_EMOJI) || []).length) {
       out = `${out} ${kind === "gm" ? pick(MORNING_EMOJI) : pick(NIGHT_EMOJI)}`.trim();
     }
@@ -737,24 +741,36 @@ function applyStyle(base, style, kind, mode) {
     }
     return out;
   }
-  if (s === "minimal" || mode === "min") return tightenMinimal(out, kind);
+  if (s === "minimal" || mode === "min") return tightenMinimal(out, kind, lang);
   return out;
 }
 
-function bankFor(kind, style) {
-  const familyKey = FAMILY_BY_STYLE[String(style || "classic").toLowerCase().trim()] || "ordinary";
-  const family = BANKS[familyKey] || BANKS.ordinary;
-  const bank = family[kind] || BANKS.ordinary[kind];
-  return { ...bank, familyKey };
+function LANG_PACK_FALLBACK_GREET(lang, kind) {
+  const bank = getLocalizedBank(lang, kind, "ordinary");
+  if (bank?.greet?.length) return bank.greet[0];
+  return kind === "gm" ? "Gm" : "Gn";
 }
 
-function composeReply(kind, mode, _lang, style) {
-  const bank = bankFor(kind, style);
+function bankFor(kind, style, lang = "en") {
+  const familyKey = FAMILY_BY_STYLE[String(style || "classic").toLowerCase().trim()] || "ordinary";
+  const code = String(lang || "en").toLowerCase();
+  if (code !== "en") {
+    const localized = getLocalizedBank(code, kind, familyKey);
+    if (localized) return localized;
+  }
+  const family = BANKS[familyKey] || BANKS.ordinary;
+  const bank = family[kind] || BANKS.ordinary[kind];
+  return { ...bank, familyKey, vocatives: SAFE_VOCATIVE };
+}
+
+function composeReply(kind, mode, lang, style) {
+  const code = normLang(lang) || "en";
+  const bank = bankFor(kind, style, code);
   const modeKey = ["min", "mid", "max"].includes(String(mode || "").toLowerCase()) ? String(mode).toLowerCase() : "mid";
   const templates = Array.isArray(bank[modeKey]) && bank[modeKey].length ? bank[modeKey] : bank.mid;
   const template = pick(templates);
   const rendered = renderTemplate(template, bank, kind);
-  return applyStyle(rendered, style, kind, modeKey);
+  return applyStyle(rendered, style, kind, modeKey, code);
 }
 
 function shapeFingerprint(text, kind) {
@@ -778,7 +794,11 @@ function modeProfile(text) {
   const t = String(text || "").trim();
   if (!t) return { chars: 0, words: 0 };
   const chars = Array.from(t).length;
-  const words = t.replace(RE_ANY_EMOJI, " ").replace(/[^A-Za-z0-9\s']+/g, " ").split(/\s+/).filter(Boolean).length;
+  const words = t
+    .replace(RE_ANY_EMOJI, " ")
+    .replace(/[^\p{L}\p{N}\s']/gu, " ")
+    .split(/\s+/)
+    .filter(Boolean).length;
   return { chars, words };
 }
 
@@ -1086,6 +1106,7 @@ function generateUnique(handle, kind, mode, lang, style, antiLastN = 20) {
 
   return {
     normLang,
+    SUPPORTED_REPLY_LANGS,
     pick,
     composeReply,
     sanitizeSingle,

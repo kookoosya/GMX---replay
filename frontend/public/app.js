@@ -114,6 +114,21 @@ const {
   getExtWallpapers: () => EXT_WALLPAPERS,
 });
 
+function replyLangForKind(kind) {
+  const isGn = String(kind || "").toLowerCase() === "gn";
+  const lsKey = isGn ? K.GN_REPLY_LANG : K.GM_REPLY_LANG;
+  const selId = isGn ? "gnLang" : "gmLang";
+  try {
+    const v = __gmxChrome?.$?.(selId)?.value;
+    if (v) return String(v).trim() || "en";
+  } catch (_e) {}
+  try {
+    return String(__gmxSt.lsGet(lsKey, "en") || "en").trim() || "en";
+  } catch (_e) {
+    return "en";
+  }
+}
+
 if (!window.__GMXBootstrapGenWireFactory) throw new Error("GMX bootstrapgenwire factory missing");
 const {
   __gmxGp,
@@ -138,7 +153,7 @@ const {
   syncModePanelCopy: () => { try { __gmxSiteI18nDynamic.syncModePanelCopy(); } catch {} },
   siteLang: () => siteLang(),
   syncCleanFillUi: () => { try { syncCleanFillUi(); } catch {} },
-  getCurrentLang: (kind) => currentLang(kind),
+  getCurrentLang: replyLangForKind,
   getCurrentTab: () => { try { return currentTabName(); } catch { return "home"; } },
   hasActiveUnlockedWallpaper: (tab) => {
     try {
@@ -740,6 +755,7 @@ async function doBestServer(kind){ return __gmxBestPick.doBestServer(kind); }
     fmt: __gmxFmt,
     gen: __gmxGen,
     keys: K,
+    storage: __gmxSt,
     requireConnected,
     getHandle,
     isPro,

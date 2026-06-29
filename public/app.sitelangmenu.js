@@ -48,10 +48,10 @@
           setSiteLangs(cfg.languages.site);
         }
         if (cfg.languages && Array.isArray(cfg.languages.reply)) {
-          const onlyEnglish = cfg.languages.reply.filter(
-            (item) => Array.isArray(item) && String(item[0] || "").toLowerCase() === "en"
+          const reply = cfg.languages.reply.filter(
+            (item) => Array.isArray(item) && String(item[0] || "").trim()
           );
-          setReplyLangs(onlyEnglish.length ? onlyEnglish : [["en", "English"]]);
+          setReplyLangs(reply.length ? reply : [["en", "English"]]);
         } else {
           setReplyLangs([["en", "English"]]);
         }

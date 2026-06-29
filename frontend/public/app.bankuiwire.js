@@ -62,9 +62,16 @@
       return fmt.friendlyUiErrorMessage?.(msg, opts);
     }
     function currentLang(kind) {
+      const isGn = String(kind || "").toLowerCase() === "gn";
+      const lsKey = isGn ? keys.GN_REPLY_LANG || "gmx_gn_reply_lang" : keys.GM_REPLY_LANG || "gmx_gm_reply_lang";
+      const selId = isGn ? "gnLang" : "gmLang";
       try {
-        const el = kind === "gm" ? ctx.$?.("gmLang") : ctx.$?.("gnLang");
-        if (el) el.value = "en";
+        const v = ctx.$?.(selId)?.value;
+        if (v) return String(v).trim() || "en";
+      } catch (_e) {}
+      try {
+        const stored = ctx.storage?.lsGet?.(lsKey, "en");
+        if (stored) return String(stored).trim() || "en";
       } catch (_e) {}
       return "en";
     }

@@ -80,7 +80,12 @@ export function registerGenerateRoutes(deps) {
       const handle = req.user?.handle || null;
       const kind = String(req.query.kind || "").toLowerCase();
       const mode = String(req.query.mode || "min").toLowerCase();
-      const lang = normLang(req.query.lang);
+      const rawLang = req.query.lang;
+      const lang = normLang(rawLang);
+      if (rawLang != null && String(rawLang).trim() !== "" && lang === null) {
+        return sendError(res, 400, "invalid_lang");
+      }
+      const effectiveLang = lang || "en";
       let style = String(req.query.style || "classic").toLowerCase();
       if (!VALID_STYLES.has(style)) style = "classic";
       const antiN = parseAntiLastN(req, 20);
@@ -103,7 +108,7 @@ export function registerGenerateRoutes(deps) {
 
       let reply;
       try {
-        reply = generateUnique(handle, kind, mode, lang, style, antiN);
+        reply = generateUnique(handle, kind, mode, effectiveLang, style, antiN);
       } catch (e) {
         logGenerateRouteError("engine", e, { kind });
         return sendError(res, 500, ERROR_CODES.SERVER_ERROR);
@@ -123,7 +128,7 @@ export function registerGenerateRoutes(deps) {
 
       saveRecent(handle, kind, reply, mode, style);
       try {
-        logActivity(handle, "gen", { kind, mode, lang, style, antiN, source: "site" });
+        logActivity(handle, "gen", { kind, mode, lang: effectiveLang, style, antiN, source: "site" });
       } catch (_e) {}
 
       res.json({
@@ -131,7 +136,7 @@ export function registerGenerateRoutes(deps) {
         handle,
         kind,
         mode,
-        lang,
+        lang: effectiveLang,
         reply,
         usage: {
           used: consume.used,
@@ -154,7 +159,12 @@ export function registerGenerateRoutes(deps) {
       const handle = req.user?.handle || null;
       const kind = String(req.query.kind || "").toLowerCase();
       const mode = String(req.query.mode || "min").toLowerCase();
-      const lang = normLang(req.query.lang);
+      const rawLang = req.query.lang;
+      const lang = normLang(rawLang);
+      if (rawLang != null && String(rawLang).trim() !== "" && lang === null) {
+        return sendError(res, 400, "invalid_lang");
+      }
+      const effectiveLang = lang || "en";
       let style = String(req.query.style || "classic").toLowerCase();
       if (!VALID_STYLES.has(style)) style = "classic";
       const antiN = parseAntiLastN(req, 20);
@@ -181,7 +191,7 @@ export function registerGenerateRoutes(deps) {
 
       let list;
       try {
-        list = generateRankedCandidates(handle, kind, mode, lang, style, count, antiN, false);
+        list = generateRankedCandidates(handle, kind, mode, effectiveLang, style, count, antiN, false);
       } catch (e) {
         logGenerateRouteError("engine_bulk", e, { kind, count });
         return sendError(res, 500, ERROR_CODES.SERVER_ERROR);
@@ -205,7 +215,7 @@ export function registerGenerateRoutes(deps) {
 
       for (const r of lines) saveRecent(handle, kind, r, mode, style);
       try {
-        logActivity(handle, "gen_bulk", { kind, mode, lang, style, count: lines.length, source: "site" });
+        logActivity(handle, "gen_bulk", { kind, mode, lang: effectiveLang, style, count: lines.length, source: "site" });
       } catch (_e) {}
 
       res.json({
@@ -213,7 +223,7 @@ export function registerGenerateRoutes(deps) {
         handle,
         kind,
         mode,
-        lang,
+        lang: effectiveLang,
         count: lines.length,
         list: lines,
         usage: {
