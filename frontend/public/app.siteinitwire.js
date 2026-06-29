@@ -161,6 +161,8 @@
       return {
         setBestMode: ctx.setBestMode,
         setCleanFillEnabled: ctx.setCleanFillEnabled,
+        storage,
+        referralPendingKey: K.REF_PENDING,
         bootstrapSiteLangUi: () => siteLangMenu.bootstrapSiteLangUi?.(),
         applyLang: ctx.applyLang,
         syncBestModeUi: ctx.syncBestModeUi,

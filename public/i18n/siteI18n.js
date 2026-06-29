@@ -896,7 +896,10 @@
     "ref_status_active": "Active",
     "ref_lb_rules_summary": "referrals with at least one GM or GN use",
     "ref_fraud_device": "duplicate device",
-    "ref_fraud_burst": "suspicious burst"
+    "ref_fraud_burst": "suspicious burst",
+    "ref_capture_pending": "Referral link saved — connect your @handle to apply it.",
+    "ref_capture_expired": "This referral link has expired.",
+    "ref_connect_retry": "Connect failed. Your referral link is still saved — try again."
   },
   "de": {
     "plan_compare_btn": "Vergleichen",
@@ -1793,7 +1796,10 @@
     "ref_status_active": "Aktiv",
     "ref_lb_rules_summary": "Referrals mit mindestens einer GM- oder GN-Nutzung",
     "ref_fraud_device": "doppeltes Gerät",
-    "ref_fraud_burst": "verdächtiger Anstieg"
+    "ref_fraud_burst": "verdächtiger Anstieg",
+    "ref_capture_pending": "Empfehlungslink gespeichert — verbinde deinen @handle, um ihn anzuwenden.",
+    "ref_capture_expired": "Dieser Empfehlungslink ist abgelaufen.",
+    "ref_connect_retry": "Verbindung fehlgeschlagen. Dein Empfehlungslink ist noch gespeichert — versuche es erneut."
   },
   "fr": {
     "plan_compare_btn": "Comparer",
@@ -2690,7 +2696,10 @@
     "ref_status_active": "Actif",
     "ref_lb_rules_summary": "filleuls avec au moins une utilisation GM ou GN",
     "ref_fraud_device": "appareil en double",
-    "ref_fraud_burst": "pic suspect"
+    "ref_fraud_burst": "pic suspect",
+    "ref_capture_pending": "Lien de parrainage enregistré — connecte ton @handle pour l'appliquer.",
+    "ref_capture_expired": "Ce lien de parrainage a expiré.",
+    "ref_connect_retry": "Échec de la connexion. Ton lien de parrainage est toujours enregistré — réessaie."
   },
   "es": {
     "plan_compare_btn": "Comparar",
@@ -3587,7 +3596,10 @@
     "ref_status_active": "Activo",
     "ref_lb_rules_summary": "referidos con al menos un uso de GM o GN",
     "ref_fraud_device": "dispositivo duplicado",
-    "ref_fraud_burst": "ráfaga sospechosa"
+    "ref_fraud_burst": "ráfaga sospechosa",
+    "ref_capture_pending": "Enlace de referido guardado — conecta tu @handle para aplicarlo.",
+    "ref_capture_expired": "Este enlace de referido ha caducado.",
+    "ref_connect_retry": "Error al conectar. Tu enlace de referido sigue guardado — inténtalo de nuevo."
   },
   "pt": {
     "plan_compare_btn": "Comparar",
@@ -4484,7 +4496,10 @@
     "ref_status_active": "Ativo",
     "ref_lb_rules_summary": "indicados com pelo menos um uso de GM ou GN",
     "ref_fraud_device": "dispositivo duplicado",
-    "ref_fraud_burst": "pico suspeito"
+    "ref_fraud_burst": "pico suspeito",
+    "ref_capture_pending": "Link de indicação salvo — conecte seu @handle para aplicá-lo.",
+    "ref_capture_expired": "Este link de indicação expirou.",
+    "ref_connect_retry": "Falha na conexão. Seu link de indicação ainda está salvo — tente novamente."
   },
   "it": {
     "plan_compare_btn": "Confronta",
@@ -5381,7 +5396,10 @@
     "ref_status_active": "Attivo",
     "ref_lb_rules_summary": "referral con almeno un utilizzo GM o GN",
     "ref_fraud_device": "dispositivo duplicato",
-    "ref_fraud_burst": "picco sospetto"
+    "ref_fraud_burst": "picco sospetto",
+    "ref_capture_pending": "Link referral salvato — collega il tuo @handle per applicarlo.",
+    "ref_capture_expired": "Questo link referral è scaduto.",
+    "ref_connect_retry": "Connessione non riuscita. Il link referral è ancora salvato — riprova."
   },
   "nl": {
     "plan_compare_btn": "Vergelijken",
@@ -6278,7 +6296,10 @@
     "ref_status_active": "Actief",
     "ref_lb_rules_summary": "referrals met minstens één GM- of GN-gebruik",
     "ref_fraud_device": "dubbel apparaat",
-    "ref_fraud_burst": "verdachte piek"
+    "ref_fraud_burst": "verdachte piek",
+    "ref_capture_pending": "Referrallink opgeslagen — koppel je @handle om deze toe te passen.",
+    "ref_capture_expired": "Deze referrallink is verlopen.",
+    "ref_connect_retry": "Verbinden mislukt. Je referrallink is nog opgeslagen — probeer opnieuw."
   },
   "tr": {
     "plan_compare_btn": "Karşılaştır",
@@ -7175,7 +7196,10 @@
     "ref_status_active": "Aktif",
     "ref_lb_rules_summary": "en az bir GM veya GN kullanımı olan yönlendirmeler",
     "ref_fraud_device": "yinelenen cihaz",
-    "ref_fraud_burst": "şüpheli artış"
+    "ref_fraud_burst": "şüpheli artış",
+    "ref_capture_pending": "Referans bağlantısı kaydedildi — uygulamak için @handle bağla.",
+    "ref_capture_expired": "Bu referans bağlantısının süresi doldu.",
+    "ref_connect_retry": "Bağlantı başarısız. Referans bağlantın hâlâ kayıtlı — tekrar dene."
   },
   "pl": {
     "plan_compare_btn": "Porównaj",
@@ -8072,7 +8096,10 @@
     "ref_status_active": "Aktywny",
     "ref_lb_rules_summary": "polecenia z co najmniej jednym użyciem GM lub GN",
     "ref_fraud_device": "zduplikowane urządzenie",
-    "ref_fraud_burst": "podejrzany skok"
+    "ref_fraud_burst": "podejrzany skok",
+    "ref_capture_pending": "Link polecający zapisany — podłącz @handle, aby go zastosować.",
+    "ref_capture_expired": "Ten link polecający wygasł.",
+    "ref_connect_retry": "Połączenie nie powiodło się. Link polecający nadal zapisany — spróbuj ponownie."
   },
   "id": {
     "plan_compare_btn": "Bandingkan",
@@ -8969,7 +8996,10 @@
     "ref_status_active": "Aktif",
     "ref_lb_rules_summary": "referral dengan minimal satu penggunaan GM atau GN",
     "ref_fraud_device": "perangkat duplikat",
-    "ref_fraud_burst": "lonjakan mencurigakan"
+    "ref_fraud_burst": "lonjakan mencurigakan",
+    "ref_capture_pending": "Tautan referral disimpan — hubungkan @handle untuk menerapkannya.",
+    "ref_capture_expired": "Tautan referral ini sudah kedaluwarsa.",
+    "ref_connect_retry": "Gagal terhubung. Tautan referral masih tersimpan — coba lagi."
   },
   "ru": {
     "plan_compare_btn": "Сравнить",
@@ -9866,7 +9896,10 @@
     "ref_status_active": "Активен",
     "ref_lb_rules_summary": "рефералы с хотя бы одним использованием GM или GN",
     "ref_fraud_device": "повтор устройства",
-    "ref_fraud_burst": "подозрительный всплеск"
+    "ref_fraud_burst": "подозрительный всплеск",
+    "ref_capture_pending": "Реферальная ссылка сохранена — подключите @handle, чтобы применить её.",
+    "ref_capture_expired": "Срок действия этой реферальной ссылки истёк.",
+    "ref_connect_retry": "Не удалось подключиться. Реферальная ссылка сохранена — попробуйте снова."
   },
   "uk": {
     "plan_compare_btn": "Порівняти",
@@ -10763,7 +10796,10 @@
     "ref_status_active": "Активний",
     "ref_lb_rules_summary": "реферали з хоча б одним використанням GM або GN",
     "ref_fraud_device": "повтор пристрою",
-    "ref_fraud_burst": "підозрілий сплеск"
+    "ref_fraud_burst": "підозрілий сплеск",
+    "ref_capture_pending": "Реферальне посилання збережено — підключіть @handle, щоб застосувати його.",
+    "ref_capture_expired": "Термін дії цього реферального посилання минув.",
+    "ref_connect_retry": "Не вдалося підключитися. Реферальне посилання збережено — спробуйте ще раз."
   },
   "hi": {
     "plan_compare_btn": "कम्पेयर करें",
@@ -11660,7 +11696,10 @@
     "ref_status_active": "सक्रिय",
     "ref_lb_rules_summary": "कम से कम एक GM या GN उपयोग वाले रेफरल",
     "ref_fraud_device": "डुप्लिकेट डिवाइस",
-    "ref_fraud_burst": "संदिग्ध वृद्धि"
+    "ref_fraud_burst": "संदिग्ध वृद्धि",
+    "ref_capture_pending": "रेफ़रल लिंक सेव हो गया — लागू करने के लिए अपना @handle कनेक्ट करें।",
+    "ref_capture_expired": "यह रेफ़रल लिंक समाप्त हो गया है।",
+    "ref_connect_retry": "कनेक्ट नहीं हो सका। आपका रेफ़रल लिंक अभी भी सेव है — फिर कोशिश करें।"
   },
   "ja": {
     "plan_compare_btn": "比較",
@@ -12557,7 +12596,10 @@
     "ref_status_active": "アクティブ",
     "ref_lb_rules_summary": "GMまたはGNを1回以上使った紹介",
     "ref_fraud_device": "重複デバイス",
-    "ref_fraud_burst": "不審な急増"
+    "ref_fraud_burst": "不審な急増",
+    "ref_capture_pending": "紹介リンクを保存しました。@handle を接続すると適用されます。",
+    "ref_capture_expired": "この紹介リンクの有効期限が切れました。",
+    "ref_connect_retry": "接続に失敗しました。紹介リンクは保存されたままです。もう一度お試しください。"
   },
   "zh": {
     "plan_compare_btn": "对比",
@@ -13454,7 +13496,10 @@
     "ref_status_active": "活跃",
     "ref_lb_rules_summary": "至少使用过一次 GM 或 GN 的推荐",
     "ref_fraud_device": "重复设备",
-    "ref_fraud_burst": "可疑激增"
+    "ref_fraud_burst": "可疑激增",
+    "ref_capture_pending": "推荐链接已保存 — 连接你的 @handle 即可生效。",
+    "ref_capture_expired": "此推荐链接已过期。",
+    "ref_connect_retry": "连接失败。推荐链接仍已保存 — 请重试。"
   }
 };
   function clone(value){ return JSON.parse(JSON.stringify(value)); }

@@ -26,6 +26,11 @@ export const CONFIG = {
 
 export const REF_MIN_ACTIVE_DAYS = Math.max(1, Math.min(30, Number(process.env.GMX_REF_ACTIVE_MIN_DAYS || "1") || 1));
 export const REF_MIN_ACTIVE_USES = Math.max(1, Math.min(1000, Number(process.env.GMX_REF_ACTIVE_MIN_USES || "1") || 1));
+/** Client pending attribution TTL (7 days). */
+export const REF_PENDING_TTL_MS = Math.max(
+  60_000,
+  Math.min(30 * 24 * 60 * 60 * 1000, Number(process.env.GMX_REF_PENDING_TTL_MS || String(7 * 24 * 60 * 60 * 1000)) || 7 * 24 * 60 * 60 * 1000)
+);
 
 export const PLANS = {
   free: {

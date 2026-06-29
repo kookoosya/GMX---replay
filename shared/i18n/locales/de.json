@@ -893,5 +893,8 @@
   "ref_status_active": "Aktiv",
   "ref_lb_rules_summary": "Referrals mit mindestens einer GM- oder GN-Nutzung",
   "ref_fraud_device": "doppeltes Gerät",
-  "ref_fraud_burst": "verdächtiger Anstieg"
+  "ref_fraud_burst": "verdächtiger Anstieg",
+  "ref_capture_pending": "Empfehlungslink gespeichert — verbinde deinen @handle, um ihn anzuwenden.",
+  "ref_capture_expired": "Dieser Empfehlungslink ist abgelaufen.",
+  "ref_connect_retry": "Verbindung fehlgeschlagen. Dein Empfehlungslink ist noch gespeichert — versuche es erneut."
 }

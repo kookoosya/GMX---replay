@@ -893,5 +893,8 @@
   "ref_status_active": "Aktif",
   "ref_lb_rules_summary": "en az bir GM veya GN kullanımı olan yönlendirmeler",
   "ref_fraud_device": "yinelenen cihaz",
-  "ref_fraud_burst": "şüpheli artış"
+  "ref_fraud_burst": "şüpheli artış",
+  "ref_capture_pending": "Referans bağlantısı kaydedildi — uygulamak için @handle bağla.",
+  "ref_capture_expired": "Bu referans bağlantısının süresi doldu.",
+  "ref_connect_retry": "Bağlantı başarısız. Referans bağlantın hâlâ kayıtlı — tekrar dene."
 }

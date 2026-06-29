@@ -893,5 +893,8 @@
   "ref_status_active": "Actif",
   "ref_lb_rules_summary": "filleuls avec au moins une utilisation GM ou GN",
   "ref_fraud_device": "appareil en double",
-  "ref_fraud_burst": "pic suspect"
+  "ref_fraud_burst": "pic suspect",
+  "ref_capture_pending": "Lien de parrainage enregistré — connecte ton @handle pour l'appliquer.",
+  "ref_capture_expired": "Ce lien de parrainage a expiré.",
+  "ref_connect_retry": "Échec de la connexion. Ton lien de parrainage est toujours enregistré — réessaie."
 }

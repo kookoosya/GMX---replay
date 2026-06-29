@@ -893,5 +893,8 @@
   "ref_status_active": "アクティブ",
   "ref_lb_rules_summary": "GMまたはGNを1回以上使った紹介",
   "ref_fraud_device": "重複デバイス",
-  "ref_fraud_burst": "不審な急増"
+  "ref_fraud_burst": "不審な急増",
+  "ref_capture_pending": "紹介リンクを保存しました。@handle を接続すると適用されます。",
+  "ref_capture_expired": "この紹介リンクの有効期限が切れました。",
+  "ref_connect_retry": "接続に失敗しました。紹介リンクは保存されたままです。もう一度お試しください。"
 }

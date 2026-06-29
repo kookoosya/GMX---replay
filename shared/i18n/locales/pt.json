@@ -893,5 +893,8 @@
   "ref_status_active": "Ativo",
   "ref_lb_rules_summary": "indicados com pelo menos um uso de GM ou GN",
   "ref_fraud_device": "dispositivo duplicado",
-  "ref_fraud_burst": "pico suspeito"
+  "ref_fraud_burst": "pico suspeito",
+  "ref_capture_pending": "Link de indicação salvo — conecte seu @handle para aplicá-lo.",
+  "ref_capture_expired": "Este link de indicação expirou.",
+  "ref_connect_retry": "Falha na conexão. Seu link de indicação ainda está salvo — tente novamente."
 }

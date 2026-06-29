@@ -6,6 +6,7 @@
     const setBestMode = typeof ctx.setBestMode === "function" ? ctx.setBestMode : () => {};
     const setCleanFillEnabled =
       typeof ctx.setCleanFillEnabled === "function" ? ctx.setCleanFillEnabled : () => {};
+    const referralPending = ctx.referralPending || null;
     const fetchReferralClick =
       typeof ctx.fetchReferralClick === "function"
         ? ctx.fetchReferralClick
@@ -17,11 +18,21 @@
     const win = ctx.window || window;
     const loc = ctx.location || win.location;
 
-    function wireReferralClick() {
+    function wireReferralCapture() {
+      if (!referralPending) {
+        try {
+          const ref = new URLSearchParams(loc.search).get("ref");
+          if (ref) fetchReferralClick(ref);
+        } catch {}
+        return;
+      }
       try {
-        const ref = new URLSearchParams(loc.search).get("ref");
-        if (ref) fetchReferralClick(ref);
-      } catch {}
+        const decision = referralPending.captureFromCurrentUrl();
+        if (decision?.sendClick && decision.record?.code) {
+          fetchReferralClick(decision.record.code);
+        }
+        if (decision?.stripUrl) referralPending.stripRefFromUrl();
+      } catch (_e) {}
     }
 
     function wireCrossFrameSync() {
@@ -42,10 +53,10 @@
     }
 
     function wire() {
-      wireReferralClick();
+      wireReferralCapture();
       wireCrossFrameSync();
     }
 
-    return { wire, wireReferralClick, wireCrossFrameSync };
+    return { wire, wireReferralCapture, wireCrossFrameSync };
   };
 })(window);

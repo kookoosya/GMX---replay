@@ -893,5 +893,8 @@
   "ref_status_active": "Aktywny",
   "ref_lb_rules_summary": "polecenia z co najmniej jednym użyciem GM lub GN",
   "ref_fraud_device": "zduplikowane urządzenie",
-  "ref_fraud_burst": "podejrzany skok"
+  "ref_fraud_burst": "podejrzany skok",
+  "ref_capture_pending": "Link polecający zapisany — podłącz @handle, aby go zastosować.",
+  "ref_capture_expired": "Ten link polecający wygasł.",
+  "ref_connect_retry": "Połączenie nie powiodło się. Link polecający nadal zapisany — spróbuj ponownie."
 }

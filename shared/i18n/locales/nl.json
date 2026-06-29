@@ -893,5 +893,8 @@
   "ref_status_active": "Actief",
   "ref_lb_rules_summary": "referrals met minstens één GM- of GN-gebruik",
   "ref_fraud_device": "dubbel apparaat",
-  "ref_fraud_burst": "verdachte piek"
+  "ref_fraud_burst": "verdachte piek",
+  "ref_capture_pending": "Referrallink opgeslagen — koppel je @handle om deze toe te passen.",
+  "ref_capture_expired": "Deze referrallink is verlopen.",
+  "ref_connect_retry": "Verbinden mislukt. Je referrallink is nog opgeslagen — probeer opnieuw."
 }

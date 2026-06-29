@@ -8,6 +8,7 @@
     "app.js",
     "app.css",
     "lib/referral-progress-core.js",
+    "lib/referral-pending-core.js",
     "lib/referral-badge-core.js",
     "lib/theme-group-core.js",
     "lib/wallpaper-core.js",
@@ -95,6 +96,7 @@
     "app.tabwire.js",
     "app.gmgnwire.js",
     "app.sitesync.js",
+    "app.referralpending.js",
     "app.extwallpaperui.js",
     "app.wallpaperswire.js",
     "app.themeswire.js",
@@ -132,6 +134,7 @@
   "scriptOrder": [
     "i18n/siteI18n.js",
     "lib/referral-progress-core.js",
+    "lib/referral-pending-core.js",
     "lib/referral-badge-core.js",
     "lib/theme-group-core.js",
     "lib/wallpaper-core.js",

@@ -20,6 +20,8 @@
       typeof ctx.invalidatePendingSessionInit === "function"
         ? ctx.invalidatePendingSessionInit
         : () => {};
+    const referralPending = ctx.referralPending || null;
+    const tr = typeof ctx.tr === "function" ? ctx.tr : (key) => String(key || "");
     let connectFallbackGeneration = 0;
     const beginSessionGeneration =
       typeof ctx.beginSessionGeneration === "function"
@@ -33,10 +35,22 @@
         ? ctx.isSessionGenerationCurrent
         : () => true;
     const keys = ctx.keys || {};
-    const tr = typeof ctx.tr === "function" ? ctx.tr : (key) => String(key || "");
 
     let tryInflight = false;
     let tryLastText = "";
+
+    function showConnectMsg(cm, kind, key) {
+      if (!cm) return;
+      const cls = kind === "ok" ? "ok" : kind === "bad" ? "bad" : "muted";
+      cm.innerHTML = `<span class="${cls}">${escapeHtml(tr(key))}</span>`;
+    }
+
+    function renderPendingConnectHint() {
+      if (!referralPending) return;
+      const pending = referralPending.readPending();
+      if (!pending) return;
+      showConnectMsg($("connectMsg"), "muted", "ref_capture_pending");
+    }
 
     async function runHomeTry(kind) {
       if (tryInflight) return;
@@ -75,11 +89,21 @@
     }
 
     function bindConnect() {
+      if (referralPending) {
+        referralPending.onStorageSync(() => {
+          try {
+            renderPendingConnectHint();
+          } catch (_e) {}
+        });
+        renderPendingConnectHint();
+      }
+
       const connectBtn = $("btnConnect");
       if (connectBtn) {
         connectBtn.onclick = async () => {
           const cm = $("connectMsg");
           if (cm) cm.textContent = "";
+
           const xh = $("xHandle");
           const handle = normalizeHandle(xh?.value);
           if (!handle) {
@@ -87,13 +111,14 @@
             return;
           }
 
-          const params = new URLSearchParams(location.search);
-          const ref = params.get("ref") || "";
+          const ref = referralPending
+            ? referralPending.resolveRefForInit(location.search)
+            : new URLSearchParams(location.search).get("ref") || "";
 
           const connectGeneration = beginSessionGeneration();
 
           try {
-            const j = await api("/api/user/init", "POST", { handle, ref });
+            const j = await api("/api/user/init", "POST", { handle, ref: ref || undefined });
             if (!isSessionGenerationCurrent(connectGeneration)) return;
 
             localStorage.setItem(keys.handle || "gmx_handle", j.handle);
@@ -110,6 +135,8 @@
             const rl = $("refLink");
             if (rl) rl.value = j.refLink || "";
             if (cm) cm.innerHTML = "";
+            if (referralPending && ref) referralPending.onInitSuccess(ref);
+
             try {
               localStorage.removeItem(keys.forceLogout || "gmx_force_logout");
             } catch (_e) {}
@@ -128,6 +155,7 @@
             await refreshUsage();
             await loadPlans();
 
+            const params = new URLSearchParams(location.search);
             const code = params.get("code");
             if (code) {
               const rc = $("redeemCode");
@@ -135,7 +163,9 @@
             }
           } catch (e) {
             if (!isSessionGenerationCurrent(connectGeneration)) return;
-            if (cm) {
+            if (referralPending && ref) {
+              showConnectMsg(cm, "bad", "ref_connect_retry");
+            } else if (cm) {
               cm.innerHTML =
                 '<span class="bad">Connect error: ' +
                 escapeHtml(
@@ -202,6 +232,9 @@
           try {
             loadPlans();
           } catch (_e) {}
+          try {
+            renderPendingConnectHint();
+          } catch (_e) {}
           if (xh) {
             try {
               xh.focus();
@@ -211,6 +244,6 @@
       }
     }
 
-    return { bindConnect };
+    return { bindConnect, renderPendingConnectHint };
   };
 })(window);

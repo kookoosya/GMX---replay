@@ -79,6 +79,16 @@
     const isSessionGenerationCurrent = resolveIsSessionGenerationCurrent(ctx);
 
     if (!window.__GMXConnectFactory) throw new Error("GMX connect factory missing");
+    const referralPending =
+      ctx.referralPending ||
+      (window.__GMXReferralPendingFactory && ctx.storage
+        ? window.__GMXReferralPendingFactory({
+            lsGet: (k, fb) => ctx.storage.lsGet(k, fb),
+            lsSet: (k, v) => ctx.storage.lsSet(k, v),
+            lsRemove: (k) => ctx.storage.lsRemove(k),
+            storageKey: ctx.referralPendingKey || "gmx_ref_pending_v1",
+          })
+        : null);
     const __gmxConnect = window.__GMXConnectFactory({
       $: ctx.$,
       api: ctx.api,
@@ -94,6 +104,7 @@
       invalidatePendingSessionInit,
       beginSessionGeneration,
       isSessionGenerationCurrent,
+      referralPending,
       keys: {
         handle: keys.handle,
         token: keys.token,

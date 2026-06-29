@@ -6,9 +6,21 @@
 
     async function run() {
       if (!window.__GMXSiteSyncFactory) throw new Error("GMX sitesync factory missing");
+      const storage = ctx.storage;
+      const referralPendingKey = ctx.referralPendingKey || "gmx_ref_pending_v1";
+      let referralPending = null;
+      if (storage && window.__GMXReferralPendingFactory) {
+        referralPending = window.__GMXReferralPendingFactory({
+          lsGet: (k, fb) => storage.lsGet(k, fb),
+          lsSet: (k, v) => storage.lsSet(k, v),
+          lsRemove: (k) => storage.lsRemove(k),
+          storageKey: referralPendingKey,
+        });
+      }
       window.__GMXSiteSyncFactory({
         setBestMode: ctx.setBestMode,
         setCleanFillEnabled: ctx.setCleanFillEnabled,
+        referralPending,
       }).wire();
 
       const bootstrapSiteLangUi =

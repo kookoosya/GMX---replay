@@ -18,6 +18,9 @@ const REF_KEYS = [
   "ref_lb_rules_summary",
   "ref_fraud_device",
   "ref_fraud_burst",
+  "ref_capture_pending",
+  "ref_capture_expired",
+  "ref_connect_retry",
   "r_li2c",
 ];
 

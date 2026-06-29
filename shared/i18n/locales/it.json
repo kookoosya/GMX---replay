@@ -893,5 +893,8 @@
   "ref_status_active": "Attivo",
   "ref_lb_rules_summary": "referral con almeno un utilizzo GM o GN",
   "ref_fraud_device": "dispositivo duplicato",
-  "ref_fraud_burst": "picco sospetto"
+  "ref_fraud_burst": "picco sospetto",
+  "ref_capture_pending": "Link referral salvato — collega il tuo @handle per applicarlo.",
+  "ref_capture_expired": "Questo link referral è scaduto.",
+  "ref_connect_retry": "Connessione non riuscita. Il link referral è ancora salvato — riprova."
 }

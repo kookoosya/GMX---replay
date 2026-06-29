@@ -893,5 +893,8 @@
   "ref_status_active": "活跃",
   "ref_lb_rules_summary": "至少使用过一次 GM 或 GN 的推荐",
   "ref_fraud_device": "重复设备",
-  "ref_fraud_burst": "可疑激增"
+  "ref_fraud_burst": "可疑激增",
+  "ref_capture_pending": "推荐链接已保存 — 连接你的 @handle 即可生效。",
+  "ref_capture_expired": "此推荐链接已过期。",
+  "ref_connect_retry": "连接失败。推荐链接仍已保存 — 请重试。"
 }

@@ -4,6 +4,7 @@
   global.__GMXStorageFactory = function createGMXStorage() {
     const keys = Object.freeze({
       REF_ELIGIBLE_CACHE: "gmx_ref_eligible_v1",
+      REF_PENDING: "gmx_ref_pending_v1",
       HANDLE: "gmx_handle",
       TOKEN: "gmx_token",
       IS_ADMIN: "gmx_is_admin",

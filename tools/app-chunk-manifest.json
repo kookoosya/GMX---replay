@@ -75,6 +75,7 @@
       "markers": ["__GMXBootstrapCoreWireFactory", "__GMXThemesWireFactory"],
       "files": [
         "app.bootstrapcorewire.js",
+        "app.referralpending.js",
         "app.bootstrapunlockwire.js",
         "app.bootstrapgenwire.js",
         "app.bootstrapusagewire.js",

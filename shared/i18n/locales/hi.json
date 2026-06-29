@@ -893,5 +893,8 @@
   "ref_status_active": "सक्रिय",
   "ref_lb_rules_summary": "कम से कम एक GM या GN उपयोग वाले रेफरल",
   "ref_fraud_device": "डुप्लिकेट डिवाइस",
-  "ref_fraud_burst": "संदिग्ध वृद्धि"
+  "ref_fraud_burst": "संदिग्ध वृद्धि",
+  "ref_capture_pending": "रेफ़रल लिंक सेव हो गया — लागू करने के लिए अपना @handle कनेक्ट करें।",
+  "ref_capture_expired": "यह रेफ़रल लिंक समाप्त हो गया है।",
+  "ref_connect_retry": "कनेक्ट नहीं हो सका। आपका रेफ़रल लिंक अभी भी सेव है — फिर कोशिश करें।"
 }
