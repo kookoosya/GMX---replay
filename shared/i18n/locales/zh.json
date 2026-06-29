@@ -324,10 +324,10 @@
   "ref_def_active": "Active：受邀者已使用",
   "ref_def_legacy": "较早的结转仍计入您的解锁总数。",
   "ref_def_eligible": "max(活跃, 结转)。",
-  "ref_daily_limit_title": "每日生成限制（GM + GN各）",
-  "ref_per_day": "每日：上限与奖励",
+  "ref_daily_limit_title": "生成额度（GM + GN 共享，终身）",
+  "ref_per_day": "终身共享池",
   "ref_base_plus_bonus": "基础 + 奖励",
-  "ref_bonus_rule": "奖励：每 20 名符合条件的推荐人每天可生成 +{per20}（解锁步骤：{chunks}）。",
+  "ref_bonus_rule": "奖励：每 20 名符合条件推荐终身 +{per20} 额度（已解锁步数：{chunks}）。",
   "ref_next_bonus": "下一个奖励在",
   "ref_cap_note": "存在每日上限",
   "ref_owner_inactive": "所有者不活跃则不计入",
@@ -422,8 +422,8 @@
   "r_list": [
     "<b>Confirmed</b> counts when someone connects a handle with your link.",
     "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-    "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-    "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+    "每<b>20</b>名符合条件推荐终身<b>+10</b>额度（50+为每20<b>+12</b>）。",
+    "奖励额度与基础50共享GM+GN池。Pro移除上限。"
   ],
   "themes_title": "主题",
   "themes_note": "选择主题和壁纸",
@@ -571,7 +571,7 @@
   "ref_promoter_title": "邀请奖励（推广者）",
   "ref_promoter_body": "符合资格的邀请越多，每日额度越高",
   "r_li2b": "Clicks 单独统计。Rewards/unlocks 以已连接的 referrals 为准。",
-  "r_li2c": "推广者：免费每日生成上限随推荐自动增加（奖励加入基础上限）。",
+  "r_li2c": "推广者：符合条件推荐在基础 50 之外单独增加奖励额度。",
   "r_li4": "符合条件 = max(活跃, 结转)。仅当结转更大时才计入。",
   "themes_right_title": "快速指南",
   "w_pay_help_list": [
@@ -887,5 +887,11 @@
   "wallet_recovery_wrong_account": "待处理付款属于另一个 @handle。请切回该账户以完成验证。",
   "wallet_recovery_wrong_account_title": "不同账户",
   "wallet_recovery_wrong_wallet": "此付款由另一个钱包发送。请重新连接该钱包，或关闭后重新开始。",
-  "wallet_recovery_wrong_wallet_title": "不同钱包"
+  "wallet_recovery_wrong_wallet_title": "不同钱包",
+  "ref_k_gen_total": "总额度",
+  "ref_status_confirmed": "已连接",
+  "ref_status_active": "活跃",
+  "ref_lb_rules_summary": "至少使用过一次 GM 或 GN 的推荐",
+  "ref_fraud_device": "重复设备",
+  "ref_fraud_burst": "可疑激增"
 }

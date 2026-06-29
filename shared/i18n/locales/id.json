@@ -324,10 +324,10 @@
   "ref_def_active": "Aktif = referral terkonfirmasi dengan minimal satu penggunaan nyata.",
   "ref_def_legacy": "carry-over yang lebih lama masih dihitung dalam total pembukaan kunci Anda.",
   "ref_def_eligible": "max(aktif, carry-over).",
-  "ref_daily_limit_title": "Batas pembuatan harian (masing-masing GM + GN)",
-  "ref_per_day": "per hari",
+  "ref_daily_limit_title": "Kredit generasi (GM + GN bersama, seumur hidup)",
+  "ref_per_day": "pool bersama seumur hidup",
   "ref_base_plus_bonus": "Dasar {base} + bonus {bonus}",
-  "ref_bonus_rule": "Bonus: +{per20} generasi harian untuk setiap 20 referensi yang memenuhi syarat (langkah terbuka: {chunks}).",
+  "ref_bonus_rule": "Bonus: +{per20} kredit generasi seumur hidup per 20 referral eligible (langkah: {chunks}).",
   "ref_next_bonus": "Bonus berikutnya pada {nextAt} referral eligible.",
   "ref_cap_note": "batas {cap}",
   "ref_owner_inactive": "bonus dijeda sampai kamu sendiri memakai produk.",
@@ -422,8 +422,8 @@
   "r_list": [
     "Setiap <b>20 referral yang eligible</b> menambah <b>+10</b> generation harian.",
     "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-    "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-    "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+    "Setiap <b>20 eligible</b> menambah <b>+10</b> kredit seumur hidup (50+ = <b>+12</b> per 20).",
+    "Kredit bonus berbagi satu pool GM+GN dengan base 50. Pro menghapus batas."
   ],
   "themes_title": "Tema",
   "themes_note": "Pilih tema dan wallpaper",
@@ -571,7 +571,7 @@
   "ref_promoter_title": "Promotor",
   "ref_promoter_body": "Batas harian naik dengan referral layak",
   "r_li2b": "Klik dihitung terpisah. Rewards/unlocks pakai connected referrals.",
-  "r_li2c": "Promotor: batas generasi harian gratis naik otomatis dengan referral (bonus ditambahkan ke batas dasar).",
+  "r_li2c": "Promotor: referral eligible menambah kredit bonus di atas base 50.",
   "r_li4": "Memenuhi syarat = max(aktif, carry-over). Carry-over hanya berlaku jika lebih besar.",
   "themes_right_title": "Panduan cepat",
   "w_pay_help_list": [
@@ -887,5 +887,11 @@
   "wallet_recovery_wrong_account": "Pembayaran tertunda milik @handle lain. Kembali ke akun itu untuk menyelesaikan verifikasi.",
   "wallet_recovery_wrong_account_title": "Akun berbeda",
   "wallet_recovery_wrong_wallet": "Pembayaran ini dikirim dari dompet lain. Hubungkan kembali dompet itu atau tutup untuk memulai ulang.",
-  "wallet_recovery_wrong_wallet_title": "Dompet berbeda"
+  "wallet_recovery_wrong_wallet_title": "Dompet berbeda",
+  "ref_k_gen_total": "Total kredit",
+  "ref_status_confirmed": "Terhubung",
+  "ref_status_active": "Aktif",
+  "ref_lb_rules_summary": "referral dengan minimal satu penggunaan GM atau GN",
+  "ref_fraud_device": "perangkat duplikat",
+  "ref_fraud_burst": "lonjakan mencurigakan"
 }

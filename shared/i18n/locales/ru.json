@@ -324,10 +324,10 @@
   "ref_def_active": "Активные = подтверждённые рефералы с хотя бы одним реальным использованием.",
   "ref_def_legacy": "старые рефералы, всё ещё учитываются в разблокировках.",
   "ref_def_eligible": "max(активные, перенос).",
-  "ref_daily_limit_title": "Дневной лимит генерации (GM и GN отдельно)",
-  "ref_per_day": "в день",
+  "ref_daily_limit_title": "Кредиты генерации (GM + GN общий пул, навсегда)",
+  "ref_per_day": "общий пул навсегда",
   "ref_base_plus_bonus": "База {base} + бонус {bonus}",
-  "ref_bonus_rule": "Бонус: +{per20} к дневной генерации за каждые 20 eligible (шагов: {chunks}).",
+  "ref_bonus_rule": "Бонус: +{per20} кредитов генерации навсегда за каждые 20 eligible рефералов (шагов: {chunks}).",
   "ref_next_bonus": "Следующий бонус при {nextAt} учитываемых.",
   "ref_cap_note": "потолок {cap}",
   "ref_owner_inactive": "бонус ставится на паузу, пока ты сам не пользуешься продуктом.",
@@ -410,7 +410,7 @@
     "Free Cap - это 70 сохраненных строк для банка GN. Если вы нажмете 50/50, новые сгенерированные линии заменят старые. Редактирование не ограничено."
   ],
   "gn_desc": "Короткие ночные ответы для X. Выберите тон и язык ответа, нажмите Quick 1, копируйте или сохраняйте строки. Free: 50 кредитов генерации на всё время (GM+GN общие).",
-  "ref_desc": "Рефералы: делись ссылкой. Confirmed = подключился, Active = пользовался, Eligible = max(active, carry-over). Бонус: +10/день за 20 eligible.",
+  "ref_desc": "Поделись ссылкой. Confirmed = подключился по ссылке. Active = реальное использование GM/GN. Eligible = max(active, carry-over). Бонус: +{per20} за 20 eligible (+12 при 50+). Базовые 50 отдельно.",
   "wallet_desc": "Апгрейд Pro: безлимитные кредиты генерации, вся косметика (темы, стили, скины и обои расширения) и все игры Arcade. Оплата в Solana: SOL / USDC / USDT. Проверка on-chain.",
   "w_pay_desc": "Кошелёк получателя появится после выбора плана.",
   "w_status_desc": "Просто и безопасно: ты отправляешь со своего кошелька и вставляешь signature для проверки.",
@@ -420,10 +420,10 @@
     "Полный wallet-connect — после security review."
   ],
   "r_list": [
-    "<b>Confirmed</b> — человек подключил хендл по твоей ссылке.",
-    "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-    "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-    "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+    "<b>Confirmed</b> — когда кто-то подключил handle по твоей ссылке.",
+    "<b>Active</b> — confirmed с записанным использованием. <b>Eligible</b> = max(active, carry-over).",
+    "Каждые <b>20 eligible</b> дают <b>+10</b> кредитов навсегда (50+ = <b>+12</b> за 20).",
+    "Бонусные кредиты в одном пуле GM+GN с базовыми 50. Pro снимает лимиты."
   ],
   "themes_title": "Темы",
   "themes_note": "Выбери тему и обои",
@@ -569,9 +569,9 @@
   "ui_site_lang": "Язык сайта",
   "apply_upgrade_pro": "Апгрейд до Pro",
   "ref_promoter_title": "Промоутер",
-  "ref_promoter_body": "Больше дневного лимита за зачётных рефералов",
+  "ref_promoter_body": "Награды только за eligible рефералов (подключение + реальное использование). Клики считаются отдельно.",
   "r_li2b": "Клики считаются отдельно. Награды/анлоки считаются по подключившимся рефералам.",
-  "r_li2c": "Active = подтверждённый реферал, который хотя бы раз пользовался продуктом.",
+  "r_li2c": "Промоутерам: eligible рефералы добавляют бонусные кредиты поверх базовых 50 (показываются отдельно).",
   "r_li4": "Каждые <b>20 eligible</b> дают <b>+10</b> дневной генерации (Promoter 50+ = <b>+12</b> за 20).",
   "themes_right_title": "Короткий гайд",
   "w_pay_help_list": [
@@ -887,5 +887,11 @@
   "wallet_recovery_wrong_account": "Ожидающий платёж привязан к другому @handle. Вернитесь к тому аккаунту для завершения проверки.",
   "wallet_recovery_wrong_account_title": "Другой аккаунт",
   "wallet_recovery_wrong_wallet": "Этот платёж отправлен с другого кошелька. Подключите тот кошелёк или скройте, чтобы начать заново.",
-  "wallet_recovery_wrong_wallet_title": "Другой кошелёк"
+  "wallet_recovery_wrong_wallet_title": "Другой кошелёк",
+  "ref_k_gen_total": "Всего кредитов",
+  "ref_status_confirmed": "Подключён",
+  "ref_status_active": "Активен",
+  "ref_lb_rules_summary": "рефералы с хотя бы одним использованием GM или GN",
+  "ref_fraud_device": "повтор устройства",
+  "ref_fraud_burst": "подозрительный всплеск"
 }

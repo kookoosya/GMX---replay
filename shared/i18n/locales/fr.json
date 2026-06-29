@@ -324,10 +324,10 @@
   "ref_def_active": "Actif = parrainage confirmé avec au moins une utilisation réelle.",
   "ref_def_legacy": "les anciens reports sont toujours comptés dans votre total de déverrouillage.",
   "ref_def_eligible": "max(actif, report).",
-  "ref_daily_limit_title": "Limite de production quotidienne (GM + GN chacun)",
-  "ref_per_day": "par jour",
+  "ref_daily_limit_title": "Crédits de génération (GM + GN partagés, à vie)",
+  "ref_per_day": "pool partagé à vie",
   "ref_base_plus_bonus": "Base {base} + bonus {bonus}",
-  "ref_bonus_rule": "Bonus : +{per20} génération quotidienne pour chaque 20 filleuls éligibles (étapes débloquées : {chunks}).",
+  "ref_bonus_rule": "Bonus : +{per20} crédits de génération à vie pour chaque 20 filleuls éligibles (étapes : {chunks}).",
   "ref_next_bonus": "Prochain palier de bonus à {nextAt} éligibles.",
   "ref_cap_note": "plafond {cap}",
   "ref_owner_inactive": "bonus en pause tant que tu n’utilises pas le produit.",
@@ -422,8 +422,8 @@
   "r_list": [
     "Chaque <b>20 parrainages éligibles</b> ajoute <b>+10</b> générations quotidiennes.",
     "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-    "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-    "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+    "Chaque <b>20 éligibles</b> ajoute <b>+10</b> crédits à vie (50+ = <b>+12</b> par 20).",
+    "Les crédits bonus partagent un pool GM+GN avec les 50 de base. Pro supprime les plafonds."
   ],
   "themes_title": "Thèmes",
   "themes_note": "Choisis un thème et un fond.",
@@ -571,7 +571,7 @@
   "ref_promoter_title": "Promoteur",
   "ref_promoter_body": "Plus de limite/jour avec des parrainages éligibles",
   "r_li2b": "Les clics sont comptés à part. Rewards/unlocks utilisent les parrainages connectés.",
-  "r_li2c": "Promoteurs : votre plafond de génération quotidienne gratuite augmente automatiquement avec les parrainages (un bonus est ajouté à votre limite de base).",
+  "r_li2c": "Promoteurs : les filleuls éligibles ajoutent un bonus séparé au pool de base de 50.",
   "r_li4": "Éligible = max(actif, report). Le report n'a d'importance que s'il est plus important.",
   "themes_right_title": "Guide rapide",
   "w_pay_help_list": [
@@ -887,5 +887,11 @@
   "wallet_recovery_wrong_account": "Un paiement en attente appartient à un autre @handle. Revenez à ce compte pour terminer la vérification.",
   "wallet_recovery_wrong_account_title": "Compte différent",
   "wallet_recovery_wrong_wallet": "Ce paiement a été envoyé depuis un autre portefeuille. Reconnectez ce portefeuille ou fermez pour recommencer.",
-  "wallet_recovery_wrong_wallet_title": "Portefeuille différent"
+  "wallet_recovery_wrong_wallet_title": "Portefeuille différent",
+  "ref_k_gen_total": "Crédits totaux",
+  "ref_status_confirmed": "Connecté",
+  "ref_status_active": "Actif",
+  "ref_lb_rules_summary": "filleuls avec au moins une utilisation GM ou GN",
+  "ref_fraud_device": "appareil en double",
+  "ref_fraud_burst": "pic suspect"
 }

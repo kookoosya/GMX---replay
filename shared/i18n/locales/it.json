@@ -324,10 +324,10 @@
   "ref_def_active": "Attivo = referral confermato con almeno un utilizzo reale.",
   "ref_def_legacy": "il riporto precedente conta ancora nel totale sblocchi.",
   "ref_def_eligible": "max(attivi, riporto).",
-  "ref_daily_limit_title": "Limite generazione giornaliera (GM + GN ciascuno)",
-  "ref_per_day": "al giorno",
+  "ref_daily_limit_title": "Crediti di generazione (GM + GN condivisi, a vita)",
+  "ref_per_day": "pool condiviso a vita",
   "ref_base_plus_bonus": "Base {base} + bonus {bonus}",
-  "ref_bonus_rule": "Bonus: +{per20} generazione giornaliera ogni 20 referral idonei (passi sbloccati: {chunks}).",
+  "ref_bonus_rule": "Bonus: +{per20} crediti di generazione a vita ogni 20 referral idonei (passi: {chunks}).",
   "ref_next_bonus": "Prossimo bonus a {nextAt} idonei.",
   "ref_cap_note": "tetto {cap}",
   "ref_owner_inactive": "bonus in pausa finché non usi il prodotto.",
@@ -422,8 +422,8 @@
   "r_list": [
     "Ogni <b>20 referral</b> aggiunge <b>+10</b> inserimenti giornalieri.",
     "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-    "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-    "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+    "Ogni <b>20 idonei</b> aggiunge <b>+10</b> crediti a vita (50+ = <b>+12</b> ogni 20).",
+    "I crediti bonus condividono un pool GM+GN con i 50 base. Pro rimuove i limiti."
   ],
   "themes_title": "Temi",
   "themes_note": "Scegli un tema e uno sfondo",
@@ -571,7 +571,7 @@
   "ref_promoter_title": "Promotore",
   "ref_promoter_body": "Più limite giornaliero con referral idonei",
   "r_li2b": "I click sono tracciati separatamente. Rewards/unlock usano referral connessi.",
-  "r_li2c": "Promoter: il limite giornaliero gratuito aumenta automaticamente con i referral (bonus aggiunto al limite base).",
+  "r_li2c": "Promoter: i referral idonei aggiungono crediti bonus oltre al base 50.",
   "r_li4": "Idoneo = max(attivo, riporto). Il riporto conta solo se è più grande.",
   "themes_right_title": "Guida rapida",
   "w_pay_help_list": [
@@ -887,5 +887,11 @@
   "wallet_recovery_wrong_account": "Un pagamento in sospeso appartiene a un altro @handle. Torna a quell'account per completare la verifica.",
   "wallet_recovery_wrong_account_title": "Account diverso",
   "wallet_recovery_wrong_wallet": "Questo pagamento è stato inviato da un altro wallet. Riconnetti quel wallet o chiudi per ricominciare.",
-  "wallet_recovery_wrong_wallet_title": "Wallet diverso"
+  "wallet_recovery_wrong_wallet_title": "Wallet diverso",
+  "ref_k_gen_total": "Crediti totali",
+  "ref_status_confirmed": "Connesso",
+  "ref_status_active": "Attivo",
+  "ref_lb_rules_summary": "referral con almeno un utilizzo GM o GN",
+  "ref_fraud_device": "dispositivo duplicato",
+  "ref_fraud_burst": "picco sospetto"
 }

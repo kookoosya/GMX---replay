@@ -15,9 +15,11 @@
     },
     ui: {
       renderReferralRightCopy,
+      renderReferralPromoNote,
       renderGuideRightCopy,
       applyRefCountEligible,
       nextReferralUnlockAt,
+      syncRefProgressMeter,
       renderThemes,
       renderExtThemes,
       fillStyles,

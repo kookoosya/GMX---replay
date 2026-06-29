@@ -324,10 +324,10 @@
   "ref_def_active": "Активні = підтверджені реферали з хоча б одним реальним використанням.",
   "ref_def_legacy": "старіший перехід все ще враховується в загальній сумі розблокування.",
   "ref_def_eligible": "max (активний, перенесений).",
-  "ref_daily_limit_title": "Добовий ліміт генерації (GM + GN кожен)",
-  "ref_per_day": "на день",
+  "ref_daily_limit_title": "Кредити генерації (GM + GN спільний пул, назавжди)",
+  "ref_per_day": "спільний пул назавжди",
   "ref_base_plus_bonus": "База {base} + бонус {bonus}",
-  "ref_bonus_rule": "Бонус: +{per20} щоденна генерація за кожні 20 відповідних рефералів (розблоковано кроків: {chunks}).",
+  "ref_bonus_rule": "Бонус: +{per20} кредитів генерації назавжди за кожні 20 eligible рефералів (кроків: {chunks}).",
   "ref_next_bonus": "Наступний бонус при {nextAt} урахованих.",
   "ref_cap_note": "стеля {cap}",
   "ref_owner_inactive": "бонус на паузі, доки ти сам не користуєшся продуктом.",
@@ -410,7 +410,7 @@
     "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
   "gn_desc": "Короткі нічні відповіді для X. Оберіть тон і мову відповіді, натисніть Quick 1, копіюйте або зберігайте рядки. Free: 50 кредитів генерації на все життя (GM+GN спільні).",
-  "ref_desc": "Реферали: діліться посиланням. Підтверджено = підключено, Активний = використав продукт, Допущений = max(активні, перенос). Бонус: +10/день за кожні 20 допущених (+12 при 50+).",
+  "ref_desc": "Поділись посиланням. Confirmed = підключився за посиланням. Active = реальне використання GM/GN. Eligible = max(active, carry-over). Бонус: +{per20} за 20 eligible (+12 при 50+). Базові 50 окремо.",
   "wallet_desc": "Апгрейд Pro: безлімітні кредити генерації, уся косметика (теми, стилі, скіни та шпалери розширення) і всі ігри Arcade. Оплата в Solana: SOL / USDC / USDT. Перевірка on-chain.",
   "w_pay_desc": "Гаманець отримувача з’явиться після вибору плану.",
   "w_status_desc": "Просто і безпечно: ти відправляєш зі свого гаманця і вставляєш signature для перевірки.",
@@ -420,10 +420,10 @@
     "Повний wallet-connect — після security review."
   ],
   "r_list": [
-    "Кожні <b>20 рефералів</b> дають <b>+10</b> вставок на день.",
-    "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-    "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-    "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+    "<b>Confirmed</b> — коли хтось підключив handle за твоїм посиланням.",
+    "<b>Active</b> — confirmed із записаним використанням. <b>Eligible</b> = max(active, carry-over).",
+    "Кожні <b>20 eligible</b> дають <b>+10</b> кредитів назавжди (50+ = <b>+12</b> за 20).",
+    "Бонусні кредити в одному пулі GM+GN з базовими 50. Pro знімає ліміти."
   ],
   "themes_title": "Теми",
   "themes_note": "Обери тему та шпалери",
@@ -569,9 +569,9 @@
   "ui_site_lang": "Мова сайту",
   "apply_upgrade_pro": "Апгрейд до Pro",
   "ref_promoter_title": "Промоутер",
-  "ref_promoter_body": "Більший денний ліміт за придатних рефералів",
+  "ref_promoter_body": "Нагороди лише за eligible рефералів (підключення + реальне використання). Кліки рахуються окремо.",
   "r_li2b": "Кліки рахуємо окремо. Нагороди/анлоки — за підключеними рефералами.",
-  "r_li2c": "Промоутери: ліміт ваших безкоштовних щоденних поколінь автоматично збільшується разом із рефералами (бонус додається до вашого базового ліміту).",
+  "r_li2c": "Промоутерам: eligible реферали додають бонусні кредити поверх базових 50 (показуються окремо).",
   "r_li4": "Прийнятний = макс.(активний, перенесення). Перенесення має значення, лише якщо воно більше.",
   "themes_right_title": "Короткий гайд",
   "w_pay_help_list": [
@@ -887,5 +887,11 @@
   "wallet_recovery_wrong_account": "Очікуючий платіж належить іншому @handle. Поверніться до того акаунта, щоб завершити перевірку.",
   "wallet_recovery_wrong_account_title": "Інший акаунт",
   "wallet_recovery_wrong_wallet": "Цей платіж надіслано з іншого гаманця. Підключіть той гаманець або приховайте, щоб почати спочатку.",
-  "wallet_recovery_wrong_wallet_title": "Інший гаманець"
+  "wallet_recovery_wrong_wallet_title": "Інший гаманець",
+  "ref_k_gen_total": "Усього кредитів",
+  "ref_status_confirmed": "Підключений",
+  "ref_status_active": "Активний",
+  "ref_lb_rules_summary": "реферали з хоча б одним використанням GM або GN",
+  "ref_fraud_device": "повтор пристрою",
+  "ref_fraud_burst": "підозрілий сплеск"
 }

@@ -327,10 +327,10 @@
     "ref_def_active": "confirmed users with at least one recorded usage.",
     "ref_def_legacy": "older carry-over still counted in your unlock total.",
     "ref_def_eligible": "max(active, carry-over).",
-    "ref_daily_limit_title": "Daily generation limit (GM + GN each)",
-    "ref_per_day": "per day",
+    "ref_daily_limit_title": "Generation credits (GM + GN shared, lifetime)",
+    "ref_per_day": "lifetime shared pool",
     "ref_base_plus_bonus": "base {base} + bonus {bonus}",
-    "ref_bonus_rule": "Bonus: +{per20} daily generation for each 20 eligible referrals (steps unlocked: {chunks}).",
+    "ref_bonus_rule": "Bonus: +{per20} lifetime generation credits for each 20 eligible referrals (steps unlocked: {chunks}).",
     "ref_next_bonus": "Next bonus step at {nextAt} eligible referrals.",
     "ref_cap_note": "bonus capped at {cap}",
     "ref_owner_inactive": "bonus paused until you use the product",
@@ -413,7 +413,7 @@
       "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "Build short night replies for X. Pick a tone and reply language, tap Quick 1, then copy or save lines you like. Free includes 50 lifetime generation credits (GM+GN shared).",
-    "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
+    "ref_desc": "Share your link. Confirmed = connected via your link. Active = real GM/GN use. Eligible = max(active, carry-over). Bonus: +{per20} credits per 20 eligible (+12 at 50+). Base 50 stays separate.",
     "wallet_desc": "Upgrade Pro: unlimited generation credits, all themes/styles/extension skins & wallpapers, and all Arcade games. Pay on Solana with SOL, USDC, or USDT — verified on-chain.",
     "w_pay_desc": "Select a plan to enable payment.",
     "w_status_desc": "After you approve the transaction in your wallet, we verify it automatically on-chain.",
@@ -425,8 +425,8 @@
     "r_list": [
       "<b>Confirmed</b> counts when someone connects a handle with your link.",
       "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-      "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-      "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+      "Every <b>20 eligible</b> adds <b>+10</b> lifetime credits (Promoter 50+ = <b>+12</b> per 20).",
+      "Bonus credits share one GM+GN pool with the base 50. Pro removes caps and unlocks everything."
     ],
     "themes_title": "Themes",
     "themes_note": "Wallpaper picker for the main site. Theme accents follow your saved preset.",
@@ -572,9 +572,9 @@
     "ui_site_lang": "Language",
     "apply_upgrade_pro": "Upgrade Pro",
     "ref_promoter_title": "Referral rewards (Promoters)",
-    "ref_promoter_body": "Clicks are welcome. Rewards are based on eligible users only (connect + first real use). High traffic can be queued daily.",
+    "ref_promoter_body": "Rewards need eligible referrals (connect + real use). Clicks are tracked separately.",
     "r_li2b": "We track clicks separately. Rewards/unlocks use connected referrals.",
-    "r_li2c": "Promoters: your free daily generation cap increases automatically with referrals (bonus is added to your base limit).",
+    "r_li2c": "Promoters: eligible referrals add bonus generation credits on top of the base 50 (shown separately).",
     "r_li4": "Eligible = max(active, carry-over). Carry-over only matters if it is larger.",
     "themes_right_title": "Quick guide",
     "w_pay_help_list": [
@@ -890,7 +890,13 @@
     "wallet_recovery_wrong_account": "A pending payment belongs to a different @handle. Switch back to that account to finish verification.",
     "wallet_recovery_wrong_account_title": "Different account",
     "wallet_recovery_wrong_wallet": "This payment was sent from a different wallet. Reconnect that wallet or dismiss to start over.",
-    "wallet_recovery_wrong_wallet_title": "Different wallet"
+    "wallet_recovery_wrong_wallet_title": "Different wallet",
+    "ref_k_gen_total": "Total credits",
+    "ref_status_confirmed": "Connected",
+    "ref_status_active": "Active",
+    "ref_lb_rules_summary": "referrals with at least one GM or GN use",
+    "ref_fraud_device": "duplicate device",
+    "ref_fraud_burst": "suspicious burst"
   },
   "de": {
     "plan_compare_btn": "Vergleichen",
@@ -1218,10 +1224,10 @@
     "ref_def_active": "Aktiv = bestätigte Empfehlung mit mindestens einer echten Nutzung.",
     "ref_def_legacy": "Ältere Überträge werden immer noch in Ihre Freischaltsumme einbezogen.",
     "ref_def_eligible": "max(aktiv, Übertrag).",
-    "ref_daily_limit_title": "Tägliches Erzeugungslimit (jeweils GM + GN)",
-    "ref_per_day": "pro Tag",
+    "ref_daily_limit_title": "Generierungs-Credits (GM + GN gemeinsam, lebenslang)",
+    "ref_per_day": "gemeinsamer lebenslanger Pool",
     "ref_base_plus_bonus": "Basis {base} + Bonus {bonus}",
-    "ref_bonus_rule": "Bonus: +{per20} tägliche Generierung für jeweils 20 berechtigte Empfehlungen (freigeschaltete Schritte: {chunks}).",
+    "ref_bonus_rule": "Bonus: +{per20} lebenslange Generierungs-Credits je 20 berechtigte Referrals (Schritte: {chunks}).",
     "ref_next_bonus": "Nächster Bonus bei {nextAt} berechtigten Empfehlungen.",
     "ref_cap_note": "Limit {cap}",
     "ref_owner_inactive": "Bonus pausiert, bis du das Produkt selbst nutzt.",
@@ -1316,8 +1322,8 @@
     "r_list": [
       "Alle <b>20 berechtigten Referrals</b> geben <b>+10</b> tägliche Generation.",
       "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-      "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-      "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+      "Jede <b>20 berechtigten</b> Referrals geben <b>+10</b> lebenslange Credits (ab 50+ = <b>+12</b> pro 20).",
+      "Bonus-Credits teilen sich einen GM+GN-Pool mit den Basis-50. Pro hebt Limits auf."
     ],
     "themes_title": "Designs",
     "themes_note": "Wähle ein Theme und Wallpaper.",
@@ -1465,7 +1471,7 @@
     "ref_promoter_title": "Promoter",
     "ref_promoter_body": "Mehr tägliche Limits durch berechtigte Empfehlungen",
     "r_li2b": "Klicks zählen wir separat. Rewards/Unlocks basieren auf verbundenen Referrals.",
-    "r_li2c": "Promoter: Ihr kostenloses tägliches Generationslimit erhöht sich automatisch mit Empfehlungen (der Bonus wird zu Ihrem Basislimit hinzugefügt).",
+    "r_li2c": "Promoter: berechtigte Referrals erhöhen den Bonus separat zum Basis-50-Pool.",
     "r_li4": "Berechtigt = max(aktiv, übertragen). Die Verschleppung ist nur dann von Bedeutung, wenn sie größer ist.",
     "themes_right_title": "Kurzanleitung",
     "w_pay_help_list": [
@@ -1781,7 +1787,13 @@
     "wallet_recovery_wrong_account": "Eine ausstehende Zahlung gehört zu einem anderen @handle. Wechsle zurück zu diesem Konto, um die Verifizierung abzuschließen.",
     "wallet_recovery_wrong_account_title": "Anderes Konto",
     "wallet_recovery_wrong_wallet": "Diese Zahlung wurde von einer anderen Wallet gesendet. Verbinde diese Wallet erneut oder blende aus, um neu zu starten.",
-    "wallet_recovery_wrong_wallet_title": "Andere Wallet"
+    "wallet_recovery_wrong_wallet_title": "Andere Wallet",
+    "ref_k_gen_total": "Credits gesamt",
+    "ref_status_confirmed": "Verbunden",
+    "ref_status_active": "Aktiv",
+    "ref_lb_rules_summary": "Referrals mit mindestens einer GM- oder GN-Nutzung",
+    "ref_fraud_device": "doppeltes Gerät",
+    "ref_fraud_burst": "verdächtiger Anstieg"
   },
   "fr": {
     "plan_compare_btn": "Comparer",
@@ -2109,10 +2121,10 @@
     "ref_def_active": "Actif = parrainage confirmé avec au moins une utilisation réelle.",
     "ref_def_legacy": "les anciens reports sont toujours comptés dans votre total de déverrouillage.",
     "ref_def_eligible": "max(actif, report).",
-    "ref_daily_limit_title": "Limite de production quotidienne (GM + GN chacun)",
-    "ref_per_day": "par jour",
+    "ref_daily_limit_title": "Crédits de génération (GM + GN partagés, à vie)",
+    "ref_per_day": "pool partagé à vie",
     "ref_base_plus_bonus": "Base {base} + bonus {bonus}",
-    "ref_bonus_rule": "Bonus : +{per20} génération quotidienne pour chaque 20 filleuls éligibles (étapes débloquées : {chunks}).",
+    "ref_bonus_rule": "Bonus : +{per20} crédits de génération à vie pour chaque 20 filleuls éligibles (étapes : {chunks}).",
     "ref_next_bonus": "Prochain palier de bonus à {nextAt} éligibles.",
     "ref_cap_note": "plafond {cap}",
     "ref_owner_inactive": "bonus en pause tant que tu n’utilises pas le produit.",
@@ -2207,8 +2219,8 @@
     "r_list": [
       "Chaque <b>20 parrainages éligibles</b> ajoute <b>+10</b> générations quotidiennes.",
       "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-      "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-      "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+      "Chaque <b>20 éligibles</b> ajoute <b>+10</b> crédits à vie (50+ = <b>+12</b> par 20).",
+      "Les crédits bonus partagent un pool GM+GN avec les 50 de base. Pro supprime les plafonds."
     ],
     "themes_title": "Thèmes",
     "themes_note": "Choisis un thème et un fond.",
@@ -2356,7 +2368,7 @@
     "ref_promoter_title": "Promoteur",
     "ref_promoter_body": "Plus de limite/jour avec des parrainages éligibles",
     "r_li2b": "Les clics sont comptés à part. Rewards/unlocks utilisent les parrainages connectés.",
-    "r_li2c": "Promoteurs : votre plafond de génération quotidienne gratuite augmente automatiquement avec les parrainages (un bonus est ajouté à votre limite de base).",
+    "r_li2c": "Promoteurs : les filleuls éligibles ajoutent un bonus séparé au pool de base de 50.",
     "r_li4": "Éligible = max(actif, report). Le report n'a d'importance que s'il est plus important.",
     "themes_right_title": "Guide rapide",
     "w_pay_help_list": [
@@ -2672,7 +2684,13 @@
     "wallet_recovery_wrong_account": "Un paiement en attente appartient à un autre @handle. Revenez à ce compte pour terminer la vérification.",
     "wallet_recovery_wrong_account_title": "Compte différent",
     "wallet_recovery_wrong_wallet": "Ce paiement a été envoyé depuis un autre portefeuille. Reconnectez ce portefeuille ou fermez pour recommencer.",
-    "wallet_recovery_wrong_wallet_title": "Portefeuille différent"
+    "wallet_recovery_wrong_wallet_title": "Portefeuille différent",
+    "ref_k_gen_total": "Crédits totaux",
+    "ref_status_confirmed": "Connecté",
+    "ref_status_active": "Actif",
+    "ref_lb_rules_summary": "filleuls avec au moins une utilisation GM ou GN",
+    "ref_fraud_device": "appareil en double",
+    "ref_fraud_burst": "pic suspect"
   },
   "es": {
     "plan_compare_btn": "Comparar",
@@ -3000,10 +3018,10 @@
     "ref_def_active": "Activo = referido confirmado con al menos un uso real.",
     "ref_def_legacy": "el arrastre antiguo aún se cuenta en tu total de desbloqueos.",
     "ref_def_eligible": "máx.(activo, arrastre).",
-    "ref_daily_limit_title": "Límite de generación diaria (GM + GN cada uno)",
-    "ref_per_day": "por día",
+    "ref_daily_limit_title": "Créditos de generación (GM + GN compartidos, de por vida)",
+    "ref_per_day": "pool compartido de por vida",
     "ref_base_plus_bonus": "Base {base} + bonus {bonus}",
-    "ref_bonus_rule": "Bonificación: +⟦0 generación⟧ diaria por cada 20 referidos elegibles (pasos desbloqueados: {chunks}).",
+    "ref_bonus_rule": "Bonificación: +{per20} créditos de generación de por vida por cada 20 referidos elegibles (pasos: {chunks}).",
     "ref_next_bonus": "Próximo bonus en {nextAt} elegibles.",
     "ref_cap_note": "tope {cap}",
     "ref_owner_inactive": "bonus en pausa mientras no uses el producto.",
@@ -3098,8 +3116,8 @@
     "r_list": [
       "Cada <b>20 referidos</b> añade <b>+10</b> inserciones diarias.",
       "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-      "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-      "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+      "Cada <b>20 elegibles</b> suma <b>+10</b> créditos de por vida (50+ = <b>+12</b> por 20).",
+      "Los créditos bonus comparten un pool GM+GN con los 50 base. Pro quita límites."
     ],
     "themes_title": "Temas",
     "themes_note": "Elige un tema y un fondo.",
@@ -3247,7 +3265,7 @@
     "ref_promoter_title": "Promotor",
     "ref_promoter_body": "Más límite diario con referidos elegibles",
     "r_li2b": "Los clics se registran por separado. Rewards/unlocks usan referidos conectados.",
-    "r_li2c": "Promotores: su límite de generación diario gratuito aumenta automáticamente con las referencias (la bonificación se agrega a su límite base).",
+    "r_li2c": "Promotores: los referidos elegibles añaden créditos bonus aparte del base de 50.",
     "r_li4": "Elegible = max(activo, transferido). El traspaso sólo importa si es mayor.",
     "themes_right_title": "Guía rápida",
     "w_pay_help_list": [
@@ -3563,7 +3581,13 @@
     "wallet_recovery_wrong_account": "Un pago pendiente pertenece a otro @handle. Vuelve a esa cuenta para terminar la verificación.",
     "wallet_recovery_wrong_account_title": "Cuenta distinta",
     "wallet_recovery_wrong_wallet": "Este pago se envió desde otra wallet. Reconéctala o descarta para empezar de nuevo.",
-    "wallet_recovery_wrong_wallet_title": "Wallet distinta"
+    "wallet_recovery_wrong_wallet_title": "Wallet distinta",
+    "ref_k_gen_total": "Créditos totales",
+    "ref_status_confirmed": "Conectado",
+    "ref_status_active": "Activo",
+    "ref_lb_rules_summary": "referidos con al menos un uso de GM o GN",
+    "ref_fraud_device": "dispositivo duplicado",
+    "ref_fraud_burst": "ráfaga sospechosa"
   },
   "pt": {
     "plan_compare_btn": "Comparar",
@@ -3891,10 +3915,10 @@
     "ref_def_active": "Ativo = indicação confirmada com pelo menos um uso real.",
     "ref_def_legacy": "transferências mais antigas ainda serão contabilizadas em seu total de desbloqueio.",
     "ref_def_eligible": "max(ativo, transferência).",
-    "ref_daily_limit_title": "Limite de geração diária (GM + GN cada)",
-    "ref_per_day": "por dia",
+    "ref_daily_limit_title": "Créditos de geração (GM + GN partilhados, vitalícios)",
+    "ref_per_day": "pool partilhado vitalício",
     "ref_base_plus_bonus": "Base {base} + bônus {bonus}",
-    "ref_bonus_rule": "Bônus: +{per20} geração diária para cada 20 indicados elegíveis (etapas desbloqueadas: {chunks}).",
+    "ref_bonus_rule": "Bônus: +{per20} créditos de geração vitalícios a cada 20 indicados elegíveis (passos: {chunks}).",
     "ref_next_bonus": "Próximo bônus em {nextAt} elegíveis.",
     "ref_cap_note": "teto {cap}",
     "ref_owner_inactive": "bônus pausado enquanto você não usa o produto.",
@@ -3989,8 +4013,8 @@
     "r_list": [
       "A cada <b>20 indicações</b> adiciona <b>+10</b> inserções diárias.",
       "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-      "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-      "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+      "Cada <b>20 elegíveis</b> acrescenta <b>+10</b> créditos vitalícios (50+ = <b>+12</b> por 20).",
+      "Créditos bonus partilham um pool GM+GN com os 50 base. Pro remove limites."
     ],
     "themes_title": "Temas",
     "themes_note": "Escolha um tema e um papel de parede",
@@ -4138,7 +4162,7 @@
     "ref_promoter_title": "Promotor",
     "ref_promoter_body": "Mais limite diário com indicações elegíveis",
     "r_li2b": "Cliques são contados separadamente. Rewards/unlocks usam indicações conectadas.",
-    "r_li2c": "Promotores: seu limite de geração diária gratuita aumenta automaticamente com as indicações (o bônus é adicionado ao seu limite base).",
+    "r_li2c": "Promotores: indicados elegíveis acrescentam créditos bonus além do base 50.",
     "r_li4": "Elegível = max(ativo, transferência). O transporte só importa se for maior.",
     "themes_right_title": "Guia rápido",
     "w_pay_help_list": [
@@ -4454,7 +4478,13 @@
     "wallet_recovery_wrong_account": "Um pagamento pendente pertence a outro @handle. Volte a essa conta para concluir a verificação.",
     "wallet_recovery_wrong_account_title": "Conta diferente",
     "wallet_recovery_wrong_wallet": "Este pagamento foi enviado de outra carteira. Reconecte essa carteira ou dispense para recomeçar.",
-    "wallet_recovery_wrong_wallet_title": "Carteira diferente"
+    "wallet_recovery_wrong_wallet_title": "Carteira diferente",
+    "ref_k_gen_total": "Créditos totais",
+    "ref_status_confirmed": "Conectado",
+    "ref_status_active": "Ativo",
+    "ref_lb_rules_summary": "indicados com pelo menos um uso de GM ou GN",
+    "ref_fraud_device": "dispositivo duplicado",
+    "ref_fraud_burst": "pico suspeito"
   },
   "it": {
     "plan_compare_btn": "Confronta",
@@ -4782,10 +4812,10 @@
     "ref_def_active": "Attivo = referral confermato con almeno un utilizzo reale.",
     "ref_def_legacy": "il riporto precedente conta ancora nel totale sblocchi.",
     "ref_def_eligible": "max(attivi, riporto).",
-    "ref_daily_limit_title": "Limite generazione giornaliera (GM + GN ciascuno)",
-    "ref_per_day": "al giorno",
+    "ref_daily_limit_title": "Crediti di generazione (GM + GN condivisi, a vita)",
+    "ref_per_day": "pool condiviso a vita",
     "ref_base_plus_bonus": "Base {base} + bonus {bonus}",
-    "ref_bonus_rule": "Bonus: +{per20} generazione giornaliera ogni 20 referral idonei (passi sbloccati: {chunks}).",
+    "ref_bonus_rule": "Bonus: +{per20} crediti di generazione a vita ogni 20 referral idonei (passi: {chunks}).",
     "ref_next_bonus": "Prossimo bonus a {nextAt} idonei.",
     "ref_cap_note": "tetto {cap}",
     "ref_owner_inactive": "bonus in pausa finché non usi il prodotto.",
@@ -4880,8 +4910,8 @@
     "r_list": [
       "Ogni <b>20 referral</b> aggiunge <b>+10</b> inserimenti giornalieri.",
       "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-      "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-      "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+      "Ogni <b>20 idonei</b> aggiunge <b>+10</b> crediti a vita (50+ = <b>+12</b> ogni 20).",
+      "I crediti bonus condividono un pool GM+GN con i 50 base. Pro rimuove i limiti."
     ],
     "themes_title": "Temi",
     "themes_note": "Scegli un tema e uno sfondo",
@@ -5029,7 +5059,7 @@
     "ref_promoter_title": "Promotore",
     "ref_promoter_body": "Più limite giornaliero con referral idonei",
     "r_li2b": "I click sono tracciati separatamente. Rewards/unlock usano referral connessi.",
-    "r_li2c": "Promoter: il limite giornaliero gratuito aumenta automaticamente con i referral (bonus aggiunto al limite base).",
+    "r_li2c": "Promoter: i referral idonei aggiungono crediti bonus oltre al base 50.",
     "r_li4": "Idoneo = max(attivo, riporto). Il riporto conta solo se è più grande.",
     "themes_right_title": "Guida rapida",
     "w_pay_help_list": [
@@ -5345,7 +5375,13 @@
     "wallet_recovery_wrong_account": "Un pagamento in sospeso appartiene a un altro @handle. Torna a quell'account per completare la verifica.",
     "wallet_recovery_wrong_account_title": "Account diverso",
     "wallet_recovery_wrong_wallet": "Questo pagamento è stato inviato da un altro wallet. Riconnetti quel wallet o chiudi per ricominciare.",
-    "wallet_recovery_wrong_wallet_title": "Wallet diverso"
+    "wallet_recovery_wrong_wallet_title": "Wallet diverso",
+    "ref_k_gen_total": "Crediti totali",
+    "ref_status_confirmed": "Connesso",
+    "ref_status_active": "Attivo",
+    "ref_lb_rules_summary": "referral con almeno un utilizzo GM o GN",
+    "ref_fraud_device": "dispositivo duplicato",
+    "ref_fraud_burst": "picco sospetto"
   },
   "nl": {
     "plan_compare_btn": "Vergelijken",
@@ -5673,10 +5709,10 @@
     "ref_def_active": "Actief = bevestigde referral met ten minste één echt gebruik.",
     "ref_def_legacy": "oudere carry-over telt nog steeds mee in je ontgrendelingstotaal.",
     "ref_def_eligible": "max(actief, overgedragen).",
-    "ref_daily_limit_title": "Dagelijkse generatielimiet (elk GM + GN)",
-    "ref_per_day": "per dag",
+    "ref_daily_limit_title": "Generatiecredits (GM + GN gedeeld, levenslang)",
+    "ref_per_day": "gedeeld levenslang pool",
     "ref_base_plus_bonus": "Basis {base} + bonus {bonus}",
-    "ref_bonus_rule": "Bonus: +{per20} dagelijkse generatie voor elke 20 in aanmerking komende verwijzingen (ontgrendelde stappen: {chunks}).",
+    "ref_bonus_rule": "Bonus: +{per20} levenslange generatiecredits per 20 eligible referrals (stappen: {chunks}).",
     "ref_next_bonus": "Volgende bonus bij {nextAt} in aanmerking komende referrals.",
     "ref_cap_note": "limiet {cap}",
     "ref_owner_inactive": "bonus gepauzeerd totdat je het product zelf gebruikt.",
@@ -5771,8 +5807,8 @@
     "r_list": [
       "Elke <b>20 eligible referrals</b> geeft <b>+10</b> dagelijkse generations.",
       "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-      "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-      "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+      "Elke <b>20 eligible</b> geeft <b>+10</b> levenslange credits (50+ = <b>+12</b> per 20).",
+      "Bonuscredits delen één GM+GN-pool met de basis 50. Pro verwijdert limieten."
     ],
     "themes_title": "Thema’s",
     "themes_note": "Kies een thema en wallpaper",
@@ -5920,7 +5956,7 @@
     "ref_promoter_title": "Promoter",
     "ref_promoter_body": "Meer daglimiet via geschikte referrals",
     "r_li2b": "Clicks tellen we apart. Rewards/unlocks gebruiken connected referrals.",
-    "r_li2c": "Promoters: uw gratis dagelijkse generatielimiet stijgt automatisch met referrals (bonus wordt toegevoegd aan basislimiet).",
+    "r_li2c": "Promoters: eligible referrals voegen bonuscredits toe bovenop de basis 50.",
     "r_li4": "In aanmerking = max(actief, carry-over). Carry-over telt alleen als die groter is.",
     "themes_right_title": "Snelle uitleg",
     "w_pay_help_list": [
@@ -6236,7 +6272,13 @@
     "wallet_recovery_wrong_account": "Een openstaande betaling hoort bij een andere @handle. Schakel terug naar dat account om de verificatie af te ronden.",
     "wallet_recovery_wrong_account_title": "Ander account",
     "wallet_recovery_wrong_wallet": "Deze betaling is vanuit een andere wallet verzonden. Verbind die wallet opnieuw of sluit om opnieuw te beginnen.",
-    "wallet_recovery_wrong_wallet_title": "Andere wallet"
+    "wallet_recovery_wrong_wallet_title": "Andere wallet",
+    "ref_k_gen_total": "Totaal credits",
+    "ref_status_confirmed": "Verbonden",
+    "ref_status_active": "Actief",
+    "ref_lb_rules_summary": "referrals met minstens één GM- of GN-gebruik",
+    "ref_fraud_device": "dubbel apparaat",
+    "ref_fraud_burst": "verdachte piek"
   },
   "tr": {
     "plan_compare_btn": "Karşılaştır",
@@ -6564,10 +6606,10 @@
     "ref_def_active": "Aktif = en az bir gerçek kullanım içeren onaylı yönlendirme.",
     "ref_def_legacy": "eski aktarımlar hâlâ kilit açma toplamına dahil ediliyor.",
     "ref_def_eligible": "max(aktif, aktarım).",
-    "ref_daily_limit_title": "Günlük üretim sınırı (her biri GM + GN)",
-    "ref_per_day": "günde",
+    "ref_daily_limit_title": "Üretim kredileri (GM + GN paylaşımlı, ömür boyu)",
+    "ref_per_day": "paylaşımlı ömür boyu havuz",
     "ref_base_plus_bonus": "Temel {base} + bonus {bonus}",
-    "ref_bonus_rule": "Bonus: Her 20 uygun yönlendirme için +{per20} günlük oluşturma (kilidi açılan adımlar: {chunks}).",
+    "ref_bonus_rule": "Bonus: Her 20 uygun yönlendirme için +{per20} ömür boyu üretim kredisi (adımlar: {chunks}).",
     "ref_next_bonus": "Sonraki bonus {nextAt} uygun yönlendirmede.",
     "ref_cap_note": "tavan {cap}",
     "ref_owner_inactive": "bonus ürünü kullanana kadar duraklatılır.",
@@ -6662,8 +6704,8 @@
     "r_list": [
       "Her <b>20 eligible referral</b> <b>+10</b> günlük generation ekler.",
       "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-      "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-      "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+      "Her <b>20 uygun</b> yönlendirme <b>+10</b> ömür boyu kredi ekler (50+ = 20 başına <b>+12</b>).",
+      "Bonus krediler temel 50 ile tek GM+GN havuzunu paylaşır. Pro limitleri kaldırır."
     ],
     "themes_title": "Temalar",
     "themes_note": "Tema ve duvar kağıdı seç",
@@ -6811,7 +6853,7 @@
     "ref_promoter_title": "Promotör",
     "ref_promoter_body": "Uygun referansla günlük limit artar",
     "r_li2b": "Tıklamalar ayrı sayılır. Rewards/unlocks connected referrals ile hesaplanır.",
-    "r_li2c": "Promosyoncular: Ücretsiz günlük üretim sınırınız yönlendirmelerle otomatik olarak artar (bonus taban sınırınıza eklenir).",
+    "r_li2c": "Promoterlar: uygun yönlendirmeler temel 50'nin üstüne ayrı bonus kredisi ekler.",
     "r_li4": "Uygun = maksimum(aktif, devredilen). Aktarım yalnızca daha büyükse önemlidir.",
     "themes_right_title": "Hızlı rehber",
     "w_pay_help_list": [
@@ -7127,7 +7169,13 @@
     "wallet_recovery_wrong_account": "Bekleyen ödeme farklı bir @handle'a ait. Doğrulamayı bitirmek için o hesaba dönün.",
     "wallet_recovery_wrong_account_title": "Farklı hesap",
     "wallet_recovery_wrong_wallet": "Bu ödeme farklı bir cüzdandan gönderildi. O cüzdanı yeniden bağlayın veya kapatıp baştan başlayın.",
-    "wallet_recovery_wrong_wallet_title": "Farklı cüzdan"
+    "wallet_recovery_wrong_wallet_title": "Farklı cüzdan",
+    "ref_k_gen_total": "Toplam kredi",
+    "ref_status_confirmed": "Bağlandı",
+    "ref_status_active": "Aktif",
+    "ref_lb_rules_summary": "en az bir GM veya GN kullanımı olan yönlendirmeler",
+    "ref_fraud_device": "yinelenen cihaz",
+    "ref_fraud_burst": "şüpheli artış"
   },
   "pl": {
     "plan_compare_btn": "Porównaj",
@@ -7455,10 +7503,10 @@
     "ref_def_active": "Aktywne = potwierdzone polecenie z co najmniej jednym realnym użyciem.",
     "ref_def_legacy": "starsze przeniesienia nadal są wliczane do sumy odblokowań.",
     "ref_def_eligible": "max (aktywny, przeniesienie).",
-    "ref_daily_limit_title": "Dzienny limit generacji (każdy GM + GN)",
-    "ref_per_day": "na dzień",
+    "ref_daily_limit_title": "Kredyty generacji (GM + GN wspólne, na stałe)",
+    "ref_per_day": "wspólny pul na stałe",
     "ref_base_plus_bonus": "Baza {base} + bonus {bonus}",
-    "ref_bonus_rule": "Premia: +{per20} dziennej generacji za każde 20 kwalifikujących się poleconych (odblokowane kroki: {chunks}).",
+    "ref_bonus_rule": "Premia: +{per20} kredytów generacji na stałe za każde 20 eligible poleceń (kroki: {chunks}).",
     "ref_next_bonus": "Następny bonus przy {nextAt} kwalifikujących się.",
     "ref_cap_note": "limit {cap}",
     "ref_owner_inactive": "bonus wstrzymany, dopóki sam nie używasz produktu.",
@@ -7553,8 +7601,8 @@
     "r_list": [
       "Każde <b>20 eligible referrals</b> daje <b>+10</b> dziennych generacji.",
       "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-      "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-      "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+      "Każde <b>20 eligible</b> daje <b>+10</b> kredytów na stałe (50+ = <b>+12</b> na 20).",
+      "Bonusowe kredyty dzielą jeden pul GM+GN z bazowymi 50. Pro usuwa limity."
     ],
     "themes_title": "Motywy",
     "themes_note": "Wybierz motyw i tapetę",
@@ -7702,7 +7750,7 @@
     "ref_promoter_title": "Promotor",
     "ref_promoter_body": "Większy limit dzienny dzięki uprawnionym poleceniom",
     "r_li2b": "Kliknięcia liczymy osobno. Rewards/unlocks liczą się po connected referrals.",
-    "r_li2c": "Promotorzy: dzienny limit generacji Free rośnie automatycznie z poleceniami (bonus dodawany do limitu bazowego).",
+    "r_li2c": "Promotorzy: eligible polecenia dodają bonusowe kredyty ponad bazowe 50.",
     "r_li4": "Uprawniony = max(aktywni, przeniesienie). Przeniesienie liczy się tylko gdy jest większe.",
     "themes_right_title": "Szybki przewodnik",
     "w_pay_help_list": [
@@ -8018,7 +8066,13 @@
     "wallet_recovery_wrong_account": "Oczekująca płatność należy do innego @handle. Wróć do tego konta, aby dokończyć weryfikację.",
     "wallet_recovery_wrong_account_title": "Inne konto",
     "wallet_recovery_wrong_wallet": "Ta płatność została wysłana z innego portfela. Połącz ten portfel ponownie lub zamknij, aby zacząć od nowa.",
-    "wallet_recovery_wrong_wallet_title": "Inny portfel"
+    "wallet_recovery_wrong_wallet_title": "Inny portfel",
+    "ref_k_gen_total": "Łącznie kredytów",
+    "ref_status_confirmed": "Połączony",
+    "ref_status_active": "Aktywny",
+    "ref_lb_rules_summary": "polecenia z co najmniej jednym użyciem GM lub GN",
+    "ref_fraud_device": "zduplikowane urządzenie",
+    "ref_fraud_burst": "podejrzany skok"
   },
   "id": {
     "plan_compare_btn": "Bandingkan",
@@ -8346,10 +8400,10 @@
     "ref_def_active": "Aktif = referral terkonfirmasi dengan minimal satu penggunaan nyata.",
     "ref_def_legacy": "carry-over yang lebih lama masih dihitung dalam total pembukaan kunci Anda.",
     "ref_def_eligible": "max(aktif, carry-over).",
-    "ref_daily_limit_title": "Batas pembuatan harian (masing-masing GM + GN)",
-    "ref_per_day": "per hari",
+    "ref_daily_limit_title": "Kredit generasi (GM + GN bersama, seumur hidup)",
+    "ref_per_day": "pool bersama seumur hidup",
     "ref_base_plus_bonus": "Dasar {base} + bonus {bonus}",
-    "ref_bonus_rule": "Bonus: +{per20} generasi harian untuk setiap 20 referensi yang memenuhi syarat (langkah terbuka: {chunks}).",
+    "ref_bonus_rule": "Bonus: +{per20} kredit generasi seumur hidup per 20 referral eligible (langkah: {chunks}).",
     "ref_next_bonus": "Bonus berikutnya pada {nextAt} referral eligible.",
     "ref_cap_note": "batas {cap}",
     "ref_owner_inactive": "bonus dijeda sampai kamu sendiri memakai produk.",
@@ -8444,8 +8498,8 @@
     "r_list": [
       "Setiap <b>20 referral yang eligible</b> menambah <b>+10</b> generation harian.",
       "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-      "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-      "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+      "Setiap <b>20 eligible</b> menambah <b>+10</b> kredit seumur hidup (50+ = <b>+12</b> per 20).",
+      "Kredit bonus berbagi satu pool GM+GN dengan base 50. Pro menghapus batas."
     ],
     "themes_title": "Tema",
     "themes_note": "Pilih tema dan wallpaper",
@@ -8593,7 +8647,7 @@
     "ref_promoter_title": "Promotor",
     "ref_promoter_body": "Batas harian naik dengan referral layak",
     "r_li2b": "Klik dihitung terpisah. Rewards/unlocks pakai connected referrals.",
-    "r_li2c": "Promotor: batas generasi harian gratis naik otomatis dengan referral (bonus ditambahkan ke batas dasar).",
+    "r_li2c": "Promotor: referral eligible menambah kredit bonus di atas base 50.",
     "r_li4": "Memenuhi syarat = max(aktif, carry-over). Carry-over hanya berlaku jika lebih besar.",
     "themes_right_title": "Panduan cepat",
     "w_pay_help_list": [
@@ -8909,7 +8963,13 @@
     "wallet_recovery_wrong_account": "Pembayaran tertunda milik @handle lain. Kembali ke akun itu untuk menyelesaikan verifikasi.",
     "wallet_recovery_wrong_account_title": "Akun berbeda",
     "wallet_recovery_wrong_wallet": "Pembayaran ini dikirim dari dompet lain. Hubungkan kembali dompet itu atau tutup untuk memulai ulang.",
-    "wallet_recovery_wrong_wallet_title": "Dompet berbeda"
+    "wallet_recovery_wrong_wallet_title": "Dompet berbeda",
+    "ref_k_gen_total": "Total kredit",
+    "ref_status_confirmed": "Terhubung",
+    "ref_status_active": "Aktif",
+    "ref_lb_rules_summary": "referral dengan minimal satu penggunaan GM atau GN",
+    "ref_fraud_device": "perangkat duplikat",
+    "ref_fraud_burst": "lonjakan mencurigakan"
   },
   "ru": {
     "plan_compare_btn": "Сравнить",
@@ -9237,10 +9297,10 @@
     "ref_def_active": "Активные = подтверждённые рефералы с хотя бы одним реальным использованием.",
     "ref_def_legacy": "старые рефералы, всё ещё учитываются в разблокировках.",
     "ref_def_eligible": "max(активные, перенос).",
-    "ref_daily_limit_title": "Дневной лимит генерации (GM и GN отдельно)",
-    "ref_per_day": "в день",
+    "ref_daily_limit_title": "Кредиты генерации (GM + GN общий пул, навсегда)",
+    "ref_per_day": "общий пул навсегда",
     "ref_base_plus_bonus": "База {base} + бонус {bonus}",
-    "ref_bonus_rule": "Бонус: +{per20} к дневной генерации за каждые 20 eligible (шагов: {chunks}).",
+    "ref_bonus_rule": "Бонус: +{per20} кредитов генерации навсегда за каждые 20 eligible рефералов (шагов: {chunks}).",
     "ref_next_bonus": "Следующий бонус при {nextAt} учитываемых.",
     "ref_cap_note": "потолок {cap}",
     "ref_owner_inactive": "бонус ставится на паузу, пока ты сам не пользуешься продуктом.",
@@ -9323,7 +9383,7 @@
       "Free Cap - это 70 сохраненных строк для банка GN. Если вы нажмете 50/50, новые сгенерированные линии заменят старые. Редактирование не ограничено."
     ],
     "gn_desc": "Короткие ночные ответы для X. Выберите тон и язык ответа, нажмите Quick 1, копируйте или сохраняйте строки. Free: 50 кредитов генерации на всё время (GM+GN общие).",
-    "ref_desc": "Рефералы: делись ссылкой. Confirmed = подключился, Active = пользовался, Eligible = max(active, carry-over). Бонус: +10/день за 20 eligible.",
+    "ref_desc": "Поделись ссылкой. Confirmed = подключился по ссылке. Active = реальное использование GM/GN. Eligible = max(active, carry-over). Бонус: +{per20} за 20 eligible (+12 при 50+). Базовые 50 отдельно.",
     "wallet_desc": "Апгрейд Pro: безлимитные кредиты генерации, вся косметика (темы, стили, скины и обои расширения) и все игры Arcade. Оплата в Solana: SOL / USDC / USDT. Проверка on-chain.",
     "w_pay_desc": "Кошелёк получателя появится после выбора плана.",
     "w_status_desc": "Просто и безопасно: ты отправляешь со своего кошелька и вставляешь signature для проверки.",
@@ -9333,10 +9393,10 @@
       "Полный wallet-connect — после security review."
     ],
     "r_list": [
-      "<b>Confirmed</b> — человек подключил хендл по твоей ссылке.",
-      "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-      "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-      "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+      "<b>Confirmed</b> — когда кто-то подключил handle по твоей ссылке.",
+      "<b>Active</b> — confirmed с записанным использованием. <b>Eligible</b> = max(active, carry-over).",
+      "Каждые <b>20 eligible</b> дают <b>+10</b> кредитов навсегда (50+ = <b>+12</b> за 20).",
+      "Бонусные кредиты в одном пуле GM+GN с базовыми 50. Pro снимает лимиты."
     ],
     "themes_title": "Темы",
     "themes_note": "Выбери тему и обои",
@@ -9482,9 +9542,9 @@
     "ui_site_lang": "Язык сайта",
     "apply_upgrade_pro": "Апгрейд до Pro",
     "ref_promoter_title": "Промоутер",
-    "ref_promoter_body": "Больше дневного лимита за зачётных рефералов",
+    "ref_promoter_body": "Награды только за eligible рефералов (подключение + реальное использование). Клики считаются отдельно.",
     "r_li2b": "Клики считаются отдельно. Награды/анлоки считаются по подключившимся рефералам.",
-    "r_li2c": "Active = подтверждённый реферал, который хотя бы раз пользовался продуктом.",
+    "r_li2c": "Промоутерам: eligible рефералы добавляют бонусные кредиты поверх базовых 50 (показываются отдельно).",
     "r_li4": "Каждые <b>20 eligible</b> дают <b>+10</b> дневной генерации (Promoter 50+ = <b>+12</b> за 20).",
     "themes_right_title": "Короткий гайд",
     "w_pay_help_list": [
@@ -9800,7 +9860,13 @@
     "wallet_recovery_wrong_account": "Ожидающий платёж привязан к другому @handle. Вернитесь к тому аккаунту для завершения проверки.",
     "wallet_recovery_wrong_account_title": "Другой аккаунт",
     "wallet_recovery_wrong_wallet": "Этот платёж отправлен с другого кошелька. Подключите тот кошелёк или скройте, чтобы начать заново.",
-    "wallet_recovery_wrong_wallet_title": "Другой кошелёк"
+    "wallet_recovery_wrong_wallet_title": "Другой кошелёк",
+    "ref_k_gen_total": "Всего кредитов",
+    "ref_status_confirmed": "Подключён",
+    "ref_status_active": "Активен",
+    "ref_lb_rules_summary": "рефералы с хотя бы одним использованием GM или GN",
+    "ref_fraud_device": "повтор устройства",
+    "ref_fraud_burst": "подозрительный всплеск"
   },
   "uk": {
     "plan_compare_btn": "Порівняти",
@@ -10128,10 +10194,10 @@
     "ref_def_active": "Активні = підтверджені реферали з хоча б одним реальним використанням.",
     "ref_def_legacy": "старіший перехід все ще враховується в загальній сумі розблокування.",
     "ref_def_eligible": "max (активний, перенесений).",
-    "ref_daily_limit_title": "Добовий ліміт генерації (GM + GN кожен)",
-    "ref_per_day": "на день",
+    "ref_daily_limit_title": "Кредити генерації (GM + GN спільний пул, назавжди)",
+    "ref_per_day": "спільний пул назавжди",
     "ref_base_plus_bonus": "База {base} + бонус {bonus}",
-    "ref_bonus_rule": "Бонус: +{per20} щоденна генерація за кожні 20 відповідних рефералів (розблоковано кроків: {chunks}).",
+    "ref_bonus_rule": "Бонус: +{per20} кредитів генерації назавжди за кожні 20 eligible рефералів (кроків: {chunks}).",
     "ref_next_bonus": "Наступний бонус при {nextAt} урахованих.",
     "ref_cap_note": "стеля {cap}",
     "ref_owner_inactive": "бонус на паузі, доки ти сам не користуєшся продуктом.",
@@ -10214,7 +10280,7 @@
       "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
     ],
     "gn_desc": "Короткі нічні відповіді для X. Оберіть тон і мову відповіді, натисніть Quick 1, копіюйте або зберігайте рядки. Free: 50 кредитів генерації на все життя (GM+GN спільні).",
-    "ref_desc": "Реферали: діліться посиланням. Підтверджено = підключено, Активний = використав продукт, Допущений = max(активні, перенос). Бонус: +10/день за кожні 20 допущених (+12 при 50+).",
+    "ref_desc": "Поділись посиланням. Confirmed = підключився за посиланням. Active = реальне використання GM/GN. Eligible = max(active, carry-over). Бонус: +{per20} за 20 eligible (+12 при 50+). Базові 50 окремо.",
     "wallet_desc": "Апгрейд Pro: безлімітні кредити генерації, уся косметика (теми, стилі, скіни та шпалери розширення) і всі ігри Arcade. Оплата в Solana: SOL / USDC / USDT. Перевірка on-chain.",
     "w_pay_desc": "Гаманець отримувача з’явиться після вибору плану.",
     "w_status_desc": "Просто і безпечно: ти відправляєш зі свого гаманця і вставляєш signature для перевірки.",
@@ -10224,10 +10290,10 @@
       "Повний wallet-connect — після security review."
     ],
     "r_list": [
-      "Кожні <b>20 рефералів</b> дають <b>+10</b> вставок на день.",
-      "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-      "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-      "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+      "<b>Confirmed</b> — коли хтось підключив handle за твоїм посиланням.",
+      "<b>Active</b> — confirmed із записаним використанням. <b>Eligible</b> = max(active, carry-over).",
+      "Кожні <b>20 eligible</b> дають <b>+10</b> кредитів назавжди (50+ = <b>+12</b> за 20).",
+      "Бонусні кредити в одному пулі GM+GN з базовими 50. Pro знімає ліміти."
     ],
     "themes_title": "Теми",
     "themes_note": "Обери тему та шпалери",
@@ -10373,9 +10439,9 @@
     "ui_site_lang": "Мова сайту",
     "apply_upgrade_pro": "Апгрейд до Pro",
     "ref_promoter_title": "Промоутер",
-    "ref_promoter_body": "Більший денний ліміт за придатних рефералів",
+    "ref_promoter_body": "Нагороди лише за eligible рефералів (підключення + реальне використання). Кліки рахуються окремо.",
     "r_li2b": "Кліки рахуємо окремо. Нагороди/анлоки — за підключеними рефералами.",
-    "r_li2c": "Промоутери: ліміт ваших безкоштовних щоденних поколінь автоматично збільшується разом із рефералами (бонус додається до вашого базового ліміту).",
+    "r_li2c": "Промоутерам: eligible реферали додають бонусні кредити поверх базових 50 (показуються окремо).",
     "r_li4": "Прийнятний = макс.(активний, перенесення). Перенесення має значення, лише якщо воно більше.",
     "themes_right_title": "Короткий гайд",
     "w_pay_help_list": [
@@ -10691,7 +10757,13 @@
     "wallet_recovery_wrong_account": "Очікуючий платіж належить іншому @handle. Поверніться до того акаунта, щоб завершити перевірку.",
     "wallet_recovery_wrong_account_title": "Інший акаунт",
     "wallet_recovery_wrong_wallet": "Цей платіж надіслано з іншого гаманця. Підключіть той гаманець або приховайте, щоб почати спочатку.",
-    "wallet_recovery_wrong_wallet_title": "Інший гаманець"
+    "wallet_recovery_wrong_wallet_title": "Інший гаманець",
+    "ref_k_gen_total": "Усього кредитів",
+    "ref_status_confirmed": "Підключений",
+    "ref_status_active": "Активний",
+    "ref_lb_rules_summary": "реферали з хоча б одним використанням GM або GN",
+    "ref_fraud_device": "повтор пристрою",
+    "ref_fraud_burst": "підозрілий сплеск"
   },
   "hi": {
     "plan_compare_btn": "कम्पेयर करें",
@@ -11019,10 +11091,10 @@
     "ref_def_active": "Active: приглашённый использовал продукт",
     "ref_def_legacy": "पुराना कैरी-ओवर अभी भी अनलॉक कुल में गिना जाता है।",
     "ref_def_eligible": "max(सक्रिय, कैरी-ओवर)।",
-    "ref_daily_limit_title": "दैनिक जनरेशन सीमा (GM + GN प्रत्येक)",
-    "ref_per_day": "В день: лимит и бонусы",
+    "ref_daily_limit_title": "जनरेशन क्रेडिट (GM + GN साझा, आजीवन)",
+    "ref_per_day": "आजीवन साझा पूल",
     "ref_base_plus_bonus": "База + бонус",
-    "ref_bonus_rule": "बोनस: हर 20 योग्य रेफरल पर +{per20} दैनिक जनरेशन (अनलॉक स्टेप: {chunks})।",
+    "ref_bonus_rule": "बोनस: हर 20 योग्य रेफरल पर +{per20} आजीवन जनरेशन क्रेडिट (स्टेप: {chunks})।",
     "ref_next_bonus": "Следующий бонус на",
     "ref_cap_note": "Есть дневной лимит",
     "ref_owner_inactive": "Владелец неактивен — рефы не считаются",
@@ -11117,8 +11189,8 @@
     "r_list": [
       "<b>Confirmed</b> counts when someone connects a handle with your link.",
       "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-      "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-      "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+      "हर <b>20 योग्य</b> रेफरल <b>+10</b> आजीवन क्रेडिट जोड़ता है (50+ = प्रति 20 <b>+12</b>)।",
+      "बोनस क्रेडिट base 50 के साथ एक GM+GN पूल साझा करते हैं। Pro सीमाएँ हटाता है।"
     ],
     "themes_title": "थीम्स",
     "themes_note": "थीम और वॉलपेपर चुनें",
@@ -11266,7 +11338,7 @@
     "ref_promoter_title": "रेफरल रिवॉर्ड्स (प्रोमोटर्स)",
     "ref_promoter_body": "पात्र रेफ़रल से डेली लिमिट बढ़ता है",
     "r_li2b": "Clicks अलग से track होते हैं। Rewards/unlocks connected referrals पर होते हैं।",
-    "r_li2c": "प्रमोटर: रेफरल के साथ आपकी मुफ्त दैनिक उत्पादन सीमा स्वचालित रूप से बढ़ जाती है (बोनस आपकी आधार सीमा में जोड़ा जाता है)।",
+    "r_li2c": "प्रमोटर: योग्य रेफरल base 50 के ऊपर अलग बोनस क्रेडिट जोड़ते हैं।",
     "r_li4": "योग्य = अधिकतम (सक्रिय, कैरी-ओवर)। कैरी-ओवर तभी मायने रखता है जब वह बड़ा हो।",
     "themes_right_title": "त्वरित गाइड",
     "w_pay_help_list": [
@@ -11582,7 +11654,13 @@
     "wallet_recovery_wrong_account": "लंबित भुगतान दूसरे @handle से है। सत्यापन पूरा करने के लिए उस खाते पर वापस जाएँ।",
     "wallet_recovery_wrong_account_title": "अलग खाता",
     "wallet_recovery_wrong_wallet": "यह भुगतान दूसरे वॉलेट से भेजा गया। उस वॉलेट को फिर कनेक्ट करें या बंद करके फिर से शुरू करें।",
-    "wallet_recovery_wrong_wallet_title": "अलग वॉलेट"
+    "wallet_recovery_wrong_wallet_title": "अलग वॉलेट",
+    "ref_k_gen_total": "कुल क्रेडिट",
+    "ref_status_confirmed": "कनेक्टेड",
+    "ref_status_active": "सक्रिय",
+    "ref_lb_rules_summary": "कम से कम एक GM या GN उपयोग वाले रेफरल",
+    "ref_fraud_device": "डुप्लिकेट डिवाइस",
+    "ref_fraud_burst": "संदिग्ध वृद्धि"
   },
   "ja": {
     "plan_compare_btn": "比較",
@@ -11910,10 +11988,10 @@
     "ref_def_active": "Active: 招待先が利用中",
     "ref_def_legacy": "古いキャリーオーバーは引き続きロック解除の合計にカウントされます。",
     "ref_def_eligible": "max(アクティブ、キャリーオーバー)。",
-    "ref_daily_limit_title": "1日の生成上限(GM+GN各)",
-    "ref_per_day": "1日あたり: 上限とボーナス",
+    "ref_daily_limit_title": "生成クレジット（GM+GN共有・生涯）",
+    "ref_per_day": "生涯共有プール",
     "ref_base_plus_bonus": "基本 + ボーナス",
-    "ref_bonus_rule": "ボーナス: 対象となる 20 件の紹介ごとに、毎日 +{per20} 生成されます (ロック解除されたステップ: {chunks})。",
+    "ref_bonus_rule": "ボーナス: 対象20件ごとに生涯 +{per20} クレジット（解除ステップ: {chunks}）。",
     "ref_next_bonus": "次のボーナスまで",
     "ref_cap_note": "1日の上限があります",
     "ref_owner_inactive": "オーナーが非アクティブだとカウントされません",
@@ -12008,8 +12086,8 @@
     "r_list": [
       "<b>Confirmed</b> counts when someone connects a handle with your link.",
       "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-      "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-      "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+      "対象<b>20件</b>ごとに生涯<b>+10</b>クレジット（50+は20件ごと<b>+12</b>）。",
+      "ボーナスクレジットはベース50とGM+GN共有プール。Proは上限なし。"
     ],
     "themes_title": "テーマ",
     "themes_note": "テーマと壁紙を選択",
@@ -12157,7 +12235,7 @@
     "ref_promoter_title": "紹介報酬（プロモーター）",
     "ref_promoter_body": "対象紹介が増えると日次上限が増えます",
     "r_li2b": "クリックは別で計測。Rewards/unlocks は接続済み referrals を使用。",
-    "r_li2c": "プロモーター: 紹介に応じて Free の日次生成上限が自動で増加（ボーナスは基本上限に加算）。",
+    "r_li2c": "プロモーター: 対象紹介はベース50に別途ボーナスクレジットを追加。",
     "r_li4": "対象 = max(アクティブ, 繰越)。繰越はそれが大きい場合のみ意味があります。",
     "themes_right_title": "クイックガイド",
     "w_pay_help_list": [
@@ -12473,7 +12551,13 @@
     "wallet_recovery_wrong_account": "保留中の支払いは別の@handleに紐づいています。確認を完了するにはそのアカウントに戻ってください。",
     "wallet_recovery_wrong_account_title": "別のアカウント",
     "wallet_recovery_wrong_wallet": "この支払いは別のウォレットから送信されました。そのウォレットを再接続するか、閉じて最初からやり直してください。",
-    "wallet_recovery_wrong_wallet_title": "別のウォレット"
+    "wallet_recovery_wrong_wallet_title": "別のウォレット",
+    "ref_k_gen_total": "合計クレジット",
+    "ref_status_confirmed": "接続済み",
+    "ref_status_active": "アクティブ",
+    "ref_lb_rules_summary": "GMまたはGNを1回以上使った紹介",
+    "ref_fraud_device": "重複デバイス",
+    "ref_fraud_burst": "不審な急増"
   },
   "zh": {
     "plan_compare_btn": "对比",
@@ -12801,10 +12885,10 @@
     "ref_def_active": "Active：受邀者已使用",
     "ref_def_legacy": "较早的结转仍计入您的解锁总数。",
     "ref_def_eligible": "max(活跃, 结转)。",
-    "ref_daily_limit_title": "每日生成限制（GM + GN各）",
-    "ref_per_day": "每日：上限与奖励",
+    "ref_daily_limit_title": "生成额度（GM + GN 共享，终身）",
+    "ref_per_day": "终身共享池",
     "ref_base_plus_bonus": "基础 + 奖励",
-    "ref_bonus_rule": "奖励：每 20 名符合条件的推荐人每天可生成 +{per20}（解锁步骤：{chunks}）。",
+    "ref_bonus_rule": "奖励：每 20 名符合条件推荐终身 +{per20} 额度（已解锁步数：{chunks}）。",
     "ref_next_bonus": "下一个奖励在",
     "ref_cap_note": "存在每日上限",
     "ref_owner_inactive": "所有者不活跃则不计入",
@@ -12899,8 +12983,8 @@
     "r_list": [
       "<b>Confirmed</b> counts when someone connects a handle with your link.",
       "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-      "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-      "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+      "每<b>20</b>名符合条件推荐终身<b>+10</b>额度（50+为每20<b>+12</b>）。",
+      "奖励额度与基础50共享GM+GN池。Pro移除上限。"
     ],
     "themes_title": "主题",
     "themes_note": "选择主题和壁纸",
@@ -13048,7 +13132,7 @@
     "ref_promoter_title": "邀请奖励（推广者）",
     "ref_promoter_body": "符合资格的邀请越多，每日额度越高",
     "r_li2b": "Clicks 单独统计。Rewards/unlocks 以已连接的 referrals 为准。",
-    "r_li2c": "推广者：免费每日生成上限随推荐自动增加（奖励加入基础上限）。",
+    "r_li2c": "推广者：符合条件推荐在基础 50 之外单独增加奖励额度。",
     "r_li4": "符合条件 = max(活跃, 结转)。仅当结转更大时才计入。",
     "themes_right_title": "快速指南",
     "w_pay_help_list": [
@@ -13364,7 +13448,13 @@
     "wallet_recovery_wrong_account": "待处理付款属于另一个 @handle。请切回该账户以完成验证。",
     "wallet_recovery_wrong_account_title": "不同账户",
     "wallet_recovery_wrong_wallet": "此付款由另一个钱包发送。请重新连接该钱包，或关闭后重新开始。",
-    "wallet_recovery_wrong_wallet_title": "不同钱包"
+    "wallet_recovery_wrong_wallet_title": "不同钱包",
+    "ref_k_gen_total": "总额度",
+    "ref_status_confirmed": "已连接",
+    "ref_status_active": "活跃",
+    "ref_lb_rules_summary": "至少使用过一次 GM 或 GN 的推荐",
+    "ref_fraud_device": "重复设备",
+    "ref_fraud_burst": "可疑激增"
   }
 };
   function clone(value){ return JSON.parse(JSON.stringify(value)); }

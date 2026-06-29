@@ -36,7 +36,7 @@
           "<b>Eligible</b> = max(active, carry-over).",
         ],
         promoterTitle: "Promoter details",
-        baseDaily: "Base daily",
+        baseDaily: "Generation credits",
         unlocksNow: "Unlocks now",
         nextUnlock: "Next unlock",
         allUnlocked: "All listed unlocks reached",
@@ -96,7 +96,7 @@
         leaderboardLoading: t("r_loading") || fallback.leaderboardLoading,
         leaderboardEmpty: t("lb_empty") || fallback.leaderboardEmpty,
         youLabel: t("lb_you") || fallback.youLabel,
-        rulesLabel: fallback.rulesLabel,
+        rulesLabel: t("ref_rules_word") || fallback.rulesLabel,
         invitedNote: t("r_invited_note") || fallback.invitedNote,
       };
     }
@@ -355,6 +355,57 @@
           .map((line, i) => `<li id="r_li${i + 1}">${line}</li>`)
           .join("");
       }
+      const promoKeys = [
+        ["promo_k_confirmed", "ref_k_confirmed"],
+        ["promo_k_active", "ref_k_active"],
+        ["promo_k_eligible", "ref_k_eligible"],
+        ["promo_k_legacy", "ref_k_legacy"],
+        ["promo_k_clicks", "ref_metric_clicks"],
+        ["promo_k_daily", "ref_k_gen_total"],
+      ];
+      for (const [id, key] of promoKeys) {
+        const el = $(id);
+        if (el) el.textContent = siteTr(key, el.textContent || "");
+      }
+    }
+
+    function renderReferralPromoNote(j) {
+      const el = $("refPromoNote");
+      if (!el || !j || typeof j !== "object") return;
+      const base = Math.max(0, Number(j.freeDaily ?? 50) || 50);
+      const bonus = Math.max(0, Number(j.dailyBonus || 0) || 0);
+      const per20 = Math.max(0, Number(j.bonusPer20 || 10) || 10);
+      const chunks = Math.max(0, Number(j.bonusChunks || 0) || 0);
+      const cap = Math.max(0, Number(j.bonusCap || 120) || 120);
+      const parts = [];
+      const limitTpl = siteTr("ref_base_plus_bonus", "base {base} + bonus {bonus}");
+      parts.push(limitTpl.replace("{base}", String(base)).replace("{bonus}", String(bonus)));
+      const ruleTpl = siteTr(
+        "ref_bonus_rule",
+        "Bonus: +{per20} lifetime generation credits for each 20 eligible referrals (steps unlocked: {chunks})."
+      );
+      parts.push(ruleTpl.replace("{per20}", String(per20)).replace("{chunks}", String(chunks)));
+      if (j.nextBonusAt != null && Number(j.nextBonusAt) > 0) {
+        parts.push(
+          siteTr("ref_next_bonus", "Next bonus step at {nextAt} eligible referrals.").replace(
+            "{nextAt}",
+            String(j.nextBonusAt)
+          )
+        );
+      }
+      if (cap > 0 && chunks * per20 >= cap) {
+        parts.push(siteTr("ref_cap_note", "bonus capped at {cap}").replace("{cap}", String(cap)));
+      }
+      if (!j.ownerActive && bonus > 0) {
+        parts.push(siteTr("ref_owner_inactive", "bonus paused until you use the product"));
+      }
+      parts.push(
+        siteTr(
+          "ref_abuse_note",
+          "Automation, self-referrals, duplicates and fraud do not count. Bonuses may be recalculated if abuse is detected."
+        )
+      );
+      el.textContent = parts.filter(Boolean).join(" ");
     }
 
     function syncModePanelCopy() {
@@ -436,6 +487,7 @@
       syncRefProgressMeter,
       syncRefBadgeUi,
       renderReferralRightCopy,
+      renderReferralPromoNote,
       syncModePanelCopy,
       patchDynamicCopy,
     };

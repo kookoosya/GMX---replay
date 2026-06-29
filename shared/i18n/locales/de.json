@@ -324,10 +324,10 @@
   "ref_def_active": "Aktiv = bestätigte Empfehlung mit mindestens einer echten Nutzung.",
   "ref_def_legacy": "Ältere Überträge werden immer noch in Ihre Freischaltsumme einbezogen.",
   "ref_def_eligible": "max(aktiv, Übertrag).",
-  "ref_daily_limit_title": "Tägliches Erzeugungslimit (jeweils GM + GN)",
-  "ref_per_day": "pro Tag",
+  "ref_daily_limit_title": "Generierungs-Credits (GM + GN gemeinsam, lebenslang)",
+  "ref_per_day": "gemeinsamer lebenslanger Pool",
   "ref_base_plus_bonus": "Basis {base} + Bonus {bonus}",
-  "ref_bonus_rule": "Bonus: +{per20} tägliche Generierung für jeweils 20 berechtigte Empfehlungen (freigeschaltete Schritte: {chunks}).",
+  "ref_bonus_rule": "Bonus: +{per20} lebenslange Generierungs-Credits je 20 berechtigte Referrals (Schritte: {chunks}).",
   "ref_next_bonus": "Nächster Bonus bei {nextAt} berechtigten Empfehlungen.",
   "ref_cap_note": "Limit {cap}",
   "ref_owner_inactive": "Bonus pausiert, bis du das Produkt selbst nutzt.",
@@ -422,8 +422,8 @@
   "r_list": [
     "Alle <b>20 berechtigten Referrals</b> geben <b>+10</b> tägliche Generation.",
     "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-    "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-    "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+    "Jede <b>20 berechtigten</b> Referrals geben <b>+10</b> lebenslange Credits (ab 50+ = <b>+12</b> pro 20).",
+    "Bonus-Credits teilen sich einen GM+GN-Pool mit den Basis-50. Pro hebt Limits auf."
   ],
   "themes_title": "Designs",
   "themes_note": "Wähle ein Theme und Wallpaper.",
@@ -571,7 +571,7 @@
   "ref_promoter_title": "Promoter",
   "ref_promoter_body": "Mehr tägliche Limits durch berechtigte Empfehlungen",
   "r_li2b": "Klicks zählen wir separat. Rewards/Unlocks basieren auf verbundenen Referrals.",
-  "r_li2c": "Promoter: Ihr kostenloses tägliches Generationslimit erhöht sich automatisch mit Empfehlungen (der Bonus wird zu Ihrem Basislimit hinzugefügt).",
+  "r_li2c": "Promoter: berechtigte Referrals erhöhen den Bonus separat zum Basis-50-Pool.",
   "r_li4": "Berechtigt = max(aktiv, übertragen). Die Verschleppung ist nur dann von Bedeutung, wenn sie größer ist.",
   "themes_right_title": "Kurzanleitung",
   "w_pay_help_list": [
@@ -887,5 +887,11 @@
   "wallet_recovery_wrong_account": "Eine ausstehende Zahlung gehört zu einem anderen @handle. Wechsle zurück zu diesem Konto, um die Verifizierung abzuschließen.",
   "wallet_recovery_wrong_account_title": "Anderes Konto",
   "wallet_recovery_wrong_wallet": "Diese Zahlung wurde von einer anderen Wallet gesendet. Verbinde diese Wallet erneut oder blende aus, um neu zu starten.",
-  "wallet_recovery_wrong_wallet_title": "Andere Wallet"
+  "wallet_recovery_wrong_wallet_title": "Andere Wallet",
+  "ref_k_gen_total": "Credits gesamt",
+  "ref_status_confirmed": "Verbunden",
+  "ref_status_active": "Aktiv",
+  "ref_lb_rules_summary": "Referrals mit mindestens einer GM- oder GN-Nutzung",
+  "ref_fraud_device": "doppeltes Gerät",
+  "ref_fraud_burst": "verdächtiger Anstieg"
 }

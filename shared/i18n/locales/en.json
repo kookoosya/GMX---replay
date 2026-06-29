@@ -324,10 +324,10 @@
   "ref_def_active": "confirmed users with at least one recorded usage.",
   "ref_def_legacy": "older carry-over still counted in your unlock total.",
   "ref_def_eligible": "max(active, carry-over).",
-  "ref_daily_limit_title": "Daily generation limit (GM + GN each)",
-  "ref_per_day": "per day",
+  "ref_daily_limit_title": "Generation credits (GM + GN shared, lifetime)",
+  "ref_per_day": "lifetime shared pool",
   "ref_base_plus_bonus": "base {base} + bonus {bonus}",
-  "ref_bonus_rule": "Bonus: +{per20} daily generation for each 20 eligible referrals (steps unlocked: {chunks}).",
+  "ref_bonus_rule": "Bonus: +{per20} lifetime generation credits for each 20 eligible referrals (steps unlocked: {chunks}).",
   "ref_next_bonus": "Next bonus step at {nextAt} eligible referrals.",
   "ref_cap_note": "bonus capped at {cap}",
   "ref_owner_inactive": "bonus paused until you use the product",
@@ -410,7 +410,7 @@
     "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
   "gn_desc": "Build short night replies for X. Pick a tone and reply language, tap Quick 1, then copy or save lines you like. Free includes 50 lifetime generation credits (GM+GN shared).",
-  "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
+  "ref_desc": "Share your link. Confirmed = connected via your link. Active = real GM/GN use. Eligible = max(active, carry-over). Bonus: +{per20} credits per 20 eligible (+12 at 50+). Base 50 stays separate.",
   "wallet_desc": "Upgrade Pro: unlimited generation credits, all themes/styles/extension skins & wallpapers, and all Arcade games. Pay on Solana with SOL, USDC, or USDT — verified on-chain.",
   "w_pay_desc": "Select a plan to enable payment.",
   "w_status_desc": "After you approve the transaction in your wallet, we verify it automatically on-chain.",
@@ -422,8 +422,8 @@
   "r_list": [
     "<b>Confirmed</b> counts when someone connects a handle with your link.",
     "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-    "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-    "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+    "Every <b>20 eligible</b> adds <b>+10</b> lifetime credits (Promoter 50+ = <b>+12</b> per 20).",
+    "Bonus credits share one GM+GN pool with the base 50. Pro removes caps and unlocks everything."
   ],
   "themes_title": "Themes",
   "themes_note": "Wallpaper picker for the main site. Theme accents follow your saved preset.",
@@ -569,9 +569,9 @@
   "ui_site_lang": "Language",
   "apply_upgrade_pro": "Upgrade Pro",
   "ref_promoter_title": "Referral rewards (Promoters)",
-  "ref_promoter_body": "Clicks are welcome. Rewards are based on eligible users only (connect + first real use). High traffic can be queued daily.",
+  "ref_promoter_body": "Rewards need eligible referrals (connect + real use). Clicks are tracked separately.",
   "r_li2b": "We track clicks separately. Rewards/unlocks use connected referrals.",
-  "r_li2c": "Promoters: your free daily generation cap increases automatically with referrals (bonus is added to your base limit).",
+  "r_li2c": "Promoters: eligible referrals add bonus generation credits on top of the base 50 (shown separately).",
   "r_li4": "Eligible = max(active, carry-over). Carry-over only matters if it is larger.",
   "themes_right_title": "Quick guide",
   "w_pay_help_list": [
@@ -887,5 +887,11 @@
   "wallet_recovery_wrong_account": "A pending payment belongs to a different @handle. Switch back to that account to finish verification.",
   "wallet_recovery_wrong_account_title": "Different account",
   "wallet_recovery_wrong_wallet": "This payment was sent from a different wallet. Reconnect that wallet or dismiss to start over.",
-  "wallet_recovery_wrong_wallet_title": "Different wallet"
+  "wallet_recovery_wrong_wallet_title": "Different wallet",
+  "ref_k_gen_total": "Total credits",
+  "ref_status_confirmed": "Connected",
+  "ref_status_active": "Active",
+  "ref_lb_rules_summary": "referrals with at least one GM or GN use",
+  "ref_fraud_device": "duplicate device",
+  "ref_fraud_burst": "suspicious burst"
 }

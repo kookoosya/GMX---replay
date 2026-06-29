@@ -45,6 +45,9 @@
     function renderReferralRightCopy(lang) {
       return siteI18nDynamic.renderReferralRightCopy?.(lang);
     }
+    function renderReferralPromoNote(j) {
+      return siteI18nDynamic.renderReferralPromoNote?.(j);
+    }
     function syncModePanelCopy() {
       return siteI18nDynamic.syncModePanelCopy?.();
     }
@@ -68,6 +71,7 @@
       syncRefProgressMeter,
       syncRefBadgeUi,
       renderReferralRightCopy,
+      renderReferralPromoNote,
       syncModePanelCopy,
       patchDynamicCopy,
       fillSelect,

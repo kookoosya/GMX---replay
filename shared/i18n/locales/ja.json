@@ -324,10 +324,10 @@
   "ref_def_active": "Active: 招待先が利用中",
   "ref_def_legacy": "古いキャリーオーバーは引き続きロック解除の合計にカウントされます。",
   "ref_def_eligible": "max(アクティブ、キャリーオーバー)。",
-  "ref_daily_limit_title": "1日の生成上限(GM+GN各)",
-  "ref_per_day": "1日あたり: 上限とボーナス",
+  "ref_daily_limit_title": "生成クレジット（GM+GN共有・生涯）",
+  "ref_per_day": "生涯共有プール",
   "ref_base_plus_bonus": "基本 + ボーナス",
-  "ref_bonus_rule": "ボーナス: 対象となる 20 件の紹介ごとに、毎日 +{per20} 生成されます (ロック解除されたステップ: {chunks})。",
+  "ref_bonus_rule": "ボーナス: 対象20件ごとに生涯 +{per20} クレジット（解除ステップ: {chunks}）。",
   "ref_next_bonus": "次のボーナスまで",
   "ref_cap_note": "1日の上限があります",
   "ref_owner_inactive": "オーナーが非アクティブだとカウントされません",
@@ -422,8 +422,8 @@
   "r_list": [
     "<b>Confirmed</b> counts when someone connects a handle with your link.",
     "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-    "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-    "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+    "対象<b>20件</b>ごとに生涯<b>+10</b>クレジット（50+は20件ごと<b>+12</b>）。",
+    "ボーナスクレジットはベース50とGM+GN共有プール。Proは上限なし。"
   ],
   "themes_title": "テーマ",
   "themes_note": "テーマと壁紙を選択",
@@ -571,7 +571,7 @@
   "ref_promoter_title": "紹介報酬（プロモーター）",
   "ref_promoter_body": "対象紹介が増えると日次上限が増えます",
   "r_li2b": "クリックは別で計測。Rewards/unlocks は接続済み referrals を使用。",
-  "r_li2c": "プロモーター: 紹介に応じて Free の日次生成上限が自動で増加（ボーナスは基本上限に加算）。",
+  "r_li2c": "プロモーター: 対象紹介はベース50に別途ボーナスクレジットを追加。",
   "r_li4": "対象 = max(アクティブ, 繰越)。繰越はそれが大きい場合のみ意味があります。",
   "themes_right_title": "クイックガイド",
   "w_pay_help_list": [
@@ -887,5 +887,11 @@
   "wallet_recovery_wrong_account": "保留中の支払いは別の@handleに紐づいています。確認を完了するにはそのアカウントに戻ってください。",
   "wallet_recovery_wrong_account_title": "別のアカウント",
   "wallet_recovery_wrong_wallet": "この支払いは別のウォレットから送信されました。そのウォレットを再接続するか、閉じて最初からやり直してください。",
-  "wallet_recovery_wrong_wallet_title": "別のウォレット"
+  "wallet_recovery_wrong_wallet_title": "別のウォレット",
+  "ref_k_gen_total": "合計クレジット",
+  "ref_status_confirmed": "接続済み",
+  "ref_status_active": "アクティブ",
+  "ref_lb_rules_summary": "GMまたはGNを1回以上使った紹介",
+  "ref_fraud_device": "重複デバイス",
+  "ref_fraud_burst": "不審な急増"
 }

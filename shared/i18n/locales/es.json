@@ -324,10 +324,10 @@
   "ref_def_active": "Activo = referido confirmado con al menos un uso real.",
   "ref_def_legacy": "el arrastre antiguo aún se cuenta en tu total de desbloqueos.",
   "ref_def_eligible": "máx.(activo, arrastre).",
-  "ref_daily_limit_title": "Límite de generación diaria (GM + GN cada uno)",
-  "ref_per_day": "por día",
+  "ref_daily_limit_title": "Créditos de generación (GM + GN compartidos, de por vida)",
+  "ref_per_day": "pool compartido de por vida",
   "ref_base_plus_bonus": "Base {base} + bonus {bonus}",
-  "ref_bonus_rule": "Bonificación: +⟦0 generación⟧ diaria por cada 20 referidos elegibles (pasos desbloqueados: {chunks}).",
+  "ref_bonus_rule": "Bonificación: +{per20} créditos de generación de por vida por cada 20 referidos elegibles (pasos: {chunks}).",
   "ref_next_bonus": "Próximo bonus en {nextAt} elegibles.",
   "ref_cap_note": "tope {cap}",
   "ref_owner_inactive": "bonus en pausa mientras no uses el producto.",
@@ -422,8 +422,8 @@
   "r_list": [
     "Cada <b>20 referidos</b> añade <b>+10</b> inserciones diarias.",
     "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-    "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-    "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+    "Cada <b>20 elegibles</b> suma <b>+10</b> créditos de por vida (50+ = <b>+12</b> por 20).",
+    "Los créditos bonus comparten un pool GM+GN con los 50 base. Pro quita límites."
   ],
   "themes_title": "Temas",
   "themes_note": "Elige un tema y un fondo.",
@@ -571,7 +571,7 @@
   "ref_promoter_title": "Promotor",
   "ref_promoter_body": "Más límite diario con referidos elegibles",
   "r_li2b": "Los clics se registran por separado. Rewards/unlocks usan referidos conectados.",
-  "r_li2c": "Promotores: su límite de generación diario gratuito aumenta automáticamente con las referencias (la bonificación se agrega a su límite base).",
+  "r_li2c": "Promotores: los referidos elegibles añaden créditos bonus aparte del base de 50.",
   "r_li4": "Elegible = max(activo, transferido). El traspaso sólo importa si es mayor.",
   "themes_right_title": "Guía rápida",
   "w_pay_help_list": [
@@ -887,5 +887,11 @@
   "wallet_recovery_wrong_account": "Un pago pendiente pertenece a otro @handle. Vuelve a esa cuenta para terminar la verificación.",
   "wallet_recovery_wrong_account_title": "Cuenta distinta",
   "wallet_recovery_wrong_wallet": "Este pago se envió desde otra wallet. Reconéctala o descarta para empezar de nuevo.",
-  "wallet_recovery_wrong_wallet_title": "Wallet distinta"
+  "wallet_recovery_wrong_wallet_title": "Wallet distinta",
+  "ref_k_gen_total": "Créditos totales",
+  "ref_status_confirmed": "Conectado",
+  "ref_status_active": "Activo",
+  "ref_lb_rules_summary": "referidos con al menos un uso de GM o GN",
+  "ref_fraud_device": "dispositivo duplicado",
+  "ref_fraud_burst": "ráfaga sospechosa"
 }

@@ -12,6 +12,7 @@
     syncRefProgressMeter,
     syncRefBadgeUi,
     renderReferralRightCopy,
+    renderReferralPromoNote,
     syncModePanelCopy,
     patchDynamicCopy,
     fillSelect,

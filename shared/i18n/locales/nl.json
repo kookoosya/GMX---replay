@@ -324,10 +324,10 @@
   "ref_def_active": "Actief = bevestigde referral met ten minste één echt gebruik.",
   "ref_def_legacy": "oudere carry-over telt nog steeds mee in je ontgrendelingstotaal.",
   "ref_def_eligible": "max(actief, overgedragen).",
-  "ref_daily_limit_title": "Dagelijkse generatielimiet (elk GM + GN)",
-  "ref_per_day": "per dag",
+  "ref_daily_limit_title": "Generatiecredits (GM + GN gedeeld, levenslang)",
+  "ref_per_day": "gedeeld levenslang pool",
   "ref_base_plus_bonus": "Basis {base} + bonus {bonus}",
-  "ref_bonus_rule": "Bonus: +{per20} dagelijkse generatie voor elke 20 in aanmerking komende verwijzingen (ontgrendelde stappen: {chunks}).",
+  "ref_bonus_rule": "Bonus: +{per20} levenslange generatiecredits per 20 eligible referrals (stappen: {chunks}).",
   "ref_next_bonus": "Volgende bonus bij {nextAt} in aanmerking komende referrals.",
   "ref_cap_note": "limiet {cap}",
   "ref_owner_inactive": "bonus gepauzeerd totdat je het product zelf gebruikt.",
@@ -422,8 +422,8 @@
   "r_list": [
     "Elke <b>20 eligible referrals</b> geeft <b>+10</b> dagelijkse generations.",
     "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-    "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-    "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+    "Elke <b>20 eligible</b> geeft <b>+10</b> levenslange credits (50+ = <b>+12</b> per 20).",
+    "Bonuscredits delen één GM+GN-pool met de basis 50. Pro verwijdert limieten."
   ],
   "themes_title": "Thema’s",
   "themes_note": "Kies een thema en wallpaper",
@@ -571,7 +571,7 @@
   "ref_promoter_title": "Promoter",
   "ref_promoter_body": "Meer daglimiet via geschikte referrals",
   "r_li2b": "Clicks tellen we apart. Rewards/unlocks gebruiken connected referrals.",
-  "r_li2c": "Promoters: uw gratis dagelijkse generatielimiet stijgt automatisch met referrals (bonus wordt toegevoegd aan basislimiet).",
+  "r_li2c": "Promoters: eligible referrals voegen bonuscredits toe bovenop de basis 50.",
   "r_li4": "In aanmerking = max(actief, carry-over). Carry-over telt alleen als die groter is.",
   "themes_right_title": "Snelle uitleg",
   "w_pay_help_list": [
@@ -887,5 +887,11 @@
   "wallet_recovery_wrong_account": "Een openstaande betaling hoort bij een andere @handle. Schakel terug naar dat account om de verificatie af te ronden.",
   "wallet_recovery_wrong_account_title": "Ander account",
   "wallet_recovery_wrong_wallet": "Deze betaling is vanuit een andere wallet verzonden. Verbind die wallet opnieuw of sluit om opnieuw te beginnen.",
-  "wallet_recovery_wrong_wallet_title": "Andere wallet"
+  "wallet_recovery_wrong_wallet_title": "Andere wallet",
+  "ref_k_gen_total": "Totaal credits",
+  "ref_status_confirmed": "Verbonden",
+  "ref_status_active": "Actief",
+  "ref_lb_rules_summary": "referrals met minstens één GM- of GN-gebruik",
+  "ref_fraud_device": "dubbel apparaat",
+  "ref_fraud_burst": "verdachte piek"
 }

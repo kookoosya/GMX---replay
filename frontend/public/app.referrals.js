@@ -47,6 +47,28 @@
       );
     }
 
+    function maskHandle(handle) {
+      const h = String(handle || "").trim();
+      if (!h) return "";
+      if (h.length <= 10) return h;
+      return `${h.slice(0, 5)}…${h.slice(-4)}`;
+    }
+
+    function referralStatusLabel(r) {
+      if (r.fraud) {
+        const base = t("r_flagged") || "Not counted";
+        const reason = String(r.fraudReason || "").trim();
+        if (!reason) return base;
+        if (reason === "fingerprint_dup") return `${base}: ${t("ref_fraud_device") || "duplicate device"}`;
+        if (reason === "ip_burst") return `${base}: ${t("ref_fraud_burst") || "suspicious burst"}`;
+        return base;
+      }
+      if (r.eligible || r.status === "eligible") return t("r_eligible") || "Eligible";
+      if (r.status === "active") return t("ref_status_active") || "Active";
+      if (r.status === "confirmed") return t("ref_status_confirmed") || "Connected";
+      return t("r_not_yet") || "Pending";
+    }
+
     async function loadRefInvited(days = 30) {
       const body = $("refInvitedBody");
       if (!body) return;
@@ -60,13 +82,9 @@
       }
       body.innerHTML = list
         .map((r) => {
-          const status = r.fraud
-            ? (t("r_flagged") || "Flagged") + (r.fraudReason ? ": " + escHtml(r.fraudReason) : "")
-            : r.eligible
-              ? t("r_eligible") || "Eligible"
-              : t("r_not_yet") || "Not yet";
+          const status = escHtml(referralStatusLabel(r));
           return `<tr>
-        <td>${escHtml(r.handle || "")}</td>
+        <td title="${escHtml(r.handle || "")}">${escHtml(maskHandle(r.handle || ""))}</td>
         <td>${Number(r.inserts || 0)}</td>
         <td>${Number(r.activeDays || 0)}</td>
         <td>${status}</td>
@@ -94,13 +112,20 @@
         body.innerHTML = top
           .map(
             (r, i) =>
-              `<tr><td>${i + 1}</td><td>${escHtml(r.handle || "")}</td><td>${Number(r.eligible || 0)}</td></tr>`
+              `<tr><td>${i + 1}</td><td title="${escHtml(r.handle || "")}">${escHtml(maskHandle(r.handle || ""))}</td><td>${Number(r.eligible || 0)}</td></tr>`
           )
           .join("");
       }
       if (meEl) {
         if (j.me && j.me.handle) {
-          meEl.textContent = `${ui.youLabel || "You"}: ${j.me.handle} — ${ui.eligible}: ${Number(j.me.eligible || 0)} (${ui.rulesLabel || "rules"}: ≥${j.rules?.minInserts || 5} inserts + ≥${j.rules?.minActiveDays || 3} active days in ${days}d)`;
+          const ruleSummary =
+            j.rules?.leaderboardSummary ||
+            t("ref_lb_rules_summary") ||
+            j.rules?.eligible ||
+            "real product usage";
+          const rank =
+            j.me.rank != null && Number(j.me.rank) > 0 ? ` · #${Number(j.me.rank)}` : "";
+          meEl.textContent = `${ui.youLabel || "You"}: ${maskHandle(j.me.handle)} — ${ui.eligible}: ${Number(j.me.eligible || 0)}${rank} (${ui.rulesLabel || "rules"}: ${ruleSummary})`;
         } else {
           meEl.textContent = "";
         }

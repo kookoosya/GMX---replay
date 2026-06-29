@@ -324,10 +324,10 @@
   "ref_def_active": "Aktywne = potwierdzone polecenie z co najmniej jednym realnym użyciem.",
   "ref_def_legacy": "starsze przeniesienia nadal są wliczane do sumy odblokowań.",
   "ref_def_eligible": "max (aktywny, przeniesienie).",
-  "ref_daily_limit_title": "Dzienny limit generacji (każdy GM + GN)",
-  "ref_per_day": "na dzień",
+  "ref_daily_limit_title": "Kredyty generacji (GM + GN wspólne, na stałe)",
+  "ref_per_day": "wspólny pul na stałe",
   "ref_base_plus_bonus": "Baza {base} + bonus {bonus}",
-  "ref_bonus_rule": "Premia: +{per20} dziennej generacji za każde 20 kwalifikujących się poleconych (odblokowane kroki: {chunks}).",
+  "ref_bonus_rule": "Premia: +{per20} kredytów generacji na stałe za każde 20 eligible poleceń (kroki: {chunks}).",
   "ref_next_bonus": "Następny bonus przy {nextAt} kwalifikujących się.",
   "ref_cap_note": "limit {cap}",
   "ref_owner_inactive": "bonus wstrzymany, dopóki sam nie używasz produktu.",
@@ -422,8 +422,8 @@
   "r_list": [
     "Każde <b>20 eligible referrals</b> daje <b>+10</b> dziennych generacji.",
     "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-    "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-    "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+    "Każde <b>20 eligible</b> daje <b>+10</b> kredytów na stałe (50+ = <b>+12</b> na 20).",
+    "Bonusowe kredyty dzielą jeden pul GM+GN z bazowymi 50. Pro usuwa limity."
   ],
   "themes_title": "Motywy",
   "themes_note": "Wybierz motyw i tapetę",
@@ -571,7 +571,7 @@
   "ref_promoter_title": "Promotor",
   "ref_promoter_body": "Większy limit dzienny dzięki uprawnionym poleceniom",
   "r_li2b": "Kliknięcia liczymy osobno. Rewards/unlocks liczą się po connected referrals.",
-  "r_li2c": "Promotorzy: dzienny limit generacji Free rośnie automatycznie z poleceniami (bonus dodawany do limitu bazowego).",
+  "r_li2c": "Promotorzy: eligible polecenia dodają bonusowe kredyty ponad bazowe 50.",
   "r_li4": "Uprawniony = max(aktywni, przeniesienie). Przeniesienie liczy się tylko gdy jest większe.",
   "themes_right_title": "Szybki przewodnik",
   "w_pay_help_list": [
@@ -887,5 +887,11 @@
   "wallet_recovery_wrong_account": "Oczekująca płatność należy do innego @handle. Wróć do tego konta, aby dokończyć weryfikację.",
   "wallet_recovery_wrong_account_title": "Inne konto",
   "wallet_recovery_wrong_wallet": "Ta płatność została wysłana z innego portfela. Połącz ten portfel ponownie lub zamknij, aby zacząć od nowa.",
-  "wallet_recovery_wrong_wallet_title": "Inny portfel"
+  "wallet_recovery_wrong_wallet_title": "Inny portfel",
+  "ref_k_gen_total": "Łącznie kredytów",
+  "ref_status_confirmed": "Połączony",
+  "ref_status_active": "Aktywny",
+  "ref_lb_rules_summary": "polecenia z co najmniej jednym użyciem GM lub GN",
+  "ref_fraud_device": "zduplikowane urządzenie",
+  "ref_fraud_burst": "podejrzany skok"
 }

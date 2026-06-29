@@ -324,10 +324,10 @@
   "ref_def_active": "Aktif = en az bir gerçek kullanım içeren onaylı yönlendirme.",
   "ref_def_legacy": "eski aktarımlar hâlâ kilit açma toplamına dahil ediliyor.",
   "ref_def_eligible": "max(aktif, aktarım).",
-  "ref_daily_limit_title": "Günlük üretim sınırı (her biri GM + GN)",
-  "ref_per_day": "günde",
+  "ref_daily_limit_title": "Üretim kredileri (GM + GN paylaşımlı, ömür boyu)",
+  "ref_per_day": "paylaşımlı ömür boyu havuz",
   "ref_base_plus_bonus": "Temel {base} + bonus {bonus}",
-  "ref_bonus_rule": "Bonus: Her 20 uygun yönlendirme için +{per20} günlük oluşturma (kilidi açılan adımlar: {chunks}).",
+  "ref_bonus_rule": "Bonus: Her 20 uygun yönlendirme için +{per20} ömür boyu üretim kredisi (adımlar: {chunks}).",
   "ref_next_bonus": "Sonraki bonus {nextAt} uygun yönlendirmede.",
   "ref_cap_note": "tavan {cap}",
   "ref_owner_inactive": "bonus ürünü kullanana kadar duraklatılır.",
@@ -422,8 +422,8 @@
   "r_list": [
     "Her <b>20 eligible referral</b> <b>+10</b> günlük generation ekler.",
     "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-    "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-    "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+    "Her <b>20 uygun</b> yönlendirme <b>+10</b> ömür boyu kredi ekler (50+ = 20 başına <b>+12</b>).",
+    "Bonus krediler temel 50 ile tek GM+GN havuzunu paylaşır. Pro limitleri kaldırır."
   ],
   "themes_title": "Temalar",
   "themes_note": "Tema ve duvar kağıdı seç",
@@ -571,7 +571,7 @@
   "ref_promoter_title": "Promotör",
   "ref_promoter_body": "Uygun referansla günlük limit artar",
   "r_li2b": "Tıklamalar ayrı sayılır. Rewards/unlocks connected referrals ile hesaplanır.",
-  "r_li2c": "Promosyoncular: Ücretsiz günlük üretim sınırınız yönlendirmelerle otomatik olarak artar (bonus taban sınırınıza eklenir).",
+  "r_li2c": "Promoterlar: uygun yönlendirmeler temel 50'nin üstüne ayrı bonus kredisi ekler.",
   "r_li4": "Uygun = maksimum(aktif, devredilen). Aktarım yalnızca daha büyükse önemlidir.",
   "themes_right_title": "Hızlı rehber",
   "w_pay_help_list": [
@@ -887,5 +887,11 @@
   "wallet_recovery_wrong_account": "Bekleyen ödeme farklı bir @handle'a ait. Doğrulamayı bitirmek için o hesaba dönün.",
   "wallet_recovery_wrong_account_title": "Farklı hesap",
   "wallet_recovery_wrong_wallet": "Bu ödeme farklı bir cüzdandan gönderildi. O cüzdanı yeniden bağlayın veya kapatıp baştan başlayın.",
-  "wallet_recovery_wrong_wallet_title": "Farklı cüzdan"
+  "wallet_recovery_wrong_wallet_title": "Farklı cüzdan",
+  "ref_k_gen_total": "Toplam kredi",
+  "ref_status_confirmed": "Bağlandı",
+  "ref_status_active": "Aktif",
+  "ref_lb_rules_summary": "en az bir GM veya GN kullanımı olan yönlendirmeler",
+  "ref_fraud_device": "yinelenen cihaz",
+  "ref_fraud_burst": "şüpheli artış"
 }

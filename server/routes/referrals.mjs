@@ -460,7 +460,14 @@ app.get("/api/leaderboard/referrals", (req, res) => {
     }catch(_e){}
 
     // On leaderboard, eligible == active (legacy isn't used for ranking).
-    res.json({ ok:true, days, rules: { confirmed: "invite via ref link", active: "usage_daily.used > 0", eligible: "active (leaderboard)" }, top: top.map(r=>({
+    res.json({ ok:true, days, rules: {
+      confirmed: "invite via ref link on handle connect",
+      active: "usage_daily.used > 0",
+      eligible: "active (leaderboard)",
+      leaderboardSummary: "referrals with at least one GM or GN use",
+      minActiveDays: REF_MIN_ACTIVE_DAYS,
+      minUses: REF_MIN_ACTIVE_USES,
+    }, top: top.map(r=>({
       handle: r.handle,
       confirmed: Number(r.confirmed||0)||0,
       active: Number(r.active||0)||0,

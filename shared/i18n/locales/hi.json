@@ -324,10 +324,10 @@
   "ref_def_active": "Active: приглашённый использовал продукт",
   "ref_def_legacy": "पुराना कैरी-ओवर अभी भी अनलॉक कुल में गिना जाता है।",
   "ref_def_eligible": "max(सक्रिय, कैरी-ओवर)।",
-  "ref_daily_limit_title": "दैनिक जनरेशन सीमा (GM + GN प्रत्येक)",
-  "ref_per_day": "В день: лимит и бонусы",
+  "ref_daily_limit_title": "जनरेशन क्रेडिट (GM + GN साझा, आजीवन)",
+  "ref_per_day": "आजीवन साझा पूल",
   "ref_base_plus_bonus": "База + бонус",
-  "ref_bonus_rule": "बोनस: हर 20 योग्य रेफरल पर +{per20} दैनिक जनरेशन (अनलॉक स्टेप: {chunks})।",
+  "ref_bonus_rule": "बोनस: हर 20 योग्य रेफरल पर +{per20} आजीवन जनरेशन क्रेडिट (स्टेप: {chunks})।",
   "ref_next_bonus": "Следующий бонус на",
   "ref_cap_note": "Есть дневной лимит",
   "ref_owner_inactive": "Владелец неактивен — рефы не считаются",
@@ -422,8 +422,8 @@
   "r_list": [
     "<b>Confirmed</b> counts when someone connects a handle with your link.",
     "<b>Active</b> counts confirmed users with recorded usage. <b>Eligible</b> = max(active, carry-over).",
-    "Every <b>20 eligible</b> adds <b>+10</b> daily generation (Promoter 50+ = <b>+12</b> per 20).",
-    "Daily generation affects the extension endpoint <b>/api/random</b> (not the site generator). Pro removes caps and unlocks everything."
+    "हर <b>20 योग्य</b> रेफरल <b>+10</b> आजीवन क्रेडिट जोड़ता है (50+ = प्रति 20 <b>+12</b>)।",
+    "बोनस क्रेडिट base 50 के साथ एक GM+GN पूल साझा करते हैं। Pro सीमाएँ हटाता है।"
   ],
   "themes_title": "थीम्स",
   "themes_note": "थीम और वॉलपेपर चुनें",
@@ -571,7 +571,7 @@
   "ref_promoter_title": "रेफरल रिवॉर्ड्स (प्रोमोटर्स)",
   "ref_promoter_body": "पात्र रेफ़रल से डेली लिमिट बढ़ता है",
   "r_li2b": "Clicks अलग से track होते हैं। Rewards/unlocks connected referrals पर होते हैं।",
-  "r_li2c": "प्रमोटर: रेफरल के साथ आपकी मुफ्त दैनिक उत्पादन सीमा स्वचालित रूप से बढ़ जाती है (बोनस आपकी आधार सीमा में जोड़ा जाता है)।",
+  "r_li2c": "प्रमोटर: योग्य रेफरल base 50 के ऊपर अलग बोनस क्रेडिट जोड़ते हैं।",
   "r_li4": "योग्य = अधिकतम (सक्रिय, कैरी-ओवर)। कैरी-ओवर तभी मायने रखता है जब वह बड़ा हो।",
   "themes_right_title": "त्वरित गाइड",
   "w_pay_help_list": [
@@ -887,5 +887,11 @@
   "wallet_recovery_wrong_account": "लंबित भुगतान दूसरे @handle से है। सत्यापन पूरा करने के लिए उस खाते पर वापस जाएँ।",
   "wallet_recovery_wrong_account_title": "अलग खाता",
   "wallet_recovery_wrong_wallet": "यह भुगतान दूसरे वॉलेट से भेजा गया। उस वॉलेट को फिर कनेक्ट करें या बंद करके फिर से शुरू करें।",
-  "wallet_recovery_wrong_wallet_title": "अलग वॉलेट"
+  "wallet_recovery_wrong_wallet_title": "अलग वॉलेट",
+  "ref_k_gen_total": "कुल क्रेडिट",
+  "ref_status_confirmed": "कनेक्टेड",
+  "ref_status_active": "सक्रिय",
+  "ref_lb_rules_summary": "कम से कम एक GM या GN उपयोग वाले रेफरल",
+  "ref_fraud_device": "डुप्लिकेट डिवाइस",
+  "ref_fraud_burst": "संदिग्ध वृद्धि"
 }
