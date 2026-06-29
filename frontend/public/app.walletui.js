@@ -535,6 +535,7 @@
     }
 
     async function payNow() {
+      if (payInflight) return;
       const WALLET = getWallet();
       const selectedPlan = getSelectedPlan();
       const selectedCurrency = getSelectedCurrency();

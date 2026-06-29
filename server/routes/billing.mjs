@@ -754,8 +754,18 @@ export function registerBillingRoutes({
       if (!payer) return res.status(400).json({ ok:false, error:"payer_required" });
       if (!isSolanaPubkey(payer)) return res.status(400).json({ ok:false, error:"invalid_payer" });
 
-      const exists = safeDb(() => db.prepare("SELECT 1 FROM payments WHERE sig=?").get(sig));
-      if (exists) return res.status(409).json({ ok:false, error:"sig_already_used" });
+      const exists = safeDb(() => db.prepare("SELECT handle, plan FROM payments WHERE sig=?").get(sig));
+      if (exists) {
+        if (String(exists.handle || "").toLowerCase() !== String(handle || "").toLowerCase()) {
+          return res.status(403).json({ ok:false, error:"sig_handle_mismatch" });
+        }
+        const u2 = userByHandle(handle);
+        return res.json({
+          ok: true,
+          sub: subscriptionInfo({ ...u2, handle }),
+          paid: { idempotent: true, currency: exists.plan || null },
+        });
+      }
 
       const intent = safeDb(() =>
         db.prepare(
@@ -766,7 +776,17 @@ export function registerBillingRoutes({
       if (String(intent.handle).toLowerCase() !== String(handle).toLowerCase()) {
         return res.status(403).json({ ok:false, error:"intent_handle_mismatch" });
       }
-      if (intent.used_sig) return res.status(409).json({ ok:false, error:"intent_already_used" });
+      if (intent.used_sig) {
+        if (String(intent.used_sig) === sig) {
+          const u2 = userByHandle(handle);
+          return res.json({
+            ok: true,
+            sub: subscriptionInfo({ ...u2, handle }),
+            paid: { idempotent: true },
+          });
+        }
+        return res.status(409).json({ ok:false, error:"intent_already_used" });
+      }
       const now = new Date();
       if (intent.expires_at && new Date(intent.expires_at) < now) {
         return res.status(410).json({ ok:false, error:"intent_expired" });

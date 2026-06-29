@@ -407,7 +407,9 @@
             m === "payment_not_verified" ||
             m === "request_failed" ||
             m === "timeout" ||
-            m === "server_error"
+            m === "server_error" ||
+            m === "sig_already_used" ||
+            m === "intent_already_used"
           ) {
             await new Promise((r) => setTimeout(r, 1500));
             continue;
