@@ -656,7 +656,8 @@
     "GMXReplyアイコンを押すと、どのタブの横でもChromeサイドパネルが開きます。",
     "保存したGM/GNバンクは、gmxreply.comがタブで開いているときに同期されます。",
     "行のCopyを押す — Xへは自分で貼り付けて投稿。自動投稿はありません。",
-    "ログインはサイトのGMXReplyトークンまたは手動connectを使用 — 公開handleだけでは不十分です。"
+    "ログインはサイトのGMXReplyトークンまたは手動connectを使用 — 公開handleだけでは不十分です。",
+    "権限: storage、サイドパネル、gmxreply.comホストアクセスのみ — tabs不要、Xページアクセスなし。"
   ],
   "ext_preview_popup_caption": "Chromeサイドパネル — 保存GM/GNをコピー",
   "ext_preview_inline_caption": "ここでコピーし、Xへは自分で貼り付け",

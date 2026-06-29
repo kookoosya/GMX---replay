@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "GMXReply",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Copy-only GM/GN reply library in Chrome Side Panel. Save on gmxreply.com, copy here, paste on X yourself. No auto-posting or X page access.",
   "minimum_chrome_version": "114",
   "action": {
@@ -18,7 +18,7 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "permissions": ["storage", "sidePanel", "tabs"],
+  "permissions": ["storage", "sidePanel"],
   "host_permissions": [
     "https://www.gmxreply.com/*",
     "https://gmxreply.com/*"

@@ -656,7 +656,8 @@
     "Pulsa el icono de GMXReply — se abre el panel lateral de Chrome junto a cualquier pestaña.",
     "Los bancos GM y GN se sincronizan cuando gmxreply.com está abierto en una pestaña.",
     "Pulsa Copy en una línea — tú pegas y publicas en X. Sin auto-publicación.",
-    "El inicio de sesión usa tu token GMXReply del sitio o connect manual — un handle público no basta."
+    "El inicio de sesión usa tu token GMXReply del sitio o connect manual — un handle público no basta.",
+    "Permisos: storage, panel lateral y acceso host solo a gmxreply.com — sin tabs ni acceso a la página de X."
   ],
   "ext_preview_popup_caption": "Panel lateral Chrome — copiar GM/GN guardadas",
   "ext_preview_inline_caption": "Copia aquí, pega en X tú mismo",

@@ -656,7 +656,8 @@
     "Cliquez l'icône GMXReply — le panneau latéral Chrome s'ouvre à côté de n'importe quel onglet.",
     "Les banques GM et GN se synchronisent quand gmxreply.com est ouvert dans un onglet.",
     "Appuyez sur Copy — vous collez et publiez sur X vous-même. Pas d'auto-publication.",
-    "La connexion utilise votre jeton GMXReply du site ou un connect manuel — un handle public ne suffit pas."
+    "La connexion utilise votre jeton GMXReply du site ou un connect manuel — un handle public ne suffit pas.",
+    "Autorisations : storage, panneau latéral et accès hôte gmxreply.com uniquement — pas de tabs, pas d'accès à la page X."
   ],
   "ext_preview_popup_caption": "Panneau latéral Chrome — copie GM/GN enregistrées",
   "ext_preview_inline_caption": "Copiez ici, collez sur X vous-même",

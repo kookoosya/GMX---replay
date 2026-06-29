@@ -130,7 +130,7 @@
       gn: "gmx_ext_bank_gn_v1",
       syncedAt: "gmx_ext_bank_synced_at_v1",
     },
-    EXT_VERSION: "1.2.0",
+    EXT_VERSION: "1.2.1",
     ALERT_KEYS: {
       enabled: "gmx_market_alerts_enabled_v1",
       interval: "gmx_market_alerts_interval_v1",

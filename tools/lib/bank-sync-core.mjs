@@ -6,8 +6,14 @@ export const EXT_BANK_GM_KEY = "gmx_ext_bank_gm_v1";
 export const EXT_BANK_GN_KEY = "gmx_ext_bank_gn_v1";
 export const EXT_BANK_SYNCED_AT_KEY = "gmx_ext_bank_synced_at_v1";
 export const EXT_BANK_SCHEMA_VERSION = 1;
+export const MAX_BANK_LINES = 500;
+export const MAX_LINE_CHARS = 500;
 
 const EMPTY = "__EMPTY__";
+
+export function boundLine(text) {
+  return String(text || "").trim().slice(0, MAX_LINE_CHARS);
+}
 
 export function linesFromBankRaw(raw) {
   return String(raw || "")
@@ -20,10 +26,11 @@ export function dedupeBankLines(lines) {
   const seen = new Set();
   const out = [];
   for (const line of lines || []) {
-    const text = String(line || "").trim();
+    const text = boundLine(line);
     if (!text || seen.has(text)) continue;
     seen.add(text);
     out.push(text);
+    if (out.length >= MAX_BANK_LINES) break;
   }
   return out;
 }
@@ -34,6 +41,7 @@ export function parseBankPayload(raw) {
     version: EXT_BANK_SCHEMA_VERSION,
     lines,
     count: lines.length,
+    truncated: linesFromBankRaw(raw).length > MAX_BANK_LINES,
   };
 }
 

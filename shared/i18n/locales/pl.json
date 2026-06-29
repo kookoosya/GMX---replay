@@ -656,7 +656,8 @@
     "Kliknij ikonę GMXReply — panel boczny Chrome otworzy się obok dowolnej karty.",
     "Zapisane banki GM i GN synchronizują się, gdy gmxreply.com jest otwarty w karcie.",
     "Naciśnij Copy przy linii — sam wklejasz i publikujesz na X. Bez auto-publikacji.",
-    "Logowanie używa tokenu GMXReply ze strony lub ręcznego connect — sam publiczny handle nie wystarczy."
+    "Logowanie używa tokenu GMXReply ze strony lub ręcznego connect — sam publiczny handle nie wystarczy.",
+    "Uprawnienia: storage, panel boczny i dostęp host tylko do gmxreply.com — bez tabs i bez dostępu do strony X."
   ],
   "ext_preview_popup_caption": "Panel boczny Chrome — kopiuj zapisane GM/GN",
   "ext_preview_inline_caption": "Kopiuj tutaj, wklej na X sam",

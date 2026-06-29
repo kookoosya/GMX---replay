@@ -656,7 +656,8 @@
     "Open the GMXReply icon to launch the Chrome Side Panel beside any tab.",
     "Saved GM and GN banks sync when gmxreply.com is open in a browser tab.",
     "Tap Copy on any line — you paste and post on X yourself. No auto-posting.",
-    "Account login uses your GMXReply token from the site or manual connect — a public handle alone is not enough."
+    "Account login uses your GMXReply token from the site or manual connect — a public handle alone is not enough.",
+    "Permissions: storage, Side Panel, and gmxreply.com host access only — no tabs permission, no X page access."
   ],
   "ext_preview_popup_caption": "Chrome Side Panel — saved GM/GN copy",
   "ext_preview_inline_caption": "Copy here, paste on X yourself",

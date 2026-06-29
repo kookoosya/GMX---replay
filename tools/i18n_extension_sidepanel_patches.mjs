@@ -32,6 +32,7 @@ const PATCH = {
       "Saved GM and GN banks sync when gmxreply.com is open in a browser tab.",
       "Tap Copy on any line — you paste and post on X yourself. No auto-posting.",
       "Account login uses your GMXReply token from the site or manual connect — a public handle alone is not enough.",
+      "Permissions: storage, Side Panel, and gmxreply.com host access only — no tabs permission, no X page access.",
     ],
     ext_chrome_store_hint: "Chrome 114+ desktop · copy-only Side Panel · no X page access",
     ext_preview_popup_caption: "Chrome Side Panel — saved GM/GN copy",
@@ -60,6 +61,7 @@ const PATCH = {
       "Сохранённые GM и GN синхронизируются, когда gmxreply.com открыт во вкладке.",
       "Нажмите Copy у строки — вы сами вставляете и публикуете в X. Без автопостинга.",
       "Вход по токену GMXReply с сайта или ручному connect — одного handle недостаточно.",
+      "Разрешения: storage, Side Panel и доступ только к gmxreply.com — без tabs и без доступа к странице X.",
     ],
     ext_chrome_store_hint: "Chrome 114+ desktop · только копирование · без доступа к X",
     ext_preview_popup_caption: "Боковая панель Chrome — копирование GM/GN",
@@ -431,10 +433,36 @@ const PATCH = {
   },
 };
 
+const PERM_BULLET = {
+  en: "Permissions: storage, Side Panel, and gmxreply.com host access only — no tabs permission, no X page access.",
+  ru: "Разрешения: storage, Side Panel и доступ только к gmxreply.com — без tabs и без доступа к странице X.",
+  uk: "Дозволи: storage, Side Panel і доступ лише до gmxreply.com — без tabs і без доступу до сторінки X.",
+  de: "Berechtigungen: storage, Side Panel und nur gmxreply.com-Hostzugriff — kein tabs, kein X-Seitenzugriff.",
+  fr: "Autorisations : storage, panneau latéral et accès hôte gmxreply.com uniquement — pas de tabs, pas d'accès à la page X.",
+  es: "Permisos: storage, panel lateral y acceso host solo a gmxreply.com — sin tabs ni acceso a la página de X.",
+  pt: "Permissões: storage, painel lateral e acesso host apenas a gmxreply.com — sem tabs nem acesso à página do X.",
+  it: "Permessi: storage, pannello laterale e accesso host solo a gmxreply.com — niente tabs, niente accesso alla pagina X.",
+  nl: "Machtigingen: storage, zijpaneel en alleen gmxreply.com-hosttoegang — geen tabs, geen X-paginatoegang.",
+  tr: "İzinler: storage, yan panel ve yalnızca gmxreply.com host erişimi — tabs yok, X sayfası erişimi yok.",
+  pl: "Uprawnienia: storage, panel boczny i dostęp host tylko do gmxreply.com — bez tabs i bez dostępu do strony X.",
+  id: "Izin: storage, side panel, dan akses host gmxreply.com saja — tanpa tabs, tanpa akses halaman X.",
+  hi: "अनुमतियाँ: storage, Side Panel, और केवल gmxreply.com host access — कोई tabs नहीं, X पेज एक्सेस नहीं।",
+  ja: "権限: storage、サイドパネル、gmxreply.comホストアクセスのみ — tabs不要、Xページアクセスなし。",
+  zh: "权限：storage、侧边栏、仅 gmxreply.com 主机访问 — 无需 tabs，不访问 X 页面。",
+};
+
 for (const loc of LOCALES) {
   const file = path.join(ROOT, `${loc}.json`);
   const j = JSON.parse(fs.readFileSync(file, "utf8"));
-  Object.assign(j, PATCH[loc]);
+  Object.assign(j, PATCH[loc] || {});
+  if (!PATCH[loc] && PATCH.en.ext_sync_list) {
+    j.ext_sync_list = PATCH.en.ext_sync_list;
+  }
+  if (Array.isArray(j.ext_sync_list)) {
+    const perm = PERM_BULLET[loc] || PERM_BULLET.en;
+    if (j.ext_sync_list.length < 5) j.ext_sync_list.push(perm);
+    else j.ext_sync_list[4] = perm;
+  }
   fs.writeFileSync(file, `${JSON.stringify(j, null, 2)}\n`, "utf8");
   console.log(`patched ${loc}`);
 }

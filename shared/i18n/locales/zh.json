@@ -656,7 +656,8 @@
     "点击 GMXReply 图标 — Chrome 侧边栏会在任意标签页旁打开。",
     "当 gmxreply.com 在浏览器标签中打开时，已保存的 GM 和 GN 库会同步。",
     "点击某行的 Copy — 由你自行粘贴并发布到 X。无自动发帖。",
-    "登录使用网站 GMXReply 令牌或手动 connect — 仅有公开 handle 不够。"
+    "登录使用网站 GMXReply 令牌或手动 connect — 仅有公开 handle 不够。",
+    "权限：storage、侧边栏、仅 gmxreply.com 主机访问 — 无需 tabs，不访问 X 页面。"
   ],
   "ext_preview_popup_caption": "Chrome 侧边栏 — 复制已保存 GM/GN",
   "ext_preview_inline_caption": "在此复制，自行粘贴到 X",

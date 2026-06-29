@@ -659,7 +659,8 @@
       "Open the GMXReply icon to launch the Chrome Side Panel beside any tab.",
       "Saved GM and GN banks sync when gmxreply.com is open in a browser tab.",
       "Tap Copy on any line — you paste and post on X yourself. No auto-posting.",
-      "Account login uses your GMXReply token from the site or manual connect — a public handle alone is not enough."
+      "Account login uses your GMXReply token from the site or manual connect — a public handle alone is not enough.",
+      "Permissions: storage, Side Panel, and gmxreply.com host access only — no tabs permission, no X page access."
     ],
     "ext_preview_popup_caption": "Chrome Side Panel — saved GM/GN copy",
     "ext_preview_inline_caption": "Copy here, paste on X yourself",
@@ -1574,7 +1575,8 @@
       "Klicke das GMXReply-Symbol — das Chrome Side Panel öffnet sich neben jedem Tab.",
       "Gespeicherte GM- und GN-Banken synchronisieren, wenn gmxreply.com in einem Tab offen ist.",
       "Tippe auf Copy — du fügst selbst in X ein und postest. Kein Auto-Posting.",
-      "Login nutzt deinen GMXReply-Token von der Website oder manuelles Connect — ein öffentlicher Handle reicht nicht."
+      "Login nutzt deinen GMXReply-Token von der Website oder manuelles Connect — ein öffentlicher Handle reicht nicht.",
+      "Berechtigungen: storage, Side Panel und nur gmxreply.com-Hostzugriff — kein tabs, kein X-Seitenzugriff."
     ],
     "ext_preview_popup_caption": "Chrome Side Panel — gespeicherte GM/GN kopieren",
     "ext_preview_inline_caption": "Hier kopieren, selbst in X einfügen",
@@ -2489,7 +2491,8 @@
       "Cliquez l'icône GMXReply — le panneau latéral Chrome s'ouvre à côté de n'importe quel onglet.",
       "Les banques GM et GN se synchronisent quand gmxreply.com est ouvert dans un onglet.",
       "Appuyez sur Copy — vous collez et publiez sur X vous-même. Pas d'auto-publication.",
-      "La connexion utilise votre jeton GMXReply du site ou un connect manuel — un handle public ne suffit pas."
+      "La connexion utilise votre jeton GMXReply du site ou un connect manuel — un handle public ne suffit pas.",
+      "Autorisations : storage, panneau latéral et accès hôte gmxreply.com uniquement — pas de tabs, pas d'accès à la page X."
     ],
     "ext_preview_popup_caption": "Panneau latéral Chrome — copie GM/GN enregistrées",
     "ext_preview_inline_caption": "Copiez ici, collez sur X vous-même",
@@ -3404,7 +3407,8 @@
       "Pulsa el icono de GMXReply — se abre el panel lateral de Chrome junto a cualquier pestaña.",
       "Los bancos GM y GN se sincronizan cuando gmxreply.com está abierto en una pestaña.",
       "Pulsa Copy en una línea — tú pegas y publicas en X. Sin auto-publicación.",
-      "El inicio de sesión usa tu token GMXReply del sitio o connect manual — un handle público no basta."
+      "El inicio de sesión usa tu token GMXReply del sitio o connect manual — un handle público no basta.",
+      "Permisos: storage, panel lateral y acceso host solo a gmxreply.com — sin tabs ni acceso a la página de X."
     ],
     "ext_preview_popup_caption": "Panel lateral Chrome — copiar GM/GN guardadas",
     "ext_preview_inline_caption": "Copia aquí, pega en X tú mismo",
@@ -4319,7 +4323,8 @@
       "Clique no ícone GMXReply — o painel lateral do Chrome abre ao lado de qualquer aba.",
       "Bancos GM e GN sincronizam quando gmxreply.com está aberto em uma aba.",
       "Toque em Copy — você cola e publica no X. Sem auto-post.",
-      "Login usa seu token GMXReply do site ou connect manual — handle público não basta."
+      "Login usa seu token GMXReply do site ou connect manual — handle público não basta.",
+      "Permissões: storage, painel lateral e acesso host apenas a gmxreply.com — sem tabs nem acesso à página do X."
     ],
     "ext_preview_popup_caption": "Painel lateral Chrome — copiar GM/GN salvas",
     "ext_preview_inline_caption": "Copie aqui, cole no X você mesmo",
@@ -5234,7 +5239,8 @@
       "Clicca l'icona GMXReply — si apre il pannello laterale Chrome accanto a qualsiasi scheda.",
       "I banchi GM e GN si sincronizzano quando gmxreply.com è aperto in una scheda.",
       "Tocca Copy — incolli e pubblichi su X da solo. Niente auto-post.",
-      "L'accesso usa il token GMXReply dal sito o connect manuale — un handle pubblico non basta."
+      "L'accesso usa il token GMXReply dal sito o connect manuale — un handle pubblico non basta.",
+      "Permessi: storage, pannello laterale e accesso host solo a gmxreply.com — niente tabs, niente accesso alla pagina X."
     ],
     "ext_preview_popup_caption": "Pannello laterale Chrome — copia GM/GN salvate",
     "ext_preview_inline_caption": "Copia qui, incolla su X da solo",
@@ -6149,7 +6155,8 @@
       "Klik het GMXReply-pictogram — het Chrome-zijpaneel opent naast elk tabblad.",
       "Opgeslagen GM- en GN-banken synchroniseren wanneer gmxreply.com open is in een tab.",
       "Tik op Copy — jij plakt en post zelf op X. Geen auto-post.",
-      "Login gebruikt je GMXReply-token van de site of handmatige connect — alleen een publieke handle is niet genoeg."
+      "Login gebruikt je GMXReply-token van de site of handmatige connect — alleen een publieke handle is niet genoeg.",
+      "Machtigingen: storage, zijpaneel en alleen gmxreply.com-hosttoegang — geen tabs, geen X-paginatoegang."
     ],
     "ext_preview_popup_caption": "Chrome-zijpaneel — opgeslagen GM/GN kopiëren",
     "ext_preview_inline_caption": "Kopieer hier, plak zelf op X",
@@ -7064,7 +7071,8 @@
       "GMXReply simgesine tıkla — Chrome Yan Paneli herhangi bir sekmenin yanında açılır.",
       "Kayıtlı GM ve GN bankaları, gmxreply.com bir sekmede açıkken senkronize olur.",
       "Bir satırda Copy'ye bas — X'e kendin yapıştırıp paylaşırsın. Otomatik paylaşım yok.",
-      "Giriş, sitedeki GMXReply token'ını veya manuel connect'i kullanır — yalnızca public handle yetmez."
+      "Giriş, sitedeki GMXReply token'ını veya manuel connect'i kullanır — yalnızca public handle yetmez.",
+      "İzinler: storage, yan panel ve yalnızca gmxreply.com host erişimi — tabs yok, X sayfası erişimi yok."
     ],
     "ext_preview_popup_caption": "Chrome Yan Paneli — kayıtlı GM/GN kopyala",
     "ext_preview_inline_caption": "Burada kopyala, X'e kendin yapıştır",
@@ -7979,7 +7987,8 @@
       "Kliknij ikonę GMXReply — panel boczny Chrome otworzy się obok dowolnej karty.",
       "Zapisane banki GM i GN synchronizują się, gdy gmxreply.com jest otwarty w karcie.",
       "Naciśnij Copy przy linii — sam wklejasz i publikujesz na X. Bez auto-publikacji.",
-      "Logowanie używa tokenu GMXReply ze strony lub ręcznego connect — sam publiczny handle nie wystarczy."
+      "Logowanie używa tokenu GMXReply ze strony lub ręcznego connect — sam publiczny handle nie wystarczy.",
+      "Uprawnienia: storage, panel boczny i dostęp host tylko do gmxreply.com — bez tabs i bez dostępu do strony X."
     ],
     "ext_preview_popup_caption": "Panel boczny Chrome — kopiuj zapisane GM/GN",
     "ext_preview_inline_caption": "Kopiuj tutaj, wklej na X sam",
@@ -8894,7 +8903,8 @@
       "Klik ikon GMXReply — Side Panel Chrome terbuka di samping tab mana pun.",
       "Bank GM dan GN tersimpan disinkronkan saat gmxreply.com terbuka di tab.",
       "Ketuk Copy pada baris — kamu sendiri yang tempel dan posting di X. Tanpa auto-post.",
-      "Login memakai token GMXReply dari situs atau connect manual — handle publik saja tidak cukup."
+      "Login memakai token GMXReply dari situs atau connect manual — handle publik saja tidak cukup.",
+      "Izin: storage, side panel, dan akses host gmxreply.com saja — tanpa tabs, tanpa akses halaman X."
     ],
     "ext_preview_popup_caption": "Side Panel Chrome — salin GM/GN tersimpan",
     "ext_preview_inline_caption": "Salin di sini, tempel di X sendiri",
@@ -9809,7 +9819,8 @@
       "Нажмите иконку GMXReply — откроется боковая панель Chrome рядом с любой вкладкой.",
       "Сохранённые GM и GN синхронизируются, когда gmxreply.com открыт во вкладке.",
       "Нажмите Copy у строки — вы сами вставляете и публикуете в X. Без автопостинга.",
-      "Вход по токену GMXReply с сайта или ручному connect — одного handle недостаточно."
+      "Вход по токену GMXReply с сайта или ручному connect — одного handle недостаточно.",
+      "Разрешения: storage, Side Panel и доступ только к gmxreply.com — без tabs и без доступа к странице X."
     ],
     "ext_preview_popup_caption": "Боковая панель Chrome — копирование GM/GN",
     "ext_preview_inline_caption": "Копируйте здесь, вставляйте в X сами",
@@ -10724,7 +10735,8 @@
       "Натисніть іконку GMXReply — відкриється бічна панель Chrome поруч із будь-якою вкладкою.",
       "Збережені GM і GN синхронізуються, коли gmxreply.com відкритий у вкладці.",
       "Натисніть Copy біля рядка — ви самі вставляєте й публікуєте в X. Без автопостингу.",
-      "Вхід через токен GMXReply із сайту або ручний connect — одного handle недостатньо."
+      "Вхід через токен GMXReply із сайту або ручний connect — одного handle недостатньо.",
+      "Дозволи: storage, Side Panel і доступ лише до gmxreply.com — без tabs і без доступу до сторінки X."
     ],
     "ext_preview_popup_caption": "Бічна панель Chrome — копіювання GM/GN",
     "ext_preview_inline_caption": "Копіюйте тут, вставляйте в X самі",
@@ -11639,7 +11651,8 @@
       "GMXReply आइकन दबाएँ — Chrome Side Panel किसी भी टैब के बगल में खुलता है।",
       "सेव GM और GN बैंक तब सिंक होते हैं जब gmxreply.com टैब में खुला हो।",
       "किसी लाइन पर Copy दबाएँ — आप खुद X पर पेस्ट और पोस्ट करते हैं। कोई ऑटो-पोस्ट नहीं।",
-      "लॉगिन साइट के GMXReply टोकन या मैनुअल connect से होता है — सिर्फ public handle काफी नहीं।"
+      "लॉगिन साइट के GMXReply टोकन या मैनुअल connect से होता है — सिर्फ public handle काफी नहीं।",
+      "अनुमतियाँ: storage, Side Panel, और केवल gmxreply.com host access — कोई tabs नहीं, X पेज एक्सेस नहीं।"
     ],
     "ext_preview_popup_caption": "Chrome Side Panel — सेव GM/GN कॉपी",
     "ext_preview_inline_caption": "यहाँ कॉपी करें, X पर खुद पेस्ट करें",
@@ -12554,7 +12567,8 @@
       "GMXReplyアイコンを押すと、どのタブの横でもChromeサイドパネルが開きます。",
       "保存したGM/GNバンクは、gmxreply.comがタブで開いているときに同期されます。",
       "行のCopyを押す — Xへは自分で貼り付けて投稿。自動投稿はありません。",
-      "ログインはサイトのGMXReplyトークンまたは手動connectを使用 — 公開handleだけでは不十分です。"
+      "ログインはサイトのGMXReplyトークンまたは手動connectを使用 — 公開handleだけでは不十分です。",
+      "権限: storage、サイドパネル、gmxreply.comホストアクセスのみ — tabs不要、Xページアクセスなし。"
     ],
     "ext_preview_popup_caption": "Chromeサイドパネル — 保存GM/GNをコピー",
     "ext_preview_inline_caption": "ここでコピーし、Xへは自分で貼り付け",
@@ -13469,7 +13483,8 @@
       "点击 GMXReply 图标 — Chrome 侧边栏会在任意标签页旁打开。",
       "当 gmxreply.com 在浏览器标签中打开时，已保存的 GM 和 GN 库会同步。",
       "点击某行的 Copy — 由你自行粘贴并发布到 X。无自动发帖。",
-      "登录使用网站 GMXReply 令牌或手动 connect — 仅有公开 handle 不够。"
+      "登录使用网站 GMXReply 令牌或手动 connect — 仅有公开 handle 不够。",
+      "权限：storage、侧边栏、仅 gmxreply.com 主机访问 — 无需 tabs，不访问 X 页面。"
     ],
     "ext_preview_popup_caption": "Chrome 侧边栏 — 复制已保存 GM/GN",
     "ext_preview_inline_caption": "在此复制，自行粘贴到 X",

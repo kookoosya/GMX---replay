@@ -242,12 +242,21 @@
   window.addEventListener("message", (event) => {
     try {
       if (!event || !event.data || event.data.type !== "GMX_SYNC_NOW") return;
+      const origin = String(event.origin || "");
+      if (origin && origin !== String(location.origin || "")) return;
       scheduleSync();
     } catch {}
   }, { passive: true });
 
-  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (!message || message.type !== "GMX_FORCE_SITE_SYNC") return undefined;
+    try {
+      const senderUrl = String(sender?.url || "");
+      if (senderUrl && !/^chrome-extension:\/\//i.test(senderUrl)) {
+        sendResponse({ ok: false, error: "forbidden_sender" });
+        return false;
+      }
+    } catch {}
     (async () => {
       const result = await runSyncOnce().catch((error) => ({ ok: false, error: String(error && error.message || error || 'sync_failed') }));
       try {

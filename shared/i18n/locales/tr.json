@@ -656,7 +656,8 @@
     "GMXReply simgesine tıkla — Chrome Yan Paneli herhangi bir sekmenin yanında açılır.",
     "Kayıtlı GM ve GN bankaları, gmxreply.com bir sekmede açıkken senkronize olur.",
     "Bir satırda Copy'ye bas — X'e kendin yapıştırıp paylaşırsın. Otomatik paylaşım yok.",
-    "Giriş, sitedeki GMXReply token'ını veya manuel connect'i kullanır — yalnızca public handle yetmez."
+    "Giriş, sitedeki GMXReply token'ını veya manuel connect'i kullanır — yalnızca public handle yetmez.",
+    "İzinler: storage, yan panel ve yalnızca gmxreply.com host erişimi — tabs yok, X sayfası erişimi yok."
   ],
   "ext_preview_popup_caption": "Chrome Yan Paneli — kayıtlı GM/GN kopyala",
   "ext_preview_inline_caption": "Burada kopyala, X'e kendin yapıştır",

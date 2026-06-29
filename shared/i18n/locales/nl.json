@@ -656,7 +656,8 @@
     "Klik het GMXReply-pictogram — het Chrome-zijpaneel opent naast elk tabblad.",
     "Opgeslagen GM- en GN-banken synchroniseren wanneer gmxreply.com open is in een tab.",
     "Tik op Copy — jij plakt en post zelf op X. Geen auto-post.",
-    "Login gebruikt je GMXReply-token van de site of handmatige connect — alleen een publieke handle is niet genoeg."
+    "Login gebruikt je GMXReply-token van de site of handmatige connect — alleen een publieke handle is niet genoeg.",
+    "Machtigingen: storage, zijpaneel en alleen gmxreply.com-hosttoegang — geen tabs, geen X-paginatoegang."
   ],
   "ext_preview_popup_caption": "Chrome-zijpaneel — opgeslagen GM/GN kopiëren",
   "ext_preview_inline_caption": "Kopieer hier, plak zelf op X",

@@ -656,7 +656,8 @@
     "GMXReply आइकन दबाएँ — Chrome Side Panel किसी भी टैब के बगल में खुलता है।",
     "सेव GM और GN बैंक तब सिंक होते हैं जब gmxreply.com टैब में खुला हो।",
     "किसी लाइन पर Copy दबाएँ — आप खुद X पर पेस्ट और पोस्ट करते हैं। कोई ऑटो-पोस्ट नहीं।",
-    "लॉगिन साइट के GMXReply टोकन या मैनुअल connect से होता है — सिर्फ public handle काफी नहीं।"
+    "लॉगिन साइट के GMXReply टोकन या मैनुअल connect से होता है — सिर्फ public handle काफी नहीं।",
+    "अनुमतियाँ: storage, Side Panel, और केवल gmxreply.com host access — कोई tabs नहीं, X पेज एक्सेस नहीं।"
   ],
   "ext_preview_popup_caption": "Chrome Side Panel — सेव GM/GN कॉपी",
   "ext_preview_inline_caption": "यहाँ कॉपी करें, X पर खुद पेस्ट करें",

@@ -656,7 +656,8 @@
     "Klik ikon GMXReply — Side Panel Chrome terbuka di samping tab mana pun.",
     "Bank GM dan GN tersimpan disinkronkan saat gmxreply.com terbuka di tab.",
     "Ketuk Copy pada baris — kamu sendiri yang tempel dan posting di X. Tanpa auto-post.",
-    "Login memakai token GMXReply dari situs atau connect manual — handle publik saja tidak cukup."
+    "Login memakai token GMXReply dari situs atau connect manual — handle publik saja tidak cukup.",
+    "Izin: storage, side panel, dan akses host gmxreply.com saja — tanpa tabs, tanpa akses halaman X."
   ],
   "ext_preview_popup_caption": "Side Panel Chrome — salin GM/GN tersimpan",
   "ext_preview_inline_caption": "Salin di sini, tempel di X sendiri",

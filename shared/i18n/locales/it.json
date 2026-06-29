@@ -656,7 +656,8 @@
     "Clicca l'icona GMXReply — si apre il pannello laterale Chrome accanto a qualsiasi scheda.",
     "I banchi GM e GN si sincronizzano quando gmxreply.com è aperto in una scheda.",
     "Tocca Copy — incolli e pubblichi su X da solo. Niente auto-post.",
-    "L'accesso usa il token GMXReply dal sito o connect manuale — un handle pubblico non basta."
+    "L'accesso usa il token GMXReply dal sito o connect manuale — un handle pubblico non basta.",
+    "Permessi: storage, pannello laterale e accesso host solo a gmxreply.com — niente tabs, niente accesso alla pagina X."
   ],
   "ext_preview_popup_caption": "Pannello laterale Chrome — copia GM/GN salvate",
   "ext_preview_inline_caption": "Copia qui, incolla su X da solo",

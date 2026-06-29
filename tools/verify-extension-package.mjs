@@ -31,13 +31,19 @@ if (!bg.includes("openPanelOnActionClick")) fail("background must open side pane
 if (bg.includes("maybeShowGotdToast")) fail("background must not schedule GOTD toasts");
 
 const sidepanel = read("sidepanel.js");
+if (!/host_permissions|gmxreply\.com/.test(read("manifest.json")) && sidepanel.includes("chrome.tabs.query")) {
+  fail("tabs.query for site sync requires gmxreply host_permissions");
+}
+if (/\btab\.(url|title|favIconUrl|pendingUrl)\b/.test(sidepanel)) {
+  fail("sidepanel must not read sensitive tab fields");
+}
 for (const needle of ["/api/generate", "/api/random-bulk", "insertText", "execCommand", "contentScript"]) {
   if (sidepanel.includes(needle)) fail(`sidepanel.js must not contain ${needle}`);
 }
 if (!sidepanel.includes("navigator.clipboard.writeText")) fail("sidepanel must copy via Clipboard API on user click");
 
 const perms = manifest.permissions || [];
-for (const banned of ["scripting", "activeTab", "webNavigation", "cookies", "clipboardRead", "history", "notifications", "alarms"]) {
+for (const banned of ["scripting", "activeTab", "webNavigation", "cookies", "clipboardRead", "history", "notifications", "alarms", "tabs"]) {
   if (perms.includes(banned)) fail(`unnecessary permission: ${banned}`);
 }
 for (const required of ["storage", "sidePanel"]) {

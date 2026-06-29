@@ -656,7 +656,8 @@
     "Clique no ícone GMXReply — o painel lateral do Chrome abre ao lado de qualquer aba.",
     "Bancos GM e GN sincronizam quando gmxreply.com está aberto em uma aba.",
     "Toque em Copy — você cola e publica no X. Sem auto-post.",
-    "Login usa seu token GMXReply do site ou connect manual — handle público não basta."
+    "Login usa seu token GMXReply do site ou connect manual — handle público não basta.",
+    "Permissões: storage, painel lateral e acesso host apenas a gmxreply.com — sem tabs nem acesso à página do X."
   ],
   "ext_preview_popup_caption": "Painel lateral Chrome — copiar GM/GN salvas",
   "ext_preview_inline_caption": "Copie aqui, cole no X você mesmo",

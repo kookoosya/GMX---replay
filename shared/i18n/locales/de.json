@@ -656,7 +656,8 @@
     "Klicke das GMXReply-Symbol — das Chrome Side Panel öffnet sich neben jedem Tab.",
     "Gespeicherte GM- und GN-Banken synchronisieren, wenn gmxreply.com in einem Tab offen ist.",
     "Tippe auf Copy — du fügst selbst in X ein und postest. Kein Auto-Posting.",
-    "Login nutzt deinen GMXReply-Token von der Website oder manuelles Connect — ein öffentlicher Handle reicht nicht."
+    "Login nutzt deinen GMXReply-Token von der Website oder manuelles Connect — ein öffentlicher Handle reicht nicht.",
+    "Berechtigungen: storage, Side Panel und nur gmxreply.com-Hostzugriff — kein tabs, kein X-Seitenzugriff."
   ],
   "ext_preview_popup_caption": "Chrome Side Panel — gespeicherte GM/GN kopieren",
   "ext_preview_inline_caption": "Hier kopieren, selbst in X einfügen",
