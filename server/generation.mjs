@@ -2,6 +2,11 @@
  * GM/GN reply generation engine (extracted from index.js).
  */
 import { normLang, getLocalizedBank, SUPPORTED_REPLY_LANGS } from "./generation-lang.mjs";
+import {
+  passesMinSubstance,
+  filterSubstantiveMinTemplates,
+  isThinMinTemplate,
+} from "./generation-min-substance.mjs";
 
 export function createGenerator(deps) {
   const { safeDb, db, nowIso, safeOptionalHistoryDb, sha256 } = deps;
@@ -703,11 +708,6 @@ function sanitizeSingle(text, mode, kind, lang = "en") {
     out = `${out} ${keep}`.trim();
   }
 
-  if (mode === "min") {
-    const parts = out.split(",").map((x) => String(x || "").trim()).filter(Boolean);
-    if (parts.length > 1) out = parts.slice(0, 1).join(", ");
-  }
-
   if (lang === "en") {
     out = out.replace(/\b(gm|gn)\s+(gm|gn)\b/gi, "$1");
     out = out.replace(/\b(morning)\s+(morning)\b/gi, "$1");
@@ -767,9 +767,21 @@ function composeReply(kind, mode, lang, style) {
   const code = normLang(lang) || "en";
   const bank = bankFor(kind, style, code);
   const modeKey = ["min", "mid", "max"].includes(String(mode || "").toLowerCase()) ? String(mode).toLowerCase() : "mid";
-  const templates = Array.isArray(bank[modeKey]) && bank[modeKey].length ? bank[modeKey] : bank.mid;
-  const template = pick(templates);
-  const rendered = renderTemplate(template, bank, kind);
+  let templates = Array.isArray(bank[modeKey]) && bank[modeKey].length ? bank[modeKey] : bank.mid;
+  if (modeKey === "min") templates = filterSubstantiveMinTemplates(templates);
+  const attempts = modeKey === "min" ? 20 : 1;
+  let last = "";
+  for (let i = 0; i < attempts; i++) {
+    const template = pick(templates);
+    const rendered = renderTemplate(template, bank, kind);
+    const out = applyStyle(rendered, style, kind, modeKey, code);
+    last = out;
+    if (modeKey !== "min" || passesMinSubstance(out, kind, code, style)) return out;
+  }
+  if (last && passesMinSubstance(last, kind, code, style)) return last;
+  const fallbackTpl =
+    templates.find((t) => String(t).includes(",") && !isThinMinTemplate(t)) || templates[0];
+  const rendered = renderTemplate(fallbackTpl, bank, kind);
   return applyStyle(rendered, style, kind, modeKey, code);
 }
 
@@ -1008,6 +1020,7 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
       tries++;
       const candidate = composeReply(kind, mode, lang, style);
       if (!candidate || !passesModeProfile(candidate, mode)) continue;
+      if (mode === "min" && kind === "gm" && !passesMinSubstance(candidate, kind, lang, style)) continue;
       const fp = shapeFingerprint(candidate, kind);
       if (!fp) continue;
       if (!allowHistory && (recent.has(candidate) || (!relaxHistoryShape && (recentShapes.has(fp) || recentShapeList.some((shape) => isNearDuplicateShape(shape, fp)))))) continue;
@@ -1056,6 +1069,7 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
       emergencyTries++;
       const candidate = composeReply(kind, mode, lang, style);
       if (!candidate) continue;
+      if (mode === "min" && kind === "gm" && !passesMinSubstance(candidate, kind, lang, style)) continue;
       const fp = shapeFingerprint(candidate, kind) || candidate.toLowerCase();
       if (seenText.has(candidate)) continue;
       seenText.add(candidate);
@@ -1117,6 +1131,7 @@ function generateUnique(handle, kind, mode, lang, style, antiLastN = 20) {
     saveRecent,
     replyQualityScore,
     passesModeProfile,
+    passesMinSubstance,
     bankFor,
   };
 }
