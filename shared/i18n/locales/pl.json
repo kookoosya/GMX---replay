@@ -124,7 +124,7 @@
   "gm_saved_label": "Zapisane linie (strona)",
   "gm_limits_note": "Free wystarczy, żeby wszystko przetestować. Pro usuwa limity i odblokowuje wszystkie motywy/style.",
   "gn_limits_title": "Limity Free (na zawsze)",
-  "gn_daily_label": "Dzienna generacja GN (rozszerzenie)",
+  "gn_daily_label": "Kredyty generacji (GM+GN wspólne)",
   "gn_saved_label": "Zapisane linie (strona)",
   "gn_limits_note": "Free wystarczy, żeby wszystko przetestować. Pro usuwa limity i odblokowuje wszystkie motywy/style.",
   "themes_unlocked_label": "Odblokowane motywy",
@@ -409,7 +409,7 @@
     "<b>Czysty widok</b> oczyszcza widoczny bank GN. <b>Wyczyść WSZYSTKIE</b> czyści wszystkie zapisane linie GN dla tej sekcji.",
     "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
-  "gn_desc": "Krótkie nocne odpowiedzi — edytujesz i wklejasz sam. Jedna zapisana baza; Free ma limit wierszy.",
+  "gn_desc": "Krótkie nocne odpowiedzi GN na X. Wybierz ton i język odpowiedzi, naciśnij Quick 1, kopiuj lub zapisuj linie. Free: 50 kredytów generacji na całe życie (GM+GN wspólne).",
   "ref_desc": "Polecenia: udostępnij link. Potwierdzony = połączony, Aktywny = użył produktu, Uprawniony = max(aktywni, przeniesienie). Bonus: +10/dzień na 20 uprawnionych (+12 przy 50+).",
   "wallet_desc": "Upgrade Pro: nielimitowane dzienne linie GM/GN + cała kosmetyka (motywy, style, skórki i tapety rozszerzenia) + wszystkie gry Arcade. Płatność w Solana: SOL / USDC / USDT. Auto-weryfikacja on-chain.",
   "w_pay_desc": "Portfel odbiorcy pojawi się po wybraniu planu.",
@@ -555,9 +555,9 @@
   "gmPasteAdd": "Wklej i dodaj",
   "gnViewGlobal": "Global list",
   "gnViewLang": "Language list",
-  "gnRand1": "Random 1",
-  "gnRand10": "Random 10",
-  "gnRand70": "Random 70",
+  "gnRand1": "Quick 1",
+  "gnRand10": "Batch 10",
+  "gnRand70": "Batch 10",
   "gnAddLine": "+ Add line",
   "gnClear": "Clear view",
   "gnPasteAdd": "Paste & add",
@@ -873,5 +873,6 @@
   "ref_badge_next_html": "Następna odznaka przy <b>{n}</b> uprawnionych — {tier}",
   "ref_badge_toast_html": "Nowa odznaka: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Wszystkie odznaki promotora odblokowane",
-  "locked_pack": "Pakiet zablokowany. Potrzebny Pro lub polecenia."
+  "locked_pack": "Pakiet zablokowany. Potrzebny Pro lub polecenia.",
+  "gn_lang": "Reply language"
 }

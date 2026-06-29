@@ -124,7 +124,7 @@
   "gm_saved_label": "Saved lines (site)",
   "gm_limits_note": "Free is enough to try everything. Pro removes caps + unlocks all themes/styles.",
   "gn_limits_title": "Free limits (forever)",
-  "gn_daily_label": "Daily generation (extension)",
+  "gn_daily_label": "Generation credits (GM+GN shared)",
   "gn_saved_label": "Saved lines (site)",
   "gn_limits_note": "Free is enough to try everything. Pro removes caps + unlocks all themes/styles.",
   "themes_unlocked_label": "Themes unlocked",
@@ -398,7 +398,7 @@
     "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "How to use GN",
-  "gn_right_desc": "Build short English night replies to someone else’s post. Keep them calm, human, and easy to paste.",
+  "gn_right_desc": "Build short night replies to someone else's post. Keep them calm, human, and easy to paste.",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
     "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -409,7 +409,7 @@
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
     "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
-  "gn_desc": "Short night replies you edit and paste yourself. One saved bank for this section; Free has a saved-line cap.",
+  "gn_desc": "Build short night replies for X. Pick a tone and reply language, tap Quick 1, then copy or save lines you like. Free includes 50 lifetime generation credits (GM+GN shared).",
   "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
   "wallet_desc": "Upgrade Pro: unlimited daily GM/GN lines + unlock all cosmetics (Themes, Styles, Extension skins & wallpapers) + all Arcade games. Pay on Solana with SOL / USDC / USDT. Auto-verified on-chain.",
   "w_pay_desc": "Select a plan to enable payment.",
@@ -464,7 +464,7 @@
   "mobile_nav_more": "More",
   "mobile_nav_arcade": "Arcade",
   "gm_swipe_hint": "Swipe left or right to switch between GM and GN",
-  "gnControlsHelp": "Quick tone sets size + style + preset in one click. Ctrl+Enter = Batch 10.",
+  "gnControlsHelp": "Quick tone sets size + style + preset in one click. Quick 1 = one line; Batch 10 = ten lines.",
   "pm_title": "Prediction Market",
   "pm_desc": "Preview: live bot signals and external market feeds are not connected yet. After launch, this tab is meant for a small daily batch of directional context cards — not financial advice.",
   "pm_pro_badge": "Private API feed",
@@ -555,9 +555,9 @@
   "gmPasteAdd": "Paste & add",
   "gnViewGlobal": "Global list",
   "gnViewLang": "Language list",
-  "gnRand1": "Random 1",
-  "gnRand10": "Random 10",
-  "gnRand70": "Random 70",
+  "gnRand1": "Quick 1",
+  "gnRand10": "Batch 10",
+  "gnRand70": "Batch 10",
   "gnAddLine": "+ Add line",
   "gnClear": "Clear view",
   "gnPasteAdd": "Paste & add",
@@ -873,5 +873,6 @@
   "ref_badge_next_html": "Next badge at <b>{n}</b> eligible — {tier}",
   "ref_badge_toast_html": "New badge unlocked: <b>{tier}</b>",
   "ref_badge_all_unlocked": "All promoter badges unlocked",
-  "locked_pack": "Pack is locked. Upgrade to Pro or unlock via referrals."
+  "locked_pack": "Pack is locked. Upgrade to Pro or unlock via referrals.",
+  "gn_lang": "Reply language"
 }

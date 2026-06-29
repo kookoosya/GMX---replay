@@ -124,7 +124,7 @@
   "gm_saved_label": "Líneas guardadas (sitio)",
   "gm_limits_note": "Free es suficiente para probar todo. Pro quita límites y desbloquea todos los temas/estilos.",
   "gn_limits_title": "Límites Free (para siempre)",
-  "gn_daily_label": "Generación diaria GN (extensión)",
+  "gn_daily_label": "Créditos de generación (GM+GN compartidos)",
   "gn_saved_label": "Líneas guardadas (sitio)",
   "gn_limits_note": "Free es suficiente para probar todo. Pro quita límites y desbloquea todos los temas/estilos.",
   "themes_unlocked_label": "Temas desbloqueados",
@@ -398,7 +398,7 @@
     "El límite gratuito cuenta en todo el banco de GM. Si llegas a 50/50, las nuevas líneas generadas reemplazan a las antiguas (la edición es ilimitada)."
   ],
   "gn_right": "Cómo usar GN",
-  "gn_right_desc": "Respuestas GN cortas por la noche — calmadas, humanas, fáciles de pegar.",
+  "gn_right_desc": "Respuestas nocturnas cortas al post de otro. Calmas, humanas y fáciles de pegar.",
   "gn_right_list": [
     "<b>Este banco</b>: un banco GN guardado para esta sección. Sin división de idioma oculta.",
     "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -409,7 +409,7 @@
     "<b>La vista clara</b> borra el banco de GN visible. <b>Borrar TODO</b> borra todas las líneas GN guardadas para esta sección.",
     "El límite gratuito es de 50 líneas guardadas en total para el banco GN. Si llegas a 50/50, las nuevas líneas generadas reemplazan a las más antiguas. La edición es ilimitada."
   ],
-  "gn_desc": "Respuestas nocturnas cortas que editas y pegas tú mismo. Un banco guardado para esta sección; Gratis tiene un límite de línea guardada.",
+  "gn_desc": "Respuestas nocturnas cortas para X. Elige tono e idioma de respuesta, pulsa Quick 1 y copia o guarda líneas. Free: 50 créditos de generación de por vida (GM+GN compartidos).",
   "ref_desc": "Referidos: comparte tu enlace. Confirmado = conectado, Activo = usó el producto, Elegible = max(activos, arrastre). Bono: +10/día por cada 20 elegibles (+12 con 50+).",
   "wallet_desc": "Upgrade Pro: líneas GM/GN diarias ilimitadas + todos los cosméticos (temas, estilos, skins y wallpapers de extensión) + todos los juegos del Arcade. Pago en Solana con SOL / USDC / USDT. Verificación automática on-chain.",
   "w_pay_desc": "La wallet receptora aparecerá después de elegir un plan.",
@@ -555,9 +555,9 @@
   "gmPasteAdd": "Paste & add",
   "gnViewGlobal": "Global list",
   "gnViewLang": "Language list",
-  "gnRand1": "Random 1",
-  "gnRand10": "Random 10",
-  "gnRand70": "Random 70",
+  "gnRand1": "Quick 1",
+  "gnRand10": "Batch 10",
+  "gnRand70": "Batch 10",
   "gnAddLine": "+ Add line",
   "gnClear": "Clear view",
   "gnPasteAdd": "Paste & add",
@@ -873,5 +873,6 @@
   "ref_badge_next_html": "Próxima insignia con <b>{n}</b> elegibles — {tier}",
   "ref_badge_toast_html": "Nueva insignia: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Todas las insignias de promotor desbloqueadas",
-  "locked_pack": "Pack bloqueado. Necesitas Pro o referidos."
+  "locked_pack": "Pack bloqueado. Necesitas Pro o referidos.",
+  "gn_lang": "Reply language"
 }

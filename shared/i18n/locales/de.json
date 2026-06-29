@@ -124,7 +124,7 @@
   "gm_saved_label": "Gespeicherte Zeilen (Site)",
   "gm_limits_note": "Free reicht zum Testen. Pro entfernt Caps und schaltet alle Themes/Stile frei.",
   "gn_limits_title": "Free-Limits (für immer)",
-  "gn_daily_label": "Tägliche GN-Generierung (Extension)",
+  "gn_daily_label": "Generierungs-Credits (GM+GN gemeinsam)",
   "gn_saved_label": "Gespeicherte Zeilen (Site)",
   "gn_limits_note": "Free reicht zum Testen. Pro entfernt Caps und schaltet alle Themes/Stile frei.",
   "themes_unlocked_label": "Themes freigeschaltet",
@@ -409,7 +409,7 @@
     "<b>Freie Sicht</b> löscht die sichtbare GN-Bank. <b>Alle löschen löscht ALLE</b> gespeicherten GN-Zeilen für diesen Abschnitt.",
     "Die freie Obergrenze beträgt insgesamt 70 gespeicherte Zeilen für die GN-Bank. Wenn Sie 50/50 erreichen, ersetzen neue generierte Linien ältere. Die Bearbeitung ist unbegrenzt."
   ],
-  "gn_desc": "Kurze Nachtantworten, die Sie selbst bearbeiten und einfügen. Eine gespeicherte Bank für diesen Abschnitt; Free hat eine Begrenzung für gespeicherte Zeilen.",
+  "gn_desc": "Kurze Nachtantworten für X. Ton und Antwortsprache wählen, Quick 1 tippen, Zeilen kopieren oder speichern. Free: 50 Generierungs-Credits lebenslang (GM+GN gemeinsam).",
   "ref_desc": "Weiterempfehlungen: Teile deinen Link. Bestätigt = verbunden, Aktiv = verwendet, Berechtigt = max(aktiv, Übertrag). Bonus: +10/Tag pro 20 teilnahmeberechtigten Personen (+12 bei 50+).",
   "wallet_desc": "Pro-Upgrade: unbegrenzte tägliche GM/GN-Zeilen + alle Kosmetik (Themes, Styles, Extension-Skins & Wallpapers) + alle Arcade-Spiele. Zahlung auf Solana mit SOL / USDC / USDT. Auto-Verifizierung on-chain.",
   "w_pay_desc": "Empfänger-Wallet erscheint nach Plan-Auswahl.",
@@ -555,9 +555,9 @@
   "gmPasteAdd": "Paste & add",
   "gnViewGlobal": "Global list",
   "gnViewLang": "Language list",
-  "gnRand1": "Random 1",
-  "gnRand10": "Random 10",
-  "gnRand70": "Random 70",
+  "gnRand1": "Quick 1",
+  "gnRand10": "Batch 10",
+  "gnRand70": "Batch 10",
   "gnAddLine": "+ Add line",
   "gnClear": "Clear view",
   "gnPasteAdd": "Paste & add",
@@ -873,5 +873,6 @@
   "ref_badge_next_html": "Nächstes Abzeichen bei <b>{n}</b> berechtigten — {tier}",
   "ref_badge_toast_html": "Neues Abzeichen: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Alle Promoter-Abzeichen freigeschaltet",
-  "locked_pack": "Paket gesperrt. Pro oder Referrals nötig."
+  "locked_pack": "Paket gesperrt. Pro oder Referrals nötig.",
+  "gn_lang": "Reply language"
 }

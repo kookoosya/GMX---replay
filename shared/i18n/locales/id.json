@@ -124,7 +124,7 @@
   "gm_saved_label": "Baris tersimpan (situs)",
   "gm_limits_note": "Free cukup untuk mencoba semuanya. Pro menghapus batas dan membuka semua tema/gaya.",
   "gn_limits_title": "Batas Free (selamanya)",
-  "gn_daily_label": "Generasi GN harian (ekstensi)",
+  "gn_daily_label": "Kredit generasi (GM+GN bersama)",
   "gn_saved_label": "Baris tersimpan (situs)",
   "gn_limits_note": "Free cukup untuk mencoba semuanya. Pro menghapus batas dan membuka semua tema/gaya.",
   "themes_unlocked_label": "Tema terbuka",
@@ -409,7 +409,7 @@
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
     "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
-  "gn_desc": "Balasan malam singkat — Anda edit dan tempel sendiri. Satu bank tersimpan; Free punya batas baris.",
+  "gn_desc": "Balasan malam singkat untuk X. Pilih nada dan bahasa balasan, ketuk Quick 1, salin atau simpan baris. Free: 50 kredit generasi seumur hidup (GM+GN bersama).",
   "ref_desc": "Referral: bagikan tautan Anda. Terkonfirmasi = terhubung, Aktif = digunakan, Memenuhi syarat = max(aktif, carry-over). Bonus: +10/hari per 20 memenuhi syarat (+12 pada 50+).",
   "wallet_desc": "Upgrade Pro: baris GM/GN harian tanpa batas + semua kosmetik (tema, style, skin & wallpaper ekstensi) + semua game Arcade. Bayar di Solana dengan SOL / USDC / USDT. Verifikasi otomatis on-chain.",
   "w_pay_desc": "Wallet penerima muncul setelah memilih plan.",
@@ -555,9 +555,9 @@
   "gmPasteAdd": "Tempel & tambah",
   "gnViewGlobal": "Global list",
   "gnViewLang": "Language list",
-  "gnRand1": "Random 1",
-  "gnRand10": "Random 10",
-  "gnRand70": "Random 70",
+  "gnRand1": "Quick 1",
+  "gnRand10": "Batch 10",
+  "gnRand70": "Batch 10",
   "gnAddLine": "+ Add line",
   "gnClear": "Clear view",
   "gnPasteAdd": "Paste & add",
@@ -873,5 +873,6 @@
   "ref_badge_next_html": "Lencana berikutnya pada <b>{n}</b> eligible — {tier}",
   "ref_badge_toast_html": "Lencana baru: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Semua lencana promotor terbuka",
-  "locked_pack": "Paket terkunci. Butuh Pro atau referral."
+  "locked_pack": "Paket terkunci. Butuh Pro atau referral.",
+  "gn_lang": "Reply language"
 }

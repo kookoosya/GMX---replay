@@ -127,7 +127,7 @@
     "gm_saved_label": "Saved lines (site)",
     "gm_limits_note": "Free is enough to try everything. Pro removes caps + unlocks all themes/styles.",
     "gn_limits_title": "Free limits (forever)",
-    "gn_daily_label": "Daily generation (extension)",
+    "gn_daily_label": "Generation credits (GM+GN shared)",
     "gn_saved_label": "Saved lines (site)",
     "gn_limits_note": "Free is enough to try everything. Pro removes caps + unlocks all themes/styles.",
     "themes_unlocked_label": "Themes unlocked",
@@ -401,7 +401,7 @@
       "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "How to use GN",
-    "gn_right_desc": "Build short English night replies to someone else’s post. Keep them calm, human, and easy to paste.",
+    "gn_right_desc": "Build short night replies to someone else's post. Keep them calm, human, and easy to paste.",
     "gn_right_list": [
       "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
       "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -412,7 +412,7 @@
       "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
       "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
     ],
-    "gn_desc": "Short night replies you edit and paste yourself. One saved bank for this section; Free has a saved-line cap.",
+    "gn_desc": "Build short night replies for X. Pick a tone and reply language, tap Quick 1, then copy or save lines you like. Free includes 50 lifetime generation credits (GM+GN shared).",
     "ref_desc": "Referrals: share your link. Confirmed = connected, Active = used, Eligible = max(active, carry-over). Bonus: +10/day per 20 eligible (+12 at 50+).",
     "wallet_desc": "Upgrade Pro: unlimited daily GM/GN lines + unlock all cosmetics (Themes, Styles, Extension skins & wallpapers) + all Arcade games. Pay on Solana with SOL / USDC / USDT. Auto-verified on-chain.",
     "w_pay_desc": "Select a plan to enable payment.",
@@ -467,7 +467,7 @@
     "mobile_nav_more": "More",
     "mobile_nav_arcade": "Arcade",
     "gm_swipe_hint": "Swipe left or right to switch between GM and GN",
-    "gnControlsHelp": "Quick tone sets size + style + preset in one click. Ctrl+Enter = Batch 10.",
+    "gnControlsHelp": "Quick tone sets size + style + preset in one click. Quick 1 = one line; Batch 10 = ten lines.",
     "pm_title": "Prediction Market",
     "pm_desc": "Preview: live bot signals and external market feeds are not connected yet. After launch, this tab is meant for a small daily batch of directional context cards — not financial advice.",
     "pm_pro_badge": "Private API feed",
@@ -558,9 +558,9 @@
     "gmPasteAdd": "Paste & add",
     "gnViewGlobal": "Global list",
     "gnViewLang": "Language list",
-    "gnRand1": "Random 1",
-    "gnRand10": "Random 10",
-    "gnRand70": "Random 70",
+    "gnRand1": "Quick 1",
+    "gnRand10": "Batch 10",
+    "gnRand70": "Batch 10",
     "gnAddLine": "+ Add line",
     "gnClear": "Clear view",
     "gnPasteAdd": "Paste & add",
@@ -876,7 +876,8 @@
     "ref_badge_next_html": "Next badge at <b>{n}</b> eligible — {tier}",
     "ref_badge_toast_html": "New badge unlocked: <b>{tier}</b>",
     "ref_badge_all_unlocked": "All promoter badges unlocked",
-    "locked_pack": "Pack is locked. Upgrade to Pro or unlock via referrals."
+    "locked_pack": "Pack is locked. Upgrade to Pro or unlock via referrals.",
+    "gn_lang": "Reply language"
   },
   "de": {
     "plan_compare_btn": "Vergleichen",
@@ -1004,7 +1005,7 @@
     "gm_saved_label": "Gespeicherte Zeilen (Site)",
     "gm_limits_note": "Free reicht zum Testen. Pro entfernt Caps und schaltet alle Themes/Stile frei.",
     "gn_limits_title": "Free-Limits (für immer)",
-    "gn_daily_label": "Tägliche GN-Generierung (Extension)",
+    "gn_daily_label": "Generierungs-Credits (GM+GN gemeinsam)",
     "gn_saved_label": "Gespeicherte Zeilen (Site)",
     "gn_limits_note": "Free reicht zum Testen. Pro entfernt Caps und schaltet alle Themes/Stile frei.",
     "themes_unlocked_label": "Themes freigeschaltet",
@@ -1289,7 +1290,7 @@
       "<b>Freie Sicht</b> löscht die sichtbare GN-Bank. <b>Alle löschen löscht ALLE</b> gespeicherten GN-Zeilen für diesen Abschnitt.",
       "Die freie Obergrenze beträgt insgesamt 70 gespeicherte Zeilen für die GN-Bank. Wenn Sie 50/50 erreichen, ersetzen neue generierte Linien ältere. Die Bearbeitung ist unbegrenzt."
     ],
-    "gn_desc": "Kurze Nachtantworten, die Sie selbst bearbeiten und einfügen. Eine gespeicherte Bank für diesen Abschnitt; Free hat eine Begrenzung für gespeicherte Zeilen.",
+    "gn_desc": "Kurze Nachtantworten für X. Ton und Antwortsprache wählen, Quick 1 tippen, Zeilen kopieren oder speichern. Free: 50 Generierungs-Credits lebenslang (GM+GN gemeinsam).",
     "ref_desc": "Weiterempfehlungen: Teile deinen Link. Bestätigt = verbunden, Aktiv = verwendet, Berechtigt = max(aktiv, Übertrag). Bonus: +10/Tag pro 20 teilnahmeberechtigten Personen (+12 bei 50+).",
     "wallet_desc": "Pro-Upgrade: unbegrenzte tägliche GM/GN-Zeilen + alle Kosmetik (Themes, Styles, Extension-Skins & Wallpapers) + alle Arcade-Spiele. Zahlung auf Solana mit SOL / USDC / USDT. Auto-Verifizierung on-chain.",
     "w_pay_desc": "Empfänger-Wallet erscheint nach Plan-Auswahl.",
@@ -1435,9 +1436,9 @@
     "gmPasteAdd": "Paste & add",
     "gnViewGlobal": "Global list",
     "gnViewLang": "Language list",
-    "gnRand1": "Random 1",
-    "gnRand10": "Random 10",
-    "gnRand70": "Random 70",
+    "gnRand1": "Quick 1",
+    "gnRand10": "Batch 10",
+    "gnRand70": "Batch 10",
     "gnAddLine": "+ Add line",
     "gnClear": "Clear view",
     "gnPasteAdd": "Paste & add",
@@ -1753,7 +1754,8 @@
     "ref_badge_next_html": "Nächstes Abzeichen bei <b>{n}</b> berechtigten — {tier}",
     "ref_badge_toast_html": "Neues Abzeichen: <b>{tier}</b>",
     "ref_badge_all_unlocked": "Alle Promoter-Abzeichen freigeschaltet",
-    "locked_pack": "Paket gesperrt. Pro oder Referrals nötig."
+    "locked_pack": "Paket gesperrt. Pro oder Referrals nötig.",
+    "gn_lang": "Reply language"
   },
   "fr": {
     "plan_compare_btn": "Comparer",
@@ -1881,7 +1883,7 @@
     "gm_saved_label": "Lignes enregistrées (site)",
     "gm_limits_note": "Free suffit pour tout essayer. Pro enlève les limites et débloque tous les thèmes/styles.",
     "gn_limits_title": "Limites Free (pour toujours)",
-    "gn_daily_label": "Génération GN quotidienne (extension)",
+    "gn_daily_label": "Crédits de génération (GM+GN partagés)",
     "gn_saved_label": "Lignes enregistrées (site)",
     "gn_limits_note": "Free suffit pour tout essayer. Pro enlève les limites et débloque tous les thèmes/styles.",
     "themes_unlocked_label": "Thèmes débloqués",
@@ -2166,7 +2168,7 @@
       "<b>Une vue claire</b> efface la banque GN visible. <b>Effacer TOUT</b> efface toutes les lignes GN enregistrées pour cette section.",
       "Le plafond gratuit est de 50 lignes enregistrées au total pour la banque GN. Si vous atteignez 50/50, les nouvelles lignes générées remplacent les plus anciennes. La modification est illimitée."
     ],
-    "gn_desc": "Réponses courtes de nuit que vous modifiez et collez vous-même. Une banque enregistrée pour cette section ; Free a un plafond de ligne enregistrée.",
+    "gn_desc": "Réponses GN courtes pour la nuit sur X. Choisissez le ton et la langue de réponse, appuyez sur Quick 1, copiez ou enregistrez. Free : 50 crédits de génération à vie (GM+GN partagés).",
     "ref_desc": "Parrainages : partagez votre lien. Confirmé = connecté, Actif = utilisé, Eligible = max(actif, report). Bonus : +10/jour pour 20 éligibles (+12 à 50+).",
     "wallet_desc": "Upgrade Pro : lignes GM/GN quotidiennes illimitées + tous les cosmétiques (thèmes, styles, skins & wallpapers d’extension) + tous les jeux Arcade. Paiement sur Solana en SOL / USDC / USDT. Vérification automatique on‑chain.",
     "w_pay_desc": "Le wallet receveur s’affichera après la sélection d’un plan.",
@@ -2312,9 +2314,9 @@
     "gmPasteAdd": "Paste & add",
     "gnViewGlobal": "Global list",
     "gnViewLang": "Language list",
-    "gnRand1": "Random 1",
-    "gnRand10": "Random 10",
-    "gnRand70": "Random 70",
+    "gnRand1": "Quick 1",
+    "gnRand10": "Batch 10",
+    "gnRand70": "Batch 10",
     "gnAddLine": "+ Add line",
     "gnClear": "Clear view",
     "gnPasteAdd": "Paste & add",
@@ -2630,7 +2632,8 @@
     "ref_badge_next_html": "Prochain badge à <b>{n}</b> éligibles — {tier}",
     "ref_badge_toast_html": "Nouveau badge : <b>{tier}</b>",
     "ref_badge_all_unlocked": "Tous les badges promoteur débloqués",
-    "locked_pack": "Pack verrouillé. Pro ou parrainages requis."
+    "locked_pack": "Pack verrouillé. Pro ou parrainages requis.",
+    "gn_lang": "Reply language"
   },
   "es": {
     "plan_compare_btn": "Comparar",
@@ -2758,7 +2761,7 @@
     "gm_saved_label": "Líneas guardadas (sitio)",
     "gm_limits_note": "Free es suficiente para probar todo. Pro quita límites y desbloquea todos los temas/estilos.",
     "gn_limits_title": "Límites Free (para siempre)",
-    "gn_daily_label": "Generación diaria GN (extensión)",
+    "gn_daily_label": "Créditos de generación (GM+GN compartidos)",
     "gn_saved_label": "Líneas guardadas (sitio)",
     "gn_limits_note": "Free es suficiente para probar todo. Pro quita límites y desbloquea todos los temas/estilos.",
     "themes_unlocked_label": "Temas desbloqueados",
@@ -3032,7 +3035,7 @@
       "El límite gratuito cuenta en todo el banco de GM. Si llegas a 50/50, las nuevas líneas generadas reemplazan a las antiguas (la edición es ilimitada)."
     ],
     "gn_right": "Cómo usar GN",
-    "gn_right_desc": "Respuestas GN cortas por la noche — calmadas, humanas, fáciles de pegar.",
+    "gn_right_desc": "Respuestas nocturnas cortas al post de otro. Calmas, humanas y fáciles de pegar.",
     "gn_right_list": [
       "<b>Este banco</b>: un banco GN guardado para esta sección. Sin división de idioma oculta.",
       "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -3043,7 +3046,7 @@
       "<b>La vista clara</b> borra el banco de GN visible. <b>Borrar TODO</b> borra todas las líneas GN guardadas para esta sección.",
       "El límite gratuito es de 50 líneas guardadas en total para el banco GN. Si llegas a 50/50, las nuevas líneas generadas reemplazan a las más antiguas. La edición es ilimitada."
     ],
-    "gn_desc": "Respuestas nocturnas cortas que editas y pegas tú mismo. Un banco guardado para esta sección; Gratis tiene un límite de línea guardada.",
+    "gn_desc": "Respuestas nocturnas cortas para X. Elige tono e idioma de respuesta, pulsa Quick 1 y copia o guarda líneas. Free: 50 créditos de generación de por vida (GM+GN compartidos).",
     "ref_desc": "Referidos: comparte tu enlace. Confirmado = conectado, Activo = usó el producto, Elegible = max(activos, arrastre). Bono: +10/día por cada 20 elegibles (+12 con 50+).",
     "wallet_desc": "Upgrade Pro: líneas GM/GN diarias ilimitadas + todos los cosméticos (temas, estilos, skins y wallpapers de extensión) + todos los juegos del Arcade. Pago en Solana con SOL / USDC / USDT. Verificación automática on-chain.",
     "w_pay_desc": "La wallet receptora aparecerá después de elegir un plan.",
@@ -3189,9 +3192,9 @@
     "gmPasteAdd": "Paste & add",
     "gnViewGlobal": "Global list",
     "gnViewLang": "Language list",
-    "gnRand1": "Random 1",
-    "gnRand10": "Random 10",
-    "gnRand70": "Random 70",
+    "gnRand1": "Quick 1",
+    "gnRand10": "Batch 10",
+    "gnRand70": "Batch 10",
     "gnAddLine": "+ Add line",
     "gnClear": "Clear view",
     "gnPasteAdd": "Paste & add",
@@ -3507,7 +3510,8 @@
     "ref_badge_next_html": "Próxima insignia con <b>{n}</b> elegibles — {tier}",
     "ref_badge_toast_html": "Nueva insignia: <b>{tier}</b>",
     "ref_badge_all_unlocked": "Todas las insignias de promotor desbloqueadas",
-    "locked_pack": "Pack bloqueado. Necesitas Pro o referidos."
+    "locked_pack": "Pack bloqueado. Necesitas Pro o referidos.",
+    "gn_lang": "Reply language"
   },
   "pt": {
     "plan_compare_btn": "Comparar",
@@ -3635,7 +3639,7 @@
     "gm_saved_label": "Linhas salvas (site)",
     "gm_limits_note": "Free dá para testar tudo. Pro remove limites e desbloqueia todos temas/estilos.",
     "gn_limits_title": "Limites Free (para sempre)",
-    "gn_daily_label": "Geração diária GN (extensão)",
+    "gn_daily_label": "Créditos de geração (GM+GN compartilhados)",
     "gn_saved_label": "Linhas salvas (site)",
     "gn_limits_note": "Free dá para testar tudo. Pro remove limites e desbloqueia todos temas/estilos.",
     "themes_unlocked_label": "Temas desbloqueados",
@@ -3920,7 +3924,7 @@
       "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
       "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
     ],
-    "gn_desc": "Respostas noturnas curtas que você mesmo edita e cola. Um banco guardado para esta seção; Grátis tem um limite de linha salva.",
+    "gn_desc": "Respostas noturnas curtas para X. Escolha tom e idioma da resposta, toque Quick 1 e copie ou salve linhas. Free: 50 créditos de geração vitalícios (GM+GN compartilhados).",
     "ref_desc": "Indicações: compartilhe seu link. Confirmado = conectado, Ativo = usou o produto, Elegível = max(ativos, arraste). Bônus: +10/dia a cada 20 elegíveis (+12 com 50+).",
     "wallet_desc": "Upgrade Pro: linhas GM/GN diárias ilimitadas + todos os cosméticos (temas, estilos, skins e wallpapers da extensão) + todos os jogos do Arcade. Pagamento em Solana com SOL / USDC / USDT. Verificação automática on-chain.",
     "w_pay_desc": "A wallet receptora aparece depois de escolher um plano.",
@@ -4066,9 +4070,9 @@
     "gmPasteAdd": "Paste & add",
     "gnViewGlobal": "Global list",
     "gnViewLang": "Language list",
-    "gnRand1": "Random 1",
-    "gnRand10": "Random 10",
-    "gnRand70": "Random 70",
+    "gnRand1": "Quick 1",
+    "gnRand10": "Batch 10",
+    "gnRand70": "Batch 10",
     "gnAddLine": "+ Add line",
     "gnClear": "Clear view",
     "gnPasteAdd": "Paste & add",
@@ -4384,7 +4388,8 @@
     "ref_badge_next_html": "Próximo emblema com <b>{n}</b> elegíveis — {tier}",
     "ref_badge_toast_html": "Novo emblema: <b>{tier}</b>",
     "ref_badge_all_unlocked": "Todos os emblemas de promotor desbloqueados",
-    "locked_pack": "Pack bloqueado. Pro ou indicações necessários."
+    "locked_pack": "Pack bloqueado. Pro ou indicações necessários.",
+    "gn_lang": "Reply language"
   },
   "it": {
     "plan_compare_btn": "Confronta",
@@ -4512,7 +4517,7 @@
     "gm_saved_label": "Righe salvate (sito)",
     "gm_limits_note": "Free basta per provare tutto. Pro rimuove i limiti e sblocca tutti temi/stili.",
     "gn_limits_title": "Limiti Free (per sempre)",
-    "gn_daily_label": "Generazione GN giornaliera (estensione)",
+    "gn_daily_label": "Crediti di generazione (GM+GN condivisi)",
     "gn_saved_label": "Righe salvate (sito)",
     "gn_limits_note": "Free basta per provare tutto. Pro rimuove i limiti e sblocca tutti temi/stili.",
     "themes_unlocked_label": "Temi sbloccati",
@@ -4797,7 +4802,7 @@
       "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
       "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
     ],
-    "gn_desc": "Brevi risposte notturne — modifichi e incolli tu. Una banca salvata; Gratis ha limite righe.",
+    "gn_desc": "Risposte notturne brevi per X. Scegli tono e lingua della risposta, premi Quick 1, copia o salva le righe. Free: 50 crediti di generazione a vita (GM+GN condivisi).",
     "ref_desc": "Referral: condividi il link. Confermato = connesso, Attivo = usato, Idoneo = max(attivi, riporto). Bonus: +10/giorno ogni 20 idonei (+12 a 50+).",
     "wallet_desc": "Upgrade Pro: righe GM/GN giornaliere illimitate + tutti i cosmetici (temi, stili, skin e wallpaper dell’estensione) + tutti i giochi Arcade. Pagamento su Solana con SOL / USDC / USDT. Verifica automatica on‑chain.",
     "w_pay_desc": "Il wallet destinatario apparirà dopo la scelta del piano.",
@@ -4943,9 +4948,9 @@
     "gmPasteAdd": "Incolla e aggiungi",
     "gnViewGlobal": "Global list",
     "gnViewLang": "Language list",
-    "gnRand1": "Random 1",
-    "gnRand10": "Random 10",
-    "gnRand70": "Random 70",
+    "gnRand1": "Quick 1",
+    "gnRand10": "Batch 10",
+    "gnRand70": "Batch 10",
     "gnAddLine": "+ Add line",
     "gnClear": "Clear view",
     "gnPasteAdd": "Paste & add",
@@ -5261,7 +5266,8 @@
     "ref_badge_next_html": "Prossimo badge a <b>{n}</b> idonei — {tier}",
     "ref_badge_toast_html": "Nuovo badge: <b>{tier}</b>",
     "ref_badge_all_unlocked": "Tutti i badge promotore sbloccati",
-    "locked_pack": "Pack bloccato. Serve Pro o referral."
+    "locked_pack": "Pack bloccato. Serve Pro o referral.",
+    "gn_lang": "Reply language"
   },
   "nl": {
     "plan_compare_btn": "Vergelijken",
@@ -5389,7 +5395,7 @@
     "gm_saved_label": "Opgeslagen regels (site)",
     "gm_limits_note": "Free is genoeg om alles te proberen. Pro haalt limieten weg en ontgrendelt alle thema’s/stijlen.",
     "gn_limits_title": "Free-limieten (altijd)",
-    "gn_daily_label": "Dagelijkse GN-generatie (extensie)",
+    "gn_daily_label": "Generatiecredits (GM+GN gedeeld)",
     "gn_saved_label": "Opgeslagen regels (site)",
     "gn_limits_note": "Free is genoeg om alles te proberen. Pro haalt limieten weg en ontgrendelt alle thema’s/stijlen.",
     "themes_unlocked_label": "Thema’s ontgrendeld",
@@ -5674,7 +5680,7 @@
       "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
       "Gratis limiet is 70 opgeslagen regels in totaal voor de GN-bank. Als u 50/50 bereikt, vervangen nieuwe gegenereerde lijnen de oudere. Bewerken is onbeperkt."
     ],
-    "gn_desc": "Korte avondantwoorden — u bewerkt en plakt zelf. Eén opgeslagen bank; Gratis heeft een regellimiet.",
+    "gn_desc": "Korte avondantwoorden voor X. Kies toon en antwoordtaal, tik Quick 1 en kopieer of bewaar regels. Free: 50 generatiecredits levenslang (GM+GN gedeeld).",
     "ref_desc": "Referrals: deel uw link. Bevestigd = verbonden, Actief = gebruikt, In aanmerking = max(actief, carry-over). Bonus: +10/dag per 20 in aanmerking (+12 bij 50+).",
     "wallet_desc": "Pro-upgrade: onbeperkte dagelijkse GM/GN-regels + alle cosmetica (themes, styles, extension skins & wallpapers) + alle Arcade-games. Betaal op Solana met SOL / USDC / USDT. Auto-verificatie on-chain.",
     "w_pay_desc": "Receiver wallet verschijnt na het kiezen van een plan.",
@@ -5820,9 +5826,9 @@
     "gmPasteAdd": "Plakken en toevoegen",
     "gnViewGlobal": "Global list",
     "gnViewLang": "Language list",
-    "gnRand1": "Random 1",
-    "gnRand10": "Random 10",
-    "gnRand70": "Random 70",
+    "gnRand1": "Quick 1",
+    "gnRand10": "Batch 10",
+    "gnRand70": "Batch 10",
     "gnAddLine": "+ Add line",
     "gnClear": "Clear view",
     "gnPasteAdd": "Paste & add",
@@ -6138,7 +6144,8 @@
     "ref_badge_next_html": "Volgende badge bij <b>{n}</b> in aanmerking komenden — {tier}",
     "ref_badge_toast_html": "Nieuwe badge: <b>{tier}</b>",
     "ref_badge_all_unlocked": "Alle promoter-badges ontgrendeld",
-    "locked_pack": "Pack vergrendeld. Pro of referrals nodig."
+    "locked_pack": "Pack vergrendeld. Pro of referrals nodig.",
+    "gn_lang": "Reply language"
   },
   "tr": {
     "plan_compare_btn": "Karşılaştır",
@@ -6266,7 +6273,7 @@
     "gm_saved_label": "Kaydedilen satırlar (site)",
     "gm_limits_note": "Free her şeyi denemeye yeter. Pro limitleri kaldırır ve tüm tema/stilleri açar.",
     "gn_limits_title": "Free limitleri (kalıcı)",
-    "gn_daily_label": "Günlük GN üretimi (eklenti)",
+    "gn_daily_label": "Üretim kredileri (GM+GN paylaşımlı)",
     "gn_saved_label": "Kaydedilen satırlar (site)",
     "gn_limits_note": "Free her şeyi denemeye yeter. Pro limitleri kaldırır ve tüm tema/stilleri açar.",
     "themes_unlocked_label": "Açılan temalar",
@@ -6540,7 +6547,7 @@
       "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "GN nasıl kullanılır",
-    "gn_right_desc": "Kısa gece GN yanıtları — sakin, insani, yapıştırmaya hazır.",
+    "gn_right_desc": "Başkasının gönderisine kısa gece yanıtları. Sakin, insani ve yapıştırmaya hazır.",
     "gn_right_list": [
       "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
       "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -6551,7 +6558,7 @@
       "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
       "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
     ],
-    "gn_desc": "Kısa gece yanıtları — kendiniz düzenleyip yapıştırırsınız. Bu bölüm için tek kayıtlı banka; Free’de satır limiti vardır.",
+    "gn_desc": "X için kısa gece GN yanıtları. Ton ve yanıt dilini seçin, Quick 1'e dokunun, satırları kopyalayın veya kaydedin. Free: 50 ömür boyu üretim kredisi (GM+GN paylaşımlı).",
     "ref_desc": "Referanslar: bağlantınızı paylaşın. Onaylı = bağlı, Aktif = kullandı, Uygun = max(aktif, devir). Bonus: 20 uygun başına +10/gün (50+ için +12).",
     "wallet_desc": "Pro yükseltme: sınırsız günlük GM/GN satırı + tüm kozmetikler (temalar, stiller, extension skin & wallpaper) + tüm Arcade oyunları. Solana’da SOL / USDC / USDT ile öde. On-chain otomatik doğrulama.",
     "w_pay_desc": "Alıcı cüzdan plan seçildikten sonra görünür.",
@@ -6697,9 +6704,9 @@
     "gmPasteAdd": "Yapıştır & ekle",
     "gnViewGlobal": "Global list",
     "gnViewLang": "Language list",
-    "gnRand1": "Random 1",
-    "gnRand10": "Random 10",
-    "gnRand70": "Random 70",
+    "gnRand1": "Quick 1",
+    "gnRand10": "Batch 10",
+    "gnRand70": "Batch 10",
     "gnAddLine": "+ Add line",
     "gnClear": "Clear view",
     "gnPasteAdd": "Paste & add",
@@ -7015,7 +7022,8 @@
     "ref_badge_next_html": "Sonraki rozet <b>{n}</b> uygun kullanıcıda — {tier}",
     "ref_badge_toast_html": "Yeni rozet: <b>{tier}</b>",
     "ref_badge_all_unlocked": "Tüm promoter rozetleri açıldı",
-    "locked_pack": "Paket kilitli. Pro veya referans gerekir."
+    "locked_pack": "Paket kilitli. Pro veya referans gerekir.",
+    "gn_lang": "Reply language"
   },
   "pl": {
     "plan_compare_btn": "Porównaj",
@@ -7143,7 +7151,7 @@
     "gm_saved_label": "Zapisane linie (strona)",
     "gm_limits_note": "Free wystarczy, żeby wszystko przetestować. Pro usuwa limity i odblokowuje wszystkie motywy/style.",
     "gn_limits_title": "Limity Free (na zawsze)",
-    "gn_daily_label": "Dzienna generacja GN (rozszerzenie)",
+    "gn_daily_label": "Kredyty generacji (GM+GN wspólne)",
     "gn_saved_label": "Zapisane linie (strona)",
     "gn_limits_note": "Free wystarczy, żeby wszystko przetestować. Pro usuwa limity i odblokowuje wszystkie motywy/style.",
     "themes_unlocked_label": "Odblokowane motywy",
@@ -7428,7 +7436,7 @@
       "<b>Czysty widok</b> oczyszcza widoczny bank GN. <b>Wyczyść WSZYSTKIE</b> czyści wszystkie zapisane linie GN dla tej sekcji.",
       "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
     ],
-    "gn_desc": "Krótkie nocne odpowiedzi — edytujesz i wklejasz sam. Jedna zapisana baza; Free ma limit wierszy.",
+    "gn_desc": "Krótkie nocne odpowiedzi GN na X. Wybierz ton i język odpowiedzi, naciśnij Quick 1, kopiuj lub zapisuj linie. Free: 50 kredytów generacji na całe życie (GM+GN wspólne).",
     "ref_desc": "Polecenia: udostępnij link. Potwierdzony = połączony, Aktywny = użył produktu, Uprawniony = max(aktywni, przeniesienie). Bonus: +10/dzień na 20 uprawnionych (+12 przy 50+).",
     "wallet_desc": "Upgrade Pro: nielimitowane dzienne linie GM/GN + cała kosmetyka (motywy, style, skórki i tapety rozszerzenia) + wszystkie gry Arcade. Płatność w Solana: SOL / USDC / USDT. Auto-weryfikacja on-chain.",
     "w_pay_desc": "Portfel odbiorcy pojawi się po wybraniu planu.",
@@ -7574,9 +7582,9 @@
     "gmPasteAdd": "Wklej i dodaj",
     "gnViewGlobal": "Global list",
     "gnViewLang": "Language list",
-    "gnRand1": "Random 1",
-    "gnRand10": "Random 10",
-    "gnRand70": "Random 70",
+    "gnRand1": "Quick 1",
+    "gnRand10": "Batch 10",
+    "gnRand70": "Batch 10",
     "gnAddLine": "+ Add line",
     "gnClear": "Clear view",
     "gnPasteAdd": "Paste & add",
@@ -7892,7 +7900,8 @@
     "ref_badge_next_html": "Następna odznaka przy <b>{n}</b> uprawnionych — {tier}",
     "ref_badge_toast_html": "Nowa odznaka: <b>{tier}</b>",
     "ref_badge_all_unlocked": "Wszystkie odznaki promotora odblokowane",
-    "locked_pack": "Pakiet zablokowany. Potrzebny Pro lub polecenia."
+    "locked_pack": "Pakiet zablokowany. Potrzebny Pro lub polecenia.",
+    "gn_lang": "Reply language"
   },
   "id": {
     "plan_compare_btn": "Bandingkan",
@@ -8020,7 +8029,7 @@
     "gm_saved_label": "Baris tersimpan (situs)",
     "gm_limits_note": "Free cukup untuk mencoba semuanya. Pro menghapus batas dan membuka semua tema/gaya.",
     "gn_limits_title": "Batas Free (selamanya)",
-    "gn_daily_label": "Generasi GN harian (ekstensi)",
+    "gn_daily_label": "Kredit generasi (GM+GN bersama)",
     "gn_saved_label": "Baris tersimpan (situs)",
     "gn_limits_note": "Free cukup untuk mencoba semuanya. Pro menghapus batas dan membuka semua tema/gaya.",
     "themes_unlocked_label": "Tema terbuka",
@@ -8305,7 +8314,7 @@
       "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
       "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
     ],
-    "gn_desc": "Balasan malam singkat — Anda edit dan tempel sendiri. Satu bank tersimpan; Free punya batas baris.",
+    "gn_desc": "Balasan malam singkat untuk X. Pilih nada dan bahasa balasan, ketuk Quick 1, salin atau simpan baris. Free: 50 kredit generasi seumur hidup (GM+GN bersama).",
     "ref_desc": "Referral: bagikan tautan Anda. Terkonfirmasi = terhubung, Aktif = digunakan, Memenuhi syarat = max(aktif, carry-over). Bonus: +10/hari per 20 memenuhi syarat (+12 pada 50+).",
     "wallet_desc": "Upgrade Pro: baris GM/GN harian tanpa batas + semua kosmetik (tema, style, skin & wallpaper ekstensi) + semua game Arcade. Bayar di Solana dengan SOL / USDC / USDT. Verifikasi otomatis on-chain.",
     "w_pay_desc": "Wallet penerima muncul setelah memilih plan.",
@@ -8451,9 +8460,9 @@
     "gmPasteAdd": "Tempel & tambah",
     "gnViewGlobal": "Global list",
     "gnViewLang": "Language list",
-    "gnRand1": "Random 1",
-    "gnRand10": "Random 10",
-    "gnRand70": "Random 70",
+    "gnRand1": "Quick 1",
+    "gnRand10": "Batch 10",
+    "gnRand70": "Batch 10",
     "gnAddLine": "+ Add line",
     "gnClear": "Clear view",
     "gnPasteAdd": "Paste & add",
@@ -8769,7 +8778,8 @@
     "ref_badge_next_html": "Lencana berikutnya pada <b>{n}</b> eligible — {tier}",
     "ref_badge_toast_html": "Lencana baru: <b>{tier}</b>",
     "ref_badge_all_unlocked": "Semua lencana promotor terbuka",
-    "locked_pack": "Paket terkunci. Butuh Pro atau referral."
+    "locked_pack": "Paket terkunci. Butuh Pro atau referral.",
+    "gn_lang": "Reply language"
   },
   "ru": {
     "plan_compare_btn": "Сравнить",
@@ -8897,7 +8907,7 @@
     "gm_saved_label": "Сохранённые строки (сайт)",
     "gm_limits_note": "Free хватает, чтобы попробовать всё. Pro снимает лимиты и открывает все темы/стили.",
     "gn_limits_title": "Лимиты Free (навсегда)",
-    "gn_daily_label": "Дневная генерация GN (расширение)",
+    "gn_daily_label": "Кредиты генерации (GM+GN общие)",
     "gn_saved_label": "Сохранённые строки (сайт)",
     "gn_limits_note": "Free хватает, чтобы попробовать всё. Pro снимает лимиты и открывает все темы/стили.",
     "themes_unlocked_label": "Открыто тем",
@@ -9171,7 +9181,7 @@
       "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "Как использовать GN",
-    "gn_right_desc": "Короткие ночные ответы GN на чужой пост — спокойно, по-человечески, удобно вставлять.",
+    "gn_right_desc": "Короткие ночные ответы к чужому посту. Спокойные, человечные, готовые к вставке.",
     "gn_right_list": [
       "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
       "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -9182,7 +9192,7 @@
       "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
       "Free Cap - это 70 сохраненных строк для банка GN. Если вы нажмете 50/50, новые сгенерированные линии заменят старые. Редактирование не ограничено."
     ],
-    "gn_desc": "Короткие ночные ответы — вы сами редактируете и вставляете. Одна сохранённая база для раздела; в Free есть лимит строк.",
+    "gn_desc": "Короткие ночные ответы для X. Выберите тон и язык ответа, нажмите Quick 1, копируйте или сохраняйте строки. Free: 50 кредитов генерации на всё время (GM+GN общие).",
     "ref_desc": "Рефералы: делись ссылкой. Confirmed = подключился, Active = пользовался, Eligible = max(active, carry-over). Бонус: +10/день за 20 eligible.",
     "wallet_desc": "Апгрейд Pro: безлимит на строки GM/GN в день + вся косметика (темы, стили, скины и обои для расширения) + все игры Arcade. Оплата в Solana: SOL / USDC / USDT. Авто‑проверка on‑chain.",
     "w_pay_desc": "Кошелёк получателя появится после выбора плана.",
@@ -9328,9 +9338,9 @@
     "gmPasteAdd": "Вставить и добавить",
     "gnViewGlobal": "Глобально",
     "gnViewLang": "По языкам",
-    "gnRand1": "Рандом 1",
-    "gnRand10": "Рандом 10",
-    "gnRand70": "Рандом 70",
+    "gnRand1": "Quick 1",
+    "gnRand10": "Batch 10",
+    "gnRand70": "Batch 10",
     "gnAddLine": "+ Добавить строку",
     "gnClear": "Очистить вид",
     "gnPasteAdd": "Вставить и добавить",
@@ -9646,7 +9656,8 @@
     "ref_badge_next_html": "Следующий бейдж при <b>{n}</b> eligible — {tier}",
     "ref_badge_toast_html": "Новый бейдж: <b>{tier}</b>",
     "ref_badge_all_unlocked": "Все бейджи промоутера открыты",
-    "locked_pack": "Пак заблокирован. Нужен Pro или рефералы."
+    "locked_pack": "Пак заблокирован. Нужен Pro или рефералы.",
+    "gn_lang": "Reply language"
   },
   "uk": {
     "plan_compare_btn": "Порівняти",
@@ -9774,7 +9785,7 @@
     "gm_saved_label": "Збережені рядки (сайт)",
     "gm_limits_note": "Free достатньо, щоб спробувати все. Pro знімає ліміти й відкриває всі теми/стилі.",
     "gn_limits_title": "Ліміти Free (назавжди)",
-    "gn_daily_label": "Денна генерація GN (розширення)",
+    "gn_daily_label": "Кредити генерації (GM+GN спільні)",
     "gn_saved_label": "Збережені рядки (сайт)",
     "gn_limits_note": "Free достатньо, щоб спробувати все. Pro знімає ліміти й відкриває всі теми/стилі.",
     "themes_unlocked_label": "Відкрито тем",
@@ -10059,7 +10070,7 @@
       "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
       "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
     ],
-    "gn_desc": "Короткі нічні відповіді — ви самі редагуєте та вставляєте. Одна збережена база; у Free є ліміт рядків.",
+    "gn_desc": "Короткі нічні відповіді для X. Оберіть тон і мову відповіді, натисніть Quick 1, копіюйте або зберігайте рядки. Free: 50 кредитів генерації на все життя (GM+GN спільні).",
     "ref_desc": "Реферали: діліться посиланням. Підтверджено = підключено, Активний = використав продукт, Допущений = max(активні, перенос). Бонус: +10/день за кожні 20 допущених (+12 при 50+).",
     "wallet_desc": "Апгрейд Pro: безліміт на рядки GM/GN на день + вся косметика (теми, стилі, скіни та шпалери для розширення) + усі ігри Arcade. Оплата в Solana: SOL / USDC / USDT. Авто‑перевірка on‑chain.",
     "w_pay_desc": "Гаманець отримувача з’явиться після вибору плану.",
@@ -10205,9 +10216,9 @@
     "gmPasteAdd": "Вставити та додати",
     "gnViewGlobal": "Глобально",
     "gnViewLang": "За мовами",
-    "gnRand1": "Рандом 1",
-    "gnRand10": "Рандом 10",
-    "gnRand70": "Рандом 70",
+    "gnRand1": "Quick 1",
+    "gnRand10": "Batch 10",
+    "gnRand70": "Batch 10",
     "gnAddLine": "+ Додати рядок",
     "gnClear": "Очистити вигляд",
     "gnPasteAdd": "Вставити та додати",
@@ -10523,7 +10534,8 @@
     "ref_badge_next_html": "Наступний бейдж при <b>{n}</b> eligible — {tier}",
     "ref_badge_toast_html": "Новий бейдж: <b>{tier}</b>",
     "ref_badge_all_unlocked": "Усі бейджі промоутера відкриті",
-    "locked_pack": "Пак заблоковано. Потрібен Pro або реферали."
+    "locked_pack": "Пак заблоковано. Потрібен Pro або реферали.",
+    "gn_lang": "Reply language"
   },
   "hi": {
     "plan_compare_btn": "कम्पेयर करें",
@@ -10651,7 +10663,7 @@
     "gm_saved_label": "सेव की गई लाइनें (साइट)",
     "gm_limits_note": "Free सब कुछ आज़माने के लिए काफी है. Pro सीमाएँ हटाता है और सारे themes/styles खोल देता है.",
     "gn_limits_title": "Free सीमा (हमेशा)",
-    "gn_daily_label": "दैनिक GN जनरेशन (एक्सटेंशन)",
+    "gn_daily_label": "जनरेशन क्रेडिट (GM+GN साझा)",
     "gn_saved_label": "सेव की गई लाइनें (साइट)",
     "gn_limits_note": "Free सब कुछ आज़माने के लिए काफी है. Pro सीमाएँ हटाता है और सारे themes/styles खोल देता है.",
     "themes_unlocked_label": "अनलॉक हुए थीम",
@@ -10936,7 +10948,7 @@
       "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
       "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
     ],
-    "gn_desc": "छोटे रात के जवाब — आप खुद एडिट और पेस्ट करते हैं। एक सेव्ड बैंक; Free में लाइन सीमा।",
+    "gn_desc": "X के लिए छोटे रात के GN जवाब। टोन और जवाब की भाषा चुनें, Quick 1 दबाएँ, लाइनें कॉपी या सेव करें। Free: 50 जीवनभर जनरेशन क्रेडिट (GM+GN साझा)।",
     "ref_desc": "रेफरल: अपना लिंक साझा करें। पुष्टि = कनेक्ट, सक्रिय = उपयोग, योग्य = max(सक्रिय, कैरी-ओवर)। बोनस: 20 योग्य पर +10/दिन (50+ पर +12)।",
     "wallet_desc": "Pro अपग्रेड: अनलिमिटेड दैनिक GM/GN लाइन्स + सभी कॉस्मेटिक्स (थीम्स, स्टाइल्स, एक्सटेंशन स्किन्स और वॉलपेपर) + सभी Arcade गेम्स। Solana पर SOL / USDC / USDT से पे करें। ऑन-चेन ऑटो-वेरिफाइड।",
     "w_pay_desc": "पेमेंट सक्षम करने के लिए एक प्लान चुनें।",
@@ -11082,9 +11094,9 @@
     "gmPasteAdd": "Paste & add",
     "gnViewGlobal": "Global list",
     "gnViewLang": "Language list",
-    "gnRand1": "Random 1",
-    "gnRand10": "Random 10",
-    "gnRand70": "Random 70",
+    "gnRand1": "Quick 1",
+    "gnRand10": "Batch 10",
+    "gnRand70": "Batch 10",
     "gnAddLine": "+ Add line",
     "gnClear": "Clear view",
     "gnPasteAdd": "Paste & add",
@@ -11400,7 +11412,8 @@
     "ref_badge_next_html": "अगला बैज <b>{n}</b> योग्य पर — {tier}",
     "ref_badge_toast_html": "नया बैज: <b>{tier}</b>",
     "ref_badge_all_unlocked": "सभी प्रमोटर बैज अनलॉक",
-    "locked_pack": "पैक लॉक है। Pro या रेफरल चाहिए।"
+    "locked_pack": "पैक लॉक है। Pro या रेफरल चाहिए।",
+    "gn_lang": "Reply language"
   },
   "ja": {
     "plan_compare_btn": "比較",
@@ -11528,7 +11541,7 @@
     "gm_saved_label": "保存行（サイト）",
     "gm_limits_note": "Freeで全部試せる。Proは制限解除＋全テーマ/スタイル解放。",
     "gn_limits_title": "Free制限（ずっと）",
-    "gn_daily_label": "1日のGN生成（拡張機能）",
+    "gn_daily_label": "生成クレジット（GM+GN共有）",
     "gn_saved_label": "保存行（サイト）",
     "gn_limits_note": "Freeで全部試せる。Proは制限解除＋全テーマ/スタイル解放。",
     "themes_unlocked_label": "解放済みテーマ",
@@ -11802,7 +11815,7 @@
       "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "GN の使い方",
-    "gn_right_desc": "短い夜のGN返信 — 落ち着いて、人間味があり、貼りやすい。",
+    "gn_right_desc": "他人の投稿への短い夜の返信。落ち着いて、自然で、そのまま貼れる文に。",
     "gn_right_list": [
       "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
       "<b>ランダムな1/10/70は</b>新鮮なラインを追加します。最小滞在時間は短く、中間滞在時間はバランスが取れており、最大滞在時間はもう少し呼吸を長くすることができます。",
@@ -11813,7 +11826,7 @@
       "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
       "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
     ],
-    "gn_desc": "短い夜の返信 — 自分で編集して貼り付けます。このセクション用の保存バンクは1つ。Free には保存行上限があります。",
+    "gn_desc": "X向けの短い夜のGN返信。トーンと返信言語を選び、Quick 1で生成、コピーまたは保存。Free：生涯50生成クレジット（GM+GN共有）。",
     "ref_desc": "紹介: リンクを共有。確認済み = 接続、アクティブ = 利用、対象 = max(アクティブ, 繰越)。ボーナス: 対象20人ごとに +10/日（50+ で +12）。",
     "wallet_desc": "Proアップグレード：GM/GNの1日無制限 + すべてのコスメ（テーマ、スタイル、拡張スキン＆壁紙）+ Arcadeの全ゲーム。SolanaでSOL / USDC / USDT支払い。オンチェーン自動検証。",
     "w_pay_desc": "支払いを有効化するにはプランを選択してください。",
@@ -11959,9 +11972,9 @@
     "gmPasteAdd": "Paste & add",
     "gnViewGlobal": "Global list",
     "gnViewLang": "Language list",
-    "gnRand1": "Random 1",
-    "gnRand10": "Random 10",
-    "gnRand70": "Random 70",
+    "gnRand1": "Quick 1",
+    "gnRand10": "Batch 10",
+    "gnRand70": "Batch 10",
     "gnAddLine": "+ Add line",
     "gnClear": "Clear view",
     "gnPasteAdd": "Paste & add",
@@ -12277,7 +12290,8 @@
     "ref_badge_next_html": "次のバッジは<b>{n}</b>人の対象者で — {tier}",
     "ref_badge_toast_html": "新しいバッジ: <b>{tier}</b>",
     "ref_badge_all_unlocked": "すべてのプロモーターバッジを解放",
-    "locked_pack": "パックはロック中。Proまたは紹介が必要です。"
+    "locked_pack": "パックはロック中。Proまたは紹介が必要です。",
+    "gn_lang": "Reply language"
   },
   "zh": {
     "plan_compare_btn": "对比",
@@ -12405,7 +12419,7 @@
     "gm_saved_label": "已保存行（站点）",
     "gm_limits_note": "Free 足够试用全部。Pro 移除限制并解锁所有主题/风格。",
     "gn_limits_title": "Free 限制（永久）",
-    "gn_daily_label": "每日 GN 生成（扩展）",
+    "gn_daily_label": "生成额度（GM+GN 共享）",
     "gn_saved_label": "已保存行（站点）",
     "gn_limits_note": "Free 足够试用全部。Pro 移除限制并解锁所有主题/风格。",
     "themes_unlocked_label": "已解锁主题",
@@ -12679,7 +12693,7 @@
       "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
     ],
     "gn_right": "GN 使用方法",
-    "gn_right_desc": "简短的夜间 GN 回复 — 平静、人性化、便于粘贴。",
+    "gn_right_desc": "回复他人帖子的简短夜间回复。保持平静、自然、便于粘贴。",
     "gn_right_list": [
       "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
       "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -12690,7 +12704,7 @@
       "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
       "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
     ],
-    "gn_desc": "简短夜间回复 — 自行编辑并粘贴。本分区一个保存库；免费版有行数上限。",
+    "gn_desc": "为 X 生成简短夜间 GN 回复。选择语气与回复语言，点 Quick 1，然后复制或保存。Free：终身 50 次生成额度（GM+GN 共享）。",
     "ref_desc": "推荐：分享您的链接。已确认 = 已连接，活跃 = 已使用，符合条件 = max(活跃, 结转)。奖励：每 20 名符合条件 +10/天（50+ 为 +12）。",
     "wallet_desc": "升级 Pro：每日 GM/GN 行数不限 + 解锁全部外观（主题、样式、扩展皮肤与壁纸）+ 全部 Arcade 游戏。Solana 上用 SOL / USDC / USDT 支付。链上自动验证。",
     "w_pay_desc": "请选择一个套餐以启用付款。",
@@ -12836,9 +12850,9 @@
     "gmPasteAdd": "Paste & add",
     "gnViewGlobal": "Global list",
     "gnViewLang": "Language list",
-    "gnRand1": "Random 1",
-    "gnRand10": "Random 10",
-    "gnRand70": "Random 70",
+    "gnRand1": "Quick 1",
+    "gnRand10": "Batch 10",
+    "gnRand70": "Batch 10",
     "gnAddLine": "+ Add line",
     "gnClear": "Clear view",
     "gnPasteAdd": "Paste & add",
@@ -13154,7 +13168,8 @@
     "ref_badge_next_html": "下一枚徽章需<b>{n}</b>个符合条件 — {tier}",
     "ref_badge_toast_html": "新徽章：<b>{tier}</b>",
     "ref_badge_all_unlocked": "已解锁全部推广徽章",
-    "locked_pack": "包已锁定。需要 Pro 或推荐。"
+    "locked_pack": "包已锁定。需要 Pro 或推荐。",
+    "gn_lang": "Reply language"
   }
 };
   function clone(value){ return JSON.parse(JSON.stringify(value)); }

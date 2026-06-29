@@ -124,7 +124,7 @@
   "gm_saved_label": "Kaydedilen satırlar (site)",
   "gm_limits_note": "Free her şeyi denemeye yeter. Pro limitleri kaldırır ve tüm tema/stilleri açar.",
   "gn_limits_title": "Free limitleri (kalıcı)",
-  "gn_daily_label": "Günlük GN üretimi (eklenti)",
+  "gn_daily_label": "Üretim kredileri (GM+GN paylaşımlı)",
   "gn_saved_label": "Kaydedilen satırlar (site)",
   "gn_limits_note": "Free her şeyi denemeye yeter. Pro limitleri kaldırır ve tüm tema/stilleri açar.",
   "themes_unlocked_label": "Açılan temalar",
@@ -398,7 +398,7 @@
     "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "GN nasıl kullanılır",
-  "gn_right_desc": "Kısa gece GN yanıtları — sakin, insani, yapıştırmaya hazır.",
+  "gn_right_desc": "Başkasının gönderisine kısa gece yanıtları. Sakin, insani ve yapıştırmaya hazır.",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
     "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -409,7 +409,7 @@
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
     "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
-  "gn_desc": "Kısa gece yanıtları — kendiniz düzenleyip yapıştırırsınız. Bu bölüm için tek kayıtlı banka; Free’de satır limiti vardır.",
+  "gn_desc": "X için kısa gece GN yanıtları. Ton ve yanıt dilini seçin, Quick 1'e dokunun, satırları kopyalayın veya kaydedin. Free: 50 ömür boyu üretim kredisi (GM+GN paylaşımlı).",
   "ref_desc": "Referanslar: bağlantınızı paylaşın. Onaylı = bağlı, Aktif = kullandı, Uygun = max(aktif, devir). Bonus: 20 uygun başına +10/gün (50+ için +12).",
   "wallet_desc": "Pro yükseltme: sınırsız günlük GM/GN satırı + tüm kozmetikler (temalar, stiller, extension skin & wallpaper) + tüm Arcade oyunları. Solana’da SOL / USDC / USDT ile öde. On-chain otomatik doğrulama.",
   "w_pay_desc": "Alıcı cüzdan plan seçildikten sonra görünür.",
@@ -555,9 +555,9 @@
   "gmPasteAdd": "Yapıştır & ekle",
   "gnViewGlobal": "Global list",
   "gnViewLang": "Language list",
-  "gnRand1": "Random 1",
-  "gnRand10": "Random 10",
-  "gnRand70": "Random 70",
+  "gnRand1": "Quick 1",
+  "gnRand10": "Batch 10",
+  "gnRand70": "Batch 10",
   "gnAddLine": "+ Add line",
   "gnClear": "Clear view",
   "gnPasteAdd": "Paste & add",
@@ -873,5 +873,6 @@
   "ref_badge_next_html": "Sonraki rozet <b>{n}</b> uygun kullanıcıda — {tier}",
   "ref_badge_toast_html": "Yeni rozet: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Tüm promoter rozetleri açıldı",
-  "locked_pack": "Paket kilitli. Pro veya referans gerekir."
+  "locked_pack": "Paket kilitli. Pro veya referans gerekir.",
+  "gn_lang": "Reply language"
 }

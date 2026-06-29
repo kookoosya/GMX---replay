@@ -124,7 +124,7 @@
   "gm_saved_label": "保存行（サイト）",
   "gm_limits_note": "Freeで全部試せる。Proは制限解除＋全テーマ/スタイル解放。",
   "gn_limits_title": "Free制限（ずっと）",
-  "gn_daily_label": "1日のGN生成（拡張機能）",
+  "gn_daily_label": "生成クレジット（GM+GN共有）",
   "gn_saved_label": "保存行（サイト）",
   "gn_limits_note": "Freeで全部試せる。Proは制限解除＋全テーマ/スタイル解放。",
   "themes_unlocked_label": "解放済みテーマ",
@@ -398,7 +398,7 @@
     "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "GN の使い方",
-  "gn_right_desc": "短い夜のGN返信 — 落ち着いて、人間味があり、貼りやすい。",
+  "gn_right_desc": "他人の投稿への短い夜の返信。落ち着いて、自然で、そのまま貼れる文に。",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
     "<b>ランダムな1/10/70は</b>新鮮なラインを追加します。最小滞在時間は短く、中間滞在時間はバランスが取れており、最大滞在時間はもう少し呼吸を長くすることができます。",
@@ -409,7 +409,7 @@
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
     "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
-  "gn_desc": "短い夜の返信 — 自分で編集して貼り付けます。このセクション用の保存バンクは1つ。Free には保存行上限があります。",
+  "gn_desc": "X向けの短い夜のGN返信。トーンと返信言語を選び、Quick 1で生成、コピーまたは保存。Free：生涯50生成クレジット（GM+GN共有）。",
   "ref_desc": "紹介: リンクを共有。確認済み = 接続、アクティブ = 利用、対象 = max(アクティブ, 繰越)。ボーナス: 対象20人ごとに +10/日（50+ で +12）。",
   "wallet_desc": "Proアップグレード：GM/GNの1日無制限 + すべてのコスメ（テーマ、スタイル、拡張スキン＆壁紙）+ Arcadeの全ゲーム。SolanaでSOL / USDC / USDT支払い。オンチェーン自動検証。",
   "w_pay_desc": "支払いを有効化するにはプランを選択してください。",
@@ -555,9 +555,9 @@
   "gmPasteAdd": "Paste & add",
   "gnViewGlobal": "Global list",
   "gnViewLang": "Language list",
-  "gnRand1": "Random 1",
-  "gnRand10": "Random 10",
-  "gnRand70": "Random 70",
+  "gnRand1": "Quick 1",
+  "gnRand10": "Batch 10",
+  "gnRand70": "Batch 10",
   "gnAddLine": "+ Add line",
   "gnClear": "Clear view",
   "gnPasteAdd": "Paste & add",
@@ -873,5 +873,6 @@
   "ref_badge_next_html": "次のバッジは<b>{n}</b>人の対象者で — {tier}",
   "ref_badge_toast_html": "新しいバッジ: <b>{tier}</b>",
   "ref_badge_all_unlocked": "すべてのプロモーターバッジを解放",
-  "locked_pack": "パックはロック中。Proまたは紹介が必要です。"
+  "locked_pack": "パックはロック中。Proまたは紹介が必要です。",
+  "gn_lang": "Reply language"
 }

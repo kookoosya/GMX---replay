@@ -124,7 +124,7 @@
   "gm_saved_label": "Linhas salvas (site)",
   "gm_limits_note": "Free dá para testar tudo. Pro remove limites e desbloqueia todos temas/estilos.",
   "gn_limits_title": "Limites Free (para sempre)",
-  "gn_daily_label": "Geração diária GN (extensão)",
+  "gn_daily_label": "Créditos de geração (GM+GN compartilhados)",
   "gn_saved_label": "Linhas salvas (site)",
   "gn_limits_note": "Free dá para testar tudo. Pro remove limites e desbloqueia todos temas/estilos.",
   "themes_unlocked_label": "Temas desbloqueados",
@@ -409,7 +409,7 @@
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
     "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
-  "gn_desc": "Respostas noturnas curtas que você mesmo edita e cola. Um banco guardado para esta seção; Grátis tem um limite de linha salva.",
+  "gn_desc": "Respostas noturnas curtas para X. Escolha tom e idioma da resposta, toque Quick 1 e copie ou salve linhas. Free: 50 créditos de geração vitalícios (GM+GN compartilhados).",
   "ref_desc": "Indicações: compartilhe seu link. Confirmado = conectado, Ativo = usou o produto, Elegível = max(ativos, arraste). Bônus: +10/dia a cada 20 elegíveis (+12 com 50+).",
   "wallet_desc": "Upgrade Pro: linhas GM/GN diárias ilimitadas + todos os cosméticos (temas, estilos, skins e wallpapers da extensão) + todos os jogos do Arcade. Pagamento em Solana com SOL / USDC / USDT. Verificação automática on-chain.",
   "w_pay_desc": "A wallet receptora aparece depois de escolher um plano.",
@@ -555,9 +555,9 @@
   "gmPasteAdd": "Paste & add",
   "gnViewGlobal": "Global list",
   "gnViewLang": "Language list",
-  "gnRand1": "Random 1",
-  "gnRand10": "Random 10",
-  "gnRand70": "Random 70",
+  "gnRand1": "Quick 1",
+  "gnRand10": "Batch 10",
+  "gnRand70": "Batch 10",
   "gnAddLine": "+ Add line",
   "gnClear": "Clear view",
   "gnPasteAdd": "Paste & add",
@@ -873,5 +873,6 @@
   "ref_badge_next_html": "Próximo emblema com <b>{n}</b> elegíveis — {tier}",
   "ref_badge_toast_html": "Novo emblema: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Todos os emblemas de promotor desbloqueados",
-  "locked_pack": "Pack bloqueado. Pro ou indicações necessários."
+  "locked_pack": "Pack bloqueado. Pro ou indicações necessários.",
+  "gn_lang": "Reply language"
 }

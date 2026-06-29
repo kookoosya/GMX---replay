@@ -124,7 +124,7 @@
   "gm_saved_label": "Сохранённые строки (сайт)",
   "gm_limits_note": "Free хватает, чтобы попробовать всё. Pro снимает лимиты и открывает все темы/стили.",
   "gn_limits_title": "Лимиты Free (навсегда)",
-  "gn_daily_label": "Дневная генерация GN (расширение)",
+  "gn_daily_label": "Кредиты генерации (GM+GN общие)",
   "gn_saved_label": "Сохранённые строки (сайт)",
   "gn_limits_note": "Free хватает, чтобы попробовать всё. Pro снимает лимиты и открывает все темы/стили.",
   "themes_unlocked_label": "Открыто тем",
@@ -398,7 +398,7 @@
     "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "Как использовать GN",
-  "gn_right_desc": "Короткие ночные ответы GN на чужой пост — спокойно, по-человечески, удобно вставлять.",
+  "gn_right_desc": "Короткие ночные ответы к чужому посту. Спокойные, человечные, готовые к вставке.",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
     "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -409,7 +409,7 @@
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
     "Free Cap - это 70 сохраненных строк для банка GN. Если вы нажмете 50/50, новые сгенерированные линии заменят старые. Редактирование не ограничено."
   ],
-  "gn_desc": "Короткие ночные ответы — вы сами редактируете и вставляете. Одна сохранённая база для раздела; в Free есть лимит строк.",
+  "gn_desc": "Короткие ночные ответы для X. Выберите тон и язык ответа, нажмите Quick 1, копируйте или сохраняйте строки. Free: 50 кредитов генерации на всё время (GM+GN общие).",
   "ref_desc": "Рефералы: делись ссылкой. Confirmed = подключился, Active = пользовался, Eligible = max(active, carry-over). Бонус: +10/день за 20 eligible.",
   "wallet_desc": "Апгрейд Pro: безлимит на строки GM/GN в день + вся косметика (темы, стили, скины и обои для расширения) + все игры Arcade. Оплата в Solana: SOL / USDC / USDT. Авто‑проверка on‑chain.",
   "w_pay_desc": "Кошелёк получателя появится после выбора плана.",
@@ -555,9 +555,9 @@
   "gmPasteAdd": "Вставить и добавить",
   "gnViewGlobal": "Глобально",
   "gnViewLang": "По языкам",
-  "gnRand1": "Рандом 1",
-  "gnRand10": "Рандом 10",
-  "gnRand70": "Рандом 70",
+  "gnRand1": "Quick 1",
+  "gnRand10": "Batch 10",
+  "gnRand70": "Batch 10",
   "gnAddLine": "+ Добавить строку",
   "gnClear": "Очистить вид",
   "gnPasteAdd": "Вставить и добавить",
@@ -873,5 +873,6 @@
   "ref_badge_next_html": "Следующий бейдж при <b>{n}</b> eligible — {tier}",
   "ref_badge_toast_html": "Новый бейдж: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Все бейджи промоутера открыты",
-  "locked_pack": "Пак заблокирован. Нужен Pro или рефералы."
+  "locked_pack": "Пак заблокирован. Нужен Pro или рефералы.",
+  "gn_lang": "Reply language"
 }

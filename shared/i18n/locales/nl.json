@@ -124,7 +124,7 @@
   "gm_saved_label": "Opgeslagen regels (site)",
   "gm_limits_note": "Free is genoeg om alles te proberen. Pro haalt limieten weg en ontgrendelt alle thema’s/stijlen.",
   "gn_limits_title": "Free-limieten (altijd)",
-  "gn_daily_label": "Dagelijkse GN-generatie (extensie)",
+  "gn_daily_label": "Generatiecredits (GM+GN gedeeld)",
   "gn_saved_label": "Opgeslagen regels (site)",
   "gn_limits_note": "Free is genoeg om alles te proberen. Pro haalt limieten weg en ontgrendelt alle thema’s/stijlen.",
   "themes_unlocked_label": "Thema’s ontgrendeld",
@@ -409,7 +409,7 @@
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
     "Gratis limiet is 70 opgeslagen regels in totaal voor de GN-bank. Als u 50/50 bereikt, vervangen nieuwe gegenereerde lijnen de oudere. Bewerken is onbeperkt."
   ],
-  "gn_desc": "Korte avondantwoorden — u bewerkt en plakt zelf. Eén opgeslagen bank; Gratis heeft een regellimiet.",
+  "gn_desc": "Korte avondantwoorden voor X. Kies toon en antwoordtaal, tik Quick 1 en kopieer of bewaar regels. Free: 50 generatiecredits levenslang (GM+GN gedeeld).",
   "ref_desc": "Referrals: deel uw link. Bevestigd = verbonden, Actief = gebruikt, In aanmerking = max(actief, carry-over). Bonus: +10/dag per 20 in aanmerking (+12 bij 50+).",
   "wallet_desc": "Pro-upgrade: onbeperkte dagelijkse GM/GN-regels + alle cosmetica (themes, styles, extension skins & wallpapers) + alle Arcade-games. Betaal op Solana met SOL / USDC / USDT. Auto-verificatie on-chain.",
   "w_pay_desc": "Receiver wallet verschijnt na het kiezen van een plan.",
@@ -555,9 +555,9 @@
   "gmPasteAdd": "Plakken en toevoegen",
   "gnViewGlobal": "Global list",
   "gnViewLang": "Language list",
-  "gnRand1": "Random 1",
-  "gnRand10": "Random 10",
-  "gnRand70": "Random 70",
+  "gnRand1": "Quick 1",
+  "gnRand10": "Batch 10",
+  "gnRand70": "Batch 10",
   "gnAddLine": "+ Add line",
   "gnClear": "Clear view",
   "gnPasteAdd": "Paste & add",
@@ -873,5 +873,6 @@
   "ref_badge_next_html": "Volgende badge bij <b>{n}</b> in aanmerking komenden — {tier}",
   "ref_badge_toast_html": "Nieuwe badge: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Alle promoter-badges ontgrendeld",
-  "locked_pack": "Pack vergrendeld. Pro of referrals nodig."
+  "locked_pack": "Pack vergrendeld. Pro of referrals nodig.",
+  "gn_lang": "Reply language"
 }

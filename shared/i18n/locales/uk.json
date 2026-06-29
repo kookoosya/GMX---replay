@@ -124,7 +124,7 @@
   "gm_saved_label": "Збережені рядки (сайт)",
   "gm_limits_note": "Free достатньо, щоб спробувати все. Pro знімає ліміти й відкриває всі теми/стилі.",
   "gn_limits_title": "Ліміти Free (назавжди)",
-  "gn_daily_label": "Денна генерація GN (розширення)",
+  "gn_daily_label": "Кредити генерації (GM+GN спільні)",
   "gn_saved_label": "Збережені рядки (сайт)",
   "gn_limits_note": "Free достатньо, щоб спробувати все. Pro знімає ліміти й відкриває всі теми/стилі.",
   "themes_unlocked_label": "Відкрито тем",
@@ -409,7 +409,7 @@
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
     "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
-  "gn_desc": "Короткі нічні відповіді — ви самі редагуєте та вставляєте. Одна збережена база; у Free є ліміт рядків.",
+  "gn_desc": "Короткі нічні відповіді для X. Оберіть тон і мову відповіді, натисніть Quick 1, копіюйте або зберігайте рядки. Free: 50 кредитів генерації на все життя (GM+GN спільні).",
   "ref_desc": "Реферали: діліться посиланням. Підтверджено = підключено, Активний = використав продукт, Допущений = max(активні, перенос). Бонус: +10/день за кожні 20 допущених (+12 при 50+).",
   "wallet_desc": "Апгрейд Pro: безліміт на рядки GM/GN на день + вся косметика (теми, стилі, скіни та шпалери для розширення) + усі ігри Arcade. Оплата в Solana: SOL / USDC / USDT. Авто‑перевірка on‑chain.",
   "w_pay_desc": "Гаманець отримувача з’явиться після вибору плану.",
@@ -555,9 +555,9 @@
   "gmPasteAdd": "Вставити та додати",
   "gnViewGlobal": "Глобально",
   "gnViewLang": "За мовами",
-  "gnRand1": "Рандом 1",
-  "gnRand10": "Рандом 10",
-  "gnRand70": "Рандом 70",
+  "gnRand1": "Quick 1",
+  "gnRand10": "Batch 10",
+  "gnRand70": "Batch 10",
   "gnAddLine": "+ Додати рядок",
   "gnClear": "Очистити вигляд",
   "gnPasteAdd": "Вставити та додати",
@@ -873,5 +873,6 @@
   "ref_badge_next_html": "Наступний бейдж при <b>{n}</b> eligible — {tier}",
   "ref_badge_toast_html": "Новий бейдж: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Усі бейджі промоутера відкриті",
-  "locked_pack": "Пак заблоковано. Потрібен Pro або реферали."
+  "locked_pack": "Пак заблоковано. Потрібен Pro або реферали.",
+  "gn_lang": "Reply language"
 }

@@ -124,7 +124,7 @@
   "gm_saved_label": "Lignes enregistrées (site)",
   "gm_limits_note": "Free suffit pour tout essayer. Pro enlève les limites et débloque tous les thèmes/styles.",
   "gn_limits_title": "Limites Free (pour toujours)",
-  "gn_daily_label": "Génération GN quotidienne (extension)",
+  "gn_daily_label": "Crédits de génération (GM+GN partagés)",
   "gn_saved_label": "Lignes enregistrées (site)",
   "gn_limits_note": "Free suffit pour tout essayer. Pro enlève les limites et débloque tous les thèmes/styles.",
   "themes_unlocked_label": "Thèmes débloqués",
@@ -409,7 +409,7 @@
     "<b>Une vue claire</b> efface la banque GN visible. <b>Effacer TOUT</b> efface toutes les lignes GN enregistrées pour cette section.",
     "Le plafond gratuit est de 50 lignes enregistrées au total pour la banque GN. Si vous atteignez 50/50, les nouvelles lignes générées remplacent les plus anciennes. La modification est illimitée."
   ],
-  "gn_desc": "Réponses courtes de nuit que vous modifiez et collez vous-même. Une banque enregistrée pour cette section ; Free a un plafond de ligne enregistrée.",
+  "gn_desc": "Réponses GN courtes pour la nuit sur X. Choisissez le ton et la langue de réponse, appuyez sur Quick 1, copiez ou enregistrez. Free : 50 crédits de génération à vie (GM+GN partagés).",
   "ref_desc": "Parrainages : partagez votre lien. Confirmé = connecté, Actif = utilisé, Eligible = max(actif, report). Bonus : +10/jour pour 20 éligibles (+12 à 50+).",
   "wallet_desc": "Upgrade Pro : lignes GM/GN quotidiennes illimitées + tous les cosmétiques (thèmes, styles, skins & wallpapers d’extension) + tous les jeux Arcade. Paiement sur Solana en SOL / USDC / USDT. Vérification automatique on‑chain.",
   "w_pay_desc": "Le wallet receveur s’affichera après la sélection d’un plan.",
@@ -555,9 +555,9 @@
   "gmPasteAdd": "Paste & add",
   "gnViewGlobal": "Global list",
   "gnViewLang": "Language list",
-  "gnRand1": "Random 1",
-  "gnRand10": "Random 10",
-  "gnRand70": "Random 70",
+  "gnRand1": "Quick 1",
+  "gnRand10": "Batch 10",
+  "gnRand70": "Batch 10",
   "gnAddLine": "+ Add line",
   "gnClear": "Clear view",
   "gnPasteAdd": "Paste & add",
@@ -873,5 +873,6 @@
   "ref_badge_next_html": "Prochain badge à <b>{n}</b> éligibles — {tier}",
   "ref_badge_toast_html": "Nouveau badge : <b>{tier}</b>",
   "ref_badge_all_unlocked": "Tous les badges promoteur débloqués",
-  "locked_pack": "Pack verrouillé. Pro ou parrainages requis."
+  "locked_pack": "Pack verrouillé. Pro ou parrainages requis.",
+  "gn_lang": "Reply language"
 }

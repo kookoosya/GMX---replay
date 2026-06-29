@@ -124,7 +124,7 @@
   "gm_saved_label": "सेव की गई लाइनें (साइट)",
   "gm_limits_note": "Free सब कुछ आज़माने के लिए काफी है. Pro सीमाएँ हटाता है और सारे themes/styles खोल देता है.",
   "gn_limits_title": "Free सीमा (हमेशा)",
-  "gn_daily_label": "दैनिक GN जनरेशन (एक्सटेंशन)",
+  "gn_daily_label": "जनरेशन क्रेडिट (GM+GN साझा)",
   "gn_saved_label": "सेव की गई लाइनें (साइट)",
   "gn_limits_note": "Free सब कुछ आज़माने के लिए काफी है. Pro सीमाएँ हटाता है और सारे themes/styles खोल देता है.",
   "themes_unlocked_label": "अनलॉक हुए थीम",
@@ -409,7 +409,7 @@
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
     "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
-  "gn_desc": "छोटे रात के जवाब — आप खुद एडिट और पेस्ट करते हैं। एक सेव्ड बैंक; Free में लाइन सीमा।",
+  "gn_desc": "X के लिए छोटे रात के GN जवाब। टोन और जवाब की भाषा चुनें, Quick 1 दबाएँ, लाइनें कॉपी या सेव करें। Free: 50 जीवनभर जनरेशन क्रेडिट (GM+GN साझा)।",
   "ref_desc": "रेफरल: अपना लिंक साझा करें। पुष्टि = कनेक्ट, सक्रिय = उपयोग, योग्य = max(सक्रिय, कैरी-ओवर)। बोनस: 20 योग्य पर +10/दिन (50+ पर +12)।",
   "wallet_desc": "Pro अपग्रेड: अनलिमिटेड दैनिक GM/GN लाइन्स + सभी कॉस्मेटिक्स (थीम्स, स्टाइल्स, एक्सटेंशन स्किन्स और वॉलपेपर) + सभी Arcade गेम्स। Solana पर SOL / USDC / USDT से पे करें। ऑन-चेन ऑटो-वेरिफाइड।",
   "w_pay_desc": "पेमेंट सक्षम करने के लिए एक प्लान चुनें।",
@@ -555,9 +555,9 @@
   "gmPasteAdd": "Paste & add",
   "gnViewGlobal": "Global list",
   "gnViewLang": "Language list",
-  "gnRand1": "Random 1",
-  "gnRand10": "Random 10",
-  "gnRand70": "Random 70",
+  "gnRand1": "Quick 1",
+  "gnRand10": "Batch 10",
+  "gnRand70": "Batch 10",
   "gnAddLine": "+ Add line",
   "gnClear": "Clear view",
   "gnPasteAdd": "Paste & add",
@@ -873,5 +873,6 @@
   "ref_badge_next_html": "अगला बैज <b>{n}</b> योग्य पर — {tier}",
   "ref_badge_toast_html": "नया बैज: <b>{tier}</b>",
   "ref_badge_all_unlocked": "सभी प्रमोटर बैज अनलॉक",
-  "locked_pack": "पैक लॉक है। Pro या रेफरल चाहिए।"
+  "locked_pack": "पैक लॉक है। Pro या रेफरल चाहिए।",
+  "gn_lang": "Reply language"
 }

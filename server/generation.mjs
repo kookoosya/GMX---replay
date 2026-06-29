@@ -1020,7 +1020,7 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
       tries++;
       const candidate = composeReply(kind, mode, lang, style);
       if (!candidate || !passesModeProfile(candidate, mode)) continue;
-      if (mode === "min" && kind === "gm" && !passesMinSubstance(candidate, kind, lang, style)) continue;
+      if (mode === "min" && !passesMinSubstance(candidate, kind, lang, style)) continue;
       const fp = shapeFingerprint(candidate, kind);
       if (!fp) continue;
       if (!allowHistory && (recent.has(candidate) || (!relaxHistoryShape && (recentShapes.has(fp) || recentShapeList.some((shape) => isNearDuplicateShape(shape, fp)))))) continue;
@@ -1069,7 +1069,7 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
       emergencyTries++;
       const candidate = composeReply(kind, mode, lang, style);
       if (!candidate) continue;
-      if (mode === "min" && kind === "gm" && !passesMinSubstance(candidate, kind, lang, style)) continue;
+      if (mode === "min" && !passesMinSubstance(candidate, kind, lang, style)) continue;
       const fp = shapeFingerprint(candidate, kind) || candidate.toLowerCase();
       if (seenText.has(candidate)) continue;
       seenText.add(candidate);

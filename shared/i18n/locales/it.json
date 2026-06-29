@@ -124,7 +124,7 @@
   "gm_saved_label": "Righe salvate (sito)",
   "gm_limits_note": "Free basta per provare tutto. Pro rimuove i limiti e sblocca tutti temi/stili.",
   "gn_limits_title": "Limiti Free (per sempre)",
-  "gn_daily_label": "Generazione GN giornaliera (estensione)",
+  "gn_daily_label": "Crediti di generazione (GM+GN condivisi)",
   "gn_saved_label": "Righe salvate (sito)",
   "gn_limits_note": "Free basta per provare tutto. Pro rimuove i limiti e sblocca tutti temi/stili.",
   "themes_unlocked_label": "Temi sbloccati",
@@ -409,7 +409,7 @@
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
     "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
-  "gn_desc": "Brevi risposte notturne — modifichi e incolli tu. Una banca salvata; Gratis ha limite righe.",
+  "gn_desc": "Risposte notturne brevi per X. Scegli tono e lingua della risposta, premi Quick 1, copia o salva le righe. Free: 50 crediti di generazione a vita (GM+GN condivisi).",
   "ref_desc": "Referral: condividi il link. Confermato = connesso, Attivo = usato, Idoneo = max(attivi, riporto). Bonus: +10/giorno ogni 20 idonei (+12 a 50+).",
   "wallet_desc": "Upgrade Pro: righe GM/GN giornaliere illimitate + tutti i cosmetici (temi, stili, skin e wallpaper dell’estensione) + tutti i giochi Arcade. Pagamento su Solana con SOL / USDC / USDT. Verifica automatica on‑chain.",
   "w_pay_desc": "Il wallet destinatario apparirà dopo la scelta del piano.",
@@ -555,9 +555,9 @@
   "gmPasteAdd": "Incolla e aggiungi",
   "gnViewGlobal": "Global list",
   "gnViewLang": "Language list",
-  "gnRand1": "Random 1",
-  "gnRand10": "Random 10",
-  "gnRand70": "Random 70",
+  "gnRand1": "Quick 1",
+  "gnRand10": "Batch 10",
+  "gnRand70": "Batch 10",
   "gnAddLine": "+ Add line",
   "gnClear": "Clear view",
   "gnPasteAdd": "Paste & add",
@@ -873,5 +873,6 @@
   "ref_badge_next_html": "Prossimo badge a <b>{n}</b> idonei — {tier}",
   "ref_badge_toast_html": "Nuovo badge: <b>{tier}</b>",
   "ref_badge_all_unlocked": "Tutti i badge promotore sbloccati",
-  "locked_pack": "Pack bloccato. Serve Pro o referral."
+  "locked_pack": "Pack bloccato. Serve Pro o referral.",
+  "gn_lang": "Reply language"
 }

@@ -124,7 +124,7 @@
   "gm_saved_label": "已保存行（站点）",
   "gm_limits_note": "Free 足够试用全部。Pro 移除限制并解锁所有主题/风格。",
   "gn_limits_title": "Free 限制（永久）",
-  "gn_daily_label": "每日 GN 生成（扩展）",
+  "gn_daily_label": "生成额度（GM+GN 共享）",
   "gn_saved_label": "已保存行（站点）",
   "gn_limits_note": "Free 足够试用全部。Pro 移除限制并解锁所有主题/风格。",
   "themes_unlocked_label": "已解锁主题",
@@ -398,7 +398,7 @@
     "Free cap counts across the GM bank. If you hit 50/50, new generated lines replace older ones (editing is unlimited)."
   ],
   "gn_right": "GN 使用方法",
-  "gn_right_desc": "简短的夜间 GN 回复 — 平静、人性化、便于粘贴。",
+  "gn_right_desc": "回复他人帖子的简短夜间回复。保持平静、自然、便于粘贴。",
   "gn_right_list": [
     "<b>This bank</b>: one saved GN bank for this section. No hidden language split.",
     "<b>Quick 1 / Batch 10</b> adds fresh lines. Min stays short, Mid stays balanced, Max can breathe a little more.",
@@ -409,7 +409,7 @@
     "<b>Clear view</b> clears the visible GN bank. <b>Clear ALL</b> clears all saved GN lines for this section.",
     "Free cap is 50 saved lines total for the GN bank. If you hit 50/50, new generated lines replace older ones. Editing is unlimited."
   ],
-  "gn_desc": "简短夜间回复 — 自行编辑并粘贴。本分区一个保存库；免费版有行数上限。",
+  "gn_desc": "为 X 生成简短夜间 GN 回复。选择语气与回复语言，点 Quick 1，然后复制或保存。Free：终身 50 次生成额度（GM+GN 共享）。",
   "ref_desc": "推荐：分享您的链接。已确认 = 已连接，活跃 = 已使用，符合条件 = max(活跃, 结转)。奖励：每 20 名符合条件 +10/天（50+ 为 +12）。",
   "wallet_desc": "升级 Pro：每日 GM/GN 行数不限 + 解锁全部外观（主题、样式、扩展皮肤与壁纸）+ 全部 Arcade 游戏。Solana 上用 SOL / USDC / USDT 支付。链上自动验证。",
   "w_pay_desc": "请选择一个套餐以启用付款。",
@@ -555,9 +555,9 @@
   "gmPasteAdd": "Paste & add",
   "gnViewGlobal": "Global list",
   "gnViewLang": "Language list",
-  "gnRand1": "Random 1",
-  "gnRand10": "Random 10",
-  "gnRand70": "Random 70",
+  "gnRand1": "Quick 1",
+  "gnRand10": "Batch 10",
+  "gnRand70": "Batch 10",
   "gnAddLine": "+ Add line",
   "gnClear": "Clear view",
   "gnPasteAdd": "Paste & add",
@@ -873,5 +873,6 @@
   "ref_badge_next_html": "下一枚徽章需<b>{n}</b>个符合条件 — {tier}",
   "ref_badge_toast_html": "新徽章：<b>{tier}</b>",
   "ref_badge_all_unlocked": "已解锁全部推广徽章",
-  "locked_pack": "包已锁定。需要 Pro 或推荐。"
+  "locked_pack": "包已锁定。需要 Pro 或推荐。",
+  "gn_lang": "Reply language"
 }
