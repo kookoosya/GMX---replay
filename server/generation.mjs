@@ -7,6 +7,7 @@ import {
   filterSubstantiveMinTemplates,
   isThinMinTemplate,
 } from "./generation-min-substance.mjs";
+import { passesNaturalQuality, normalizedSkeleton } from "./generation-natural-validator.mjs";
 
 export function createGenerator(deps) {
   const { safeDb, db, nowIso, safeOptionalHistoryDb, sha256 } = deps;
@@ -50,30 +51,36 @@ const BANKS = {
     gm: {
       greet: ["Gm", "Good morning", "Morning"],
       min: [
-        "{greet}! {emoji}",
-        "{greet} {voc} {emoji}",
-        "{greet}, good one {emoji}",
-        "{greet}, nice post {emoji}",
-        "{greet}, clean one {emoji}",
-        "{greet} {voc}, good one {emoji}",
-        "{greet} {voc}, nice gm {emoji}",
-        "{greet}, coffee first {emoji}",
-        "{greet} {voc}, morning back {emoji}",
-        "{greet}, good looks {emoji}",
-        "{greet}, easy start {emoji}",
-        "{greet}, smooth start {emoji}",
-        "{greet}, steady start {emoji}",
-        "{greet}, morning reset {emoji}",
-        "{greet}, clean read {emoji}",
-        "{greet}, good thread {emoji}",
-        "{greet}, rise easy {emoji}",
-        "{greet} {voc}, quick gm {emoji}",
-        "{greet}, here for it {emoji}",
-        "{greet}, light start {emoji}",
-        "{greet} {voc}, back at it {emoji}",
+        "{greet} {voc}, hope today starts easy {emoji}",
+        "{greet}, coffee first and a calm day {emoji}",
+        "{greet} {voc}, good vibes on this one {emoji}",
+        "{greet}, wishing you a smooth morning {emoji}",
+        "{greet} {voc}, solid way to start the day {emoji}",
+        "{greet}, hope the coffee hits early {emoji}",
+        "{greet} {voc}, nice post to wake up to {emoji}",
+        "{greet}, calm energy on the tl today {emoji}",
+        "{greet} {voc}, good morning back at you {emoji}",
+        "{greet}, let's have a good one today {emoji}",
+        "{greet} {voc}, hope your day goes well {emoji}",
+        "{greet}, strong post for the morning {emoji}",
+        "{greet} {voc}, this one lands nicely {emoji}",
+        "{greet}, hope the day opens kind {emoji}",
+        "{greet} {voc}, good energy here {emoji}",
+        "{greet}, clean morning post {emoji}",
+        "{greet} {voc}, hope you have a good one {emoji}",
+        "{greet}, nice way to open the day {emoji}",
+        "{greet} {voc}, wishing you a good morning {emoji}",
+        "{greet} {voc}, hope today treats you well {emoji}",
+        "{greet}, this is a nice morning post {emoji}",
+        "{greet} {voc}, good way to start the timeline {emoji}",
+        "{greet}, hope your coffee is hot {emoji}",
+        "{greet} {voc}, sending good morning vibes {emoji}",
+        "{greet}, steady energy this morning {emoji}",
+        "{greet} {voc}, appreciate the morning post {emoji}",
+        "{greet}, hope the tl stays calm today {emoji}",
       ],
       mid: [
-        "{greet} {voc}, strong gm from you {emoji}",
+        "{greet} {voc}, good energy from you {emoji}",
         "{greet} {voc}, good energy on this one {emoji}",
         "{greet}, hope the day starts easy {emoji}",
         "{greet} {voc}, wishing you a smooth one {emoji}",
@@ -96,41 +103,50 @@ const BANKS = {
         "{greet}, solid post to wake the timeline up a bit {emoji}",
         "{greet} {voc}, good energy here, hope today treats you well {emoji}",
         "{greet}, clean morning reply, hope the rest of the day follows {emoji}",
-        "{greet} {voc}, strong gm and a good start to the day {emoji}",
+        "{greet} {voc}, strong post and a good start to the day {emoji}",
         "{greet}, this is the kind of post the morning needed {emoji}",
       ],
     },
     gn: {
       greet: ["Gn", "Good night", "Night"],
       min: [
-        "{greet}! {emoji}",
-        "{greet} {voc} {emoji}",
-        "{greet}, sleep well {emoji}",
-        "{greet}, rest easy {emoji}",
-        "{greet} {voc}, good rest {emoji}",
-        "{greet}, easy night {emoji}",
-        "{greet} {voc}, sleep easy {emoji}",
-        "{greet}, calm close {emoji}",
-        "{greet}, soft close {emoji}",
-        "{greet}, quiet close {emoji}",
-        "{greet}, night reset {emoji}",
-        "{greet}, proper rest {emoji}",
+        "{greet} {voc}, sleep easy tonight {emoji}",
+        "{greet}, rest well and reset {emoji}",
+        "{greet} {voc}, calm close tonight {emoji}",
+        "{greet}, hope the night is kind {emoji}",
+        "{greet} {voc}, good rest on your side {emoji}",
+        "{greet}, soft landing tonight {emoji}",
+        "{greet} {voc}, hope you rest well {emoji}",
+        "{greet}, easy close tonight {emoji}",
+        "{greet} {voc}, logging off for the night {emoji}",
         "{greet}, see you tomorrow {emoji}",
-        "{greet} {voc}, logging off {emoji}",
-        "{greet}, good night back {emoji}",
-        "{greet}, off to rest {emoji}",
+        "{greet} {voc}, quiet night ahead {emoji}",
+        "{greet}, good night back at you {emoji}",
+        "{greet} {voc}, rest easy and reset {emoji}",
+        "{greet}, hope tomorrow starts kind {emoji}",
+        "{greet} {voc}, calm night on your side {emoji}",
+        "{greet}, off to rest now {emoji}",
+        "{greet} {voc}, proper rest tonight {emoji}",
+        "{greet}, good post to end the day {emoji}",
+        "{greet} {voc}, sleep well tonight {emoji}",
+        "{greet}, wishing you a good night {emoji}",
       ],
       mid: [
         "{greet} {voc}, sleep easy tonight {emoji}",
         "{greet}, rest well and come back strong {emoji}",
         "{greet} {voc}, calm close tonight {emoji}",
-        "{greet}, good night and good rest {emoji}",
+        "{greet}, hope you get good rest {emoji}",
         "{greet} {voc}, hope the night is kind {emoji}",
         "{greet}, easy close and better morning tomorrow {emoji}",
         "{greet} {voc}, good rest on your side {emoji}",
         "{greet}, soft landing tonight {emoji}",
         "{greet} {voc}, sleep well and reset {emoji}",
-        "{greet}, good post to end the day with {emoji}",
+        "{greet}, good post to end the day {emoji}",
+        "{greet} {voc}, wishing you a quiet night {emoji}",
+        "{greet}, hope tomorrow starts kind {emoji}",
+        "{greet} {voc}, time to log off and rest {emoji}",
+        "{greet}, calm night on the timeline {emoji}",
+        "{greet} {voc}, rest easy tonight {emoji}",
       ],
       max: [
         "{greet} {voc}, good rest tonight and a better morning tomorrow {emoji}",
@@ -148,22 +164,18 @@ const BANKS = {
     gm: {
       greet: ["Gm", "Good morning", "Morning"],
       min: [
-        "{greet} {voc} {emoji}",
-        "{greet}, good alpha {emoji}",
-        "{greet}, strong post {emoji}",
-        "{greet} {voc}, nice call {emoji}",
-        "{greet}, clean setup {emoji}",
-        "{greet} {voc}, good read {emoji}",
-        "{greet}, solid take {emoji}",
-        "{greet}, clean tape {emoji}",
-        "{greet}, sharp read {emoji}",
-        "{greet}, calm session {emoji}",
-        "{greet}, good chart {emoji}",
-        "{greet} {voc}, steady open {emoji}",
-        "{greet}, sharp setup {emoji}",
-        "{greet} {voc}, clean conviction {emoji}",
-        "{greet}, good session open {emoji}",
-        "{greet}, nice read here {emoji}",
+        "{greet} {voc}, good read to start the session {emoji}",
+        "{greet}, solid take for the open {emoji}",
+        "{greet} {voc}, clean chart read here {emoji}",
+        "{greet}, calm open and good energy {emoji}",
+        "{greet} {voc}, sharp call on this one {emoji}",
+        "{greet}, good alpha to wake up to {emoji}",
+        "{greet} {voc}, steady start to the day {emoji}",
+        "{greet}, hope the session stays kind {emoji}",
+        "{greet} {voc}, this setup reads clean {emoji}",
+        "{greet}, strong post for the morning {emoji}",
+        "{greet} {voc}, nice way to open the tape {emoji}",
+        "{greet}, good morning from the charts {emoji}",
       ],
       mid: [
         "{greet} {voc}, good alpha on this one {emoji}",
@@ -359,7 +371,7 @@ const BANKS = {
         "{greet} {voc}, good build energy {emoji}",
         "{greet}, ship something good {emoji}",
         "{greet}, good work day {emoji}",
-        "{greet} {voc}, useful morning {emoji}",
+        "{greet} {voc}, clean start to the day {emoji}",
         "{greet}, clean session ahead {emoji}",
         "{greet} {voc}, solid start {emoji}",
       ],
@@ -369,7 +381,7 @@ const BANKS = {
         "{greet} {voc}, good energy for a solid build day {emoji}",
         "{greet} {voc}, hope you ship something good today {emoji}",
         "{greet}, strong start for a builder morning {emoji}",
-        "{greet} {voc}, useful morning and a clean work session {emoji}",
+        "{greet} {voc}, clean work session ahead {emoji}",
         "{greet}, good post to start building from {emoji}",
       ],
       max: [
@@ -510,9 +522,9 @@ function sentenceCaseGreeting(text, kind) {
 function tightenMinimal(text, kind, lang = "en") {
   const raw = String(text || "").trim();
   const firstEmoji = (raw.match(RE_ANY_EMOJI) || [""])[0] || "";
-  let out = raw.replace(RE_ANY_EMOJI, " ").replace(/[!,]/g, " ").replace(/\s+/g, " ").trim();
+  let out = raw.replace(RE_ANY_EMOJI, " ").replace(/!+/g, " ").replace(/\s+/g, " ").trim();
   let words = out.split(/\s+/).filter(Boolean);
-  const cap = kind === "gm" ? 4 : 5;
+  const cap = kind === "gm" ? 8 : 9;
   if (words.length > cap) words = words.slice(0, cap);
   out = words.join(" ").trim();
   if (lang === "en") out = sentenceCaseGreeting(out, kind);
@@ -589,20 +601,16 @@ function rotateGreetingLead(text, kind) {
   const src = String(text || "").trim();
   if (!src) return src;
 
-  if (kind === "gm" && /^(good morning|gm)\b/i.test(src)) {
-    const rest = src.replace(/^(good morning|gm)\b/i, "").trim();
-    const lead = rest
-      ? pickOne(["Good morning", "GM", "Big GM", "Grand rising", "G to the M"])
-      : pickOne(["Good morning", "GM", "Big GM", "Grand rising", "G to the M", "Morning"]);
-    return rest ? `${lead} ${rest}` : lead;
+  if (kind === "gm" && /^(good morning|gm|morning)\b/i.test(src)) {
+    const rest = src.replace(/^(good morning|gm|morning)\b/i, "").replace(/^,\s*/, "").trim();
+    const lead = pickOne(["Good morning", "GM", "Morning"]);
+    return rest ? `${lead}, ${rest}` : lead;
   }
 
-  if (kind === "gn" && /^(good night|gn)\b/i.test(src)) {
-    const rest = src.replace(/^(good night|gn)\b/i, "").trim();
-    const lead = rest
-      ? pickOne(["Good night", "GN", "Sleep easy", "Rest easy tonight", "Easy night"])
-      : pickOne(["Good night", "GN", "Sleep easy", "Rest easy", "Easy night", "Soft night"]);
-    return rest ? `${lead} ${rest}` : lead;
+  if (kind === "gn" && /^(good night|gn|night)\b/i.test(src)) {
+    const rest = src.replace(/^(good night|gn|night)\b/i, "").replace(/^,\s*/, "").trim();
+    const lead = pickOne(["Good night", "GN", "Night"]);
+    return rest ? `${lead}, ${rest}` : lead;
   }
 
   return src;
@@ -612,7 +620,9 @@ function normalizeHumanReply(text, kind, mode) {
   let out = String(text || "").trim();
   if (!out) return out;
 
-  out = rotateGreetingLead(out, kind);
+  if (mode !== "min") {
+    out = rotateGreetingLead(out, kind);
+  }
 
   out = out.replace(/\bGm\b/g, "GM");
   out = out.replace(/\bGn\b/g, "GN");
@@ -776,9 +786,17 @@ function composeReply(kind, mode, lang, style) {
     const rendered = renderTemplate(template, bank, kind);
     const out = applyStyle(rendered, style, kind, modeKey, code);
     last = out;
-    if (modeKey !== "min" || passesMinSubstance(out, kind, code, style)) return out;
+    if (passesNaturalQuality(out, kind, modeKey, code) && (modeKey !== "min" || passesMinSubstance(out, kind, code, style))) {
+      return out;
+    }
   }
-  if (last && passesMinSubstance(last, kind, code, style)) return last;
+  if (
+    last &&
+    passesNaturalQuality(last, kind, modeKey, code) &&
+    (modeKey !== "min" || passesMinSubstance(last, kind, code, style))
+  ) {
+    return last;
+  }
   const fallbackTpl =
     templates.find((t) => String(t).includes(",") && !isThinMinTemplate(t)) || templates[0];
   const rendered = renderTemplate(fallbackTpl, bank, kind);
@@ -1020,6 +1038,7 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
       tries++;
       const candidate = composeReply(kind, mode, lang, style);
       if (!candidate || !passesModeProfile(candidate, mode)) continue;
+      if (!passesNaturalQuality(candidate, kind, mode, lang)) continue;
       if (mode === "min" && !passesMinSubstance(candidate, kind, lang, style)) continue;
       const fp = shapeFingerprint(candidate, kind);
       if (!fp) continue;
@@ -1069,6 +1088,7 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
       emergencyTries++;
       const candidate = composeReply(kind, mode, lang, style);
       if (!candidate) continue;
+      if (!passesNaturalQuality(candidate, kind, mode, lang)) continue;
       if (mode === "min" && !passesMinSubstance(candidate, kind, lang, style)) continue;
       const fp = shapeFingerprint(candidate, kind) || candidate.toLowerCase();
       if (seenText.has(candidate)) continue;
@@ -1090,11 +1110,14 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
   const out = [];
   const usedShape = new Set();
   const usedText = new Set();
+  const usedNorm = new Set();
   for (const item of pool) {
     if (!item || !item.text || !item.fp) continue;
-    if (usedShape.has(item.fp) || usedText.has(item.text)) continue;
+    const norm = normalizedSkeleton(item.text);
+    if (usedShape.has(item.fp) || usedText.has(item.text) || usedNorm.has(norm)) continue;
     usedShape.add(item.fp);
     usedText.add(item.text);
+    usedNorm.add(norm);
     out.push(item.text);
     if (out.length >= count) break;
   }

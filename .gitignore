@@ -61,6 +61,7 @@ tools/gmx-stage*.mjs
 tools/test-best*.mjs
 tools/diag-hook.mjs
 tools/print-gen-samples.mjs
+tools/.generation-human-review.txt
 WORK_STATUS.md
 
 # Vite dev fallback only — canonical binaries live in assets/ (served at /assets)

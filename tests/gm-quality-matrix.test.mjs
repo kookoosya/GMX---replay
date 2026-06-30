@@ -50,7 +50,7 @@ function langProbe(lang, text) {
   if (lang === "pt") return /energia|bom|mano|boa|começo|dia|post/i.test(t);
   if (lang === "fr") return /[àâçééèêëîïôùûü]|Bonjour|Matin|beau|bonne|énergie|journée/i.test(t);
   if (lang === "de") return /[äöüß]|leichter|Start|energie|gut|Tag|Morgen|Post/i.test(t);
-  if (lang === "it") return /[àèéìòù]|buon|inizio|giornata|leggera|bel|post|Buongiorno|energia/i.test(t);
+  if (lang === "it") return /[àèéìòù]|buon|inizio|giornata|leggera|bel|post|Buongiorno|energia|mattina|mattinata|tranquilla/i.test(t);
   if (lang === "nl") return /energie|goede|mooie|Ochtend|maat|dag|lichte|start/i.test(t);
   if (lang === "pl") return /[ąćęłńóśźż]|energia|dobra|dobry|dobrego|dnia|dzień|ziom|bro|lekki|start/i.test(t);
   if (lang === "id") return /semoga|harimu|posting|pagi|bagus|energi|awal|ringan|yang/i.test(t);
