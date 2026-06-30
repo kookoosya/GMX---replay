@@ -1,16 +1,20 @@
 /** Wallpaper pairing, curated picks, and UI grouping — shared by site UI and tests. */
+import { PACK_CATEGORIES, WALLPAPER_CATEGORIES } from "./wallpaper-curated-catalog.mjs";
 
-export const WALLPAPER_PACK_COUNT = 100;
+export { WALLPAPER_CATEGORIES };
 
-export const WALLPAPER_CURATED_INDICES = Object.freeze([
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62, 66, 70, 74, 78, 82, 86, 90, 94, 98, 100,
-]);
+export const WALLPAPER_PACK_COUNT = 25;
+
+export const WALLPAPER_CURATED_INDICES = Object.freeze(
+  Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => i + 1)
+);
 
 export const WALLPAPER_GROUP_ORDER = Object.freeze(["custom", "free", "unlocked", "locked"]);
 
 export const WALLPAPER_FILTER_OPTIONS = Object.freeze([
   { id: "featured", labelKey: "wp_filter_featured" },
   { id: "all", labelKey: "wp_filter_all" },
+  ...WALLPAPER_CATEGORIES.map((c) => ({ id: c.id, labelKey: c.labelKey })),
   { id: "free", labelKey: "wp_filter_free" },
   { id: "mine", labelKey: "wp_filter_mine" },
 ]);
@@ -56,6 +60,12 @@ export function bucketWallpaperEntry(wp, idx, effectiveCustomLen, opts) {
   return "locked";
 }
 
+export function packCategoryForIndex(n) {
+  const idx = Number(n) - 1;
+  if (idx < 0 || idx >= PACK_CATEGORIES.length) return "";
+  return PACK_CATEGORIES[idx] || "";
+}
+
 export function filterWallpaperEntries(entries, filterId, packIndexOf) {
   const filter = String(filterId || "featured").toLowerCase();
   const idxOf =
@@ -64,6 +74,13 @@ export function filterWallpaperEntries(entries, filterId, packIndexOf) {
       : (wp) => packIndexFromSiteId(wp?.id);
 
   if (filter === "all") return entries;
+  if (WALLPAPER_CATEGORIES.some((c) => c.id === filter)) {
+    return entries.filter(({ wp, bucket }) => {
+      if (bucket === "custom") return filter === "all";
+      const n = idxOf(wp);
+      return n > 0 && packCategoryForIndex(n) === filter;
+    });
+  }
   if (filter === "featured") {
     return entries.filter(({ wp, bucket }) => {
       if (bucket === "custom") return true;

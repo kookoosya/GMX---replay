@@ -62,6 +62,7 @@ tools/test-best*.mjs
 tools/diag-hook.mjs
 tools/print-gen-samples.mjs
 tools/.generation-human-review.txt
+tools/_stage1-rotate.local.mjs
 WORK_STATUS.md
 
 # Vite dev fallback only — canonical binaries live in assets/ (served at /assets)

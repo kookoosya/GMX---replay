@@ -3,10 +3,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { PACK_NAMES, WALLPAPER_PACK_COUNT } from "./lib/wallpaper-pexels-catalog.mjs";
+import { PACK_NAMES, WALLPAPER_PACK_COUNT, PACK_CATEGORIES } from "./lib/wallpaper-pexels-catalog.mjs";
 import {
   WALLPAPER_CURATED_INDICES,
   WALLPAPER_PACK_COUNT as CORE_COUNT,
+  WALLPAPER_FILTER_OPTIONS,
   formatExtPackId,
 } from "./lib/wallpaper-core.mjs";
 
@@ -70,12 +71,9 @@ function patchWallpaperCoreJs(file) {
 
   const WALLPAPER_GROUP_ORDER = ["custom", "free", "unlocked", "locked"];
 
-  const WALLPAPER_FILTER_OPTIONS = [
-    { id: "featured", labelKey: "wp_filter_featured" },
-    { id: "all", labelKey: "wp_filter_all" },
-    { id: "free", labelKey: "wp_filter_free" },
-    { id: "mine", labelKey: "wp_filter_mine" },
-  ];
+  const WALLPAPER_FILTER_OPTIONS = ${JSON.stringify(WALLPAPER_FILTER_OPTIONS, null, 2)};
+
+  const PACK_CATEGORIES = ${JSON.stringify(PACK_CATEGORIES, null, 2)};
 
   function formatExtPackId(n) {
     const num = Math.max(1, Math.min(WALLPAPER_PACK_COUNT, Number(n) || 1));
@@ -119,6 +117,12 @@ function patchWallpaperCoreJs(file) {
     return "locked";
   }
 
+  function packCategoryForIndex(n) {
+    const idx = Number(n) - 1;
+    if (idx < 0 || idx >= PACK_CATEGORIES.length) return "";
+    return PACK_CATEGORIES[idx] || "";
+  }
+
   function filterWallpaperEntries(entries, filterId, packIndexOf) {
     const filter = String(filterId || "featured").toLowerCase();
     const idxOf =
@@ -127,6 +131,13 @@ function patchWallpaperCoreJs(file) {
       };
 
     if (filter === "all") return entries;
+    if (PACK_CATEGORIES.indexOf(filter) >= 0 || ["neon-city", "space", "nature", "abstract", "minimal"].indexOf(filter) >= 0) {
+      return entries.filter(function (entry) {
+        if (entry.bucket === "custom") return false;
+        const n = idxOf(entry.wp);
+        return n > 0 && packCategoryForIndex(n) === filter;
+      });
+    }
     if (filter === "featured") {
       return entries.filter(function (entry) {
         if (entry.bucket === "custom") return true;
@@ -175,6 +186,7 @@ function patchWallpaperCoreJs(file) {
     pairedSiteId: pairedSiteId,
     isCuratedPackIndex: isCuratedPackIndex,
     bucketWallpaperEntry: bucketWallpaperEntry,
+    packCategoryForIndex: packCategoryForIndex,
     filterWallpaperEntries: filterWallpaperEntries,
     groupWallpaperEntries: groupWallpaperEntries,
   };

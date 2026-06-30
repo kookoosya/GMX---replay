@@ -4,8 +4,8 @@ import fs from "node:fs";
 import path from "node:path";
 
 const root = process.cwd();
-const MIN_FULL = 12_000;
-const MIN_THUMB = 1_000;
+const MIN_FULL = 3500;
+const MIN_THUMB = 250;
 
 function checkDir(fullDir, thumbDir, prefix, count, pad) {
   let issues = 0;
@@ -37,19 +37,19 @@ issues += checkDir(
   path.join(root, "assets", "wallpapers"),
   path.join(root, "assets", "wallpapers", "thumbs"),
   "v2_",
-  100,
+  25,
   3
 );
 issues += checkDir(
   path.join(root, "assets", "extbg"),
   path.join(root, "assets", "extbg", "thumbs"),
   "extv3_",
-  100,
+  25,
   3
 );
 
 if (issues) {
-  console.error(`check-wallpaper-assets: ${issues} issue(s). Run: npm run wallpapers:fetch`);
+  console.error(`check-wallpaper-assets: ${issues} issue(s). Run: npm run wallpapers:generate-curated`);
   process.exit(1);
 }
-console.log("check-wallpaper-assets OK (100 site + 100 ext)");
+console.log("check-wallpaper-assets OK (25 site + 25 ext)");

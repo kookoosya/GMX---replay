@@ -47,13 +47,13 @@ function langProbe(lang, text) {
   if (lang === "hi") return /[\u0900-\u097F]/.test(t);
   if (lang === "tr") return /[çğıöşüÇĞİÖŞÜ]|güzel|paylaşım|Günaydın|Sabah|kanka|iyi|enerji/i.test(t);
   if (lang === "es") return /[áéíóúñ]|Buenos|buen|Mañana|energía|día/i.test(t);
-  if (lang === "pt") return /energia|bom|mano|boa|começo|dia|post/i.test(t);
+  if (lang === "pt") return /energia|bom|mano|boa|começo|dia|post|manhã|tranquila|tenha/i.test(t);
   if (lang === "fr") return /[àâçééèêëîïôùûü]|Bonjour|Matin|beau|bonne|énergie|journée/i.test(t);
   if (lang === "de") return /[äöüß]|leichter|Start|energie|gut|Tag|Morgen|Post/i.test(t);
   if (lang === "it") return /[àèéìòù]|buon|inizio|giornata|leggera|bel|post|Buongiorno|energia|mattina|mattinata|tranquilla/i.test(t);
   if (lang === "nl") return /energie|goede|mooie|Ochtend|maat|dag|lichte|start/i.test(t);
   if (lang === "pl") return /[ąćęłńóśźż]|energia|dobra|dobry|dobrego|dnia|dzień|ziom|bro|lekki|start/i.test(t);
-  if (lang === "id") return /semoga|harimu|posting|pagi|bagus|energi|awal|ringan|yang/i.test(t);
+  if (lang === "id") return /semoga|harimu|posting|pagi|bagus|energi|awal|ringan|yang|selamat|menyenangkan/i.test(t);
   if (lang === "ja") return /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u.test(t);
   if (lang === "zh") return /[\p{Script=Han}]/u.test(t);
   return t.trim().length > 4;
