@@ -81,7 +81,7 @@ export async function waitForHealth(base, ms = 20000) {
   fail(`server not healthy at ${base}${lastError ? ` (${lastError})` : ""}`);
 }
 
-export async function spawnTestServer(port) {
+export async function spawnTestServer(port, envOverrides = {}) {
   killPort(port);
   const dbPath = path.join(os.tmpdir(), `gmxreply-test-${port}-${process.pid}.sqlite`);
   try {
@@ -98,6 +98,7 @@ export async function spawnTestServer(port) {
       GMX_SOLANA_RPC_MOCK: "1",
       ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || "test-admin-local",
       ADMIN_SECRET: process.env.ADMIN_SECRET || "test-admin-secret-local",
+      ...envOverrides,
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
