@@ -20,6 +20,52 @@
     } = ctx;
 
     let sessionInitEpoch = 0;
+    const LS_FORCE_LOGOUT = "gmx_ext_force_logout";
+    const LS_FORCE_LOGOUT_V2 = "gmx_ext_force_logout_v2";
+
+    function isForceLogoutActive() {
+      try {
+        return !!(
+          localStorage.getItem(LS_FORCE_LOGOUT) ||
+          localStorage.getItem(LS_FORCE_LOGOUT_V2)
+        );
+      } catch (_e) {
+        return false;
+      }
+    }
+
+    function forceLogoutAfter(sinceMs) {
+      try {
+        const a = Number(localStorage.getItem(LS_FORCE_LOGOUT) || 0) || 0;
+        const b = Number(localStorage.getItem(LS_FORCE_LOGOUT_V2) || 0) || 0;
+        const marker = Math.max(a, b);
+        return marker > Number(sinceMs || 0);
+      } catch (_e) {
+        return false;
+      }
+    }
+
+    function sessionApplyBlocked(generation, startedAt) {
+      return !isSessionGenerationCurrent(generation) || forceLogoutAfter(startedAt);
+    }
+
+    async function clearStaleAuthCookie() {
+      try {
+        await runAuthCookieMutation(async () => {
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort("timeout"), 3000);
+          try {
+            await fetch(API + "/api/user/logout", {
+              method: "POST",
+              signal: controller.signal,
+              credentials: "include",
+            });
+          } finally {
+            clearTimeout(timer);
+          }
+        });
+      } catch (_e) {}
+    }
 
     function bumpSessionGeneration() {
       sessionInitEpoch += 1;
@@ -143,15 +189,22 @@
         return getToken();
       }
         const initEpoch = sessionInitEpoch;
+        const initStartedAt = Date.now();
         try{
           const params = new URLSearchParams(location.search);
           const ref = params.get("ref") || "";
           const payload = { handle, ref, devReset: (force && isLocalDevHost()) ? 1 : 0 };
           const r = await runAuthCookieMutation(() => fetchInitSessionNetwork(payload, 20000));
           const j = await r.json().catch(()=>({}));
-          if (!isSessionGenerationCurrent(initEpoch)) return null;
+          if (sessionApplyBlocked(initEpoch, initStartedAt)) {
+            if (forceLogoutAfter(initStartedAt)) await clearStaleAuthCookie();
+            return null;
+          }
           if (!r.ok || !j.token) throw new Error(j.error_code || j.error || "init_failed");
-          if (!isSessionGenerationCurrent(initEpoch)) return null;
+          if (sessionApplyBlocked(initEpoch, initStartedAt)) {
+            if (forceLogoutAfter(initStartedAt)) await clearStaleAuthCookie();
+            return null;
+          }
           try{ localStorage.setItem(LS_HANDLE, j.handle || handle); }catch{}
           try{ localStorage.setItem(LS_TOKEN, j.token); }catch{}
           try{ $("handlePill").textContent = j.handle || handle; }catch{}
@@ -162,7 +215,10 @@
           try{ ping(); }catch{}
           return j.token;
         }catch(e){
-          if (!isSessionGenerationCurrent(initEpoch)) return null;
+          if (sessionApplyBlocked(initEpoch, initStartedAt)) {
+            if (forceLogoutAfter(initStartedAt)) await clearStaleAuthCookie();
+            return null;
+          }
           setAuthOk(false);
           try{ applyAdminVisibility(); }catch{}
           try{ ping(); }catch{}

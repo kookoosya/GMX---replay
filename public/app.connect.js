@@ -45,6 +45,28 @@
       cm.innerHTML = `<span class="${cls}">${escapeHtml(tr(key))}</span>`;
     }
 
+    function isForceLogoutActive() {
+      try {
+        return !!(
+          localStorage.getItem(keys.forceLogout || "gmx_ext_force_logout") ||
+          localStorage.getItem(keys.forceLogoutV2 || "gmx_ext_force_logout_v2")
+        );
+      } catch (_e) {
+        return false;
+      }
+    }
+
+    function forceLogoutAfter(sinceMs) {
+      try {
+        const a = Number(localStorage.getItem(keys.forceLogout || "gmx_ext_force_logout") || 0) || 0;
+        const b = Number(localStorage.getItem(keys.forceLogoutV2 || "gmx_ext_force_logout_v2") || 0) || 0;
+        const marker = Math.max(a, b);
+        return marker > Number(sinceMs || 0);
+      } catch (_e) {
+        return false;
+      }
+    }
+
     function renderPendingConnectHint() {
       if (!referralPending) return;
       const pending = referralPending.readPending();
@@ -116,10 +138,16 @@
             : new URLSearchParams(location.search).get("ref") || "";
 
           const connectGeneration = beginSessionGeneration();
+          const connectStartedAt = Date.now();
 
           try {
             const j = await api("/api/user/init", "POST", { handle, ref: ref || undefined });
-            if (!isSessionGenerationCurrent(connectGeneration)) return;
+            if (!isSessionGenerationCurrent(connectGeneration) || forceLogoutAfter(connectStartedAt)) {
+              try {
+                await api("/api/user/logout", "POST", null, { timeoutMs: 3000 });
+              } catch (_e) {}
+              return;
+            }
 
             localStorage.setItem(keys.handle || "gmx_handle", j.handle);
             localStorage.setItem(keys.token || "gmx_token", j.token);

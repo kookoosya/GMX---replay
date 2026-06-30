@@ -77,6 +77,8 @@ export function setAuth(handle: string, token: string) {
 export function clearAuth() {
   try { localStorage.removeItem(LS_HANDLE); } catch {}
   try { localStorage.removeItem(LS_TOKEN); } catch {}
+  try { localStorage.setItem("gmx_ext_force_logout", String(Date.now())); } catch {}
+  try { localStorage.setItem("gmx_ext_force_logout_v2", String(Date.now())); } catch {}
   setStoredAdminToken("");
   requestSiteExtensionSync();
 }

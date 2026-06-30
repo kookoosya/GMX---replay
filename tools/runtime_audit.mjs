@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import process from "process";
+import { WALLPAPER_PACK_COUNT } from "./lib/wallpaper-core.mjs";
 
 const root = process.cwd();
 const strict = process.argv.includes("--strict");
@@ -45,13 +46,13 @@ function printList(label, items) {
 let issues = 0;
 
 const expectedSiteWalls = [
-  ...seq("v2_", 100, ".webp", 3),
+  ...seq("v2_", WALLPAPER_PACK_COUNT, ".webp", 3),
 ];
-const expectedSiteThumbs = seq("v2_", 100, ".webp", 3);
+const expectedSiteThumbs = seq("v2_", WALLPAPER_PACK_COUNT, ".webp", 3);
 const expectedExtWalls = [
-  ...seq("extv3_", 100, ".webp", 3),
+  ...seq("extv3_", WALLPAPER_PACK_COUNT, ".webp", 3),
 ];
-const expectedExtThumbs = seq("extv3_", 100, ".webp", 3);
+const expectedExtThumbs = seq("extv3_", WALLPAPER_PACK_COUNT, ".webp", 3);
 
 for (const [label, rel, expected] of [
   ["site wallpapers", "assets/wallpapers", expectedSiteWalls],

@@ -34,7 +34,11 @@ const htmlFiles = ["public/app.html", "frontend/public/app.html"];
 const wallpaperModule = "public/app.wallpapers.js";
 
 if (fs.existsSync(path.join(root, wallpaperModule))) {
-  mustMatch(wallpaperModule, /const SITE_PACK_COUNT = 100;/, "wallpaper pack count must be 100");
+  const wallpaperText = read(wallpaperModule);
+  const packCountMatch = wallpaperText.match(/const SITE_PACK_COUNT = (\d+);/);
+  if (!packCountMatch || Number(packCountMatch[1]) < 1) {
+    fail(`wallpaper pack count must be a positive integer (${wallpaperModule})`);
+  }
   mustNotMatch(wallpaperModule, /source\.unsplash\.com/, "unsplash URLs forbidden");
   mustNotMatch(wallpaperModule, /sitePackWallpaperDataUri/, "chart SVG data-uri wallpapers forbidden");
   mustNotMatch(wallpaperModule, /SITE_WALLPAPER_LUX/, "lux SVG wallpaper catalog removed");
