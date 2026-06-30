@@ -1,0 +1,252 @@
+#!/usr/bin/env node
+/** Prediction / Polymarket onboarding copy — 15 locales. */
+import fs from "node:fs";
+import path from "node:path";
+
+const ROOT = path.join(process.cwd(), "shared", "i18n", "locales");
+
+const PATCH = {
+  de: {
+    pm_desc: "Vorschau: Live-Bot-Signale und externe Markt-Feeds sind noch nicht verbunden. Nach dem Start zeigt dieser Tab eine kleine tägliche Charge Richtungskontext-Karten — keine Anlageberatung.",
+    pm_pro_badge: "Vorschau-Feed",
+    pm_status_preview: "Noch kein Live-Feed — externe Signalquelle nicht verbunden. Aktualisieren prüft nur den Server.",
+    pm_empty: "Noch keine Signale. Der Feed ist nicht verbunden — nach dem Start erneut prüfen.",
+    pm_locked: "Demnächst für alle Nutzer.",
+    pm_locked_note: "Signale sind nur informativ, können falsch sein und sind keine Ergebnisse. Dieser Tab bewegt keine Mittel.",
+    pm_newbie_dismiss: "Verstanden",
+    pm_preview_badge: "Vorschau",
+    pm_unauth_status: "Verbinde deinen @handle, um Demo-Bot-Karten zu sehen. Kein Live-Polymarket-Feed verbunden.",
+    pm_unauth_empty: "Melde dich mit deinem @handle an, um Demo-Karten zu sehen. Externe Märkte sind unten verlinkt — Handel findet dort statt, nicht hier.",
+    pm_error_retry: "Signale konnten nicht geladen werden. Tippe auf Aktualisieren.",
+    pm_filter_empty: "Keine Demo-Karten passen zu diesen Filtern.",
+    pm_demo_note: "Nur Demo-Bot-Ausgabe — keine Live-Polymarket-Daten.",
+  },
+  fr: {
+    pm_desc: "Aperçu : les signaux bot live et les flux externes ne sont pas encore connectés. Après le lancement, cet onglet montrera un petit lot quotidien de cartes de contexte — pas un conseil financier.",
+    pm_pro_badge: "Flux aperçu",
+    pm_status_preview: "Pas de flux live — source externe non connectée. Actualiser ne vérifie que le serveur.",
+    pm_empty: "Pas encore de signaux. Le flux n’est pas connecté — revenez après le lancement.",
+    pm_locked: "Bientôt pour tous les utilisateurs.",
+    pm_locked_note: "Les signaux sont informatifs, peuvent être faux et ne garantissent aucun résultat. Cet onglet ne déplace pas de fonds.",
+    pm_newbie_dismiss: "Compris",
+    pm_preview_badge: "Aperçu",
+    pm_unauth_status: "Connectez votre @handle pour voir les cartes démo. Aucun flux Polymarket live connecté.",
+    pm_unauth_empty: "Connectez-vous avec votre @handle pour l’aperçu démo. Les marchés externes sont liés ci-dessous — le trading se fait là-bas, pas ici.",
+    pm_error_retry: "Impossible de charger les signaux. Appuyez sur Actualiser.",
+    pm_filter_empty: "Aucune carte démo ne correspond à ces filtres.",
+    pm_demo_note: "Sortie bot démo uniquement — pas de données Polymarket live.",
+  },
+  es: {
+    pm_desc: "Vista previa: señales bot en vivo y feeds externos aún no conectados. Tras el lanzamiento, esta pestaña mostrará un pequeño lote diario de tarjetas de contexto — no es asesoramiento financiero.",
+    pm_pro_badge: "Feed previo",
+    pm_status_preview: "Sin feed en vivo — fuente externa no conectada. Actualizar solo comprueba el servidor.",
+    pm_empty: "Aún no hay señales. El feed no está conectado — vuelve tras el lanzamiento.",
+    pm_locked: "Próximamente para todos.",
+    pm_locked_note: "Las señales son informativas, pueden fallar y no garantizan resultados. Esta pestaña no mueve fondos.",
+    pm_newbie_dismiss: "Entendido",
+    pm_preview_badge: "Vista previa",
+    pm_unauth_status: "Conecta tu @handle para ver tarjetas demo. No hay feed Polymarket en vivo conectado.",
+    pm_unauth_empty: "Inicia sesión con tu @handle para la demo. Los mercados externos están abajo — el trading es allí, no aquí.",
+    pm_error_retry: "No se pudieron cargar las señales. Pulsa Actualizar.",
+    pm_filter_empty: "Ninguna tarjeta demo coincide con estos filtros.",
+    pm_demo_note: "Solo salida bot demo — no datos Polymarket en vivo.",
+  },
+  pt: {
+    pm_desc: "Prévia: sinais bot ao vivo e feeds externos ainda não conectados. Após o lançamento, esta aba mostrará um pequeno lote diário de cartões de contexto — não é aconselhamento financeiro.",
+    pm_pro_badge: "Feed prévia",
+    pm_status_preview: "Sem feed ao vivo — fonte externa não conectada. Atualizar só verifica o servidor.",
+    pm_empty: "Ainda sem sinais. O feed não está conectado — volte após o lançamento.",
+    pm_locked: "Em breve para todos.",
+    pm_locked_note: "Sinais são informativos, podem estar errados e não garantem resultados. Esta aba não move fundos.",
+    pm_newbie_dismiss: "Entendi",
+    pm_preview_badge: "Prévia",
+    pm_unauth_status: "Conecte seu @handle para ver cartões demo. Nenhum feed Polymarket ao vivo conectado.",
+    pm_unauth_empty: "Entre com seu @handle para a demo. Mercados externos estão abaixo — negociação é lá, não aqui.",
+    pm_error_retry: "Não foi possível carregar sinais. Toque em Atualizar.",
+    pm_filter_empty: "Nenhum cartão demo corresponde a estes filtros.",
+    pm_demo_note: "Apenas saída bot demo — não dados Polymarket ao vivo.",
+  },
+  it: {
+    pm_desc: "Anteprima: segnali bot live e feed esterni non ancora connessi. Dopo il lancio, questa scheda mostrerà un piccolo batch giornaliero di carte contesto — non consulenza finanziaria.",
+    pm_pro_badge: "Feed anteprima",
+    pm_status_preview: "Nessun feed live — fonte esterna non connessa. Aggiorna controlla solo il server.",
+    pm_empty: "Ancora nessun segnale. Il feed non è connesso — riprova dopo il lancio.",
+    pm_locked: "Presto per tutti gli utenti.",
+    pm_locked_note: "I segnali sono informativi, possono essere errati e non garantiscono risultati. Questa scheda non muove fondi.",
+    pm_newbie_dismiss: "Capito",
+    pm_preview_badge: "Anteprima",
+    pm_unauth_status: "Collega il tuo @handle per vedere le carte demo. Nessun feed Polymarket live connesso.",
+    pm_unauth_empty: "Accedi con il tuo @handle per l’anteprima demo. I mercati esterni sono sotto — il trading avviene lì, non qui.",
+    pm_error_retry: "Impossibile caricare i segnali. Tocca Aggiorna.",
+    pm_filter_empty: "Nessuna carta demo corrisponde a questi filtri.",
+    pm_demo_note: "Solo output bot demo — non dati Polymarket live.",
+  },
+  nl: {
+    pm_desc: "Voorbeeld: live bot-signalen en externe feeds zijn nog niet verbonden. Na lancering toont dit tabblad een kleine dagelijkse batch contextkaarten — geen beleggingsadvies.",
+    pm_pro_badge: "Voorbeeldfeed",
+    pm_status_preview: "Nog geen live feed — externe bron niet verbonden. Vernieuwen controleert alleen de server.",
+    pm_empty: "Nog geen signalen. Feed niet verbonden — kom terug na lancering.",
+    pm_locked: "Binnenkort voor alle gebruikers.",
+    pm_locked_note: "Signalen zijn informatief, kunnen fout zijn en garanderen geen uitkomsten. Dit tabblad verplaatst geen fondsen.",
+    pm_newbie_dismiss: "Begrepen",
+    pm_preview_badge: "Voorbeeld",
+    pm_unauth_status: "Koppel je @handle om demo-kaarten te zien. Geen live Polymarket-feed verbonden.",
+    pm_unauth_empty: "Log in met je @handle voor de demo. Externe markten staan hieronder — handelen gebeurt daar, niet hier.",
+    pm_error_retry: "Signalen laden mislukt. Tik op Vernieuwen.",
+    pm_filter_empty: "Geen demo-kaarten passen bij deze filters.",
+    pm_demo_note: "Alleen demo-botoutput — geen live Polymarket-data.",
+  },
+  pl: {
+    pm_desc: "Podgląd: sygnały bota na żywo i zewnętrzne feedy nie są jeszcze podłączone. Po starcie ta zakładka pokaże małą dzienną partię kart kontekstu — to nie porada inwestycyjna.",
+    pm_pro_badge: "Feed podglądu",
+    pm_status_preview: "Brak live feedu — zewnętrzne źródło niepodłączone. Odśwież tylko sprawdza serwer.",
+    pm_empty: "Brak sygnałów. Feed niepodłączony — wróć po starcie.",
+    pm_locked: "Wkrótce dla wszystkich.",
+    pm_locked_note: "Sygnały są informacyjne, mogą być błędne i nie gwarantują wyników. Ta zakładka nie przenosi środków.",
+    pm_newbie_dismiss: "Rozumiem",
+    pm_preview_badge: "Podgląd",
+    pm_unauth_status: "Połącz @handle, aby zobaczyć karty demo. Brak live feedu Polymarket.",
+    pm_unauth_empty: "Zaloguj się @handle, aby zobaczyć demo. Rynki zewnętrzne są poniżej — handel tam, nie tutaj.",
+    pm_error_retry: "Nie udało się załadować sygnałów. Naciśnij Odśwież.",
+    pm_filter_empty: "Żadna karta demo nie pasuje do filtrów.",
+    pm_demo_note: "Tylko demo bota — nie live dane Polymarket.",
+  },
+  tr: {
+    pm_desc: "Önizleme: canlı bot sinyalleri ve harici feedler henüz bağlı değil. Lansman sonrası bu sekme günlük küçük bir bağlam kartı seti gösterecek — yatırım tavsiyesi değil.",
+    pm_pro_badge: "Önizleme feed",
+    pm_status_preview: "Canlı feed yok — harici kaynak bağlı değil. Yenile yalnızca sunucuyu kontrol eder.",
+    pm_empty: "Henüz sinyal yok. Feed bağlı değil — lansman sonrası tekrar bakın.",
+    pm_locked: "Yakında herkes için.",
+    pm_locked_note: "Sinyaller bilgilendiricidir, yanlış olabilir ve sonuç garantisi vermez. Bu sekme fon taşımaz.",
+    pm_newbie_dismiss: "Anladım",
+    pm_preview_badge: "Önizleme",
+    pm_unauth_status: "Demo kartları görmek için @handle bağlayın. Canlı Polymarket feedi yok.",
+    pm_unauth_empty: "Demo için @handle ile giriş yapın. Harici piyasalar aşağıda — işlem orada, burada değil.",
+    pm_error_retry: "Sinyaller yüklenemedi. Yenile’ye dokunun.",
+    pm_filter_empty: "Bu filtrelere uyan demo kart yok.",
+    pm_demo_note: "Yalnızca demo bot çıktısı — canlı Polymarket verisi değil.",
+  },
+  id: {
+    pm_desc: "Pratinjau: sinyal bot live dan feed eksternal belum terhubung. Setelah peluncuran, tab ini menampilkan batch kecil kartu konteks harian — bukan saran investasi.",
+    pm_pro_badge: "Feed pratinjau",
+    pm_status_preview: "Belum ada feed live — sumber eksternal tidak terhubung. Segarkan hanya memeriksa server.",
+    pm_empty: "Belum ada sinyal. Feed belum terhubung — cek lagi setelah peluncuran.",
+    pm_locked: "Segera untuk semua pengguna.",
+    pm_locked_note: "Sinyal informatif, bisa salah, dan bukan jaminan hasil. Tab ini tidak memindahkan dana.",
+    pm_newbie_dismiss: "Mengerti",
+    pm_preview_badge: "Pratinjau",
+    pm_unauth_status: "Hubungkan @handle untuk melihat kartu demo. Tidak ada feed Polymarket live.",
+    pm_unauth_empty: "Masuk dengan @handle untuk demo. Pasar eksternal di bawah — trading di sana, bukan di sini.",
+    pm_error_retry: "Gagal memuat sinyal. Ketuk Segarkan.",
+    pm_filter_empty: "Tidak ada kartu demo yang cocok dengan filter ini.",
+    pm_demo_note: "Hanya output bot demo — bukan data Polymarket live.",
+  },
+  hi: {
+    pm_desc: "पूर्वावलोकन: live bot signals और external feeds अभी connected नहीं। Launch के बाद यह tab रोज़ाना छोटा context card batch दिखाएगा — investment advice नहीं।",
+    pm_pro_badge: "पूर्वावलोकन फ़ीड",
+    pm_status_preview: "अभी live feed नहीं — external source connected नहीं। Refresh सिर्फ server check करता है।",
+    pm_empty: "अभी signals नहीं। Feed connected नहीं — launch के बाद देखें।",
+    pm_locked: "जल्द सभी users के लिए।",
+    pm_locked_note: "Signals सिर्फ जानकारी हैं, गलत हो सकते हैं। यह tab funds move नहीं करता।",
+    pm_newbie_dismiss: "समझ गया",
+    pm_preview_badge: "पूर्वावलोकन",
+    pm_unauth_status: "Demo cards के लिए @handle connect करें। Live Polymarket feed connected नहीं।",
+    pm_unauth_empty: "Demo के लिए @handle से sign in करें। External markets नीचे हैं — trading वहीं, यहाँ नहीं।",
+    pm_error_retry: "Signals load नहीं हुए। Refresh दबाएँ।",
+    pm_filter_empty: "इन filters से कोई demo card match नहीं।",
+    pm_demo_note: "सिर्फ demo bot output — live Polymarket data नहीं।",
+  },
+  ja: {
+    pm_desc: "プレビュー：ライブ bot シグナルと外部フィードは未接続です。公開後は方向性コンテキストカードを少量表示 — 投資助言ではありません。",
+    pm_pro_badge: "プレビューフィード",
+    pm_status_preview: "ライブフィードなし — 外部ソース未接続。更新はサーバー確認のみ。",
+    pm_empty: "シグナルなし。フィード未接続 — 公開後に再確認。",
+    pm_locked: "近日全ユーザー向け。",
+    pm_locked_note: "シグナルは参考情報で誤り得ます。結果を保証しません。このタブは資金を動かしません。",
+    pm_newbie_dismiss: "了解",
+    pm_preview_badge: "プレビュー",
+    pm_unauth_status: "デモカードを見るには @handle を接続。Polymarket ライブフィード未接続。",
+    pm_unauth_empty: "デモは @handle でサインイン。外部市場は下のリンク — 取引はそちらで、ここではありません。",
+    pm_error_retry: "シグナルを読み込めませんでした。更新をタップ。",
+    pm_filter_empty: "フィルターに合うデモカードがありません。",
+    pm_demo_note: "デモ bot 出力のみ — Polymarket ライブデータではありません。",
+  },
+  zh: {
+    pm_desc: "预览：实时 bot 信号与外部数据源尚未连接。上线后此标签页将显示少量每日方向上下文卡片 — 非投资建议。",
+    pm_pro_badge: "预览源",
+    pm_status_preview: "尚无实时源 — 外部信号未连接。刷新仅检查服务器。",
+    pm_empty: "暂无信号。源未连接 — 上线后再查看。",
+    pm_locked: "即将向所有用户开放。",
+    pm_locked_note: "信号仅供参考，可能错误，不保证结果。此标签页不转移资金。",
+    pm_newbie_dismiss: "知道了",
+    pm_preview_badge: "预览",
+    pm_unauth_status: "连接 @handle 以预览演示卡片。未连接 Polymarket 实时源。",
+    pm_unauth_empty: "使用 @handle 登录以预览演示。外部市场见下方链接 — 交易在那些网站，不在此处。",
+    pm_error_retry: "无法加载信号。请点击刷新。",
+    pm_filter_empty: "没有符合筛选条件的演示卡片。",
+    pm_demo_note: "仅为演示 bot 输出 — 非 Polymarket 实时数据。",
+  },
+  ru: {
+    pm_title: "Рынок предсказаний",
+    pm_desc: "Превью: live bot-сигналы и внешние фиды ещё не подключены. После запуска вкладка покажет небольшую дневную подборку контекст-карт — не инвестсовет.",
+    pm_pro_badge: "Превью-лента",
+    pm_notice: "Сигналы генерирует бот и могут быть неверны",
+    pm_status: "Когда лента заработает: несколько bot-карт в день · контекст в стиле Polymarket · уверенность на каждой карте",
+    pm_status_preview: "Live-ленты пока нет — внешний источник не подключён. Обновление только проверяет сервер.",
+    pm_empty: "Сигналов пока нет. Лента не подключена — зайдите после запуска.",
+    pm_locked: "Скоро для всех пользователей.",
+    pm_locked_note: "Сигналы только для информации, могут быть неверны и не гарантируют исход. Вкладка не переводит средства.",
+    pm_risk_desc: "Сигналы модельные и могут ошибаться в любой фазе рынка. Проверяйте сами и используйте лимиты риска.",
+    pm_notice_loss: "Когда уведомления заработают, расширение может напомнить об обновлении.",
+    pm_notice_gain: "После запуска план — несколько обновлений в день с контекстом в стиле Polymarket.",
+    pm_disclaimer_desc: "GMXReply не даёт инвестсовет, не гарантирует результат и не несёт ответственности за сделки. Если торговля появится здесь, план — только Polygon.",
+    pm_newbie_dismiss: "Понятно",
+    pm_preview_badge: "Превью",
+    pm_unauth_status: "Подключите @handle, чтобы увидеть demo-карты. Live Polymarket не подключён.",
+    pm_unauth_empty: "Войдите с @handle для demo. Внешние рынки ниже — торговля там, не здесь.",
+    pm_error_retry: "Не удалось загрузить сигналы. Нажмите «Обновить».",
+    pm_filter_empty: "Нет demo-карт под эти фильтры.",
+    pm_demo_note: "Только demo bot — не live-данные Polymarket.",
+  },
+  uk: {
+    pm_desc: "Превʼю: live bot-сигнали та зовнішні фіди ще не підключені. Після запуску вкладка покаже невелику добову добірку контекст-карток — не інвестпорада.",
+    pm_pro_badge: "Превʼю-стрічка",
+    pm_status_preview: "Live-стрічки ще немає — зовнішнє джерело не підключене. Оновлення лише перевіряє сервер.",
+    pm_empty: "Сигналів поки немає. Стрічка не підключена — зайдіть після запуску.",
+    pm_locked: "Незабаром для всіх користувачів.",
+    pm_locked_note: "Сигнали лише для інформації, можуть бути хибними і не гарантують результат. Вкладка не переводить кошти.",
+    pm_newbie_dismiss: "Зрозуміло",
+    pm_preview_badge: "Превʼю",
+    pm_unauth_status: "Підключіть @handle, щоб побачити demo-картки. Live Polymarket не підключений.",
+    pm_unauth_empty: "Увійдіть з @handle для demo. Зовнішні ринки нижче — торгівля там, не тут.",
+    pm_error_retry: "Не вдалося завантажити сигнали. Натисніть «Оновити».",
+    pm_filter_empty: "Немає demo-карток під ці фільтри.",
+    pm_demo_note: "Лише demo bot — не live-дані Polymarket.",
+  },
+};
+
+let total = 0;
+for (const [lang, keys] of Object.entries(PATCH)) {
+  const file = path.join(ROOT, `${lang}.json`);
+  const j = JSON.parse(fs.readFileSync(file, "utf8"));
+  for (const [k, v] of Object.entries(keys)) {
+    j[k] = v;
+    total++;
+  }
+  fs.writeFileSync(file, `${JSON.stringify(j, null, 2)}\n`);
+}
+
+const en = JSON.parse(fs.readFileSync(path.join(ROOT, "en.json"), "utf8"));
+for (const lang of fs.readdirSync(ROOT).map((f) => f.replace(/\.json$/, "")).filter((c) => c !== "en")) {
+  const file = path.join(ROOT, `${lang}.json`);
+  const j = JSON.parse(fs.readFileSync(file, "utf8"));
+  for (const key of Object.keys(en)) {
+    if (!(key in j)) {
+      j[key] = en[key];
+      total++;
+    }
+  }
+  fs.writeFileSync(file, `${JSON.stringify(j, null, 2)}\n`);
+}
+
+console.log(`[i18n_prediction_onboarding_patches] updated keys=${total}`);

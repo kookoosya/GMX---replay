@@ -185,7 +185,8 @@ app.get("/api/market/signals", requireAuth, (req, res) => {
     res.json({
       ok: true,
       asOf: new Date(now).toISOString(),
-      comingSoon: false,
+      preview: true,
+      comingSoon: true,
       headlineSignal,
       scheduleRangePerDay: "3-5",
       confidenceTargetPct: 90,

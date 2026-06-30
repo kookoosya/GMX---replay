@@ -1715,9 +1715,9 @@ test("prediction: syncPredictionFilterCopy builds bias options", () => {
   assert.match(els.pm_conf.innerHTML, /70%/);
 });
 
-test("prediction: loadPredictionSignals shows public teaser without session", async () => {
+test("prediction: loadPredictionSignals shows sign-in guidance without session", async () => {
   const els = {
-    pmList: { innerHTML: "", classList: { add: () => {} } },
+    pmList: { innerHTML: "", classList: { add: () => {}, remove: () => {} } },
     pm_status: { textContent: "" },
     pm_locked_note: { textContent: "" },
     pm_asset: { value: "all", innerHTML: "" },
@@ -1730,8 +1730,9 @@ test("prediction: loadPredictionSignals shows public teaser without session", as
     getToken: () => "",
   });
   await pm.loadPredictionSignals({ force: true });
-  assert.match(els.pmList.innerHTML, /Polymarket Direction Signal/);
-  assert.match(els.pm_status.textContent, /Coming soon for everyone/);
+  assert.doesNotMatch(els.pmList.innerHTML, /Polymarket Direction Signal/);
+  assert.match(els.pmList.innerHTML, /Sign in with your @handle/);
+  assert.match(els.pm_status.textContent, /Connect your @handle/);
 });
 
 test("prediction: bindPredictionMarketUI is idempotent", () => {
@@ -3071,7 +3072,7 @@ test("predictionwire: wires prediction factory delegates", async () => {
     addEventListener: () => {},
   });
   const els = {
-    pmList: { innerHTML: "", classList: { add: () => {} } },
+    pmList: { innerHTML: "", classList: { add: () => {}, remove: () => {} } },
     pm_status: { textContent: "" },
     pm_locked_note: { textContent: "" },
     pm_asset: sel(),
@@ -3090,7 +3091,7 @@ test("predictionwire: wires prediction factory delegates", async () => {
   wire.syncPredictionFilterCopy();
   assert.match(els.pm_bias.innerHTML, /bullish/);
   await wire.loadPredictionSignals({ force: true });
-  assert.match(els.pmList.innerHTML, /Polymarket Direction Signal/);
+  assert.match(els.pmList.innerHTML, /Sign in with your @handle/);
 });
 
 test("adminwire: wires admin factory delegates", () => {

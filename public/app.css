@@ -2526,6 +2526,9 @@ html.theme-applied body.hasWallBg .sideCard {
   border: 1px solid var(--stroke);
 }
 .pmNewbieIntro .title{ font-size: 14px; margin-bottom: 6px; }
+.pmNewbieActions{ margin-top: 10px; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+.pmPreviewBadge{ margin-left: 4px; }
+.pmDemoNote{ margin-bottom: 10px; }
 .pmLearnMore{ margin-top: 12px; }
 .pmLearnLinks{ flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 .pmLearnLinks .btn{
