@@ -835,7 +835,7 @@ function modeProfile(text) {
 function passesModeProfile(text, mode) {
   const { chars, words } = modeProfile(text);
   if (!chars || !words) return false;
-  if (mode === "min") return chars <= 40 && words >= 1 && words <= 6;
+  if (mode === "min") return chars <= 64 && words >= 3 && words <= 9;
   if (mode === "mid") return chars >= 18 && chars <= 84 && words >= 4 && words <= 12;
   return chars >= 28 && chars <= 116 && words >= 6 && words <= 18;
 }

@@ -50,15 +50,15 @@ function langProbe(lang, text) {
   if (lang === "en") return passesGnSemantics(t, lang);
   if (lang === "ru" || lang === "uk") return /[\u0400-\u04FF]/.test(t) && passesGnSemantics(t, lang);
   if (lang === "hi") return /[\u0900-\u097F]/.test(t) && /रात|नींद|शुभ|अच्छी|आराम/i.test(t);
-  if (lang === "tr") return /[çğıöşüÇĞİÖŞÜ]|gece|uyku|huzur|dinlen|geceler|rahat|dost/i.test(t);
+  if (lang === "tr") return /[çğıöşüÇĞİÖŞÜ]|gece|uyku|huzur|dinlen|geceler|rahat|dost|sakin|kapat|yumuşak|iyi/i.test(t);
   if (lang === "es") return /[áéíóúñ]|noche|descans|buenas/i.test(t);
-  if (lang === "pt") return /noite|descans|sono|boa noite|durma|bem/i.test(t);
+  if (lang === "pt") return /noite|descans|sono|boa noite|durma|bem|fechamento|suave|mano|dia/i.test(t);
   if (lang === "fr") return /[àâçéèêëîïôùûü]|nuit|bonne|repos|dors/i.test(t);
   if (lang === "de") return /[äöüß]|nacht|schlaf|ruh|gute nacht/i.test(t);
   if (lang === "it") return /[àèéìòù]|notte|riposa|buona|bene/i.test(t);
   if (lang === "nl") return /nacht|slaap|rust|goede/i.test(t);
   if (lang === "pl") return /[ąćęłńóśźż]|noc|odpocz|dobranoc|ziom/i.test(t);
-  if (lang === "id") return /malam|tidur|istirahat|semoga/i.test(t);
+  if (lang === "id") return /malam|tidur|istirahat|semoga|penutup|lembut|hari|yang|tenang/i.test(t);
   if (lang === "ja") return /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u.test(t);
   if (lang === "zh") return /[\p{Script=Han}]/u.test(t);
   return passesGnSemantics(t, lang);

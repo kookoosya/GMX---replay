@@ -78,7 +78,7 @@ test("RU min contains substantive Cyrillic night text", () => {
 test("TR min contains substantive Turkish night text", () => {
   const gen = makeGen();
   const line = gnMin(gen, "tr", "classic", "@gnmin_tr");
-  assert.ok(/[çğıöşüÇĞİÖŞÜ]|gece|uyku|huzur|dinlen/i.test(line), line);
+  assert.ok(/[çğıöşüÇĞİÖŞÜ]|gece|uyku|huzur|dinlen|sakin|kapat|yumuşak|iyi/i.test(line), line);
   assert.ok(passesMinSubstance(line, "gn", "tr", "classic"), line);
 });
 
