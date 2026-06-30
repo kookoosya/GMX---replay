@@ -98,6 +98,13 @@
       } catch {}
     }
 
+    function syncWalletActionsVisibility() {
+      const billing = getBilling();
+      const plans = Array.isArray(billing?.plans) ? billing.plans : [];
+      const actions = $("walletActions");
+      if (actions && plans.length) actions.classList.remove("hidden");
+    }
+
     function setWalletUi() {
       const WALLET = getWallet();
       const selectedPlan = getSelectedPlan();
@@ -111,9 +118,11 @@
 
       if (addr) {
         addr.textContent =
-          !WALLET.connected || !WALLET.publicKey ? "not connected" : shortPk(WALLET.publicKey);
+          !WALLET.connected || !WALLET.publicKey
+            ? siteTr("wallet_ui_not_connected", "not connected")
+            : shortPk(WALLET.publicKey);
       }
-      if (label) label.textContent = WALLET.connected ? WALLET.name || "Wallet" : "Wallet";
+      if (label) label.textContent = WALLET.connected ? WALLET.name || siteTr("wallet_label_default", "Wallet") : siteTr("wallet_label_default", "Wallet");
 
       if (btnConnect) btnConnect.classList.toggle("hidden", !!WALLET.connected);
       if (btnDisconnect) btnDisconnect.classList.toggle("hidden", !WALLET.connected);
@@ -124,10 +133,18 @@
       if (payBtn) payBtn.disabled = !canPay || payInflight || recoveryVerifyInflight;
 
       if (hint) {
-        if (!selectedPlan) hint.innerHTML = `<span class="muted">Select a plan above to continue.</span>`;
-        else if (!WALLET.connected)
-          hint.innerHTML = `<span class="muted">Now connect a wallet to pay in ${escapeHtml(selectedCurrency)}.</span>`;
-        else hint.innerHTML = `<span class="ok">Ready.</span>`;
+        if (!selectedPlan) {
+          hint.innerHTML = `<span class="muted">${escapeHtml(siteTr("wallet_hint_pick_plan", "Select a plan above to continue."))}</span>`;
+        } else if (!WALLET.connected) {
+          hint.innerHTML = `<span class="muted">${escapeHtml(
+            siteTr("wallet_hint_connect_pay", "Now connect a wallet to pay in {currency}.").replace(
+              /\{currency\}/g,
+              selectedCurrency
+            )
+          )}</span>`;
+        } else {
+          hint.innerHTML = `<span class="ok">${escapeHtml(siteTr("wallet_hint_ready", "Ready."))}</span>`;
+        }
       }
     }
 
@@ -323,11 +340,11 @@
           const msg = $("sf_modal_msg");
           try {
             connectBtn.disabled = true;
-            if (msg) msg.textContent = "Opening wallet...";
+            if (msg) msg.textContent = siteTr("wallet_opening", "Opening wallet...");
             await connectWalletByChoice(picked);
             closeWalletModal();
             const out = $("w_msg");
-            if (out) out.innerHTML = `<span class="ok">Wallet connected.</span>`;
+            if (out) out.innerHTML = `<span class="ok">${escapeHtml(siteTr("wallet_connected_ok", "Wallet connected."))}</span>`;
           } catch (e) {
             if (msg)
               msg.innerHTML = `<span class="bad">${escapeHtml(String(e?.message || "wallet_connect_failed"))}</span>`;
@@ -375,15 +392,18 @@
           <div class="planPrice">${escapeHtml(primary)}</div>
         </div>
         <div class="planSub">${secondary ? escapeHtml(secondary) : ""}</div>
-        <div class="planMeta">Unlock Pro for ${escapeHtml(String(p.days || 0))} days</div>
+        <div class="planMeta">${escapeHtml(
+          siteTr("wallet_plan_unlock_days", "Unlock Pro for {days} days").replace(
+            /\{days\}/g,
+            String(p.days || 0)
+          )
+        )}</div>
       `;
 
         btn.onclick = () => {
           setSelectedPlanKey(p.key);
           setSelectedPlan(p);
-          try {
-            $("walletActions")?.classList.remove("hidden");
-          } catch {}
+          syncWalletActionsVisibility();
           renderPlanGrid();
           setWalletUi();
         };
@@ -622,9 +642,14 @@
         if (planKey) setSelectedPlan(plans.find((p) => p.key === planKey) || null);
         applyTokenAvailability();
         renderPlanGrid();
+        syncWalletActionsVisibility();
         setWalletUi();
         await tryResumePaymentRecovery({ autoVerify: true });
-      } catch (_e) {}
+      } catch (e) {
+        const msg = $("w_msg");
+        const copy = friendlyUiErrorMessage(e?.message || "billing_failed");
+        if (msg) msg.innerHTML = `<span class="bad">${escapeHtml(siteTr("wallet_plans_load_failed", copy))}</span>`;
+      }
     }
 
     async function loadBillingProof() {
@@ -781,13 +806,17 @@
       const selectedCurrency = getSelectedCurrency();
       const msg = $("w_msg");
       if (!selectedPlan) {
-        if (msg) msg.innerHTML = `<span class="warn">Select a plan first.</span>`;
+        if (msg) {
+          msg.innerHTML = `<span class="warn">${escapeHtml(siteTr("pay_select_plan_first", "Select a plan first."))}</span>`;
+        }
         return;
       }
       if (!ensureHandleSessionForPay()) return;
       if (!WALLET.connected) {
         openWalletModal();
-        if (msg) msg.innerHTML = `<span class="warn">Connect a wallet to continue.</span>`;
+        if (msg) {
+          msg.innerHTML = `<span class="warn">${escapeHtml(siteTr("pay_connect_wallet_continue", "Connect a wallet to continue."))}</span>`;
+        }
         return;
       }
 
@@ -811,8 +840,8 @@
         payInflight = true;
         if (payBtn) payBtn.disabled = true;
 
-        setPayState("processing", "Creating checkout...");
-        if (msg) msg.textContent = "Creating payment...";
+        setPayState("processing", siteTr("pay_creating_checkout", "Creating checkout..."));
+        if (msg) msg.textContent = siteTr("pay_creating_payment", "Creating payment...");
         trackEvent("pay_click", { v, plan: selectedPlan.key, cur, source: "wallet_tab" });
 
         const intent = await api("/api/billing/intent", "POST", {
@@ -820,16 +849,16 @@
           currency: cur,
         });
 
-        setPayState("processing", "Binding wallet...");
-        if (msg) msg.textContent = "Sign the wallet message to bind this checkout...";
+        setPayState("processing", siteTr("pay_binding_wallet", "Binding wallet..."));
+        if (msg) msg.textContent = siteTr("pay_sign_bind_message", "Sign the wallet message to bind this checkout...");
         await bindWalletToIntent(intent);
 
-        setPayState("processing", "Building transaction...");
-        if (msg) msg.textContent = "Building transaction...";
+        setPayState("processing", siteTr("pay_building_tx", "Building transaction..."));
+        if (msg) msg.textContent = siteTr("pay_building_tx", "Building transaction...");
         const built = await buildPaymentTx(intent);
 
-        setPayState("processing", "Approve in wallet...");
-        if (msg) msg.textContent = "Approve the transaction in your wallet...";
+        setPayState("processing", siteTr("pay_approve_wallet", "Approve in wallet..."));
+        if (msg) msg.textContent = siteTr("pay_approve_wallet_hint", "Approve the transaction in your wallet...");
         const payer = String(WALLET.publicKey?.toString?.() || "");
         const sig = await walletSendTransaction(built.tx, built.connection);
 
@@ -845,8 +874,8 @@
           createdAt: Date.now(),
         });
 
-        setPayState("confirming", "Confirming on-chain...");
-        if (msg) msg.textContent = "Confirming & verifying on-chain...";
+        setPayState("confirming", siteTr("pay_confirming", "Confirming on-chain..."));
+        if (msg) msg.textContent = siteTr("pay_confirming_verify", "Confirming & verifying on-chain...");
         const j = await verifyIntentWithRetry(intent.id, sig, payer);
 
         if (!j?.ok || !j?.sub?.active) {
@@ -856,8 +885,8 @@
         clearPaymentRecovery();
         hideRecoveryUi();
         markRecoverySuccessShown(sig);
-        setPayState("verified", "Verified. Pro activated.");
-        if (msg) msg.innerHTML = `<span class="ok">Paid & verified.</span>`;
+        setPayState("verified", siteTr("pay_verified_pro", "Verified. Pro activated."));
+        if (msg) msg.innerHTML = `<span class="ok">${escapeHtml(siteTr("pay_paid_verified", "Paid & verified."))}</span>`;
         trackEvent("pay_success", { v, plan: intent?.plan?.key || selectedPlan.key, cur });
 
         try {
@@ -908,14 +937,14 @@
       const el = $("w_status_desc");
       if (!el) return;
       if (!sub) {
-        el.innerHTML = `<span class="muted">Status unknown.</span>`;
+        el.innerHTML = `<span class="muted">${escapeHtml(siteTr("wallet_status_unknown", "Status unknown."))}</span>`;
         return;
       }
       if (sub.active) {
         const until = sub.paidUntil ? ` (until ${escapeHtml(String(sub.paidUntil))})` : "";
-        el.innerHTML = `<span class="ok">Pro active</span>${until}`;
+        el.innerHTML = `<span class="ok">${escapeHtml(siteTr("wallet_pro_active", "Pro active"))}</span>${until}`;
       } else {
-        el.innerHTML = `<span class="muted">Free</span>`;
+        el.innerHTML = `<span class="muted">${escapeHtml(siteTr("wallet_plan_free", "Free"))}</span>`;
       }
     }
 
