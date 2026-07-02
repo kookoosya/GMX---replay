@@ -14,6 +14,8 @@ const FORBIDDEN = [
   /Redeem code/i,
   /id="redeemCode"/,
   /data-tab="admin"/,
+  /\bdaily limits?\b/i,
+  /\b70\s*credits?\b/i,
 ];
 
 let base = String(process.env.E2E_BASE || "").replace(/\/$/, "");
