@@ -66,3 +66,128 @@ test("en locale defines your-rank copy", () => {
   assert.ok(en.lb_your_rank);
   assert.ok(en.lb_unranked);
 });
+
+function loadLeaderboardFactory(ctx = {}) {
+  const code = fs.readFileSync(path.join(root, "public", "app.leaderboard.js"), "utf8");
+  const fn = new Function(
+    "window",
+    `${code}; return window.__GMXLeaderboardFactory;`
+  );
+  const win = {
+    GMXLeaderboardCore: {
+      leaderboardMedal,
+      formatLbRank,
+      resolveMeRank,
+      leaderboardRankCellHtml,
+    },
+  };
+  return fn(win)(ctx);
+}
+
+test("leaderboard error keeps authed your-rank honest", async () => {
+  const meta = { textContent: "" };
+  const els = {
+    lb_you: { classList: { add() {}, remove() {} } },
+    lb_your_rank_num: { textContent: "" },
+    lb_your_rank_meta: meta,
+    lb_your_rank_label: { textContent: "" },
+    lb_status: { textContent: "" },
+    lb_body: { innerHTML: "" },
+  };
+  const prevFetch = globalThis.fetch;
+  globalThis.fetch = async () => ({
+    ok: false,
+    status: 500,
+    json: async () => ({ ok: false, error: "server_error" }),
+  });
+  try {
+    const lb = loadLeaderboardFactory({
+      $: (id) => els[id] || null,
+      getHandle: () => "@alice",
+      getToken: () => "tok",
+      t: (_k, fb) => fb,
+      escapeHtml: (s) => String(s || ""),
+      tableSkeletonHtml: () => "",
+    });
+    await lb.loadLeaderboard(7);
+    assert.doesNotMatch(meta.textContent, /connect first/i);
+    assert.match(meta.textContent, /Not ranked yet/i);
+  } finally {
+    globalThis.fetch = prevFetch;
+  }
+});
+
+test("leaderboard unauthenticated your-rank still asks to connect", async () => {
+  const meta = { textContent: "" };
+  let hidden = false;
+  const wrap = {
+    classList: {
+      add(c) {
+        if (c === "hidden") hidden = true;
+      },
+      remove() {},
+    },
+  };
+  const els = {
+    lb_you: wrap,
+    lb_your_rank_meta: meta,
+    lb_status: { textContent: "" },
+    lb_body: { innerHTML: "" },
+  };
+  const lb = loadLeaderboardFactory({
+    $: (id) => els[id] || null,
+    getHandle: () => "",
+    getToken: () => "",
+    t: (_k, fb) => fb,
+    escapeHtml: (s) => String(s || ""),
+    tableSkeletonHtml: () => "",
+  });
+  const prevFetch = globalThis.fetch;
+  globalThis.fetch = async () => ({
+    ok: true,
+    json: async () => ({ ok: true, top: [], me: null }),
+  });
+  try {
+    await lb.loadLeaderboard(7);
+    assert.match(meta.textContent, /Connect first/i);
+    assert.equal(hidden, true);
+  } finally {
+    globalThis.fetch = prevFetch;
+  }
+});
+
+test("leaderboard success shows eligible rank meta for authed user", async () => {
+  const meta = { textContent: "", innerHTML: "" };
+  const els = {
+    lb_you: { classList: { add() {}, remove() {} } },
+    lb_your_rank_num: { textContent: "" },
+    lb_your_rank_meta: meta,
+    lb_your_rank_label: { textContent: "" },
+    lb_status: { textContent: "" },
+    lb_body: { innerHTML: "" },
+  };
+  const prevFetch = globalThis.fetch;
+  globalThis.fetch = async () => ({
+    ok: true,
+    json: async () => ({
+      ok: true,
+      top: [{ handle: "@alice", eligible: 2, active: 2 }],
+      me: { handle: "@alice", eligible: 2, rank: 1 },
+    }),
+  });
+  try {
+    const lb = loadLeaderboardFactory({
+      $: (id) => els[id] || null,
+      getHandle: () => "@alice",
+      getToken: () => "tok",
+      t: (_k, fb) => fb,
+      escapeHtml: (s) => String(s || ""),
+      tableSkeletonHtml: () => "",
+    });
+    await lb.loadLeaderboard(7);
+    assert.match(meta.innerHTML, /@alice/);
+    assert.match(meta.innerHTML, /Eligible/);
+  } finally {
+    globalThis.fetch = prevFetch;
+  }
+});

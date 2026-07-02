@@ -76,8 +76,13 @@
       wrap.classList.remove("hidden");
 
       if (!me || !me.handle) {
-        if (numEl) numEl.textContent = formatLbRank(0, { unranked: t("lb_unranked") || "Not ranked yet" });
-        if (metaEl) metaEl.textContent = t("connectFirst") || "Connect first.";
+        const unranked = t("lb_unranked") || "Not ranked yet";
+        if (numEl) numEl.textContent = formatLbRank(0, { unranked });
+        if (metaEl) {
+          metaEl.textContent = getHandle()
+            ? unranked
+            : t("connectFirst") || "Connect first.";
+        }
         return;
       }
 
