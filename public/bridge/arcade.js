@@ -1052,6 +1052,10 @@
   const handle = () => {
     try { return String(localStorage.getItem("gmx_handle") || ""); } catch { return ""; }
   };
+  function achStorageKey() {
+    const h = handle().trim().toLowerCase();
+    return h ? `${LS_ARCADE_ACH}:${h}` : `${LS_ARCADE_ACH}:guest`;
+  }
   const planLabel = () => state.plan === "pro" ? arcadeT("arcade_plan_pro_unlocked") : (state.plan === "loading" ? arcadeT("arcade_plan_checking") : arcadeT("arcade_plan_free"));
   const categories = () => ["all", ...Array.from(new Set(GAMES.map((g) => g.categoryKey))).sort()];
   const filtered = () => {
@@ -1074,7 +1078,7 @@
   function readAchProgress() {
     if (!ACH) return null;
     try {
-      const raw = localStorage.getItem(LS_ARCADE_ACH);
+      const raw = localStorage.getItem(achStorageKey());
       return ACH.normalizeProgress(raw ? JSON.parse(raw) : null);
     } catch {
       return ACH.emptyProgress();
@@ -1084,7 +1088,7 @@
   function saveAchProgress(progress) {
     if (!ACH) return;
     try {
-      localStorage.setItem(LS_ARCADE_ACH, JSON.stringify(ACH.normalizeProgress(progress)));
+      localStorage.setItem(achStorageKey(), JSON.stringify(ACH.normalizeProgress(progress)));
     } catch {}
   }
 

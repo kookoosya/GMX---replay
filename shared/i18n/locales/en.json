@@ -725,7 +725,7 @@
   "arcade_back_link": "← Back to GMXReply",
   "arcade_section_gotd": "Game of the Day",
   "arcade_section_achievements": "Achievements",
-  "arcade_ach_subtitle": "Launch games to unlock badges — saved on this device.",
+  "arcade_ach_subtitle": "Launch games to unlock badges — progress is saved for your connected account on this device.",
   "arcade_ach_progress": "{unlocked} / {total} unlocked",
   "arcade_ach_unlocked": "Achievement unlocked ({n})",
   "arcade_ach_first_title": "First launch",

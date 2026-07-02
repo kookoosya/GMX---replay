@@ -59,6 +59,13 @@ test("browser achievements core global exists", () => {
   assert.match(src, /recordPlay/);
 });
 
+test("arcade page scopes achievement storage per handle", () => {
+  const arcade = fs.readFileSync(path.join(root, "public", "arcade.js"), "utf8");
+  assert.match(arcade, /function achStorageKey\(\)/);
+  assert.match(arcade, /localStorage\.getItem\(achStorageKey\(\)\)/);
+  assert.match(arcade, /localStorage\.setItem\(achStorageKey\(\)/);
+});
+
 test("en locale defines achievement keys", () => {
   const en = JSON.parse(fs.readFileSync(path.join(root, "shared", "i18n", "locales", "en.json"), "utf8"));
   for (const key of ["arcade_section_achievements", "arcade_ach_first_title", "arcade_ach_pro_desc"]) {

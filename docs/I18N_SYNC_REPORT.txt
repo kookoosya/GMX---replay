@@ -1,5 +1,5 @@
 GMXReply i18n sync report
-Updated: 2026-07-02T11:05:07.830Z
+Updated: 2026-07-02T11:25:37.324Z
 Locales: en, de, fr, es, pt, it, nl, tr, pl, id, ru, uk, hi, ja, zh
 
 en: copied-from-en=0, identical-to-en=914/914 (100%)
