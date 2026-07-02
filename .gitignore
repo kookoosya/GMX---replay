@@ -16,6 +16,10 @@ data.sqlite-*
 *.sqlite-wal
 *.sqlite-shm
 
+# Wallpaper campaign temp (not production)
+tools/.wallpaper-review/
+tools/.wallpaper-audit-cache/
+
 # Build outputs
 dist/
 frontend/dist/

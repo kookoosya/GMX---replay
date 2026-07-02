@@ -377,7 +377,7 @@
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "Over thema’s",
-  "themes_desc": "Thema’s veranderen de UI. Wallpapers en achtergronden veranderen de vibe. Sommige items zijn vergrendeld in Free. Pro unlockt alles.",
+  "themes_desc": "Kies uit 100 gecureerde fotowallpapers hieronder. Accentkleuren volgen je opgeslagen thema. Referrals en Pro vergroten de keuze; Pro voegt eigen uploads toe.",
   "themes_rules": "Premiumbibliotheek: tot 100 thema’s en 100 wallpapers. Free preview: 10 van elk. Referrals ontgrendelen stap voor stap meer. Pro opent alles direct.",
   "r_desc": "Referrals: kopieer je link, deel en volg je teller.",
   "home_desc": "Snelle replies, packs en tools op één plek",
@@ -936,5 +936,16 @@
   "ext_bank_never_synced": "Nog niet gesynchroniseerd",
   "ext_bank_offline_cached": "Toont gecachte antwoorden",
   "ext_search_placeholder": "Zoek opgeslagen regels",
-  "ext_connect_failed": "Verbinden mislukt"
+  "ext_connect_failed": "Verbinden mislukt",
+  "wp_cat_futuristic_architecture": "Futuristische architectuur",
+  "wp_cat_night_skyline": "Nacht skyline",
+  "wp_cat_moon_planets": "Maan & planeten",
+  "wp_cat_mountains": "Bergen",
+  "wp_cat_forest": "Bos",
+  "wp_cat_ocean_underwater": "Oceaan & onderwater",
+  "wp_cat_desert": "Woestijn",
+  "wp_cat_northern_lights": "Noorderlicht",
+  "wp_cat_abstract_glass": "Abstract glas",
+  "wp_cat_geometric_dark": "Donkere geometrie",
+  "wp_cat_minimal_texture": "Minimale textuur"
 }

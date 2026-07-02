@@ -377,7 +377,7 @@
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "テーマについて",
-  "themes_desc": "テーマはUIを変更。壁紙/背景は雰囲気を変更。一部はFreeでロック。Proで全解放。",
+  "themes_desc": "下から100枚の厳選フォト壁紙を選べます。アクセント色は保存したテーマに従います。紹介とProで選択肢が広がり、Proは独自アップロードを追加します。",
   "themes_rules": "プレミアムライブラリ：最大100テーマと100壁紙。Freeプレビューは各10。紹介で段階的に解放。Proですべて即解放。",
   "r_desc": "短く言うと:",
   "home_desc": "返信・パック・ツールをひとつに",
@@ -648,7 +648,7 @@
   "wp_filter_all": "すべての壁紙",
   "wp_filter_free": "無料のみ",
   "wp_filter_mine": "解放済み",
-  "wp_cat_neon_city": "ネオンシティ",
+  "wp_cat_neon_city": "ネオン都市",
   "wp_cat_space": "宇宙",
   "wp_cat_nature": "自然",
   "wp_cat_abstract": "抽象",
@@ -936,5 +936,16 @@
   "ext_bank_never_synced": "まだ同期していません",
   "ext_bank_offline_cached": "キャッシュされた返信を表示中",
   "ext_search_placeholder": "保存行を検索",
-  "ext_connect_failed": "接続できませんでした"
+  "ext_connect_failed": "接続できませんでした",
+  "wp_cat_futuristic_architecture": "未来建築",
+  "wp_cat_night_skyline": "夜景スカイライン",
+  "wp_cat_moon_planets": "月と惑星",
+  "wp_cat_mountains": "山",
+  "wp_cat_forest": "森",
+  "wp_cat_ocean_underwater": "海と水中",
+  "wp_cat_desert": "砂漠",
+  "wp_cat_northern_lights": "オーロラ",
+  "wp_cat_abstract_glass": "抽象ガラス",
+  "wp_cat_geometric_dark": "ダーク幾何学",
+  "wp_cat_minimal_texture": "ミニマルテクスチャ"
 }

@@ -377,7 +377,7 @@
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "Info Temi",
-  "themes_desc": "I temi cambiano la UI. Wallpapers e sfondi cambiano il look. Alcuni elementi sono bloccati in Free. Pro sblocca tutto.",
+  "themes_desc": "Scegli tra 100 sfondi fotografici curati qui sotto. I colori d'accento seguono il tema salvato. Referral e Pro ampliano la scelta; Pro aggiunge caricamenti personali.",
   "themes_rules": "Libreria premium: fino a 100 temi e 100 wallpapers. Anteprima Free: 10 ciascuno. I referral sbloccano gradualmente. Pro apre tutto subito.",
   "r_desc": "Referral: copia il link, condividi e controlla il conteggio.",
   "home_desc": "Risposte rapide, pack e strumenti in un unico posto",
@@ -936,5 +936,16 @@
   "ext_bank_never_synced": "Non ancora sincronizzato",
   "ext_bank_offline_cached": "Mostro risposte in cache",
   "ext_search_placeholder": "Cerca righe salvate",
-  "ext_connect_failed": "Connessione non riuscita"
+  "ext_connect_failed": "Connessione non riuscita",
+  "wp_cat_futuristic_architecture": "Architettura futuristica",
+  "wp_cat_night_skyline": "Skyline notturna",
+  "wp_cat_moon_planets": "Luna e pianeti",
+  "wp_cat_mountains": "Montagne",
+  "wp_cat_forest": "Foresta",
+  "wp_cat_ocean_underwater": "Oceano e sottacqua",
+  "wp_cat_desert": "Deserto",
+  "wp_cat_northern_lights": "Aurora boreale",
+  "wp_cat_abstract_glass": "Vetro astratto",
+  "wp_cat_geometric_dark": "Geometria scura",
+  "wp_cat_minimal_texture": "Texture minimale"
 }

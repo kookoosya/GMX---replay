@@ -377,7 +377,7 @@
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "О темах",
-  "themes_desc": "25 курируемых обоев для сайта — выбирайте ниже. Акцентные цвета следуют сохранённой теме. Рефералы и Pro открывают больше; Pro добавляет свои загрузки.",
+  "themes_desc": "100 курируемых фотографических обоев — выбирайте ниже. Акцентные цвета следуют сохранённой теме. Рефералы и Pro открывают больше; Pro добавляет свои загрузки.",
   "themes_rules": "Премиум-библиотека: до 100 тем и 100 обоев. В Free — превью по 10; рефералы открывают шаг за шагом. Pro открывает всё сразу.",
   "r_desc": "Коротко:",
   "home_desc": "Быстрые ответы, паки и инструменты в одном месте",
@@ -936,5 +936,16 @@
   "ext_bank_never_synced": "Ещё не синхронизировано",
   "ext_bank_offline_cached": "Показаны кэшированные ответы",
   "ext_search_placeholder": "Поиск по сохранённым строкам",
-  "ext_connect_failed": "Не удалось подключиться"
+  "ext_connect_failed": "Не удалось подключиться",
+  "wp_cat_futuristic_architecture": "Футуристическая архитектура",
+  "wp_cat_night_skyline": "Ночной горизонт",
+  "wp_cat_moon_planets": "Луна и планеты",
+  "wp_cat_mountains": "Горы",
+  "wp_cat_forest": "Лес",
+  "wp_cat_ocean_underwater": "Океан и подводный мир",
+  "wp_cat_desert": "Пустыня",
+  "wp_cat_northern_lights": "Северное сияние",
+  "wp_cat_abstract_glass": "Абстрактное стекло",
+  "wp_cat_geometric_dark": "Тёмная геометрия",
+  "wp_cat_minimal_texture": "Минимальная текстура"
 }
