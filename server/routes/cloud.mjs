@@ -65,6 +65,7 @@ export function registerCloudRoutes(deps) {
       }
 
       const now = nowIso();
+      let saved = 0;
       safeDb(() => {
         const st = db.prepare(`
         INSERT INTO cloud_lists(handle, kind, scope, lang, content, updated_at)
@@ -82,12 +83,13 @@ export function registerCloudRoutes(deps) {
             if (scope !== "global" && scope !== "lang") continue;
             if (content.length > 200000) continue;
             st.run(handle, kind, scope, lang, content, now);
+            saved += 1;
           }
         });
         tx(items);
       });
 
-      res.json({ ok: true, handle, saved: items.length, updated_at: now });
+      res.json({ ok: true, handle, saved, updated_at: now });
     } catch (e) {
       console.error("CLOUD_LISTS_POST_ERROR", e);
       res.status(500).json({ ok: false, error: "server_error" });
