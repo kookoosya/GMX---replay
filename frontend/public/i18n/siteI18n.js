@@ -380,7 +380,7 @@
       "<b>Pro</b> removes save-line caps and unlocks all writing styles and preset packs, same as the main site."
     ],
     "themes_right": "About Themes",
-    "themes_desc": "Choose from 100 premium site wallpapers below. Accent colors follow your saved theme preset in storage. Referrals and Pro expand what you can pick; Pro adds custom uploads.",
+    "themes_desc": "Choose from 25 curated site wallpapers below. Accent colors follow your saved theme preset in storage. Referrals and Pro expand what you can pick; Pro adds custom uploads.",
     "themes_rules": "Premium library: up to 100 themes and 100 wallpapers. Free preview starts with 10 of each; referrals unlock more step by step. Pro opens the full set immediately.",
     "r_desc": "Short version:",
     "home_desc": "Home: connect your X handle, activate a Pro code, and check your daily usage.",
@@ -9780,7 +9780,7 @@
       "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
     ],
     "themes_right": "О темах",
-    "themes_desc": "100 премиум-обоев для сайта — выбирайте ниже. Акцентные цвета следуют сохранённой теме. Рефералы и Pro открывают больше; Pro добавляет свои загрузки.",
+    "themes_desc": "25 курируемых обоев для сайта — выбирайте ниже. Акцентные цвета следуют сохранённой теме. Рефералы и Pro открывают больше; Pro добавляет свои загрузки.",
     "themes_rules": "Премиум-библиотека: до 100 тем и 100 обоев. В Free — превью по 10; рефералы открывают шаг за шагом. Pro открывает всё сразу.",
     "r_desc": "Коротко:",
     "home_desc": "Быстрые ответы, паки и инструменты в одном месте",

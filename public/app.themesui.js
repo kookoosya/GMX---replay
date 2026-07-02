@@ -186,10 +186,6 @@
       const grid = $("themeGrid");
       if (!grid) return;
 
-      endThemePreview();
-      grid.innerHTML = "";
-      grid.classList.add("themeGridRoot");
-
       const themes = getThemes();
       const wallpapers = getWallpapers();
       const total = themes.length;
@@ -206,6 +202,10 @@
 
       const renderSig = themeRenderSignature(chosen, unlocked, total, curWps, wallpapers.length);
       if (renderSig === lastThemeRenderSig) return;
+
+      endThemePreview();
+      grid.innerHTML = "";
+      grid.classList.add("themeGridRoot");
       lastThemeRenderSig = renderSig;
 
       const items = themes.map((th, idx) => ({ th, idx }));
