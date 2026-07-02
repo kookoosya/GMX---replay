@@ -41,7 +41,7 @@ export function removePexelsKey() {
     .split(/\r?\n/)
     .filter((line) => !/^PEXELS_API_KEY=/.test(line.trim()))
     .join("\n");
-  fs.writeFileSync(content ? (content.endsWith("\n") ? content : `${content}\n`) : "", file, "utf8");
+  fs.writeFileSync(file, content ? (content.endsWith("\n") ? content : `${content}\n`) : "", "utf8");
 }
 
 export { ROOT };
