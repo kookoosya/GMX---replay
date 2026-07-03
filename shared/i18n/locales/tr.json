@@ -377,7 +377,7 @@
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "Temalar hakkında",
-  "themes_desc": "Aşağıdan 100 seçilmiş fotoğraf duvar kağıdı arasından seçin. Vurgu renkleri kayıtlı temanızı izler. Referanslar ve Pro seçimi genişletir; Pro özel yüklemeler ekler.",
+  "themes_desc": "Temalar arayüzü değiştirir. Duvar kâğıtları ve arka planlar görünümü değiştirir. Bazı öğeler Free’de kilitlidir. Pro hepsini açar.",
   "themes_rules": "Premium kütüphane: 100 temaya ve 100 duvar kâğıdına kadar. Free önizleme: her birinden 10. Referanslar adım adım daha fazlasını açar. Pro hepsini anında açar.",
   "r_desc": "Referrals: linkini kopyala, paylaş ve sayacı takip et.",
   "home_desc": "Hızlı yanıtlar, paketler ve araçlar tek yerde",
@@ -936,16 +936,5 @@
   "ext_bank_never_synced": "Henüz senkronize edilmedi",
   "ext_bank_offline_cached": "Önbellekteki yanıtlar gösteriliyor",
   "ext_search_placeholder": "Kayıtlı satırlarda ara",
-  "ext_connect_failed": "Bağlanılamadı",
-  "wp_cat_futuristic_architecture": "Fütürist mimari",
-  "wp_cat_night_skyline": "Gece silueti",
-  "wp_cat_moon_planets": "Ay ve gezegenler",
-  "wp_cat_mountains": "Dağlar",
-  "wp_cat_forest": "Orman",
-  "wp_cat_ocean_underwater": "Okyanus ve su altı",
-  "wp_cat_desert": "Çöl",
-  "wp_cat_northern_lights": "Kuzey ışıkları",
-  "wp_cat_abstract_glass": "Soyut cam",
-  "wp_cat_geometric_dark": "Karanlık geometri",
-  "wp_cat_minimal_texture": "Minimal doku"
+  "ext_connect_failed": "Bağlanılamadı"
 }

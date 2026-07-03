@@ -377,7 +377,7 @@
     "<b>Pro</b> removes save-line caps and unlocks all writing styles and preset packs, same as the main site."
   ],
   "themes_right": "About Themes",
-  "themes_desc": "Choose from 100 curated photographic wallpapers below. Accent colors follow your saved theme preset. Referrals and Pro expand what you can pick; Pro adds custom uploads.",
+  "themes_desc": "Choose from 25 curated site wallpapers below. Accent colors follow your saved theme preset in storage. Referrals and Pro expand what you can pick; Pro adds custom uploads.",
   "themes_rules": "Premium library: up to 100 themes and 100 wallpapers. Free preview starts with 10 of each; referrals unlock more step by step. Pro opens the full set immediately.",
   "r_desc": "Short version:",
   "home_desc": "Home: connect your X handle, activate a Pro code, and check your daily usage.",
@@ -936,16 +936,5 @@
   "ext_bank_never_synced": "Not synced yet",
   "ext_bank_offline_cached": "Showing cached replies",
   "ext_search_placeholder": "Search saved lines",
-  "ext_connect_failed": "Could not connect",
-  "wp_cat_futuristic_architecture": "Futuristic architecture",
-  "wp_cat_night_skyline": "Night skyline",
-  "wp_cat_moon_planets": "Moon & planets",
-  "wp_cat_mountains": "Mountains",
-  "wp_cat_forest": "Forest",
-  "wp_cat_ocean_underwater": "Ocean & underwater",
-  "wp_cat_desert": "Desert",
-  "wp_cat_northern_lights": "Northern lights",
-  "wp_cat_abstract_glass": "Abstract glass",
-  "wp_cat_geometric_dark": "Geometric dark",
-  "wp_cat_minimal_texture": "Minimal texture"
+  "ext_connect_failed": "Could not connect"
 }

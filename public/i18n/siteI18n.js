@@ -380,7 +380,7 @@
       "<b>Pro</b> removes save-line caps and unlocks all writing styles and preset packs, same as the main site."
     ],
     "themes_right": "About Themes",
-    "themes_desc": "Choose from 100 curated photographic wallpapers below. Accent colors follow your saved theme preset. Referrals and Pro expand what you can pick; Pro adds custom uploads.",
+    "themes_desc": "Choose from 25 curated site wallpapers below. Accent colors follow your saved theme preset in storage. Referrals and Pro expand what you can pick; Pro adds custom uploads.",
     "themes_rules": "Premium library: up to 100 themes and 100 wallpapers. Free preview starts with 10 of each; referrals unlock more step by step. Pro opens the full set immediately.",
     "r_desc": "Short version:",
     "home_desc": "Home: connect your X handle, activate a Pro code, and check your daily usage.",
@@ -939,18 +939,7 @@
     "ext_bank_never_synced": "Not synced yet",
     "ext_bank_offline_cached": "Showing cached replies",
     "ext_search_placeholder": "Search saved lines",
-    "ext_connect_failed": "Could not connect",
-    "wp_cat_futuristic_architecture": "Futuristic architecture",
-    "wp_cat_night_skyline": "Night skyline",
-    "wp_cat_moon_planets": "Moon & planets",
-    "wp_cat_mountains": "Mountains",
-    "wp_cat_forest": "Forest",
-    "wp_cat_ocean_underwater": "Ocean & underwater",
-    "wp_cat_desert": "Desert",
-    "wp_cat_northern_lights": "Northern lights",
-    "wp_cat_abstract_glass": "Abstract glass",
-    "wp_cat_geometric_dark": "Geometric dark",
-    "wp_cat_minimal_texture": "Minimal texture"
+    "ext_connect_failed": "Could not connect"
   },
   "de": {
     "plan_compare_btn": "Vergleichen",
@@ -1331,7 +1320,7 @@
       "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
     ],
     "themes_right": "Über Themes",
-    "themes_desc": "Wählen Sie aus 100 kuratierten Fotohintergründen unten. Akzentfarben folgen Ihrem gespeicherten Theme. Referrals und Pro erweitern die Auswahl; Pro ermöglicht eigene Uploads.",
+    "themes_desc": "Themes ändern die UI. Wallpapers und Hintergründe ändern den Look. Einige Elemente sind in Free gesperrt. Pro schaltet alles frei.",
     "themes_rules": "Premium-Bibliothek: bis zu 100 Themes und 100 Wallpapers. Free-Vorschau: je 10. Referrals schalten schrittweise mehr frei. Pro öffnet sofort alles.",
     "r_desc": "Referrals: Link kopieren, teilen und Counter verfolgen.",
     "home_desc": "Schnelle Replies, Packs und Tools in einem.",
@@ -1890,18 +1879,7 @@
     "ext_bank_never_synced": "Noch nicht synchronisiert",
     "ext_bank_offline_cached": "Zwischengespeicherte Antworten werden angezeigt",
     "ext_search_placeholder": "Gespeicherte Zeilen suchen",
-    "ext_connect_failed": "Verbindung fehlgeschlagen",
-    "wp_cat_futuristic_architecture": "Futuristische Architektur",
-    "wp_cat_night_skyline": "Nacht-Skyline",
-    "wp_cat_moon_planets": "Mond & Planeten",
-    "wp_cat_mountains": "Berge",
-    "wp_cat_forest": "Wald",
-    "wp_cat_ocean_underwater": "Ozean & Unterwasser",
-    "wp_cat_desert": "Wüste",
-    "wp_cat_northern_lights": "Nordlichter",
-    "wp_cat_abstract_glass": "Abstraktes Glas",
-    "wp_cat_geometric_dark": "Dunkle Geometrie",
-    "wp_cat_minimal_texture": "Minimale Textur"
+    "ext_connect_failed": "Verbindung fehlgeschlagen"
   },
   "fr": {
     "plan_compare_btn": "Comparer",
@@ -2282,7 +2260,7 @@
       "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
     ],
     "themes_right": "À propos des thèmes",
-    "themes_desc": "Choisissez parmi 100 fonds d'écran photo ci-dessous. Les couleurs d'accent suivent votre thème enregistré. Parrainages et Pro élargissent le choix ; Pro ajoute vos propres fichiers.",
+    "themes_desc": "Les thèmes changent l’UI. Les wallpapers et arrière-plans changent le style. Certains éléments sont verrouillés en Free. Pro débloque tout.",
     "themes_rules": "Bibliothèque premium : jusqu’à 100 thèmes et 100 fonds d’écran. Aperçu Free : 10 de chaque. Les parrainages débloquent progressivement. Pro ouvre tout immédiatement.",
     "r_desc": "Parrainage : copiez votre lien, partagez-le et suivez votre compteur.",
     "home_desc": "Réponses rapides, packs et outils au même endroit.",
@@ -2841,18 +2819,7 @@
     "ext_bank_never_synced": "Pas encore synchronisé",
     "ext_bank_offline_cached": "Affichage des réponses en cache",
     "ext_search_placeholder": "Rechercher des lignes enregistrées",
-    "ext_connect_failed": "Connexion impossible",
-    "wp_cat_futuristic_architecture": "Architecture futuriste",
-    "wp_cat_night_skyline": "Skyline nocturne",
-    "wp_cat_moon_planets": "Lune et planètes",
-    "wp_cat_mountains": "Montagnes",
-    "wp_cat_forest": "Forêt",
-    "wp_cat_ocean_underwater": "Océan & sous-marin",
-    "wp_cat_desert": "Désert",
-    "wp_cat_northern_lights": "Aurores boréales",
-    "wp_cat_abstract_glass": "Verre abstrait",
-    "wp_cat_geometric_dark": "Géométrie sombre",
-    "wp_cat_minimal_texture": "Texture minimale"
+    "ext_connect_failed": "Connexion impossible"
   },
   "es": {
     "plan_compare_btn": "Comparar",
@@ -3233,7 +3200,7 @@
       "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
     ],
     "themes_right": "Sobre Temas",
-    "themes_desc": "Elige entre 100 fondos fotográficos curados abajo. Los colores de acento siguen tu tema guardado. Referidos y Pro amplían la selección; Pro añade cargas propias.",
+    "themes_desc": "Los temas cambian la UI. Los wallpapers y fondos cambian el estilo. Algunas opciones están bloqueadas en Free. Pro lo desbloquea todo.",
     "themes_rules": "Biblioteca premium: hasta 100 temas y 100 wallpapers. Vista previa Free: 10 de cada uno. Los referidos desbloquean más paso a paso. Pro abre todo al instante.",
     "r_desc": "Referidos: copia tu enlace, compártelo y revisa tu contador.",
     "home_desc": "Respuestas rápidas, packs y herramientas en uno.",
@@ -3792,18 +3759,7 @@
     "ext_bank_never_synced": "Aún no sincronizado",
     "ext_bank_offline_cached": "Mostrando respuestas en caché",
     "ext_search_placeholder": "Buscar líneas guardadas",
-    "ext_connect_failed": "No se pudo conectar",
-    "wp_cat_futuristic_architecture": "Arquitectura futurista",
-    "wp_cat_night_skyline": "Horizonte nocturno",
-    "wp_cat_moon_planets": "Luna y planetas",
-    "wp_cat_mountains": "Montañas",
-    "wp_cat_forest": "Bosque",
-    "wp_cat_ocean_underwater": "Océano y submarino",
-    "wp_cat_desert": "Desierto",
-    "wp_cat_northern_lights": "Auroras boreales",
-    "wp_cat_abstract_glass": "Cristal abstracto",
-    "wp_cat_geometric_dark": "Geometría oscura",
-    "wp_cat_minimal_texture": "Textura minimal"
+    "ext_connect_failed": "No se pudo conectar"
   },
   "pt": {
     "plan_compare_btn": "Comparar",
@@ -4184,7 +4140,7 @@
       "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
     ],
     "themes_right": "Sobre temas",
-    "themes_desc": "Escolha entre 100 papéis de parede fotográficos abaixo. As cores de destaque seguem o tema salvo. Indicações e Pro ampliam a escolha; Pro adiciona uploads próprios.",
+    "themes_desc": "Os temas mudam a UI. Wallpapers e fundos mudam o visual. Alguns itens ficam bloqueados no Free. Pro libera tudo.",
     "themes_rules": "Biblioteca premium: até 100 temas e 100 wallpapers. Prévia Free: 10 de cada. Indicações liberam mais aos poucos. Pro abre tudo na hora.",
     "r_desc": "Indicações: copie seu link, compartilhe e acompanhe sua contagem.",
     "home_desc": "Respostas rápidas, packs e ferramentas em um só lugar",
@@ -4743,18 +4699,7 @@
     "ext_bank_never_synced": "Ainda não sincronizado",
     "ext_bank_offline_cached": "Mostrando respostas em cache",
     "ext_search_placeholder": "Pesquisar linhas salvas",
-    "ext_connect_failed": "Não foi possível conectar",
-    "wp_cat_futuristic_architecture": "Arquitetura futurista",
-    "wp_cat_night_skyline": "Horizonte noturno",
-    "wp_cat_moon_planets": "Lua e planetas",
-    "wp_cat_mountains": "Montanhas",
-    "wp_cat_forest": "Floresta",
-    "wp_cat_ocean_underwater": "Oceano e subaquático",
-    "wp_cat_desert": "Deserto",
-    "wp_cat_northern_lights": "Auroras boreais",
-    "wp_cat_abstract_glass": "Vidro abstrato",
-    "wp_cat_geometric_dark": "Geometria escura",
-    "wp_cat_minimal_texture": "Textura minimal"
+    "ext_connect_failed": "Não foi possível conectar"
   },
   "it": {
     "plan_compare_btn": "Confronta",
@@ -5135,7 +5080,7 @@
       "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
     ],
     "themes_right": "Info Temi",
-    "themes_desc": "Scegli tra 100 sfondi fotografici curati qui sotto. I colori d'accento seguono il tema salvato. Referral e Pro ampliano la scelta; Pro aggiunge caricamenti personali.",
+    "themes_desc": "I temi cambiano la UI. Wallpapers e sfondi cambiano il look. Alcuni elementi sono bloccati in Free. Pro sblocca tutto.",
     "themes_rules": "Libreria premium: fino a 100 temi e 100 wallpapers. Anteprima Free: 10 ciascuno. I referral sbloccano gradualmente. Pro apre tutto subito.",
     "r_desc": "Referral: copia il link, condividi e controlla il conteggio.",
     "home_desc": "Risposte rapide, pack e strumenti in un unico posto",
@@ -5694,18 +5639,7 @@
     "ext_bank_never_synced": "Non ancora sincronizzato",
     "ext_bank_offline_cached": "Mostro risposte in cache",
     "ext_search_placeholder": "Cerca righe salvate",
-    "ext_connect_failed": "Connessione non riuscita",
-    "wp_cat_futuristic_architecture": "Architettura futuristica",
-    "wp_cat_night_skyline": "Skyline notturna",
-    "wp_cat_moon_planets": "Luna e pianeti",
-    "wp_cat_mountains": "Montagne",
-    "wp_cat_forest": "Foresta",
-    "wp_cat_ocean_underwater": "Oceano e sottacqua",
-    "wp_cat_desert": "Deserto",
-    "wp_cat_northern_lights": "Aurora boreale",
-    "wp_cat_abstract_glass": "Vetro astratto",
-    "wp_cat_geometric_dark": "Geometria scura",
-    "wp_cat_minimal_texture": "Texture minimale"
+    "ext_connect_failed": "Connessione non riuscita"
   },
   "nl": {
     "plan_compare_btn": "Vergelijken",
@@ -6086,7 +6020,7 @@
       "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
     ],
     "themes_right": "Over thema’s",
-    "themes_desc": "Kies uit 100 gecureerde fotowallpapers hieronder. Accentkleuren volgen je opgeslagen thema. Referrals en Pro vergroten de keuze; Pro voegt eigen uploads toe.",
+    "themes_desc": "Thema’s veranderen de UI. Wallpapers en achtergronden veranderen de vibe. Sommige items zijn vergrendeld in Free. Pro unlockt alles.",
     "themes_rules": "Premiumbibliotheek: tot 100 thema’s en 100 wallpapers. Free preview: 10 van elk. Referrals ontgrendelen stap voor stap meer. Pro opent alles direct.",
     "r_desc": "Referrals: kopieer je link, deel en volg je teller.",
     "home_desc": "Snelle replies, packs en tools op één plek",
@@ -6645,18 +6579,7 @@
     "ext_bank_never_synced": "Nog niet gesynchroniseerd",
     "ext_bank_offline_cached": "Toont gecachte antwoorden",
     "ext_search_placeholder": "Zoek opgeslagen regels",
-    "ext_connect_failed": "Verbinden mislukt",
-    "wp_cat_futuristic_architecture": "Futuristische architectuur",
-    "wp_cat_night_skyline": "Nacht skyline",
-    "wp_cat_moon_planets": "Maan & planeten",
-    "wp_cat_mountains": "Bergen",
-    "wp_cat_forest": "Bos",
-    "wp_cat_ocean_underwater": "Oceaan & onderwater",
-    "wp_cat_desert": "Woestijn",
-    "wp_cat_northern_lights": "Noorderlicht",
-    "wp_cat_abstract_glass": "Abstract glas",
-    "wp_cat_geometric_dark": "Donkere geometrie",
-    "wp_cat_minimal_texture": "Minimale textuur"
+    "ext_connect_failed": "Verbinden mislukt"
   },
   "tr": {
     "plan_compare_btn": "Karşılaştır",
@@ -7037,7 +6960,7 @@
       "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
     ],
     "themes_right": "Temalar hakkında",
-    "themes_desc": "Aşağıdan 100 seçilmiş fotoğraf duvar kağıdı arasından seçin. Vurgu renkleri kayıtlı temanızı izler. Referanslar ve Pro seçimi genişletir; Pro özel yüklemeler ekler.",
+    "themes_desc": "Temalar arayüzü değiştirir. Duvar kâğıtları ve arka planlar görünümü değiştirir. Bazı öğeler Free’de kilitlidir. Pro hepsini açar.",
     "themes_rules": "Premium kütüphane: 100 temaya ve 100 duvar kâğıdına kadar. Free önizleme: her birinden 10. Referanslar adım adım daha fazlasını açar. Pro hepsini anında açar.",
     "r_desc": "Referrals: linkini kopyala, paylaş ve sayacı takip et.",
     "home_desc": "Hızlı yanıtlar, paketler ve araçlar tek yerde",
@@ -7596,18 +7519,7 @@
     "ext_bank_never_synced": "Henüz senkronize edilmedi",
     "ext_bank_offline_cached": "Önbellekteki yanıtlar gösteriliyor",
     "ext_search_placeholder": "Kayıtlı satırlarda ara",
-    "ext_connect_failed": "Bağlanılamadı",
-    "wp_cat_futuristic_architecture": "Fütürist mimari",
-    "wp_cat_night_skyline": "Gece silueti",
-    "wp_cat_moon_planets": "Ay ve gezegenler",
-    "wp_cat_mountains": "Dağlar",
-    "wp_cat_forest": "Orman",
-    "wp_cat_ocean_underwater": "Okyanus ve su altı",
-    "wp_cat_desert": "Çöl",
-    "wp_cat_northern_lights": "Kuzey ışıkları",
-    "wp_cat_abstract_glass": "Soyut cam",
-    "wp_cat_geometric_dark": "Karanlık geometri",
-    "wp_cat_minimal_texture": "Minimal doku"
+    "ext_connect_failed": "Bağlanılamadı"
   },
   "pl": {
     "plan_compare_btn": "Porównaj",
@@ -7988,7 +7900,7 @@
       "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
     ],
     "themes_right": "O motywach",
-    "themes_desc": "Wybierz spośród 100 starannie dobranych fototapet poniżej. Kolory akcentu podążają za zapisanym motywem. Polecenia i Pro rozszerzają wybór; Pro dodaje własne pliki.",
+    "themes_desc": "Motywy zmieniają UI. Tapety i tła zmieniają klimat. Część opcji jest zablokowana w Free. Pro odblokowuje wszystko.",
     "themes_rules": "Biblioteka premium: do 100 motywów i 100 tapet. Podgląd Free: po 10. Referrale odblokowują więcej krok po kroku. Pro otwiera wszystko od razu.",
     "r_desc": "Referrals: skopiuj link, udostępnij i śledź licznik.",
     "home_desc": "Szybkie odpowiedzi, paczki i narzędzia w jednym miejscu",
@@ -8547,18 +8459,7 @@
     "ext_bank_never_synced": "Jeszcze nie zsynchronizowano",
     "ext_bank_offline_cached": "Pokazuję zapisane w pamięci podręcznej odpowiedzi",
     "ext_search_placeholder": "Szukaj zapisanych linii",
-    "ext_connect_failed": "Nie udało się połączyć",
-    "wp_cat_futuristic_architecture": "Futurystyczna architektura",
-    "wp_cat_night_skyline": "Nocna panorama",
-    "wp_cat_moon_planets": "Księżyc i planety",
-    "wp_cat_mountains": "Góry",
-    "wp_cat_forest": "Las",
-    "wp_cat_ocean_underwater": "Ocean i podwodny",
-    "wp_cat_desert": "Pustynia",
-    "wp_cat_northern_lights": "Zorza polarna",
-    "wp_cat_abstract_glass": "Abstrakcyjne szkło",
-    "wp_cat_geometric_dark": "Ciemna geometria",
-    "wp_cat_minimal_texture": "Minimalna tekstura"
+    "ext_connect_failed": "Nie udało się połączyć"
   },
   "id": {
     "plan_compare_btn": "Bandingkan",
@@ -8939,7 +8840,7 @@
       "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
     ],
     "themes_right": "Tentang Tema",
-    "themes_desc": "Pilih dari 100 wallpaper foto kurasi di bawah. Warna aksen mengikuti tema tersimpan. Referral dan Pro memperluas pilihan; Pro menambah unggahan sendiri.",
+    "themes_desc": "Tema mengubah UI. Wallpaper dan background mengubah vibe. Beberapa item terkunci di Free. Pro membuka semuanya.",
     "themes_rules": "Perpustakaan premium: hingga 100 tema dan 100 wallpaper. Pratinjau Free: 10 masing-masing. Referral membuka lebih banyak bertahap. Pro membuka semuanya sekaligus.",
     "r_desc": "Referrals: copy link, share, dan pantau jumlahnya.",
     "home_desc": "Balasan cepat, pack, dan tools di satu tempat",
@@ -9498,18 +9399,7 @@
     "ext_bank_never_synced": "Belum disinkronkan",
     "ext_bank_offline_cached": "Menampilkan balasan cache",
     "ext_search_placeholder": "Cari baris tersimpan",
-    "ext_connect_failed": "Tidak bisa terhubung",
-    "wp_cat_futuristic_architecture": "Arsitektur futuristik",
-    "wp_cat_night_skyline": "Cakrawala malam",
-    "wp_cat_moon_planets": "Bulan & planet",
-    "wp_cat_mountains": "Pegunungan",
-    "wp_cat_forest": "Hutan",
-    "wp_cat_ocean_underwater": "Laut & bawah air",
-    "wp_cat_desert": "Gurun",
-    "wp_cat_northern_lights": "Aurora",
-    "wp_cat_abstract_glass": "Kaca abstrak",
-    "wp_cat_geometric_dark": "Geometri gelap",
-    "wp_cat_minimal_texture": "Tekstur minimal"
+    "ext_connect_failed": "Tidak bisa terhubung"
   },
   "ru": {
     "plan_compare_btn": "Сравнить",
@@ -9890,7 +9780,7 @@
       "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
     ],
     "themes_right": "О темах",
-    "themes_desc": "100 курируемых фотографических обоев — выбирайте ниже. Акцентные цвета следуют сохранённой теме. Рефералы и Pro открывают больше; Pro добавляет свои загрузки.",
+    "themes_desc": "25 курируемых обоев для сайта — выбирайте ниже. Акцентные цвета следуют сохранённой теме. Рефералы и Pro открывают больше; Pro добавляет свои загрузки.",
     "themes_rules": "Премиум-библиотека: до 100 тем и 100 обоев. В Free — превью по 10; рефералы открывают шаг за шагом. Pro открывает всё сразу.",
     "r_desc": "Коротко:",
     "home_desc": "Быстрые ответы, паки и инструменты в одном месте",
@@ -10449,18 +10339,7 @@
     "ext_bank_never_synced": "Ещё не синхронизировано",
     "ext_bank_offline_cached": "Показаны кэшированные ответы",
     "ext_search_placeholder": "Поиск по сохранённым строкам",
-    "ext_connect_failed": "Не удалось подключиться",
-    "wp_cat_futuristic_architecture": "Футуристическая архитектура",
-    "wp_cat_night_skyline": "Ночной горизонт",
-    "wp_cat_moon_planets": "Луна и планеты",
-    "wp_cat_mountains": "Горы",
-    "wp_cat_forest": "Лес",
-    "wp_cat_ocean_underwater": "Океан и подводный мир",
-    "wp_cat_desert": "Пустыня",
-    "wp_cat_northern_lights": "Северное сияние",
-    "wp_cat_abstract_glass": "Абстрактное стекло",
-    "wp_cat_geometric_dark": "Тёмная геометрия",
-    "wp_cat_minimal_texture": "Минимальная текстура"
+    "ext_connect_failed": "Не удалось подключиться"
   },
   "uk": {
     "plan_compare_btn": "Порівняти",
@@ -10841,7 +10720,7 @@
       "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
     ],
     "themes_right": "Про теми",
-    "themes_desc": "100 кураторських фото-шпалер — обирайте нижче. Акцентні кольори слідують збереженій темі. Реферали та Pro розширюють вибір; Pro додає власні завантаження.",
+    "themes_desc": "Теми змінюють інтерфейс. Шпалери та фон задають атмосферу. У Free частина функцій заблокована. Pro відкриває все.",
     "themes_rules": "Преміум-бібліотека: до 100 тем і 100 шпалер. У Free — прев’ю по 10; реферали відкривають крок за кроком. Pro відкриває все одразу.",
     "r_desc": "Реферали: скопіюй посилання, ділись і дивись лічильник.",
     "home_desc": "Швидкі відповіді, паки та інструменти в одному місці",
@@ -11400,18 +11279,7 @@
     "ext_bank_never_synced": "Ще не синхронізовано",
     "ext_bank_offline_cached": "Показано кешовані відповіді",
     "ext_search_placeholder": "Пошук збережених рядків",
-    "ext_connect_failed": "Не вдалося підключитися",
-    "wp_cat_futuristic_architecture": "Футуристична архітектура",
-    "wp_cat_night_skyline": "Нічний горизонт",
-    "wp_cat_moon_planets": "Місяць і планети",
-    "wp_cat_mountains": "Гори",
-    "wp_cat_forest": "Ліс",
-    "wp_cat_ocean_underwater": "Океан і підводний світ",
-    "wp_cat_desert": "Пустеля",
-    "wp_cat_northern_lights": "Північне сияння",
-    "wp_cat_abstract_glass": "Абстрактне скло",
-    "wp_cat_geometric_dark": "Темна геометрія",
-    "wp_cat_minimal_texture": "Мінімальна текстура"
+    "ext_connect_failed": "Не вдалося підключитися"
   },
   "hi": {
     "plan_compare_btn": "कम्पेयर करें",
@@ -11792,7 +11660,7 @@
       "<b>Pro</b> removes save-line caps and unlocks all writing styles and preset packs, same as the main site."
     ],
     "themes_right": "थीम्स के बारे में",
-    "themes_desc": "नीचे 100 क्यूरेटेड फोटो वॉलपेपर में से चुनें। एक्सेंट रंग आपकी सहेजी थीम का अनुसरण करते हैं। रेफरल और Pro विकल्प बढ़ाते हैं; Pro कस्टम अपलोड जोड़ता है।",
+    "themes_desc": "थीम्स UI बदलती हैं। वॉलपेपर/बैकग्राउंड वाइब बदलते हैं। कुछ आइटम फ्री में लॉक हैं। Pro सब अनलॉक करता है।",
     "themes_rules": "प्रीमियम लाइब्रेरी: 100 थीम और 100 वॉलपेपर तक। Free प्रीव्यू: दोनों में 10। रेफ़रल धीरे-धीरे और खोलते हैं। Pro सब तुरंत खोलता है।",
     "r_desc": "संक्षिप्त में:",
     "home_desc": "एक जगह पर तेज़ रिप्लाई, पैक और टूल्स",
@@ -12351,18 +12219,7 @@
     "ext_bank_never_synced": "अभी सिंक नहीं हुआ",
     "ext_bank_offline_cached": "कैश किए जवाब दिखाए जा रहे हैं",
     "ext_search_placeholder": "सेव लाइनें खोजें",
-    "ext_connect_failed": "कनेक्ट नहीं हो सका",
-    "wp_cat_futuristic_architecture": "भविष्यवादी वास्तुकला",
-    "wp_cat_night_skyline": "रात्रि क्षितिज",
-    "wp_cat_moon_planets": "चंद्रमा और ग्रह",
-    "wp_cat_mountains": "पर्वत",
-    "wp_cat_forest": "वन",
-    "wp_cat_ocean_underwater": "महासागर और पानी के नीचे",
-    "wp_cat_desert": "रेगिस्तान",
-    "wp_cat_northern_lights": "उत्तरी रोशनी",
-    "wp_cat_abstract_glass": "अमूर्त काँच",
-    "wp_cat_geometric_dark": "गहरी ज्यामिति",
-    "wp_cat_minimal_texture": "न्यूनतम बनावट"
+    "ext_connect_failed": "कनेक्ट नहीं हो सका"
   },
   "ja": {
     "plan_compare_btn": "比較",
@@ -12743,7 +12600,7 @@
       "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
     ],
     "themes_right": "テーマについて",
-    "themes_desc": "下から100枚の厳選フォト壁紙を選べます。アクセント色は保存したテーマに従います。紹介とProで選択肢が広がり、Proは独自アップロードを追加します。",
+    "themes_desc": "テーマはUIを変更。壁紙/背景は雰囲気を変更。一部はFreeでロック。Proで全解放。",
     "themes_rules": "プレミアムライブラリ：最大100テーマと100壁紙。Freeプレビューは各10。紹介で段階的に解放。Proですべて即解放。",
     "r_desc": "短く言うと:",
     "home_desc": "返信・パック・ツールをひとつに",
@@ -13014,7 +12871,7 @@
     "wp_filter_all": "すべての壁紙",
     "wp_filter_free": "無料のみ",
     "wp_filter_mine": "解放済み",
-    "wp_cat_neon_city": "ネオン都市",
+    "wp_cat_neon_city": "ネオンシティ",
     "wp_cat_space": "宇宙",
     "wp_cat_nature": "自然",
     "wp_cat_abstract": "抽象",
@@ -13302,18 +13159,7 @@
     "ext_bank_never_synced": "まだ同期していません",
     "ext_bank_offline_cached": "キャッシュされた返信を表示中",
     "ext_search_placeholder": "保存行を検索",
-    "ext_connect_failed": "接続できませんでした",
-    "wp_cat_futuristic_architecture": "未来建築",
-    "wp_cat_night_skyline": "夜景スカイライン",
-    "wp_cat_moon_planets": "月と惑星",
-    "wp_cat_mountains": "山",
-    "wp_cat_forest": "森",
-    "wp_cat_ocean_underwater": "海と水中",
-    "wp_cat_desert": "砂漠",
-    "wp_cat_northern_lights": "オーロラ",
-    "wp_cat_abstract_glass": "抽象ガラス",
-    "wp_cat_geometric_dark": "ダーク幾何学",
-    "wp_cat_minimal_texture": "ミニマルテクスチャ"
+    "ext_connect_failed": "接続できませんでした"
   },
   "zh": {
     "plan_compare_btn": "对比",
@@ -13694,7 +13540,7 @@
       "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
     ],
     "themes_right": "关于主题",
-    "themes_desc": "从下方100张精选摄影壁纸中选择。强调色跟随您保存的主题。推荐与Pro扩展可选范围；Pro可添加自定义上传。",
+    "themes_desc": "主题会改变 UI。壁纸/背景改变氛围。部分内容在免费版锁定，Pro 全部解锁。",
     "themes_rules": "高级库：最多 100 个主题和 100 张壁纸。Free 预览各 10 个；推荐逐步解锁更多。Pro 立即全部解锁。",
     "r_desc": "简版：",
     "home_desc": "快速回复、素材包和工具都在这里",
@@ -14253,18 +14099,7 @@
     "ext_bank_never_synced": "尚未同步",
     "ext_bank_offline_cached": "显示缓存回复",
     "ext_search_placeholder": "搜索已保存行",
-    "ext_connect_failed": "无法连接",
-    "wp_cat_futuristic_architecture": "未来建筑",
-    "wp_cat_night_skyline": "夜间天际线",
-    "wp_cat_moon_planets": "月亮与行星",
-    "wp_cat_mountains": "山脉",
-    "wp_cat_forest": "森林",
-    "wp_cat_ocean_underwater": "海洋与水下",
-    "wp_cat_desert": "沙漠",
-    "wp_cat_northern_lights": "北极光",
-    "wp_cat_abstract_glass": "抽象玻璃",
-    "wp_cat_geometric_dark": "暗色几何",
-    "wp_cat_minimal_texture": "极简纹理"
+    "ext_connect_failed": "无法连接"
   }
 };
   function clone(value){ return JSON.parse(JSON.stringify(value)); }

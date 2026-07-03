@@ -377,7 +377,7 @@
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "O motywach",
-  "themes_desc": "Wybierz spośród 100 starannie dobranych fototapet poniżej. Kolory akcentu podążają za zapisanym motywem. Polecenia i Pro rozszerzają wybór; Pro dodaje własne pliki.",
+  "themes_desc": "Motywy zmieniają UI. Tapety i tła zmieniają klimat. Część opcji jest zablokowana w Free. Pro odblokowuje wszystko.",
   "themes_rules": "Biblioteka premium: do 100 motywów i 100 tapet. Podgląd Free: po 10. Referrale odblokowują więcej krok po kroku. Pro otwiera wszystko od razu.",
   "r_desc": "Referrals: skopiuj link, udostępnij i śledź licznik.",
   "home_desc": "Szybkie odpowiedzi, paczki i narzędzia w jednym miejscu",
@@ -936,16 +936,5 @@
   "ext_bank_never_synced": "Jeszcze nie zsynchronizowano",
   "ext_bank_offline_cached": "Pokazuję zapisane w pamięci podręcznej odpowiedzi",
   "ext_search_placeholder": "Szukaj zapisanych linii",
-  "ext_connect_failed": "Nie udało się połączyć",
-  "wp_cat_futuristic_architecture": "Futurystyczna architektura",
-  "wp_cat_night_skyline": "Nocna panorama",
-  "wp_cat_moon_planets": "Księżyc i planety",
-  "wp_cat_mountains": "Góry",
-  "wp_cat_forest": "Las",
-  "wp_cat_ocean_underwater": "Ocean i podwodny",
-  "wp_cat_desert": "Pustynia",
-  "wp_cat_northern_lights": "Zorza polarna",
-  "wp_cat_abstract_glass": "Abstrakcyjne szkło",
-  "wp_cat_geometric_dark": "Ciemna geometria",
-  "wp_cat_minimal_texture": "Minimalna tekstura"
+  "ext_connect_failed": "Nie udało się połączyć"
 }

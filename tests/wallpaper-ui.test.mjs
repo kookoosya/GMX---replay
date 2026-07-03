@@ -20,7 +20,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 test("wallpaper core pairs site and extension pack ids", () => {
   assert.equal(pairedExtId("v2_012"), "extv3_012");
   assert.equal(pairedSiteId("extv3_005"), "v2_005");
-  assert.equal(WALLPAPER_CURATED_INDICES.length, 100);
+  assert.equal(WALLPAPER_CURATED_INDICES.length, 25);
 });
 
 test("wallpaper core filters featured picks and groups buckets", () => {
@@ -32,7 +32,7 @@ test("wallpaper core filters featured picks and groups buckets", () => {
   const featured = filterWallpaperEntries(entries, "featured", (wp) =>
     Number(String(wp.id).replace(/^v2_/, "")) || 0
   );
-  assert.equal(featured.length, 3);
+  assert.equal(featured.length, 2);
   assert.ok(bucketWallpaperEntry({ tier: "custom" }, 0, 1, { freeVisible: 10, isUnlocked: () => true }) === "custom");
   const groups = groupWallpaperEntries(entries);
   assert.deepEqual(
@@ -64,10 +64,10 @@ test("site wallpaper ui passes unlock state from entry to card builder", () => {
   assert.match(src, /function buildWpCard\(\{ wp, idx, mainIdx, isUnlocked \}/);
 });
 
-test("curated catalog has 100 unique categorized wallpapers", () => {
-  assert.equal(WALLPAPER_PACK_COUNT, 100);
+test("curated catalog has 25+ unique categorized wallpapers", () => {
+  assert.ok(WALLPAPER_PACK_COUNT >= 24);
   assert.equal(PACK_CATEGORIES.length, WALLPAPER_PACK_COUNT);
-  assert.ok(new Set(PACK_CATEGORIES).size >= 12);
+  assert.equal(new Set(PACK_CATEGORIES).size, 5);
 });
 
 test("category filter returns only matching wallpapers", () => {

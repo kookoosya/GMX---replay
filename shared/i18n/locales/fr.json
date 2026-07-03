@@ -377,7 +377,7 @@
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "À propos des thèmes",
-  "themes_desc": "Choisissez parmi 100 fonds d'écran photo ci-dessous. Les couleurs d'accent suivent votre thème enregistré. Parrainages et Pro élargissent le choix ; Pro ajoute vos propres fichiers.",
+  "themes_desc": "Les thèmes changent l’UI. Les wallpapers et arrière-plans changent le style. Certains éléments sont verrouillés en Free. Pro débloque tout.",
   "themes_rules": "Bibliothèque premium : jusqu’à 100 thèmes et 100 fonds d’écran. Aperçu Free : 10 de chaque. Les parrainages débloquent progressivement. Pro ouvre tout immédiatement.",
   "r_desc": "Parrainage : copiez votre lien, partagez-le et suivez votre compteur.",
   "home_desc": "Réponses rapides, packs et outils au même endroit.",
@@ -936,16 +936,5 @@
   "ext_bank_never_synced": "Pas encore synchronisé",
   "ext_bank_offline_cached": "Affichage des réponses en cache",
   "ext_search_placeholder": "Rechercher des lignes enregistrées",
-  "ext_connect_failed": "Connexion impossible",
-  "wp_cat_futuristic_architecture": "Architecture futuriste",
-  "wp_cat_night_skyline": "Skyline nocturne",
-  "wp_cat_moon_planets": "Lune et planètes",
-  "wp_cat_mountains": "Montagnes",
-  "wp_cat_forest": "Forêt",
-  "wp_cat_ocean_underwater": "Océan & sous-marin",
-  "wp_cat_desert": "Désert",
-  "wp_cat_northern_lights": "Aurores boréales",
-  "wp_cat_abstract_glass": "Verre abstrait",
-  "wp_cat_geometric_dark": "Géométrie sombre",
-  "wp_cat_minimal_texture": "Texture minimale"
+  "ext_connect_failed": "Connexion impossible"
 }

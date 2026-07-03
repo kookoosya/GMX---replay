@@ -377,7 +377,7 @@
     "<b>Pro</b> removes save-line caps and unlocks all writing styles and preset packs, same as the main site."
   ],
   "themes_right": "थीम्स के बारे में",
-  "themes_desc": "नीचे 100 क्यूरेटेड फोटो वॉलपेपर में से चुनें। एक्सेंट रंग आपकी सहेजी थीम का अनुसरण करते हैं। रेफरल और Pro विकल्प बढ़ाते हैं; Pro कस्टम अपलोड जोड़ता है।",
+  "themes_desc": "थीम्स UI बदलती हैं। वॉलपेपर/बैकग्राउंड वाइब बदलते हैं। कुछ आइटम फ्री में लॉक हैं। Pro सब अनलॉक करता है।",
   "themes_rules": "प्रीमियम लाइब्रेरी: 100 थीम और 100 वॉलपेपर तक। Free प्रीव्यू: दोनों में 10। रेफ़रल धीरे-धीरे और खोलते हैं। Pro सब तुरंत खोलता है।",
   "r_desc": "संक्षिप्त में:",
   "home_desc": "एक जगह पर तेज़ रिप्लाई, पैक और टूल्स",
@@ -936,16 +936,5 @@
   "ext_bank_never_synced": "अभी सिंक नहीं हुआ",
   "ext_bank_offline_cached": "कैश किए जवाब दिखाए जा रहे हैं",
   "ext_search_placeholder": "सेव लाइनें खोजें",
-  "ext_connect_failed": "कनेक्ट नहीं हो सका",
-  "wp_cat_futuristic_architecture": "भविष्यवादी वास्तुकला",
-  "wp_cat_night_skyline": "रात्रि क्षितिज",
-  "wp_cat_moon_planets": "चंद्रमा और ग्रह",
-  "wp_cat_mountains": "पर्वत",
-  "wp_cat_forest": "वन",
-  "wp_cat_ocean_underwater": "महासागर और पानी के नीचे",
-  "wp_cat_desert": "रेगिस्तान",
-  "wp_cat_northern_lights": "उत्तरी रोशनी",
-  "wp_cat_abstract_glass": "अमूर्त काँच",
-  "wp_cat_geometric_dark": "गहरी ज्यामिति",
-  "wp_cat_minimal_texture": "न्यूनतम बनावट"
+  "ext_connect_failed": "कनेक्ट नहीं हो सका"
 }

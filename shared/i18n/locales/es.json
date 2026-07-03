@@ -377,7 +377,7 @@
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "Sobre Temas",
-  "themes_desc": "Elige entre 100 fondos fotográficos curados abajo. Los colores de acento siguen tu tema guardado. Referidos y Pro amplían la selección; Pro añade cargas propias.",
+  "themes_desc": "Los temas cambian la UI. Los wallpapers y fondos cambian el estilo. Algunas opciones están bloqueadas en Free. Pro lo desbloquea todo.",
   "themes_rules": "Biblioteca premium: hasta 100 temas y 100 wallpapers. Vista previa Free: 10 de cada uno. Los referidos desbloquean más paso a paso. Pro abre todo al instante.",
   "r_desc": "Referidos: copia tu enlace, compártelo y revisa tu contador.",
   "home_desc": "Respuestas rápidas, packs y herramientas en uno.",
@@ -936,16 +936,5 @@
   "ext_bank_never_synced": "Aún no sincronizado",
   "ext_bank_offline_cached": "Mostrando respuestas en caché",
   "ext_search_placeholder": "Buscar líneas guardadas",
-  "ext_connect_failed": "No se pudo conectar",
-  "wp_cat_futuristic_architecture": "Arquitectura futurista",
-  "wp_cat_night_skyline": "Horizonte nocturno",
-  "wp_cat_moon_planets": "Luna y planetas",
-  "wp_cat_mountains": "Montañas",
-  "wp_cat_forest": "Bosque",
-  "wp_cat_ocean_underwater": "Océano y submarino",
-  "wp_cat_desert": "Desierto",
-  "wp_cat_northern_lights": "Auroras boreales",
-  "wp_cat_abstract_glass": "Cristal abstracto",
-  "wp_cat_geometric_dark": "Geometría oscura",
-  "wp_cat_minimal_texture": "Textura minimal"
+  "ext_connect_failed": "No se pudo conectar"
 }

@@ -377,7 +377,7 @@
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "Sobre temas",
-  "themes_desc": "Escolha entre 100 papéis de parede fotográficos abaixo. As cores de destaque seguem o tema salvo. Indicações e Pro ampliam a escolha; Pro adiciona uploads próprios.",
+  "themes_desc": "Os temas mudam a UI. Wallpapers e fundos mudam o visual. Alguns itens ficam bloqueados no Free. Pro libera tudo.",
   "themes_rules": "Biblioteca premium: até 100 temas e 100 wallpapers. Prévia Free: 10 de cada. Indicações liberam mais aos poucos. Pro abre tudo na hora.",
   "r_desc": "Indicações: copie seu link, compartilhe e acompanhe sua contagem.",
   "home_desc": "Respostas rápidas, packs e ferramentas em um só lugar",
@@ -936,16 +936,5 @@
   "ext_bank_never_synced": "Ainda não sincronizado",
   "ext_bank_offline_cached": "Mostrando respostas em cache",
   "ext_search_placeholder": "Pesquisar linhas salvas",
-  "ext_connect_failed": "Não foi possível conectar",
-  "wp_cat_futuristic_architecture": "Arquitetura futurista",
-  "wp_cat_night_skyline": "Horizonte noturno",
-  "wp_cat_moon_planets": "Lua e planetas",
-  "wp_cat_mountains": "Montanhas",
-  "wp_cat_forest": "Floresta",
-  "wp_cat_ocean_underwater": "Oceano e subaquático",
-  "wp_cat_desert": "Deserto",
-  "wp_cat_northern_lights": "Auroras boreais",
-  "wp_cat_abstract_glass": "Vidro abstrato",
-  "wp_cat_geometric_dark": "Geometria escura",
-  "wp_cat_minimal_texture": "Textura minimal"
+  "ext_connect_failed": "Não foi possível conectar"
 }

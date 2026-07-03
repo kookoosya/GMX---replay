@@ -377,7 +377,7 @@
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "Про теми",
-  "themes_desc": "100 кураторських фото-шпалер — обирайте нижче. Акцентні кольори слідують збереженій темі. Реферали та Pro розширюють вибір; Pro додає власні завантаження.",
+  "themes_desc": "Теми змінюють інтерфейс. Шпалери та фон задають атмосферу. У Free частина функцій заблокована. Pro відкриває все.",
   "themes_rules": "Преміум-бібліотека: до 100 тем і 100 шпалер. У Free — прев’ю по 10; реферали відкривають крок за кроком. Pro відкриває все одразу.",
   "r_desc": "Реферали: скопіюй посилання, ділись і дивись лічильник.",
   "home_desc": "Швидкі відповіді, паки та інструменти в одному місці",
@@ -936,16 +936,5 @@
   "ext_bank_never_synced": "Ще не синхронізовано",
   "ext_bank_offline_cached": "Показано кешовані відповіді",
   "ext_search_placeholder": "Пошук збережених рядків",
-  "ext_connect_failed": "Не вдалося підключитися",
-  "wp_cat_futuristic_architecture": "Футуристична архітектура",
-  "wp_cat_night_skyline": "Нічний горизонт",
-  "wp_cat_moon_planets": "Місяць і планети",
-  "wp_cat_mountains": "Гори",
-  "wp_cat_forest": "Ліс",
-  "wp_cat_ocean_underwater": "Океан і підводний світ",
-  "wp_cat_desert": "Пустеля",
-  "wp_cat_northern_lights": "Північне сияння",
-  "wp_cat_abstract_glass": "Абстрактне скло",
-  "wp_cat_geometric_dark": "Темна геометрія",
-  "wp_cat_minimal_texture": "Мінімальна текстура"
+  "ext_connect_failed": "Не вдалося підключитися"
 }

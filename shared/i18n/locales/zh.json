@@ -377,7 +377,7 @@
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "关于主题",
-  "themes_desc": "从下方100张精选摄影壁纸中选择。强调色跟随您保存的主题。推荐与Pro扩展可选范围；Pro可添加自定义上传。",
+  "themes_desc": "主题会改变 UI。壁纸/背景改变氛围。部分内容在免费版锁定，Pro 全部解锁。",
   "themes_rules": "高级库：最多 100 个主题和 100 张壁纸。Free 预览各 10 个；推荐逐步解锁更多。Pro 立即全部解锁。",
   "r_desc": "简版：",
   "home_desc": "快速回复、素材包和工具都在这里",
@@ -936,16 +936,5 @@
   "ext_bank_never_synced": "尚未同步",
   "ext_bank_offline_cached": "显示缓存回复",
   "ext_search_placeholder": "搜索已保存行",
-  "ext_connect_failed": "无法连接",
-  "wp_cat_futuristic_architecture": "未来建筑",
-  "wp_cat_night_skyline": "夜间天际线",
-  "wp_cat_moon_planets": "月亮与行星",
-  "wp_cat_mountains": "山脉",
-  "wp_cat_forest": "森林",
-  "wp_cat_ocean_underwater": "海洋与水下",
-  "wp_cat_desert": "沙漠",
-  "wp_cat_northern_lights": "北极光",
-  "wp_cat_abstract_glass": "抽象玻璃",
-  "wp_cat_geometric_dark": "暗色几何",
-  "wp_cat_minimal_texture": "极简纹理"
+  "ext_connect_failed": "无法连接"
 }
