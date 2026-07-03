@@ -167,6 +167,18 @@
       return `extv3_${String(num).padStart(3, "0")}`;
     }
 
+    function sitePackAssetFile(id) {
+      const m = String(id || "").match(/^v2_(\d+)$/i);
+      if (!m) return "";
+      return `pexels100_${String(Number(m[1])).padStart(3, "0")}.webp`;
+    }
+
+    function extPackAssetFile(id) {
+      const m = String(id || "").match(/^extv3_(\d+)$/i);
+      if (!m) return "";
+      return `pexels100_portrait_${String(Number(m[1])).padStart(3, "0")}.webp`;
+    }
+
     function normalizeExtWallpaperIdLocal(id, catalog) {
       const v = String(id || "").trim();
       if (!v) return "";
@@ -196,14 +208,14 @@
 
     function wallpaperAssetPath(id) {
       if (!id) return "";
-      if (String(id).startsWith("v2_")) return String(id) + ".webp";
+      if (String(id).startsWith("v2_")) return sitePackAssetFile(id);
       return String(id) + ".svg";
     }
 
     function extWallpaperAssetPath(id, catalog) {
       const norm = normalizeExtWallpaperIdLocal(id, catalog);
       if (!norm) return "";
-      if (norm.startsWith("extv3_")) return norm + ".webp";
+      if (norm.startsWith("extv3_")) return extPackAssetFile(norm);
       return norm + ".svg";
     }
 
@@ -217,7 +229,10 @@
       if (!norm) return "";
       if (norm === CUSTOM_UPLOAD_ID) return getSiteCustomUpload();
       if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}${revQuery()}`;
-      if (norm.startsWith("v2_")) return `/assets/wallpapers/${norm}.webp${revQuery()}`;
+      if (norm.startsWith("v2_")) {
+        const f = sitePackAssetFile(norm);
+        return f ? `/assets/wallpapers/${f}${revQuery()}` : "";
+      }
       const p = wallpaperAssetPath(norm);
       return p ? `/assets/wallpapers/${p}${revQuery()}` : "";
     }
@@ -227,8 +242,11 @@
       if (!norm) return "";
       if (norm === CUSTOM_UPLOAD_ID) return getSiteCustomUpload();
       if (norm.startsWith("custom_")) return `/assets/wallpapers/custom/${norm.slice(7)}${revQuery()}`;
-      if (norm.startsWith("v2_")) return `/assets/wallpapers/thumbs/${norm}.webp${revQuery()}`;
-      return `/assets/wallpapers/thumbs/v2_001.webp${revQuery()}`;
+      if (norm.startsWith("v2_")) {
+        const f = sitePackAssetFile(norm);
+        return f ? `/assets/wallpapers/thumbs/${f}${revQuery()}` : "";
+      }
+      return `/assets/wallpapers/thumbs/pexels100_001.webp${revQuery()}`;
     }
 
     function wallpaperUrl(id, catalog) {
@@ -241,7 +259,10 @@
       if (!norm) return "";
       if (norm === CUSTOM_UPLOAD_ID) return getExtCustomUpload();
       if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}${revQuery()}`;
-      if (norm.startsWith("extv3_")) return `/assets/extbg/${norm}.webp${revQuery()}`;
+      if (norm.startsWith("extv3_")) {
+        const f = extPackAssetFile(norm);
+        return f ? `/assets/extbg/${f}${revQuery()}` : "";
+      }
       const p = extWallpaperAssetPath(norm, catalog);
       return p ? `/assets/extbg/${p}${revQuery()}` : "";
     }
@@ -251,8 +272,11 @@
       if (!norm) return "";
       if (norm === CUSTOM_UPLOAD_ID) return getExtCustomUpload();
       if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}${revQuery()}`;
-      if (norm.startsWith("extv3_")) return `/assets/extbg/thumbs/${norm}.webp${revQuery()}`;
-      return `/assets/extbg/thumbs/extv3_001.webp${revQuery()}`;
+      if (norm.startsWith("extv3_")) {
+        const f = extPackAssetFile(norm);
+        return f ? `/assets/extbg/thumbs/${f}${revQuery()}` : "";
+      }
+      return `/assets/extbg/thumbs/pexels100_portrait_001.webp${revQuery()}`;
     }
 
     return {

@@ -1,5 +1,5 @@
 /* GMXReply shell service worker — static cache + offline shell docs; API stays network-only. */
-const CACHE = "gmx-shell-v2";
+const CACHE = "gmx-shell-v3";
 const DOC_CACHE = "gmx-shell-docs-v1";
 const PRECACHE = [
   "/manifest.webmanifest",
@@ -53,13 +53,14 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("activate", (event) => {
+  const LEGACY_CACHES = ["gmx-shell-v1", "gmx-shell-v2"];
   event.waitUntil(
     caches
       .keys()
       .then((keys) =>
         Promise.all(
           keys
-            .filter((k) => k !== CACHE && k !== DOC_CACHE)
+            .filter((k) => (k !== CACHE && k !== DOC_CACHE) || LEGACY_CACHES.includes(k))
             .map((k) => caches.delete(k))
         )
       )

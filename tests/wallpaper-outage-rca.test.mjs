@@ -32,12 +32,12 @@ test("service worker excludes full wallpaper assets from runtime cache", () => {
 });
 
 test("pwa cache policy keeps thumbnails cacheable but not full wallpapers", () => {
-  assert.equal(isWallpaperFullAssetPath("/assets/wallpapers/v2_001.webp"), true);
-  assert.equal(isWallpaperFullAssetPath("/assets/wallpapers/thumbs/v2_001.webp"), false);
-  assert.equal(isWallpaperFullAssetPath("/assets/extbg/extv3_001.webp"), true);
-  assert.equal(isWallpaperFullAssetPath("/assets/extbg/thumbs/extv3_001.webp"), false);
-  assert.equal(isSwCacheableAssetPath("/assets/wallpapers/v2_001.webp"), false);
-  assert.equal(isSwCacheableAssetPath("/assets/wallpapers/thumbs/v2_001.webp"), true);
+  assert.equal(isWallpaperFullAssetPath("/assets/wallpapers/pexels100_001.webp"), true);
+  assert.equal(isWallpaperFullAssetPath("/assets/wallpapers/thumbs/pexels100_001.webp"), false);
+  assert.equal(isWallpaperFullAssetPath("/assets/extbg/pexels100_portrait_001.webp"), true);
+  assert.equal(isWallpaperFullAssetPath("/assets/extbg/thumbs/pexels100_portrait_001.webp"), false);
+  assert.equal(isSwCacheableAssetPath("/assets/wallpapers/pexels100_001.webp"), false);
+  assert.equal(isSwCacheableAssetPath("/assets/wallpapers/thumbs/pexels100_001.webp"), true);
 });
 
 test("production catalog count matches wallpaper-core pack", () => {

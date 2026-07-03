@@ -2,7 +2,13 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import process from "process";
-import { WALLPAPER_PACK_COUNT } from "./lib/wallpaper-core.mjs";
+import {
+  WALLPAPER_PACK_COUNT,
+  siteLandscapeFilename,
+  siteThumbFilename,
+  extPortraitFilename,
+  extThumbFilename,
+} from "./lib/wallpaper-core.mjs";
 
 const root = process.cwd();
 const strict = process.argv.includes("--strict");
@@ -45,14 +51,10 @@ function printList(label, items) {
 
 let issues = 0;
 
-const expectedSiteWalls = [
-  ...seq("v2_", WALLPAPER_PACK_COUNT, ".webp", 3),
-];
-const expectedSiteThumbs = seq("v2_", WALLPAPER_PACK_COUNT, ".webp", 3);
-const expectedExtWalls = [
-  ...seq("extv3_", WALLPAPER_PACK_COUNT, ".webp", 3),
-];
-const expectedExtThumbs = seq("extv3_", WALLPAPER_PACK_COUNT, ".webp", 3);
+const expectedSiteWalls = Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => siteLandscapeFilename(i + 1));
+const expectedSiteThumbs = Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => siteThumbFilename(i + 1));
+const expectedExtWalls = Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => extPortraitFilename(i + 1));
+const expectedExtThumbs = Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => extThumbFilename(i + 1));
 
 for (const [label, rel, expected] of [
   ["site wallpapers", "assets/wallpapers", expectedSiteWalls],
@@ -67,7 +69,7 @@ for (const [label, rel, expected] of [
   printList("missing", missing);
   printList("extra", extra);
   if (missing.length) issues += missing.length;
-  if (extra.length && strict) { /* legacy wallpaper svg may remain on disk */ }
+  if (extra.length && strict) issues += extra.length;
 }
 
 const deadFiles = [

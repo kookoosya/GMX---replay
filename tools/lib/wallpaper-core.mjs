@@ -5,6 +5,52 @@ export { WALLPAPER_CATEGORIES };
 
 export const WALLPAPER_PACK_COUNT = 100;
 
+/** Versioned on-disk filenames — never reuse legacy v2_/extv3_ gradient URLs. */
+export const WALLPAPER_ASSET_PACK = "pexels100";
+
+export function siteLandscapeFilename(n) {
+  const num = Math.max(1, Math.min(WALLPAPER_PACK_COUNT, Number(n) || 1));
+  return `${WALLPAPER_ASSET_PACK}_${String(num).padStart(3, "0")}.webp`;
+}
+
+export function siteThumbFilename(n) {
+  return siteLandscapeFilename(n);
+}
+
+export function extPortraitFilename(n) {
+  const num = Math.max(1, Math.min(WALLPAPER_PACK_COUNT, Number(n) || 1));
+  return `${WALLPAPER_ASSET_PACK}_portrait_${String(num).padStart(3, "0")}.webp`;
+}
+
+export function extThumbFilename(n) {
+  return extPortraitFilename(n);
+}
+
+export function siteLandscapePathFromIndex(n) {
+  return `assets/wallpapers/${siteLandscapeFilename(n)}`;
+}
+
+export function siteThumbPathFromIndex(n) {
+  return `assets/wallpapers/thumbs/${siteThumbFilename(n)}`;
+}
+
+export function extPortraitPathFromIndex(n) {
+  return `assets/extbg/${extPortraitFilename(n)}`;
+}
+
+export function extThumbPathFromIndex(n) {
+  return `assets/extbg/thumbs/${extThumbFilename(n)}`;
+}
+
+/** Legacy gradient-era filenames that must not appear in active catalog URLs. */
+export const LEGACY_GRADIENT_SITE_FILENAMES = Object.freeze(
+  Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => `v2_${String(i + 1).padStart(3, "0")}.webp`)
+);
+
+export const LEGACY_GRADIENT_EXT_FILENAMES = Object.freeze(
+  Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => `extv3_${String(i + 1).padStart(3, "0")}.webp`)
+);
+
 export const WALLPAPER_CURATED_INDICES = Object.freeze(
   Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => i + 1)
 );

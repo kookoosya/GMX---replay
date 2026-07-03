@@ -12,7 +12,7 @@ import {
   PACK_CATEGORIES,
   WALLPAPER_CATEGORIES,
 } from "../tools/lib/wallpaper-curated-catalog.mjs";
-import { pairedExtId, pairedSiteId } from "../tools/lib/wallpaper-core.mjs";
+import { pairedExtId, pairedSiteId, siteLandscapeFilename, siteThumbPathFromIndex } from "../tools/lib/wallpaper-core.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -34,10 +34,9 @@ test("wallpaper site and extension ids pair 1:1", () => {
 
 test("wallpaper landscape and portrait assets differ and exist", () => {
   for (let i = 1; i <= WALLPAPER_PACK_COUNT; i++) {
-    const n = String(i).padStart(3, "0");
-    const land = path.join(root, "assets", "wallpapers", `v2_${n}.webp`);
-    const port = path.join(root, "assets", "extbg", `extv3_${n}.webp`);
-    const thumb = path.join(root, "assets", "wallpapers", "thumbs", `v2_${n}.webp`);
+    const land = path.join(root, "assets", "wallpapers", siteLandscapeFilename(i));
+    const port = path.join(root, "assets", "extbg", `pexels100_portrait_${String(i).padStart(3, "0")}.webp`);
+    const thumb = path.join(root, "assets", "wallpapers", "thumbs", siteLandscapeFilename(i));
     assert.ok(fs.existsSync(land), land);
     assert.ok(fs.existsSync(port), port);
     assert.ok(fs.existsSync(thumb), thumb);
@@ -60,6 +59,10 @@ test("wallpaper-sources.json matches active pack count", () => {
     assert.ok(item.pageUrl);
     assert.ok(item.landscapePath);
     assert.ok(item.portraitPath);
+    assert.match(item.landscapePath, /pexels100_\d{3}\.webp$/);
+    assert.match(item.portraitPath, /pexels100_portrait_\d{3}\.webp$/);
+    assert.match(item.thumbnailPath, /pexels100_\d{3}\.webp$/);
+    assert.equal(item.thumbnailPath, siteThumbPathFromIndex(Number(String(item.id).replace(/^v2_/, ""))));
     assert.notEqual(item.landscapePath, item.portraitPath);
   }
 });

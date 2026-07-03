@@ -4,6 +4,7 @@
  * Run: npm run verify:prod
  */
 import { execSync } from "node:child_process";
+import crypto from "node:crypto";
 import { fail, ok, freshSmokeHandle } from "./tests/_helpers.mjs";
 
 const BASE = String(process.env.PROD_BASE || "https://www.gmxreply.com").replace(/\/$/, "");
@@ -238,7 +239,7 @@ const sw = await get("/sw.js");
 if (sw.status !== 200) {
   fail(`service worker: ${sw.status}`);
 }
-if (!sw.text.includes("gmx-shell-v2") || !sw.text.includes("gmx-shell-docs-v1")) {
+if (!sw.text.includes("gmx-shell-v3") || !sw.text.includes("gmx-shell-docs-v1")) {
   fail("sw.js missing v2 shell/doc caches");
 }
 if (!sw.text.includes('req.mode === "navigate"') || !sw.text.includes("/app.css")) {
@@ -426,5 +427,38 @@ if (appPage.text.includes('id="blog_home_teaser"')) {
   fail("/app shell should not include blog home teaser");
 }
 ok("blog guides removed");
+
+const wpChunk = await get("/app.wallpapers.js");
+if (!wpChunk.text.includes("pexels100_")) {
+  fail("production app.wallpapers.js missing pexels100 versioned paths");
+}
+if (!wpChunk.text.includes("sitePackAssetFile")) {
+  fail("production app.wallpapers.js missing versioned asset resolver");
+}
+const appJs = await get("/app.js");
+if (!appJs.text.includes('ASSET_REV = "20260703a"')) {
+  fail("production ASSET_REV not bumped for pexels100 rollout");
+}
+ok("wallpaper pexels100 paths on production");
+
+try {
+  const gradThumb = execSync("git show c6c9fa6:assets/wallpapers/thumbs/v2_001.webp", { encoding: "buffer" });
+  const gradHash = crypto.createHash("sha256").update(gradThumb).digest("hex");
+  const legacyFetch = await fetch(`${BASE}/assets/wallpapers/thumbs/v2_001.webp`, { cache: "no-store" });
+  if (legacyFetch.status === 200) {
+    const legacyHash = crypto.createHash("sha256").update(Buffer.from(await legacyFetch.arrayBuffer())).digest("hex");
+    if (legacyHash === gradHash) {
+      fail("production still serves gradient bytes at legacy /thumbs/v2_001.webp");
+    }
+  }
+  const newFetch = await fetch(`${BASE}/assets/wallpapers/thumbs/pexels100_001.webp`, { cache: "no-store" });
+  if (newFetch.status !== 200) {
+    fail(`production missing pexels100_001 thumb: ${newFetch.status}`);
+  }
+  ok("production pexels100 thumb asset live");
+} catch (err) {
+  if (String(err?.message || err).includes("production")) throw err;
+  console.log("  skip gradient byte check (no local git baseline)");
+}
 
 console.log("\nPROD_VERIFY_OK");

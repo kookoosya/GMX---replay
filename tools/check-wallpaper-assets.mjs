@@ -5,6 +5,12 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { WALLPAPER_PACK_COUNT, PACK_CATEGORIES } from "./lib/wallpaper-curated-catalog.mjs";
+import {
+  siteLandscapeFilename,
+  siteThumbFilename,
+  extPortraitFilename,
+  extThumbFilename,
+} from "./lib/wallpaper-core.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(root, "..");
@@ -39,13 +45,10 @@ const landHashes = new Set();
 const portHashes = new Set();
 
 for (let i = 1; i <= COUNT; i++) {
-  const n = String(i).padStart(3, "0");
-  const siteId = `v2_${n}`;
-  const extId = `extv3_${n}`;
-  const land = path.join(ROOT, "assets", "wallpapers", `${siteId}.webp`);
-  const port = path.join(ROOT, "assets", "extbg", `${extId}.webp`);
-  const thumb = path.join(ROOT, "assets", "wallpapers", "thumbs", `${siteId}.webp`);
-  const extThumb = path.join(ROOT, "assets", "extbg", "thumbs", `${extId}.webp`);
+  const land = path.join(ROOT, "assets", "wallpapers", siteLandscapeFilename(i));
+  const port = path.join(ROOT, "assets", "extbg", extPortraitFilename(i));
+  const thumb = path.join(ROOT, "assets", "wallpapers", "thumbs", siteThumbFilename(i));
+  const extThumb = path.join(ROOT, "assets", "extbg", "thumbs", extThumbFilename(i));
 
   checkFile("landscape", land, MIN_LAND, MAX_LAND);
   checkFile("portrait", port, MIN_PORT, MAX_PORT);
@@ -55,9 +58,9 @@ for (let i = 1; i <= COUNT; i++) {
   if (fs.existsSync(land) && fs.existsSync(port)) {
     const lh = crypto.createHash("sha256").update(fs.readFileSync(land)).digest("hex");
     const ph = crypto.createHash("sha256").update(fs.readFileSync(port)).digest("hex");
-    if (lh === ph) fail(`landscape equals portrait: ${siteId}`);
-    if (landHashes.has(lh)) fail(`duplicate landscape hash: ${siteId}`);
-    if (portHashes.has(ph)) fail(`duplicate portrait hash: ${siteId}`);
+    if (lh === ph) fail(`landscape equals portrait: ${siteLandscapeFilename(i)}`);
+    if (landHashes.has(lh)) fail(`duplicate landscape hash: ${siteLandscapeFilename(i)}`);
+    if (portHashes.has(ph)) fail(`duplicate portrait hash: ${extPortraitFilename(i)}`);
     landHashes.add(lh);
     portHashes.add(ph);
   }

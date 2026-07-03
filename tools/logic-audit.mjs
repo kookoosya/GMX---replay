@@ -42,8 +42,10 @@ if (fs.existsSync(path.join(root, wallpaperModule))) {
   mustNotMatch(wallpaperModule, /source\.unsplash\.com/, "unsplash URLs forbidden");
   mustNotMatch(wallpaperModule, /sitePackWallpaperDataUri/, "chart SVG data-uri wallpapers forbidden");
   mustNotMatch(wallpaperModule, /SITE_WALLPAPER_LUX/, "lux SVG wallpaper catalog removed");
-  mustMatch(wallpaperModule, /\/assets\/wallpapers\/thumbs\/\$\{norm\}\.webp/, "wallpaper thumbs must use webp files");
-  mustMatch(wallpaperModule, /\/assets\/extbg\/\$\{norm\}\.webp/, "extension wallpapers use webp CDN paths");
+  mustMatch(wallpaperModule, /\/assets\/wallpapers\/thumbs\/\$\{f\}/, "wallpaper thumbs must use versioned webp files");
+  mustMatch(wallpaperModule, /\/assets\/extbg\/\$\{f\}/, "extension wallpapers use versioned webp CDN paths");
+  mustMatch(wallpaperModule, /sitePackAssetFile/, "site wallpaper filenames versioned via sitePackAssetFile");
+  mustMatch(wallpaperModule, /extPackAssetFile/, "extension wallpaper filenames versioned via extPackAssetFile");
 }
 
 for (const rel of appFiles) {
