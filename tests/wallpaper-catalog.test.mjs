@@ -45,8 +45,8 @@ test("site-wallpaper-sources.json matches active pack count", () => {
   assert.doesNotMatch(raw, /PEXELS_API_KEY/);
   for (const item of manifest.items) {
     assert.ok(item.landscapePath);
-    assert.match(item.landscapePath, /sitev4_\d{3}\.webp$/);
-    assert.match(item.thumbnailPath, /sitev4_\d{3}\.webp$/);
+    assert.match(item.landscapePath, /sitev5_\d{3}\.webp$/);
+    assert.match(item.thumbnailPath, /sitev5_\d{3}\.webp$/);
     assert.equal(item.thumbnailPath, siteThumbPathFromIndex(Number(String(item.id).replace(/^v2_/, ""))));
   }
 });
@@ -57,7 +57,7 @@ test("extension-skin-sources.json has 60 independent skins", () => {
   assert.equal(manifest.items.length, 60);
   for (const item of manifest.items) {
     assert.match(item.id, /^extskin_/);
-    assert.match(item.portraitPath, /extskin_v4_\d{3}\.webp$/);
+    assert.match(item.portraitPath, /extskin_v5_\d{3}\.webp$/);
   }
 });
 
@@ -74,14 +74,13 @@ test("wallpaper public modules reference active pack counts", () => {
 });
 
 test("100-pack category distribution contract", () => {
-  assert.ok(WALLPAPER_CATEGORIES.length >= 12);
+  assert.ok(WALLPAPER_CATEGORIES.length >= 8);
   const counts = {};
   for (const c of PACK_CATEGORIES) counts[c] = (counts[c] || 0) + 1;
-  assert.ok(Object.keys(counts).length >= 12);
+  assert.ok(Object.keys(counts).length >= 8);
   for (const n of Object.values(counts)) assert.ok(n <= 15);
-  const city =
-    (counts["neon-city"] || 0) +
-    (counts["futuristic-architecture"] || 0) +
-    (counts["night-skyline"] || 0);
-  assert.ok(city <= 20);
+  assert.ok((counts["city-neon"] || 0) <= 15);
+  assert.ok((counts["superhero-comic"] || 0) >= 12);
+  assert.ok((counts["anime-style"] || 0) >= 12);
+  assert.ok((counts["crypto-web3"] || 0) >= 12);
 });

@@ -44,8 +44,8 @@ test("wallpapers: catalog and url helpers", () => {
   assert.equal(site.length, packCount);
   assert.equal(site[0].id, "v2_001");
   assert.equal(wp.normalizeWallpaperId("w12", site), "v2_001");
-  assert.match(wp.wallpaperFullUrl("v2_001", site), /\/assets\/wallpapers\/sitev4_001\.webp\?v=rev1$/);
-  assert.match(wp.wallpaperThumbUrl("v2_001", site), /\/assets\/wallpapers\/thumbs\/sitev4_001\.webp\?v=rev1$/);
+  assert.match(wp.wallpaperFullUrl("v2_001", site), /\/assets\/wallpapers\/sitev5_001\.webp\?v=rev1$/);
+  assert.match(wp.wallpaperThumbUrl("v2_001", site), /\/assets\/wallpapers\/thumbs\/sitev5_001\.webp\?v=rev1$/);
   const ext = wp.buildExtWallpapers();
   assert.equal(ext.length, wp.EXT_PACK_COUNT);
   assert.equal(ext[0].id, "extskin_001");

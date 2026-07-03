@@ -239,8 +239,8 @@ const sw = await get("/sw.js");
 if (sw.status !== 200) {
   fail(`service worker: ${sw.status}`);
 }
-if (!sw.text.includes("gmx-shell-v4") || !sw.text.includes("gmx-shell-docs-v1")) {
-  fail("sw.js missing v4 shell/doc caches");
+if (!sw.text.includes("gmx-shell-v5") || !sw.text.includes("gmx-shell-docs-v1")) {
+  fail("sw.js missing v5 shell/doc caches");
 }
 if (!sw.text.includes('req.mode === "navigate"') || !sw.text.includes("/app.css")) {
   fail("sw.js missing offline shell navigation or precache");
@@ -429,20 +429,23 @@ if (appPage.text.includes('id="blog_home_teaser"')) {
 ok("blog guides removed");
 
 const wpChunk = await get("/app.wallpapers.js");
-if (!wpChunk.text.includes("sitev4_")) {
-  fail("production app.wallpapers.js missing sitev4 versioned paths");
+if (!wpChunk.text.includes("sitev5_")) {
+  fail("production app.wallpapers.js missing sitev5 versioned paths");
 }
-if (!wpChunk.text.includes("extskin_v4_")) {
-  fail("production app.wallpapers.js missing extskin_v4 paths");
+if (!wpChunk.text.includes("extskin_v5_")) {
+  fail("production app.wallpapers.js missing extskin_v5 paths");
+}
+if (wpChunk.text.includes("sitev4_") || wpChunk.text.includes("extskin_v4_")) {
+  fail("production app.wallpapers.js still references v4 asset paths");
 }
 if (!wpChunk.text.includes("sitePackAssetFile")) {
   fail("production app.wallpapers.js missing versioned asset resolver");
 }
 const appJsRev = await get("/app.js");
-if (!appJsRev.text.includes('ASSET_REV = "20260704a"')) {
-  fail("production ASSET_REV not bumped for Themes V4 rollout");
+if (!appJsRev.text.includes('ASSET_REV = "20260705a"')) {
+  fail("production ASSET_REV not bumped for Themes V5 rollout");
 }
-ok("wallpaper Themes V4 paths on production");
+ok("wallpaper Themes V5 paths on production");
 
 try {
   const gradThumb = execSync("git show c6c9fa6:assets/wallpapers/thumbs/v2_001.webp", { encoding: "buffer" });
@@ -454,11 +457,11 @@ try {
       fail("production still serves gradient bytes at legacy /thumbs/v2_001.webp");
     }
   }
-  const newFetch = await fetch(`${BASE}/assets/wallpapers/thumbs/sitev4_001.webp`, { cache: "no-store" });
+  const newFetch = await fetch(`${BASE}/assets/wallpapers/thumbs/sitev5_001.webp`, { cache: "no-store" });
   if (newFetch.status !== 200) {
-    fail(`production missing sitev4_001 thumb: ${newFetch.status}`);
+    fail(`production missing sitev5_001 thumb: ${newFetch.status}`);
   }
-  ok("production sitev4 thumb asset live");
+  ok("production sitev5 thumb asset live");
 } catch (err) {
   if (String(err?.message || err).includes("production")) throw err;
   console.log("  skip gradient byte check (no local git baseline)");

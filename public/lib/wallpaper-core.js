@@ -22,7 +22,7 @@
   "v2_090": "extskin_042",
   "v2_100": "extskin_060"
 };
-  const PACK_CATEGORIES = ["geometric-dark","abstract-glass","neon-city","neon-city","neon-city","geometric-dark","neon-city","neon-city","geometric-dark","neon-city","abstract-glass","abstract-glass","neon-city","anime-inspired","futuristic-architecture","night-skyline","minimal-texture","minimal-texture","futuristic-architecture","futuristic-architecture","geometric-dark","abstract-glass","forest","futuristic-architecture","night-skyline","forest","minimal-texture","forest","abstract-glass","futuristic-architecture","futuristic-architecture","comic-inspired","forest","forest","geometric-dark","mecha","futuristic-architecture","mountains","mountains","night-skyline","abstract-glass","moon-planets","geometric-dark","mountains","fantasy","desert","ocean-underwater","sci-fi","abstract-glass","ocean-underwater","geometric-dark","night-skyline","anime-inspired","forest","moon-planets","moon-planets","comic-inspired","forest","abstract-glass","superhero-inspired","desert","mountains","night-skyline","night-skyline","mecha","northern-lights","space","desert","desert","superhero-inspired","minimal-texture","fantasy","mountains","sci-fi","ocean-underwater","space","mountains","anime-inspired","minimal-texture","mountains","comic-inspired","minimal-texture","ocean-underwater","superhero-inspired","space","mecha","northern-lights","fantasy","space","ocean-underwater","sci-fi","northern-lights","ocean-underwater","anime-inspired","northern-lights","northern-lights","fantasy","ocean-underwater","moon-planets","moon-planets"];
+  const PACK_CATEGORIES = ["superhero-comic","superhero-comic","superhero-comic","superhero-comic","superhero-comic","superhero-comic","superhero-comic","superhero-comic","superhero-comic","superhero-comic","superhero-comic","superhero-comic","anime-style","anime-style","anime-style","anime-style","anime-style","anime-style","anime-style","anime-style","anime-style","anime-style","anime-style","anime-style","crypto-web3","crypto-web3","crypto-web3","crypto-web3","crypto-web3","crypto-web3","crypto-web3","crypto-web3","crypto-web3","crypto-web3","crypto-web3","crypto-web3","mecha-cyber","mecha-cyber","mecha-cyber","mecha-cyber","mecha-cyber","mecha-cyber","mecha-cyber","mecha-cyber","mecha-cyber","city-neon","city-neon","city-neon","city-neon","city-neon","city-neon","city-neon","city-neon","city-neon","city-neon","city-neon","city-neon","city-neon","city-neon","city-neon","nature","nature","nature","nature","nature","nature","nature","nature","nature","nature","nature","nature","nature","nature","nature","space","space","space","space","space","space","space","space","space","space","fantasy-env","fantasy-env","fantasy-env","fantasy-env","fantasy-env","fantasy-env","fantasy-env","fantasy-env","abstract-minimal","abstract-minimal","abstract-minimal","abstract-minimal","abstract-minimal","abstract-minimal","abstract-minimal"];
   const WALLPAPER_CURATED_INDICES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
   const WALLPAPER_GROUP_ORDER = ["custom", "free", "unlocked", "locked"];
   const WALLPAPER_FILTER_OPTIONS = [
@@ -35,79 +35,39 @@
     "labelKey": "wp_filter_all"
   },
   {
-    "id": "anime-inspired",
-    "labelKey": "wp_cat_anime_inspired"
+    "id": "superhero-comic",
+    "labelKey": "wp_cat_superhero_comic"
   },
   {
-    "id": "comic-inspired",
-    "labelKey": "wp_cat_comic_inspired"
+    "id": "anime-style",
+    "labelKey": "wp_cat_anime_style"
   },
   {
-    "id": "superhero-inspired",
-    "labelKey": "wp_cat_superhero_inspired"
+    "id": "crypto-web3",
+    "labelKey": "wp_cat_crypto_web3"
   },
   {
-    "id": "mecha",
-    "labelKey": "wp_cat_mecha"
+    "id": "mecha-cyber",
+    "labelKey": "wp_cat_mecha_cyber"
   },
   {
-    "id": "fantasy",
-    "labelKey": "wp_cat_fantasy"
-  },
-  {
-    "id": "sci-fi",
-    "labelKey": "wp_cat_sci_fi"
-  },
-  {
-    "id": "neon-city",
+    "id": "city-neon",
     "labelKey": "wp_cat_neon_city"
   },
   {
-    "id": "futuristic-architecture",
-    "labelKey": "wp_cat_futuristic_architecture"
-  },
-  {
-    "id": "night-skyline",
-    "labelKey": "wp_cat_night_skyline"
+    "id": "nature",
+    "labelKey": "wp_cat_nature"
   },
   {
     "id": "space",
     "labelKey": "wp_cat_space"
   },
   {
-    "id": "moon-planets",
-    "labelKey": "wp_cat_moon_planets"
+    "id": "fantasy-env",
+    "labelKey": "wp_cat_fantasy_env"
   },
   {
-    "id": "mountains",
-    "labelKey": "wp_cat_mountains"
-  },
-  {
-    "id": "forest",
-    "labelKey": "wp_cat_forest"
-  },
-  {
-    "id": "ocean-underwater",
-    "labelKey": "wp_cat_ocean_underwater"
-  },
-  {
-    "id": "desert",
-    "labelKey": "wp_cat_desert"
-  },
-  {
-    "id": "northern-lights",
-    "labelKey": "wp_cat_northern_lights"
-  },
-  {
-    "id": "abstract-glass",
-    "labelKey": "wp_cat_abstract_glass"
-  },
-  {
-    "id": "geometric-dark",
-    "labelKey": "wp_cat_geometric_dark"
-  },
-  {
-    "id": "minimal-texture",
+    "id": "abstract-minimal",
     "labelKey": "wp_cat_minimal_texture"
   },
   {
