@@ -27,8 +27,16 @@ export function shellDocCacheKey(pathname) {
   return null;
 }
 
+export function isWallpaperFullAssetPath(pathname) {
+  const path = String(pathname || "");
+  if (path.startsWith("/assets/wallpapers/") && !path.includes("/thumbs/")) return true;
+  if (path.startsWith("/assets/extbg/") && !path.includes("/thumbs/")) return true;
+  return false;
+}
+
 export function isSwCacheableAssetPath(pathname) {
   const path = String(pathname || "");
+  if (isWallpaperFullAssetPath(path)) return false;
   return (
     path === "/sw.js" ||
     path === PWA_MANIFEST_PATH ||

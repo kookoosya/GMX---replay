@@ -15,7 +15,15 @@ function shellDocKey(pathname) {
   return null;
 }
 
+function isWallpaperFullAsset(pathname) {
+  return (
+    (pathname.startsWith("/assets/wallpapers/") && !pathname.includes("/thumbs/")) ||
+    (pathname.startsWith("/assets/extbg/") && !pathname.includes("/thumbs/"))
+  );
+}
+
 function isCacheableAsset(pathname) {
+  if (isWallpaperFullAsset(pathname)) return false;
   return (
     pathname === "/sw.js" ||
     pathname === "/manifest.webmanifest" ||

@@ -36,6 +36,7 @@ test("service worker precaches shell assets", () => {
     assert.match(sw, new RegExp(url.replace(/\//g, "\\/")));
   }
   assert.match(sw, /\/api\//);
+  assert.match(sw, /isWallpaperFullAsset/);
 });
 
 test("pwainstall module registers service worker", () => {
