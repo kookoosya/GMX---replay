@@ -12,14 +12,16 @@ import {
   groupWallpaperEntries,
   bucketWallpaperEntry,
   packCategoryForIndex,
+  SITE_EXT_SYNC_MAP,
 } from "../tools/lib/wallpaper-core.mjs";
 import { PACK_CATEGORIES } from "../tools/lib/wallpaper-curated-catalog.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 test("wallpaper core pairs site and extension pack ids", () => {
-  assert.equal(pairedExtId("v2_012"), "extv3_012");
-  assert.equal(pairedSiteId("extv3_005"), "v2_005");
+  assert.equal(pairedExtId("v2_012"), SITE_EXT_SYNC_MAP.v2_012);
+  assert.equal(pairedSiteId("extskin_010"), "v2_012");
+  assert.equal(pairedExtId("v2_002"), "");
   assert.equal(WALLPAPER_CURATED_INDICES.length, WALLPAPER_PACK_COUNT);
 });
 

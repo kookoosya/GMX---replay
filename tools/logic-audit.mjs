@@ -43,7 +43,8 @@ if (fs.existsSync(path.join(root, wallpaperModule))) {
   mustNotMatch(wallpaperModule, /sitePackWallpaperDataUri/, "chart SVG data-uri wallpapers forbidden");
   mustNotMatch(wallpaperModule, /SITE_WALLPAPER_LUX/, "lux SVG wallpaper catalog removed");
   mustMatch(wallpaperModule, /\/assets\/wallpapers\/thumbs\/\$\{f\}/, "wallpaper thumbs must use versioned webp files");
-  mustMatch(wallpaperModule, /\/assets\/extbg\/\$\{f\}/, "extension wallpapers use versioned webp CDN paths");
+  mustMatch(wallpaperModule, /\/assets\/extskins\/\$\{f\}/, "extension wallpapers use versioned webp CDN paths");
+  mustMatch(wallpaperModule, /extskin_v4_/, "extension wallpapers use extskin_v4 pack filenames");
   mustMatch(wallpaperModule, /sitePackAssetFile/, "site wallpaper filenames versioned via sitePackAssetFile");
   mustMatch(wallpaperModule, /extPackAssetFile/, "extension wallpaper filenames versioned via extPackAssetFile");
 }

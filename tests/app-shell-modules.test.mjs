@@ -49,7 +49,8 @@ test("wallpapers: catalog and url helpers", () => {
   const ext = wp.buildExtWallpapers();
   assert.equal(ext.length, wp.EXT_PACK_COUNT);
   assert.equal(ext[0].id, "extskin_001");
-  assert.equal(wp.normalizeExtWallpaperIdLocal("ext_3", ext), "extskin_003");
+  assert.equal(wp.normalizeExtWallpaperIdLocal("extv3_003", ext), "extskin_003");
+  assert.equal(wp.normalizeExtWallpaperIdLocal("w3", ext), "extskin_003");
 });
 
 test("themes: catalog exports", () => {
