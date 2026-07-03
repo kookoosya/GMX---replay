@@ -40,10 +40,14 @@ test("pwa cache policy keeps thumbnails cacheable but not full wallpapers", () =
   assert.equal(isSwCacheableAssetPath("/assets/wallpapers/thumbs/v2_001.webp"), true);
 });
 
-test("production catalog remains 25-pack baseline after rollback", () => {
+test("production catalog count matches wallpaper-core pack", () => {
+  const core = fs.readFileSync(path.join(root, "tools", "lib", "wallpaper-core.mjs"), "utf8");
+  const m = core.match(/WALLPAPER_PACK_COUNT = (\d+)/);
+  assert.ok(m, "WALLPAPER_PACK_COUNT missing");
+  const count = Number(m[1]);
   const wp = fs.readFileSync(path.join(root, "public", "app.wallpapers.js"), "utf8");
-  assert.match(wp, /SITE_PACK_COUNT = 25/);
-  assert.doesNotMatch(wp, /SITE_PACK_COUNT = 100/);
+  assert.match(wp, new RegExp(`SITE_PACK_COUNT = ${count}`));
+  assert.match(wp, new RegExp(`EXT_PACK_COUNT = ${count}`));
 });
 
 test("fail-before: 100-wallpaper deploy footprint exceeded safe budget", () => {

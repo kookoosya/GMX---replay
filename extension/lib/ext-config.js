@@ -2,31 +2,31 @@
   if (global.GMXExtConfig) return;
 
   const EXT_WP_NAMES = [
-  "Rainy Skyline",
-  "Cyber Alley",
-  "Glass Future City",
-  "Night Rooftop",
-  "Neon Harbor",
-  "Subtle Nebula",
-  "Lunar Horizon",
-  "Distant Planet",
-  "Minimal Star Field",
-  "Deep Orbit",
-  "Misty Mountains",
-  "Dark Forest",
-  "Ocean Twilight",
-  "Desert Night",
-  "Northern Lights",
-  "Dark Glass",
-  "Violet Waves",
-  "Teal Depth",
-  "Graphite Geometry",
-  "Liquid Gradient",
-  "Black Texture",
-  "Dark Paper",
-  "Subtle Grid",
-  "Monochrome Depth",
-  "Premium Dark Gradient"
+  "Geometric Scene",
+  "Abstract Scene",
+  "Neon Scene",
+  "Neon Scene 2",
+  "Neon Scene 3",
+  "Geometric Scene 2",
+  "Neon Scene 4",
+  "Neon Scene 5",
+  "Geometric Scene 3",
+  "Neon Scene 6",
+  "Abstract Scene 2",
+  "Abstract Scene 3",
+  "Neon Scene 7",
+  "Neon Scene 8",
+  "Futuristic Scene",
+  "Night Scene",
+  "Minimal Scene",
+  "Minimal Scene 2",
+  "Futuristic Scene 2",
+  "Futuristic Scene 3",
+  "Geometric Scene 4",
+  "Abstract Scene 4",
+  "Forest Scene",
+  "Futuristic Scene 4",
+  "Night Scene 2"
 ];
 
   const EXT_WALLPAPER_OPTIONS = (() => {
@@ -34,7 +34,7 @@
       { id: "ext_free_01", name: "Soft Gradient" },
       { id: "ext_free_02", name: "Calm Glow" },
     ];
-    for (let i = 1; i <= 100; i++) {
+    for (let i = 1; i <= 25; i++) {
       const n = String(i).padStart(2, "0");
       out.push({ id: `w${n}`, name: EXT_WP_NAMES[i - 1] || `Scene ${i}` });
     }

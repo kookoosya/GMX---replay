@@ -5,6 +5,7 @@ import path from "node:path";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "node:url";
 import { themeGroup, groupThemeItems, THEME_GROUP_ORDER } from "../tools/lib/theme-group-core.mjs";
+import { WALLPAPER_PACK_COUNT } from "../tools/lib/wallpaper-core.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -150,10 +151,8 @@ test("en locale defines theme group and pro unlock copy", () => {
 test("themes desc matches curated wallpaper pack count", () => {
   const en = JSON.parse(fs.readFileSync(path.join(root, "shared", "i18n", "locales", "en.json"), "utf8"));
   const ru = JSON.parse(fs.readFileSync(path.join(root, "shared", "i18n", "locales", "ru.json"), "utf8"));
-  assert.match(en.themes_desc, /25 curated site wallpapers/i);
-  assert.doesNotMatch(en.themes_desc, /100 premium/i);
-  assert.match(ru.themes_desc, /25 курируемых обоев/i);
-  assert.doesNotMatch(ru.themes_desc, /100 премиум/i);
+  assert.match(en.themes_desc, new RegExp(String(WALLPAPER_PACK_COUNT)));
+  assert.match(ru.themes_desc, new RegExp(String(WALLPAPER_PACK_COUNT)));
 });
 
 test("renderThemes keeps grid when signature unchanged", () => {

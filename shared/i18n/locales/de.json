@@ -377,7 +377,7 @@
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "Über Themes",
-  "themes_desc": "Themes ändern die UI. Wallpapers und Hintergründe ändern den Look. Einige Elemente sind in Free gesperrt. Pro schaltet alles frei.",
+  "themes_desc": "Wählen Sie aus 25 kuratierten Fotohintergründen unten. Akzentfarben folgen Ihrem gespeicherten Theme. Referrals und Pro erweitern die Auswahl; Pro ermöglicht eigene Uploads.",
   "themes_rules": "Premium-Bibliothek: bis zu 100 Themes und 100 Wallpapers. Free-Vorschau: je 10. Referrals schalten schrittweise mehr frei. Pro öffnet sofort alles.",
   "r_desc": "Referrals: Link kopieren, teilen und Counter verfolgen.",
   "home_desc": "Schnelle Replies, Packs und Tools in einem.",
@@ -936,5 +936,16 @@
   "ext_bank_never_synced": "Noch nicht synchronisiert",
   "ext_bank_offline_cached": "Zwischengespeicherte Antworten werden angezeigt",
   "ext_search_placeholder": "Gespeicherte Zeilen suchen",
-  "ext_connect_failed": "Verbindung fehlgeschlagen"
+  "ext_connect_failed": "Verbindung fehlgeschlagen",
+  "wp_cat_futuristic_architecture": "Futuristische Architektur",
+  "wp_cat_night_skyline": "Nacht-Skyline",
+  "wp_cat_moon_planets": "Mond & Planeten",
+  "wp_cat_mountains": "Berge",
+  "wp_cat_forest": "Wald",
+  "wp_cat_ocean_underwater": "Ozean & Unterwasser",
+  "wp_cat_desert": "Wüste",
+  "wp_cat_northern_lights": "Nordlichter",
+  "wp_cat_abstract_glass": "Abstraktes Glas",
+  "wp_cat_geometric_dark": "Dunkle Geometrie",
+  "wp_cat_minimal_texture": "Minimale Textur"
 }

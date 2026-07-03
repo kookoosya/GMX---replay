@@ -23,20 +23,28 @@
     "labelKey": "wp_cat_neon_city"
   },
   {
-    "id": "space",
-    "labelKey": "wp_cat_space"
+    "id": "futuristic-architecture",
+    "labelKey": "wp_cat_futuristic_architecture"
   },
   {
-    "id": "nature",
-    "labelKey": "wp_cat_nature"
+    "id": "night-skyline",
+    "labelKey": "wp_cat_night_skyline"
   },
   {
-    "id": "abstract",
-    "labelKey": "wp_cat_abstract"
+    "id": "forest",
+    "labelKey": "wp_cat_forest"
   },
   {
-    "id": "minimal",
-    "labelKey": "wp_cat_minimal"
+    "id": "abstract-glass",
+    "labelKey": "wp_cat_abstract_glass"
+  },
+  {
+    "id": "geometric-dark",
+    "labelKey": "wp_cat_geometric_dark"
+  },
+  {
+    "id": "minimal-texture",
+    "labelKey": "wp_cat_minimal_texture"
   },
   {
     "id": "free",
@@ -49,31 +57,31 @@
 ];
 
   const PACK_CATEGORIES = [
+  "geometric-dark",
+  "abstract-glass",
   "neon-city",
   "neon-city",
   "neon-city",
+  "geometric-dark",
   "neon-city",
   "neon-city",
-  "space",
-  "space",
-  "space",
-  "space",
-  "space",
-  "nature",
-  "nature",
-  "nature",
-  "nature",
-  "nature",
-  "abstract",
-  "abstract",
-  "abstract",
-  "abstract",
-  "abstract",
-  "minimal",
-  "minimal",
-  "minimal",
-  "minimal",
-  "minimal"
+  "geometric-dark",
+  "neon-city",
+  "abstract-glass",
+  "abstract-glass",
+  "neon-city",
+  "neon-city",
+  "futuristic-architecture",
+  "night-skyline",
+  "minimal-texture",
+  "minimal-texture",
+  "futuristic-architecture",
+  "futuristic-architecture",
+  "geometric-dark",
+  "abstract-glass",
+  "forest",
+  "futuristic-architecture",
+  "night-skyline"
 ];
 
   function formatExtPackId(n) {

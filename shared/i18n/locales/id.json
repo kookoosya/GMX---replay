@@ -377,7 +377,7 @@
     "Pro removes save-line caps and unlocks all writing styles / preset packs (same as the main site)."
   ],
   "themes_right": "Tentang Tema",
-  "themes_desc": "Tema mengubah UI. Wallpaper dan background mengubah vibe. Beberapa item terkunci di Free. Pro membuka semuanya.",
+  "themes_desc": "Pilih dari 25 wallpaper foto kurasi di bawah. Warna aksen mengikuti tema tersimpan. Referral dan Pro memperluas pilihan; Pro menambah unggahan sendiri.",
   "themes_rules": "Perpustakaan premium: hingga 100 tema dan 100 wallpaper. Pratinjau Free: 10 masing-masing. Referral membuka lebih banyak bertahap. Pro membuka semuanya sekaligus.",
   "r_desc": "Referrals: copy link, share, dan pantau jumlahnya.",
   "home_desc": "Balasan cepat, pack, dan tools di satu tempat",
@@ -936,5 +936,16 @@
   "ext_bank_never_synced": "Belum disinkronkan",
   "ext_bank_offline_cached": "Menampilkan balasan cache",
   "ext_search_placeholder": "Cari baris tersimpan",
-  "ext_connect_failed": "Tidak bisa terhubung"
+  "ext_connect_failed": "Tidak bisa terhubung",
+  "wp_cat_futuristic_architecture": "Arsitektur futuristik",
+  "wp_cat_night_skyline": "Cakrawala malam",
+  "wp_cat_moon_planets": "Bulan & planet",
+  "wp_cat_mountains": "Pegunungan",
+  "wp_cat_forest": "Hutan",
+  "wp_cat_ocean_underwater": "Laut & bawah air",
+  "wp_cat_desert": "Gurun",
+  "wp_cat_northern_lights": "Aurora",
+  "wp_cat_abstract_glass": "Kaca abstrak",
+  "wp_cat_geometric_dark": "Geometri gelap",
+  "wp_cat_minimal_texture": "Tekstur minimal"
 }

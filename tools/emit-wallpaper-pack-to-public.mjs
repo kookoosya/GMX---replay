@@ -207,7 +207,7 @@ function patchExtConfig(file) {
   let src = fs.readFileSync(file, "utf8");
   const namesBlock = `const EXT_WP_NAMES = ${JSON.stringify(PACK_NAMES, null, 2)};`;
   src = src.replace(/const EXT_WP_NAMES = \[[\s\S]*?\];/, namesBlock);
-  src = src.replace(/for \(let i = 1; i <= 58; i\+\+\)/, "for (let i = 1; i <= 100; i++)");
+  src = src.replace(/for \(let i = 1; i <= \d+; i\+\+\)/, `for (let i = 1; i <= ${WALLPAPER_PACK_COUNT}; i++)`);
   fs.writeFileSync(file, src, "utf8");
   console.log("patched", path.relative(ROOT, file));
 }
