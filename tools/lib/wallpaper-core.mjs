@@ -1,29 +1,45 @@
-/** Wallpaper pairing, curated picks, and UI grouping — shared by site UI and tests. */
-import { PACK_CATEGORIES, WALLPAPER_CATEGORIES } from "./wallpaper-curated-catalog.mjs";
+/** Wallpaper + extension skin pairing, paths, and UI grouping — Themes V4. */
+import { PACK_CATEGORIES, WALLPAPER_CATEGORIES, WALLPAPER_PACK_COUNT } from "./wallpaper-curated-catalog.mjs";
+import { EXT_SKIN_PACK_COUNT, EXT_SKIN_CATEGORIES_LIST } from "./extension-skin-catalog.mjs";
+import { SITE_EXT_SYNC_MAP, syncedExtSkinId, syncedSiteId } from "./themes-v4-sync.mjs";
 
-export { WALLPAPER_CATEGORIES };
+export { WALLPAPER_CATEGORIES, EXT_SKIN_PACK_COUNT };
 
-export const WALLPAPER_PACK_COUNT = 100;
+export { WALLPAPER_PACK_COUNT };
 
-/** Versioned on-disk filenames — never reuse legacy v2_/extv3_ gradient URLs. */
-export const WALLPAPER_ASSET_PACK = "pexels100";
+/** Versioned on-disk filenames — never reuse legacy pexels100 / extv3 paths. */
+export const SITE_ASSET_PACK = "sitev4";
+export const EXT_SKIN_ASSET_PACK = "extskin_v4";
+
+/** @deprecated use SITE_ASSET_PACK */
+export const WALLPAPER_ASSET_PACK = SITE_ASSET_PACK;
 
 export function siteLandscapeFilename(n) {
   const num = Math.max(1, Math.min(WALLPAPER_PACK_COUNT, Number(n) || 1));
-  return `${WALLPAPER_ASSET_PACK}_${String(num).padStart(3, "0")}.webp`;
+  return `${SITE_ASSET_PACK}_${String(num).padStart(3, "0")}.webp`;
 }
 
 export function siteThumbFilename(n) {
   return siteLandscapeFilename(n);
 }
 
-export function extPortraitFilename(n) {
-  const num = Math.max(1, Math.min(WALLPAPER_PACK_COUNT, Number(n) || 1));
-  return `${WALLPAPER_ASSET_PACK}_portrait_${String(num).padStart(3, "0")}.webp`;
+export function extSkinFilename(n) {
+  const num = Math.max(1, Math.min(EXT_SKIN_PACK_COUNT, Number(n) || 1));
+  return `${EXT_SKIN_ASSET_PACK}_${String(num).padStart(3, "0")}.webp`;
 }
 
+export function extSkinThumbFilename(n) {
+  return extSkinFilename(n);
+}
+
+/** @deprecated extension backgrounds moved to extskins/ */
+export function extPortraitFilename(n) {
+  return extSkinFilename(n);
+}
+
+/** @deprecated */
 export function extThumbFilename(n) {
-  return extPortraitFilename(n);
+  return extSkinThumbFilename(n);
 }
 
 export function siteLandscapePathFromIndex(n) {
@@ -34,21 +50,38 @@ export function siteThumbPathFromIndex(n) {
   return `assets/wallpapers/thumbs/${siteThumbFilename(n)}`;
 }
 
+export function extSkinPathFromIndex(n) {
+  return `assets/extskins/${extSkinFilename(n)}`;
+}
+
+export function extSkinThumbPathFromIndex(n) {
+  return `assets/extskins/thumbs/${extSkinThumbFilename(n)}`;
+}
+
+/** @deprecated */
 export function extPortraitPathFromIndex(n) {
-  return `assets/extbg/${extPortraitFilename(n)}`;
+  return extSkinPathFromIndex(n);
 }
 
+/** @deprecated */
 export function extThumbPathFromIndex(n) {
-  return `assets/extbg/thumbs/${extThumbFilename(n)}`;
+  return extSkinThumbPathFromIndex(n);
 }
 
-/** Legacy gradient-era filenames that must not appear in active catalog URLs. */
 export const LEGACY_GRADIENT_SITE_FILENAMES = Object.freeze(
   Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => `v2_${String(i + 1).padStart(3, "0")}.webp`)
 );
 
+export const LEGACY_PEXELS100_SITE_FILENAMES = Object.freeze(
+  Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => `pexels100_${String(i + 1).padStart(3, "0")}.webp`)
+);
+
 export const LEGACY_GRADIENT_EXT_FILENAMES = Object.freeze(
-  Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => `extv3_${String(i + 1).padStart(3, "0")}.webp`)
+  Array.from({ length: 100 }, (_, i) => `extv3_${String(i + 1).padStart(3, "0")}.webp`)
+);
+
+export const LEGACY_PEXELS100_EXT_FILENAMES = Object.freeze(
+  Array.from({ length: 100 }, (_, i) => `pexels100_portrait_${String(i + 1).padStart(3, "0")}.webp`)
 );
 
 export const WALLPAPER_CURATED_INDICES = Object.freeze(
@@ -65,9 +98,14 @@ export const WALLPAPER_FILTER_OPTIONS = Object.freeze([
   { id: "mine", labelKey: "wp_filter_mine" },
 ]);
 
+export function formatExtSkinId(n) {
+  const num = Math.max(1, Math.min(EXT_SKIN_PACK_COUNT, Number(n) || 1));
+  return `extskin_${String(num).padStart(3, "0")}`;
+}
+
+/** @deprecated use formatExtSkinId */
 export function formatExtPackId(n) {
-  const num = Math.max(1, Math.min(WALLPAPER_PACK_COUNT, Number(n) || 1));
-  return `extv3_${String(num).padStart(3, "0")}`;
+  return formatExtSkinId(n);
 }
 
 export function packIndexFromSiteId(id) {
@@ -75,22 +113,32 @@ export function packIndexFromSiteId(id) {
   return m ? Number(m[1]) || 0 : 0;
 }
 
-export function packIndexFromExtId(id) {
-  const m = String(id || "").match(/^extv3_(\d+)$/i);
-  return m ? Number(m[1]) || 0 : 0;
+export function packIndexFromExtSkinId(id) {
+  const m = String(id || "").match(/^extskin_(\d+)$/i);
+  if (m) return Number(m[1]) || 0;
+  const legacy = String(id || "").match(/^extv3_(\d+)$/i);
+  if (legacy) {
+    const n = Number(legacy[1]) || 1;
+    return Math.max(1, Math.min(EXT_SKIN_PACK_COUNT, n));
+  }
+  return 0;
 }
 
+/** @deprecated */
+export function packIndexFromExtId(id) {
+  return packIndexFromExtSkinId(id);
+}
+
+/** Explicit sync map only — no automatic index pairing. */
 export function pairedExtId(siteId) {
-  const n = packIndexFromSiteId(siteId);
-  if (!n) return "";
-  return formatExtPackId(n);
+  return syncedExtSkinId(siteId);
 }
 
 export function pairedSiteId(extId) {
-  const n = packIndexFromExtId(extId);
-  if (!n) return "";
-  return `v2_${String(n).padStart(3, "0")}`;
+  return syncedSiteId(extId);
 }
+
+export { SITE_EXT_SYNC_MAP };
 
 export function isCuratedPackIndex(n) {
   return WALLPAPER_CURATED_INDICES.includes(Number(n) || 0);
@@ -98,8 +146,8 @@ export function isCuratedPackIndex(n) {
 
 export function bucketWallpaperEntry(wp, idx, effectiveCustomLen, opts) {
   const freeVisible = Number(opts?.freeVisible) || 8;
-  const isUnlocked = typeof opts?.isUnlocked === "function" ? opts.isUnlocked(wp, idx) : false;
-  if (wp?.tier === "custom") return "custom";
+  const isUnlocked = opts && typeof opts.isUnlocked === "function" ? opts.isUnlocked(wp, idx) : false;
+  if (wp && wp.tier === "custom") return "custom";
   const mainIdx = idx - effectiveCustomLen;
   if (mainIdx >= 0 && mainIdx < freeVisible) return "free";
   if (isUnlocked) return "unlocked";
@@ -112,43 +160,48 @@ export function packCategoryForIndex(n) {
   return PACK_CATEGORIES[idx] || "";
 }
 
+export function extSkinCategoryForIndex(n) {
+  const idx = Number(n) - 1;
+  if (idx < 0 || idx >= EXT_SKIN_CATEGORIES_LIST.length) return "";
+  return EXT_SKIN_CATEGORIES_LIST[idx] || "";
+}
+
 export function filterWallpaperEntries(entries, filterId, packIndexOf) {
   const filter = String(filterId || "featured").toLowerCase();
   const idxOf =
     typeof packIndexOf === "function"
       ? packIndexOf
-      : (wp) => packIndexFromSiteId(wp?.id);
+      : (wp) => packIndexFromSiteId(wp && wp.id);
 
   if (filter === "all") return entries;
-  if (WALLPAPER_CATEGORIES.some((c) => c.id === filter)) {
-    return entries.filter(({ wp, bucket }) => {
-      if (bucket === "custom") return filter === "all";
-      const n = idxOf(wp);
+  if (
+    PACK_CATEGORIES.includes(filter) ||
+    ["neon-city", "space", "nature", "abstract", "minimal", "anime-inspired", "sci-fi", "fantasy"].includes(filter)
+  ) {
+    return entries.filter((entry) => {
+      if (entry.bucket === "custom") return false;
+      const n = idxOf(entry.wp);
       return n > 0 && packCategoryForIndex(n) === filter;
     });
   }
   if (filter === "featured") {
-    return entries.filter(({ wp, bucket }) => {
-      if (bucket === "custom") return true;
-      const n = idxOf(wp);
+    return entries.filter((entry) => {
+      if (entry.bucket === "custom") return true;
+      const n = idxOf(entry.wp);
       return n > 0 && isCuratedPackIndex(n);
     });
   }
   if (filter === "free") {
-    return entries.filter(({ bucket }) => bucket === "free" || bucket === "custom");
+    return entries.filter((entry) => entry.bucket === "free" || entry.bucket === "custom");
   }
   if (filter === "mine") {
-    return entries.filter(({ bucket }) => bucket === "custom" || bucket === "free" || bucket === "unlocked");
+    return entries.filter((entry) => entry.bucket === "custom" || entry.bucket === "free" || entry.bucket === "unlocked");
   }
   return entries;
 }
 
 export function groupWallpaperEntries(entries) {
-  const groups = WALLPAPER_GROUP_ORDER.map((id) => ({
-    id,
-    labelKey: `wp_group_${id}`,
-    items: [],
-  }));
+  const groups = WALLPAPER_GROUP_ORDER.map((id) => ({ id, labelKey: `wp_group_${id}`, items: [] }));
   for (const entry of entries) {
     const group = groups.find((g) => g.id === entry.bucket);
     if (group) group.items.push(entry);

@@ -947,5 +947,17 @@
   "wp_cat_northern_lights": "उत्तरी रोशनी",
   "wp_cat_abstract_glass": "अमूर्त काँच",
   "wp_cat_geometric_dark": "गहरी ज्यामिति",
-  "wp_cat_minimal_texture": "न्यूनतम बनावट"
+  "wp_cat_minimal_texture": "न्यूनतम बनावट",
+  "wp_cat_anime_inspired": "Anime inspired",
+  "wp_cat_comic_inspired": "Comic inspired",
+  "wp_cat_superhero_inspired": "Superhero inspired",
+  "wp_cat_mecha": "Mecha",
+  "wp_cat_fantasy": "Fantasy",
+  "wp_cat_sci_fi": "Sci-fi",
+  "extskin_cat_cyber_neon": "Cyber neon",
+  "extskin_cat_abstract": "Abstract",
+  "extskin_cat_space": "Space",
+  "extskin_cat_nature": "Nature",
+  "extskin_cat_fantasy": "Fantasy",
+  "extskin_cat_minimal": "Minimal"
 }

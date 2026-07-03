@@ -22,12 +22,17 @@ export function sumGitTreeBytes(sha, prefix) {
 
 export function wallpaperDeployFootprint(sha) {
   const wp = sumGitTreeBytes(sha, "assets/wallpapers");
-  const ext = sumGitTreeBytes(sha, "assets/extbg");
-  const extPkg = sumGitTreeBytes(sha, "extension/extbg");
+  const extSkins = sumGitTreeBytes(sha, "assets/extskins");
+  const extLegacy = sumGitTreeBytes(sha, "assets/extbg");
+  const extPkg = sumGitTreeBytes(sha, "extension/extskins");
+  const extPkgLegacy = sumGitTreeBytes(sha, "extension/extbg");
+  const extActive = extSkins.bytes > 0 ? extSkins : extLegacy;
+  const extPkgActive = extPkg.bytes > 0 ? extPkg : extPkgLegacy;
   return {
     wallpapers: wp,
-    extbg: ext,
-    extensionExtbg: extPkg,
-    totalBytes: wp.bytes + ext.bytes + extPkg.bytes,
+    extskins: extActive,
+    extbgLegacy: extLegacy,
+    extensionExtskins: extPkgActive,
+    totalBytes: wp.bytes + extActive.bytes + extPkgActive.bytes,
   };
 }

@@ -1,5 +1,5 @@
 /* GMXReply shell service worker — static cache + offline shell docs; API stays network-only. */
-const CACHE = "gmx-shell-v3";
+const CACHE = "gmx-shell-v4";
 const DOC_CACHE = "gmx-shell-docs-v1";
 const PRECACHE = [
   "/manifest.webmanifest",
@@ -18,7 +18,7 @@ function shellDocKey(pathname) {
 function isWallpaperFullAsset(pathname) {
   return (
     (pathname.startsWith("/assets/wallpapers/") && !pathname.includes("/thumbs/")) ||
-    (pathname.startsWith("/assets/extbg/") && !pathname.includes("/thumbs/"))
+    (pathname.startsWith("/assets/extskins/") && !pathname.includes("/thumbs/"))
   );
 }
 
@@ -53,7 +53,7 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("activate", (event) => {
-  const LEGACY_CACHES = ["gmx-shell-v1", "gmx-shell-v2"];
+  const LEGACY_CACHES = ["gmx-shell-v3", "gmx-shell-v1", "gmx-shell-v2"];
   event.waitUntil(
     caches
       .keys()

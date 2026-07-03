@@ -44,12 +44,12 @@ test("wallpapers: catalog and url helpers", () => {
   assert.equal(site.length, packCount);
   assert.equal(site[0].id, "v2_001");
   assert.equal(wp.normalizeWallpaperId("w12", site), "v2_001");
-  assert.match(wp.wallpaperFullUrl("v2_001", site), /\/assets\/wallpapers\/pexels100_001\.webp\?v=rev1$/);
-  assert.match(wp.wallpaperThumbUrl("v2_001", site), /\/assets\/wallpapers\/thumbs\/pexels100_001\.webp\?v=rev1$/);
+  assert.match(wp.wallpaperFullUrl("v2_001", site), /\/assets\/wallpapers\/sitev4_001\.webp\?v=rev1$/);
+  assert.match(wp.wallpaperThumbUrl("v2_001", site), /\/assets\/wallpapers\/thumbs\/sitev4_001\.webp\?v=rev1$/);
   const ext = wp.buildExtWallpapers();
-  assert.equal(ext.length, packCount);
-  assert.equal(ext[0].id, "extv3_001");
-  assert.equal(wp.normalizeExtWallpaperIdLocal("ext_3", ext), "extv3_003");
+  assert.equal(ext.length, wp.EXT_PACK_COUNT);
+  assert.equal(ext[0].id, "extskin_001");
+  assert.equal(wp.normalizeExtWallpaperIdLocal("ext_3", ext), "extskin_003");
 });
 
 test("themes: catalog exports", () => {
@@ -402,8 +402,8 @@ test("extwallpaperstore: view normalization", () => {
   });
   assert.equal(store.normalizeExtWallpaperView("popup"), "popup");
   assert.equal(store.normalizeExtWallpaperView("bogus"), "all");
-  store.setExtWallpaperForView("popup", "extv3_001");
-  assert.equal(store.getExtWallpaperForView("popup"), "extv3_001");
+  store.setExtWallpaperForView("popup", "extskin_001");
+  assert.equal(store.getExtWallpaperForView("popup"), "extskin_001");
 });
 
 test("themesui: unlockTagText and renderThemes", () => {

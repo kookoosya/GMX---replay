@@ -15,6 +15,7 @@ import {
   WALLPAPER_DEPLOY_BUDGET_BYTES,
   WALLPAPER_PACK_DEPLOY_BUDGET_BYTES,
 } from "../tools/lib/wallpaper-deploy-budget.mjs";
+import { WALLPAPER_PACK_COUNT } from "../tools/lib/wallpaper-core.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -32,22 +33,19 @@ test("service worker excludes full wallpaper assets from runtime cache", () => {
 });
 
 test("pwa cache policy keeps thumbnails cacheable but not full wallpapers", () => {
-  assert.equal(isWallpaperFullAssetPath("/assets/wallpapers/pexels100_001.webp"), true);
-  assert.equal(isWallpaperFullAssetPath("/assets/wallpapers/thumbs/pexels100_001.webp"), false);
-  assert.equal(isWallpaperFullAssetPath("/assets/extbg/pexels100_portrait_001.webp"), true);
-  assert.equal(isWallpaperFullAssetPath("/assets/extbg/thumbs/pexels100_portrait_001.webp"), false);
-  assert.equal(isSwCacheableAssetPath("/assets/wallpapers/pexels100_001.webp"), false);
-  assert.equal(isSwCacheableAssetPath("/assets/wallpapers/thumbs/pexels100_001.webp"), true);
+  assert.equal(isWallpaperFullAssetPath("/assets/wallpapers/sitev4_001.webp"), true);
+  assert.equal(isWallpaperFullAssetPath("/assets/wallpapers/thumbs/sitev4_001.webp"), false);
+  assert.equal(isWallpaperFullAssetPath("/assets/extskins/extskin_v4_001.webp"), true);
+  assert.equal(isWallpaperFullAssetPath("/assets/extskins/thumbs/extskin_v4_001.webp"), false);
+  assert.equal(isSwCacheableAssetPath("/assets/wallpapers/sitev4_001.webp"), false);
+  assert.equal(isSwCacheableAssetPath("/assets/wallpapers/thumbs/sitev4_001.webp"), true);
 });
 
-test("production catalog count matches wallpaper-core pack", () => {
-  const core = fs.readFileSync(path.join(root, "tools", "lib", "wallpaper-core.mjs"), "utf8");
-  const m = core.match(/WALLPAPER_PACK_COUNT = (\d+)/);
-  assert.ok(m, "WALLPAPER_PACK_COUNT missing");
-  const count = Number(m[1]);
+test("production catalog counts: site 100, extension skins 60", () => {
+  assert.equal(WALLPAPER_PACK_COUNT, 100);
   const wp = fs.readFileSync(path.join(root, "public", "app.wallpapers.js"), "utf8");
-  assert.match(wp, new RegExp(`SITE_PACK_COUNT = ${count}`));
-  assert.match(wp, new RegExp(`EXT_PACK_COUNT = ${count}`));
+  assert.match(wp, /SITE_PACK_COUNT = 100/);
+  assert.match(wp, /EXT_PACK_COUNT = 60/);
 });
 
 test("fail-before: 100-wallpaper deploy footprint exceeded safe budget", () => {

@@ -2,13 +2,29 @@
   if (global.GMXWallpaperCore) return;
 
   const WALLPAPER_PACK_COUNT = 100;
-
-  const WALLPAPER_CURATED_INDICES = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
-  ];
-
+  const EXT_SKIN_PACK_COUNT = 60;
+  const SITE_EXT_SYNC_MAP = {
+  "v2_001": "extskin_003",
+  "v2_003": "extskin_001",
+  "v2_008": "extskin_006",
+  "v2_012": "extskin_010",
+  "v2_015": "extskin_012",
+  "v2_020": "extskin_018",
+  "v2_025": "extskin_022",
+  "v2_033": "extskin_028",
+  "v2_040": "extskin_035",
+  "v2_045": "extskin_040",
+  "v2_050": "extskin_045",
+  "v2_055": "extskin_050",
+  "v2_060": "extskin_055",
+  "v2_070": "extskin_048",
+  "v2_080": "extskin_058",
+  "v2_090": "extskin_042",
+  "v2_100": "extskin_060"
+};
+  const PACK_CATEGORIES = ["geometric-dark","abstract-glass","neon-city","neon-city","neon-city","geometric-dark","neon-city","neon-city","geometric-dark","neon-city","abstract-glass","abstract-glass","neon-city","anime-inspired","futuristic-architecture","night-skyline","minimal-texture","minimal-texture","futuristic-architecture","futuristic-architecture","geometric-dark","abstract-glass","forest","futuristic-architecture","night-skyline","forest","minimal-texture","forest","abstract-glass","futuristic-architecture","futuristic-architecture","comic-inspired","forest","forest","geometric-dark","mecha","futuristic-architecture","mountains","mountains","night-skyline","abstract-glass","moon-planets","geometric-dark","mountains","fantasy","desert","ocean-underwater","sci-fi","abstract-glass","ocean-underwater","geometric-dark","night-skyline","anime-inspired","forest","moon-planets","moon-planets","comic-inspired","forest","abstract-glass","superhero-inspired","desert","mountains","night-skyline","night-skyline","mecha","northern-lights","space","desert","desert","superhero-inspired","minimal-texture","fantasy","mountains","sci-fi","ocean-underwater","space","mountains","anime-inspired","minimal-texture","mountains","comic-inspired","minimal-texture","ocean-underwater","superhero-inspired","space","mecha","northern-lights","fantasy","space","ocean-underwater","sci-fi","northern-lights","ocean-underwater","anime-inspired","northern-lights","northern-lights","fantasy","ocean-underwater","moon-planets","moon-planets"];
+  const WALLPAPER_CURATED_INDICES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
   const WALLPAPER_GROUP_ORDER = ["custom", "free", "unlocked", "locked"];
-
   const WALLPAPER_FILTER_OPTIONS = [
   {
     "id": "featured",
@@ -17,6 +33,30 @@
   {
     "id": "all",
     "labelKey": "wp_filter_all"
+  },
+  {
+    "id": "anime-inspired",
+    "labelKey": "wp_cat_anime_inspired"
+  },
+  {
+    "id": "comic-inspired",
+    "labelKey": "wp_cat_comic_inspired"
+  },
+  {
+    "id": "superhero-inspired",
+    "labelKey": "wp_cat_superhero_inspired"
+  },
+  {
+    "id": "mecha",
+    "labelKey": "wp_cat_mecha"
+  },
+  {
+    "id": "fantasy",
+    "labelKey": "wp_cat_fantasy"
+  },
+  {
+    "id": "sci-fi",
+    "labelKey": "wp_cat_sci_fi"
   },
   {
     "id": "neon-city",
@@ -80,216 +120,78 @@
   }
 ];
 
-  const PACK_CATEGORIES = [
-  "geometric-dark",
-  "abstract-glass",
-  "neon-city",
-  "neon-city",
-  "neon-city",
-  "geometric-dark",
-  "neon-city",
-  "neon-city",
-  "geometric-dark",
-  "neon-city",
-  "abstract-glass",
-  "abstract-glass",
-  "neon-city",
-  "neon-city",
-  "futuristic-architecture",
-  "night-skyline",
-  "minimal-texture",
-  "minimal-texture",
-  "futuristic-architecture",
-  "futuristic-architecture",
-  "geometric-dark",
-  "abstract-glass",
-  "forest",
-  "futuristic-architecture",
-  "night-skyline",
-  "forest",
-  "minimal-texture",
-  "forest",
-  "abstract-glass",
-  "futuristic-architecture",
-  "futuristic-architecture",
-  "futuristic-architecture",
-  "forest",
-  "forest",
-  "geometric-dark",
-  "space",
-  "futuristic-architecture",
-  "mountains",
-  "mountains",
-  "night-skyline",
-  "abstract-glass",
-  "moon-planets",
-  "geometric-dark",
-  "mountains",
-  "forest",
-  "desert",
-  "ocean-underwater",
-  "desert",
-  "abstract-glass",
-  "ocean-underwater",
-  "geometric-dark",
-  "night-skyline",
-  "moon-planets",
-  "forest",
-  "moon-planets",
-  "moon-planets",
-  "moon-planets",
-  "forest",
-  "abstract-glass",
-  "forest",
-  "desert",
-  "mountains",
-  "night-skyline",
-  "night-skyline",
-  "desert",
-  "northern-lights",
-  "space",
-  "desert",
-  "desert",
-  "night-skyline",
-  "minimal-texture",
-  "mountains",
-  "mountains",
-  "mountains",
-  "ocean-underwater",
-  "space",
-  "mountains",
-  "minimal-texture",
-  "minimal-texture",
-  "mountains",
-  "ocean-underwater",
-  "minimal-texture",
-  "ocean-underwater",
-  "space",
-  "space",
-  "space",
-  "northern-lights",
-  "space",
-  "space",
-  "ocean-underwater",
-  "northern-lights",
-  "northern-lights",
-  "ocean-underwater",
-  "ocean-underwater",
-  "northern-lights",
-  "northern-lights",
-  "northern-lights",
-  "ocean-underwater",
-  "moon-planets",
-  "moon-planets"
-];
-
-  function formatExtPackId(n) {
-    const num = Math.max(1, Math.min(WALLPAPER_PACK_COUNT, Number(n) || 1));
-    return "extv3_" + String(num).padStart(3, "0");
+  function formatExtSkinId(n) {
+    const num = Math.max(1, Math.min(EXT_SKIN_PACK_COUNT, Number(n) || 1));
+    return "extskin_" + String(num).padStart(3, "0");
   }
-
   function packIndexFromSiteId(id) {
     const m = String(id || "").match(/^v2_(\d+)$/i);
     return m ? Number(m[1]) || 0 : 0;
   }
-
-  function packIndexFromExtId(id) {
-    const m = String(id || "").match(/^extv3_(\d+)$/i);
-    return m ? Number(m[1]) || 0 : 0;
+  function packIndexFromExtSkinId(id) {
+    let m = String(id || "").match(/^extskin_(\d+)$/i);
+    if (m) return Number(m[1]) || 0;
+    m = String(id || "").match(/^extv3_(\d+)$/i);
+    if (m) return Math.max(1, Math.min(EXT_SKIN_PACK_COUNT, Number(m[1]) || 1));
+    return 0;
   }
-
-  function pairedExtId(siteId) {
-    const n = packIndexFromSiteId(siteId);
-    if (!n) return "";
-    return formatExtPackId(n);
-  }
-
+  function pairedExtId(siteId) { return SITE_EXT_SYNC_MAP[String(siteId || "")] || ""; }
   function pairedSiteId(extId) {
-    const n = packIndexFromExtId(extId);
-    if (!n) return "";
-    return "v2_" + String(n).padStart(3, "0");
+    const id = String(extId || "");
+    for (const key in SITE_EXT_SYNC_MAP) { if (SITE_EXT_SYNC_MAP[key] === id) return key; }
+    return "";
   }
-
-  function isCuratedPackIndex(n) {
-    return WALLPAPER_CURATED_INDICES.indexOf(Number(n) || 0) >= 0;
-  }
-
+  function isCuratedPackIndex(n) { return WALLPAPER_CURATED_INDICES.indexOf(Number(n) || 0) >= 0; }
   function bucketWallpaperEntry(wp, idx, effectiveCustomLen, opts) {
     const freeVisible = Number((opts && opts.freeVisible) || 0) || 8;
-    const isUnlocked =
-      opts && typeof opts.isUnlocked === "function" ? opts.isUnlocked(wp, idx) : false;
+    const isUnlocked = opts && typeof opts.isUnlocked === "function" ? opts.isUnlocked(wp, idx) : false;
     if (wp && wp.tier === "custom") return "custom";
     const mainIdx = idx - effectiveCustomLen;
     if (mainIdx >= 0 && mainIdx < freeVisible) return "free";
     if (isUnlocked) return "unlocked";
     return "locked";
   }
-
   function packCategoryForIndex(n) {
     const idx = Number(n) - 1;
-    if (idx < 0 || idx >= PACK_CATEGORIES.length) return "";
-    return PACK_CATEGORIES[idx] || "";
+    return idx >= 0 && idx < PACK_CATEGORIES.length ? PACK_CATEGORIES[idx] : "";
   }
-
   function filterWallpaperEntries(entries, filterId, packIndexOf) {
     const filter = String(filterId || "featured").toLowerCase();
-    const idxOf =
-      typeof packIndexOf === "function" ? packIndexOf : function (wp) {
-        return packIndexFromSiteId(wp && wp.id);
-      };
-
+    const idxOf = typeof packIndexOf === "function" ? packIndexOf : function (wp) { return packIndexFromSiteId(wp && wp.id); };
     if (filter === "all") return entries;
-    if (PACK_CATEGORIES.indexOf(filter) >= 0 || ["neon-city", "space", "nature", "abstract", "minimal"].indexOf(filter) >= 0) {
-      return entries.filter(function (entry) {
-        if (entry.bucket === "custom") return false;
-        const n = idxOf(entry.wp);
-        return n > 0 && packCategoryForIndex(n) === filter;
-      });
-    }
-    if (filter === "featured") {
-      return entries.filter(function (entry) {
-        if (entry.bucket === "custom") return true;
-        const n = idxOf(entry.wp);
-        return n > 0 && isCuratedPackIndex(n);
-      });
-    }
-    if (filter === "free") {
-      return entries.filter(function (entry) {
-        return entry.bucket === "free" || entry.bucket === "custom";
-      });
-    }
-    if (filter === "mine") {
-      return entries.filter(function (entry) {
-        return entry.bucket === "custom" || entry.bucket === "free" || entry.bucket === "unlocked";
-      });
-    }
-    return entries;
-  }
-
-  function groupWallpaperEntries(entries) {
-    const groups = WALLPAPER_GROUP_ORDER.map(function (id) {
-      return { id: id, labelKey: "wp_group_" + id, items: [] };
+    if (filter === "featured") return entries.filter(function (e) {
+      if (e.bucket === "custom") return true;
+      const n = idxOf(e.wp); return n > 0 && isCuratedPackIndex(n);
     });
+    if (filter === "free") return entries.filter(function (e) { return e.bucket === "free" || e.bucket === "custom"; });
+    if (filter === "mine") return entries.filter(function (e) { return e.bucket === "custom" || e.bucket === "free" || e.bucket === "unlocked"; });
+    return entries.filter(function (e) {
+      if (e.bucket === "custom") return false;
+      const n = idxOf(e.wp); return n > 0 && packCategoryForIndex(n) === filter;
+    });
+  }
+  function groupWallpaperEntries(entries) {
+    const groups = WALLPAPER_GROUP_ORDER.map(function (id) { return { id: id, labelKey: "wp_group_" + id, items: [] }; });
     for (let i = 0; i < entries.length; i++) {
       const entry = entries[i];
-      const group = groups.find(function (g) {
-        return g.id === entry.bucket;
-      });
+      const group = groups.find(function (g) { return g.id === entry.bucket; });
       if (group) group.items.push(entry);
     }
-    return groups.filter(function (g) {
-      return g.items.length > 0;
-    });
+    return groups.filter(function (g) { return g.items.length > 0; });
   }
 
   global.GMXWallpaperCore = {
     WALLPAPER_PACK_COUNT: WALLPAPER_PACK_COUNT,
+    EXT_SKIN_PACK_COUNT: EXT_SKIN_PACK_COUNT,
+    SITE_EXT_SYNC_MAP: SITE_EXT_SYNC_MAP,
     WALLPAPER_CURATED_INDICES: WALLPAPER_CURATED_INDICES,
     WALLPAPER_GROUP_ORDER: WALLPAPER_GROUP_ORDER,
     WALLPAPER_FILTER_OPTIONS: WALLPAPER_FILTER_OPTIONS,
-    formatExtPackId: formatExtPackId,
+    formatExtSkinId: formatExtSkinId,
+    formatExtPackId: formatExtSkinId,
     packIndexFromSiteId: packIndexFromSiteId,
-    packIndexFromExtId: packIndexFromExtId,
+    packIndexFromExtId: packIndexFromExtSkinId,
+    packIndexFromExtSkinId: packIndexFromExtSkinId,
     pairedExtId: pairedExtId,
     pairedSiteId: pairedSiteId,
     isCuratedPackIndex: isCuratedPackIndex,

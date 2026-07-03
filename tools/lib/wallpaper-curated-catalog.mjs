@@ -2,6 +2,12 @@
 export const WALLPAPER_PACK_COUNT = 100;
 
 export const WALLPAPER_CATEGORIES = Object.freeze([
+  {"id":"anime-inspired","labelKey":"wp_cat_anime_inspired"},
+  {"id":"comic-inspired","labelKey":"wp_cat_comic_inspired"},
+  {"id":"superhero-inspired","labelKey":"wp_cat_superhero_inspired"},
+  {"id":"mecha","labelKey":"wp_cat_mecha"},
+  {"id":"fantasy","labelKey":"wp_cat_fantasy"},
+  {"id":"sci-fi","labelKey":"wp_cat_sci_fi"},
   {
     "id": "neon-city",
     "labelKey": "wp_cat_neon_city"
@@ -176,13 +182,14 @@ export const CURATED_WALLPAPERS = [
     "score": 41
   },
   {
-    "name": "Neon Scene 8",
-    "category": "neon-city",
-    "pexelsId": 28981395,
-    "photographer": "Sayefotograf",
+    "name": "Neon Alley Inspired",
+    "category": "anime-inspired",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 41
+    "score": 41,
+    "unsplashId": "1519501025264-65fcb10442f1",
+    "provider": "Unsplash"
   },
   {
     "name": "Futuristic Scene",
@@ -338,13 +345,14 @@ export const CURATED_WALLPAPERS = [
     "score": 41
   },
   {
-    "name": "Futuristic Scene 7",
-    "category": "futuristic-architecture",
-    "pexelsId": 32660209,
-    "photographer": "YIYANG LIU",
+    "name": "Pop Color Inspired",
+    "category": "comic-inspired",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 41
+    "score": 41,
+    "unsplashId": "1557683316-973673baf926",
+    "provider": "Unsplash"
   },
   {
     "name": "Forest Scene 4",
@@ -374,13 +382,14 @@ export const CURATED_WALLPAPERS = [
     "score": 41
   },
   {
-    "name": "Space Scene",
-    "category": "space",
-    "pexelsId": 9373868,
-    "photographer": "Ryan Fatalla",
+    "name": "Mech Grid Inspired",
+    "category": "mecha",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 41
+    "score": 41,
+    "unsplashId": "1550745166-0-bc7f730998c2",
+    "provider": "Unsplash"
   },
   {
     "name": "Futuristic Scene 8",
@@ -455,13 +464,14 @@ export const CURATED_WALLPAPERS = [
     "score": 41
   },
   {
-    "name": "Forest Scene 6",
-    "category": "forest",
-    "pexelsId": 15292809,
-    "photographer": "Denitsa Kireva",
+    "name": "Fantasy Peaks",
+    "category": "fantasy",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 41
+    "score": 41,
+    "unsplashId": "1519681393784-d120267933ba",
+    "provider": "Unsplash"
   },
   {
     "name": "Desert Scene",
@@ -482,13 +492,14 @@ export const CURATED_WALLPAPERS = [
     "score": 41
   },
   {
-    "name": "Desert Scene 2",
-    "category": "desert",
-    "pexelsId": 20547083,
-    "photographer": "Alex Moliski",
+    "name": "Orbital Sci-Fi",
+    "category": "sci-fi",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 41
+    "score": 41,
+    "unsplashId": "1451187580459-43408879c446",
+    "provider": "Unsplash"
   },
   {
     "name": "Abstract Scene 7",
@@ -527,13 +538,14 @@ export const CURATED_WALLPAPERS = [
     "score": 41
   },
   {
-    "name": "Moon Scene 2",
-    "category": "moon-planets",
-    "pexelsId": 37266266,
-    "photographer": "幼聪 戴",
+    "name": "Pastel Sky Inspired",
+    "category": "anime-inspired",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 40
+    "score": 40,
+    "unsplashId": "1557682254-3ba16653db84",
+    "provider": "Unsplash"
   },
   {
     "name": "Forest Scene 7",
@@ -563,13 +575,14 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "Moon Scene 5",
-    "category": "moon-planets",
-    "pexelsId": 31735052,
-    "photographer": "Alex Kalinin",
+    "name": "Halftone Inspired",
+    "category": "comic-inspired",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 40
+    "score": 40,
+    "unsplashId": "1579546929518-9e396f3cc809",
+    "provider": "Unsplash"
   },
   {
     "name": "Forest Scene 8",
@@ -590,13 +603,14 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "Forest Scene 9",
-    "category": "forest",
-    "pexelsId": 31373343,
-    "photographer": "Manuel Campagnoli",
+    "name": "Tower Light Inspired",
+    "category": "superhero-inspired",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 40
+    "score": 40,
+    "unsplashId": "1506318137071-a8e63cb36748",
+    "provider": "Unsplash"
   },
   {
     "name": "Desert Scene 3",
@@ -635,13 +649,14 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "Desert Scene 4",
-    "category": "desert",
-    "pexelsId": 26969891,
-    "photographer": "Francesco Ungaro",
+    "name": "Circuit Mech Inspired",
+    "category": "mecha",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 40
+    "score": 40,
+    "unsplashId": "1516416676182-444cef49d3ad",
+    "provider": "Unsplash"
   },
   {
     "name": "Northern Scene",
@@ -680,13 +695,14 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "Night Scene 7",
-    "category": "night-skyline",
-    "pexelsId": 20627348,
-    "photographer": "Quang Vuong",
+    "name": "Skyline Hero Inspired",
+    "category": "superhero-inspired",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 40
+    "score": 40,
+    "unsplashId": "1419242902214-272b4f683ee6",
+    "provider": "Unsplash"
   },
   {
     "name": "Minimal Scene 4",
@@ -698,13 +714,14 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "Mountains Scene 5",
-    "category": "mountains",
-    "pexelsId": 36882608,
-    "photographer": "Sergio Zhukov",
+    "name": "Mist Valley",
+    "category": "fantasy",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 40
+    "score": 40,
+    "unsplashId": "1506905925346-21bda4d32df4",
+    "provider": "Unsplash"
   },
   {
     "name": "Mountains Scene 6",
@@ -716,13 +733,14 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "Mountains Scene 7",
-    "category": "mountains",
-    "pexelsId": 28988216,
-    "photographer": "Andreas Schnabl",
+    "name": "Deep Space Sci-Fi",
+    "category": "sci-fi",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 40
+    "score": 40,
+    "unsplashId": "1462331940022-91a8562c0a8e",
+    "provider": "Unsplash"
   },
   {
     "name": "Ocean Scene 3",
@@ -752,13 +770,14 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "Minimal Scene 5",
-    "category": "minimal-texture",
-    "pexelsId": 36564247,
-    "photographer": "Primitive Spaces",
+    "name": "Rain Neon Inspired",
+    "category": "anime-inspired",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 40
+    "score": 40,
+    "unsplashId": "1475274040260-ce3ac7944a91",
+    "provider": "Unsplash"
   },
   {
     "name": "Minimal Scene 6",
@@ -779,13 +798,14 @@ export const CURATED_WALLPAPERS = [
     "score": 39
   },
   {
-    "name": "Ocean Scene 4",
-    "category": "ocean-underwater",
-    "pexelsId": 35116642,
-    "photographer": "Anthony Dalesandro",
+    "name": "Bold Spectrum Inspired",
+    "category": "comic-inspired",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 39
+    "score": 39,
+    "unsplashId": "1485478826545-15437787d5cb",
+    "provider": "Unsplash"
   },
   {
     "name": "Minimal Scene 7",
@@ -806,13 +826,14 @@ export const CURATED_WALLPAPERS = [
     "score": 39
   },
   {
-    "name": "Space Scene 4",
-    "category": "space",
-    "pexelsId": 37269536,
-    "photographer": "Marek Pavlík",
+    "name": "City Glow Inspired",
+    "category": "superhero-inspired",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 39
+    "score": 39,
+    "unsplashId": "1509198397868-475647b2c754",
+    "provider": "Unsplash"
   },
   {
     "name": "Space Scene 5",
@@ -824,13 +845,14 @@ export const CURATED_WALLPAPERS = [
     "score": 39
   },
   {
-    "name": "Space Scene 6",
-    "category": "space",
-    "pexelsId": 17810090,
-    "photographer": "Bruna Finelli",
+    "name": "Steel Frame Inspired",
+    "category": "mecha",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 39
+    "score": 39,
+    "unsplashId": "1563089145-599997696d32",
+    "provider": "Unsplash"
   },
   {
     "name": "Northern Scene 2",
@@ -842,13 +864,14 @@ export const CURATED_WALLPAPERS = [
     "score": 39
   },
   {
-    "name": "Space Scene 7",
-    "category": "space",
-    "pexelsId": 4592706,
-    "photographer": "Lucas George Wendt",
+    "name": "Moonlit Fantasy",
+    "category": "fantasy",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 39
+    "score": 39,
+    "unsplashId": "1446776877081-d282a136aa63",
+    "provider": "Unsplash"
   },
   {
     "name": "Space Scene 8",
@@ -869,13 +892,14 @@ export const CURATED_WALLPAPERS = [
     "score": 39
   },
   {
-    "name": "Northern Scene 3",
-    "category": "northern-lights",
-    "pexelsId": 36054423,
-    "photographer": "Marcus L.",
+    "name": "Nebula Sci-Fi",
+    "category": "sci-fi",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 39
+    "score": 39,
+    "unsplashId": "1502134249126-9f3755a50d81",
+    "provider": "Unsplash"
   },
   {
     "name": "Northern Scene 4",
@@ -896,13 +920,14 @@ export const CURATED_WALLPAPERS = [
     "score": 38
   },
   {
-    "name": "Ocean Scene 8",
-    "category": "ocean-underwater",
-    "pexelsId": 26887889,
-    "photographer": "Francesco Ungaro",
+    "name": "Twilight Inspired",
+    "category": "anime-inspired",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 38
+    "score": 38,
+    "unsplashId": "1534798566895-d62a05b5d4a1",
+    "provider": "Unsplash"
   },
   {
     "name": "Northern Scene 5",
@@ -923,13 +948,14 @@ export const CURATED_WALLPAPERS = [
     "score": 38
   },
   {
-    "name": "Northern Scene 7",
-    "category": "northern-lights",
-    "pexelsId": 14644522,
-    "photographer": "Luis A. Dumois N.",
+    "name": "Aurora Fantasy",
+    "category": "fantasy",
+    "photographer": "Unsplash",
     "tier": "premium",
     "overlay": 0.28,
-    "score": 38
+    "score": 38,
+    "unsplashId": "1558591710-4b4641412817",
+    "provider": "Unsplash"
   },
   {
     "name": "Ocean Scene 9",

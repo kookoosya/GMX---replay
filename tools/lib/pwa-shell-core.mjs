@@ -1,6 +1,6 @@
 /** PWA shell constants shared by tests and deploy checks. */
 
-export const PWA_CACHE_NAME = "gmx-shell-v3";
+export const PWA_CACHE_NAME = "gmx-shell-v4";
 
 export const PWA_DOC_CACHE_NAME = "gmx-shell-docs-v1";
 
@@ -30,7 +30,7 @@ export function shellDocCacheKey(pathname) {
 export function isWallpaperFullAssetPath(pathname) {
   const path = String(pathname || "");
   if (path.startsWith("/assets/wallpapers/") && !path.includes("/thumbs/")) return true;
-  if (path.startsWith("/assets/extbg/") && !path.includes("/thumbs/")) return true;
+  if (path.startsWith("/assets/extskins/") && !path.includes("/thumbs/")) return true;
   return false;
 }
 
