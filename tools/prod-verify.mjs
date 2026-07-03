@@ -435,8 +435,8 @@ if (!wpChunk.text.includes("pexels100_")) {
 if (!wpChunk.text.includes("sitePackAssetFile")) {
   fail("production app.wallpapers.js missing versioned asset resolver");
 }
-const appJs = await get("/app.js");
-if (!appJs.text.includes('ASSET_REV = "20260703a"')) {
+const appJsRev = await get("/app.js");
+if (!appJsRev.text.includes('ASSET_REV = "20260703a"')) {
   fail("production ASSET_REV not bumped for pexels100 rollout");
 }
 ok("wallpaper pexels100 paths on production");
