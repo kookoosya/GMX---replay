@@ -4,11 +4,10 @@ import crypto from "crypto";
 import process from "process";
 import {
   WALLPAPER_PACK_COUNT,
-  EXT_SKIN_PACK_COUNT,
   siteLandscapeFilename,
   siteThumbFilename,
-  extSkinFilename,
-  extSkinThumbFilename,
+  extPortraitFilename,
+  extThumbFilename,
 } from "./lib/wallpaper-core.mjs";
 
 const root = process.cwd();
@@ -54,30 +53,23 @@ let issues = 0;
 
 const expectedSiteWalls = Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => siteLandscapeFilename(i + 1));
 const expectedSiteThumbs = Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => siteThumbFilename(i + 1));
-const expectedExtWalls = Array.from({ length: EXT_SKIN_PACK_COUNT }, (_, i) => extSkinFilename(i + 1));
-const expectedExtThumbs = Array.from({ length: EXT_SKIN_PACK_COUNT }, (_, i) => extSkinThumbFilename(i + 1));
-
-const LEGACY_WEBP = /^(pexels100_|sitev4_|extskin_v4_|extv3_|v2_|sitev5_.*\.(new|tmp)$)/;
-
-function isLegacyExtra(name) {
-  return LEGACY_WEBP.test(name) || name.endsWith(".new") || name.endsWith(".tmp");
-}
+const expectedExtWalls = Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => extPortraitFilename(i + 1));
+const expectedExtThumbs = Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => extThumbFilename(i + 1));
 
 for (const [label, rel, expected] of [
   ["site wallpapers", "assets/wallpapers", expectedSiteWalls],
   ["site wallpaper thumbs", "assets/wallpapers/thumbs", expectedSiteThumbs],
-  ["extension skins", "assets/extskins", expectedExtWalls],
-  ["extension skin thumbs", "assets/extskins/thumbs", expectedExtThumbs],
+  ["extension wallpapers", "assets/extbg", expectedExtWalls],
+  ["extension wallpaper thumbs", "assets/extbg/thumbs", expectedExtThumbs],
 ]) {
   const actual = listFiles(rel);
   const { missing, extra } = diffSet(actual, expected);
-  const extraActive = extra.filter((name) => !isLegacyExtra(name));
   printSection(label);
   console.log(`expected=${expected.length} actual=${actual.length}`);
   printList("missing", missing);
-  printList("extra", extraActive);
+  printList("extra", extra);
   if (missing.length) issues += missing.length;
-  if (extraActive.length && strict) issues += extraActive.length;
+  if (extra.length && strict) issues += extra.length;
 }
 
 const deadFiles = [

@@ -1,5 +1,5 @@
 /**
- * Themes V5 — separate site wallpapers (100) from extension skins (60).
+ * Themes V4 — separate site wallpapers (100) from extension skins (60).
  */
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -45,22 +45,22 @@ test("site pack count is 100, extension skin pack is 60", () => {
   assert.equal(EXT_CAT_COUNT, 60);
 });
 
-test("active site URLs use sitev5 not pexels100 or legacy v2 paths", () => {
+test("active site URLs use sitev4 not pexels100 or legacy v2 paths", () => {
   const wp = loadWallpaperFactory();
   const catalog = wp.buildSiteWallpapers();
   assert.equal(catalog.length, 100);
   for (const entry of catalog) {
     const thumb = wp.wallpaperThumbUrl(entry.id, catalog);
     const full = wp.wallpaperFullUrl(entry.id, catalog);
-    assert.match(thumb, /\/assets\/wallpapers\/thumbs\/sitev5_\d{3}\.webp\?v=/);
-    assert.match(full, /\/assets\/wallpapers\/sitev5_\d{3}\.webp\?v=/);
+    assert.match(thumb, /\/assets\/wallpapers\/thumbs\/sitev4_\d{3}\.webp\?v=/);
+    assert.match(full, /\/assets\/wallpapers\/sitev4_\d{3}\.webp\?v=/);
     for (const legacy of LEGACY_PEXELS100_SITE_FILENAMES.slice(0, 5)) {
       assert.doesNotMatch(thumb, new RegExp(legacy.replace(".", "\\.")));
     }
   }
 });
 
-test("active extension skin URLs use extskin_v5 under extskins/", () => {
+test("active extension skin URLs use extskin_v4 under extskins/", () => {
   const wp = loadWallpaperFactory();
   const ext = wp.buildExtWallpapers();
   assert.equal(ext.length, 60);
@@ -68,8 +68,8 @@ test("active extension skin URLs use extskin_v5 under extskins/", () => {
   for (const entry of ext) {
     const thumb = wp.extWallpaperThumbUrl(entry.id, ext);
     const full = wp.extWallpaperFullUrl(entry.id, ext);
-    assert.match(thumb, /\/assets\/extskins\/thumbs\/extskin_v5_\d{3}\.webp\?v=/);
-    assert.match(full, /\/assets\/extskins\/extskin_v5_\d{3}\.webp\?v=/);
+    assert.match(thumb, /\/assets\/extskins\/thumbs\/extskin_v4_\d{3}\.webp\?v=/);
+    assert.match(full, /\/assets\/extskins\/extskin_v4_\d{3}\.webp\?v=/);
     for (const legacy of LEGACY_PEXELS100_EXT_FILENAMES.slice(0, 5)) {
       assert.doesNotMatch(full, new RegExp(legacy.replace(".", "\\.")));
     }
@@ -89,15 +89,19 @@ test("normalizeExtWallpaperIdLocal migrates extv3 to extskin", () => {
   assert.equal(wp.normalizeExtWallpaperIdLocal("extv3_099", ext), "extskin_060");
 });
 
-test("city-neon category at most 15", () => {
+test("city-related categories total at most 20", () => {
   const cats = {};
   for (const c of PACK_CATEGORIES) cats[c] = (cats[c] || 0) + 1;
-  assert.ok((cats["city-neon"] || 0) <= 15);
+  const city =
+    (cats["neon-city"] || 0) +
+    (cats["futuristic-architecture"] || 0) +
+    (cats["night-skyline"] || 0);
+  assert.ok(city <= 20, `city count ${city}`);
 });
 
-test("V5 content categories present", () => {
+test("diversity categories present", () => {
   const set = new Set(PACK_CATEGORIES);
-  for (const id of ["superhero-comic", "anime-style", "crypto-web3", "mecha-cyber"]) {
+  for (const id of ["anime-inspired", "comic-inspired", "superhero-inspired", "mecha", "fantasy", "sci-fi"]) {
     assert.ok(set.has(id), `missing ${id}`);
   }
 });
@@ -135,15 +139,15 @@ test("on-disk site and ext skin files match manifest paths", () => {
   }
 });
 
-test("ASSET_REV bumped for Themes V5", () => {
+test("ASSET_REV bumped for Themes V4", () => {
   const appJs = fs.readFileSync(path.join(root, "public", "app.js"), "utf8");
-  assert.match(appJs, /ASSET_REV = "20260705a"/);
+  assert.match(appJs, /ASSET_REV = "20260704a"/);
 });
 
-test("service worker cache is gmx-shell-v5 with extskins excluded from full cache", () => {
+test("service worker cache is gmx-shell-v4 with extskins excluded from full cache", () => {
   const sw = fs.readFileSync(path.join(root, "public", "sw.js"), "utf8");
-  assert.equal(PWA_CACHE_NAME, "gmx-shell-v5");
-  assert.match(sw, /gmx-shell-v5/);
+  assert.equal(PWA_CACHE_NAME, "gmx-shell-v4");
+  assert.match(sw, /gmx-shell-v4/);
   assert.match(sw, /\/assets\/extskins\//);
 });
 
@@ -174,7 +178,7 @@ test("app.wallpapers EXT_PACK_COUNT is 60", () => {
   assert.match(wp, /EXT_PACK_COUNT = 60/);
 });
 
-test("site thumb path helper uses sitev5", () => {
-  assert.match(siteThumbPathFromIndex(1), /sitev5_001\.webp$/);
-  assert.match(extSkinPathFromIndex(1), /extskin_v5_001\.webp$/);
+test("site thumb path helper uses sitev4", () => {
+  assert.match(siteThumbPathFromIndex(1), /sitev4_001\.webp$/);
+  assert.match(extSkinPathFromIndex(1), /extskin_v4_001\.webp$/);
 });

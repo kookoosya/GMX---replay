@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Verify Themes V5 site wallpapers + extension skins, manifests, and category caps. */
+/** Verify Themes V4 site wallpapers + extension skins, manifests, and category caps. */
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
@@ -21,11 +21,11 @@ const SITE_COUNT = WALLPAPER_PACK_COUNT;
 const EXT_COUNT = EXT_SKIN_PACK_COUNT;
 
 const MIN_LAND = 8000;
-const MIN_PORT = 4500;
+const MIN_PORT = 8000;
 const MIN_THUMB = 400;
-const MAX_LAND = 800_000;
+const MAX_LAND = 700_000;
 const MAX_PORT = 430_000;
-const MAX_THUMB = 96_000;
+const MAX_THUMB = 45_000;
 
 let issues = 0;
 
@@ -97,7 +97,7 @@ if (fs.existsSync(siteManifestPath) && fs.existsSync(extManifestPath)) {
     const thumb = path.join(ROOT, item.thumbnailPath);
     if (!fs.existsSync(land)) fail(`missing ${item.landscapePath}`);
     if (!fs.existsSync(thumb)) fail(`missing ${item.thumbnailPath}`);
-    if (!item.landscapePath.includes("sitev5_")) fail(`legacy site path ${item.landscapePath}`);
+    if (!item.landscapePath.includes("sitev4_")) fail(`legacy site path ${item.landscapePath}`);
   }
   for (const item of extManifest.items || []) {
     if (!item.id?.startsWith("extskin_")) fail(`bad ext id ${item.id}`);
@@ -106,21 +106,24 @@ if (fs.existsSync(siteManifestPath) && fs.existsSync(extManifestPath)) {
     }
     const port = path.join(ROOT, item.portraitPath);
     if (!fs.existsSync(port)) fail(`missing ${item.portraitPath}`);
-    if (!item.portraitPath.includes("extskin_v5_")) fail(`legacy ext path ${item.portraitPath}`);
+    if (!item.portraitPath.includes("extskin_v4_")) fail(`legacy ext path ${item.portraitPath}`);
   }
 
   const catCounts = {};
   for (const c of PACK_CATEGORIES) catCounts[c] = (catCounts[c] || 0) + 1;
-  const city = catCounts["city-neon"] || 0;
-  if (city > 15) fail(`city-neon ${city} > 15`);
+  const city =
+    (catCounts["neon-city"] || 0) +
+    (catCounts["futuristic-architecture"] || 0) +
+    (catCounts["night-skyline"] || 0);
+  if (city > 20) fail(`city categories ${city} > 20`);
   for (const [c, n] of Object.entries(catCounts)) {
     if (n > 15) fail(`category ${c} has ${n} (>15)`);
   }
-  if (new Set(PACK_CATEGORIES).size < 8) fail(`category count ${new Set(PACK_CATEGORIES).size} < 8`);
+  if (new Set(PACK_CATEGORIES).size < 12) fail(`category count ${new Set(PACK_CATEGORIES).size} < 12`);
 }
 
 if (issues) {
   console.error(`check-wallpaper-assets: ${issues} issue(s)`);
   process.exit(1);
 }
-console.log(`check-wallpaper-assets OK (${SITE_COUNT} site + ${EXT_COUNT} ext skins, Themes V5)`);
+console.log(`check-wallpaper-assets OK (${SITE_COUNT} site + ${EXT_COUNT} ext skins, Themes V4)`);

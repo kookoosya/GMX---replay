@@ -1,4 +1,4 @@
-/** Wallpaper + extension skin pairing, paths, and UI grouping — Themes V5. */
+/** Wallpaper + extension skin pairing, paths, and UI grouping — Themes V4. */
 import { PACK_CATEGORIES, WALLPAPER_CATEGORIES, WALLPAPER_PACK_COUNT } from "./wallpaper-curated-catalog.mjs";
 import { EXT_SKIN_PACK_COUNT, EXT_SKIN_CATEGORIES_LIST } from "./extension-skin-catalog.mjs";
 import { SITE_EXT_SYNC_MAP, syncedExtSkinId, syncedSiteId } from "./themes-v4-sync.mjs";
@@ -8,8 +8,8 @@ export { WALLPAPER_CATEGORIES, EXT_SKIN_PACK_COUNT };
 export { WALLPAPER_PACK_COUNT };
 
 /** Versioned on-disk filenames — never reuse legacy pexels100 / extv3 paths. */
-export const SITE_ASSET_PACK = "sitev5";
-export const EXT_SKIN_ASSET_PACK = "extskin_v5";
+export const SITE_ASSET_PACK = "sitev4";
+export const EXT_SKIN_ASSET_PACK = "extskin_v4";
 
 /** @deprecated use SITE_ASSET_PACK */
 export const WALLPAPER_ASSET_PACK = SITE_ASSET_PACK;
