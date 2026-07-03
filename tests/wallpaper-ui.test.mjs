@@ -27,7 +27,7 @@ test("wallpaper core filters featured picks and groups buckets", () => {
   const entries = [
     { wp: { id: "custom_a.png", tier: "custom" }, idx: 0, bucket: "custom" },
     { wp: { id: "v2_001", tier: "free" }, idx: 1, bucket: "free" },
-    { wp: { id: "v2_099", tier: "premium" }, idx: 2, bucket: "locked" },
+    { wp: { id: "v2_999", tier: "premium" }, idx: 2, bucket: "locked" },
   ];
   const featured = filterWallpaperEntries(entries, "featured", (wp) =>
     Number(String(wp.id).replace(/^v2_/, "")) || 0

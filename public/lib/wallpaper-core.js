@@ -1,10 +1,10 @@
 (function (global) {
   if (global.GMXWallpaperCore) return;
 
-  const WALLPAPER_PACK_COUNT = 75;
+  const WALLPAPER_PACK_COUNT = 100;
 
   const WALLPAPER_CURATED_INDICES = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75,
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
   ];
 
   const WALLPAPER_GROUP_ORDER = ["custom", "free", "unlocked", "locked"];
@@ -155,7 +155,32 @@
   "mountains",
   "mountains",
   "mountains",
-  "ocean-underwater"
+  "ocean-underwater",
+  "space",
+  "mountains",
+  "minimal-texture",
+  "minimal-texture",
+  "mountains",
+  "ocean-underwater",
+  "minimal-texture",
+  "ocean-underwater",
+  "space",
+  "space",
+  "space",
+  "northern-lights",
+  "space",
+  "space",
+  "ocean-underwater",
+  "northern-lights",
+  "northern-lights",
+  "ocean-underwater",
+  "ocean-underwater",
+  "northern-lights",
+  "northern-lights",
+  "northern-lights",
+  "ocean-underwater",
+  "moon-planets",
+  "moon-planets"
 ];
 
   function formatExtPackId(n) {

@@ -1,5 +1,5 @@
-/** 75 licensed Pexels wallpapers — canary restore from 234d50c. */
-export const WALLPAPER_PACK_COUNT = 75;
+/** 100 licensed Pexels wallpapers — canary restore from 234d50c. */
+export const WALLPAPER_PACK_COUNT = 100;
 
 export const WALLPAPER_CATEGORIES = Object.freeze([
   {
@@ -732,6 +732,231 @@ export const CURATED_WALLPAPERS = [
     "tier": "premium",
     "overlay": 0.28,
     "score": 40
+  },
+  {
+    "name": "Space Scene 3",
+    "category": "space",
+    "pexelsId": 18709633,
+    "photographer": "Leon",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Mountains Scene 8",
+    "category": "mountains",
+    "pexelsId": 33867077,
+    "photographer": "Ilia Bronskiy",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Minimal Scene 5",
+    "category": "minimal-texture",
+    "pexelsId": 36564247,
+    "photographer": "Primitive Spaces",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Minimal Scene 6",
+    "category": "minimal-texture",
+    "pexelsId": 34850999,
+    "photographer": "3D Render",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 39
+  },
+  {
+    "name": "Mountains Scene 9",
+    "category": "mountains",
+    "pexelsId": 25490465,
+    "photographer": "Muhammed zeya",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 39
+  },
+  {
+    "name": "Ocean Scene 4",
+    "category": "ocean-underwater",
+    "pexelsId": 35116642,
+    "photographer": "Anthony Dalesandro",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 39
+  },
+  {
+    "name": "Minimal Scene 7",
+    "category": "minimal-texture",
+    "pexelsId": 34860697,
+    "photographer": "3D Render",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 39
+  },
+  {
+    "name": "Ocean Scene 5",
+    "category": "ocean-underwater",
+    "pexelsId": 35116635,
+    "photographer": "Anthony Dalesandro",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 39
+  },
+  {
+    "name": "Space Scene 4",
+    "category": "space",
+    "pexelsId": 37269536,
+    "photographer": "Marek Pavlík",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 39
+  },
+  {
+    "name": "Space Scene 5",
+    "category": "space",
+    "pexelsId": 37269543,
+    "photographer": "Marek Pavlík",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 39
+  },
+  {
+    "name": "Space Scene 6",
+    "category": "space",
+    "pexelsId": 17810090,
+    "photographer": "Bruna Finelli",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 39
+  },
+  {
+    "name": "Northern Scene 2",
+    "category": "northern-lights",
+    "pexelsId": 35632388,
+    "photographer": "Efrem  Efre",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 39
+  },
+  {
+    "name": "Space Scene 7",
+    "category": "space",
+    "pexelsId": 4592706,
+    "photographer": "Lucas George Wendt",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 39
+  },
+  {
+    "name": "Space Scene 8",
+    "category": "space",
+    "pexelsId": 4644812,
+    "photographer": "Felix Mittermeier",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 39
+  },
+  {
+    "name": "Ocean Scene 6",
+    "category": "ocean-underwater",
+    "pexelsId": 17694559,
+    "photographer": "Helena Jankovičová Kováčová",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 39
+  },
+  {
+    "name": "Northern Scene 3",
+    "category": "northern-lights",
+    "pexelsId": 36054423,
+    "photographer": "Marcus L.",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 39
+  },
+  {
+    "name": "Northern Scene 4",
+    "category": "northern-lights",
+    "pexelsId": 36245503,
+    "photographer": "Ken Cheung",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 39
+  },
+  {
+    "name": "Ocean Scene 7",
+    "category": "ocean-underwater",
+    "pexelsId": 8231167,
+    "photographer": "RDNE Stock project",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 38
+  },
+  {
+    "name": "Ocean Scene 8",
+    "category": "ocean-underwater",
+    "pexelsId": 26887889,
+    "photographer": "Francesco Ungaro",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 38
+  },
+  {
+    "name": "Northern Scene 5",
+    "category": "northern-lights",
+    "pexelsId": 23995632,
+    "photographer": "Victor Lucas",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 38
+  },
+  {
+    "name": "Northern Scene 6",
+    "category": "northern-lights",
+    "pexelsId": 13964118,
+    "photographer": "Monica Oprea",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 38
+  },
+  {
+    "name": "Northern Scene 7",
+    "category": "northern-lights",
+    "pexelsId": 14644522,
+    "photographer": "Luis A. Dumois N.",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 38
+  },
+  {
+    "name": "Ocean Scene 9",
+    "category": "ocean-underwater",
+    "pexelsId": 10498914,
+    "photographer": "Daniel Torobekov",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 38
+  },
+  {
+    "name": "Moon Scene 6",
+    "category": "moon-planets",
+    "pexelsId": 30736950,
+    "photographer": "Eva Hamitaj",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 36
+  },
+  {
+    "name": "Moon Scene 7",
+    "category": "moon-planets",
+    "pexelsId": 20376399,
+    "photographer": "Zelch Csaba",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 35
   }
 ];
 
