@@ -10,6 +10,6 @@ Attribution not required per Pexels license. Full source records: `wallpaper-sou
 
 See Pexels photographer credits in the manifest for each wallpaper ID.
 
-Licensed Pexels backgrounds (50 active in canary stage).
+Licensed Pexels backgrounds (75 active in canary stage).
 
 

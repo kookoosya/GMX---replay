@@ -6,9 +6,9 @@
     const getSiteCustomUpload = () => String((ctx && typeof ctx.getSiteCustomUpload === "function" ? ctx.getSiteCustomUpload() : "") || "");
     const getExtCustomUpload = () => String((ctx && typeof ctx.getExtCustomUpload === "function" ? ctx.getExtCustomUpload() : "") || "");
 
-    const SITE_PACK_COUNT = 50;
+    const SITE_PACK_COUNT = 75;
     const SITE_FREE_PACK_COUNT = 10;
-    const EXT_PACK_COUNT = 50;
+    const EXT_PACK_COUNT = 75;
     const EXT_FREE_PACK_COUNT = 4;
     const CUSTOM_WP_FREE_COUNT = 5;
     const CUSTOM_UPLOAD_ID = "custom_upload";
@@ -64,7 +64,32 @@
   "Ocean Scene",
   "Desert Scene 2",
   "Abstract Scene 7",
-  "Ocean Scene 2"
+  "Ocean Scene 2",
+  "Geometric Scene 7",
+  "Night Scene 4",
+  "Moon Scene 2",
+  "Forest Scene 7",
+  "Moon Scene 3",
+  "Moon Scene 4",
+  "Moon Scene 5",
+  "Forest Scene 8",
+  "Abstract Scene 8",
+  "Forest Scene 9",
+  "Desert Scene 3",
+  "Mountains Scene 4",
+  "Night Scene 5",
+  "Night Scene 6",
+  "Desert Scene 4",
+  "Northern Scene",
+  "Space Scene 2",
+  "Desert Scene 5",
+  "Desert Scene 6",
+  "Night Scene 7",
+  "Minimal Scene 4",
+  "Mountains Scene 5",
+  "Mountains Scene 6",
+  "Mountains Scene 7",
+  "Ocean Scene 3"
 ];
 
     const SITE_PACK_NAMES = EXT_PACK_NAMES;

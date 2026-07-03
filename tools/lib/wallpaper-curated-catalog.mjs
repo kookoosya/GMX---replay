@@ -1,5 +1,5 @@
-/** 50 licensed Pexels wallpapers — canary restore from 234d50c. */
-export const WALLPAPER_PACK_COUNT = 50;
+/** 75 licensed Pexels wallpapers — canary restore from 234d50c. */
+export const WALLPAPER_PACK_COUNT = 75;
 
 export const WALLPAPER_CATEGORIES = Object.freeze([
   {
@@ -37,6 +37,10 @@ export const WALLPAPER_CATEGORIES = Object.freeze([
   {
     "id": "desert",
     "labelKey": "wp_cat_desert"
+  },
+  {
+    "id": "northern-lights",
+    "labelKey": "wp_cat_northern_lights"
   },
   {
     "id": "abstract-glass",
@@ -503,6 +507,231 @@ export const CURATED_WALLPAPERS = [
     "tier": "premium",
     "overlay": 0.28,
     "score": 41
+  },
+  {
+    "name": "Geometric Scene 7",
+    "category": "geometric-dark",
+    "pexelsId": 26547157,
+    "photographer": "Sydney Sang",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Night Scene 4",
+    "category": "night-skyline",
+    "pexelsId": 34432810,
+    "photographer": "K",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Moon Scene 2",
+    "category": "moon-planets",
+    "pexelsId": 37266266,
+    "photographer": "幼聪 戴",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Forest Scene 7",
+    "category": "forest",
+    "pexelsId": 29546724,
+    "photographer": "Cedé Joey",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Moon Scene 3",
+    "category": "moon-planets",
+    "pexelsId": 20874522,
+    "photographer": "Francesco Ungaro",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Moon Scene 4",
+    "category": "moon-planets",
+    "pexelsId": 27945024,
+    "photographer": "jiang hua",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Moon Scene 5",
+    "category": "moon-planets",
+    "pexelsId": 31735052,
+    "photographer": "Alex Kalinin",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Forest Scene 8",
+    "category": "forest",
+    "pexelsId": 5829387,
+    "photographer": "Helena Jankovičová Kováčová",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Abstract Scene 8",
+    "category": "abstract-glass",
+    "pexelsId": 4284281,
+    "photographer": "kostek poland",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Forest Scene 9",
+    "category": "forest",
+    "pexelsId": 31373343,
+    "photographer": "Manuel Campagnoli",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Desert Scene 3",
+    "category": "desert",
+    "pexelsId": 9291028,
+    "photographer": "K",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Mountains Scene 4",
+    "category": "mountains",
+    "pexelsId": 28997845,
+    "photographer": "Alex Moliski",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Night Scene 5",
+    "category": "night-skyline",
+    "pexelsId": 18179095,
+    "photographer": "Jimmy Liao",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Night Scene 6",
+    "category": "night-skyline",
+    "pexelsId": 28617722,
+    "photographer": "Timo Volz",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Desert Scene 4",
+    "category": "desert",
+    "pexelsId": 26969891,
+    "photographer": "Francesco Ungaro",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Northern Scene",
+    "category": "northern-lights",
+    "pexelsId": 11869673,
+    "photographer": "John Kristian Petersen",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Space Scene 2",
+    "category": "space",
+    "pexelsId": 37269545,
+    "photographer": "Marek Pavlík",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Desert Scene 5",
+    "category": "desert",
+    "pexelsId": 36844820,
+    "photographer": "Roy Serafin",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Desert Scene 6",
+    "category": "desert",
+    "pexelsId": 31838829,
+    "photographer": "Phil Evenden",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Night Scene 7",
+    "category": "night-skyline",
+    "pexelsId": 20627348,
+    "photographer": "Quang Vuong",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Minimal Scene 4",
+    "category": "minimal-texture",
+    "pexelsId": 34850996,
+    "photographer": "3D Render",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Mountains Scene 5",
+    "category": "mountains",
+    "pexelsId": 36882608,
+    "photographer": "Sergio Zhukov",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Mountains Scene 6",
+    "category": "mountains",
+    "pexelsId": 9032947,
+    "photographer": "Илья Бунин",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Mountains Scene 7",
+    "category": "mountains",
+    "pexelsId": 28988216,
+    "photographer": "Andreas Schnabl",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
+  },
+  {
+    "name": "Ocean Scene 3",
+    "category": "ocean-underwater",
+    "pexelsId": 18274913,
+    "photographer": "David Kanigan",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 40
   }
 ];
 

@@ -51,7 +51,32 @@
   "Ocean Scene",
   "Desert Scene 2",
   "Abstract Scene 7",
-  "Ocean Scene 2"
+  "Ocean Scene 2",
+  "Geometric Scene 7",
+  "Night Scene 4",
+  "Moon Scene 2",
+  "Forest Scene 7",
+  "Moon Scene 3",
+  "Moon Scene 4",
+  "Moon Scene 5",
+  "Forest Scene 8",
+  "Abstract Scene 8",
+  "Forest Scene 9",
+  "Desert Scene 3",
+  "Mountains Scene 4",
+  "Night Scene 5",
+  "Night Scene 6",
+  "Desert Scene 4",
+  "Northern Scene",
+  "Space Scene 2",
+  "Desert Scene 5",
+  "Desert Scene 6",
+  "Night Scene 7",
+  "Minimal Scene 4",
+  "Mountains Scene 5",
+  "Mountains Scene 6",
+  "Mountains Scene 7",
+  "Ocean Scene 3"
 ];
 
   const EXT_WALLPAPER_OPTIONS = (() => {
@@ -59,7 +84,7 @@
       { id: "ext_free_01", name: "Soft Gradient" },
       { id: "ext_free_02", name: "Calm Glow" },
     ];
-    for (let i = 1; i <= 50; i++) {
+    for (let i = 1; i <= 75; i++) {
       const n = String(i).padStart(2, "0");
       out.push({ id: `w${n}`, name: EXT_WP_NAMES[i - 1] || `Scene ${i}` });
     }
