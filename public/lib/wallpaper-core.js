@@ -1,10 +1,10 @@
 (function (global) {
   if (global.GMXWallpaperCore) return;
 
-  const WALLPAPER_PACK_COUNT = 25;
+  const WALLPAPER_PACK_COUNT = 50;
 
   const WALLPAPER_CURATED_INDICES = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
   ];
 
   const WALLPAPER_GROUP_ORDER = ["custom", "free", "unlocked", "locked"];
@@ -31,8 +31,28 @@
     "labelKey": "wp_cat_night_skyline"
   },
   {
+    "id": "space",
+    "labelKey": "wp_cat_space"
+  },
+  {
+    "id": "moon-planets",
+    "labelKey": "wp_cat_moon_planets"
+  },
+  {
+    "id": "mountains",
+    "labelKey": "wp_cat_mountains"
+  },
+  {
     "id": "forest",
     "labelKey": "wp_cat_forest"
+  },
+  {
+    "id": "ocean-underwater",
+    "labelKey": "wp_cat_ocean_underwater"
+  },
+  {
+    "id": "desert",
+    "labelKey": "wp_cat_desert"
   },
   {
     "id": "abstract-glass",
@@ -81,7 +101,32 @@
   "abstract-glass",
   "forest",
   "futuristic-architecture",
-  "night-skyline"
+  "night-skyline",
+  "forest",
+  "minimal-texture",
+  "forest",
+  "abstract-glass",
+  "futuristic-architecture",
+  "futuristic-architecture",
+  "futuristic-architecture",
+  "forest",
+  "forest",
+  "geometric-dark",
+  "space",
+  "futuristic-architecture",
+  "mountains",
+  "mountains",
+  "night-skyline",
+  "abstract-glass",
+  "moon-planets",
+  "geometric-dark",
+  "mountains",
+  "forest",
+  "desert",
+  "ocean-underwater",
+  "desert",
+  "abstract-glass",
+  "ocean-underwater"
 ];
 
   function formatExtPackId(n) {

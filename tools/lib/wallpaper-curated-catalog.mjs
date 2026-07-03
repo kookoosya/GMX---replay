@@ -1,5 +1,5 @@
-/** 25 licensed Pexels wallpapers — canary restore from 234d50c. */
-export const WALLPAPER_PACK_COUNT = 25;
+/** 50 licensed Pexels wallpapers — canary restore from 234d50c. */
+export const WALLPAPER_PACK_COUNT = 50;
 
 export const WALLPAPER_CATEGORIES = Object.freeze([
   {
@@ -15,8 +15,28 @@ export const WALLPAPER_CATEGORIES = Object.freeze([
     "labelKey": "wp_cat_night_skyline"
   },
   {
+    "id": "space",
+    "labelKey": "wp_cat_space"
+  },
+  {
+    "id": "moon-planets",
+    "labelKey": "wp_cat_moon_planets"
+  },
+  {
+    "id": "mountains",
+    "labelKey": "wp_cat_mountains"
+  },
+  {
     "id": "forest",
     "labelKey": "wp_cat_forest"
+  },
+  {
+    "id": "ocean-underwater",
+    "labelKey": "wp_cat_ocean_underwater"
+  },
+  {
+    "id": "desert",
+    "labelKey": "wp_cat_desert"
   },
   {
     "id": "abstract-glass",
@@ -255,6 +275,231 @@ export const CURATED_WALLPAPERS = [
     "category": "night-skyline",
     "pexelsId": 13396942,
     "photographer": "Jimmy Liao",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Forest Scene 2",
+    "category": "forest",
+    "pexelsId": 20717826,
+    "photographer": "Yunus Tuğ",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Minimal Scene 3",
+    "category": "minimal-texture",
+    "pexelsId": 5443369,
+    "photographer": "max laurell",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Forest Scene 3",
+    "category": "forest",
+    "pexelsId": 29600296,
+    "photographer": "Pho Tomass",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Abstract Scene 5",
+    "category": "abstract-glass",
+    "pexelsId": 16588858,
+    "photographer": "David Brown",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Futuristic Scene 5",
+    "category": "futuristic-architecture",
+    "pexelsId": 4328661,
+    "photographer": "Steve Pancrate",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Futuristic Scene 6",
+    "category": "futuristic-architecture",
+    "pexelsId": 7189281,
+    "photographer": "Gije Cho",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Futuristic Scene 7",
+    "category": "futuristic-architecture",
+    "pexelsId": 32660209,
+    "photographer": "YIYANG LIU",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Forest Scene 4",
+    "category": "forest",
+    "pexelsId": 5825510,
+    "photographer": "Helena Jankovičová Kováčová",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Forest Scene 5",
+    "category": "forest",
+    "pexelsId": 29546726,
+    "photographer": "Cedé Joey",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Geometric Scene 5",
+    "category": "geometric-dark",
+    "pexelsId": 31735053,
+    "photographer": "Alex Kalinin",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Space Scene",
+    "category": "space",
+    "pexelsId": 9373868,
+    "photographer": "Ryan Fatalla",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Futuristic Scene 8",
+    "category": "futuristic-architecture",
+    "pexelsId": 32755081,
+    "photographer": "Thể Phạm",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Mountains Scene",
+    "category": "mountains",
+    "pexelsId": 4555829,
+    "photographer": "Uğur Sevinç",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Mountains Scene 2",
+    "category": "mountains",
+    "pexelsId": 34034459,
+    "photographer": "政 施",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Night Scene 3",
+    "category": "night-skyline",
+    "pexelsId": 15492533,
+    "photographer": "ZhiCheng Zhang",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Abstract Scene 6",
+    "category": "abstract-glass",
+    "pexelsId": 942322,
+    "photographer": "Tim Mossholder",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Moon Scene",
+    "category": "moon-planets",
+    "pexelsId": 9740063,
+    "photographer": "Jimmy Liao",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Geometric Scene 6",
+    "category": "geometric-dark",
+    "pexelsId": 36040198,
+    "photographer": "Joerg Hartmann",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Mountains Scene 3",
+    "category": "mountains",
+    "pexelsId": 18437135,
+    "photographer": "Caleb Jack",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Forest Scene 6",
+    "category": "forest",
+    "pexelsId": 15292809,
+    "photographer": "Denitsa Kireva",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Desert Scene",
+    "category": "desert",
+    "pexelsId": 32289534,
+    "photographer": "Robert Hacker",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Ocean Scene",
+    "category": "ocean-underwater",
+    "pexelsId": 36629358,
+    "photographer": "Philipp Deus",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Desert Scene 2",
+    "category": "desert",
+    "pexelsId": 20547083,
+    "photographer": "Alex Moliski",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Abstract Scene 7",
+    "category": "abstract-glass",
+    "pexelsId": 36317872,
+    "photographer": "Filiberto Giglio",
+    "tier": "premium",
+    "overlay": 0.28,
+    "score": 41
+  },
+  {
+    "name": "Ocean Scene 2",
+    "category": "ocean-underwater",
+    "pexelsId": 13291256,
+    "photographer": "Valeria Boltneva",
     "tier": "premium",
     "overlay": 0.28,
     "score": 41

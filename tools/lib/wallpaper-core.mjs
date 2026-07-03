@@ -3,7 +3,7 @@ import { PACK_CATEGORIES, WALLPAPER_CATEGORIES } from "./wallpaper-curated-catal
 
 export { WALLPAPER_CATEGORIES };
 
-export const WALLPAPER_PACK_COUNT = 25;
+export const WALLPAPER_PACK_COUNT = 50;
 
 export const WALLPAPER_CURATED_INDICES = Object.freeze(
   Array.from({ length: WALLPAPER_PACK_COUNT }, (_, i) => i + 1)

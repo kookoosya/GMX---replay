@@ -40,11 +40,13 @@ test("wallpapers: catalog and url helpers", () => {
     getExtCustomUpload: () => "",
   });
   const site = wp.buildSiteWallpapers();
-  assert.equal(site.length, 25);
+  const packCount = wp.SITE_PACK_COUNT;
+  assert.equal(site.length, packCount);
   assert.equal(site[0].id, "v2_001");
   assert.equal(wp.normalizeWallpaperId("w12", site), "v2_001");
   assert.match(wp.wallpaperFullUrl("v2_001", site), /\/assets\/wallpapers\/v2_001\.webp\?v=rev1$/);
   const ext = wp.buildExtWallpapers();
+  assert.equal(ext.length, packCount);
   assert.equal(ext[0].id, "extv3_001");
   assert.equal(wp.normalizeExtWallpaperIdLocal("ext_3", ext), "extv3_003");
 });
