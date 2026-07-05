@@ -52,8 +52,8 @@ test("active site URLs use sitev4 not pexels100 or legacy v2 paths", () => {
   for (const entry of catalog) {
     const thumb = wp.wallpaperThumbUrl(entry.id, catalog);
     const full = wp.wallpaperFullUrl(entry.id, catalog);
-    assert.match(thumb, /\/assets\/wallpapers\/thumbs\/sitev4_\d{3}\.webp\?v=/);
-    assert.match(full, /\/assets\/wallpapers\/sitev4_\d{3}\.webp\?v=/);
+    assert.match(thumb, /\/assets\/wallpapers\/thumbs\/livev1_\d{3}\.webp\?v=/);
+    assert.match(full, /\/assets\/wallpapers\/livev1_\d{3}\.webp\?v=/);
     for (const legacy of LEGACY_PEXELS100_SITE_FILENAMES.slice(0, 5)) {
       assert.doesNotMatch(thumb, new RegExp(legacy.replace(".", "\\.")));
     }
@@ -68,8 +68,8 @@ test("active extension skin URLs use extskin_v4 under extskins/", () => {
   for (const entry of ext) {
     const thumb = wp.extWallpaperThumbUrl(entry.id, ext);
     const full = wp.extWallpaperFullUrl(entry.id, ext);
-    assert.match(thumb, /\/assets\/extskins\/thumbs\/extskin_v4_\d{3}\.webp\?v=/);
-    assert.match(full, /\/assets\/extskins\/extskin_v4_\d{3}\.webp\?v=/);
+    assert.match(thumb, /\/assets\/extskins\/thumbs\/liveext_v1_\d{3}\.webp\?v=/);
+    assert.match(full, /\/assets\/extskins\/liveext_v1_\d{3}\.webp\?v=/);
     for (const legacy of LEGACY_PEXELS100_EXT_FILENAMES.slice(0, 5)) {
       assert.doesNotMatch(full, new RegExp(legacy.replace(".", "\\.")));
     }
@@ -141,13 +141,13 @@ test("on-disk site and ext skin files match manifest paths", () => {
 
 test("ASSET_REV bumped for Themes V4", () => {
   const appJs = fs.readFileSync(path.join(root, "public", "app.js"), "utf8");
-  assert.match(appJs, /ASSET_REV = "20260704a"/);
+  assert.match(appJs, /ASSET_REV = "20260705b"/);
 });
 
-test("service worker cache is gmx-shell-v4 with extskins excluded from full cache", () => {
+test("service worker cache is gmx-shell-v5 with extskins excluded from full cache", () => {
   const sw = fs.readFileSync(path.join(root, "public", "sw.js"), "utf8");
-  assert.equal(PWA_CACHE_NAME, "gmx-shell-v4");
-  assert.match(sw, /gmx-shell-v4/);
+  assert.equal(PWA_CACHE_NAME, "gmx-shell-v5");
+  assert.match(sw, /gmx-shell-v5/);
   assert.match(sw, /\/assets\/extskins\//);
 });
 
@@ -178,7 +178,7 @@ test("app.wallpapers EXT_PACK_COUNT is 60", () => {
   assert.match(wp, /EXT_PACK_COUNT = 60/);
 });
 
-test("site thumb path helper uses sitev4", () => {
-  assert.match(siteThumbPathFromIndex(1), /sitev4_001\.webp$/);
-  assert.match(extSkinPathFromIndex(1), /extskin_v4_001\.webp$/);
+test("site thumb path helper uses livev1", () => {
+  assert.match(siteThumbPathFromIndex(1), /livev1_001\.webp$/);
+  assert.match(extSkinPathFromIndex(1), /liveext_v1_001\.webp$/);
 });

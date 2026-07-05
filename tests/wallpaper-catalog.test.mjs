@@ -45,8 +45,8 @@ test("site-wallpaper-sources.json matches active pack count", () => {
   assert.doesNotMatch(raw, /PEXELS_API_KEY/);
   for (const item of manifest.items) {
     assert.ok(item.landscapePath);
-    assert.match(item.landscapePath, /sitev4_\d{3}\.webp$/);
-    assert.match(item.thumbnailPath, /sitev4_\d{3}\.webp$/);
+    assert.match(item.landscapePath, /livev1_\d{3}\.webp$/);
+    assert.match(item.thumbnailPath, /livev1_\d{3}\.webp$/);
     assert.equal(item.thumbnailPath, siteThumbPathFromIndex(Number(String(item.id).replace(/^v2_/, ""))));
   }
 });
@@ -57,7 +57,7 @@ test("extension-skin-sources.json has 60 independent skins", () => {
   assert.equal(manifest.items.length, 60);
   for (const item of manifest.items) {
     assert.match(item.id, /^extskin_/);
-    assert.match(item.portraitPath, /extskin_v4_\d{3}\.webp$/);
+    assert.match(item.portraitPath, /liveext_v1_\d{3}\.webp$/);
   }
 });
 

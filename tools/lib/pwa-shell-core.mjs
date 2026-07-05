@@ -1,6 +1,6 @@
 /** PWA shell constants shared by tests and deploy checks. */
 
-export const PWA_CACHE_NAME = "gmx-shell-v4";
+export const PWA_CACHE_NAME = "gmx-shell-v5";
 
 export const PWA_DOC_CACHE_NAME = "gmx-shell-docs-v1";
 

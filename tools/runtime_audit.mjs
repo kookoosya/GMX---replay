@@ -40,8 +40,8 @@ function diffSet(actual, expected) {
   };
 }
 
-/** Donor/legacy packs kept on disk for rebuild — not active runtime paths. */
-const ALLOWED_WALLPAPER_EXTRA = /^(pexels100|sitev2|v2)_\d{3}\.webp$/;
+/** Donor/legacy packs kept on disk for rebuild/rollback — not active runtime paths. */
+const ALLOWED_WALLPAPER_EXTRA = /^(pexels100|sitev2|sitev4|v2|extskin_v4)_\d{3}\.webp$/;
 
 function countExtraIssues(extra) {
   return extra.filter((name) => !ALLOWED_WALLPAPER_EXTRA.test(name)).length;

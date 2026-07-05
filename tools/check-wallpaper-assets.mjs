@@ -97,7 +97,7 @@ if (fs.existsSync(siteManifestPath) && fs.existsSync(extManifestPath)) {
     const thumb = path.join(ROOT, item.thumbnailPath);
     if (!fs.existsSync(land)) fail(`missing ${item.landscapePath}`);
     if (!fs.existsSync(thumb)) fail(`missing ${item.thumbnailPath}`);
-    if (!item.landscapePath.includes("sitev4_")) fail(`legacy site path ${item.landscapePath}`);
+    if (!item.landscapePath.includes("livev1_")) fail(`legacy site path ${item.landscapePath}`);
   }
   for (const item of extManifest.items || []) {
     if (!item.id?.startsWith("extskin_")) fail(`bad ext id ${item.id}`);
@@ -106,7 +106,7 @@ if (fs.existsSync(siteManifestPath) && fs.existsSync(extManifestPath)) {
     }
     const port = path.join(ROOT, item.portraitPath);
     if (!fs.existsSync(port)) fail(`missing ${item.portraitPath}`);
-    if (!item.portraitPath.includes("extskin_v4_")) fail(`legacy ext path ${item.portraitPath}`);
+    if (!item.portraitPath.includes("liveext_v1_")) fail(`legacy ext path ${item.portraitPath}`);
   }
 
   const catCounts = {};
@@ -126,4 +126,4 @@ if (issues) {
   console.error(`check-wallpaper-assets: ${issues} issue(s)`);
   process.exit(1);
 }
-console.log(`check-wallpaper-assets OK (${SITE_COUNT} site + ${EXT_COUNT} ext skins, Themes V4)`);
+console.log(`check-wallpaper-assets OK (${SITE_COUNT} site + ${EXT_COUNT} ext skins, Live V1)`);

@@ -52,8 +52,8 @@ test("active catalog URLs use sitev4 and extskin_v4 not legacy packs", () => {
   for (const entry of catalog.slice(0, 20)) {
     const thumb = wp.wallpaperThumbUrl(entry.id, catalog);
     const full = wp.wallpaperFullUrl(entry.id, catalog);
-    assert.match(thumb, /\/assets\/wallpapers\/thumbs\/sitev4_\d{3}\.webp\?v=/);
-    assert.match(full, /\/assets\/wallpapers\/sitev4_\d{3}\.webp\?v=/);
+    assert.match(thumb, /\/assets\/wallpapers\/thumbs\/livev1_\d{3}\.webp\?v=/);
+    assert.match(full, /\/assets\/wallpapers\/livev1_\d{3}\.webp\?v=/);
     for (const legacy of LEGACY_PEXELS100_SITE_FILENAMES) {
       assert.doesNotMatch(thumb, new RegExp(legacy.replace(".", "\\.")));
     }
@@ -61,8 +61,8 @@ test("active catalog URLs use sitev4 and extskin_v4 not legacy packs", () => {
   for (const entry of extCatalog.slice(0, 10)) {
     const extThumb = wp.extWallpaperThumbUrl(entry.id, extCatalog);
     const extFull = wp.extWallpaperFullUrl(entry.id, extCatalog);
-    assert.match(extThumb, /\/assets\/extskins\/thumbs\/extskin_v4_\d{3}\.webp\?v=/);
-    assert.match(extFull, /\/assets\/extskins\/extskin_v4_\d{3}\.webp\?v=/);
+    assert.match(extThumb, /\/assets\/extskins\/thumbs\/liveext_v1_\d{3}\.webp\?v=/);
+    assert.match(extFull, /\/assets\/extskins\/liveext_v1_\d{3}\.webp\?v=/);
     for (const legacy of LEGACY_PEXELS100_EXT_FILENAMES) {
       assert.doesNotMatch(extFull, new RegExp(legacy.replace(".", "\\.")));
     }
@@ -85,8 +85,8 @@ test("site manifest paths match on-disk sitev4 assets", () => {
 
 test("service worker cache version bumped for Themes V4", () => {
   const sw = fs.readFileSync(path.join(root, "public", "sw.js"), "utf8");
-  assert.equal(PWA_CACHE_NAME, "gmx-shell-v4");
-  assert.match(sw, /const CACHE = "gmx-shell-v4"/);
+  assert.equal(PWA_CACHE_NAME, "gmx-shell-v5");
+  assert.match(sw, /const CACHE = "gmx-shell-v5"/);
 });
 
 test("production thumbnail bytes match git when served (no-store)", { skip: process.env.GMX_PROD_WALLPAPER_VERIFY !== "1" }, async () => {

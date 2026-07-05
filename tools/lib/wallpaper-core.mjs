@@ -7,9 +7,9 @@ export { WALLPAPER_CATEGORIES, EXT_SKIN_PACK_COUNT };
 
 export { WALLPAPER_PACK_COUNT };
 
-/** Versioned on-disk filenames — never reuse legacy pexels100 / extv3 paths. */
-export const SITE_ASSET_PACK = "sitev4";
-export const EXT_SKIN_ASSET_PACK = "extskin_v4";
+/** Versioned on-disk filenames — never reuse legacy pexels100 / extv3 / sitev4 paths. */
+export const SITE_ASSET_PACK = "livev1";
+export const EXT_SKIN_ASSET_PACK = "liveext_v1";
 
 /** @deprecated use SITE_ASSET_PACK */
 export const WALLPAPER_ASSET_PACK = SITE_ASSET_PACK;

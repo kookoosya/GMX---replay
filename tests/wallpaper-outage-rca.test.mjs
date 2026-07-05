@@ -33,12 +33,12 @@ test("service worker excludes full wallpaper assets from runtime cache", () => {
 });
 
 test("pwa cache policy keeps thumbnails cacheable but not full wallpapers", () => {
-  assert.equal(isWallpaperFullAssetPath("/assets/wallpapers/sitev4_001.webp"), true);
-  assert.equal(isWallpaperFullAssetPath("/assets/wallpapers/thumbs/sitev4_001.webp"), false);
-  assert.equal(isWallpaperFullAssetPath("/assets/extskins/extskin_v4_001.webp"), true);
-  assert.equal(isWallpaperFullAssetPath("/assets/extskins/thumbs/extskin_v4_001.webp"), false);
-  assert.equal(isSwCacheableAssetPath("/assets/wallpapers/sitev4_001.webp"), false);
-  assert.equal(isSwCacheableAssetPath("/assets/wallpapers/thumbs/sitev4_001.webp"), true);
+  assert.equal(isWallpaperFullAssetPath("/assets/wallpapers/livev1_001.webp"), true);
+  assert.equal(isWallpaperFullAssetPath("/assets/wallpapers/thumbs/livev1_001.webp"), false);
+  assert.equal(isWallpaperFullAssetPath("/assets/extskins/liveext_v1_001.webp"), true);
+  assert.equal(isWallpaperFullAssetPath("/assets/extskins/thumbs/liveext_v1_001.webp"), false);
+  assert.equal(isSwCacheableAssetPath("/assets/wallpapers/livev1_001.webp"), false);
+  assert.equal(isSwCacheableAssetPath("/assets/wallpapers/thumbs/livev1_001.webp"), true);
 });
 
 test("production catalog counts: site 100, extension skins 60", () => {
