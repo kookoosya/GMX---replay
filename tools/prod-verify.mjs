@@ -5,9 +5,15 @@
  */
 import { execSync } from "node:child_process";
 import crypto from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { fail, ok, freshSmokeHandle } from "./tests/_helpers.mjs";
 
 const BASE = String(process.env.PROD_BASE || "https://www.gmxreply.com").replace(/\/$/, "");
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const localAppJs = fs.readFileSync(path.join(ROOT, "public", "app.js"), "utf8");
+const localAssetRev = localAppJs.match(/const ASSET_REV = "([^"]+)"/)?.[1] || "";
 
 async function get(path, opts = {}) {
   const url = `${BASE}${path}`;
@@ -439,7 +445,7 @@ if (!wpChunk.text.includes("sitePackAssetFile")) {
   fail("production app.wallpapers.js missing versioned asset resolver");
 }
 const appJsRev = await get("/app.js");
-if (!appJsRev.text.includes('ASSET_REV = "20260705b"')) {
+if (!localAssetRev || !appJsRev.text.includes(`ASSET_REV = "${localAssetRev}"`)) {
   fail("production ASSET_REV not bumped for Live V1 rollout");
 }
 ok("wallpaper Live V1 paths on production");
