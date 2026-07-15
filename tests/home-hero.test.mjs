@@ -32,13 +32,14 @@ test("home founder social links", () => {
   assert.match(html, /Founder of the project/);
 });
 
-test("home hero module binds CTA and mp4 fallback", () => {
+test("home hero module binds CTA and uses the SVG fallback when video is unavailable", () => {
   const src = fs.readFileSync(path.join(root, "public", "app.homehero.js"), "utf8");
   const html = fs.readFileSync(path.join(root, "public", "app.html"), "utf8");
   assert.match(src, /bindHomeHero/);
   assert.match(src, /prefers-reduced-motion/);
   assert.match(src, /homeTryGm/);
-  assert.match(html, /gmx-hero\.mp4/);
+  assert.match(html, /gmx-hero-loop\.svg/);
+  assert.doesNotMatch(html, /gmx-hero\.mp4/);
 });
 
 test("siteboot wires home hero on init", () => {

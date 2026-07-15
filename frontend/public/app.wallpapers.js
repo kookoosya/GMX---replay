@@ -15,11 +15,11 @@
     const CUSTOM_WP_RE = /^custom_[a-zA-Z0-9_.-]+\.(png|jpg|jpeg|webp)$/i;
 
     const EXT_PACK_NAMES = [
-      "Obsidian Relay",
-      "Glass Meridian",
-      "Signal Bloom",
-      "Vector Nocturne",
-      "Chrome Interval",
+      "Masked Cyber Guardian",
+      "Web3 Command Portrait",
+      "Night Runner Relay",
+      "Solar Cloak Hero",
+      "Cockpit Pilot Silhouette",
       "Midnight Lattice",
       "Quiet Brutalism",
       "Shadow Aperture",
@@ -78,11 +78,11 @@
     ];
 
     const SITE_PACK_NAMES = [
-      "Blue Hour Relay",
-      "Orbital Departure",
-      "Starfield Quiet",
-      "Deep Space Bloom",
-      "Satellite Afterglow",
+      "Neon Protocol Citadel",
+      "Vault of the Digital Guardian",
+      "Raincode Runner Alley",
+      "Cosmic Drift Sentinel",
+      "Orbital Mecha Deployment",
       "Indigo Drift",
       "Astral Register",
       "Spiral Index",
@@ -310,7 +310,7 @@
       const norm = normalizeExtWallpaperIdLocal(id, catalog);
       if (!norm) return "";
       if (norm === CUSTOM_UPLOAD_ID) return getExtCustomUpload();
-      if (norm.startsWith("custom_")) return `/assets/extskins/custom/${norm.slice(7)}${revQuery()}`;
+      if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}${revQuery()}`;
       if (norm.startsWith("extskin_")) {
         const f = extPackAssetFile(norm);
         return f ? `/assets/extskins/${f}${revQuery()}` : "";
@@ -323,7 +323,7 @@
       const norm = normalizeExtWallpaperIdLocal(id, catalog);
       if (!norm) return "";
       if (norm === CUSTOM_UPLOAD_ID) return getExtCustomUpload();
-      if (norm.startsWith("custom_")) return `/assets/extskins/custom/${norm.slice(7)}${revQuery()}`;
+      if (norm.startsWith("custom_")) return `/assets/extbg/custom/${norm.slice(7)}${revQuery()}`;
       if (norm.startsWith("extskin_")) {
         const f = extPackAssetFile(norm);
         return f ? `/assets/extskins/thumbs/${f}${revQuery()}` : "";

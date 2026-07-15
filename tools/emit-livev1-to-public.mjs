@@ -12,7 +12,7 @@ import {
 } from "./lib/wallpaper-core.mjs";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ASSET_REV = "20260705b";
+const ASSET_REV = "20260715a";
 
 function patchAppWallpapers(file) {
   let src = fs.readFileSync(file, "utf8");

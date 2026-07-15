@@ -1,4 +1,4 @@
-/** 100 licensed Pexels wallpapers — canary restore from 234d50c. */
+/** 100 curated site wallpapers — licensed sources plus internal originals. */
 export const WALLPAPER_PACK_COUNT = 100;
 
 export const WALLPAPER_CATEGORIES = Object.freeze([
@@ -62,55 +62,65 @@ export const WALLPAPER_CATEGORIES = Object.freeze([
   }
 ]);
 
-/** @type {{ name: string, category: string, pexelsId: number, photographer: string, tier: string, overlay: number, score: number }[]} */
+/** @type {{ name: string, category: string, tier: string, overlay: number, score: number, origin?: string, generator?: string, reviewStatus?: string, reviewId?: string }[]} */
 export const CURATED_WALLPAPERS = [
   {
-    "name": "Abstract digital artwork showcasing a colorful, geometric de",
+    "name": "Neon Protocol Citadel",
     "category": "comic-inspired",
-    "pexelsId": 0,
-    "photographer": "Pachon in Motion",
     "tier": "free",
     "overlay": 0.28,
-    "score": 40
+    "score": 40,
+    "origin": "generated-original",
+    "generator": "cursor-generate-image",
+    "reviewStatus": "lockedAccept",
+    "reviewId": "SITE-01"
   },
   {
-    "name": "A vibrant 3D rendering of geometric digital art with a futur",
+    "name": "Vault of the Digital Guardian",
     "category": "superhero-inspired",
-    "pexelsId": 0,
-    "photographer": "Pachon in Motion",
     "tier": "free",
     "overlay": 0.28,
-    "score": 39
+    "score": 39,
+    "origin": "generated-original",
+    "generator": "cursor-generate-image",
+    "reviewStatus": "lockedAccept",
+    "reviewId": "SITE-02"
   },
   {
-    "name": "Spacecraft leaving a space station.jpg",
+    "name": "Raincode Runner Alley",
+    "category": "sci-fi",
+    "tier": "free",
+    "overlay": 0.28,
+    "score": 38,
+    "origin": "generated-original",
+    "generator": "cursor-generate-image",
+    "reviewStatus": "lockedAccept",
+    "reviewId": "SITE-07"
+  },
+  {
+    "name": "Cosmic Drift Sentinel",
+    "category": "space",
+    "tier": "free",
+    "overlay": 0.28,
+    "score": 37,
+    "origin": "generated-original",
+    "generator": "cursor-generate-image",
+    "reviewStatus": "lockedAccept",
+    "reviewId": "SITE-13B"
+  },
+  {
+    "name": "Orbital Mecha Deployment",
     "category": "mecha",
-    "pexelsId": 0,
-    "photographer": "JKC5D",
     "tier": "free",
     "overlay": 0.28,
-    "score": 38
+    "score": 36,
+    "origin": "generated-original",
+    "generator": "cursor-generate-image",
+    "reviewStatus": "lockedAccept",
+    "reviewId": "SITE-19"
   },
   {
-    "name": "Galaxy starry night sky background",
-    "category": "fantasy",
-    "pexelsId": 0,
-    "photographer": "Unknown",
-    "tier": "free",
-    "overlay": 0.28,
-    "score": 37
-  },
-  {
-    "name": "Free blue galaxy night sky",
-    "category": "fantasy",
-    "pexelsId": 0,
-    "photographer": "Unknown",
-    "tier": "free",
-    "overlay": 0.28,
-    "score": 36
-  },
-  {
-    "name": "Galaxy starry night sky background",
+    "name": "Indigo Drift",
     "category": "fantasy",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -119,7 +129,7 @@ export const CURATED_WALLPAPERS = [
     "score": 35
   },
   {
-    "name": "Galaxy Stars",
+    "name": "Astral Register",
     "category": "fantasy",
     "pexelsId": 0,
     "photographer": "Free Nature Stock",
@@ -128,7 +138,7 @@ export const CURATED_WALLPAPERS = [
     "score": 34
   },
   {
-    "name": "Spiral galaxy",
+    "name": "Spiral Index",
     "category": "fantasy",
     "pexelsId": 0,
     "photographer": "The Bureau of Land Management",
@@ -137,7 +147,7 @@ export const CURATED_WALLPAPERS = [
     "score": 33
   },
   {
-    "name": "Milkyway Galaxy",
+    "name": "Celestial Margin",
     "category": "fantasy",
     "pexelsId": 0,
     "photographer": "Free Nature Stock",
@@ -146,7 +156,7 @@ export const CURATED_WALLPAPERS = [
     "score": 32
   },
   {
-    "name": "Untitled",
+    "name": "Null Horizon",
     "category": "fantasy",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -155,7 +165,7 @@ export const CURATED_WALLPAPERS = [
     "score": 31
   },
   {
-    "name": "Galaxy starry night sky background",
+    "name": "Ledger Glow",
     "category": "fantasy",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -164,7 +174,7 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "Untitled",
+    "name": "Desert Fall",
     "category": "fantasy",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -173,7 +183,7 @@ export const CURATED_WALLPAPERS = [
     "score": 39
   },
   {
-    "name": "Cryptocurrency transaction",
+    "name": "Neon Borough",
     "category": "sci-fi",
     "pexelsId": 0,
     "photographer": "Mikael Häggström",
@@ -182,7 +192,7 @@ export const CURATED_WALLPAPERS = [
     "score": 38
   },
   {
-    "name": "Free blue galaxy night sky",
+    "name": "Reflective Hills",
     "category": "fantasy",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -191,7 +201,7 @@ export const CURATED_WALLPAPERS = [
     "score": 37
   },
   {
-    "name": "Untitled",
+    "name": "Ritual Monument",
     "category": "neon-city",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -200,7 +210,7 @@ export const CURATED_WALLPAPERS = [
     "score": 36
   },
   {
-    "name": "A fallen tree casting shadows on a vast desert landscape und",
+    "name": "Skyline Pulse",
     "category": "neon-city",
     "pexelsId": 0,
     "photographer": "Dom Sch-veg-man",
@@ -209,7 +219,7 @@ export const CURATED_WALLPAPERS = [
     "score": 35
   },
   {
-    "name": "A bustling urban scene with neon lights and signs, capturing",
+    "name": "Glass Angle",
     "category": "neon-city",
     "pexelsId": 0,
     "photographer": "ZhiCheng Zhang",
@@ -218,7 +228,7 @@ export const CURATED_WALLPAPERS = [
     "score": 34
   },
   {
-    "name": "Glass building facade reflecting hills and greenery on a sun",
+    "name": "Mist Archive",
     "category": "neon-city",
     "pexelsId": 0,
     "photographer": "David Brown",
@@ -227,7 +237,7 @@ export const CURATED_WALLPAPERS = [
     "score": 33
   },
   {
-    "name": "A monumental sculpture of a robot and skull set in Ringkøbin",
+    "name": "Golden Mesa",
     "category": "neon-city",
     "pexelsId": 0,
     "photographer": "Wolfgang Weiser",
@@ -236,7 +246,7 @@ export const CURATED_WALLPAPERS = [
     "score": 32
   },
   {
-    "name": "A stunning low-angle view of skyscrapers against the night s",
+    "name": "Grid Terrace",
     "category": "neon-city",
     "pexelsId": 0,
     "photographer": "Masood Aslami",
@@ -245,7 +255,7 @@ export const CURATED_WALLPAPERS = [
     "score": 31
   },
   {
-    "name": "Intriguing angle of contemporary skyscrapers with glass and ",
+    "name": "Red Block Theory",
     "category": "neon-city",
     "pexelsId": 0,
     "photographer": "Nadine Ginzel",
@@ -254,7 +264,7 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "Eerie mist envelops leafless trees in a serene rural orchard",
+    "name": "Lightcube",
     "category": "neon-city",
     "pexelsId": 0,
     "photographer": "Yunus Tuğ",
@@ -263,7 +273,7 @@ export const CURATED_WALLPAPERS = [
     "score": 39
   },
   {
-    "name": "Golden hour view of boulders and desert vegetation in Joshua",
+    "name": "City Nightfall",
     "category": "neon-city",
     "pexelsId": 0,
     "photographer": "Ashish Durgude",
@@ -272,7 +282,7 @@ export const CURATED_WALLPAPERS = [
     "score": 38
   },
   {
-    "name": "Modern architectural facade with geometric window patterns c",
+    "name": "Shadow Stripe",
     "category": "neon-city",
     "pexelsId": 0,
     "photographer": "Sydney Sang",
@@ -281,7 +291,7 @@ export const CURATED_WALLPAPERS = [
     "score": 37
   },
   {
-    "name": "Complex digital structure of red and black blocks, creating ",
+    "name": "Window Signal",
     "category": "neon-city",
     "pexelsId": 0,
     "photographer": "Pachon in Motion",
@@ -290,7 +300,7 @@ export const CURATED_WALLPAPERS = [
     "score": 36
   },
   {
-    "name": "Futuristic digital cube arrangement, showcasing vibrant LED-",
+    "name": "Weathered Paper",
     "category": "neon-city",
     "pexelsId": 0,
     "photographer": "Pachon in Motion",
@@ -299,7 +309,7 @@ export const CURATED_WALLPAPERS = [
     "score": 35
   },
   {
-    "name": "Modern skyscrapers with lights glowing at night, vibrant cit",
+    "name": "Reflected Garden",
     "category": "neon-city",
     "pexelsId": 0,
     "photographer": "Nguyen Hung",
@@ -308,7 +318,7 @@ export const CURATED_WALLPAPERS = [
     "score": 34
   },
   {
-    "name": "Black and white pattern of light and shadow stripes on an in",
+    "name": "Prism Chapel",
     "category": "night-skyline",
     "pexelsId": 0,
     "photographer": "Joerg Hartmann",
@@ -317,7 +327,7 @@ export const CURATED_WALLPAPERS = [
     "score": 33
   },
   {
-    "name": "Urban landscape reflected in glass windows with a blend of m",
+    "name": "Cathedral Glass",
     "category": "night-skyline",
     "pexelsId": 0,
     "photographer": "Filiberto Giglio",
@@ -326,7 +336,7 @@ export const CURATED_WALLPAPERS = [
     "score": 32
   },
   {
-    "name": "A textured wall with layers of torn and weathered paper for ",
+    "name": "Algorithmic Portrait",
     "category": "night-skyline",
     "pexelsId": 0,
     "photographer": "max laurell",
@@ -335,7 +345,7 @@ export const CURATED_WALLPAPERS = [
     "score": 31
   },
   {
-    "name": "Abstract view of a modern building's glass facade with refle",
+    "name": "Stellar Cartography",
     "category": "night-skyline",
     "pexelsId": 0,
     "photographer": "Matias Mango",
@@ -344,7 +354,7 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "Vibrant stained glass featuring textured geometric patterns ",
+    "name": "Plasma Garden",
     "category": "night-skyline",
     "pexelsId": 0,
     "photographer": "Tim Mossholder",
@@ -353,7 +363,7 @@ export const CURATED_WALLPAPERS = [
     "score": 39
   },
   {
-    "name": "Artbreeder example anime portraits.jpg",
+    "name": "Ember Atlas",
     "category": "anime-inspired",
     "pexelsId": 0,
     "photographer": "Artbreeder",
@@ -362,7 +372,7 @@ export const CURATED_WALLPAPERS = [
     "score": 38
   },
   {
-    "name": "Tarantula Nebula by JWST.jpg",
+    "name": "Chainwork",
     "category": "fantasy",
     "pexelsId": 0,
     "photographer": "NASA, ESA, CSA, STScI, Webb ERO Production Team",
@@ -371,7 +381,7 @@ export const CURATED_WALLPAPERS = [
     "score": 37
   },
   {
-    "name": "NGC 3372a-full.jpg",
+    "name": "Block Signal",
     "category": "fantasy",
     "pexelsId": 0,
     "photographer": "NASA, ESA, N. Smith (University of California, Berkeley), and The Hubble Heritage Team (STScI/AURA); credit for CTIO Image: N. Smith (University of California, Berkeley) and NOAO/AURA/NSF",
@@ -380,7 +390,7 @@ export const CURATED_WALLPAPERS = [
     "score": 36
   },
   {
-    "name": "Dragon Encounter During Sunset (FLUX 1.1 Pro Ultra).webp",
+    "name": "Ledger Bloom",
     "category": "mecha",
     "pexelsId": 0,
     "photographer": "VulcanSphere",
@@ -389,7 +399,7 @@ export const CURATED_WALLPAPERS = [
     "score": 35
   },
   {
-    "name": "Blockchain Illustration 3.jpg",
+    "name": "Token Geometry",
     "category": "sci-fi",
     "pexelsId": 0,
     "photographer": "Davidstankiewicz",
@@ -398,7 +408,7 @@ export const CURATED_WALLPAPERS = [
     "score": 34
   },
   {
-    "name": "Blockchain Illustration.jpg",
+    "name": "Vector Muse",
     "category": "sci-fi",
     "pexelsId": 0,
     "photographer": "Davidstankiewicz",
@@ -407,7 +417,7 @@ export const CURATED_WALLPAPERS = [
     "score": 33
   },
   {
-    "name": "Blockchain Illustration 4.jpg",
+    "name": "Night Street",
     "category": "sci-fi",
     "pexelsId": 0,
     "photographer": "Davidstankiewicz",
@@ -416,7 +426,7 @@ export const CURATED_WALLPAPERS = [
     "score": 32
   },
   {
-    "name": "Blockchain Illustration 2.jpg",
+    "name": "Town in Amber",
     "category": "sci-fi",
     "pexelsId": 0,
     "photographer": "Davidstankiewicz",
@@ -425,7 +435,7 @@ export const CURATED_WALLPAPERS = [
     "score": 31
   },
   {
-    "name": "Anime girl cat illustration",
+    "name": "Paper Nocturne",
     "category": "fantasy",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -434,7 +444,7 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "Neon Street",
+    "name": "Rocket Margin",
     "category": "mecha",
     "pexelsId": 0,
     "photographer": "Ethan Brooke",
@@ -443,7 +453,7 @@ export const CURATED_WALLPAPERS = [
     "score": 39
   },
   {
-    "name": "The Town (August Strindberg) - Nationalmuseum - 21568.tif",
+    "name": "Arcane Folio",
     "category": "fantasy",
     "pexelsId": 0,
     "photographer": "August Strindberg",
@@ -452,7 +462,7 @@ export const CURATED_WALLPAPERS = [
     "score": 38
   },
   {
-    "name": "Algorithmically-generated black and white portrait art of a ",
+    "name": "Soft Orbit",
     "category": "fantasy",
     "pexelsId": 0,
     "photographer": "Benlisquare",
@@ -461,7 +471,7 @@ export const CURATED_WALLPAPERS = [
     "score": 37
   },
   {
-    "name": "Futuristic rocket png sticker retro",
+    "name": "Convergence Light",
     "category": "mecha",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -470,7 +480,7 @@ export const CURATED_WALLPAPERS = [
     "score": 36
   },
   {
-    "name": "Bound Print, Title Page, Livre Nouveau de Morceaux de Fantai",
+    "name": "Moon Garden",
     "category": "space",
     "pexelsId": 0,
     "photographer": "\nEngraved by Carl Albert von Lespilliez",
@@ -479,7 +489,7 @@ export const CURATED_WALLPAPERS = [
     "score": 35
   },
   {
-    "name": "Anime Girl",
+    "name": "Generations",
     "category": "space",
     "pexelsId": 0,
     "photographer": "User:Niabot",
@@ -488,7 +498,7 @@ export const CURATED_WALLPAPERS = [
     "score": 34
   },
   {
-    "name": "Cardano Summit 2021.jpg",
+    "name": "Orbiting Dust",
     "category": "space",
     "pexelsId": 0,
     "photographer": "theconciergeclub",
@@ -497,7 +507,7 @@ export const CURATED_WALLPAPERS = [
     "score": 33
   },
   {
-    "name": "Moonlit Landscape View New Amstel",
+    "name": "Constellation Study",
     "category": "space",
     "pexelsId": 0,
     "photographer": "thegetty",
@@ -506,7 +516,7 @@ export const CURATED_WALLPAPERS = [
     "score": 32
   },
   {
-    "name": "source site, courtesy NASA/JPL-Caltech: Generations",
+    "name": "Rocket Vector",
     "category": "space",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -515,7 +525,7 @@ export const CURATED_WALLPAPERS = [
     "score": 31
   },
   {
-    "name": "Mlikyway Galaxy",
+    "name": "Night Bloom",
     "category": "space",
     "pexelsId": 0,
     "photographer": "Free Nature Stock",
@@ -524,7 +534,7 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "Milkyway Galaxy",
+    "name": "Signal Six",
     "category": "space",
     "pexelsId": 0,
     "photographer": "Free Nature Stock",
@@ -533,7 +543,7 @@ export const CURATED_WALLPAPERS = [
     "score": 39
   },
   {
-    "name": "Milkyway Galaxy",
+    "name": "Orbiting Room",
     "category": "space",
     "pexelsId": 0,
     "photographer": "Free Nature Stock",
@@ -542,7 +552,7 @@ export const CURATED_WALLPAPERS = [
     "score": 38
   },
   {
-    "name": "Consensus 2026 - Charles Hoskinson 01.jpg",
+    "name": "Amber Cathedral",
     "category": "mecha",
     "pexelsId": 0,
     "photographer": "Xuthoria",
@@ -551,7 +561,7 @@ export const CURATED_WALLPAPERS = [
     "score": 37
   },
   {
-    "name": "Futuristic rocket, space illustration",
+    "name": "Cathedral Signal",
     "category": "mecha",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -560,7 +570,7 @@ export const CURATED_WALLPAPERS = [
     "score": 36
   },
   {
-    "name": "Consensus 2026 - Charles Hoskinson 06.jpg",
+    "name": "Glass Orchard",
     "category": "space",
     "pexelsId": 0,
     "photographer": "Xuthoria",
@@ -569,7 +579,7 @@ export const CURATED_WALLPAPERS = [
     "score": 35
   },
   {
-    "name": "Consensus 2026 - Charles Hoskinson 02.jpg",
+    "name": "Quiet Aperture",
     "category": "space",
     "pexelsId": 0,
     "photographer": "Xuthoria",
@@ -578,7 +588,7 @@ export const CURATED_WALLPAPERS = [
     "score": 34
   },
   {
-    "name": "Consensus 2026 - Charles Hoskinson 05.jpg",
+    "name": "Dark Lattice",
     "category": "sci-fi",
     "pexelsId": 0,
     "photographer": "Xuthoria",
@@ -587,7 +597,7 @@ export const CURATED_WALLPAPERS = [
     "score": 33
   },
   {
-    "name": "Anime girl cat illustration",
+    "name": "Rust Interval",
     "category": "night-skyline",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -596,7 +606,7 @@ export const CURATED_WALLPAPERS = [
     "score": 32
   },
   {
-    "name": "Nasa space elev.jpg",
+    "name": "Shadow Current",
     "category": "night-skyline",
     "pexelsId": 0,
     "photographer": "NASA/Pat Rawlings",
@@ -605,7 +615,7 @@ export const CURATED_WALLPAPERS = [
     "score": 31
   },
   {
-    "name": "Png anime girl cat sticker",
+    "name": "Electric Facade",
     "category": "abstract-glass",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -614,7 +624,7 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "Anime girl cat collage element",
+    "name": "Black Geometry",
     "category": "abstract-glass",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -623,7 +633,7 @@ export const CURATED_WALLPAPERS = [
     "score": 39
   },
   {
-    "name": "Abbreviated Drawing Styles Birds Animals",
+    "name": "Solar Wall",
     "category": "abstract-glass",
     "pexelsId": 0,
     "photographer": "themet",
@@ -632,7 +642,7 @@ export const CURATED_WALLPAPERS = [
     "score": 38
   },
   {
-    "name": "Anime girl cat collage element",
+    "name": "Stone Frequency",
     "category": "abstract-glass",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -641,7 +651,7 @@ export const CURATED_WALLPAPERS = [
     "score": 37
   },
   {
-    "name": "NGC 1333 (2023-012).png",
+    "name": "Night Prism",
     "category": "abstract-glass",
     "pexelsId": 0,
     "photographer": "SCIENCE: NASA, ESA, STScI IMAGE PROCESSING: Varun Bajaj (STScI), Joseph DePasquale (STScI), Jennifer Mack (STScI)",
@@ -650,7 +660,7 @@ export const CURATED_WALLPAPERS = [
     "score": 36
   },
   {
-    "name": "Sunlight creates striking shadows on a modern building exter",
+    "name": "Steel Repetition",
     "category": "abstract-glass",
     "pexelsId": 0,
     "photographer": "Wolfgang Weiser",
@@ -659,7 +669,7 @@ export const CURATED_WALLPAPERS = [
     "score": 35
   },
   {
-    "name": "Intriguing geometric patterns created by sunlight and archit",
+    "name": "Looped Circuit",
     "category": "abstract-glass",
     "pexelsId": 0,
     "photographer": "Wolfgang Weiser",
@@ -668,7 +678,7 @@ export const CURATED_WALLPAPERS = [
     "score": 34
   },
   {
-    "name": "Abstract view of an urban office building's repetitive windo",
+    "name": "Carbon Edge",
     "category": "abstract-glass",
     "pexelsId": 0,
     "photographer": "Sydney Sang",
@@ -677,7 +687,7 @@ export const CURATED_WALLPAPERS = [
     "score": 33
   },
   {
-    "name": "A modern building with illuminated panels reflecting city li",
+    "name": "Future Line",
     "category": "moon-planets",
     "pexelsId": 0,
     "photographer": "jiang hua",
@@ -686,7 +696,7 @@ export const CURATED_WALLPAPERS = [
     "score": 32
   },
   {
-    "name": "Geometric shadows and light interplay in a modern urban unde",
+    "name": "Liquid Circuit",
     "category": "moon-planets",
     "pexelsId": 0,
     "photographer": "Wolfgang Weiser",
@@ -695,7 +705,7 @@ export const CURATED_WALLPAPERS = [
     "score": 31
   },
   {
-    "name": "Intricate abstract visualization of digital circuit blocks w",
+    "name": "Cyber Meadow",
     "category": "moon-planets",
     "pexelsId": 0,
     "photographer": "Pachon in Motion",
@@ -704,7 +714,7 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "Stunning abstract view of futuristic digital circuitry with ",
+    "name": "Digital Bloom",
     "category": "moon-planets",
     "pexelsId": 0,
     "photographer": "Pachon in Motion",
@@ -713,7 +723,7 @@ export const CURATED_WALLPAPERS = [
     "score": 39
   },
   {
-    "name": "Abstract image depicting high-tech digital circuits and glow",
+    "name": "Data Veil",
     "category": "moon-planets",
     "pexelsId": 0,
     "photographer": "Pachon in Motion",
@@ -722,7 +732,7 @@ export const CURATED_WALLPAPERS = [
     "score": 38
   },
   {
-    "name": "Abstract futuristic cyber landscape with digital matrix and ",
+    "name": "Pixel Meridian",
     "category": "moon-planets",
     "pexelsId": 0,
     "photographer": "Pachon in Motion",
@@ -731,7 +741,7 @@ export const CURATED_WALLPAPERS = [
     "score": 37
   },
   {
-    "name": "Explore the vibrant and dynamic world of a futuristic digita",
+    "name": "Graphite Grid",
     "category": "moon-planets",
     "pexelsId": 0,
     "photographer": "Pachon in Motion",
@@ -740,7 +750,7 @@ export const CURATED_WALLPAPERS = [
     "score": 36
   },
   {
-    "name": "Artistic photo of tree shadows on a corrugated metal and woo",
+    "name": "Signal Garden",
     "category": "moon-planets",
     "pexelsId": 0,
     "photographer": "ym z",
@@ -749,7 +759,7 @@ export const CURATED_WALLPAPERS = [
     "score": 35
   },
   {
-    "name": "Close-up view of a modern building's exterior with geometric",
+    "name": "Urban Vector",
     "category": "northern-lights",
     "pexelsId": 0,
     "photographer": "Alex Kalinin",
@@ -758,7 +768,7 @@ export const CURATED_WALLPAPERS = [
     "score": 34
   },
   {
-    "name": "Abstract view of modern architecture with strong shadows in ",
+    "name": "Desert Architecture",
     "category": "northern-lights",
     "pexelsId": 0,
     "photographer": "Alex Kalinin",
@@ -767,7 +777,7 @@ export const CURATED_WALLPAPERS = [
     "score": 33
   },
   {
-    "name": "Scenic view of Monument Valley at sunset showcasing iconic r",
+    "name": "Amber Skyline",
     "category": "northern-lights",
     "pexelsId": 0,
     "photographer": "Robert Hacker",
@@ -776,7 +786,7 @@ export const CURATED_WALLPAPERS = [
     "score": 32
   },
   {
-    "name": "Vibrant cityscape of Chongqing illuminated by neon lights at",
+    "name": "City Ember",
     "category": "northern-lights",
     "pexelsId": 0,
     "photographer": "YIYANG LIU",
@@ -785,7 +795,7 @@ export const CURATED_WALLPAPERS = [
     "score": 31
   },
   {
-    "name": "Stunning aerial shot of Belgrade, Serbia at sunrise with cit",
+    "name": "Brutalist Light",
     "category": "northern-lights",
     "pexelsId": 0,
     "photographer": "K",
@@ -794,7 +804,7 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "A black and white photo of a cracked glass block in an indus",
+    "name": "Green Shadow",
     "category": "northern-lights",
     "pexelsId": 0,
     "photographer": "Connor Scott McManus",
@@ -803,7 +813,7 @@ export const CURATED_WALLPAPERS = [
     "score": 39
   },
   {
-    "name": "Captivating night sky with stars over illuminated rocky clif",
+    "name": "Snow Vault",
     "category": "northern-lights",
     "pexelsId": 0,
     "photographer": "FURKAN GÜNEŞ",
@@ -812,7 +822,7 @@ export const CURATED_WALLPAPERS = [
     "score": 38
   },
   {
-    "name": "Dramatic view of illuminated skyscrapers against a moody twi",
+    "name": "Monochrome Study",
     "category": "geometric-dark",
     "pexelsId": 0,
     "photographer": "幼聪 戴",
@@ -821,7 +831,7 @@ export const CURATED_WALLPAPERS = [
     "score": 37
   },
   {
-    "name": "Striking black and white low angle shot showcasing modern ar",
+    "name": "Desert Latitude",
     "category": "geometric-dark",
     "pexelsId": 0,
     "photographer": "Mitchell Luo",
@@ -830,7 +840,7 @@ export const CURATED_WALLPAPERS = [
     "score": 36
   },
   {
-    "name": "Concrete Brutalist building facade in Boston, showcasing str",
+    "name": "Paper Satellite",
     "category": "geometric-dark",
     "pexelsId": 0,
     "photographer": "Steve Pancrate",
@@ -839,7 +849,7 @@ export const CURATED_WALLPAPERS = [
     "score": 35
   },
   {
-    "name": "From above of green lawn with abstract shadow drawing on gra",
+    "name": "Coastal Frequency",
     "category": "geometric-dark",
     "pexelsId": 0,
     "photographer": "www.kaboompics.com",
@@ -848,7 +858,7 @@ export const CURATED_WALLPAPERS = [
     "score": 34
   },
   {
-    "name": "Beautiful snow-covered landscape in Cappadocia under a starr",
+    "name": "Hazy Monument",
     "category": "geometric-dark",
     "pexelsId": 0,
     "photographer": "Uğur Sevinç",
@@ -857,7 +867,7 @@ export const CURATED_WALLPAPERS = [
     "score": 33
   },
   {
-    "name": "Black and white abstract shadows creating geometric patterns",
+    "name": "Glass District",
     "category": "geometric-dark",
     "pexelsId": 0,
     "photographer": "Jess Loiterton",
@@ -866,7 +876,7 @@ export const CURATED_WALLPAPERS = [
     "score": 32
   },
   {
-    "name": "Expansive aerial view highlighting sunlit desert mountains u",
+    "name": "Aurora Concrete",
     "category": "geometric-dark",
     "pexelsId": 0,
     "photographer": "K",
@@ -875,7 +885,7 @@ export const CURATED_WALLPAPERS = [
     "score": 31
   },
   {
-    "name": "Anime News Agency.svg",
+    "name": "Late Signal",
     "category": "anime-inspired",
     "pexelsId": 0,
     "photographer": "MBC3 Fan 2022",
@@ -884,7 +894,7 @@ export const CURATED_WALLPAPERS = [
     "score": 40
   },
   {
-    "name": "Artist's Conception of Space Station Freedom - GPN-2003-0009",
+    "name": "White Canyon",
     "category": "mecha",
     "pexelsId": 0,
     "photographer": "NASA",
@@ -893,7 +903,7 @@ export const CURATED_WALLPAPERS = [
     "score": 39
   },
   {
-    "name": "Blockchain Illustration",
+    "name": "Shadowed Hills",
     "category": "sci-fi",
     "pexelsId": 0,
     "photographer": "Davidstankiewicz",
@@ -902,7 +912,7 @@ export const CURATED_WALLPAPERS = [
     "score": 38
   },
   {
-    "name": "Anime girl cat illustration psd",
+    "name": "Neon Foyer",
     "category": "anime-inspired",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -911,7 +921,7 @@ export const CURATED_WALLPAPERS = [
     "score": 37
   },
   {
-    "name": "Blockchain Illustration 4",
+    "name": "Winter Geometry",
     "category": "sci-fi",
     "pexelsId": 0,
     "photographer": "Davidstankiewicz",
@@ -920,7 +930,7 @@ export const CURATED_WALLPAPERS = [
     "score": 36
   },
   {
-    "name": "Hubble Space Telescope image R136",
+    "name": "Sunlit Interval",
     "category": "space",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -929,7 +939,7 @@ export const CURATED_WALLPAPERS = [
     "score": 35
   },
   {
-    "name": "Blockchain Illustration 2",
+    "name": "Copper Horizon",
     "category": "sci-fi",
     "pexelsId": 0,
     "photographer": "Davidstankiewicz",
@@ -938,7 +948,7 @@ export const CURATED_WALLPAPERS = [
     "score": 34
   },
   {
-    "name": "Girl husky png illustration, transparent",
+    "name": "Modern Silence",
     "category": "anime-inspired",
     "pexelsId": 0,
     "photographer": "Unknown",
@@ -947,7 +957,7 @@ export const CURATED_WALLPAPERS = [
     "score": 33
   },
   {
-    "name": "Blockchain Illustration 3",
+    "name": "Cloud Atlas",
     "category": "sci-fi",
     "pexelsId": 0,
     "photographer": "Davidstankiewicz",
@@ -956,7 +966,7 @@ export const CURATED_WALLPAPERS = [
     "score": 32
   },
   {
-    "name": "Futuristic city drawing, vintage illustration",
+    "name": "Frontier Static",
     "category": "mecha",
     "pexelsId": 0,
     "photographer": "Unknown",

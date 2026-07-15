@@ -1,4 +1,4 @@
-/** 60 extension portrait skins — independent from site wallpapers (Themes V4). */
+/** 60 curated extension portrait skins — licensed sources plus internal originals. */
 export const EXT_SKIN_PACK_COUNT = 60;
 
 export const EXT_SKIN_CATEGORIES = Object.freeze([
@@ -12,52 +12,62 @@ export const EXT_SKIN_CATEGORIES = Object.freeze([
 
 export const CURATED_EXT_SKINS = [
   {
-    "name": "The Town (August Strindberg) - Nationalmuseum - 21568.tif",
+    "name": "Masked Cyber Guardian",
     "category": "cyber-neon",
-    "unsplashId": "liveext-1",
-    "photographer": "August Strindberg",
     "tier": "free",
     "overlay": 0.28,
-    "score": 38
+    "score": 38,
+    "origin": "generated-original",
+    "generator": "cursor-generate-image",
+    "reviewStatus": "lockedAccept",
+    "reviewId": "EXT-01B"
   },
   {
-    "name": "Algorithmically-generated black and white portrait art of a ",
-    "category": "cyber-neon",
-    "unsplashId": "liveext-2",
-    "photographer": "Benlisquare",
+    "name": "Web3 Command Portrait",
+    "category": "abstract",
     "tier": "free",
     "overlay": 0.28,
-    "score": 37
+    "score": 37,
+    "origin": "generated-original",
+    "generator": "cursor-generate-image",
+    "reviewStatus": "lockedAccept",
+    "reviewId": "EXT-02"
   },
   {
-    "name": "Urban landscape reflected in glass windows with a blend of m",
+    "name": "Night Runner Relay",
     "category": "cyber-neon",
-    "unsplashId": "36317872",
-    "photographer": "Filiberto Giglio",
     "tier": "free",
     "overlay": 0.28,
-    "score": 36
+    "score": 36,
+    "origin": "generated-original",
+    "generator": "cursor-generate-image",
+    "reviewStatus": "lockedAccept",
+    "reviewId": "EXT-06"
   },
   {
-    "name": "A modern building with illuminated panels reflecting city li",
-    "category": "cyber-neon",
-    "unsplashId": "27945024",
-    "photographer": "jiang hua",
+    "name": "Solar Cloak Hero",
+    "category": "space",
     "tier": "free",
     "overlay": 0.28,
-    "score": 35
+    "score": 35,
+    "origin": "generated-original",
+    "generator": "cursor-generate-image",
+    "reviewStatus": "lockedAccept",
+    "reviewId": "EXT-11B"
   },
   {
-    "name": "A striking black and white perspective of Hamburg's modern s",
-    "category": "cyber-neon",
-    "unsplashId": "20887150",
-    "photographer": "Wolfgang Weiser",
+    "name": "Cockpit Pilot Silhouette",
+    "category": "space",
     "tier": "free",
     "overlay": 0.28,
-    "score": 34
+    "score": 34,
+    "origin": "generated-original",
+    "generator": "cursor-generate-image",
+    "reviewStatus": "lockedAccept",
+    "reviewId": "EXT-15A"
   },
   {
-    "name": "Geometric shadows and light interplay in a modern urban unde",
+    "name": "Midnight Lattice",
     "category": "cyber-neon",
     "unsplashId": "30497844",
     "photographer": "Wolfgang Weiser",
@@ -66,7 +76,7 @@ export const CURATED_EXT_SKINS = [
     "score": 33
   },
   {
-    "name": "Striking black and white low angle shot showcasing modern ar",
+    "name": "Quiet Brutalism",
     "category": "cyber-neon",
     "unsplashId": "3735353",
     "photographer": "Mitchell Luo",
@@ -75,7 +85,7 @@ export const CURATED_EXT_SKINS = [
     "score": 32
   },
   {
-    "name": "From above of green lawn with abstract shadow drawing on gra",
+    "name": "Shadow Aperture",
     "category": "cyber-neon",
     "unsplashId": "4495792",
     "photographer": "www.kaboompics.com",
@@ -84,7 +94,7 @@ export const CURATED_EXT_SKINS = [
     "score": 31
   },
   {
-    "name": "Explore the vibrant and dynamic world of a futuristic digita",
+    "name": "Copper Static",
     "category": "cyber-neon",
     "unsplashId": "30547612",
     "photographer": "Pachon in Motion",
@@ -93,7 +103,7 @@ export const CURATED_EXT_SKINS = [
     "score": 38
   },
   {
-    "name": "Low-angle view of vibrant apartment buildings in Minsk with ",
+    "name": "Civic Afterglow",
     "category": "cyber-neon",
     "unsplashId": "15411893",
     "photographer": "Siarhei Nester",
@@ -102,7 +112,7 @@ export const CURATED_EXT_SKINS = [
     "score": 37
   },
   {
-    "name": "Striking black and white image of tunnel with geometric patt",
+    "name": "Night Transit",
     "category": "cyber-neon",
     "unsplashId": "23914141",
     "photographer": "Wolfgang Weiser",
@@ -111,7 +121,7 @@ export const CURATED_EXT_SKINS = [
     "score": 36
   },
   {
-    "name": "Black and white abstract view of shadows on a tall building ",
+    "name": "Monochrome Axis",
     "category": "cyber-neon",
     "unsplashId": "37212258",
     "photographer": "Jonathan Borba",
@@ -120,7 +130,7 @@ export const CURATED_EXT_SKINS = [
     "score": 35
   },
   {
-    "name": "A stunning low-angle view of skyscrapers against the night s",
+    "name": "Neon Divide",
     "category": "cyber-neon",
     "unsplashId": "19995580",
     "photographer": "Masood Aslami",
@@ -129,7 +139,7 @@ export const CURATED_EXT_SKINS = [
     "score": 34
   },
   {
-    "name": "Abstract futuristic cyber landscape with digital matrix and ",
+    "name": "Data Cathedral",
     "category": "cyber-neon",
     "unsplashId": "30547584",
     "photographer": "Pachon in Motion",
@@ -138,7 +148,7 @@ export const CURATED_EXT_SKINS = [
     "score": 33
   },
   {
-    "name": "Monochrome image of geometric patterns in urban architecture",
+    "name": "Linear Eclipse",
     "category": "cyber-neon",
     "unsplashId": "24304715",
     "photographer": "Wolfgang Weiser",
@@ -147,7 +157,7 @@ export const CURATED_EXT_SKINS = [
     "score": 32
   },
   {
-    "name": "Complex digital structure of red and black blocks, creating ",
+    "name": "Redline Matrix",
     "category": "cyber-neon",
     "unsplashId": "30547564",
     "photographer": "Pachon in Motion",
@@ -156,7 +166,7 @@ export const CURATED_EXT_SKINS = [
     "score": 31
   },
   {
-    "name": "Abstract view of a modern building's glass facade with refle",
+    "name": "Prism Facade",
     "category": "cyber-neon",
     "unsplashId": "9392375",
     "photographer": "Matias Mango",
@@ -165,7 +175,7 @@ export const CURATED_EXT_SKINS = [
     "score": 38
   },
   {
-    "name": "Intriguing angle of contemporary skyscrapers with glass and ",
+    "name": "Blackwater Circuit",
     "category": "cyber-neon",
     "unsplashId": "20578677",
     "photographer": "Nadine Ginzel",
@@ -174,7 +184,7 @@ export const CURATED_EXT_SKINS = [
     "score": 37
   },
   {
-    "name": "Mesmerizing abstract pattern of swirling black and gold with",
+    "name": "Gold Fracture",
     "category": "cyber-neon",
     "unsplashId": "6141905",
     "photographer": "TREEDEO.ST",
@@ -183,7 +193,7 @@ export const CURATED_EXT_SKINS = [
     "score": 36
   },
   {
-    "name": "Illuminated building facade with vibrant neon signs in an ur",
+    "name": "Electric Avenue",
     "category": "cyber-neon",
     "unsplashId": "15492526",
     "photographer": "ZhiCheng Zhang",
@@ -192,7 +202,7 @@ export const CURATED_EXT_SKINS = [
     "score": 35
   },
   {
-    "name": "Stunning aerial view of a brightly lit cityscape under twili",
+    "name": "Twilight Grid",
     "category": "cyber-neon",
     "unsplashId": "28981395",
     "photographer": "Sayefotograf",
@@ -201,7 +211,7 @@ export const CURATED_EXT_SKINS = [
     "score": 34
   },
   {
-    "name": "Modern skyscrapers with lights glowing at night, vibrant cit",
+    "name": "City Frequency",
     "category": "cyber-neon",
     "unsplashId": "31161581",
     "photographer": "Nguyen Hung",
@@ -210,7 +220,7 @@ export const CURATED_EXT_SKINS = [
     "score": 33
   },
   {
-    "name": "Abstract image depicting high-tech digital circuits and glow",
+    "name": "Scarlet Protocol",
     "category": "cyber-neon",
     "unsplashId": "30547581",
     "photographer": "Pachon in Motion",
@@ -219,7 +229,7 @@ export const CURATED_EXT_SKINS = [
     "score": 32
   },
   {
-    "name": "Stunning aerial view of Taipei's skyline showcasing illumina",
+    "name": "Skyline Index",
     "category": "cyber-neon",
     "unsplashId": "5229733",
     "photographer": "Timo Volz",
@@ -228,7 +238,7 @@ export const CURATED_EXT_SKINS = [
     "score": 31
   },
   {
-    "name": "Intriguing geometric patterns created by sunlight and archit",
+    "name": "Solar Geometry",
     "category": "cyber-neon",
     "unsplashId": "24304712",
     "photographer": "Wolfgang Weiser",
@@ -237,7 +247,7 @@ export const CURATED_EXT_SKINS = [
     "score": 38
   },
   {
-    "name": "Stylish black and white marble tiles with a geometric patter",
+    "name": "White Noise Hall",
     "category": "cyber-neon",
     "unsplashId": "10410101",
     "photographer": "Mathias Reding",
@@ -246,7 +256,7 @@ export const CURATED_EXT_SKINS = [
     "score": 37
   },
   {
-    "name": "Sunlight creates striking shadows on a modern building exter",
+    "name": "Hardlight Study",
     "category": "cyber-neon",
     "unsplashId": "23842796",
     "photographer": "Wolfgang Weiser",
@@ -255,7 +265,7 @@ export const CURATED_EXT_SKINS = [
     "score": 36
   },
   {
-    "name": "A fallen tree casting shadows on a vast desert landscape und",
+    "name": "Desert Signal",
     "category": "cyber-neon",
     "unsplashId": "14636651",
     "photographer": "Dom Sch-veg-man",
@@ -264,7 +274,7 @@ export const CURATED_EXT_SKINS = [
     "score": 35
   },
   {
-    "name": "Intricate abstract visualization of digital circuit blocks w",
+    "name": "Circuit Blocks",
     "category": "cyber-neon",
     "unsplashId": "30547567",
     "photographer": "Pachon in Motion",
@@ -273,7 +283,7 @@ export const CURATED_EXT_SKINS = [
     "score": 34
   },
   {
-    "name": "Monochrome tunnel scene with dramatic light and shadows crea",
+    "name": "Tunnel Bloom",
     "category": "cyber-neon",
     "unsplashId": "26844369",
     "photographer": "Wolfgang Weiser",
@@ -282,7 +292,7 @@ export const CURATED_EXT_SKINS = [
     "score": 33
   },
   {
-    "name": "Dramatic nighttime view of urban apartment buildings from be",
+    "name": "Afterdark Terrace",
     "category": "cyber-neon",
     "unsplashId": "7189292",
     "photographer": "Gije Cho",
@@ -291,7 +301,7 @@ export const CURATED_EXT_SKINS = [
     "score": 32
   },
   {
-    "name": "Artistic view of a building's facade with complex geometric ",
+    "name": "Concrete Syntax",
     "category": "cyber-neon",
     "unsplashId": "30205475",
     "photographer": "Khaled  Al amad",
@@ -300,7 +310,7 @@ export const CURATED_EXT_SKINS = [
     "score": 31
   },
   {
-    "name": "A black and white photo of a cracked glass block in an indus",
+    "name": "Broken Glass",
     "category": "cyber-neon",
     "unsplashId": "34875272",
     "photographer": "Connor Scott McManus",
@@ -309,7 +319,7 @@ export const CURATED_EXT_SKINS = [
     "score": 38
   },
   {
-    "name": "A dramatic view of illuminated skyscrapers reaching into the",
+    "name": "Vertical Weather",
     "category": "cyber-neon",
     "unsplashId": "19995591",
     "photographer": "Masood Aslami",
@@ -318,7 +328,7 @@ export const CURATED_EXT_SKINS = [
     "score": 37
   },
   {
-    "name": "Stunning aerial view of a bustling city at night, illuminate",
+    "name": "Nightline Atlas",
     "category": "cyber-neon",
     "unsplashId": "13396942",
     "photographer": "Jimmy Liao",
@@ -327,7 +337,7 @@ export const CURATED_EXT_SKINS = [
     "score": 36
   },
   {
-    "name": "Eerie mist envelops leafless trees in a serene rural orchard",
+    "name": "Mist Orchard",
     "category": "cyber-neon",
     "unsplashId": "20717826",
     "photographer": "Yunus Tuğ",
@@ -336,7 +346,7 @@ export const CURATED_EXT_SKINS = [
     "score": 35
   },
   {
-    "name": "A textured wall with layers of torn and weathered paper for ",
+    "name": "Paper Weather",
     "category": "cyber-neon",
     "unsplashId": "5443369",
     "photographer": "max laurell",
@@ -345,7 +355,7 @@ export const CURATED_EXT_SKINS = [
     "score": 34
   },
   {
-    "name": "Glass building facade reflecting hills and greenery on a sun",
+    "name": "Reflective Terrain",
     "category": "cyber-neon",
     "unsplashId": "16588858",
     "photographer": "David Brown",
@@ -354,7 +364,7 @@ export const CURATED_EXT_SKINS = [
     "score": 33
   },
   {
-    "name": "Low angle view of modern office building with glass facade a",
+    "name": "Steel Horizon",
     "category": "cyber-neon",
     "unsplashId": "10410086",
     "photographer": "Mathias Reding",
@@ -363,7 +373,7 @@ export const CURATED_EXT_SKINS = [
     "score": 32
   },
   {
-    "name": "A vibrant 3D rendering of geometric digital art with a futur",
+    "name": "Luminous Vector",
     "category": "cyber-neon",
     "unsplashId": "30547593",
     "photographer": "Pachon in Motion",
@@ -372,7 +382,7 @@ export const CURATED_EXT_SKINS = [
     "score": 31
   },
   {
-    "name": "Futuristic digital cube arrangement, showcasing vibrant LED-",
+    "name": "Pixel Foundry",
     "category": "cyber-neon",
     "unsplashId": "30547574",
     "photographer": "Pachon in Motion",
@@ -381,7 +391,7 @@ export const CURATED_EXT_SKINS = [
     "score": 38
   },
   {
-    "name": "Concrete Brutalist building facade in Boston, showcasing str",
+    "name": "Brutalist Index",
     "category": "cyber-neon",
     "unsplashId": "4328661",
     "photographer": "Steve Pancrate",
@@ -390,7 +400,7 @@ export const CURATED_EXT_SKINS = [
     "score": 37
   },
   {
-    "name": "Stunning abstract view of futuristic digital circuitry with ",
+    "name": "Future Circuit",
     "category": "cyber-neon",
     "unsplashId": "30547568",
     "photographer": "Pachon in Motion",
@@ -399,7 +409,7 @@ export const CURATED_EXT_SKINS = [
     "score": 36
   },
   {
-    "name": "A stunning night view of densely packed skyscrapers creating",
+    "name": "Urban Constellation",
     "category": "cyber-neon",
     "unsplashId": "7189281",
     "photographer": "Gije Cho",
@@ -408,7 +418,7 @@ export const CURATED_EXT_SKINS = [
     "score": 35
   },
   {
-    "name": "Abstract digital artwork showcasing a colorful, geometric de",
+    "name": "Chromatic Field",
     "category": "cyber-neon",
     "unsplashId": "30547582",
     "photographer": "Pachon in Motion",
@@ -417,7 +427,7 @@ export const CURATED_EXT_SKINS = [
     "score": 34
   },
   {
-    "name": "Artistic photo of tree shadows on a corrugated metal and woo",
+    "name": "Shadow Archive",
     "category": "cyber-neon",
     "unsplashId": "30870491",
     "photographer": "ym z",
@@ -426,7 +436,7 @@ export const CURATED_EXT_SKINS = [
     "score": 33
   },
   {
-    "name": "Black and white abstract shadows creating geometric patterns",
+    "name": "Neon Ravine",
     "category": "cyber-neon",
     "unsplashId": "6389164",
     "photographer": "Jess Loiterton",
@@ -435,7 +445,7 @@ export const CURATED_EXT_SKINS = [
     "score": 32
   },
   {
-    "name": "Vibrant cityscape of Chongqing illuminated by neon lights at",
+    "name": "Astral Ridge",
     "category": "cyber-neon",
     "unsplashId": "32660209",
     "photographer": "YIYANG LIU",
@@ -444,7 +454,7 @@ export const CURATED_EXT_SKINS = [
     "score": 31
   },
   {
-    "name": "Captivating night sky with stars over illuminated rocky clif",
+    "name": "Amber Surface",
     "category": "cyber-neon",
     "unsplashId": "35462274",
     "photographer": "FURKAN GÜNEŞ",
@@ -453,7 +463,7 @@ export const CURATED_EXT_SKINS = [
     "score": 38
   },
   {
-    "name": "Dynamic shadows create an abstract pattern on an orange wall",
+    "name": "Architectural Silence",
     "category": "cyber-neon",
     "unsplashId": "22897311",
     "photographer": "Wolfgang Weiser",
@@ -462,7 +472,7 @@ export const CURATED_EXT_SKINS = [
     "score": 37
   },
   {
-    "name": "Abstract view of modern architecture with strong shadows in ",
+    "name": "Stellar Vale",
     "category": "cyber-neon",
     "unsplashId": "31735053",
     "photographer": "Alex Kalinin",
@@ -471,7 +481,7 @@ export const CURATED_EXT_SKINS = [
     "score": 36
   },
   {
-    "name": "Beautiful snow-covered landscape in Cappadocia under a starr",
+    "name": "Greenhouse Haze",
     "category": "cyber-neon",
     "unsplashId": "4555829",
     "photographer": "Uğur Sevinç",
@@ -480,7 +490,7 @@ export const CURATED_EXT_SKINS = [
     "score": 35
   },
   {
-    "name": "A serene view of misty mountains covered in lush greenery in",
+    "name": "Signal Quarter",
     "category": "cyber-neon",
     "unsplashId": "34034459",
     "photographer": "政 施",
@@ -489,7 +499,7 @@ export const CURATED_EXT_SKINS = [
     "score": 34
   },
   {
-    "name": "A bustling urban scene with neon lights and signs, capturing",
+    "name": "Prismatic Vault",
     "category": "cyber-neon",
     "unsplashId": "15492533",
     "photographer": "ZhiCheng Zhang",
@@ -498,7 +508,7 @@ export const CURATED_EXT_SKINS = [
     "score": 33
   },
   {
-    "name": "Vibrant stained glass featuring textured geometric patterns ",
+    "name": "Civic Light",
     "category": "cyber-neon",
     "unsplashId": "942322",
     "photographer": "Tim Mossholder",
@@ -507,7 +517,7 @@ export const CURATED_EXT_SKINS = [
     "score": 32
   },
   {
-    "name": "Night view of Taipei skyline featuring iconic tower and mode",
+    "name": "Night Strata",
     "category": "cyber-neon",
     "unsplashId": "9740063",
     "photographer": "Jimmy Liao",
@@ -516,7 +526,7 @@ export const CURATED_EXT_SKINS = [
     "score": 31
   },
   {
-    "name": "Black and white pattern of light and shadow stripes on an in",
+    "name": "Rift Sculpture",
     "category": "cyber-neon",
     "unsplashId": "36040198",
     "photographer": "Joerg Hartmann",
@@ -525,7 +535,7 @@ export const CURATED_EXT_SKINS = [
     "score": 38
   },
   {
-    "name": "A monumental sculpture of a robot and skull set in Ringkøbin",
+    "name": "Monumental Gold",
     "category": "cyber-neon",
     "unsplashId": "16816038",
     "photographer": "Wolfgang Weiser",
@@ -534,7 +544,7 @@ export const CURATED_EXT_SKINS = [
     "score": 37
   },
   {
-    "name": "Scenic view of Monument Valley at sunset showcasing iconic r",
+    "name": "Tidal Black",
     "category": "cyber-neon",
     "unsplashId": "32289534",
     "photographer": "Robert Hacker",
@@ -543,7 +553,7 @@ export const CURATED_EXT_SKINS = [
     "score": 36
   },
   {
-    "name": "Captivating view of a wave crashing in the Baltic Sea with d",
+    "name": "Waveform Coast",
     "category": "cyber-neon",
     "unsplashId": "36629358",
     "photographer": "Philipp Deus",

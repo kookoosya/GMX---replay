@@ -141,7 +141,7 @@ test("on-disk site and ext skin files match manifest paths", () => {
 
 test("ASSET_REV bumped for Themes V4", () => {
   const appJs = fs.readFileSync(path.join(root, "public", "app.js"), "utf8");
-  assert.match(appJs, /ASSET_REV = "20260705b"/);
+  assert.match(appJs, /ASSET_REV = "20260715a"/);
 });
 
 test("service worker cache is gmx-shell-v5 with extskins excluded from full cache", () => {
