@@ -369,7 +369,7 @@
   "themes_wp_hint": "Fondos para el sitio principal. Los colores de acento siguen el ajuste preestablecido del tema guardado (o los valores predeterminados).",
   "ext_wp_simple_note": "One wallpaper choice for the extension UI. Pick below — advanced targeting and custom upload controls were removed here to reduce clutter.",
   "extthemes_right_title": "Cómo funcionan los unlocks",
-  "extthemes_right_desc": "Hasta 100 skins de la extensión y 100 wallpapers. Preview Free: primeros 10 skins. Unlock +1 a 10 referidos, luego +1 cada 5. Pro desbloquea toda la cosmética.",
+  "extthemes_right_desc": "Hasta 60 skins de la extensión y 60 wallpapers. Preview Free: primeros 10 skins. Unlock +1 a 10 referidos, luego +1 cada 5. Pro desbloquea toda la cosmética.",
   "extthemes_right_list": [
     "Skins y wallpapers se eligen en el sitio y se sincronizan con la extensión.",
     "Solo 1 skin puede estar activo a la vez.",
@@ -378,7 +378,7 @@
   ],
   "themes_right": "Sobre Temas",
   "themes_desc": "Elige entre 100 fondos fotográficos curados abajo. Los colores de acento siguen tu tema guardado. Referidos y Pro amplían la selección; Pro añade cargas propias.",
-  "themes_rules": "Biblioteca premium: hasta 100 temas y 100 wallpapers. Vista previa Free: 10 de cada uno. Los referidos desbloquean más paso a paso. Pro abre todo al instante.",
+  "themes_rules": "Biblioteca premium: hasta 60 temas y 100 wallpapers. Vista previa Free: 10 de cada uno. Los referidos desbloquean más paso a paso. Pro abre todo al instante.",
   "r_desc": "Referidos: copia tu enlace, compártelo y revisa tu contador.",
   "home_desc": "Respuestas rápidas, packs y herramientas en uno.",
   "gm_desc": "Respuestas GM cortas para X. Elige tono e idioma de respuesta, pulsa Quick 1 y copia o guarda líneas. Free: 50 créditos de generación de por vida (GM+GN compartidos).",

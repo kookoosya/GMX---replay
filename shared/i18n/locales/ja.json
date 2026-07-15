@@ -369,7 +369,7 @@
   "themes_wp_hint": "メインサイトの背景。アクセント色は保存したテーマプリセット（またはデフォルト）に従います。",
   "ext_wp_simple_note": "One wallpaper choice for the extension UI. Pick below — advanced targeting and custom upload controls were removed here to reduce clutter.",
   "extthemes_right_title": "Unlock の仕組み",
-  "extthemes_right_desc": "最大 100 の extension skins と 100 wallpapers。Free preview: 最初の 10 skins。Unlock +1（10 referrals）、その後 5 ごとに +1。Pro は全 cosmetics 解除。",
+  "extthemes_right_desc": "最大 60 の extension skins と 60 wallpapers。Free preview: 最初の 10 skins。Unlock +1（10 referrals）、その後 5 ごとに +1。Pro は全 cosmetics 解除。",
   "extthemes_right_list": [
     "Skins と wallpapers はサイトで選び、extension に同期されます。",
     "同時に有効なのは 1 skin のみ。",
@@ -378,7 +378,7 @@
   ],
   "themes_right": "テーマについて",
   "themes_desc": "下から100枚の厳選フォト壁紙を選べます。アクセント色は保存したテーマに従います。紹介とProで選択肢が広がり、Proは独自アップロードを追加します。",
-  "themes_rules": "プレミアムライブラリ：最大100テーマと100壁紙。Freeプレビューは各10。紹介で段階的に解放。Proですべて即解放。",
+  "themes_rules": "プレミアムライブラリ：最大60テーマと100壁紙。Freeプレビューは各10。紹介で段階的に解放。Proですべて即解放。",
   "r_desc": "短く言うと:",
   "home_desc": "返信・パック・ツールをひとつに",
   "gm_desc": "X向けの短い朝のGM返信。トーンと返信言語を選び、Quick 1で生成、コピーまたは保存。Free：生涯50生成クレジット（GM+GN共有）。",

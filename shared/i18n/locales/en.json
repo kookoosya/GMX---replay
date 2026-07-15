@@ -369,7 +369,7 @@
   "themes_wp_hint": "Backgrounds for the main site. Accent colors follow your saved theme preset (or defaults).",
   "ext_wp_simple_note": "One wallpaper choice for the extension UI. Pick below — advanced targeting and custom upload controls were removed here to reduce clutter.",
   "extthemes_right_title": "How unlocks work",
-  "extthemes_right_desc": "Up to 100 extension skins and 100 wallpapers, synced to the extension. Free preview: first 10 of each. Referrals unlock more; Pro opens the full cosmetic set.",
+  "extthemes_right_desc": "Up to 60 extension skins and 60 wallpapers, synced to the extension. Free preview: first 10 of each. Referrals unlock more; Pro opens the full cosmetic set.",
   "extthemes_right_list": [
     "Use <b>Pick a theme</b> for skins or <b>Wallpapers</b> for backgrounds — both sync to the extension.",
     "Only one extension skin is active at a time.",
@@ -378,7 +378,7 @@
   ],
   "themes_right": "About Themes",
   "themes_desc": "Choose from 100 curated photographic wallpapers below. Accent colors follow your saved theme preset. Referrals and Pro expand what you can pick; Pro adds custom uploads.",
-  "themes_rules": "Premium library: up to 100 themes and 100 wallpapers. Free preview starts with 10 of each; referrals unlock more step by step. Pro opens the full set immediately.",
+  "themes_rules": "Premium library: up to 60 themes and 100 wallpapers. Free preview starts with 10 of each; referrals unlock more step by step. Pro opens the full set immediately.",
   "r_desc": "Short version:",
   "home_desc": "Home: connect your X handle, activate a Pro code, and check your daily usage.",
   "gm_desc": "Build short morning replies for X. Pick a tone and reply language, tap Quick 1, then copy or save lines you like. Free includes 50 lifetime generation credits (GM+GN shared).",

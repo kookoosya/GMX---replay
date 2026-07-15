@@ -369,7 +369,7 @@
   "themes_wp_hint": "Tła głównej witryny. Kolory akcentów zgodne z zapisaną predefinicją motywu (lub domyślnymi).",
   "ext_wp_simple_note": "One wallpaper choice for the extension UI. Pick below — advanced targeting and custom upload controls were removed here to reduce clutter.",
   "extthemes_right_title": "Jak działają unlocki",
-  "extthemes_right_desc": "Do 100 skórek rozszerzenia i 100 tapet. Podgląd Free: pierwsze 10 skórek. Unlock +1 przy 10 referralach, potem +1 co 5. Pro odblokowuje całą kosmetykę.",
+  "extthemes_right_desc": "Do 60 skórek rozszerzenia i 60 tapet. Podgląd Free: pierwsze 10 skórek. Unlock +1 przy 10 referralach, potem +1 co 5. Pro odblokowuje całą kosmetykę.",
   "extthemes_right_list": [
     "Skórki i tapety wybierasz na stronie i są synchronizowane do rozszerzenia.",
     "Tylko 1 skórka może być aktywna naraz.",
@@ -378,7 +378,7 @@
   ],
   "themes_right": "O motywach",
   "themes_desc": "Wybierz spośród 100 starannie dobranych fototapet poniżej. Kolory akcentu podążają za zapisanym motywem. Polecenia i Pro rozszerzają wybór; Pro dodaje własne pliki.",
-  "themes_rules": "Biblioteka premium: do 100 motywów i 100 tapet. Podgląd Free: po 10. Referrale odblokowują więcej krok po kroku. Pro otwiera wszystko od razu.",
+  "themes_rules": "Biblioteka premium: do 60 motywów i 100 tapet. Podgląd Free: po 10. Referrale odblokowują więcej krok po kroku. Pro otwiera wszystko od razu.",
   "r_desc": "Referrals: skopiuj link, udostępnij i śledź licznik.",
   "home_desc": "Szybkie odpowiedzi, paczki i narzędzia w jednym miejscu",
   "gm_desc": "Krótkie poranne odpowiedzi GM na X. Wybierz ton i język odpowiedzi, naciśnij Quick 1, kopiuj lub zapisuj linie. Free: 50 kredytów generacji na całe życie (GM+GN wspólne).",

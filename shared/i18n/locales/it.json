@@ -369,7 +369,7 @@
   "themes_wp_hint": "Sfondi per il sito principale. I colori d'accento seguono il preset tema salvato (o predefiniti).",
   "ext_wp_simple_note": "Una scelta di sfondo per l'interfaccia utente dell'estensione. Scegli qui sotto: i controlli di targeting avanzato e caricamento personalizzato sono stati rimossi qui per ridurre il disordine.",
   "extthemes_right_title": "Come funzionano gli unlock",
-  "extthemes_right_desc": "Fino a 100 skin dell’estensione e 100 wallpapers. Anteprima Free: prime 10 skin. Unlock +1 a 10 referral, poi +1 ogni 5. Pro sblocca tutta la cosmetica.",
+  "extthemes_right_desc": "Fino a 60 skin dell’estensione e 60 wallpapers. Anteprima Free: prime 10 skin. Unlock +1 a 10 referral, poi +1 ogni 5. Pro sblocca tutta la cosmetica.",
   "extthemes_right_list": [
     "Skin e wallpapers si scelgono dal sito e si sincronizzano con l’estensione.",
     "Può essere attiva solo 1 skin alla volta.",
@@ -378,7 +378,7 @@
   ],
   "themes_right": "Info Temi",
   "themes_desc": "Scegli tra 100 sfondi fotografici curati qui sotto. I colori d'accento seguono il tema salvato. Referral e Pro ampliano la scelta; Pro aggiunge caricamenti personali.",
-  "themes_rules": "Libreria premium: fino a 100 temi e 100 wallpapers. Anteprima Free: 10 ciascuno. I referral sbloccano gradualmente. Pro apre tutto subito.",
+  "themes_rules": "Libreria premium: fino a 60 temi e 100 wallpapers. Anteprima Free: 10 ciascuno. I referral sbloccano gradualmente. Pro apre tutto subito.",
   "r_desc": "Referral: copia il link, condividi e controlla il conteggio.",
   "home_desc": "Risposte rapide, pack e strumenti in un unico posto",
   "gm_desc": "Risposte GM brevi per X. Scegli tono e lingua della risposta, premi Quick 1, copia o salva le righe. Free: 50 crediti di generazione a vita (GM+GN condivisi).",

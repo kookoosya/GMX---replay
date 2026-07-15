@@ -369,7 +369,7 @@
   "themes_wp_hint": "主站背景。强调色跟随已保存的主题预设（或默认值）。",
   "ext_wp_simple_note": "One wallpaper choice for the extension UI. Pick below — advanced targeting and custom upload controls were removed here to reduce clutter.",
   "extthemes_right_title": "解锁规则",
-  "extthemes_right_desc": "最多 100 个扩展 skins 和 100 张 wallpapers。Free 预览：前 10 个 skins。10 个 referrals 解锁 +1，之后每 5 个再 +1。Pro 解锁全部外观。",
+  "extthemes_right_desc": "最多 60 个扩展 skins 和 60 张 wallpapers。Free 预览：前 10 个 skins。10 个 referrals 解锁 +1，之后每 5 个再 +1。Pro 解锁全部外观。",
   "extthemes_right_list": [
     "Skins 和 wallpapers 在网站选择，并同步到扩展。",
     "同一时间只能启用 1 个 skin。",
@@ -378,7 +378,7 @@
   ],
   "themes_right": "关于主题",
   "themes_desc": "从下方100张精选摄影壁纸中选择。强调色跟随您保存的主题。推荐与Pro扩展可选范围；Pro可添加自定义上传。",
-  "themes_rules": "高级库：最多 100 个主题和 100 张壁纸。Free 预览各 10 个；推荐逐步解锁更多。Pro 立即全部解锁。",
+  "themes_rules": "高级库：最多 60 个主题和 100 张壁纸。Free 预览各 10 个；推荐逐步解锁更多。Pro 立即全部解锁。",
   "r_desc": "简版：",
   "home_desc": "快速回复、素材包和工具都在这里",
   "gm_desc": "为 X 生成简短早晨 GM 回复。选择语气与回复语言，点 Quick 1，然后复制或保存。Free：终身 50 次生成额度（GM+GN 共享）。",

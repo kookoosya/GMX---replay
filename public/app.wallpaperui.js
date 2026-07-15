@@ -130,17 +130,6 @@
       name.className = "wpName";
       name.textContent = wp.name;
 
-      const meta = document.createElement("div");
-      meta.className = "wpMeta";
-      meta.textContent =
-        wp.tier === "custom"
-          ? "Custom"
-          : mainIdx >= 0 && mainIdx < freeVisibleWallpapers
-            ? "Free"
-            : isPro()
-              ? "Pro"
-              : "Locked";
-
       const tag = document.createElement("div");
       tag.className = "wpTag";
       tag.textContent =
@@ -154,7 +143,6 @@
 
       card.appendChild(thumb);
       card.appendChild(name);
-      card.appendChild(meta);
       card.appendChild(tag);
 
       if (!isUnlocked) {

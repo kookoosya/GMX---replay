@@ -369,7 +369,7 @@
   "themes_wp_hint": "मुख्य साइट के लिए बैकग्राउंड। एक्सेंट रंग सेव्ड थीम प्रीसेट (या डिफ़ॉल्ट) के अनुसार।",
   "ext_wp_simple_note": "One wallpaper choice for the extension UI. Pick below — advanced targeting and custom upload controls were removed here to reduce clutter.",
   "extthemes_right_title": "Unlocks कैसे काम करते हैं",
-  "extthemes_right_desc": "100 तक extension skins और 100 wallpapers. Free preview: पहले 10 skins. Unlock +1 (10 referrals), फिर हर 5 पर +1. Pro सारी cosmetics unlock करता है।",
+  "extthemes_right_desc": "60 तक extension skins और 60 wallpapers. Free preview: पहले 10 skins. Unlock +1 (10 referrals), फिर हर 5 पर +1. Pro सारी cosmetics unlock करता है।",
   "extthemes_right_list": [
     "Skins और wallpapers साइट पर चुने जाते हैं और extension में sync होते हैं।",
     "एक समय में सिर्फ 1 skin active रहता है।",
@@ -378,7 +378,7 @@
   ],
   "themes_right": "थीम्स के बारे में",
   "themes_desc": "नीचे 100 क्यूरेटेड फोटो वॉलपेपर में से चुनें। एक्सेंट रंग आपकी सहेजी थीम का अनुसरण करते हैं। रेफरल और Pro विकल्प बढ़ाते हैं; Pro कस्टम अपलोड जोड़ता है।",
-  "themes_rules": "प्रीमियम लाइब्रेरी: 100 थीम और 100 वॉलपेपर तक। Free प्रीव्यू: दोनों में 10। रेफ़रल धीरे-धीरे और खोलते हैं। Pro सब तुरंत खोलता है।",
+  "themes_rules": "प्रीमियम लाइब्रेरी: 60 थीम और 100 वॉलपेपर तक। Free प्रीव्यू: दोनों में 10। रेफ़रल धीरे-धीरे और खोलते हैं। Pro सब तुरंत खोलता है।",
   "r_desc": "संक्षिप्त में:",
   "home_desc": "एक जगह पर तेज़ रिप्लाई, पैक और टूल्स",
   "gm_desc": "X के लिए छोटे सुबह के GM जवाब। टोन और जवाब की भाषा चुनें, Quick 1 दबाएँ, लाइनें कॉपी या सेव करें। Free: 50 जीवनभर जनरेशन क्रेडिट (GM+GN साझा)।",

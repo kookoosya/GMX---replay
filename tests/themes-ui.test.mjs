@@ -120,6 +120,33 @@ test("themes ui supports hover preview and grouping", () => {
   assert.match(src, /previewRestoreId/);
   assert.match(src, /themeProHint/);
   assert.match(src, /themeGroupSection/);
+  assert.doesNotMatch(src, /tnote|th\.note/);
+});
+
+test("extension cosmetic cards expose title and access state without descriptions", () => {
+  const themeUi = fs.readFileSync(path.join(root, "public", "app.extthemesui.js"), "utf8");
+  const siteWallpaperUi = fs.readFileSync(path.join(root, "public", "app.wallpaperui.js"), "utf8");
+  const wallpaperUi = fs.readFileSync(path.join(root, "public", "app.extwallpaperui.js"), "utf8");
+  assert.doesNotMatch(themeUi, /tnote|th\.note/);
+  assert.doesNotMatch(siteWallpaperUi, /wpMeta/);
+  assert.doesNotMatch(wallpaperUi, /wpMeta/);
+  assert.match(wallpaperUi, /wpName/);
+});
+
+test("theme catalogs contain names and palettes only", () => {
+  const themeSource = fs.readFileSync(path.join(root, "public", "app.themes.js"), "utf8");
+  assert.doesNotMatch(themeSource, /\bnote\s*:/);
+  for (const rel of ["extension/themes.json", "public/themes.json", "public/bridge/themes.json", "frontend/public/themes.json"]) {
+    const catalog = JSON.parse(fs.readFileSync(path.join(root, rel), "utf8"));
+    assert.ok(Array.isArray(catalog.themes), rel);
+    assert.ok(catalog.themes.every((theme) => !Object.prototype.hasOwnProperty.call(theme, "note")), rel);
+    assert.equal(new Set(catalog.themes.map((theme) => theme.name)).size, catalog.themes.length, `${rel}: duplicate names`);
+    assert.equal(
+      new Set(catalog.themes.map((theme) => `${theme.a}|${theme.b}`)).size,
+      catalog.themes.length,
+      `${rel}: duplicate palettes`
+    );
+  }
 });
 
 test("themes css styles groups preview and pro hint", () => {
@@ -133,6 +160,10 @@ test("themes tab exposes grouped grid root", () => {
   const html = fs.readFileSync(path.join(root, "public", "app.html"), "utf8");
   assert.match(html, /id="themeGrid"/);
   assert.match(html, /lib\/theme-group-core\.js/);
+  assert.match(html, /Premium library: up to 60 themes and 100 wallpapers/);
+  assert.match(html, /Up to 60 extension skins and 60 wallpapers/);
+  assert.match(html, /extThemesUnlocked">0\/60/);
+  assert.match(html, /extWpUnlocked">0\/60/);
 });
 
 test("en locale defines theme group and pro unlock copy", () => {
@@ -153,6 +184,8 @@ test("themes desc matches curated wallpaper pack count", () => {
   const ru = JSON.parse(fs.readFileSync(path.join(root, "shared", "i18n", "locales", "ru.json"), "utf8"));
   assert.match(en.themes_desc, new RegExp(String(WALLPAPER_PACK_COUNT)));
   assert.match(ru.themes_desc, new RegExp(String(WALLPAPER_PACK_COUNT)));
+  assert.match(en.extthemes_right_desc, /60 extension skins and 60 wallpapers/);
+  assert.match(ru.extthemes_right_desc, /60 скинов и 60 обоев/);
 });
 
 test("renderThemes keeps grid when signature unchanged", () => {

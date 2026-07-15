@@ -75,17 +75,12 @@
           nm.className = "tname";
           nm.textContent = th.name || th.id;
 
-          const note = document.createElement("div");
-          note.className = "tnote";
-          note.textContent = th.note || "";
-
           const tag = document.createElement("div");
           tag.className = "lockTag";
           tag.textContent = unlockTagText(idx, isUnlocked, freeVisibleExtThemes);
 
           card.appendChild(sw);
           card.appendChild(nm);
-          card.appendChild(note);
           card.appendChild(tag);
 
           if (!isUnlocked) {

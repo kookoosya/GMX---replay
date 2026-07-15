@@ -369,7 +369,7 @@
   "themes_wp_hint": "Arrière-plans pour le site principal. Les couleurs d'accentuation suivent votre préréglage de thème enregistré (ou les valeurs par défaut).",
   "ext_wp_simple_note": "Un choix de fond d'écran pour l'interface utilisateur de l'extension. Choisissez ci-dessous — les contrôles avancés de ciblage et de téléchargement personnalisé ont été supprimés ici pour réduire l'encombrement.",
   "extthemes_right_title": "Comment fonctionnent les unlocks",
-  "extthemes_right_desc": "Jusqu’à 100 skins d’extension et 100 fonds d’écran. Aperçu Free : 10 premiers skins. Unlock +1 à 10 parrainages, puis +1 tous les 5. Pro débloque toute la cosmétique.",
+  "extthemes_right_desc": "Jusqu’à 60 skins d’extension et 60 fonds d’écran. Aperçu Free : 10 premiers skins. Unlock +1 à 10 parrainages, puis +1 tous les 5. Pro débloque toute la cosmétique.",
   "extthemes_right_list": [
     "Les skins et fonds d’écran se choisissent sur le site et se synchronisent avec l’extension.",
     "Un seul skin peut être actif à la fois.",
@@ -378,7 +378,7 @@
   ],
   "themes_right": "À propos des thèmes",
   "themes_desc": "Choisissez parmi 100 fonds d'écran photo ci-dessous. Les couleurs d'accent suivent votre thème enregistré. Parrainages et Pro élargissent le choix ; Pro ajoute vos propres fichiers.",
-  "themes_rules": "Bibliothèque premium : jusqu’à 100 thèmes et 100 fonds d’écran. Aperçu Free : 10 de chaque. Les parrainages débloquent progressivement. Pro ouvre tout immédiatement.",
+  "themes_rules": "Bibliothèque premium : jusqu’à 60 thèmes et 100 fonds d’écran. Aperçu Free : 10 de chaque. Les parrainages débloquent progressivement. Pro ouvre tout immédiatement.",
   "r_desc": "Parrainage : copiez votre lien, partagez-le et suivez votre compteur.",
   "home_desc": "Réponses rapides, packs et outils au même endroit.",
   "gm_desc": "Réponses GM courtes pour X. Choisissez le ton et la langue de réponse, appuyez sur Quick 1, copiez ou enregistrez. Free : 50 crédits de génération à vie (GM+GN partagés).",

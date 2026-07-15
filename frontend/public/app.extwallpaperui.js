@@ -146,10 +146,6 @@
       name.className = "wpName";
       name.textContent = wp.name || wp.id;
 
-      const meta = document.createElement("div");
-      meta.className = "wpMeta";
-      meta.textContent = wp.tier === "custom" ? "Custom" : wp.tier || "";
-
       const tag = document.createElement("div");
       tag.className = "wpTag";
       tag.textContent =
@@ -159,7 +155,6 @@
 
       card.appendChild(thumb);
       card.appendChild(name);
-      card.appendChild(meta);
       card.appendChild(tag);
 
       if (!isUnlocked) {
