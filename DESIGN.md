@@ -2,7 +2,9 @@
 
 ## Direction
 
-**Cinematic Technical Editorial**: a dark, precise workspace for writing short GM/GN replies. The product should feel like a private terminal with editorial restraint: deep graphite surfaces, porcelain text, one controlled electric-cyan accent, and premium imagery used as atmosphere rather than decoration.
+**Signal Room**: a dark, precise writing product with an editorial landing page and a quiet app shell. The landing should feel like a private control room for short GM/GN replies: near-black ink, warm porcelain text, electric violet structure, lime action states, hairline rules, and premium imagery used as atmosphere rather than decoration.
+
+The landing page has one job: explain the copy-first loop in seconds and move a visitor into the app. The signature is the asymmetric hero with a status strip that states what the product actually controls: GM/GN, copy + paste, the user's choice, and web + extension.
 
 ## Product rules
 
@@ -14,22 +16,22 @@
 
 ## Visual tokens
 
+Landing tokens:
+
 ```css
 :root {
-  --gmx-bg: #080b12;
-  --gmx-surface: #101621;
-  --gmx-surface-raised: #151d2a;
-  --gmx-ink: #f3f6fb;
-  --gmx-muted: #99a5b7;
-  --gmx-line: rgba(214, 225, 240, 0.14);
-  --gmx-accent: #63d8ff;
-  --gmx-accent-deep: #1d8fbd;
-  --gmx-warm: #d6a56d;
-  --gmx-radius-sm: 10px;
-  --gmx-radius-md: 16px;
-  --gmx-radius-lg: 24px;
+  --night: #090a0f;
+  --panel: #11131b;
+  --ink: #f4f1e9;
+  --muted: #9c9da9;
+  --line: rgba(244, 241, 233, 0.14);
+  --violet: #9a70ff;
+  --lime: #c9ff68;
+  --coral: #ff8369;
 }
 ```
+
+The app shell keeps its own graphite/cyan token layer so the functional workspace remains restrained while the landing carries the stronger point of view.
 
 ## Typography
 

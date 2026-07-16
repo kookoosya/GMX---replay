@@ -16,6 +16,16 @@ test("wallpaper ui caches grid render signature", () => {
   const src = fs.readFileSync(path.join(root, "public", "app.wallpaperui.js"), "utf8");
   assert.match(src, /lastWpRenderSig/);
   assert.match(src, /markWallpaperSelection/);
+  assert.match(src, /function isWallpaperPaneVisible\(\)/);
+  assert.match(src, /return !wallPane \|\| !wallPane\.classList\.contains\("hidden"\)/);
+  assert.match(src, /if \(isWallpaperPaneVisible\(\)\) renderWallpaperUI\(\)/);
+});
+
+test("custom wallpaper requests share one in-flight promise", () => {
+  const src = fs.readFileSync(path.join(root, "public", "app.customwallpapers.js"), "utf8");
+  assert.match(src, /let loadPromise = null/);
+  assert.match(src, /if \(loadPromise\) return loadPromise/);
+  assert.match(src, /\.finally\(\(\) =>/);
 });
 
 test("themes ui caches full grid render", () => {

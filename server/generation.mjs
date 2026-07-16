@@ -1014,6 +1014,7 @@ function saveRecent(handle, kind, reply, mode = "mid", style = "classic") {
 }
 
 function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, antiLastN = 20, allowRecent = false) {
+  const requireDistinctNormalized = normLang(lang) === "en";
   const recent = handle ? getRecentSet(handle, kind, antiLastN) : new Set();
   const recentShapes = new Set(Array.from(recent).map((x) => shapeFingerprint(x, kind)).filter(Boolean));
   const recentShapeList = Array.from(recentShapes).slice(0, 240);
@@ -1126,9 +1127,29 @@ function generateRankedCandidates(handle, kind, mode, lang, style, count = 1, an
     for (const item of pool) {
       if (!item || !item.text) continue;
       if (usedText.has(item.text)) continue;
+      const norm = normalizedSkeleton(item.text);
+      if (!norm || (requireDistinctNormalized && usedNorm.has(norm))) continue;
       usedText.add(item.text);
+      usedNorm.add(norm);
       out.push(item.text);
       if (out.length >= count) break;
+    }
+  }
+
+  if (out.length < count) {
+    const refillMaxTries = Math.max(600, count * 160);
+    let refillTries = 0;
+    while (out.length < count && refillTries < refillMaxTries) {
+      refillTries++;
+      const candidate = composeReply(kind, mode, lang, style);
+      if (!candidate || !passesModeProfile(candidate, mode)) continue;
+      if (!passesNaturalQuality(candidate, kind, mode, lang)) continue;
+      if (mode === "min" && !passesMinSubstance(candidate, kind, lang, style)) continue;
+      const norm = normalizedSkeleton(candidate);
+      if (!norm || usedText.has(candidate) || (requireDistinctNormalized && usedNorm.has(norm))) continue;
+      usedText.add(candidate);
+      usedNorm.add(norm);
+      out.push(candidate);
     }
   }
 

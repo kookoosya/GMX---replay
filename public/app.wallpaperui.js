@@ -62,6 +62,11 @@
     let lastCustomWpCount = -1;
     let lastWpRenderSig = "";
 
+    function isWallpaperPaneVisible() {
+      const wallPane = $("wallPane");
+      return !wallPane || !wallPane.classList.contains("hidden");
+    }
+
     function wallpaperRenderSignature(targetTab, activeId, allWps, unlocked, unlockedAll, nextReq, filterId) {
       return [
         targetTab,
@@ -243,6 +248,7 @@
       const grid = $("wpGrid");
       const st = $("wpStatus");
       if (!tabSel || !grid || !st) return;
+      if (!isWallpaperPaneVisible()) return;
 
       const renderGen = ++wpRenderGen;
 
@@ -420,7 +426,7 @@
           toast("ok", t("toast_wallpaper_cleared") || "Wallpaper cleared.");
         });
       }
-      renderWallpaperUI();
+      if (isWallpaperPaneVisible()) renderWallpaperUI();
     }
 
     return {

@@ -2651,14 +2651,6 @@ html.mode-light .walletRecovery{
   border: 1px solid var(--stroke);
 }
 .walletPlanCompare .title{ font-size: 15px; margin-bottom: 10px; }
-.walletTestimonial{
-  margin-bottom: 12px;
-  padding: 10px 12px;
-  border-left: 3px solid rgba(153,69,255,.45);
-  background: rgba(153,69,255,.06);
-  border-radius: 0 var(--r) var(--r) 0;
-}
-.walletTestimonialQuote{ font-size: 13px; font-style: italic; }
 .planCompareScroll{ overflow: auto; }
 .planCompareTable th,
 .planCompareTable td{ vertical-align: middle; }

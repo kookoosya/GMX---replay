@@ -10,15 +10,12 @@ import {
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-test("wallet tab exposes Free vs Pro compare table and testimonial", () => {
+test("wallet tab exposes the Free vs Pro compare table", () => {
   const html = fs.readFileSync(path.join(root, "public", "app.html"), "utf8");
   for (const id of [
     "wallet_plan_compare",
     "wallet_plan_compare_title",
     "wallet_plan_compare_table",
-    "wallet_testimonial",
-    "wallet_testimonial_quote",
-    "wallet_testimonial_author",
   ]) {
     assert.match(html, new RegExp(`id="${id}"`));
   }
@@ -44,13 +41,11 @@ test("wallet plan compare css", () => {
   assert.match(css, /\.walletPlanCompare/);
   assert.match(css, /\.planCompareTable/);
   assert.match(css, /\.planCmpCell\.yes/);
-  assert.match(css, /\.walletTestimonial/);
 });
 
-test("en locale defines plan compare and testimonial copy", () => {
+test("en locale defines plan compare copy", () => {
   const en = JSON.parse(fs.readFileSync(path.join(root, "shared", "i18n", "locales", "en.json"), "utf8"));
   assert.ok(en.wallet_plan_compare_title);
-  assert.ok(en.wallet_testimonial_quote);
   for (const key of [...PLAN_COMPARE_COLUMN_KEYS, ...PLAN_COMPARE_FEATURE_KEYS]) {
     assert.ok(en[key], key);
   }

@@ -308,7 +308,10 @@ const {
   onTabActivated: (name) => {
     try { __gmxLangUi.updateLangFlags(); } catch {}
     if (name === "themes") {
-      try { renderWallpaperUI(); } catch {}
+      try {
+        const wallPane = document.getElementById("wallPane");
+        if (!wallPane || !wallPane.classList.contains("hidden")) renderWallpaperUI();
+      } catch {}
     }
     if (name === "home") {
       try { window.__gmxEnsureTabPack("redeem").catch(() => {}); } catch {}
@@ -344,7 +347,6 @@ const {
     }
   },
 });
-
 
   if (!window.__GMXUiWireFactory) throw new Error("GMX uiwire factory missing");
   const __gmxUiWire = window.__GMXUiWireFactory({ ui: __gmxUi });
