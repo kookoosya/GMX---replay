@@ -53,6 +53,7 @@ reports/
 *.preview.js
 
 # Local one-off helper scripts
+tools/.wallpaper-review/
 fix_*.cjs
 _*.cjs
 tools/_pgbot-*.mjs

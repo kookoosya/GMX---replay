@@ -1,5 +1,5 @@
 /**
- * Wallpaper visual delivery — Themes V4 sitev4 / extskin_v4 paths.
+ * Wallpaper visual delivery — active livev1 / liveext_v1 paths.
  */
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -45,7 +45,7 @@ function loadWallpaperFactory() {
   });
 }
 
-test("active catalog URLs use sitev4 and extskin_v4 not legacy packs", () => {
+test("active catalog URLs use livev1 and liveext_v1, not legacy packs", () => {
   const wp = loadWallpaperFactory();
   const catalog = wp.buildSiteWallpapers();
   const extCatalog = wp.buildExtWallpapers();
@@ -74,7 +74,7 @@ test("sync map drives pairedExtId for mapped site ids only", () => {
   assert.equal(pairedExtId("v2_050"), SITE_EXT_SYNC_MAP.v2_050);
 });
 
-test("site manifest paths match on-disk sitev4 assets", () => {
+test("site manifest paths match on-disk livev1 assets", () => {
   const manifest = JSON.parse(fs.readFileSync(path.join(root, "site-wallpaper-sources.json"), "utf8"));
   assert.equal(manifest.assetPack, SITE_ASSET_PACK);
   for (const item of manifest.items.slice(0, 30)) {
@@ -107,6 +107,6 @@ test("production thumbnail bytes match git when served (no-store)", { skip: proc
     if (prodHash !== gitHash) mismatches++;
   }
   if (mismatches > 0) {
-    assert.fail(`production not yet on sitev4 pack (${mismatches}/${SAMPLE} thumb hashes differ; deploy pending)`);
+    assert.fail(`production not yet on livev1 pack (${mismatches}/${SAMPLE} thumb hashes differ; deploy pending)`);
   }
 });

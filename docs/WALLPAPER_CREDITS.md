@@ -1,15 +1,11 @@
 # Wallpaper credits
 
-Sources: [Pexels](https://www.pexels.com/license/) — free to use in apps and websites.
+The active catalogs are split by product surface:
 
-Packs: 100 site landscapes + 100 extension portrait crops (curated photographic backgrounds).
+- `site-wallpaper-sources.json` — 100 site wallpapers.
+- `extension-skin-sources.json` — 60 independent extension skins.
 
-Generated: 2026-07-02
+Provider, source URL, license, and attribution fields are recorded per item in those manifests. Do not infer one license for the whole catalog.
 
-Attribution not required per Pexels license. Full source records: `wallpaper-sources.json`.
-
-See Pexels photographer credits in the manifest for each wallpaper ID.
-
-Licensed Pexels backgrounds (100 active in canary stage).
-
+The first five entries in each catalog are internal generated originals. Their exact production bytes and review status are recorded in `assets/premium-art-manifest.json`; no external photographer or third-party license is claimed for those ten files.
 

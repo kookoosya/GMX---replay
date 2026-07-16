@@ -1,5 +1,5 @@
 /**
- * Themes V4 — separate site wallpapers (100) from extension skins (60).
+ * Active wallpaper catalog — separate site wallpapers (100) from extension skins (60).
  */
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -45,7 +45,7 @@ test("site pack count is 100, extension skin pack is 60", () => {
   assert.equal(EXT_CAT_COUNT, 60);
 });
 
-test("active site URLs use sitev4 not pexels100 or legacy v2 paths", () => {
+test("active site URLs use livev1, not legacy paths", () => {
   const wp = loadWallpaperFactory();
   const catalog = wp.buildSiteWallpapers();
   assert.equal(catalog.length, 100);
@@ -60,7 +60,7 @@ test("active site URLs use sitev4 not pexels100 or legacy v2 paths", () => {
   }
 });
 
-test("active extension skin URLs use extskin_v4 under extskins/", () => {
+test("active extension skin URLs use liveext_v1 under extskins/", () => {
   const wp = loadWallpaperFactory();
   const ext = wp.buildExtWallpapers();
   assert.equal(ext.length, 60);

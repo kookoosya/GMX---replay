@@ -40,13 +40,6 @@ function diffSet(actual, expected) {
   };
 }
 
-/** Donor/legacy packs kept on disk for rebuild/rollback — not active runtime paths. */
-const ALLOWED_WALLPAPER_EXTRA = /^(pexels100|sitev2|sitev4|v2|extskin_v4)_\d{3}\.webp$/;
-
-function countExtraIssues(extra) {
-  return extra.filter((name) => !ALLOWED_WALLPAPER_EXTRA.test(name)).length;
-}
-
 function printSection(title) {
   console.log(`
 [${title}]`);
@@ -75,10 +68,9 @@ for (const [label, rel, expected] of [
   printSection(label);
   console.log(`expected=${expected.length} actual=${actual.length}`);
   printList("missing", missing);
-  const badExtra = extra.filter((name) => !ALLOWED_WALLPAPER_EXTRA.test(name));
-  printList("extra", badExtra);
+  printList("extra", extra);
   if (missing.length) issues += missing.length;
-  if (badExtra.length && strict) issues += badExtra.length;
+  if (extra.length && strict) issues += extra.length;
 }
 
 const deadFiles = [

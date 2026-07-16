@@ -14,12 +14,21 @@ import {
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const ASSET_REV = "20260715a";
 
+function formatNameArray(values) {
+  const lines = JSON.stringify(values, null, 2).split("\n");
+  return [
+    lines[0],
+    ...lines.slice(1, -1).map((line) => `    ${line.endsWith('"') ? `${line},` : line}`),
+    "    ]",
+  ].join("\n");
+}
+
 function patchAppWallpapers(file) {
   let src = fs.readFileSync(file, "utf8");
   src = src.replace(/const SITE_PACK_COUNT = \d+;/, `const SITE_PACK_COUNT = ${WALLPAPER_PACK_COUNT};`);
   src = src.replace(/const EXT_PACK_COUNT = \d+;/, `const EXT_PACK_COUNT = ${EXT_SKIN_PACK_COUNT};`);
-  src = src.replace(/const EXT_PACK_NAMES = \[[\s\S]*?\];/, `const EXT_PACK_NAMES = ${JSON.stringify(EXT_SKIN_NAMES, null, 2)};`);
-  src = src.replace(/const SITE_PACK_NAMES = [\s\S]*?;/, `const SITE_PACK_NAMES = ${JSON.stringify(PACK_NAMES, null, 2)};`);
+  src = src.replace(/const EXT_PACK_NAMES = \[[\s\S]*?\];/, `const EXT_PACK_NAMES = ${formatNameArray(EXT_SKIN_NAMES)};`);
+  src = src.replace(/const SITE_PACK_NAMES = [\s\S]*?;/, `const SITE_PACK_NAMES = ${formatNameArray(PACK_NAMES)};`);
 
   src = src.replace(
     /function sitePackAssetFile\(id\) \{[\s\S]*?\n    \}/,
@@ -43,7 +52,8 @@ function patchAppWallpapers(file) {
 
   src = src.replace(/sitev4_001\.webp/g, "livev1_001.webp");
   src = src.replace(/extskin_v4_001\.webp/g, "liveext_v1_001.webp");
-  src = src.replace(/\/assets\/extbg\//g, "/assets/extskins/");
+  src = src.replace(/\/assets\/extskins\/custom\//g, "/assets/extbg/custom/");
+  src = src.replace(/\/assets\/extbg\/(?!custom\/)/g, "/assets/extskins/");
 
   fs.writeFileSync(file, src, "utf8");
   console.log("patched", path.relative(ROOT, file));

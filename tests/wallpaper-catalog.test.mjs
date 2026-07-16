@@ -1,5 +1,5 @@
 /**
- * Wallpaper catalog contract — Themes V4 licensed backgrounds.
+ * Wallpaper catalog contract — active livev1 site and extension assets.
  */
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -33,7 +33,7 @@ test("wallpaper sync map pairs explicit site to ext skin ids only", () => {
   assert.equal(pairedExtId("v2_002"), "");
 });
 
-test("site sitev4 and extension extskin assets exist independently", () => {
+test("site and extension assets exist independently", () => {
   assert.ok(fs.existsSync(path.join(root, "assets", "wallpapers", siteLandscapeFilename(1))));
   assert.ok(fs.existsSync(path.join(root, extSkinPathFromIndex(1))));
 });
@@ -98,6 +98,12 @@ test("wallpaper public modules reference active pack counts", () => {
   assert.match(wp, /SITE_PACK_COUNT = 100/);
   assert.match(wp, /EXT_PACK_COUNT = 60/);
   assert.match(wp, /\/assets\/extbg\/custom\//);
+});
+
+test("livev1 emitter preserves the extension custom asset route", () => {
+  const emitter = fs.readFileSync(path.join(root, "tools", "emit-livev1-to-public.mjs"), "utf8");
+  assert.ok(emitter.includes('src.replace(/\\/assets\\/extskins\\/custom\\//g, "/assets/extbg/custom/");'));
+  assert.ok(emitter.includes('src.replace(/\\/assets\\/extbg\\/(?!custom\\/)/g, "/assets/extskins/");'));
 });
 
 test("100-pack category distribution contract", () => {
