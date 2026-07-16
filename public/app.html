@@ -139,17 +139,19 @@ html.mode-light body.hasUserBg .panel{
   </div>
 </div>
 <nav class="tabs appShellNav" id="app_shell_nav" aria-label="App sections">
-<button class="tab active" data-tab="home" id="t_home" type="button">Home</button>
-<button class="tab" data-tab="gm" id="t_gm" type="button">GM</button>
-<button class="tab" data-tab="gn" id="t_gn" type="button">GN</button>
-<button class="tab" data-tab="prediction" id="t_prediction" type="button">Prediction Market</button>
-<button class="tab" data-tab="wallet" id="t_wallet" type="button">Upgrade Pro</button>
-<button class="tab" data-tab="referrals" id="t_ref" type="button">Referrals</button>
-<button class="tab" data-tab="leaderboard" id="t_lb" type="button">Leaderboard</button>
-<button class="tab" data-tab="themes" id="t_themes" type="button">Themes</button>
-<button class="tab" data-tab="extthemes" id="t_extthemes" type="button">Extension</button>
-<a class="tab" href="/arcade.html" id="t_arcade">Arcade</a>
+<div class="navRailHead" aria-hidden="true"><span>WORKSPACE</span><strong>GMX / SIGNAL DESK</strong></div>
+<button class="tab active" data-nav-index="01" data-tab="home" id="t_home" type="button">Home</button>
+<button class="tab" data-nav-index="02" data-tab="gm" id="t_gm" type="button">GM</button>
+<button class="tab" data-nav-index="03" data-tab="gn" id="t_gn" type="button">GN</button>
+<button class="tab" data-nav-index="04" data-tab="prediction" id="t_prediction" type="button">Prediction Market</button>
+<button class="tab" data-nav-index="05" data-tab="wallet" id="t_wallet" type="button">Upgrade Pro</button>
+<button class="tab" data-nav-index="06" data-tab="referrals" id="t_ref" type="button">Referrals</button>
+<button class="tab" data-nav-index="07" data-tab="leaderboard" id="t_lb" type="button">Leaderboard</button>
+<button class="tab" data-nav-index="08" data-tab="themes" id="t_themes" type="button">Themes</button>
+<button class="tab" data-nav-index="09" data-tab="extthemes" id="t_extthemes" type="button">Extension</button>
+<a class="tab" data-nav-index="10" href="/arcade.html" id="t_arcade">Arcade</a>
 <button class="tab hidden" data-tab="admin" id="t_admin" type="button">Admin</button>
+<div class="navRailFoot" aria-hidden="true"><span>COPY-FIRST</span><small>Generate → copy → paste manually</small></div>
 </nav>
 <nav class="appBreadcrumbs hidden" id="app_breadcrumbs" aria-label="Breadcrumb">
 <ol class="appBreadcrumbList">
@@ -166,6 +168,14 @@ html.mode-light body.hasUserBg .panel{
 </video>
 <img alt="" class="homeHeroAnim" id="homeHeroAnim" src="/assets/hero/gmx-hero-loop.svg"/>
 <div class="homeHeroOverlay"></div>
+<div class="homeHeroSignal">
+  <div class="homeHeroSignalTop"><span>GMX / SIGNAL DESK</span><span>01 — COPY-FIRST</span></div>
+  <div class="homeHeroSignalCore">
+    <div class="homeHeroSignalOrb"><i></i><i></i><i></i></div>
+    <div class="homeHeroSignalReadout"><small>REPLY MODES</small><strong>GM <em>/</em> GN</strong><span>Human tone · manual paste</span></div>
+  </div>
+  <div class="homeHeroSignalBottom"><span>NO AUTO-POST</span><span>WEB + EXTENSION</span></div>
+</div>
 </div>
 <div class="homeHeroCopy">
 <div class="homeHeroTop">

@@ -24,6 +24,17 @@ test("home tab exposes hero motion block", () => {
   assert.match(html, /gmx-hero-loop\.svg/);
 });
 
+test("home hero exposes the Midnight Signal Desk console", () => {
+  const html = fs.readFileSync(path.join(root, "public", "app.html"), "utf8");
+  const css = fs.readFileSync(path.join(root, "public", "app.css"), "utf8");
+  assert.match(html, /class="homeHeroSignal"/);
+  assert.match(html, /GMX \/ SIGNAL DESK/);
+  assert.match(html, /NO AUTO-POST/);
+  assert.match(html, /data-nav-index="01"/);
+  assert.match(css, /Midnight Signal Desk/);
+  assert.match(css, /#tab-home \.homeHeroCopy \.homeHeroBrand/);
+});
+
 test("home founder social links", () => {
   const html = fs.readFileSync(path.join(root, "public", "app.html"), "utf8");
   assert.match(html, /homeFounderBar/);
