@@ -1,5 +1,5 @@
 (function (global) {
-  const ASSET_Q = "?v=SAFE16";
+  const ASSET_Q = "?v=SAFE17";
 
   const TAB_PACKS = {
     leaderboard: ["lib/leaderboard-core.js", "app.leaderboard.js", "app.leaderboardwire.js"],

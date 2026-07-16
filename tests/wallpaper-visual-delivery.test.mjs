@@ -83,10 +83,12 @@ test("site manifest paths match on-disk livev1 assets", () => {
   }
 });
 
-test("service worker cache version bumped for Themes V4", () => {
+test("service worker keeps code assets fresh with offline fallback", () => {
   const sw = fs.readFileSync(path.join(root, "public", "sw.js"), "utf8");
   assert.equal(PWA_CACHE_NAME, "gmx-shell-v5");
   assert.match(sw, /const CACHE = "gmx-shell-v5"/);
+  assert.match(sw, /function isNetworkFirstAsset\(pathname\)/);
+  assert.match(sw, /isNetworkFirstAsset\(url\.pathname\) \? network : cached \|\| network/);
 });
 
 test("production thumbnail bytes match git when served (no-store)", { skip: process.env.GMX_PROD_WALLPAPER_VERIFY !== "1" }, async () => {

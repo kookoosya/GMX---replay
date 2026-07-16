@@ -2,7 +2,7 @@
   if (window.__GMXArcadePreloadFactory) return;
 
   const LINK_IDS = ["t_arcade", "btnArcade", "mmore_arcade"];
-  const PATHS = { page: "/arcade.html", script: "/arcade.js?v=SAFE16" };
+  const PATHS = { page: "/arcade.html", script: "/arcade.js?v=SAFE17" };
 
   window.__GMXArcadePreloadFactory = function createGMXArcadePreload(ctx) {
     ctx = ctx || {};

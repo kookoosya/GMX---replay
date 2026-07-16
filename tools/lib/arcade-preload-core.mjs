@@ -4,7 +4,7 @@ export const ARCADE_PRELOAD_LINK_IDS = ["t_arcade", "btnArcade", "mmore_arcade"]
 
 export const ARCADE_PRELOAD_PATHS = Object.freeze({
   page: "/arcade.html",
-  script: "/arcade.js?v=SAFE16",
+  script: "/arcade.js?v=SAFE17",
 });
 
 export function shouldSkipArcadePreload(env = {}) {

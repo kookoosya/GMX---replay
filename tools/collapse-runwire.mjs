@@ -133,8 +133,8 @@ const siteFiles = fs.readdirSync(SITE_SRC).filter((f) => f.endsWith(".js"));
 
 for (const [wireName, runwireName, wireFactory, runwireFactory, guardExpr] of PAIRS) {
   mergePair(wireName, runwireName, guardExpr);
-  html = html.replaceAll(`<script defer src="/${runwireName}?v=SAFE16"></script>\n`, "");
-  html = html.replaceAll(`<script defer src="/${runwireName}?v=SAFE16"></script>`, "");
+  html = html.replaceAll(`<script defer src="/${runwireName}?v=SAFE17"></script>\n`, "");
+  html = html.replaceAll(`<script defer src="/${runwireName}?v=SAFE17"></script>`, "");
 
   for (const sf of siteFiles) {
     const p = path.join(SITE_SRC, sf);
@@ -169,8 +169,8 @@ for (const [wireName, runwireName, wireFactory, runwireFactory, guardExpr] of PA
   target += `\n${grouped}\n`;
   fs.writeFileSync(targetPath, target);
   fs.unlinkSync(runwirePath);
-  html = html.replaceAll(`<script defer src="/app.cleanfillrunwire.js?v=SAFE16"></script>\n`, "");
-  html = html.replaceAll(`<script defer src="/app.cleanfillrunwire.js?v=SAFE16"></script>`, "");
+  html = html.replaceAll(`<script defer src="/app.cleanfillrunwire.js?v=SAFE17"></script>\n`, "");
+  html = html.replaceAll(`<script defer src="/app.cleanfillrunwire.js?v=SAFE17"></script>`, "");
   for (const sf of siteFiles) {
     const p = path.join(SITE_SRC, sf);
     let s = fs.readFileSync(p, "utf8");

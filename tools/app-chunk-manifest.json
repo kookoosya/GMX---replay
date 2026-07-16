@@ -1,5 +1,5 @@
 {
-  "assetQuery": "SAFE16",
+  "assetQuery": "SAFE17",
   "chunks": [
     {
       "out": "chunks/app.shell.deps.js",

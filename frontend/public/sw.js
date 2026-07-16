@@ -38,6 +38,17 @@ function isCacheableAsset(pathname) {
   );
 }
 
+function isNetworkFirstAsset(pathname) {
+  return (
+    pathname === "/mode.js" ||
+    pathname === "/app.css" ||
+    pathname.startsWith("/lib/") ||
+    pathname.startsWith("/chunks/") ||
+    pathname.endsWith(".css") ||
+    pathname.endsWith(".js")
+  );
+}
+
 function putDoc(cacheKey, response) {
   return caches.open(DOC_CACHE).then((cache) => cache.put(cacheKey, response.clone()));
 }
@@ -113,7 +124,7 @@ self.addEventListener("fetch", (event) => {
           return res;
         })
         .catch(() => cached);
-      return cached || network;
+      return isNetworkFirstAsset(url.pathname) ? network : cached || network;
     })
   );
 });
