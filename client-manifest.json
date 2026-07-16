@@ -1,7 +1,7 @@
 {
   "version": 1,
   "generatedFrom": "public/app.html",
-  "generatedAt": "2026-06-25T07:45:37.593Z",
+  "generatedAt": "2026-07-16T09:55:30.077Z",
   "syncFiles": [
     "app.html",
     "i18n/siteI18n.js",
@@ -21,7 +21,6 @@
     "chunks/app.shell.boot.js",
     "arcade.html",
     "arcade.js",
-    "arcade/slug.css",
     "entitlements.js",
     "mode.js",
     "themes.json",
@@ -83,6 +82,7 @@
     "app.extview.js",
     "app.extwallpaperstore.js",
     "app.bootstrapcorewire.js",
+    "app.referralpending.js",
     "app.bootstrapunlockwire.js",
     "app.bootstrapgenwire.js",
     "app.bootstrapusagewire.js",
@@ -96,7 +96,6 @@
     "app.tabwire.js",
     "app.gmgnwire.js",
     "app.sitesync.js",
-    "app.referralpending.js",
     "app.extwallpaperui.js",
     "app.wallpaperswire.js",
     "app.themeswire.js",
@@ -152,11 +151,6 @@
       "src": "/mode.js",
       "query": "v=SAFE12",
       "async": false
-    },
-    {
-      "src": "https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.8/lib/index.iife.min.js",
-      "external": true,
-      "async": true
     }
   ]
 }

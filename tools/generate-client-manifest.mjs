@@ -70,7 +70,6 @@ const manifest = {
   scriptOrder,
   headScripts: [
     { src: "/mode.js", query: "v=SAFE12", async: false },
-    { src: "https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.8/lib/index.iife.min.js", external: true, async: true },
   ],
 };
 

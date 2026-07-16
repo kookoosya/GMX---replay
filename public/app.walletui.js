@@ -18,6 +18,8 @@
     const getToken = typeof ctx.getToken === "function" ? ctx.getToken : () => "";
     const requireConnected =
       typeof ctx.requireConnected === "function" ? ctx.requireConnected : () => true;
+    const ensureSolanaWeb3 =
+      typeof ctx.ensureSolanaWeb3 === "function" ? ctx.ensureSolanaWeb3 : async () => window.solanaWeb3;
     const onNavigateHome =
       typeof ctx.onNavigateHome === "function" ? ctx.onNavigateHome : () => {};
     const refreshUsage = typeof ctx.refreshUsage === "function" ? ctx.refreshUsage : async () => {};
@@ -176,7 +178,7 @@
     async function connectWalletByChoice(choice) {
       const WALLET = getWallet();
       if (!choice) throw new Error("wallet_not_selected");
-      const web3 = window.solanaWeb3;
+      const web3 = await ensureSolanaWeb3().catch(() => null);
       if (!web3?.PublicKey) throw new Error("web3_unavailable");
 
       WALLET.connected = false;

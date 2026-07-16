@@ -27,6 +27,7 @@
         getHandle: session.getHandle,
         getToken: session.getToken,
         requireConnected: session.requireConnected,
+        ensureSolanaWeb3: session.ensureSolanaWeb3,
         onNavigateHome: session.onNavigateHome,
         refreshUsage: session.refreshUsage,
       };
@@ -124,6 +125,7 @@
       getHandle: ctx.getHandle,
       getToken: ctx.getToken,
       requireConnected: ctx.requireConnected,
+      ensureSolanaWeb3: ctx.ensureSolanaWeb3,
       onNavigateHome: ctx.onNavigateHome,
       refreshUsage: ctx.refreshUsage,
       walletChoiceKey: LS_WALLET_CHOICE,

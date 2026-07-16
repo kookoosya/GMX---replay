@@ -28,6 +28,15 @@ test("custom wallpaper requests share one in-flight promise", () => {
   assert.match(src, /\.finally\(\(\) =>/);
 });
 
+test("Solana web3 loads only when the wallet tab is activated", () => {
+  const html = fs.readFileSync(path.join(root, "public", "app.html"), "utf8");
+  const wallet = fs.readFileSync(path.join(root, "site-src", "10-wallet-billing.js"), "utf8");
+  assert.doesNotMatch(html, /@solana\/web3\.js@1\.95\.8\/lib\/index\.iife\.min\.js/);
+  assert.match(wallet, /function ensureSolanaWeb3\(\)/);
+  assert.match(wallet, /__gmxLazyTabHooks\.wallet/);
+  assert.match(wallet, /ensureSolanaWeb3\(\)\.catch/);
+});
+
 test("themes ui caches full grid render", () => {
   const src = fs.readFileSync(path.join(root, "public", "app.themesui.js"), "utf8");
   assert.match(src, /lastThemeRenderSig/);
